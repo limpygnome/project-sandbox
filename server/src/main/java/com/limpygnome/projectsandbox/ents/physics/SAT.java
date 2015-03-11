@@ -54,13 +54,6 @@ public class SAT
         int maxCollisions = (indexMaxY - indexMinY) * (indexMaxX - indexMinX);
         ArrayList<CollisionResultMap> collisions = new ArrayList<>(maxCollisions);
         
-        // Invert y axis for tile system
-        //indexMinY = (map.height - indexMinY) - 1;
-        //indexMaxY = (map.height - indexMaxY) - 1;
-        
-        //System.out.println("x: " + indexMinX + "<>" + indexMaxX + " - y: " + indexMinY + "<>" + indexMaxY);
-        
-        
         // Test tiles
         for (int y = indexMinY; y <= indexMaxY; y++)
         {
@@ -69,18 +62,20 @@ public class SAT
                 // Fetch tile
                 tileTypeIndex = map.tiles[y][x];
                 tileType = map.tileTypes[tileTypeIndex];
-                
-                //System.out.println("x : " + x + ", y : " + y + " : " + tileType + " - " + map.tileVertices[y][x] + " - " + ent.cachedVertices);
-                
-                // Check if it's solid
-                if (tileType.properties.solid)
+
+                // Check if tile is eligible for collision
+                if (
+                        tileType.properties.solid ||
+                        tileType.properties.damage != 0
+                )
                 {
                     // Perform collision check between tile and ent
                     result = SAT.collision(ent.cachedVertices, map.tileVertices[y][x]);
                     
+                    // Check if a collision occurred
                     if (result.collision)
                     {
-                        collisions.add(new CollisionResultMap(result, x, y));
+                        collisions.add(new CollisionResultMap(result, x, y, tileType));
                     }
                 }
             }

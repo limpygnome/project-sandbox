@@ -1,8 +1,6 @@
 package com.limpygnome.projectsandbox.ents;
 
 import com.limpygnome.projectsandbox.Controller;
-import com.limpygnome.projectsandbox.ents.physics.CollisionResult;
-import com.limpygnome.projectsandbox.ents.physics.SAT;
 import com.limpygnome.projectsandbox.ents.physics.Vector2;
 import com.limpygnome.projectsandbox.ents.physics.Vertices;
 import com.limpygnome.projectsandbox.textures.Texture;
@@ -42,6 +40,8 @@ public strictfp abstract class Entity
     public Vector2 positionNew;
     public Vertices cachedVertices;
     public float rotation;
+    // -- -1 for godmode
+    public float health;
     
     public Entity(Texture texture, short width, short height)
     {
@@ -114,5 +114,44 @@ public strictfp abstract class Entity
         {
             this.state = state;
         }
+    }
+    
+    /**
+     * Inflicts damage on the entity.
+     * 
+     * @param controller
+     * @param damage The damage; can be negative for health/healing.
+     */
+    public void damage(Controller controller, float damage)
+    {
+        // Check entity does not have godmode
+        if (health == -1.0f)
+        {
+            return;
+        }
+        
+        // Apply damage
+        health -= damage;
+        
+        // Check health
+        if (health < 0.0f)
+        {
+            // Entity is now dead!
+            eventDeath(controller);
+        }
+    }
+    
+    /**
+     * Event for death of entity.
+     * 
+     * Default behaviour is to delete entity. Method should be overridden to
+     * change behaviour.
+     * 
+     * @param controller 
+     */
+    public void eventDeath(Controller controller)
+    {
+        // Default action is to remove the entity
+        setState(StateChange.PENDING_DELETED);
     }
 }

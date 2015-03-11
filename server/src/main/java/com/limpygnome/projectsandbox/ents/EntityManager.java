@@ -134,9 +134,16 @@ public class EntityManager
                 
                 for (CollisionResultMap mapResult : mapResults)
                 {
-                    if (mapResult.result.collision)
+                    // Check if solid for collision response
+                    if (mapResult.tileType.properties.solid)
                     {
                         a.positionOffset(mapResult.result.mtv);
+                    }
+                    
+                    // Check if to apply damage
+                    if (mapResult.tileType.properties.damage != 0)
+                    {
+                        
                     }
                 }
                 

@@ -28,7 +28,7 @@ public class Map
     public short width;
     public short height;
     
-    /** Mapped by [y][x] or [row][column] */
+    /** Mapped by [y][x] or [row][column]; bottom-left at 0, top-right at n */
     public short tiles[][];
     public Vertices[][] tileVertices;
     
