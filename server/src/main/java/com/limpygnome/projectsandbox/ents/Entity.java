@@ -33,7 +33,6 @@ public strictfp abstract class Entity
     private StateChange state;
     
     // State data
-    public Texture texture;
     public short width;
     public short height;
     public Vector2 position;
@@ -42,20 +41,24 @@ public strictfp abstract class Entity
     public float rotation;
     // -- -1 for godmode
     public float health;
+    public short entityType;
     
     public Entity(Texture texture, short width, short height)
     {
         this.id = 0;
         
+        // Set initial state
+        this.state = StateChange.CREATED;
+        
         // Create initial/default state data
-        this.texture = texture;
         this.width = width;
         this.height = height;
         this.position = new Vector2();
         this.positionNew = new Vector2();
         this.cachedVertices = new Vertices(this);
         this.rotation = 0.0f;
-        this.state = StateChange.CREATED;
+        this.health = 0.0f;
+        this.entityType = 0;
     }
     
     public void logic(Controller controller)

@@ -1,9 +1,34 @@
-function Primitive(texture, width, height)
+function
+
+function Entity(texture, width, height)
 {
 	// Assign data
-	this.texture = texture;
-	this.width = width;
-	this.height = height;
+	if (texture == undefined || texture == null)
+	{
+		this.texture = projectSandbox.textures.get("entity");
+	}
+	else
+	{
+		this.texture = texture;
+	}
+	
+	if (width == undefined || width == null)
+	{
+		this.width = 32;
+	}
+	else
+	{
+		this.width = width;
+	}
+	
+	if (height == undefined || height == null)
+	{
+		this.height = 32;
+	}
+	else
+	{
+		this.height = height;
+	}
 	
 	// Scale pixels
 	width *= projectSandbox.SCALE_FACTOR;
@@ -42,7 +67,7 @@ function Primitive(texture, width, height)
 	this.buffer = null;
 }
 
-Primitive.prototype.compile = function(gl)
+Entity.prototype.compile = function(gl)
 {
 	// Create buffer for position vertices
 	this.bufferPosition = gl.createBuffer();
@@ -59,9 +84,9 @@ Primitive.prototype.compile = function(gl)
 	this.bufferIndexes.numItems = 6;
 };
 
-Primitive.prototype.render = function(gl, shaderProgram, modelView, perspective)
+Entity.prototype.render = function(gl, shaderProgram, modelView, perspective)
 {
-	// Translate modelview to location of primitive
+	// Translate modelview to location of entity
 	mat4.translate(modelView, modelView, [this.renderX, this.renderY, this.renderZ]);
 	mat4.rotateZ(modelView, modelView, this.renderRotation);
 	

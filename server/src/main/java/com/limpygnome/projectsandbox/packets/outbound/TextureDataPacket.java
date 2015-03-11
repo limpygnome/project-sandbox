@@ -6,7 +6,6 @@ import com.limpygnome.projectsandbox.textures.TextureManager;
 import com.limpygnome.projectsandbox.textures.TextureSrc;
 import java.io.IOException;
 import java.nio.ByteBuffer;
-import java.util.Arrays;
 import java.util.Map;
 
 /**

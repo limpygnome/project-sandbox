@@ -76,7 +76,7 @@ public class EntityUpdatesPacket extends OutboundPacket
         ByteBuffer bb = ByteBuffer.allocate(9);
         bb.put((byte)'C');
         bb.putShort(ent.id);
-        bb.putShort(ent.texture.id);
+        bb.putShort(ent.entityType);
         bb.putShort(ent.width);
         bb.putShort(ent.height);
         

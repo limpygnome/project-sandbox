@@ -285,15 +285,23 @@ projectSandbox.comms =
 	packetEntityUpdatesEntCreated : function(data, dataView, id, offset)
 	{
 		// Parse data
-		var textureId = dataView.getInt16(offset);
-		var width = dataView.getInt16(offset + 2);
-		var height = dataView.getInt16(offset + 4);
+		var entityType = dataView.getInt16(offset);
 		
-		// Fetch texture
-		var texture = projectSandbox.textures.get(textureId);
+		// Create entity based on type
+		var ent;
+		switch(entityType)
+		{
+			// Static test entity
+			case 0:
+				ent = new Entity();
+				break;
+			// Default player
+			case 1:
+				//ent = new Player();
+				break;
+		}
 		
-		// Create entity
-		ent = new Primitive(texture, width, height);
+		// Compile entity
 		ent.compile(projectSandbox.gl);
 		
 		// Add to world
