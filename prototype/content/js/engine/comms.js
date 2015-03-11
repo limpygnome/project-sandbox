@@ -129,7 +129,7 @@ projectSandbox.comms =
 
 		// Parse tiles
 		var type;
-		for(y = 0; y < height; y++)
+		for(y = height - 1; y >=0 ; y--)
 		{
 			projectSandbox.map.tiles[y] = [];
 			for(x = 0; x < width; x++)

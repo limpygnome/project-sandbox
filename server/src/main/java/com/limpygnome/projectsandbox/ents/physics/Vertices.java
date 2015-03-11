@@ -212,7 +212,7 @@ public class Vertices
         
         // Calculate x and y - y must be inverted!
         float x = (tileX * ts) + hsize;
-        float y = (  ((map.height - tileY)-1) * ts) + hsize;
+        float y = (tileY * ts) + hsize;
         
         Vector2 position = new Vector2(x, y);
         

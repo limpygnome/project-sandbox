@@ -55,14 +55,14 @@ public class SAT
         ArrayList<CollisionResultMap> collisions = new ArrayList<>(maxCollisions);
         
         // Invert y axis for tile system
-        indexMinY = (map.height - indexMinY) - 1;
-        indexMaxY = (map.height - indexMaxY) - 1;
+        //indexMinY = (map.height - indexMinY) - 1;
+        //indexMaxY = (map.height - indexMaxY) - 1;
         
-        System.out.println("x: " + indexMinX + "<>" + indexMaxX + " - y: " + indexMinY + "<>" + indexMaxY);
+        //System.out.println("x: " + indexMinX + "<>" + indexMaxX + " - y: " + indexMinY + "<>" + indexMaxY);
         
         
         // Test tiles
-        for (int y = indexMaxY; y <= indexMinY; y++)
+        for (int y = indexMinY; y <= indexMaxY; y++)
         {
             for (int x = indexMinX; x <= indexMaxX; x++)
             {

@@ -101,13 +101,12 @@ public class Map
         TileType type;
         
         // Note: y is inverted since 0 is bottom and x is top!
-        for(int y = 0; y < map.height; y++)
+        for(int y = map.height - 1; y >= 0; y--)
         {
-            yoffset = y * map.width;
             for(int x = 0; x < map.width; x++)
             {
                 // Fetch tile
-                tile = (String) tiles.get(yoffset + x);
+                tile = (String) tiles.get(yoffset++);
                 
                 // Locate actual type
                 typeIndex = map.tileTypeMappings.get(tile);
