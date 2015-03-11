@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Project Sandbox - Prototype</title>
+		
+		<!-- Third-Party -->
+		<script src="content/js/third-party/gl-matrix-min.js"></script>
+		
+		<!-- Main -->
+		<script src="content/js/project-sandbox.js"></script>
+		
+		<!-- Engine -->
+		<script src="content/js/engine/camera.js"></script>
+		<script src="content/js/engine/shaders.js"></script>
+		<script src="content/js/engine/primitive.js"></script>
+		<script src="content/js/engine/texturesrc.js"></script>
+		<script src="content/js/engine/texture.js"></script>
+		<script src="content/js/engine/map.js"></script>
+		<script src="content/js/engine/keyboard.js"></script>
+		<script src="content/js/engine/mouse.js"></script>
+		<script src="content/js/engine/comms.js"></script>
+		<script src="content/js/engine/comms-packet.js"></script>
+	</head>
+	<body onload="projectSandbox.init();">
+		<canvas id="ps_render" width="800" height="600">
+			<p>
+				No support for HTML5 canvas.
+			</p>
+		</canvas>
+		<p>
+			FPS: <span id="fps">--</span>
+		</p>
+	</body>
+</html>
