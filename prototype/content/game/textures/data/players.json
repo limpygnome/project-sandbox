@@ -1,0 +1,34 @@
+{
+    "name" : "players",
+    "width" : 128,
+    "height" : 128,
+    "url" : "content/images/annie.png",
+    "description" : "The source file for main character textures.",
+	"textures" :
+	[
+		{
+			"name" : "players/player",
+			"speed" : 1000,
+
+			"frames" :
+			[
+				{
+					"tl" : "  0,  0", "tr" : " 64,  0",
+					"bl" : "  0, 64", "br" : " 64, 64"
+				},
+				{
+					"tl" : " 64,  0", "tr" : "128,   0",
+					"bl" : " 64, 64", "br" : "128,  64"
+				},
+				{
+					"tl" : "  0, 64", "tr" : " 64, 64",
+					"bl" : "  0,128", "br" : " 64,128"
+				},
+				{
+					"tl" : " 64, 64", "tr" : "128, 64",
+					"bl" : " 64,128", "br" : "128,128"
+				}
+			]
+		}
+	]
+}

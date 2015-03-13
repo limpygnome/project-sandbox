@@ -15,10 +15,6 @@ var projectSandbox =
 	modelView: mat4.create(),
 	perspective: mat4.create(),
 	
-	// Textures
-	texturesSrc: new Map(),
-	textures: new Map(),
-	
 	// Entities
 	entities: new Map(),
 	
@@ -40,8 +36,7 @@ var projectSandbox =
 		projectSandbox.map.reset();
 		
 		// Reset textures
-		this.texturesSrc.clear();
-		this.textures.clear();
+		this.textures.reset();
 		
 		// Reset player
 		this.playerEntityId = null;
@@ -50,14 +45,15 @@ var projectSandbox =
 		this.entities.clear();
 	},
 	
-	init: function()
+	preInit: function()
 	{
-		console.log("Initializing project sandbox...");
-	
+		console.log("Pre-initializing project sandbox...");
+		
 		// Fetch canvas instance
 		this.canvas = document.getElementById("ps_render");
 		
-		// Setup scaling in respect to canvas 
+		// Setup scaling in respect to canvas
+		// TODO: remove this scale rubbish...probably not needed now.
 		this.SCALE_FACTOR = 1.0;//0.05;
 		
 		// Fetch FPS counter
@@ -75,6 +71,17 @@ var projectSandbox =
 		// Initialize request animation frame function
 		// -- Needs improving - what if null/fails?
 		this.initRequestAnimationFrame();
+		
+		// Load textures
+		this.textures.load("/content/game/textures/list.json");
+		
+		// Begin init...
+		//this.init();
+	},
+	
+	init: function()
+	{
+		console.log("Initializing project sandbox...");
 		
 		// Setup comms
 		projectSandbox.comms.setup();
@@ -126,12 +133,7 @@ var projectSandbox =
 		this.commsPacket.updateMovement();
 		
 		// Update textures
-		var texture;
-		for(var kv of this.textures)
-		{
-			texture = kv[1];
-			texture.logic();
-		}
+		this.textures.logic();
 	},
 	
 	gameRenderLoop: function(self)

@@ -1,5 +1,3 @@
-function
-
 function Entity(texture, width, height)
 {
 	// Assign data

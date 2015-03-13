@@ -1,0 +1,34 @@
+{
+    "name" : "world",
+    "width" : 128,
+    "height" : 64,
+    "url" : "content/images/world.png",
+    "description" : "The source file for world textures.",
+	"textures" :
+	[
+		{
+			"name" : "world/building",
+			"speed" : 0,
+
+			"frames" :
+			[
+				{
+					"tl" : "  64,  0", "tr" : "128,  0",
+					"bl" : "  64, 64", "br" : "128, 64"
+				}
+			]
+		},
+		{
+			"name" : "world/grass",
+			"speed" : 0,
+
+			"frames" :
+			[
+				{
+					"tl" : "  0,  0", "tr" : " 64,  0",
+					"bl" : "  0, 64", "br" : " 64, 64"
+				}
+			]
+		}
+	]
+}

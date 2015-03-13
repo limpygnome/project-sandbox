@@ -15,15 +15,17 @@
 		<script src="content/js/engine/entity.js"></script>
 		<script src="content/js/engine/texturesrc.js"></script>
 		<script src="content/js/engine/texture.js"></script>
+		<script src="content/js/engine/textures.js"></script>
 		<script src="content/js/engine/map.js"></script>
 		<script src="content/js/engine/keyboard.js"></script>
 		<script src="content/js/engine/mouse.js"></script>
 		<script src="content/js/engine/comms.js"></script>
 		<script src="content/js/engine/comms-packet.js"></script>
+		<script src="content/js/engine/utils.js"></script>
 		
 		<!-- Game -->
 	</head>
-	<body onload="projectSandbox.init();">
+	<body onload="projectSandbox.preInit();">
 		<canvas id="ps_render" width="800" height="600">
 			<p>
 				No support for HTML5 canvas.

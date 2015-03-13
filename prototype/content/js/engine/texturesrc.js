@@ -1,9 +1,9 @@
-function TextureSrc(id, url)
+function TextureSrc(name, url)
 {
 	var gl = projectSandbox.gl;
 
 	// Assign data
-	this.id = id;
+	this.name = name;
 	this.url = url;
 	
 	// Create new texture
