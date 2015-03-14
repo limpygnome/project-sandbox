@@ -1,15 +1,5 @@
-function Entity(texture, width, height)
-{
-	// Assign data
-	if (texture == undefined || texture == null)
-	{
-		this.texture = projectSandbox.textures.get("entity");
-	}
-	else
-	{
-		this.texture = texture;
-	}
-	
+function Entity(width, height)
+{	
 	if (width == undefined || width == null)
 	{
 		this.width = 32;
@@ -92,8 +82,21 @@ Entity.prototype.render = function(gl, shaderProgram, modelView, perspective)
 	gl.bindBuffer(gl.ARRAY_BUFFER, this.bufferPosition);
 	gl.vertexAttribPointer(shaderProgram.vertexPositionAttribute, this.bufferPosition.itemSize, gl.FLOAT, false, 0, 0);
 	
-	// Bind texture
-	this.texture.bind(gl, shaderProgram);
+	// Check if texture defined
+	if (this.texture == undefined)
+	{
+		// Fetch and bind error texture
+		var error = projectSandbox.textures.get("error");
+		if (error != undefined && error != null)
+		{
+			error.bind(gl, shaderProgram);
+		}
+	}
+	else
+	{
+		// Bind referenced texture
+		this.texture.bind(gl, shaderProgram);
+	}
 	
 	// Bind index data
 	gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this.bufferIndexes);

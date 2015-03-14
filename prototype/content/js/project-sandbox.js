@@ -45,9 +45,9 @@ var projectSandbox =
 		this.entities.clear();
 	},
 	
-	preInit: function()
+	init: function()
 	{
-		console.log("Pre-initializing project sandbox...");
+		console.log("Initializing project sandbox...");
 		
 		// Fetch canvas instance
 		this.canvas = document.getElementById("ps_render");
@@ -72,17 +72,14 @@ var projectSandbox =
 		// -- Needs improving - what if null/fails?
 		this.initRequestAnimationFrame();
 		
-		// Load textures
+		// Load textures - this will call postResources when finished
 		this.textures.load("/content/game/textures/list.json");
-		
-		// Begin init...
-		//this.init();
 	},
 	
-	init: function()
+	postResources: function()
 	{
-		console.log("Initializing project sandbox...");
-		
+		console.log("Starting project sandbox...");
+		return;
 		// Setup comms
 		projectSandbox.comms.setup();
 		

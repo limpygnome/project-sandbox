@@ -1,0 +1,23 @@
+{
+    "name" : "game",
+    "width" : 64,
+    "height" : 64,
+    "url" : "/content/images/error.png",
+    "description" : "The source file for game textures.",
+	"textures" :
+	[
+		{
+			"name" : "error",
+			"speed" : 0,
+			"frames" :
+			[
+				[
+					0	,	0	,
+					64	,	0	,
+					64	,	64	,
+					0	,	64
+				]
+			]
+		}
+	]
+}

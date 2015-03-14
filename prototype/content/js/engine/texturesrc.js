@@ -1,10 +1,12 @@
-function TextureSrc(name, url)
+function TextureSrc(name, url, width, height)
 {
 	var gl = projectSandbox.gl;
 
 	// Assign data
 	this.name = name;
 	this.url = url;
+    this.width = width;
+    this.height = height;
 	
 	// Create new texture
 	this.texture = gl.createTexture();
@@ -43,5 +45,5 @@ TextureSrc.prototype.bindData = function(gl)
 	// Unbind texture
 	gl.bindTexture(gl.TEXTURE_2D, null);
 	
-	console.log("Texture src - loaded texture - " + this.image.src);
+	console.log("Texture src - loaded texture file - '" + this.image.src + "'");
 }
