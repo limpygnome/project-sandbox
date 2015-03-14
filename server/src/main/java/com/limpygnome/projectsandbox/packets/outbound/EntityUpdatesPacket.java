@@ -73,12 +73,10 @@ public class EntityUpdatesPacket extends OutboundPacket
     private void writeEntCreated(Entity ent) throws IOException
     {
         // Write creation data
-        ByteBuffer bb = ByteBuffer.allocate(9);
+        ByteBuffer bb = ByteBuffer.allocate(5);
         bb.put((byte)'C');
         bb.putShort(ent.id);
         bb.putShort(ent.entityType);
-        bb.putShort(ent.width);
-        bb.putShort(ent.height);
         
         writeClear(bb);
     }

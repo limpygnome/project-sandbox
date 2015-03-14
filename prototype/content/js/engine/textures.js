@@ -8,12 +8,12 @@ projectSandbox.textures =
 	
 	get: function(name)
 	{
-		return textures.get(name);
+		return this.textures.get(name);
 	},
 	
 	getSrc: function(name)
 	{
-		return src.get(name);
+		return this.src.get(name);
 	},
 	
 	logic: function()
@@ -29,8 +29,8 @@ projectSandbox.textures =
 	
 	reset: function()
 	{
-		textures.clear();
-		src.clear();
+		this.textures.clear();
+		this.src.clear();
 	},
 	
 	load: function(texturePathFile)
@@ -115,7 +115,6 @@ projectSandbox.textures =
         
         // Set src file to loaded
         self.srcLoaded[srcLoadedId] = true;
-        console.log(srcLoadedId + " fin");
         
         // Check if all src files have loaded
         if (self.isLoaded())
@@ -149,8 +148,8 @@ projectSandbox.textures =
 		var frames = textureData["frames"];
 		
 		// Build framedata - convert each frame into array of vertices
-		// -- frames * 8 floats (4 verts) * 4 bytes
-		var frameData = new Float32Array(frames.length * 8 * 4);
+		// -- frames * 8 floats (4 verts)
+		var frameData = new Float32Array(frames.length * 8);
 		var frameDataOffset = 0;
 		var frame;
 		var vert;

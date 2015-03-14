@@ -27,7 +27,11 @@ public strictfp abstract class Entity
         CREATED
     }
     
+    // The unique ID for the entity
     public short id;
+    
+    // The type of entity
+    public short entType;
     
     // State flags
     private StateChange state;
@@ -43,9 +47,10 @@ public strictfp abstract class Entity
     public float health;
     public short entityType;
     
-    public Entity(Texture texture, short width, short height)
+    public Entity(short width, short height)
     {
         this.id = 0;
+        this.entType = 0;
         
         // Set initial state
         this.state = StateChange.CREATED;

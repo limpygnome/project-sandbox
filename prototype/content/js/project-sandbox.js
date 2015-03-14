@@ -79,7 +79,7 @@ var projectSandbox =
 	postResources: function()
 	{
 		console.log("Starting project sandbox...");
-		return;
+        
 		// Setup comms
 		projectSandbox.comms.setup();
 		
@@ -174,7 +174,7 @@ var projectSandbox =
 		}
 		
 		// Render map
-		projectSandbox.map.render(this.gl, this.shaderProgram, this.modelView, this.perspective);
+		//projectSandbox.map.render(this.gl, this.shaderProgram, this.modelView, this.perspective);
 		
 		// Update FPS
 		var currentTime = (new Date).getTime();

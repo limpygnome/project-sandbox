@@ -24,7 +24,6 @@ public class Player extends Entity
     public Player(Controller controller)
     {
         super(
-                controller.textureManager.textureFiles.get("characters/player"),
                 (short) 32,
                 (short) 32
         );

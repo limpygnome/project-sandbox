@@ -3,7 +3,7 @@ projectSandbox.camera =
 	// Zoom settings
 	zoomFactor: 1.5,
 	zoomMin: 1,
-	zoomMax: 30,
+	zoomMax: 500,
 	
 	// Co-ordinates of the camera
 	x: 0,

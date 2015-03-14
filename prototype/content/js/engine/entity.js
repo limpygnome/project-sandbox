@@ -18,10 +18,6 @@ function Entity(width, height)
 		this.height = height;
 	}
 	
-	// Scale pixels
-	width *= projectSandbox.SCALE_FACTOR;
-	height *= projectSandbox.SCALE_FACTOR;
-	
 	// Setup position vertices
 	var halfWidth = width / 2;
 	var halfHeight = height / 2;
@@ -83,20 +79,15 @@ Entity.prototype.render = function(gl, shaderProgram, modelView, perspective)
 	gl.vertexAttribPointer(shaderProgram.vertexPositionAttribute, this.bufferPosition.itemSize, gl.FLOAT, false, 0, 0);
 	
 	// Check if texture defined
-	if (this.texture == undefined)
+    var texture = this.texture;
+	if (texture == undefined || texture == null)
 	{
-		// Fetch and bind error texture
-		var error = projectSandbox.textures.get("error");
-		if (error != undefined && error != null)
-		{
-			error.bind(gl, shaderProgram);
-		}
+		// Fetch error texture
+		texture = projectSandbox.textures.get("error");
 	}
-	else
-	{
-		// Bind referenced texture
-		this.texture.bind(gl, shaderProgram);
-	}
+    
+    // Bind texture
+    texture.bind(gl, shaderProgram);
 	
 	// Bind index data
 	gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this.bufferIndexes);
@@ -113,7 +104,7 @@ Entity.prototype.render = function(gl, shaderProgram, modelView, perspective)
 	mat4.translate(modelView, modelView, [-this.renderX, -this.renderY, -this.renderZ]);
 	
 	// Unbind texture
-	this.texture.unbind(gl);
+	texture.unbind(gl);
 	
 	// Update render co-ordinates
 	this.renderX = this.x;

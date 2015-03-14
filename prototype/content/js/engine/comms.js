@@ -88,7 +88,7 @@ projectSandbox.comms =
 				switch(subType)
 				{
 					case 68: // Data
-						this.packetTextureData(data);
+						//this.packetTextureData(data);
 						return;
 				}
 				break;
@@ -309,7 +309,7 @@ projectSandbox.comms =
 		
 		console.log("Comms - entity " + id + " created");
 				
-		return 6;
+		return 2;
 	},
 	
 	packetEntityUpdatesEntUpdated : function(data, dataView, id, offset)
