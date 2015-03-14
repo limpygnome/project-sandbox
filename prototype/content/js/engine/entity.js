@@ -1,5 +1,6 @@
 function Entity(width, height)
-{	
+{
+    // Set size
 	if (width == undefined || width == null)
 	{
 		this.width = 32;
@@ -19,8 +20,9 @@ function Entity(width, height)
 	}
 	
 	// Setup position vertices
-	var halfWidth = width / 2;
-	var halfHeight = height / 2;
+	var halfWidth = this.width / 2;
+	var halfHeight = this.height / 2;
+    
 	this.verticesPosition =
 	[
 		-halfWidth,	-halfHeight,  0.0,
@@ -49,6 +51,7 @@ function Entity(width, height)
 	this.renderRotation = 0.0;
 	
 	this.buffer = null;
+    this.texture = null;
 }
 
 Entity.prototype.compile = function(gl)
