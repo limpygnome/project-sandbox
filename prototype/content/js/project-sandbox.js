@@ -157,12 +157,14 @@ var projectSandbox =
 	
 	gameRender: function()
 	{
+        var gl = this.gl;
+    
 		// Reset scene
-		this.gl.viewport(0, 0, this.gl.viewportWidth, this.gl.viewportHeight);
-		this.gl.clear(this.gl.COLOR_BUFFER_BIT | this.gl.DEPTH_BUFFER_BIT);
+		gl.viewport(0, 0, gl.viewportWidth, gl.viewportHeight);
+		gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 		
 		// Reset perspective matrix
-        mat4.perspective(this.perspective, 45, this.gl.viewportWidth / this.gl.viewportHeight, 1, 1000.0);
+        mat4.perspective(this.perspective, 45, gl.viewportWidth / gl.viewportHeight, 1, 1000.0);
 		
 		// Reset identity matrix
 		mat4.identity(this.modelView);
@@ -174,15 +176,19 @@ var projectSandbox =
 		projectSandbox.camera.applyToModelView();
         
         // Render map
-		projectSandbox.map.render(this.gl, this.shaderProgram, this.modelView, this.perspective);
+		projectSandbox.map.render(gl, this.shaderProgram, this.modelView, this.perspective);
 		
 		// Render all the objects
+        // If we use alpha blend ever, disable depth-test for ents on the same z as hack - also works, as
+        // opposed to alpha testing
+        //gl.disable(gl.DEPTH_TEST);
 		var ent;
 		for(var kv of this.entities)
 		{
 			ent = kv[1];
-			ent.render(this.gl, this.shaderProgram, this.modelView, this.perspective);
+			ent.render(gl, this.shaderProgram, this.modelView, this.perspective);
 		}
+        //gl.enable(gl.DEPTH_TEST);
 		
 		// Update FPS
 		var currentTime = (new Date).getTime();
@@ -248,7 +254,8 @@ var projectSandbox =
 		gl.clearColor(0.0, 0.0, 0.0, 1.0);
         gl.enable(gl.DEPTH_TEST);
         
-        gl.enable(gl.BLEND);
-        gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
+        // Due to depth, we use alpha test rather than blending, implemented in shader
+        //gl.enable(gl.BLEND);
+        //gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
 	}
 }
