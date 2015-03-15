@@ -6,6 +6,19 @@
     "description" : "The source file for world textures.",
 	"textures" :
 	[
+        {
+			"name" : "world/grass",
+			"speed" : 0,
+			"frames" :
+			[
+                [
+                    0   ,   0   ,
+                    63  ,   0   ,
+                    63  ,   64  ,
+                    0   ,   64
+                ]
+			]
+		},
 		{
 			"name" : "world/building",
 			"speed" : 0,
@@ -17,19 +30,6 @@
 					128 ,   64  ,
 					64  ,   64
 				]
-			]
-		},
-		{
-			"name" : "world/grass",
-			"speed" : 0,
-			"frames" :
-			[
-                [
-                    0   ,   0   ,
-                    64  ,   0   ,
-                    64  ,   64  ,
-                    0   ,   64
-                ]
 			]
 		}
 	]

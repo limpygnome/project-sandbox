@@ -31,7 +31,7 @@ public strictfp abstract class Entity
     public short id;
     
     // The type of entity
-    public short entType;
+    public short entityType;
     
     // State flags
     private StateChange state;
@@ -45,12 +45,11 @@ public strictfp abstract class Entity
     public float rotation;
     // -- -1 for godmode
     public float health;
-    public short entityType;
     
-    public Entity(short width, short height)
+    public Entity(short width, short height, short entityType)
     {
         this.id = 0;
-        this.entType = 0;
+        this.entityType = entityType;
         
         // Set initial state
         this.state = StateChange.CREATED;
@@ -63,7 +62,6 @@ public strictfp abstract class Entity
         this.cachedVertices = new Vertices(this);
         this.rotation = 0.0f;
         this.health = 0.0f;
-        this.entityType = 0;
     }
     
     public void logic(Controller controller)

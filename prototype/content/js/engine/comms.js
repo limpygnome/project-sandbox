@@ -304,11 +304,13 @@ projectSandbox.comms =
 		{
 			// Static test entity
 			case 0:
+            default:
 				ent = new Entity();
 				break;
+                
 			// Default player
 			case 1:
-				//ent = new Player();
+				ent = new Player();
 				break;
 		}
 		

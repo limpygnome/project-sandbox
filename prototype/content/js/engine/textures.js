@@ -166,7 +166,9 @@ projectSandbox.textures =
                 }
                 else
                 {
-                    vert = frame[v] / src.height;
+                    // Texture system starts from 0,0 bottom-left, but we start 0,0 top-left, so subtract value
+                    // from 1 to invert y axis
+                    vert = 1 - (frame[v] / src.height);
                 }
                 
                 // Set vertex co-ordinate

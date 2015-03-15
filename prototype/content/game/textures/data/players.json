@@ -7,14 +7,14 @@
 	"textures" :
 	[
 		{
-			"name" : "players/player",
+			"name" : "players/default",
 			"speed" : 1000,
 			"frames" :
 			[
                 [
                     0   ,   0   ,
                     64  ,   0   ,
-                    64  ,   64  , 
+                    64  ,   64  ,
                     0   ,   64
                 ],
                 [

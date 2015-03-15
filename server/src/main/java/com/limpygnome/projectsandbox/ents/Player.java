@@ -25,7 +25,8 @@ public class Player extends Entity
     {
         super(
                 (short) 32,
-                (short) 32
+                (short) 32,
+                (short) 1
         );
         
         this.movement = 0;
