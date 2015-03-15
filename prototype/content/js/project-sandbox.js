@@ -209,7 +209,8 @@ var projectSandbox =
 
 		try
 		{
-			gl = this.canvas.getContext("webgl") || this.canvas.getContext("experimental-webgl");
+            // Setup WebGL
+			gl = this.canvas.getContext("webgl", {alpha: false}) || this.canvas.getContext("experimental-webgl", {alpha: false});
 			gl.viewportWidth = this.canvas.width;
             gl.viewportHeight = this.canvas.height;
 		}
@@ -242,7 +243,12 @@ var projectSandbox =
 	
 	sceneSetup: function()
 	{
-		this.gl.clearColor(0.0, 0.0, 0.0, 1.0);
-        this.gl.enable(this.gl.DEPTH_TEST);
+        var gl = this.gl;
+        
+		gl.clearColor(0.0, 0.0, 0.0, 1.0);
+        gl.enable(gl.DEPTH_TEST);
+        
+        gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
+        gl.enable(gl.BLEND);
 	}
 }

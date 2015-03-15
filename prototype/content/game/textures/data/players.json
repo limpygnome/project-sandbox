@@ -2,7 +2,7 @@
     "name" : "players",
     "width" : 128,
     "height" : 128,
-    "url" : "/content/images/players.png",
+    "url" : "/content/images/players2.png",
     "description" : "The source file for main character textures.",
 	"textures" :
 	[
