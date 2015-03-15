@@ -35,9 +35,6 @@ var projectSandbox =
 		// Reset map
 		projectSandbox.map.reset();
 		
-		// Reset textures
-		this.textures.reset();
-		
 		// Reset player
 		this.playerEntityId = null;
 		
@@ -131,6 +128,17 @@ var projectSandbox =
 		
 		// Update textures
 		this.textures.logic();
+        
+        // Update ents
+        var ent;
+		for(var kv of this.entities)
+		{
+			ent = kv[1];
+			if (ent.logic)
+            {
+                ent.logic();
+            }
+		}
 	},
 	
 	gameRenderLoop: function(self)

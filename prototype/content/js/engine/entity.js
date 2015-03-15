@@ -75,7 +75,7 @@ Entity.prototype.render = function(gl, shaderProgram, modelView, perspective)
 {
 	// Translate modelview to location of entity
 	mat4.translate(modelView, modelView, [this.renderX, this.renderY, this.renderZ]);
-	mat4.rotateZ(modelView, modelView, this.renderRotation);
+	mat4.rotateZ(modelView, modelView, -this.renderRotation);
 	
 	// Bind position data for shader program
 	gl.bindBuffer(gl.ARRAY_BUFFER, this.bufferPosition);
@@ -103,7 +103,7 @@ Entity.prototype.render = function(gl, shaderProgram, modelView, perspective)
 	gl.drawElements(gl.TRIANGLES, this.bufferIndexes.numItems, gl.UNSIGNED_SHORT, 0);
 
 	// Undo translation
-	mat4.rotateZ(modelView, modelView, -this.renderRotation);
+	mat4.rotateZ(modelView, modelView, this.renderRotation);
 	mat4.translate(modelView, modelView, [-this.renderX, -this.renderY, -this.renderZ]);
 	
 	// Unbind texture

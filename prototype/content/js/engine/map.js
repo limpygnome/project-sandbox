@@ -2,6 +2,9 @@ projectSandbox.map =
 {
 	// Indicates if the map is setup
 	setup: false,
+    
+    // The z-level at which to render the map
+    renderZ: -1.0,
 	
 	// The size of each tile (scaled)
 	tileSize: 0,
@@ -97,7 +100,7 @@ projectSandbox.map =
 		gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this.bufferIndexes);
 		
 		// Translate map so bottom left is 0,0
-		mat4.translate(modelView, modelView, [this.scaledTileSizeHalf, this.scaledTileSizeHalf, 0]);
+		mat4.translate(modelView, modelView, [this.scaledTileSizeHalf, this.scaledTileSizeHalf, this.renderZ]);
 		
 		// Render tiles
 		var tileType;
@@ -144,6 +147,6 @@ projectSandbox.map =
 		mat4.translate(modelView, modelView, [this.width * -this.scaledTileSize, this.height * -this.scaledTileSize, 0]);
 		
 		// Undo bottom left translation
-		mat4.translate(modelView, modelView, [-this.scaledTileSizeHalf, -this.scaledTileSizeHalf, 0]);
+		mat4.translate(modelView, modelView, [-this.scaledTileSizeHalf, -this.scaledTileSizeHalf, -this.renderZ]);
 	}
 }

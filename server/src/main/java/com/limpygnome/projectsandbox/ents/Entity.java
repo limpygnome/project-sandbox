@@ -4,6 +4,7 @@ import com.limpygnome.projectsandbox.Controller;
 import com.limpygnome.projectsandbox.ents.physics.Vector2;
 import com.limpygnome.projectsandbox.ents.physics.Vertices;
 import com.limpygnome.projectsandbox.textures.Texture;
+import com.limpygnome.projectsandbox.utils.CustomMath;
 
 /**
  *
@@ -67,6 +68,19 @@ public strictfp abstract class Entity
     public void logic(Controller controller)
     {
         // Nothing by default...
+    }
+    
+    public void rotationOffset(float radians)
+    {
+        // Update rotation
+        this.rotation = CustomMath.clampRepeat(
+                -CustomMath.PI_FLOAT,
+                CustomMath.PI_FLOAT,
+                rotation + radians
+        );
+        
+        // Update state
+        setState(StateChange.UPDATED);
     }
     
     public void positionOffset(Vector2 offset)

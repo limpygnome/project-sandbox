@@ -6,6 +6,7 @@
 package com.limpygnome.projectsandbox.ents;
 
 import com.limpygnome.projectsandbox.Controller;
+import com.limpygnome.projectsandbox.ents.physics.Vector2;
 
 /**
  * An entity which represents a player.
@@ -24,8 +25,8 @@ public class Player extends Entity
     public Player(Controller controller)
     {
         super(
-                (short) 32,
-                (short) 32,
+                (short) 10,
+                (short) 8,
                 (short) 1
         );
         
@@ -35,33 +36,45 @@ public class Player extends Entity
     @Override
     public void logic(Controller controller)
     {
-        final float movementFactor = 1.5f;
+        final float movementFactor = 2.0f;
+        final float rotationFactor = 0.25f;
         
-        float changeX = 0.0f;
-        float changeY = 0.0f;
+        float changeDist = 0.0f;
+        float changeRotation = 0.0f;
         
         // Update player's position
         if((movement & MOVEMENT_UP) == MOVEMENT_UP)
         {
-            changeY += movementFactor;
-        }
-        if((movement & MOVEMENT_RIGHT) == MOVEMENT_RIGHT)
-        {
-            changeX += movementFactor;
+            changeDist += movementFactor;
         }
         if((movement & MOVEMENT_DOWN) == MOVEMENT_DOWN)
         {
-            changeY -= movementFactor;
+            changeDist -= movementFactor;
+        }
+        
+        // Check for rotation
+        if((movement & MOVEMENT_RIGHT) == MOVEMENT_RIGHT)
+        {
+            //changeX += movementFactor;
+            changeRotation = rotationFactor;
         }
         if((movement & MOVEMENT_LEFT) == MOVEMENT_LEFT)
         {
-            changeX -= movementFactor;
+            changeRotation = -rotationFactor;
         }
 
         // Check if to update the position
-        if(changeX != 0.0f || changeY != 0.0f)
+        if(changeDist != 0.0f)
         {
-            positionOffset(changeX, changeY);
+            // Project dist for angle
+            Vector2 rotatedDist = Vector2.vectorFromAngle(rotation, changeDist);
+            positionOffset(rotatedDist);
+        }
+        
+        // Check if to update the rotation
+        if (changeRotation != 0.0f)
+        {
+            rotationOffset(changeRotation);
         }
         
         // Perform ent logic

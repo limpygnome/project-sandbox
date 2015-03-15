@@ -178,6 +178,14 @@ public class Vector2
         return Math.abs((float) Math.sqrt( expA + expB ));
     }
     
+    public static Vector2 vectorFromAngle(float radians, float distance)
+    {
+        float x = distance * (float) Math.sin(radians);
+        float y = distance * (float) Math.cos(radians);
+        
+        return new Vector2(x, y);
+    }
+    
     @Override
     public String toString()
     {

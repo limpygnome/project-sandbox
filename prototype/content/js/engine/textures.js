@@ -168,7 +168,7 @@ projectSandbox.textures =
                 {
                     // Texture system starts from 0,0 bottom-left, but we start 0,0 top-left, so subtract value
                     // from 1 to invert y axis
-                    vert = 1 - (frame[v] / src.height);
+                    vert = frame[v] / src.height;
                 }
                 
                 // Set vertex co-ordinate
@@ -185,6 +185,13 @@ projectSandbox.textures =
 			frameData
 		);
 	},
+    
+    switchFrameY: function(frameData, index1, index2)
+    {
+        var v = frameData[index1];
+        frameData[index1] = frameData[index2];
+        frameData[index2] = v;
+    },
 	
 	ajaxJsonFailure: function(ajax, url)
 	{

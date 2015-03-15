@@ -6,6 +6,8 @@ package com.limpygnome.projectsandbox.utils;
  */
 public class CustomMath
 {
+    public static final float PI_FLOAT = (float) Math.PI;
+    
     /**
      * Clamps value inclusively within min and max.
      * 
@@ -28,5 +30,38 @@ public class CustomMath
         {
             return value;
         }
+    }
+    
+    public static float clampRepeat(float min, float max, float value)
+    {
+        float diff = max - min;
+        float v = value - min;
+        
+        if (v > diff)
+        {
+            while (v > diff)
+            {
+                v -= diff;
+            }
+        }
+        else if (v < 0)
+        {
+            while (v < 0)
+            {
+                v += diff;
+            }
+        }
+        
+        return min + v;
+    }
+    
+    public float deg2rad(float deg)
+    {
+        return PI_FLOAT / 2.0f + deg * PI_FLOAT / 180.0f;
+    }
+    
+    public float rad2deg(float rad)
+    {
+        return rad * (180.0f / PI_FLOAT);
     }
 }
