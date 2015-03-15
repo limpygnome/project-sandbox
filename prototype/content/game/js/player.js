@@ -1,6 +1,6 @@
 function Player()
 {
-    Entity.call(this, 10, 16);
+    Entity.call(this, 16, 20);
     
     // Set custom params for this ent
     this.texture = projectSandbox.textures.get("players/default");

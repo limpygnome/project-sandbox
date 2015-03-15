@@ -22,7 +22,7 @@ projectSandbox.shaders =
 		//"	gl_FragColor = texture2D(uSampler, vec2(vTextureCoord.s, vTextureCoord.t));" +
         // Alpha testing for depth transparency - https://www.opengl.org/wiki/Transparency_Sorting
         " vec4 texel = texture2D(uSampler, vec2(vTextureCoord.s, vTextureCoord.t));" +
-        " if (texel.a < 0.5) discard;" +
+        //" if (texel.a < 0.5) discard;" +
         " gl_FragColor = texel;" +
 		//"	gl_FragColor = vec4(1.0, 0.0, 0.0, 1.0);" +
 		"}",

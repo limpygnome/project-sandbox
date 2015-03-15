@@ -181,14 +181,14 @@ var projectSandbox =
 		// Render all the objects
         // If we use alpha blend ever, disable depth-test for ents on the same z as hack - also works, as
         // opposed to alpha testing
-        //gl.disable(gl.DEPTH_TEST);
+        gl.disable(gl.DEPTH_TEST);
 		var ent;
 		for(var kv of this.entities)
 		{
 			ent = kv[1];
 			ent.render(gl, this.shaderProgram, this.modelView, this.perspective);
 		}
-        //gl.enable(gl.DEPTH_TEST);
+        gl.enable(gl.DEPTH_TEST);
 		
 		// Update FPS
 		var currentTime = (new Date).getTime();
