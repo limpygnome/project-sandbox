@@ -255,7 +255,7 @@ var projectSandbox =
         gl.enable(gl.DEPTH_TEST);
         
         // Due to depth, we use alpha test rather than blending, implemented in shader
-        //gl.enable(gl.BLEND);
-        //gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
+        gl.enable(gl.BLEND);
+        gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
 	}
 }
