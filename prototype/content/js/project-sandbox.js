@@ -172,6 +172,9 @@ var projectSandbox =
 		
 		// Set camera translation
 		projectSandbox.camera.applyToModelView();
+        
+        // Render map
+		projectSandbox.map.render(this.gl, this.shaderProgram, this.modelView, this.perspective);
 		
 		// Render all the objects
 		var ent;
@@ -180,9 +183,6 @@ var projectSandbox =
 			ent = kv[1];
 			ent.render(this.gl, this.shaderProgram, this.modelView, this.perspective);
 		}
-		
-		// Render map
-		projectSandbox.map.render(this.gl, this.shaderProgram, this.modelView, this.perspective);
 		
 		// Update FPS
 		var currentTime = (new Date).getTime();
@@ -248,7 +248,7 @@ var projectSandbox =
 		gl.clearColor(0.0, 0.0, 0.0, 1.0);
         gl.enable(gl.DEPTH_TEST);
         
-        gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
         gl.enable(gl.BLEND);
+        gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
 	}
 }

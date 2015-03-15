@@ -144,7 +144,7 @@ projectSandbox.map =
         }
 		
 		// Undo translation for tiles
-		mat4.translate(modelView, modelView, [this.width * -this.scaledTileSize, this.height * -this.scaledTileSize, 0]);
+		mat4.translate(modelView, modelView, [0, this.height * -this.scaledTileSize, 0]);
 		
 		// Undo bottom left translation
 		mat4.translate(modelView, modelView, [-this.scaledTileSizeHalf, -this.scaledTileSizeHalf, -this.renderZ]);
