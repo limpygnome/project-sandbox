@@ -1,7 +1,7 @@
 projectSandbox.camera =
 {
 	// Zoom settings
-	zoomFactor: 1.5,
+	zoomFactor: 10,
 	zoomMin: 1,
 	zoomMax: 500,
 	

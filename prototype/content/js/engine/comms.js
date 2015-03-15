@@ -150,11 +150,22 @@ projectSandbox.comms =
 	packetMapDataTileType: function(data, dataView, offset)
 	{
 		var id = dataView.getInt16(offset);
-		var textureId = dataView.getInt16(offset + 2);
+        var textureNameLen = dataView.getInt8(offset + 2);
+        var textureName = String.fromCharCode.apply(String, data.subarray(offset + 3, offset + 3 + textureNameLen));
+        
+        // Fetch texture
+        var texture = projectSandbox.textures.get(textureName);
+        
+        if (texture == undefined || texture == null)
+        {
+            texture = projectSandbox.textures.get("error");
+            console.error("Comms - failed to load tile type texture - id : " + id + ", texture name: '" + textureName + "'");
+        }
+        
+        // Set tile type
+		projectSandbox.map.types[id] = [texture];
 		
-		projectSandbox.map.types[id] = [textureId];
-		
-		return 4;
+		return 2 + 1 + textureNameLen;
 	},
 	
 	packetTextureData: function(data)

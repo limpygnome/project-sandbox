@@ -18,7 +18,7 @@ projectSandbox.map =
 	// The height of the tiles
 	height: 0,
 	
-	// Each type has {textureId}
+	// Each type has {texture}
 	types: [],
 	
 	// Each tile is a short indicating the type
@@ -101,8 +101,8 @@ projectSandbox.map =
 		
 		// Render tiles
 		var tileType;
-		var texture;
-		var textureId = -1;
+		var texture = null;
+		var textureName = null;
 		
 		for(y = endY; y >= startY; y--) // Y is inverse!
 		{
@@ -111,14 +111,14 @@ projectSandbox.map =
 			{
 				// Rebind if texture is different
 				tileType = this.types[this.tiles[y][x]];
-				if(tileType[0] != textureId)
+				if(tileType[0] != textureName)
 				{
-					// Fetch texture and bind
-					texture = projectSandbox.textures.get(tileType[0]);
+					// Bind texture
+					texture = tileType[0];
 					texture.bind(gl, shaderProgram);
 					
 					// Update current texture
-					textureId = tileType[0];
+					textureName = tileType[0];
 				}
 				
 				// -- Set shader matrix uniforms
@@ -133,6 +133,12 @@ projectSandbox.map =
 			}
 			mat4.translate(modelView, modelView, [-this.scaledTileSize * this.width, this.scaledTileSize, 0]);
 		}
+        
+        // Unbind texture
+        if (texture != null)
+        {
+            texture.unbind(gl);
+        }
 		
 		// Undo translation for tiles
 		mat4.translate(modelView, modelView, [this.width * -this.scaledTileSize, this.height * -this.scaledTileSize, 0]);

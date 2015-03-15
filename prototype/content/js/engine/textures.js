@@ -177,8 +177,8 @@ projectSandbox.textures =
 		// Create texture from element
 		return new Texture(
 			src,
-			textureData["name"],
-			textureData["speed"],
+			name,
+			speed,
 			frames.length,
 			frameData
 		);

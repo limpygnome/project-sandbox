@@ -31,16 +31,26 @@ public class MapDataPacket extends OutboundPacket
         buffer.write(bb.array());
         
         // Write tile types
-        bb = ByteBuffer.allocate(4);
-        
         TileType tileType;
+        byte[] textureNameBytes;
         for (int i = 0; i < map.tileTypes.length; i++)
         {
+            // Fetch tile type
             tileType = map.tileTypes[i];
+            
+            // Convert texture name to bytes
+            textureNameBytes = tileType.texture.getBytes("UTF-8");
+            
+            // Allocate buffer dynamically for type
+            bb = ByteBuffer.allocate(2 + 1 + textureNameBytes.length);
+            
+            // Write data
             bb.putShort(tileType.id);
-            bb.putShort(tileType.texture.id);
+            bb.put((byte) tileType.texture.length());
+            bb.put(textureNameBytes);
+            
+            // Add data to packet buffer
             buffer.write(bb.array());
-            bb.clear();
         }
         
         // Write tilesize, w, h
