@@ -17,6 +17,14 @@ import java.util.Collection;
  */
 public class SAT
 {
+    /**
+     * The distance added to the penetration depth / axis overlay of MTV
+     * to avoid collision detection occurring again. We basically add this
+     * amount to the MTV, since without adding it, the polygons will still
+     * be penetrating.
+     */
+    private static final float ADDED_DEPTH_MTV = 0.0001f;
+    
     public static CollisionResult collision(Entity a, Entity b)
     {
         return collision(a.cachedVertices, b.cachedVertices);
@@ -159,7 +167,10 @@ public class SAT
         }
         
         // Create minimal translation vector (MTV)
-        Vector2 mtv = Vector2.multiply(smallestAxis, smallestOverlap);
+        Vector2 mtv = Vector2.multiply(
+                smallestAxis,
+                smallestOverlap + ADDED_DEPTH_MTV
+        );
         
         // Return the result from the collision
         return new CollisionResult(true, mtv, smallestAxis, smallestOverlap);

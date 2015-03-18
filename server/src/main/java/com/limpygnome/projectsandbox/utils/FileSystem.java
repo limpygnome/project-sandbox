@@ -13,6 +13,7 @@ import java.util.jar.JarInputStream;
  */
 public class FileSystem
 {
+    
     public static FileSystemFile[] getResources(String packagePath) throws IOException
     {
         LinkedList<FileSystemFile> results = new LinkedList<>();
@@ -26,6 +27,7 @@ public class FileSystem
         else
         {
             // Make sure the path starts with /
+            // TODO: doesnt start or end with / - bug
             if(!packagePath.startsWith("/"))
             {
                 packagePath = "/" + packagePath;
@@ -36,14 +38,14 @@ public class FileSystem
             }
         
             // Start with top dir
-            getResourcesDir(results, path + packagePath);
+            getResourcesDir(results, path + packagePath, packagePath.substring(0, packagePath.length()-1));
         }
         
         // Return the results
         return results.toArray(new FileSystemFile[results.size()]);
     }
     
-    private static void getResourcesDir(LinkedList<FileSystemFile> results, String path) throws IOException
+    private static void getResourcesDir(LinkedList<FileSystemFile> results, String path, String relativePath) throws IOException
     {
         // Fetch files
         File dir = new File(path);
@@ -55,11 +57,11 @@ public class FileSystem
                 if(f.isFile())
                 {
                     // Add file to results
-                    results.add(new FileSystemFile(true, f.getCanonicalPath()));
+                    results.add(new FileSystemFile(true, f.getCanonicalPath(), relativePath + "/" + f.getName()));
                 }
                 else if(f.isDirectory())
                 {
-                    getResourcesDir(results, f.getCanonicalPath());
+                    getResourcesDir(results, f.getCanonicalPath(), relativePath + "/" + f.getName());
                 }
             }
         }
@@ -89,8 +91,52 @@ public class FileSystem
             
             if(!name.endsWith("/") && name.startsWith(packagePath))
             {
-                results.add(new FileSystemFile(false, "/" + je.getName()));
+                results.add(new FileSystemFile(false, "/" + je.getName(), je.getName()));
             }
         }
     }
+    
+    public static Class[] getAllClasses(String packageName) throws IOException
+    {
+        // Locate all class files
+        FileSystemFile[] files = getResources(packageName);
+        
+        LinkedList<Class> result = new LinkedList<>();
+        String className;
+        Class clazz;
+        
+        for (FileSystemFile f : files)
+        {
+            if (f.getPath().endsWith(".class"))
+            {
+                // Format as class name
+                className = f.getRelativePath().replace("/", ".");
+                
+                // -- Remove starting .
+                if (className.startsWith(".") && className.length() > 1)
+                {
+                    className = className.substring(1);
+                }
+                
+                // -- Remove tailing .class
+                if (className.endsWith(".class") && className.length() > 6)
+                {
+                    className = className.substring(0, className.length()-6);
+                }
+                
+                try
+                {
+                    // Attempt to load class
+                    clazz = Class.forName(className);
+                    
+                    // Add to results
+                    result.add(clazz);
+                }
+                catch (ClassNotFoundException e) { }
+            }
+        }
+        
+        return result.toArray(new Class[result.size()]);
+    }
+    
 }

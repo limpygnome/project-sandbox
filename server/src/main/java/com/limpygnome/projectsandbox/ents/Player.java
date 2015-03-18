@@ -6,6 +6,7 @@
 package com.limpygnome.projectsandbox.ents;
 
 import com.limpygnome.projectsandbox.Controller;
+import com.limpygnome.projectsandbox.ents.annotations.EntityType;
 import com.limpygnome.projectsandbox.ents.physics.Vector2;
 
 /**
@@ -13,6 +14,7 @@ import com.limpygnome.projectsandbox.ents.physics.Vector2;
  * 
  * @author limpygnome
  */
+@EntityType(typeId = 1)
 public class Player extends Entity
 {
     private static final int MOVEMENT_UP = 1;
@@ -25,9 +27,8 @@ public class Player extends Entity
     public Player(Controller controller)
     {
         super(
-                (short) 10,
-                (short) 8,
-                (short) 1
+                (short) 16,
+                (short) 9
         );
         
         this.movement = 0;

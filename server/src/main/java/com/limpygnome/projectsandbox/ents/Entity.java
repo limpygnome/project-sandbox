@@ -1,15 +1,18 @@
 package com.limpygnome.projectsandbox.ents;
 
 import com.limpygnome.projectsandbox.Controller;
+import com.limpygnome.projectsandbox.ents.annotations.EntityType;
 import com.limpygnome.projectsandbox.ents.physics.Vector2;
 import com.limpygnome.projectsandbox.ents.physics.Vertices;
-import com.limpygnome.projectsandbox.textures.Texture;
 import com.limpygnome.projectsandbox.utils.CustomMath;
+import java.lang.annotation.Annotation;
+import org.hibernate.metamodel.source.annotations.entity.EntityClass;
 
 /**
  *
  * @author limpygnome
  */
+@EntityType(typeId = 0)
 public strictfp abstract class Entity
 {
     public enum StateChange
@@ -47,10 +50,23 @@ public strictfp abstract class Entity
     // -- -1 for godmode
     public float health;
     
-    public Entity(short width, short height, short entityType)
+    public Entity(short width, short height)
     {
         this.id = 0;
-        this.entityType = entityType;
+        
+        // Fetch entity ID
+        final Class ENTITY_CLASS = getClass();
+        
+        // -- Check annotation present
+        if (!ENTITY_CLASS.isAnnotationPresent(EntityClass.class))
+        {
+            throw new IllegalArgumentException("No entity-type annotation present.");
+        }
+        
+        // -- Read ID from annotation
+        Annotation annotationEntityType = ENTITY_CLASS.getAnnotation(EntityType.class);
+        EntityType entType = (EntityType) annotationEntityType;
+        this.entityType = entType.typeId();
         
         // Set initial state
         this.state = StateChange.CREATED;
