@@ -48,6 +48,7 @@ public class MapManager
         
         Annotation annotationEntityType;
         EntityType entType;
+        
         for (Class clazz : classes)
         {
             if (clazz.isAnnotationPresent(EntityType.class))
@@ -60,7 +61,7 @@ public class MapManager
                 {
                     // Create mapping
                     entTypeMappings.put(entType.typeId(), clazz);
-                    System.out.println("Added ent mapping - " + entType.typeId() + " -> " + clazz.getName());
+                    System.out.println("Added ent type mapping - " + entType.typeId() + " -> " + clazz.getName());
                 }
                 else if (clazz != Entity.class)
                 {

@@ -6,7 +6,6 @@ import com.limpygnome.projectsandbox.ents.physics.Vector2;
 import com.limpygnome.projectsandbox.ents.physics.Vertices;
 import com.limpygnome.projectsandbox.utils.CustomMath;
 import java.lang.annotation.Annotation;
-import org.hibernate.metamodel.source.annotations.entity.EntityClass;
 
 /**
  *
@@ -58,7 +57,7 @@ public strictfp abstract class Entity
         final Class ENTITY_CLASS = getClass();
         
         // -- Check annotation present
-        if (!ENTITY_CLASS.isAnnotationPresent(EntityClass.class))
+        if (!ENTITY_CLASS.isAnnotationPresent(EntityType.class))
         {
             throw new IllegalArgumentException("No entity-type annotation present.");
         }

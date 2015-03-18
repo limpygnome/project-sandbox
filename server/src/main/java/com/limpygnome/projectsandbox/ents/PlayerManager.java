@@ -41,9 +41,6 @@ public class PlayerManager
         
         byte[] data;
         
-        // Send texture data
-        ws.send(controller.textureManager.texturePacket.getPacketData());
-        
         // Send map data
         ws.send(controller.mapManager.main.packet.getPacketData());
         

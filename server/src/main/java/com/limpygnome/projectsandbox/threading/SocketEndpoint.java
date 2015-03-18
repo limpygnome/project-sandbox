@@ -1,5 +1,6 @@
-package com.limpygnome.projectsandbox;
+package com.limpygnome.projectsandbox.threading;
 
+import com.limpygnome.projectsandbox.Controller;
 import com.limpygnome.projectsandbox.packets.InboundPacket;
 import com.limpygnome.projectsandbox.packets.inbound.PlayerMovementPacket;
 import java.io.IOException;
@@ -13,11 +14,11 @@ import org.java_websocket.server.WebSocketServer;
  *
  * @author limpygnome
  */
-public class Endpoint extends WebSocketServer
+public class SocketEndpoint extends WebSocketServer
 {
     private Controller controller;
     
-    public Endpoint(Controller controller, int port) throws IOException
+    public SocketEndpoint(Controller controller, int port) throws IOException
     {
         super(new InetSocketAddress(port));
         

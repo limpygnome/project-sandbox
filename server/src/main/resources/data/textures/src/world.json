@@ -1,7 +1,0 @@
-{
-    "name" : "world",
-    "width" : 128,
-    "height" : 64,
-    "url" : "content/images/world.png",
-    "description" : "The source file for world textures."
-}

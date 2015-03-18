@@ -1,6 +1,6 @@
 package com.limpygnome.projectsandbox;
 
-import com.limpygnome.projectsandbox.textures.TextureManager;
+import com.limpygnome.projectsandbox.threading.SocketEndpoint;
 import com.limpygnome.projectsandbox.ents.EntityManager;
 import com.limpygnome.projectsandbox.ents.PlayerManager;
 import com.limpygnome.projectsandbox.threading.GameLogic;
@@ -12,13 +12,12 @@ import com.limpygnome.projectsandbox.world.MapManager;
  */
 public class Controller
 {
-    public Endpoint endpoint;
+    public SocketEndpoint endpoint;
     public GameLogic logic;
     public Thread threadLogic;
     
     public EntityManager entityManager;
     public PlayerManager playerManager;
-    public TextureManager textureManager;
     public MapManager mapManager;
     
     public Controller()
@@ -34,17 +33,13 @@ public class Controller
             
             // Setup manager for players
             playerManager = new PlayerManager(this);
-            
-            // Setup texture manager
-            textureManager = new TextureManager();
-            textureManager.load();
-            
+
             // Setup map manager
             mapManager = new MapManager(this);
             mapManager.load();
             
             // Setup endpoint
-            endpoint = new Endpoint(this, 4857);
+            endpoint = new SocketEndpoint(this, 4857);
             endpoint.start();
             
             // Setup logic thread
