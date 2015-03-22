@@ -1,6 +1,6 @@
 package com.limpygnome.projectsandbox.packets.outbound;
 
-import com.limpygnome.projectsandbox.ents.Player;
+import com.limpygnome.projectsandbox.ents.Entity;
 import com.limpygnome.projectsandbox.packets.OutboundPacket;
 import java.io.IOException;
 import java.nio.ByteBuffer;
@@ -16,7 +16,7 @@ public class PlayerIdentityPacket extends OutboundPacket
         super((byte)'P', (byte)'I');
     }
     
-    public void writeIdentity(Player ply)
+    public void writeIdentity(Entity ply)
     {
         ByteBuffer bb = ByteBuffer.allocate(2);
         bb.putShort(ply.id);

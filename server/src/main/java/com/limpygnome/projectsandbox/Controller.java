@@ -2,7 +2,7 @@ package com.limpygnome.projectsandbox;
 
 import com.limpygnome.projectsandbox.threading.SocketEndpoint;
 import com.limpygnome.projectsandbox.ents.EntityManager;
-import com.limpygnome.projectsandbox.ents.PlayerManager;
+import com.limpygnome.projectsandbox.players.PlayerManager;
 import com.limpygnome.projectsandbox.threading.GameLogic;
 import com.limpygnome.projectsandbox.world.MapManager;
 

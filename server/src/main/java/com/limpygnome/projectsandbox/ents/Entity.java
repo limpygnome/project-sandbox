@@ -27,7 +27,13 @@ public strictfp abstract class Entity
          * Indicates the entity can now be deleted.
          */
         DELETED,
+        /**
+         * Indicates the entity's state has been updated.
+         */
         UPDATED,
+        /**
+         * Indicates the entity has been created
+         */
         CREATED
     }
     
@@ -206,9 +212,15 @@ public strictfp abstract class Entity
         return false;
     }
     
-    public void eventCollision(Entity collider, CollisionResult result)
+    public void eventCollision(Controller controller, Entity collider, CollisionResult result)
     {
         // Push ent out by default
         positionOffset(result.mtv);
+    }
+
+    @Override
+    public String toString()
+    {
+        return "[" + getClass().getName() + " - id: " + id + "]";
     }
 }

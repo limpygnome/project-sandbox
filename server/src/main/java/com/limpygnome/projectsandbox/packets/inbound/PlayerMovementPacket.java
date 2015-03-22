@@ -4,6 +4,7 @@ import com.limpygnome.projectsandbox.Controller;
 import com.limpygnome.projectsandbox.ents.Entity;
 import com.limpygnome.projectsandbox.ents.Player;
 import com.limpygnome.projectsandbox.packets.InboundPacket;
+import com.limpygnome.projectsandbox.players.PlayerInfo;
 import java.nio.ByteBuffer;
 import org.java_websocket.WebSocket;
 
@@ -15,7 +16,7 @@ import org.java_websocket.WebSocket;
 public class PlayerMovementPacket extends InboundPacket
 {
     public short id;
-    public byte movement;
+    public byte keys;
     
     public PlayerMovementPacket()
     {
@@ -27,21 +28,20 @@ public class PlayerMovementPacket extends InboundPacket
     {
         // Parse data
         id = bb.getShort(2);
-        movement = data[4];
+        keys = data[4];
         
         // Fetch player
-        Entity ent = controller.entityManager.fetch(id);
-        if(ent != null && ent instanceof Player)
+        PlayerInfo playerInfo = controller.playerManager.getPlayerByEntId(id);
+        
+        if (playerInfo != null)
         {
-            Player ply = (Player) ent;
-            
             // Check the socket is allowed to update the player, or drop them...
             // TODO: ...
             
             // Update the movement
-            ply.movement = movement;
+            playerInfo.keys = keys;
             
-            System.out.println("Player movement - ent id: " + id + ", flags: " + movement);
+            System.out.println("Player movement - ent id: " + id + ", flags: " + keys);
         }
         else
         {
