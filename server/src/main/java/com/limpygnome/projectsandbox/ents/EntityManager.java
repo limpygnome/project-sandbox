@@ -125,8 +125,8 @@ public class EntityManager
                         
                         if (result.collision)
                         {
-                            // Update offset
-                            a.positionOffset(result.mtv);
+                            // Inform ent of collision
+                            a.eventCollision(b, result);
                         }
                     }
                 }

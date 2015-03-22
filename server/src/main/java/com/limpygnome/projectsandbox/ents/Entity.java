@@ -95,6 +95,9 @@ public strictfp abstract class Entity
                 rotation + radians
         );
         
+        // Rebuild cached vertices
+        cachedVertices = new Vertices(this);
+        
         // Update state
         setState(StateChange.UPDATED);
     }
@@ -122,7 +125,7 @@ public strictfp abstract class Entity
      * @param y The new Y position.
      */
     public void position(float x, float y)
-    {   
+    {
         // Update positionNew
         positionNew.x = x;
         positionNew.y = y;
@@ -205,6 +208,7 @@ public strictfp abstract class Entity
     
     public void eventCollision(Entity collider, CollisionResult result)
     {
-        // Do nothing by default...
+        // Push ent out by default
+        positionOffset(result.mtv);
     }
 }
