@@ -125,8 +125,9 @@ public class EntityManager
                         
                         if (result.collision)
                         {
-                            // Inform ent of collision
-                            a.eventCollision(controller, b, result);
+                            // Inform both ents of event
+                            a.eventCollision(controller, b, a, b, result);
+                            b.eventCollision(controller, b, a, a, result);
                         }
                     }
                 }

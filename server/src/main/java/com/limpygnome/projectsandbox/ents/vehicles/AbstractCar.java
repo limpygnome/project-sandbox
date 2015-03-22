@@ -27,12 +27,12 @@ public abstract class AbstractCar extends Entity
     }
 
     @Override
-    public strictfp void eventCollision(Controller controller, Entity collider, CollisionResult result)
+    public strictfp void eventCollision(Controller controller, Entity entCollider, Entity entVictim, Entity entOther, CollisionResult result)
     {
-        if (collider instanceof Player)
+        if (entOther instanceof Player)
         {
             // Check if they're holding down action key to get in vehicle
-            Player ply = (Player) collider;
+            Player ply = (Player) entOther;
             PlayerInfo playerInfo = ply.playerInfo;
             
             if (playerInfo.isKeyDown(PlayerInfo.PlayerKey.Action))
@@ -42,6 +42,6 @@ public abstract class AbstractCar extends Entity
             }
         }
         
-        super.eventCollision(controller, collider, result);
+        super.eventCollision(controller, entCollider, entVictim, entOther, result);
     }
 }

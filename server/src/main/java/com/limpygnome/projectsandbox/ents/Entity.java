@@ -211,11 +211,14 @@ public strictfp abstract class Entity
         // Return true = handled, false = unhandled
         return false;
     }
-    
-    public void eventCollision(Controller controller, Entity collider, CollisionResult result)
+
+    public void eventCollision(Controller controller, Entity entCollider, Entity entVictim, Entity entOther, CollisionResult result)
     {
-        // Push ent out by default
-        positionOffset(result.mtv);
+        if (entCollider != this)
+        {
+            // Push ent out by default
+            positionOffset(result.mtv);
+        }
     }
 
     @Override
