@@ -2,7 +2,8 @@
     "src":
     [
 		"/content/game/textures/data/game.json",
-        "/content/game/textures/data/players.json",
-        "/content/game/textures/data/world.json"
+        "/content/game/textures/data/world.json",
+		"/content/game/textures/data/players.json",
+		"/content/game/textures/data/vehicles.json"
     ]
 }

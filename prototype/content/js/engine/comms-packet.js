@@ -23,6 +23,7 @@ projectSandbox.commsPacket =
 	MOVEMENT_LEFT: 2,
 	MOVEMENT_DOWN: 4,
 	MOVEMENT_RIGHT: 8,
+	ACTION_KEY: 16,
 	
 	// Previous packet - no point updating the server if the value is the same!
 	previousMovement: 0,
@@ -47,6 +48,11 @@ projectSandbox.commsPacket =
 		if(projectSandbox.keyboard.D)
 		{
 			movement |= this.MOVEMENT_RIGHT;
+		}
+		
+		if (projectSandbox.keyboard.E)
+		{
+			movement |= this.ACTION_KEY;
 		}
 		
 		// Compare and decide if to send

@@ -4,8 +4,10 @@ import com.limpygnome.projectsandbox.Controller;
 import com.limpygnome.projectsandbox.ents.physics.CollisionResult;
 import com.limpygnome.projectsandbox.ents.physics.CollisionResultMap;
 import com.limpygnome.projectsandbox.ents.physics.SAT;
+import com.limpygnome.projectsandbox.ents.physics.Vector2;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.Map;
 
 /**
@@ -151,6 +153,58 @@ public class EntityManager
                 a.position.copy(a.positionNew);
             }
         }
+    }
+    
+    // TODO: consider removal of the below code
+    public Entity[] nearbyEnts(Entity a, float distance, boolean testAllVertices)
+    {
+        LinkedList<Entity> result = new LinkedList<>();
+        
+        synchronized(entities)
+        {
+            Entity b;
+            float entDistance;
+            boolean found;
+            int i, j;
+            
+            for(Map.Entry<Short, Entity> kv : entities.entrySet())
+            {
+                b = kv.getValue();
+                
+                // Get distance to center
+                entDistance = Vector2.distance(a.position, b.position);
+                
+                // Check distance to center
+                if (entDistance <= distance)
+                {
+                    result.add(b);
+                }
+                else if (
+                    testAllVertices &&
+                    // Must be within collision radius to even be testable
+                    entDistance <= distance + b.cachedVertices.collisionRadius
+                )
+                {
+                    // Test all the vertices - expensive!
+                    found = false;
+                    for (i = 0; !found && i < a.cachedVertices.vertices.length; i++)
+                    {
+                        for (j = 0; !found && j < b.cachedVertices.vertices.length; j++)
+                        {
+                            entDistance = Vector2.distance(a.cachedVertices.vertices[i], b.cachedVertices.vertices[i]);
+                            
+                            if (entDistance < distance)
+                            {
+                                found = true;
+                                result.add(b);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        
+        return result.toArray(new Entity[result.size()]);
     }
     
 }

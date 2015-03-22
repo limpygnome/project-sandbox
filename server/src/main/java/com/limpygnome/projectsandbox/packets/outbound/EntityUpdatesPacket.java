@@ -72,11 +72,21 @@ public class EntityUpdatesPacket extends OutboundPacket
     
     private void writeEntCreated(Entity ent) throws IOException
     {
+        // Get ent custom bytes
+        byte[] customEntBytes = ent.eventPacketEntCreated();
+        int len = customEntBytes != null ? customEntBytes.length : 0;
+        
         // Write creation data
-        ByteBuffer bb = ByteBuffer.allocate(5);
+        ByteBuffer bb = ByteBuffer.allocate(5 + len);
         bb.put((byte)'C');
         bb.putShort(ent.id);
         bb.putShort(ent.entityType);
+        
+        // Write custom bytes
+        if (customEntBytes != null)
+        {
+            bb.put(customEntBytes);
+        }
         
         writeClear(bb);
     }

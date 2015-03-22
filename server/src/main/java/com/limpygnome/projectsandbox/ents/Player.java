@@ -12,10 +12,13 @@ import com.limpygnome.projectsandbox.ents.physics.Vector2;
 @EntityType(typeId = 1)
 public class Player extends Entity
 {
+    private static final float ACTION_DISTANCE = 5.0f;
+    
     private static final int MOVEMENT_UP = 1;
     private static final int MOVEMENT_LEFT = 2;
     private static final int MOVEMENT_DOWN = 4;
     private static final int MOVEMENT_RIGHT = 8;
+    private static final int ACTION_KEY = 16;
     
     public byte movement;
     

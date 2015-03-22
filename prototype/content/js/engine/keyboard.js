@@ -5,6 +5,8 @@ projectSandbox.keyboard =
 	A: false,
 	D: false,
 	
+	E: false,
+	
 	hook: function()
 	{
 		var self = this;
@@ -45,6 +47,9 @@ projectSandbox.keyboard =
 				break;
 			case 68:
 				this.D = value;
+				break;
+			case 69:
+				this.E = value;
 				break;
 			default:
 				console.warn("Keyboard - unhandled keycode " + keyCode);

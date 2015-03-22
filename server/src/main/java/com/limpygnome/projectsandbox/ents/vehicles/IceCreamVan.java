@@ -1,0 +1,24 @@
+package com.limpygnome.projectsandbox.ents.vehicles;
+
+import com.limpygnome.projectsandbox.ents.Entity;
+import com.limpygnome.projectsandbox.ents.annotations.EntityType;
+
+/**
+ *
+ * @author limpygnome
+ */
+@EntityType(typeId = 20)
+public class IceCreamVan extends AbstractCar
+{
+    public IceCreamVan()
+    {
+        super((short) 32, (short) 64);
+    }
+
+    @Override
+    public strictfp boolean eventActionKey(Entity cause)
+    {
+        System.out.println("received action key!");
+        return true;
+    }
+}

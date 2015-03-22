@@ -302,17 +302,20 @@ projectSandbox.comms =
 		var ent;
 		switch(entityType)
 		{
-			// Static test entity
+			default:
+				console.warn("Comms - unhandled ent type " + entityType);
 			case 0:
-            default:
 				ent = new Entity();
 				break;
-                
-			// Default player
 			case 1:
 				ent = new Player();
 				break;
+			case 20:
+				ent = new IceCreamVan();
+				break;
 		}
+		
+		// TODO: read custom byte data here
 		
 		// Compile entity
 		ent.compile(projectSandbox.gl);

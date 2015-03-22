@@ -2,6 +2,7 @@ package com.limpygnome.projectsandbox.ents;
 
 import com.limpygnome.projectsandbox.Controller;
 import com.limpygnome.projectsandbox.ents.annotations.EntityType;
+import com.limpygnome.projectsandbox.ents.physics.CollisionResult;
 import com.limpygnome.projectsandbox.ents.physics.Vector2;
 import com.limpygnome.projectsandbox.ents.physics.Vertices;
 import com.limpygnome.projectsandbox.utils.CustomMath;
@@ -188,5 +189,22 @@ public strictfp abstract class Entity
     {
         // Default action is to remove the entity
         setState(StateChange.PENDING_DELETED);
+    }
+    
+    public byte[] eventPacketEntCreated()
+    {
+        return null;
+    }
+    
+    public boolean eventActionKey(Entity cause)
+    {
+        // Does nothing by default...
+        // Return true = handled, false = unhandled
+        return false;
+    }
+    
+    public void eventCollision(Entity collider, CollisionResult result)
+    {
+        // Do nothing by default...
     }
 }

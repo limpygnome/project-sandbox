@@ -1,5 +1,6 @@
 package com.limpygnome.projectsandbox.world;
 
+import com.limpygnome.projectsandbox.ents.Entity;
 import com.limpygnome.projectsandbox.ents.physics.Vertices;
 import com.limpygnome.projectsandbox.packets.outbound.MapDataPacket;
 import java.io.IOException;
@@ -131,6 +132,42 @@ public class Map
         // Build map packet
         map.packet = new MapDataPacket();
         map.packet.build(map);
+        
+        // Spawn ents into world
+        JSONArray ents = (JSONArray) obj.get("ents");
+        
+        JSONObject entData;
+        Entity ent;
+        short entTypeId;
+        Class entClass;
+        
+        for (Object rawEnt : ents)
+        {
+            entData = (JSONObject) rawEnt;
+            
+            // Read type
+            entTypeId = (short)(long) entData.get("type");
+            
+            // Fetch ent type and create instance
+            entClass = mapManager.entTypeMappings.get(entTypeId);
+            
+            if (entClass == null)
+            {
+                throw new IOException("Entity type " + entTypeId + " not found");
+            }
+            
+            try
+            {
+                ent = (Entity) entClass.newInstance();
+            }
+            catch (Exception e)
+            {
+                throw new IOException("Unable to create entity instance", e);
+            }
+            
+            // Add to world
+            mapManager.controller.entityManager.add(ent);
+        }
         
         return map;
     }
