@@ -50,38 +50,42 @@ public abstract class AbstractCar extends Entity
                 acceleration += -accelerationFactor;
             }
             
+            float rotationOffset = 0.0f;
+
+            // Check if to apply rotation
+            if (playerInfo.isKeyDown(PlayerInfo.PlayerKey.MovementLeft))
+            {
+                rotationOffset -= 0.02f;
+            }
+            if (playerInfo.isKeyDown(PlayerInfo.PlayerKey.MovementRight))
+            {
+                rotationOffset += 0.02f;
+            }
+            
+            // Check if to invert rotation
+            // TODO: replace with magnitude check
+            if (acceleration < 0.0f)
+            {
+                rotationOffset *= -1.0f;
+            }
+            
+            // Apply acceleration
             if (acceleration != 0.0f)
             {
-                float rotationOffset = 0.0f;
-                
-                // Check if to apply rotation
-                if (playerInfo.isKeyDown(PlayerInfo.PlayerKey.MovementLeft))
-                {
-                    rotationOffset -= 0.02f;
-                }
-                if (playerInfo.isKeyDown(PlayerInfo.PlayerKey.MovementRight))
-                {
-                    rotationOffset += 0.02f;
-                }
-                
-                // Check if to invert rotation
-                if (acceleration < 0.0f)
-                {
-                    rotationOffset *= -1.0f;
-                }
-                
-                if (rotationOffset  != 0.0f)
-                {
-                    rotation += rotationOffset;
-                }
-                
                 Vector2 vAcceleration = Vector2.vectorFromAngle(rotation, acceleration);
                 velocity = Vector2.add(velocity, vAcceleration);
+            }
+            
+            // Apply rotation if velocity > 0
+            // TODO: replace with magnitude check
+            if (rotationOffset != 0.0f && (velocity.x != 0.0f || velocity.y != 0.0f))
+            {
+                rotationOffset(rotationOffset);
             }
         }
         
         // Apply deacceleration
-        if (acceleration != 0.0f)
+        if (acceleration == 0.0f)
         {
             velocity = Vector2.multiply(velocity, deaccelerationMultiplier);
         }
