@@ -156,6 +156,12 @@ public strictfp abstract class Entity
     public synchronized void setState(StateChange state)
     {
         // Only allow delete state to progress
+        // TODO: disallow created -> update change
+        if (state == StateChange.UPDATED && this.state == StateChange.CREATED)
+        {
+            return;
+        }
+        
         if(this.state == StateChange.PENDING_DELETED && state == StateChange.DELETED)
         {
             this.state = state;

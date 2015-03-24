@@ -36,7 +36,7 @@ public abstract class AbstractCar extends Entity
         float steerAngle = 0.0f;
         final float steerAngleAbs = 0.5f;//CustomMath.deg2rad(35.0f);
         
-        float deaccelerationMultiplier = 0.9f;
+        float deaccelerationMultiplier = 0.95f;
         
         // Check player keys
         if (playerInfo != null)
@@ -100,6 +100,16 @@ public abstract class AbstractCar extends Entity
             // Compute new rotation
             float newRotation = (float) Math.atan2(frontWheel.x - backWheel.x, frontWheel.y - backWheel.y);
             rotation(newRotation);
+            
+            // Check if player wants to get out
+            // TODO: add delay or reset action key
+            // TODO: prolly better to reset/turn off action key!
+//            if (playerInfo.isKeyDown(PlayerInfo.PlayerKey.Action))
+//            {
+//                // Eject player from car
+//                controller.playerManager.createSetNewPlayerEnt(playerInfo, positionNew);
+//                this.playerInfo = null;
+//            }
         }
         
         

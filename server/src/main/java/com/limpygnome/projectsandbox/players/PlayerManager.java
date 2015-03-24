@@ -4,6 +4,7 @@ package com.limpygnome.projectsandbox.players;
 import com.limpygnome.projectsandbox.Controller;
 import com.limpygnome.projectsandbox.ents.Entity;
 import com.limpygnome.projectsandbox.ents.Player;
+import com.limpygnome.projectsandbox.ents.physics.Vector2;
 import com.limpygnome.projectsandbox.packets.outbound.EntityUpdatesPacket;
 import com.limpygnome.projectsandbox.packets.outbound.PlayerIdentityPacket;
 import java.io.IOException;
@@ -38,7 +39,7 @@ public class PlayerManager
         
         // Create entity for player
         // TODO: set to use spawns with type of player created etc?
-        createSetNewPlayerEnt(playerInfo);
+        createSetNewPlayerEnt(playerInfo, new Vector2(0.0f, 0.0f));
         
         byte[] data;
         
@@ -78,7 +79,7 @@ public class PlayerManager
     {
     }
     
-    public synchronized void createSetNewPlayerEnt(PlayerInfo playerInfo)
+    public synchronized void createSetNewPlayerEnt(PlayerInfo playerInfo, Vector2 position)
     {
         // Create new entity
         Player ply = new Player(controller, playerInfo);
