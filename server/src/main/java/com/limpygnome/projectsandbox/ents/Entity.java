@@ -92,13 +92,13 @@ public strictfp abstract class Entity
         // Nothing by default...
     }
     
-    public void rotationOffset(float radians)
+    public void rotation(float radians)
     {
         // Update rotation
         this.rotation = CustomMath.clampRepeat(
                 -CustomMath.PI_FLOAT,
                 CustomMath.PI_FLOAT,
-                rotation + radians
+                radians
         );
         
         // Rebuild cached vertices
@@ -106,6 +106,11 @@ public strictfp abstract class Entity
         
         // Update state
         setState(StateChange.UPDATED);
+    }
+    
+    public void rotationOffset(float radians)
+    {
+        rotation(rotation + radians);
     }
     
     public void positionOffset(Vector2 offset)

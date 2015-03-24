@@ -6,6 +6,7 @@ import com.limpygnome.projectsandbox.ents.Player;
 import com.limpygnome.projectsandbox.ents.physics.CollisionResult;
 import com.limpygnome.projectsandbox.ents.physics.Vector2;
 import com.limpygnome.projectsandbox.players.PlayerInfo;
+import com.limpygnome.projectsandbox.utils.CustomMath;
 
 /**
  *
@@ -16,25 +17,24 @@ public abstract class AbstractCar extends Entity
     // The player driving the car; null if no one.
     protected PlayerInfo playerInfo;
     
-    protected Vector2 velocity;
-    
     protected float accelerationFactor;
     protected float deaccelerationMultiplier;
-    protected float maxSpeed;
-    protected float friction;
+    protected float speed;
     
     public AbstractCar(short width, short height)
     {
         super(width, height);
         
         playerInfo = null;
-        velocity = new Vector2();
+        speed = 0.0f;
     }
 
     @Override
     public strictfp void logic(Controller controller)
     {
         float acceleration = 0.0f;
+        float steerAngle = 0.0f;
+        final float steerAngleAbs = 0.5f;//CustomMath.deg2rad(35.0f);
         
         // Check player keys
         if (playerInfo != null)
@@ -50,47 +50,91 @@ public abstract class AbstractCar extends Entity
                 acceleration += -accelerationFactor;
             }
             
-            float rotationOffset = 0.0f;
-
-            // Check if to apply rotation
+            // Check for steer angle
             if (playerInfo.isKeyDown(PlayerInfo.PlayerKey.MovementLeft))
             {
-                rotationOffset -= 0.02f;
+                steerAngle -= steerAngleAbs;
             }
+            
             if (playerInfo.isKeyDown(PlayerInfo.PlayerKey.MovementRight))
             {
-                rotationOffset += 0.02f;
+                steerAngle += steerAngleAbs;
             }
             
-            // Check if to invert rotation
-            // TODO: replace with magnitude check
-            if (acceleration < 0.0f)
-            {
-                rotationOffset *= -1.0f;
-            }
+            // Compute wheel positions
+            //Vector2 wheelBase = Vector2.vectorFromAngle(rotation, height / 2.0f);
+            float wheelBase = height / 2.0f;
             
-            // Apply acceleration
-            if (acceleration != 0.0f)
-            {
-                Vector2 vAcceleration = Vector2.vectorFromAngle(rotation, acceleration);
-                velocity = Vector2.add(velocity, vAcceleration);
-            }
+            Vector2 heading = new Vector2(wheelBase * (float) Math.sin(rotation), wheelBase * (float) Math.cos(rotation));
+//            Vector2 steering = new Vector2((float) Math.cos(rotation+steerAngle), (float) Math.sin(rotation+steerAngle));
             
-            // Apply rotation if velocity > 0
-            // TODO: replace with magnitude check
-            if (rotationOffset != 0.0f && (velocity.x != 0.0f || velocity.y != 0.0f))
-            {
-                rotationOffset(rotationOffset);
-            }
+            Vector2 frontWheel = Vector2.add(position, heading);
+            
+            Vector2 backWheel = Vector2.subtract(position, heading);
+            
+            // Offset wheels by acceleration
+            this.speed += acceleration;
+            Vector2 backWheelAccel = new Vector2(speed * (float) Math.sin(rotation), speed * (float) Math.cos(rotation)); //Vector2.multiply(heading, speed);
+            Vector2 frontWheelAccel = new Vector2(speed * (float) Math.sin(rotation + steerAngle), speed * (float) Math.cos(rotation + steerAngle)); //Vector2.multiply(steering, speed);
+            
+            frontWheel = Vector2.add(frontWheel, frontWheelAccel);
+            backWheel = Vector2.add(backWheel, backWheelAccel);
+            
+            // Compute car position
+            Vector2 carPosition = new Vector2(
+                    (frontWheel.x + backWheel.x) / 2.0f,
+                    (frontWheel.y + backWheel.y) / 2.0f
+            );
+            position(carPosition);
+            
+            // Compute new rotation
+            float newRotation = (float) Math.atan2(frontWheel.x - backWheel.x, frontWheel.y - backWheel.y);
+            rotation(newRotation);
         }
         
-        // Apply deacceleration
-        if (acceleration == 0.0f)
-        {
-            velocity = Vector2.multiply(velocity, deaccelerationMultiplier);
-        }
-        // Apply velocity
-        positionOffset(velocity);
+        
+            
+//            float rotationOffset = 0.0f;
+//
+//            // Check if to apply rotation
+//            if (playerInfo.isKeyDown(PlayerInfo.PlayerKey.MovementLeft))
+//            {
+//                rotationOffset -= 0.02f;
+//            }
+//            if (playerInfo.isKeyDown(PlayerInfo.PlayerKey.MovementRight))
+//            {
+//                rotationOffset += 0.02f;
+//            }
+//            
+//            // Check if to invert rotation
+//            // TODO: replace with magnitude check
+//            if (acceleration < 0.0f)
+//            {
+//                rotationOffset *= -1.0f;
+//            }
+//            
+//            // Apply acceleration
+//            if (acceleration != 0.0f)
+//            {
+//                Vector2 vAcceleration = Vector2.vectorFromAngle(rotation, acceleration);
+//                velocity = Vector2.add(velocity, vAcceleration);
+//            }
+//            
+//            // Apply rotation if velocity > 0
+//            // TODO: replace with magnitude check
+//            if (rotationOffset != 0.0f && (velocity.x != 0.0f || velocity.y != 0.0f))
+//            {
+//                rotationOffset(rotationOffset);
+//            }
+//        }
+//        
+//        // Apply deacceleration
+//        if (acceleration == 0.0f)
+//        {
+//            velocity = Vector2.multiply(velocity, deaccelerationMultiplier);
+//        }
+//        // Apply velocity
+//        positionOffset(velocity);
     }
 
     @Override

@@ -14,9 +14,7 @@ public class IceCreamVan extends AbstractCar
     {
         super((short) 32, (short) 64);
         
-        accelerationFactor = 0.2f;
-        deaccelerationMultiplier = 0.8f;
-        maxSpeed = 5.0f;
+        accelerationFactor = 0.15f;
     }
 
     @Override

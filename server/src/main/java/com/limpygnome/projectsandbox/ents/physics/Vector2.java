@@ -94,6 +94,11 @@ public class Vector2
         return new Vector2(v.x + value.x, v.y + value.y);
     }
     
+    public static Vector2 add(Vector2 v, float value)
+    {
+        return new Vector2(v.x + value, v.y + value);
+    }
+    
     public static Vector2 subtract(Vector2 v, Vector2 value)
     {
         return new Vector2(v.x - value.x, v.y - value.y);
@@ -102,6 +107,11 @@ public class Vector2
     public static Vector2 multiply(Vector2 v, float value)
     {
         return new Vector2(v.x * value, v.y * value);
+    }
+    
+    public static Vector2 multiply(Vector2 a, Vector2 b)
+    {
+        return new Vector2(a.x * b.x, a.y * b.y);
     }
     
     public static Vector2 normalise(Vector2 v)

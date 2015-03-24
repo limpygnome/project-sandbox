@@ -55,12 +55,12 @@ public class CustomMath
         return min + v;
     }
     
-    public float deg2rad(float deg)
+    public static float deg2rad(float deg)
     {
         return PI_FLOAT / 2.0f + deg * PI_FLOAT / 180.0f;
     }
     
-    public float rad2deg(float rad)
+    public static float rad2deg(float rad)
     {
         return rad * (180.0f / PI_FLOAT);
     }
