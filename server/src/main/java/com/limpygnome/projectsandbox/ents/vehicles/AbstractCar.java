@@ -36,6 +36,8 @@ public abstract class AbstractCar extends Entity
         float steerAngle = 0.0f;
         final float steerAngleAbs = 0.5f;//CustomMath.deg2rad(35.0f);
         
+        float deaccelerationMultiplier = 0.9f;
+        
         // Check player keys
         if (playerInfo != null)
         {
@@ -73,7 +75,15 @@ public abstract class AbstractCar extends Entity
             Vector2 backWheel = Vector2.subtract(position, heading);
             
             // Offset wheels by acceleration
-            this.speed += acceleration;
+            if (acceleration != 0.0f)
+            {
+                this.speed += acceleration;
+            }
+            else
+            {
+                this.speed *= deaccelerationMultiplier;
+            }
+            
             Vector2 backWheelAccel = new Vector2(speed * (float) Math.sin(rotation), speed * (float) Math.cos(rotation)); //Vector2.multiply(heading, speed);
             Vector2 frontWheelAccel = new Vector2(speed * (float) Math.sin(rotation + steerAngle), speed * (float) Math.cos(rotation + steerAngle)); //Vector2.multiply(steering, speed);
             
