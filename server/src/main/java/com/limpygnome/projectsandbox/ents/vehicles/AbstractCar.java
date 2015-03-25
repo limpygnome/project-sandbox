@@ -6,6 +6,7 @@ import com.limpygnome.projectsandbox.ents.Player;
 import com.limpygnome.projectsandbox.ents.physics.CollisionResult;
 import com.limpygnome.projectsandbox.ents.physics.Vector2;
 import com.limpygnome.projectsandbox.players.PlayerInfo;
+import com.limpygnome.projectsandbox.utils.CustomMath;
 
 /**
  *
@@ -14,21 +15,23 @@ import com.limpygnome.projectsandbox.players.PlayerInfo;
 public abstract class AbstractCar extends Entity
 {
     private final float SPEED_FP_MIN = 0.01f;
-    
-    // The player driving the car; null if no one.
-    protected PlayerInfo playerInfo;
-    
+
+    // Car properties
     protected float accelerationFactor;
     protected float deaccelerationMultiplier;
-    protected float speed;
     protected float steeringAngle;
+    protected float maxSpeed;
+    
+    // Car state
+    protected float speed;
+    protected PlayerInfo playerInfo;
     
     public AbstractCar(short width, short height)
     {
         super(width, height);
         
-        playerInfo = null;
         speed = 0.0f;
+        playerInfo = null;
     }
 
     @Override
@@ -90,6 +93,16 @@ public abstract class AbstractCar extends Entity
             if (acceleration != 0.0f)
             {
                 this.speed += acceleration;
+                
+                // Clamp speed
+                if (this.speed < -maxSpeed)
+                {
+                    this.speed = -maxSpeed;
+                }
+                else if (this.speed > maxSpeed)
+                {
+                    this.speed = maxSpeed;
+                }
             }
             else
             {

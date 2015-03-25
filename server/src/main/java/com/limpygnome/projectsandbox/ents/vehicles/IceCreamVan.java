@@ -1,6 +1,5 @@
 package com.limpygnome.projectsandbox.ents.vehicles;
 
-import com.limpygnome.projectsandbox.ents.Entity;
 import com.limpygnome.projectsandbox.ents.annotations.EntityType;
 
 /**
@@ -16,13 +15,7 @@ public class IceCreamVan extends AbstractCar
         
         accelerationFactor = 0.15f;
         deaccelerationMultiplier = 0.95f;
-        steeringAngle = 0.5f;
-    }
-
-    @Override
-    public strictfp boolean eventActionKey(Entity cause)
-    {
-        System.out.println("received action key!");
-        return true;
+        steeringAngle = 0.9f;
+        maxSpeed = 5.0f;
     }
 }
