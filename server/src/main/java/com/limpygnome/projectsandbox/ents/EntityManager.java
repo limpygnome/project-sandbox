@@ -16,14 +16,16 @@ import java.util.Map;
  */
 public class EntityManager
 {
-    private Controller controller;
-    public final HashMap<Short,Entity> entities;
+    private final Controller controller;
+    public final HashMap<Short, Entity> entities;
+    public final HashMap<Short, Entity> entitiesNew;
     private short entityIdCounter;
     
     public EntityManager(Controller controller)
     {
         this.controller = controller;
         this.entities = new HashMap<>();
+        this.entitiesNew = new HashMap<>();
     }
     
     public Entity fetch(Short key)
@@ -38,7 +40,7 @@ public class EntityManager
     {
         // Fetch the next available identifier
         short id;
-        boolean found = false;
+        boolean foundNewId = false;
         int attempts = 0;
         
         synchronized(entities)
@@ -46,16 +48,16 @@ public class EntityManager
             do
             {
                 id = entityIdCounter++;
-                if(!entities.containsKey(id))
+                if(!entities.containsKey(id) && !entitiesNew.containsKey(id))
                 {
-                    found = true;
+                    foundNewId = true;
                 }
             }
-            while(!found && ++attempts < Short.MAX_VALUE);
+            while(!foundNewId && ++attempts < Short.MAX_VALUE);
         }
         
         // Check we found an identifier
-        if(!found)
+        if(!foundNewId)
         {
             return false;
         }
@@ -66,8 +68,8 @@ public class EntityManager
         // Add mapping
         synchronized(entities)
         {
-            // Add entity
-            entities.put(id, ent);
+            // Add entity to pending map
+            entitiesNew.put(id, ent);
             
             // Update state to created - for update to all players!
             ent.setState(Entity.StateChange.CREATED);
@@ -85,6 +87,15 @@ public class EntityManager
             if(ent != null)
             {
                 ent.setState(Entity.StateChange.PENDING_DELETED);
+            }
+            else
+            {
+                // Try pending ents
+                ent = entitiesNew.get(id);
+                if (ent != null)
+                {
+                    ent.setState(Entity.StateChange.PENDING_DELETED);
+                }
             }
         }
         
@@ -153,6 +164,10 @@ public class EntityManager
                 // Update position for ent
                 a.position.copy(a.positionNew);
             }
+            
+            // Add pending ents
+            entities.putAll(entitiesNew);
+            entitiesNew.clear();
         }
     }
     

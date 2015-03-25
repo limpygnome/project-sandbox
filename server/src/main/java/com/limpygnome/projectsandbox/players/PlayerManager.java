@@ -83,6 +83,7 @@ public class PlayerManager
     {
         // Create new entity
         Player ply = new Player(controller, playerInfo);
+        ply.position(position);
         
         // Add entity to world
         if(!controller.entityManager.add(ply))

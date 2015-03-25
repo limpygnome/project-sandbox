@@ -34,7 +34,7 @@ public abstract class AbstractCar extends Entity
     {
         float acceleration = 0.0f;
         float steerAngle = 0.0f;
-        final float steerAngleAbs = 0.5f;//CustomMath.deg2rad(35.0f);
+        final float steerAngleAbs = 0.5f;
         
         float deaccelerationMultiplier = 0.95f;
         
@@ -49,7 +49,7 @@ public abstract class AbstractCar extends Entity
             if (playerInfo.isKeyDown(PlayerInfo.PlayerKey.MovementDown))
             {
                 // TODO: seperate variable for reverse
-                acceleration += -accelerationFactor;
+                acceleration -= accelerationFactor;
             }
             
             // Check for steer angle
@@ -64,12 +64,9 @@ public abstract class AbstractCar extends Entity
             }
             
             // Compute wheel positions
-            //Vector2 wheelBase = Vector2.vectorFromAngle(rotation, height / 2.0f);
             float wheelBase = height / 2.0f;
             
             Vector2 heading = new Vector2(wheelBase * (float) Math.sin(rotation), wheelBase * (float) Math.cos(rotation));
-//            Vector2 steering = new Vector2((float) Math.cos(rotation+steerAngle), (float) Math.sin(rotation+steerAngle));
-            
             Vector2 frontWheel = Vector2.add(position, heading);
             
             Vector2 backWheel = Vector2.subtract(position, heading);
@@ -101,60 +98,19 @@ public abstract class AbstractCar extends Entity
             float newRotation = (float) Math.atan2(frontWheel.x - backWheel.x, frontWheel.y - backWheel.y);
             rotation(newRotation);
             
-            // Check if player wants to get out
-            // TODO: add delay or reset action key
-            // TODO: prolly better to reset/turn off action key!
-//            if (playerInfo.isKeyDown(PlayerInfo.PlayerKey.Action))
-//            {
-//                // Eject player from car
-//                controller.playerManager.createSetNewPlayerEnt(playerInfo, positionNew);
-//                this.playerInfo = null;
-//            }
+            // Check if player is trying to get out
+            if (playerInfo.isKeyDown(PlayerInfo.PlayerKey.Action))
+            {
+                // Set action to up/handled
+                playerInfo.setKey(PlayerInfo.PlayerKey.Action, false);
+                
+                // Create new player in position of vehicle
+                controller.playerManager.createSetNewPlayerEnt(playerInfo, positionNew);
+                
+                // Reset player in car
+                this.playerInfo = null;
+            }
         }
-        
-        
-            
-//            float rotationOffset = 0.0f;
-//
-//            // Check if to apply rotation
-//            if (playerInfo.isKeyDown(PlayerInfo.PlayerKey.MovementLeft))
-//            {
-//                rotationOffset -= 0.02f;
-//            }
-//            if (playerInfo.isKeyDown(PlayerInfo.PlayerKey.MovementRight))
-//            {
-//                rotationOffset += 0.02f;
-//            }
-//            
-//            // Check if to invert rotation
-//            // TODO: replace with magnitude check
-//            if (acceleration < 0.0f)
-//            {
-//                rotationOffset *= -1.0f;
-//            }
-//            
-//            // Apply acceleration
-//            if (acceleration != 0.0f)
-//            {
-//                Vector2 vAcceleration = Vector2.vectorFromAngle(rotation, acceleration);
-//                velocity = Vector2.add(velocity, vAcceleration);
-//            }
-//            
-//            // Apply rotation if velocity > 0
-//            // TODO: replace with magnitude check
-//            if (rotationOffset != 0.0f && (velocity.x != 0.0f || velocity.y != 0.0f))
-//            {
-//                rotationOffset(rotationOffset);
-//            }
-//        }
-//        
-//        // Apply deacceleration
-//        if (acceleration == 0.0f)
-//        {
-//            velocity = Vector2.multiply(velocity, deaccelerationMultiplier);
-//        }
-//        // Apply velocity
-//        positionOffset(velocity);
     }
 
     @Override
@@ -168,6 +124,9 @@ public abstract class AbstractCar extends Entity
             
             if (playerInfo.isKeyDown(PlayerInfo.PlayerKey.Action))
             {
+                // Set action key off/handled
+                playerInfo.setKey(PlayerInfo.PlayerKey.Action, false);
+                
                 // Set the player to use this entity
                 controller.playerManager.setPlayerEnt(playerInfo, this);
                 

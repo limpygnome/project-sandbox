@@ -98,8 +98,8 @@ public class EntityUpdatesPacket extends OutboundPacket
         ByteBuffer bb = ByteBuffer.allocate(15);
         bb.put((byte)'U');
         bb.putShort(ent.id); // 2
-        bb.putFloat(ent.position.x); // 4
-        bb.putFloat(ent.position.y); // 4
+        bb.putFloat(ent.positionNew.x); // 4
+        bb.putFloat(ent.positionNew.y); // 4
         bb.putFloat(ent.rotation); //4
 
         writeClear(bb);

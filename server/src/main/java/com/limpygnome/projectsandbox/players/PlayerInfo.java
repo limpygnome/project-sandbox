@@ -1,7 +1,6 @@
 package com.limpygnome.projectsandbox.players;
 
 import com.limpygnome.projectsandbox.ents.Entity;
-import com.limpygnome.projectsandbox.packets.outbound.PlayerIdentityPacket;
 import org.java_websocket.WebSocket;
 
 /**
@@ -49,5 +48,17 @@ public class PlayerInfo
     public boolean isKeyDown(PlayerKey key)
     {
         return (keys & key.FLAG) == key.FLAG;
+    }
+    
+    public void setKey(PlayerKey key, boolean down)
+    {
+        if (down)
+        {
+            keys |= key.FLAG;
+        }
+        else
+        {
+            keys &= ~key.FLAG;
+        }
     }
 }
