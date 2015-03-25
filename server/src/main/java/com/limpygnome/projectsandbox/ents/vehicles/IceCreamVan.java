@@ -15,6 +15,8 @@ public class IceCreamVan extends AbstractCar
         super((short) 32, (short) 64);
         
         accelerationFactor = 0.15f;
+        deaccelerationMultiplier = 0.95f;
+        steeringAngle = 0.5f;
     }
 
     @Override

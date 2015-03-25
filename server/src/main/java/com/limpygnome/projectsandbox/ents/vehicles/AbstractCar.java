@@ -6,7 +6,6 @@ import com.limpygnome.projectsandbox.ents.Player;
 import com.limpygnome.projectsandbox.ents.physics.CollisionResult;
 import com.limpygnome.projectsandbox.ents.physics.Vector2;
 import com.limpygnome.projectsandbox.players.PlayerInfo;
-import com.limpygnome.projectsandbox.utils.CustomMath;
 
 /**
  *
@@ -14,12 +13,15 @@ import com.limpygnome.projectsandbox.utils.CustomMath;
  */
 public abstract class AbstractCar extends Entity
 {
+    private final float SPEED_FP_MIN = 0.01f;
+    
     // The player driving the car; null if no one.
     protected PlayerInfo playerInfo;
     
     protected float accelerationFactor;
     protected float deaccelerationMultiplier;
     protected float speed;
+    protected float steeringAngle;
     
     public AbstractCar(short width, short height)
     {
@@ -34,9 +36,6 @@ public abstract class AbstractCar extends Entity
     {
         float acceleration = 0.0f;
         float steerAngle = 0.0f;
-        final float steerAngleAbs = 0.5f;
-        
-        float deaccelerationMultiplier = 0.95f;
         
         // Check player keys
         if (playerInfo != null)
@@ -55,48 +54,13 @@ public abstract class AbstractCar extends Entity
             // Check for steer angle
             if (playerInfo.isKeyDown(PlayerInfo.PlayerKey.MovementLeft))
             {
-                steerAngle -= steerAngleAbs;
+                steerAngle -= this.steeringAngle;
             }
             
             if (playerInfo.isKeyDown(PlayerInfo.PlayerKey.MovementRight))
             {
-                steerAngle += steerAngleAbs;
+                steerAngle += this.steeringAngle;
             }
-            
-            // Compute wheel positions
-            float wheelBase = height / 2.0f;
-            
-            Vector2 heading = new Vector2(wheelBase * (float) Math.sin(rotation), wheelBase * (float) Math.cos(rotation));
-            Vector2 frontWheel = Vector2.add(position, heading);
-            
-            Vector2 backWheel = Vector2.subtract(position, heading);
-            
-            // Offset wheels by acceleration
-            if (acceleration != 0.0f)
-            {
-                this.speed += acceleration;
-            }
-            else
-            {
-                this.speed *= deaccelerationMultiplier;
-            }
-            
-            Vector2 backWheelAccel = new Vector2(speed * (float) Math.sin(rotation), speed * (float) Math.cos(rotation)); //Vector2.multiply(heading, speed);
-            Vector2 frontWheelAccel = new Vector2(speed * (float) Math.sin(rotation + steerAngle), speed * (float) Math.cos(rotation + steerAngle)); //Vector2.multiply(steering, speed);
-            
-            frontWheel = Vector2.add(frontWheel, frontWheelAccel);
-            backWheel = Vector2.add(backWheel, backWheelAccel);
-            
-            // Compute car position
-            Vector2 carPosition = new Vector2(
-                    (frontWheel.x + backWheel.x) / 2.0f,
-                    (frontWheel.y + backWheel.y) / 2.0f
-            );
-            position(carPosition);
-            
-            // Compute new rotation
-            float newRotation = (float) Math.atan2(frontWheel.x - backWheel.x, frontWheel.y - backWheel.y);
-            rotation(newRotation);
             
             // Check if player is trying to get out
             if (playerInfo.isKeyDown(PlayerInfo.PlayerKey.Action))
@@ -109,6 +73,50 @@ public abstract class AbstractCar extends Entity
                 
                 // Reset player in car
                 this.playerInfo = null;
+            }
+        }
+        
+        if (speed != 0.0f || acceleration != 0.0f)
+        {
+            // Compute wheel positions
+            float wheelBase = height / 2.0f;
+
+            Vector2 heading = new Vector2(wheelBase * (float) Math.sin(rotation), wheelBase * (float) Math.cos(rotation));
+            Vector2 frontWheel = Vector2.add(position, heading);
+
+            Vector2 backWheel = Vector2.subtract(position, heading);
+
+            // Offset wheels by acceleration
+            if (acceleration != 0.0f)
+            {
+                this.speed += acceleration;
+            }
+            else
+            {
+                this.speed *= deaccelerationMultiplier;
+            }
+
+            Vector2 backWheelAccel = new Vector2(speed * (float) Math.sin(rotation), speed * (float) Math.cos(rotation));
+            Vector2 frontWheelAccel = new Vector2(speed * (float) Math.sin(rotation + steerAngle), speed * (float) Math.cos(rotation + steerAngle));
+
+            frontWheel = Vector2.add(frontWheel, frontWheelAccel);
+            backWheel = Vector2.add(backWheel, backWheelAccel);
+
+            // Compute car position
+            Vector2 carPosition = new Vector2(
+                    (frontWheel.x + backWheel.x) / 2.0f,
+                    (frontWheel.y + backWheel.y) / 2.0f
+            );
+            position(carPosition);
+
+            // Compute new rotation
+            float newRotation = (float) Math.atan2(frontWheel.x - backWheel.x, frontWheel.y - backWheel.y);
+            rotation(newRotation);
+
+            // Check if to set speed to 0
+            if (Math.abs(speed) < SPEED_FP_MIN)
+            {
+                speed = 0.0f;
             }
         }
     }
