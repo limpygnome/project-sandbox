@@ -37,9 +37,8 @@ public class PlayerManager
         // Add mapping for sock
         mappingsSocket.put(ws, playerInfo);
         
-        // Create entity for player
-        // TODO: set to use spawns with type of player created etc?
-        createSetNewPlayerEnt(playerInfo, new Vector2(0.0f, 0.0f));
+        // Create and spawn entity for player
+        createSpawnNewPlayerEnt(playerInfo);
         
         byte[] data;
         
@@ -79,21 +78,36 @@ public class PlayerManager
     {
     }
     
-    public synchronized void createSetNewPlayerEnt(PlayerInfo playerInfo, Vector2 position)
+    public synchronized Player createSpawnNewPlayerEnt(PlayerInfo playerInfo)
+    {
+        Player ply = createSetNewPlayerEnt(playerInfo);
+        controller.mapManager.main.spawn(ply);
+        return ply;
+    }
+    
+    public synchronized Player createSetNewPlayerEnt(PlayerInfo playerInfo, Vector2 position)
+    {
+        Player ply = createSetNewPlayerEnt(playerInfo);
+        ply.position(position);
+        return ply;
+    }
+    
+    public synchronized Player createSetNewPlayerEnt(PlayerInfo playerInfo)
     {
         // Create new entity
         Player ply = new Player(controller, playerInfo);
-        ply.position(position);
         
         // Add entity to world
         if(!controller.entityManager.add(ply))
         {
-            System.err.println("Player manager - failed to register new player.");
-            return;
+            // TODO; consider removal or better handling...
+            throw new RuntimeException("Failed to spawn player");
         }
         
         // Set player to use ent
         setPlayerEnt(playerInfo, ply);
+        
+        return ply;
     }
     
     public synchronized void setPlayerEnt(PlayerInfo playerInfo, Entity entity)

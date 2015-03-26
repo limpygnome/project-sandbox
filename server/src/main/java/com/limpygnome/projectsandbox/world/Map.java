@@ -217,12 +217,12 @@ public class Map
     public <T extends Entity & PropertyFaction> void spawn(T ent)
     {
         // Fetch spawn for faction
-        FactionSpawns factionSpawns = spawns.get(ent.getFaction().ID);
+        FactionSpawns factionSpawns = spawns.get(ent.getPropertyFaction().ID);
         
         if (factionSpawns == null)
         {
             // TODO: replace with log4j
-            System.err.println("no spawns available for faction " + ent.getFaction().ID);
+            System.err.println("no spawns available for faction " + ent.getPropertyFaction().ID);
         }
         else
         {

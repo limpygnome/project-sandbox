@@ -6,5 +6,5 @@ package com.limpygnome.projectsandbox.ents;
  */
 public interface PropertyFaction
 {
-    Faction getFaction();
+    Faction getPropertyFaction();
 }

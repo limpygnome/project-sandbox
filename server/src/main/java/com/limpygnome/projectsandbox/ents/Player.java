@@ -11,7 +11,7 @@ import com.limpygnome.projectsandbox.players.PlayerInfo;
  * @author limpygnome
  */
 @EntityType(typeId = 1)
-public class Player extends Entity
+public class Player extends Entity implements PropertyFaction
 {
     public PlayerInfo playerInfo;
     
@@ -78,5 +78,10 @@ public class Player extends Entity
         // Perform ent logic
         super.logic(controller);
     }
-    
+
+    @Override
+    public Faction getPropertyFaction()
+    {
+        return Faction.NONE;
+    }
 }
