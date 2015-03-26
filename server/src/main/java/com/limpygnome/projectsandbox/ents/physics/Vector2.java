@@ -73,13 +73,13 @@ public class Vector2
     public void rotate(float originX, float originY, float theta)
     {
         // Create sin/cos of rotation
-        float angleCos = (float) Math.cos(theta);
-        float angleSin = (float) Math.sin(theta);
+        float angleSin = (float) Math.sin(-theta);
+        float angleCos = (float) Math.cos(-theta);
         
         // Translate xy relative to origin, so that origin is 0,0
         float posX = x - originX;
         float posY = y - originY;
-        
+
         // Create new co-ords around origin
         float rX = (angleCos * posX) - (angleSin * posY);
         float rY = (angleSin * posX) + (angleCos * posY);

@@ -49,16 +49,16 @@ public class Vertices
     {
         float hw = width / 2.0f;
         float hh = height / 2.0f;
-        
+
         // Copy position as center
         this.center = position.clone();
         
         // Build vertices
-        Vector2 topLeft = new Vector2(position, -hw, hh, rotation);
-        Vector2 topRight = new Vector2(position, hw, hh, rotation);
-        Vector2 bottomLeft = new Vector2(position, -hw, -hh, rotation);
-        Vector2 bottomRight = new Vector2(position, hw, -hh, rotation);
-        
+        Vector2 topLeft = new Vector2(center, -hw, hh, rotation);
+        Vector2 topRight = new Vector2(center, hw, hh, rotation);
+        Vector2 bottomLeft = new Vector2(center, -hw, -hh, rotation);
+        Vector2 bottomRight = new Vector2(center, hw, -hh, rotation);
+
         this.vertices = new Vector2[]
         {
             topLeft,
