@@ -1,6 +1,7 @@
 package com.limpygnome.projectsandbox.players;
 
 import com.limpygnome.projectsandbox.ents.Entity;
+import com.limpygnome.projectsandbox.ents.Faction;
 import org.java_websocket.WebSocket;
 
 /**
@@ -34,6 +35,11 @@ public class PlayerInfo
     public WebSocket socket;
     
     /**
+     * Default faction for all new ents.
+     */
+    public Faction defaultFaction;
+    
+    /**
      * The player's current entity.
      */
     public Entity entity;
@@ -43,6 +49,7 @@ public class PlayerInfo
         this.keys = 0;
         this.socket = socket;
         this.entity = null;
+        this.defaultFaction = Faction.NONE;
     }
     
     public boolean isKeyDown(PlayerKey key)

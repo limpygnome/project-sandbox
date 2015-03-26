@@ -1,6 +1,8 @@
 package com.limpygnome.projectsandbox.world;
 
 import com.limpygnome.projectsandbox.ents.Entity;
+import com.limpygnome.projectsandbox.ents.PropertyFaction;
+import com.limpygnome.projectsandbox.ents.physics.Vector2;
 import com.limpygnome.projectsandbox.ents.physics.Vertices;
 import com.limpygnome.projectsandbox.packets.outbound.MapDataPacket;
 import java.io.IOException;
@@ -36,11 +38,14 @@ public class Map
     // if this is updated, it needs thread protection
     public MapDataPacket packet;
     
+    private HashMap<Short, FactionSpawns> spawns;
+    
     public Map(MapManager mapManager)
     {
         this.mapManager = mapManager;
         this.tileTypeMappings = new HashMap<>();
         this.tileTypeIdCounter = 0;
+        this.spawns = new HashMap<>();
     }
     
     public static Map load(MapManager mapManager, JSONObject obj) throws IOException
@@ -169,7 +174,62 @@ public class Map
             mapManager.controller.entityManager.add(ent);
         }
         
+        JSONArray spawns = (JSONArray) obj.get("spawns");
+        
+        JSONObject spawnData;
+        short faction;
+        float x;
+        float y;
+        float rotation;
+        FactionSpawns factionSpawns;
+        
+        for (Object rawSpawn : spawns)
+        {
+            spawnData = (JSONObject) rawSpawn;
+            
+            // Parse data
+            faction = (short) (long) spawnData.get("faction");
+            x = (float) (double) spawnData.get("x");
+            y = (float) (double) spawnData.get("y");
+            rotation = (float) (double) spawnData.get("rotation");
+            
+            // Store in faction spawns
+            factionSpawns = map.spawns.get(faction);
+            
+            if (factionSpawns == null)
+            {
+                factionSpawns = new FactionSpawns();
+                map.spawns.put(faction, factionSpawns);
+            }
+            
+            factionSpawns.add(new Spawn(x, y, rotation));
+        }
+        
         return map;
+    }
+    
+    /**
+     * Spawns an entity at the next available spawn for their faction.
+     * 
+     * @param <T>
+     * @param ent 
+     */
+    public <T extends Entity & PropertyFaction> void spawn(T ent)
+    {
+        // Fetch spawn for faction
+        FactionSpawns factionSpawns = spawns.get(ent.getFaction().ID);
+        
+        if (factionSpawns == null)
+        {
+            // TODO: replace with log4j
+            System.err.println("no spawns available for faction " + ent.getFaction().ID);
+        }
+        else
+        {
+            Spawn spawn = factionSpawns.getNextSpawn();
+            ent.position(new Vector2(spawn.x, spawn.y));
+            ent.rotation(spawn.rotation);
+        }
     }
 
     @Override

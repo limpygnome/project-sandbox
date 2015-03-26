@@ -50,5 +50,15 @@
                 "rotation" : 0.0
             }
         }
+    ],
+    
+    "spawns":
+    [
+        {
+            "faction" : 0,
+            "x" : 60.0,
+            "y" : 200.0,
+            "rotation" : 0.0
+        }
     ]
 }
