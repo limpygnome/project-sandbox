@@ -7,6 +7,7 @@ import com.limpygnome.projectsandbox.ents.physics.CollisionResult;
 import com.limpygnome.projectsandbox.ents.physics.Vector2;
 import com.limpygnome.projectsandbox.players.PlayerInfo;
 import com.limpygnome.projectsandbox.players.PlayerKeys;
+import java.util.LinkedList;
 
 /**
  *
@@ -14,7 +15,17 @@ import com.limpygnome.projectsandbox.players.PlayerKeys;
  */
 public abstract class AbstractCar extends Entity
 {
+    /**
+     * The minimum (absolute) speed supported, until the speed is set to 0.
+     * 
+     * This avoids computation for very small movements.
+     */
     private final float SPEED_FP_MIN = 0.01f;
+    
+    /**
+     * The space between a vehicle and an ejected player.
+     */
+    private final float EJECT_SPACING = 2.0f;
 
     // Car properties
     protected float accelerationFactor;
@@ -24,74 +35,55 @@ public abstract class AbstractCar extends Entity
     
     // Car state
     protected float speed;
-    protected PlayerInfo playerInfo;
     
-    public AbstractCar(short width, short height)
+    // Player state
+    protected Vector2[] playerEjectPositions;
+    protected PlayerInfo[] players;
+    
+    public AbstractCar(short width, short height, Vector2[] playerEjectPositions)
     {
         super(width, height);
         
-        speed = 0.0f;
-        playerInfo = null;
+        if (playerEjectPositions.length < 1)
+        {
+            throw new IllegalArgumentException("Must be at least one eject position for driver");
+        }
+        
+        this.speed = 0.0f;
+        this.playerEjectPositions = playerEjectPositions;
+        this.players = new PlayerInfo[playerEjectPositions.length];
     }
 
     @Override
     public strictfp void logic(Controller controller)
     {
+        PlayerInfo playerInfoDriver = players[0];
         float acceleration = 0.0f;
         float steerAngle = 0.0f;
         
         // Check player keys
-        if (playerInfo != null)
+        if (playerInfoDriver != null)
         {
             // Check if to apply power/reverse
-            if (playerInfo.isKeyDown(PlayerKeys.MovementUp))
+            if (playerInfoDriver.isKeyDown(PlayerKeys.MovementUp))
             {
                 acceleration = accelerationFactor;
             }
-            if (playerInfo.isKeyDown(PlayerKeys.MovementDown))
+            if (playerInfoDriver.isKeyDown(PlayerKeys.MovementDown))
             {
                 // TODO: seperate variable for reverse
                 acceleration -= accelerationFactor;
             }
             
             // Check for steer angle
-            if (playerInfo.isKeyDown(PlayerKeys.MovementLeft))
+            if (playerInfoDriver.isKeyDown(PlayerKeys.MovementLeft))
             {
                 steerAngle -= this.steeringAngle;
             }
             
-            if (playerInfo.isKeyDown(PlayerKeys.MovementRight))
+            if (playerInfoDriver.isKeyDown(PlayerKeys.MovementRight))
             {
                 steerAngle += this.steeringAngle;
-            }
-            
-            // Check if player is trying to get out
-            if (playerInfo.isKeyDown(PlayerKeys.Action))
-            {
-                // Set action to up/handled
-                playerInfo.setKey(PlayerKeys.Action, false);
-                
-                // Offset position so that the playr exits to the left of the vehicle
-                Vector2 plyPos = new Vector2(width / 2.0f, 0.0f);
-                
-                // Create new player in position of vehicle
-                Player ply = controller.playerManager.createSetNewPlayerEnt(playerInfo);
-                
-                // Add player to pos offset
-                plyPos = Vector2.add(plyPos, ply.width / 2.0f, 0.0f);
-                
-                // Rotate pos to align with vehicle
-                plyPos.rotate(0.0f, 0.0f, rotation);
-                
-                // Add pos of vehicle to pos
-                plyPos = Vector2.add(plyPos, positionNew);
-                
-                // Set player's rotation and position
-                ply.rotation(rotation);
-                ply.position(plyPos);
-                
-                // Reset player in car
-                this.playerInfo = null;
             }
         }
         
@@ -148,6 +140,65 @@ public abstract class AbstractCar extends Entity
                 speed = 0.0f;
             }
         }
+        
+        // Check if players want to get out
+        PlayerInfo playerInfo;
+        for (int i = 0; i < players.length; i++)
+        {
+            playerInfo = players[i];
+            
+            if (playerInfo != null && playerInfo.isKeyDown(PlayerKeys.Action))
+            {
+                // Set action key to handled
+                playerInfo.setKey(PlayerKeys.Action, false);
+                
+                // Eject them from the vehicle
+                playerEject(controller, playerInfo, playerEjectPositions[i]);
+                
+                // Free-up the space
+                players[i] = null;
+            }
+        }
+    }
+    
+    private void playerEject(Controller controller, PlayerInfo playerInfo, Vector2 ejectPosition)
+    {
+        // Offset position so that the playr exits to the left of the vehicle
+        Vector2 plyPos = ejectPosition.clone();
+
+        // Create new player ent in position of vehicle
+        Player ply = controller.playerManager.createSetNewPlayerEnt(playerInfo);
+
+        // Add player to pos offset
+        float plyx = playerEjectVectorPos(ejectPosition.x, ply.width / 2.0f);
+        float plyy = playerEjectVectorPos(ejectPosition.y, ply.height / 2.0f);
+        plyPos = Vector2.add(plyPos, plyx, plyy);
+
+        // Rotate pos to align with vehicle
+        plyPos.rotate(0.0f, 0.0f, rotation);
+
+        // Add pos of vehicle to pos
+        plyPos = Vector2.add(plyPos, positionNew);
+
+        // Set player's rotation and position
+        ply.rotation(rotation);
+        ply.position(plyPos);
+    }
+    
+    private float playerEjectVectorPos(float coord, float value)
+    {
+        if (coord == 0)
+        {
+            return 0.0f;
+        }
+        else if (coord < 0)
+        {
+            return (value * -1.0f) + EJECT_SPACING;
+        }
+        else
+        {
+            return value + EJECT_SPACING;
+        }
     }
 
     @Override
@@ -164,11 +215,20 @@ public abstract class AbstractCar extends Entity
                 // Set action key off/handled
                 playerInfo.setKey(PlayerKeys.Action, false);
                 
-                // Set the player to use this entity
-                controller.playerManager.setPlayerEnt(playerInfo, this);
-                
-                // Set this vehicle to use player
-                this.playerInfo = playerInfo;
+                // Check for next available seat
+                for (int i = 0; i < players.length; i++)
+                {
+                    if (players[i] == null)
+                    {
+                        // Set the player to use this entity
+                        controller.playerManager.setPlayerEnt(playerInfo, this);
+                        
+                        // Add as passenger
+                        players[i] = playerInfo;
+                        
+                        break;
+                    }
+                }
             }
         }
         

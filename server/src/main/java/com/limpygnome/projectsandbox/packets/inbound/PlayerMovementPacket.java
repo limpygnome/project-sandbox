@@ -29,7 +29,7 @@ public class PlayerMovementPacket extends InboundPacket
         keys = bb.getShort(4);
         
         // Fetch player
-        PlayerInfo playerInfo = controller.playerManager.getPlayerByEntId(id);
+        PlayerInfo playerInfo = controller.playerManager.getPlayerByWebSocket(ws);
         
         if (playerInfo != null)
         {

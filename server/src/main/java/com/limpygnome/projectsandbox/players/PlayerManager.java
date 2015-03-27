@@ -19,14 +19,12 @@ public class PlayerManager
 {
     private final Controller controller;
     
-    private final HashMap<WebSocket, PlayerInfo> mappingsSocket;
-    private final HashMap<Short, PlayerInfo> mappingsEnt;
+    private final HashMap<WebSocket, PlayerInfo> mappingsSock2Ply;
     
     public PlayerManager(Controller controller)
     {
         this.controller = controller;
-        this.mappingsSocket = new HashMap<>();
-        this.mappingsEnt = new HashMap<>();
+        this.mappingsSock2Ply = new HashMap<>();
     }
     
     public PlayerInfo register(WebSocket ws, Session session)
@@ -35,7 +33,7 @@ public class PlayerManager
         PlayerInfo playerInfo = new PlayerInfo(ws, session);
         
         // Add mapping for sock
-        mappingsSocket.put(ws, playerInfo);
+        mappingsSock2Ply.put(ws, playerInfo);
         
         // Create and spawn entity for player
         createSpawnNewPlayerEnt(playerInfo);
@@ -65,7 +63,7 @@ public class PlayerManager
     public synchronized void unregister(WebSocket ws)
     {
         // Fetch and remove entity associated with connection if player
-        PlayerInfo playerInfo = mappingsSocket.get(ws);
+        PlayerInfo playerInfo = mappingsSock2Ply.get(ws);
         Entity ent = playerInfo.entity;
         
         if (ent != null && ent instanceof Player)
@@ -117,18 +115,12 @@ public class PlayerManager
         Entity current = playerInfo.entity;
         if (current != null)
         {
-            // Remove old mapping
-            mappingsEnt.remove(current.id);
-            
             // Remove entity if instance of player
             if (current instanceof Player)
             {
                 controller.entityManager.remove(current);
             }
         }
-        
-        // Add new mapping
-        mappingsEnt.put(entity.id, playerInfo);
         
         // Update entity
         playerInfo.entity = entity;
@@ -141,15 +133,10 @@ public class PlayerManager
         // Send identity packet
         playerInfo.socket.send(data);
     }
-    
-    public PlayerInfo getPlayerByEntId(short id)
-    {
-        return mappingsEnt.get(id);
-    }
-    
+
     public PlayerInfo getPlayerByWebSocket(WebSocket ws)
     {
-        return mappingsSocket.get(ws);
+        return mappingsSock2Ply.get(ws);
     }
     
 }

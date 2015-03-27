@@ -1,6 +1,7 @@
 package com.limpygnome.projectsandbox.ents.vehicles;
 
 import com.limpygnome.projectsandbox.ents.annotations.EntityType;
+import com.limpygnome.projectsandbox.ents.physics.Vector2;
 
 /**
  *
@@ -11,7 +12,17 @@ public class IceCreamVan extends AbstractCar
 {
     public IceCreamVan()
     {
-        super((short) 32, (short) 64);
+        super(
+                (short) 32,
+                (short) 64,
+                new Vector2[]
+                {
+                    new Vector2(+16.0f, +8.0f),
+                    new Vector2(-16.0f, +8.0f),
+                    new Vector2(+16.0f, -8.0f),
+                    new Vector2(-16.0f, -8.0f)
+                }
+        );
         
         accelerationFactor = 0.15f;
         deaccelerationMultiplier = 0.95f;
