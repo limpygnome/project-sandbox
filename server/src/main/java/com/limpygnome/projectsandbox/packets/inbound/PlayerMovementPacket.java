@@ -14,7 +14,7 @@ import org.java_websocket.WebSocket;
 public class PlayerMovementPacket extends InboundPacket
 {
     public short id;
-    public byte keys;
+    public short keys;
     
     public PlayerMovementPacket()
     {
@@ -26,7 +26,7 @@ public class PlayerMovementPacket extends InboundPacket
     {
         // Parse data
         id = bb.getShort(2);
-        keys = data[4];
+        keys = bb.getShort(4);
         
         // Fetch player
         PlayerInfo playerInfo = controller.playerManager.getPlayerByEntId(id);

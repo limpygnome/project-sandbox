@@ -6,7 +6,7 @@ import com.limpygnome.projectsandbox.ents.Player;
 import com.limpygnome.projectsandbox.ents.physics.CollisionResult;
 import com.limpygnome.projectsandbox.ents.physics.Vector2;
 import com.limpygnome.projectsandbox.players.PlayerInfo;
-import com.limpygnome.projectsandbox.utils.CustomMath;
+import com.limpygnome.projectsandbox.players.PlayerKeys;
 
 /**
  *
@@ -44,32 +44,32 @@ public abstract class AbstractCar extends Entity
         if (playerInfo != null)
         {
             // Check if to apply power/reverse
-            if (playerInfo.isKeyDown(PlayerInfo.PlayerKey.MovementUp))
+            if (playerInfo.isKeyDown(PlayerKeys.MovementUp))
             {
                 acceleration = accelerationFactor;
             }
-            if (playerInfo.isKeyDown(PlayerInfo.PlayerKey.MovementDown))
+            if (playerInfo.isKeyDown(PlayerKeys.MovementDown))
             {
                 // TODO: seperate variable for reverse
                 acceleration -= accelerationFactor;
             }
             
             // Check for steer angle
-            if (playerInfo.isKeyDown(PlayerInfo.PlayerKey.MovementLeft))
+            if (playerInfo.isKeyDown(PlayerKeys.MovementLeft))
             {
                 steerAngle -= this.steeringAngle;
             }
             
-            if (playerInfo.isKeyDown(PlayerInfo.PlayerKey.MovementRight))
+            if (playerInfo.isKeyDown(PlayerKeys.MovementRight))
             {
                 steerAngle += this.steeringAngle;
             }
             
             // Check if player is trying to get out
-            if (playerInfo.isKeyDown(PlayerInfo.PlayerKey.Action))
+            if (playerInfo.isKeyDown(PlayerKeys.Action))
             {
                 // Set action to up/handled
-                playerInfo.setKey(PlayerInfo.PlayerKey.Action, false);
+                playerInfo.setKey(PlayerKeys.Action, false);
                 
                 // Create new player in position of vehicle
                 controller.playerManager.createSetNewPlayerEnt(playerInfo, positionNew);
@@ -143,10 +143,10 @@ public abstract class AbstractCar extends Entity
             Player ply = (Player) entOther;
             PlayerInfo playerInfo = ply.playerInfo;
             
-            if (playerInfo.isKeyDown(PlayerInfo.PlayerKey.Action))
+            if (playerInfo.isKeyDown(PlayerKeys.Action))
             {
                 // Set action key off/handled
-                playerInfo.setKey(PlayerInfo.PlayerKey.Action, false);
+                playerInfo.setKey(PlayerKeys.Action, false);
                 
                 // Set the player to use this entity
                 controller.playerManager.setPlayerEnt(playerInfo, this);

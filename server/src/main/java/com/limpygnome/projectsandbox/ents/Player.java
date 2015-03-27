@@ -4,6 +4,7 @@ import com.limpygnome.projectsandbox.Controller;
 import com.limpygnome.projectsandbox.ents.annotations.EntityType;
 import com.limpygnome.projectsandbox.ents.physics.Vector2;
 import com.limpygnome.projectsandbox.players.PlayerInfo;
+import com.limpygnome.projectsandbox.players.PlayerKeys;
 
 /**
  * An entity which represents a player.
@@ -41,22 +42,22 @@ public class Player extends Entity implements PropertyFaction
         float changeRotation = 0.0f;
         
         // Update player's position
-        if (playerInfo.isKeyDown(PlayerInfo.PlayerKey.MovementUp))
+        if (playerInfo.isKeyDown(PlayerKeys.MovementUp))
         {
             changeDist += movementFactor;
         }
-        if (playerInfo.isKeyDown(PlayerInfo.PlayerKey.MovementDown))
+        if (playerInfo.isKeyDown(PlayerKeys.MovementDown))
         {
             changeDist -= movementFactor;
         }
         
         // Check for rotation
-        if (playerInfo.isKeyDown(PlayerInfo.PlayerKey.MovementRight))
+        if (playerInfo.isKeyDown(PlayerKeys.MovementRight))
         {
             //changeX += movementFactor;
             changeRotation = rotationFactor;
         }
-        if (playerInfo.isKeyDown(PlayerInfo.PlayerKey.MovementLeft))
+        if (playerInfo.isKeyDown(PlayerKeys.MovementLeft))
         {
             changeRotation = -rotationFactor;
         }

@@ -10,23 +10,6 @@ import org.java_websocket.WebSocket;
  */
 public class PlayerInfo
 {
-    public enum PlayerKey
-    {
-        MovementUp(1),
-        MovementLeft(2),
-        MovementDown(4),
-        MovementRight(8),
-        Action(16)
-        ;
-        
-        public final int FLAG;
-        
-        private PlayerKey(int flag)
-        {
-            this.FLAG = flag;
-        }
-    }
-    
     /**
      * The current session tied to the player; null if no session assigned.
      */
@@ -35,7 +18,7 @@ public class PlayerInfo
     /**
      * The keys currently held down by the player.
      */
-    public byte keys;
+    public short keys;
     
     /**
      * The player's web socket.
@@ -61,12 +44,12 @@ public class PlayerInfo
         this.session = session;
     }
     
-    public boolean isKeyDown(PlayerKey key)
+    public boolean isKeyDown(PlayerKeys key)
     {
         return (keys & key.FLAG) == key.FLAG;
     }
     
-    public void setKey(PlayerKey key, boolean down)
+    public void setKey(PlayerKeys key, boolean down)
     {
         if (down)
         {

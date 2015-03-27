@@ -80,7 +80,7 @@ projectSandbox.commsPacket =
 			this.previousMovement = movement;
 			
 			// Build packet
-			var buff = new Uint8Array(5);
+			var buff = new Uint8Array(6);
 			var dv = new DataView(buff.buffer);
 			// -- Header data
 			buff[0] = 85; // U
@@ -88,10 +88,11 @@ projectSandbox.commsPacket =
 			// -- Entity ID
 			dv.setInt16(2, projectSandbox.playerEntityId);
 			// -- Movement flags
-			buff[4] = movement;
+			dv.setInt16(4, movement);
 			
 			// Send packet
 			projectSandbox.comms.send(buff.buffer);
 		}
 	}
+	
 }
