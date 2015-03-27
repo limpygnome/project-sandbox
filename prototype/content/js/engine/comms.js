@@ -4,6 +4,7 @@ projectSandbox.comms =
 	
 	setup: function()
 	{
+		// Create socket
 		webSocket = new WebSocket("ws://localhost:4857");
 		webSocket.binaryType = 'arraybuffer';
 		
@@ -38,6 +39,9 @@ projectSandbox.comms =
 	wsEventOpen: function(event)
 	{
 		console.log("Comms - connection established");
+		
+		// Send session ID - must always be done first
+		projectSandbox.commsPacket.sendSessionId();
 	},
 	
 	wsEventClose: function(event)

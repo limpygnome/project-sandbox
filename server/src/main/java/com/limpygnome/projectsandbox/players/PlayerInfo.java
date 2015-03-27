@@ -27,6 +27,14 @@ public class PlayerInfo
         }
     }
     
+    /**
+     * The current session tied to the player; null if no session assigned.
+     */
+    public Session session;
+    
+    /**
+     * The keys currently held down by the player.
+     */
     public byte keys;
     
     /**
@@ -50,6 +58,7 @@ public class PlayerInfo
         this.socket = socket;
         this.entity = null;
         this.defaultFaction = Faction.NONE;
+        this.session = null;
     }
     
     public boolean isKeyDown(PlayerKey key)

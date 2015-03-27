@@ -6,6 +6,9 @@ var projectSandbox =
 	// -- Pixel scaling factor for co-ords
 	SCALE_FACTOR: null,
 	
+	// Session ID
+	sessionId: null,
+	
 	// Rendering
 	canvas: null,
 	gl: null,
@@ -45,6 +48,10 @@ var projectSandbox =
 	init: function()
 	{
 		console.log("Initializing project sandbox...");
+		
+		// Retrieve session ID
+		// TODO: actually retrieve session ID
+		this.sessionId = "6b1091d6-11fa-4ca1-b8cc-f38d1f266011";
 		
 		// Fetch canvas instance
 		this.canvas = document.getElementById("ps_render");

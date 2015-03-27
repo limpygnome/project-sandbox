@@ -28,6 +28,24 @@ projectSandbox.commsPacket =
 	// Previous packet - no point updating the server if the value is the same!
 	previousMovement: 0,
 	
+	sendSessionId: function()
+	{
+		var buff = new Uint8Array(38);
+		
+		// Header data
+		buff[0] = "U".charCodeAt(0); // U
+		buff[1] = "S".charCodeAt(0); // S
+		
+		// Session ID / UUID
+		for(var i = 0; i < 36; i++)
+		{
+			buff[2+i] = projectSandbox.sessionId.charCodeAt(i);
+		}
+		
+		// Send packet
+		projectSandbox.comms.send(buff.buffer);
+	},
+	
 	updateMovement: function()
 	{
 		// Compute new movement packet

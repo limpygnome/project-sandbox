@@ -145,4 +145,9 @@ public class PlayerManager
         return mappingsEnt.get(id);
     }
     
+    public PlayerInfo getPlayerByWebSocket(WebSocket ws)
+    {
+        return mappingsSocket.get(ws);
+    }
+    
 }

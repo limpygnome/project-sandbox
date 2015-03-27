@@ -1,8 +1,6 @@
 package com.limpygnome.projectsandbox.packets.inbound;
 
 import com.limpygnome.projectsandbox.Controller;
-import com.limpygnome.projectsandbox.ents.Entity;
-import com.limpygnome.projectsandbox.ents.Player;
 import com.limpygnome.projectsandbox.packets.InboundPacket;
 import com.limpygnome.projectsandbox.players.PlayerInfo;
 import java.nio.ByteBuffer;
