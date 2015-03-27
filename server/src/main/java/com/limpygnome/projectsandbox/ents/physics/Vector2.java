@@ -99,6 +99,11 @@ public class Vector2
         return new Vector2(v.x + value, v.y + value);
     }
     
+    public static Vector2 add(Vector2 v, float x, float y)
+    {
+        return new Vector2(v.x + x, v.y + y);
+    }
+    
     public static Vector2 subtract(Vector2 v, Vector2 value)
     {
         return new Vector2(v.x - value.x, v.y - value.y);

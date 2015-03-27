@@ -71,8 +71,24 @@ public abstract class AbstractCar extends Entity
                 // Set action to up/handled
                 playerInfo.setKey(PlayerKeys.Action, false);
                 
+                // Offset position so that the playr exits to the left of the vehicle
+                Vector2 plyPos = new Vector2(width / 2.0f, 0.0f);
+                
                 // Create new player in position of vehicle
-                controller.playerManager.createSetNewPlayerEnt(playerInfo, positionNew);
+                Player ply = controller.playerManager.createSetNewPlayerEnt(playerInfo);
+                
+                // Add player to pos offset
+                plyPos = Vector2.add(plyPos, ply.width / 2.0f, 0.0f);
+                
+                // Rotate pos to align with vehicle
+                plyPos.rotate(0.0f, 0.0f, rotation);
+                
+                // Add pos of vehicle to pos
+                plyPos = Vector2.add(plyPos, positionNew);
+                
+                // Set player's rotation and position
+                ply.rotation(rotation);
+                ply.position(plyPos);
                 
                 // Reset player in car
                 this.playerInfo = null;
