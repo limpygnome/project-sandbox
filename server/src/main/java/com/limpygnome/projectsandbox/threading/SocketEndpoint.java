@@ -35,46 +35,44 @@ public class SocketEndpoint extends WebSocketServer
     }
 
     @Override
-    public void onMessage(WebSocket conn, ByteBuffer message)
+    public void onMessage(WebSocket ws, ByteBuffer message)
     {
         byte[] data = message.array();
         byte mainType = data[0];
         byte subType = data[1];
         
         // Fetch the player's info
-        PlayerInfo playerInfo = controller.playerManager.getPlayerByWebSocket(conn);
-        if (playerInfo == null)
-        {
-            // TODO: race condition could occur where onMessage before register; test against it. 
-            conn.close();
-            return;
-        }
-        
+        PlayerInfo playerInfo = controller.playerManager.getPlayerByWebSocket(ws);
+
         // Check if we're expecting a session packet - always first packet to system!
-        if (playerInfo.session == null)
+        if (playerInfo == null)
         {
             // Check we have received session packet
             if (mainType == 'U' && subType == 'S')
             {
                 // Parse packet and load session associated with player
                 SessionIdentifierPacket sessPacket = new SessionIdentifierPacket();
-                sessPacket.parse(controller, conn, message, data);
+                sessPacket.parse(controller, ws, message, data);
                 
                 // Check data / socket valid
-                if (sessPacket.sessionId != null && conn.isOpen())
+                if (sessPacket.sessionId != null && ws.isOpen())
                 {
                     // Load session data from database
                     // TODO: actually load from DB
                     Session session = new Session();
+
+                    // Log event
+                    System.out.println("Session " + session.sessionId + " <> " + ws.getRemoteSocketAddress());
                     
-                    playerInfo.session = session;
+                    // Register player
+                    controller.playerManager.register(ws, session);
                     return;
                 }
             }
             
             // Some other packet / invalid data / no session
             // TODO: add debug msg; nothing else. could be attack...
-            conn.close();
+            ws.close();
             return;
         }
         
@@ -102,14 +100,13 @@ public class SocketEndpoint extends WebSocketServer
         }
         
         // Parse data
-        packet.parse(controller, conn, message, data);
+        packet.parse(controller, ws, message, data);
     }
 
     @Override
     public void onOpen(WebSocket ws, ClientHandshake ch)
     {
         System.out.println("Endpoint - client connected - " + ws.getRemoteSocketAddress());
-        controller.playerManager.register(ws);
     }
     
     @Override

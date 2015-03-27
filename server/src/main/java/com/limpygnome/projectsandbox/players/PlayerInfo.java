@@ -52,13 +52,13 @@ public class PlayerInfo
      */
     public Entity entity;
     
-    public PlayerInfo(WebSocket socket)
+    public PlayerInfo(WebSocket socket, Session session)
     {
         this.keys = 0;
         this.socket = socket;
         this.entity = null;
         this.defaultFaction = Faction.NONE;
-        this.session = null;
+        this.session = session;
     }
     
     public boolean isKeyDown(PlayerKey key)

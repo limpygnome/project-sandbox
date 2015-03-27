@@ -29,10 +29,10 @@ public class PlayerManager
         this.mappingsEnt = new HashMap<>();
     }
     
-    public void register(WebSocket ws)
+    public PlayerInfo register(WebSocket ws, Session session)
     {
         // Create new player
-        PlayerInfo playerInfo = new PlayerInfo(ws);
+        PlayerInfo playerInfo = new PlayerInfo(ws, session);
         
         // Add mapping for sock
         mappingsSocket.put(ws, playerInfo);
@@ -59,6 +59,8 @@ public class PlayerManager
         }
         
         System.out.println("Player manager - mapped " + ws.getRemoteSocketAddress() + " <> " + playerInfo.entity);
+        
+        return playerInfo;
     }
     public synchronized void unregister(WebSocket ws)
     {
