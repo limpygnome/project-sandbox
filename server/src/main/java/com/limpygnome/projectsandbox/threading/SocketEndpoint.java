@@ -106,6 +106,16 @@ public class SocketEndpoint extends WebSocketServer
     @Override
     public void onOpen(WebSocket ws, ClientHandshake ch)
     {
+        /*
+        TODO: have a hashmap which rejects clients who've made too many
+        invalid connections e.g. invalid session data etc. This would help
+        protect against denial of service attacks, people trying to write hacks
+        etc. Have a thread which goes through all the sockets, automatically
+        kills and adds a counter against any connections who fail to auth within
+        5s - add new conns to a list, remove when auth'd. If a user auths,
+        remove entries for them. Could still perform DOS by spamming 5, open
+        one. Going to be fun to protect against attacks.
+        */
         System.out.println("Endpoint - client connected - " + ws.getRemoteSocketAddress());
     }
     
