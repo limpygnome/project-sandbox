@@ -33,8 +33,17 @@ var projectSandbox =
 	fpsTime: (new Date).getTime(),
 	fpsFrames : 0,
 	
+	// The current UI
+	ui: null,
+	
 	reset: function()
 	{
+		// Reset UI
+		if (this.ui != null)
+		{
+			this.ui.reset();
+		}
+		
 		// Reset map
 		projectSandbox.map.reset();
 		
@@ -78,6 +87,9 @@ var projectSandbox =
 		
 		// Load textures - this will call postResources when finished
 		this.textures.load("/content/game/textures/list.json");
+		
+		// Setup game
+		this.ui = game.ui;
 	},
 	
 	postResources: function()
@@ -213,6 +225,12 @@ var projectSandbox =
 		{
 			// Update total frames for current second
 			this.fpsFrames++;
+		}
+		
+		// Render UI
+		if (this.ui != null)
+		{
+			this.ui.render();
 		}
 	},
 	
