@@ -9,9 +9,7 @@ function Player()
     this.prevy = this.y;
 }
 
-Player.prototype = new Entity();
-
-Player.prototype.constructor = Player;
+Player.inherits(Entity);
 
 Player.prototype.logic = function()
 {

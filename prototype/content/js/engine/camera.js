@@ -56,7 +56,7 @@ projectSandbox.camera =
 			}
 			else
 			{
-				console.warn("Camera - chase entity " + this.chaseEntityId + " not found");
+				//console.warn("Camera - chase entity " + this.chaseEntityId + " not found");
 			}
 		}
 		else

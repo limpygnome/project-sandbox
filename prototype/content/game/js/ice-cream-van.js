@@ -6,9 +6,7 @@ function IceCreamVan()
     this.texture = projectSandbox.textures.get("vehicles/ice-cream-van");
 }
 
-IceCreamVan.prototype = new Entity();
-
-IceCreamVan.prototype.constructor = IceCreamVan;
+IceCreamVan.inherits(Entity);
 
 IceCreamVan.prototype.logic = function()
 {
