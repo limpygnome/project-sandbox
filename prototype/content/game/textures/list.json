@@ -5,6 +5,8 @@
         "/content/game/textures/data/world.json",
 		"/content/game/textures/data/players.json",
 		"/content/game/textures/data/vehicles.json",
-		"/content/game/textures/data/font-arial.json"
+		"/content/game/textures/data/font-arial.json",
+		"/content/game/textures/data/ui.json",
+		"/content/game/textures/data/ui-weapons.json"
     ]
 }

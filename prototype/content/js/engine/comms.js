@@ -322,8 +322,7 @@ projectSandbox.comms =
 		// TODO: read custom byte data here
 		
 		// Compile entity
-		console.log(ent);
-		ent.compile(projectSandbox.gl);
+		//ent.compile(projectSandbox.gl);
 		
 		// Add to world
 		projectSandbox.entities.set(id, ent);

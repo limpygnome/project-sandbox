@@ -121,6 +121,9 @@ var projectSandbox =
 	{
 		var self = this;
 		
+		// Setup UI
+		this.ui.setup();
+		
 		// Setup logic loop
 		window.setInterval(
 			function()
@@ -230,7 +233,7 @@ var projectSandbox =
 		// Render UI
 		if (this.ui != null)
 		{
-			this.ui.render();
+			this.ui.render(gl, this.shaderProgram, this.modelView, this.perspective);
 		}
 	},
 	

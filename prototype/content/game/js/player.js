@@ -3,7 +3,8 @@ function Player()
     Entity.call(this, 16, 20);
     
     // Set custom params for this ent
-    this.texture = projectSandbox.textures.get("players/default");
+    this.setTexture("players/default");
+	
     this.running = false;
     this.prevx = this.x;
     this.prevy = this.y;
@@ -17,11 +18,11 @@ Player.prototype.logic = function()
     
     if (moved && !this.running)
     {
-        this.texture = projectSandbox.textures.get("players/default_running");
+        this.setTexture("players/default_running");
     }
     else if (!moved && this.running)
     {
-        this.texture = projectSandbox.textures.get("players/default");
+        this.setTexture("players/default");
     }
     
     // Update running state
