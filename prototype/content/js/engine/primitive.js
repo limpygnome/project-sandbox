@@ -1,5 +1,8 @@
 function Primitive(width, height)
 {
+	// Set initial render flag
+	this.flagRender = false;
+	
     // Set size
 	if (width == undefined || width == null)
 	{
@@ -19,25 +22,6 @@ function Primitive(width, height)
 		this.height = height;
 	}
 	
-	// Setup position vertices
-	var halfWidth = this.width / 2;
-	var halfHeight = this.height / 2;
-    
-	this.verticesPosition =
-	[
-		-halfWidth,	-halfHeight,  0.0,
-		+halfWidth, -halfHeight,  0.0,
-		+halfWidth, +halfHeight,  0.0,
-		-halfWidth, +halfHeight,  0.0
-	];
-	
-	// Setup vertex index array
-	this.verticesIndex = 
-	[
-		0, 1, 2,
-		0, 2, 3
-	];
-	
 	// Actual live version of position
 	this.x = 0.0;
 	this.y = 0.0;
@@ -54,28 +38,65 @@ function Primitive(width, height)
     this.texture = null;
 	
 	// Compile vertices to graphics card
+	this.compile();
+}
+
+Primitive.prototype.compile = function()
+{
 	var gl = projectSandbox.gl;
 	
-	if (gl != null)
+	if (gl != null && this.width > 0 && this.height > 0)
 	{
-		// -- Create buffer for position vertices
+		// Setup position vertices
+		var halfWidth = this.width / 2;
+		var halfHeight = this.height / 2;
+		
+		this.verticesPosition =
+		[
+			-halfWidth,	-halfHeight,  0.0,
+			+halfWidth, -halfHeight,  0.0,
+			+halfWidth, +halfHeight,  0.0,
+			-halfWidth, +halfHeight,  0.0
+		];
+		
+		// Setup vertex index array
+		this.verticesIndex = 
+		[
+			0, 1, 2,
+			0, 2, 3
+		];
+		
+		// Create buffer for position vertices
 		this.bufferPosition = gl.createBuffer();
 		gl.bindBuffer(gl.ARRAY_BUFFER, this.bufferPosition);
 		gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(this.verticesPosition), gl.STATIC_DRAW);
 		this.bufferPosition.itemSize = 3;
 		this.bufferPosition.numItems = 4;
 		
-		// -- Create buffer for index vertices
+		// Create buffer for index vertices
 		this.bufferIndexes = gl.createBuffer();
 		gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this.bufferIndexes);
 		gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint16Array(this.verticesIndex), gl.STATIC_DRAW);
 		this.bufferIndexes.itemSize = 1;
 		this.bufferIndexes.numItems = 6;
+		
+		// Set render flag
+		this.flagRender = true;
+	}
+	else
+	{
+		this.flagRender = false;
 	}
 }
 
 Primitive.prototype.render = function(gl, shaderProgram, modelView, perspective)
 {
+	// Check we are allowed to render
+	if (!this.flagRender)
+	{
+		return;
+	}
+	
 	// Translate modelview to location of primitive
 	mat4.translate(modelView, modelView, [this.renderX, this.renderY, this.renderZ]);
 	mat4.rotateZ(modelView, modelView, -this.renderRotation);

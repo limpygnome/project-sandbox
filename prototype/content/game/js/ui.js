@@ -4,14 +4,15 @@ game.ui =
 	uiWidth: 800,
 	uiHeight: 600,
 	
-	primitiveTest: null,
-	
 	// Weapon icon
 	iconWeapon: null,
 	
 	// Bounty / wanted stars
 	starsIcon: null,
 	starsOn: true,
+	
+	// Health
+	healthBar: null,
 	
 	setup: function()
 	{
@@ -30,16 +31,17 @@ game.ui =
 		var height = gl.viewportHeight;
 		var ratio = width / height;
 		
-		// Create UI primitives
-		this.primitiveTest = new Primitive(128, 128);
-		this.primitiveTest.setTexture("vehicles/ice-cream-van");
-		
 		// Create weapons icon
 		this.iconWeapon = new Primitive(48 * ratio, 48 * ratio);
 		this.iconWeapon.setTexture("ui-weapons/fist");
 		this.setPrimitivePosTopLeft(this.iconWeapon, width, height, 8, 8);
 		
-		// Set initial stars
+		// Create health bar
+		this.healthBar = new PrimitiveBar(128, 8, true);
+		this.setPrimitivePosTopLeft(this.healthBar, width, height, 12, 78);
+		this.healthBar.setValue(0.8);
+		
+		// Create bounty/wanted stars
 		var starCount = 6;
 		
 		this.starsIcon = [];
@@ -48,7 +50,7 @@ game.ui =
 		{
 			star = new Primitive(16 * ratio, 16 * ratio);
 			star.setTexture("ui/star_off");
-			this.setPrimitivePosTopLeft(star, width, height, 8 + ((star.width) * i), 75);
+			this.setPrimitivePosTopLeft(star, width, height, 8 + ((star.width) * i), 90);
 			
 			this.starsIcon[i] = star;
 		}
@@ -76,9 +78,9 @@ game.ui =
 		mat4.identity(modelView);
 		
 		// Render cash score
-		this.primitiveTest.render(gl, shaderProgram, modelView, perspective);
 		
 		// Render health bar
+		this.healthBar.render(gl, shaderProgram, modelView, perspective);
 		
 		// Render weapon icon
 		this.iconWeapon.render(gl, shaderProgram, modelView, perspective);
