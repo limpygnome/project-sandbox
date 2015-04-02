@@ -86,7 +86,11 @@ var projectSandbox =
 		this.initRequestAnimationFrame();
 		
 		// Load textures - this will call postResources when finished
-		this.textures.load("/content/game/textures/list.json");
+		//this.textures.load("/content/game/textures/list.json");
+		
+		// Load assets
+		this.assetLoader.loadFromAssetsFile("/content/game/shaders/list.json");
+		this.assetLoader.loadFromAssetsFile("/content/game/textures/list.json");
 		
 		// Setup game
 		this.ui = game.ui;
