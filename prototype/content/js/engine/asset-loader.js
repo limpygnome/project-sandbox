@@ -14,7 +14,7 @@ projectSandbox.assetLoader =
 		var self = this;
 		
 		// Increment ID counter
-		assetListIndexId = this.assetListIndexCounter++;
+		var assetListIndexId = this.assetListIndexCounter++;
 		
 		// Set initial array to empty
 		this.expectedAssets[assetListIndexId] = [];
@@ -37,22 +37,20 @@ projectSandbox.assetLoader =
 		// Fetch list of assets
 		var assets = json["assets"];
 		
+		// Check we have assets array
 		if (assets == null)
 		{
 			console.error("Assets loader - malformed assets list - " + assetListUrl);
 			return;
 		}
 		
-		// Setup array for assets
-		self.expectedAssets[assetListIndexId] = [assets.length];
-		
 		var url;
 		for (var i = 0; i < assets.length; i++)
 		{
 			url = assets[i];
 			
-			// Set loaded state to false
-			self.expectedAssets[assetListIndexId] = false;
+			// Setup asset array for item
+			self.expectedAssets[assetListIndexId][i] = false;
 			
 			// Load asset, unless it's another asset file
 			if (url.endsWith("/list.json"))
@@ -104,6 +102,7 @@ projectSandbox.assetLoader =
 		
 		if (isJson && data["textures"] != null)
 		{
+			projectSandbox.textures.loadTextureJson(data);
 			console.log("Asset loader - loaded texture - " + url);
 		}
 		else
@@ -112,22 +111,54 @@ projectSandbox.assetLoader =
 			console.log("Asset loader - loaded - " + url);
 		}
 		
+		// Set asset to loaded
+		self.expectedAssets[assetListIndexId][assetId] = true;
+		
 		// Check if all the assets have loaded yet
-		if (isLoaded)
+		if (this.isLoaded() == true)
 		{
 			// Invoke postResources method to continue game
+			projectSandbox.postResources();
 		}
 	},
 	
 	isLoaded: function()
 	{
-		// Check if no asset files loading
-		if (totalAssetLists == 0)
+		// Check if all the assets have even loaded
+		if (this.assetListIndexCounter != this.expectedAssets.length)
 		{
-			return true;
+			return false;
 		}
 		
-		// Check assets array is 
+		// Check if no asset files loading
+		if (this.expectedAssets.length == 0)
+		{
+			return false;
+		}
+		
+		// Check assets array
+		var subAssets;
+		for (var i = 0; i < this.expectedAssets.length; i++)
+		{
+			subAssets = this.expectedAssets[i];
+			
+			// Check it has assets
+			if (subAssets == null || subAssets.length == undefined || subAssets.length <= 0)
+			{
+				return false;
+			}
+			
+			// Check each asset
+			for (var j = 0; j < subAssets.length; j++) {
+				if (subAssets[j] != true)
+				{
+					return false;
+				}
+				alert(subAssets[j]);
+			}
+		}
+		
+		return true;
 	},
 	
 	ajaxJsonFailure: function(ajax, url)

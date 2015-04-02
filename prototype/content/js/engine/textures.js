@@ -2,9 +2,6 @@ projectSandbox.textures =
 {
 	textures: new Map(),
 	src: new Map(),
-
-    // Array which tracks which src files have loaded
-    srcLoaded: null,
 	
 	get: function(name)
 	{
@@ -33,54 +30,7 @@ projectSandbox.textures =
 		this.src.clear();
 	},
 	
-	load: function(texturePathFile)
-	{
-		// Fetch list of textures and read them in...
-		projectSandbox.utils.ajaxJson(texturePathFile, this.loadTextureList, this.ajaxJsonFailure);
-	},
-	
-	loadTextureList: function(json)
-	{
-		var self = projectSandbox.textures;
-        
-        // Fetch src files to load
-        var src = json["src"];
-        
-        // Setup var for tracking the src's which have loaded
-        self.srcLoaded = new Array(src.length);
-        for (var i = 0; i < src.length; i++)
-        {
-            self.srcLoaded[i] = false;
-        }
-		
-		// Iterate each src file and load that too
-		var url;
-		for (var i = 0; i < src.length; i++)
-		{
-            // Fetch url
-			url = src[i];
-            
-            // Make request to load file
-			self.loadTextureFileUrl(i, url);
-		}
-	},
-    
-    loadTextureFileUrl: function(srcLoadedId, url)
-    {
-        var self = projectSandbox.textures;
-        
-        // Use ajax and pass the id and json
-        projectSandbox.utils.ajaxJson(
-                url,
-                function(json)
-                {
-                    self.loadTextureFile(srcLoadedId, json);
-                },
-                self.ajaxJsonFailure
-            );
-    },
-	
-	loadTextureFile: function(srcLoadedId, json)
+	loadTextureJson: function(json)
 	{
 		var self = projectSandbox.textures;
 	
@@ -112,16 +62,6 @@ projectSandbox.textures =
 			self.textures.set(texture.name, texture);
 			console.log("Textures - added texture '" + texture.name + "' - " + texture.frames + " frames");
 		}
-        
-        // Set src file to loaded
-        self.srcLoaded[srcLoadedId] = true;
-        
-        // Check if all src files have loaded
-        if (self.isLoaded())
-        {
-            // Continue rest of game
-            projectSandbox.postResources();
-        }
 	},
     
     isLoaded : function()
