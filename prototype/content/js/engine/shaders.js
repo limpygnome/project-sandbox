@@ -14,30 +14,6 @@ projectSandbox.shaders =
 		"	gl_Position = uPMatrix * uMVMatrix * vec4(aVertexPosition, 1.0);" +
 		"}",
 		
-	defaultTextureFragment:
-		"precision mediump float;" +
-		"varying vec2 vTextureCoord;" +
-		"uniform sampler2D uSampler;" +
-		"void main(void) {" +
-		//"	gl_FragColor = texture2D(uSampler, vec2(vTextureCoord.s, vTextureCoord.t));" +
-        // Alpha testing for depth transparency - https://www.opengl.org/wiki/Transparency_Sorting
-        " vec4 texel = texture2D(uSampler, vec2(vTextureCoord.s, vTextureCoord.t));" +
-        //" if (texel.a < 0.5) discard;" +
-        " gl_FragColor = texel;" +
-		//"	gl_FragColor = vec4(1.0, 0.0, 0.0, 1.0);" +
-		"}",
-		
-	defaultTextureVertex:
-		"attribute vec3 aVertexPosition;" +
-		"attribute vec2 aTextureCoord;" +
-		"uniform mat4 uMVMatrix;" +
-		"uniform mat4 uPMatrix;" +
-		"varying vec2 vTextureCoord;" +
-		"void main(void) {" +
-		"	gl_Position = uPMatrix * uMVMatrix * vec4(aVertexPosition, 1.0);" +
-		"	vTextureCoord = aTextureCoord;" +
-		"}",
-		
 	createDefaultProgram: function(gl)
 	{
 		return this.createProgram(gl, this.defaultFragment, this.defaultVertex);
@@ -45,7 +21,10 @@ projectSandbox.shaders =
 	
 	createDefaultTextureProgram: function(gl)
 	{
-		return this.createProgram(gl, this.defaultTextureFragment, this.defaultTextureVertex);
+		var fragmentShader = projectSandbox.assetLoader.get("/content/game/shaders/default-texture.frag");
+		var vertexShaderSrc = projectSandbox.assetLoader.get("/content/game/shaders/default-texture.vert");
+		
+		return this.createProgram(gl, fragmentShader, vertexShaderSrc);
 	},
 		
 	createProgram: function(gl, dataFragment, dataVertex)

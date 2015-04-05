@@ -9,6 +9,11 @@ projectSandbox.assetLoader =
 	// Array of total assets to be loaded for each list
 	expectedAssets: [],
 	
+	get: function(key)
+	{
+		return this.assets.get(key);
+	},
+	
 	loadFromAssetsFile: function(assetListUrl)
 	{
 		var self = this;
@@ -58,14 +63,14 @@ projectSandbox.assetLoader =
 				self.loadFromAssetsFile(url);
 			}
 			else
-			{
-				self.loadAsset(assetListIndexId, i, url);
+				{
+					self.loadAsset(assetListIndexId, i, url);
+				}
 			}
-		}
-	},
-	
-	loadAsset: function(assetListIndexId, assetId, url)
-	{
+		},
+		
+		loadAsset: function(assetListIndexId, assetId, url)
+		{
 		var self = this;
 		
 		// If the extension is .json, load as json
@@ -108,7 +113,7 @@ projectSandbox.assetLoader =
 		else
 		{
 			self.assets.set(url, data);
-			console.log("Asset loader - loaded - " + url);
+			console.log("Asset loader - loaded - '" + url + "'");
 		}
 		
 		// Set asset to loaded
@@ -154,7 +159,6 @@ projectSandbox.assetLoader =
 				{
 					return false;
 				}
-				alert(subAssets[j]);
 			}
 		}
 		
