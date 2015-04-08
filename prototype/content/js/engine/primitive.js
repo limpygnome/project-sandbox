@@ -1,7 +1,10 @@
-function Primitive(width, height)
+function Primitive(width, height, compile)
 {
 	// Set initial render flag
 	this.flagRender = false;
+	
+	// Set initial texture to null
+	this.texture = null;
 	
     // Set size
 	if (width == undefined || width == null)
@@ -38,8 +41,34 @@ function Primitive(width, height)
     this.texture = null;
 	
 	// Compile vertices to graphics card
-	this.compile();
+	if (compile == undefined || compile == null || compile)
+	{
+		this.compile();
+	}
 }
+
+Primitive.prototype.setColourTest = function()
+{
+	// Setup test colour vertex array
+	this.verticesColour =
+	[
+		1.0, 0.0, 1.0, 1.0,
+		1.0, 0.0, 1.0, 1.0,
+		1.0, 0.0, 1.0, 1.0,
+		1.0, 0.0, 1.0, 1.0
+	];
+},
+
+Primitive.prototype.setColour = function(r, g, b, a)
+{
+	this.verticesColour =
+	[
+		r, g, b, a,
+		r, g, b, a,
+		r, g, b, a,
+		r, g, b, a
+	];
+},
 
 Primitive.prototype.compile = function()
 {
@@ -73,6 +102,16 @@ Primitive.prototype.compile = function()
 		this.bufferPosition.itemSize = 3;
 		this.bufferPosition.numItems = 4;
 		
+		// Create buffer for colours
+		if (this.verticesColour != null)
+		{
+			this.bufferColour = gl.createBuffer();
+			gl.bindBuffer(gl.ARRAY_BUFFER, this.bufferColour);
+			gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(this.verticesColour), gl.STATIC_DRAW);
+			this.bufferColour.itemSize = 4;
+			this.bufferColour.numItems = 4;
+		}
+		
 		// Create buffer for index vertices
 		this.bufferIndexes = gl.createBuffer();
 		gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this.bufferIndexes);
@@ -105,16 +144,29 @@ Primitive.prototype.render = function(gl, shaderProgram, modelView, perspective)
 	gl.bindBuffer(gl.ARRAY_BUFFER, this.bufferPosition);
 	gl.vertexAttribPointer(shaderProgram.vertexPositionAttribute, this.bufferPosition.itemSize, gl.FLOAT, false, 0, 0);
 	
-	// Check if texture defined
-    var texture = this.texture;
-	if (texture == undefined || texture == null)
+	// Bind colour data for shader program
+	if (this.bufferColour != null)
 	{
-		// Fetch error texture
-		texture = projectSandbox.textures.get("error");
+		gl.bindBuffer(gl.ARRAY_BUFFER, this.bufferColour);
+		gl.vertexAttribPointer(shaderProgram.vertexColourAttribute, this.bufferColour.itemSize, gl.FLOAT, false, 0, 0);
 	}
+	else
+	{
+		projectSandbox.textures.bindNoColour(gl, shaderProgram);
+	}
+	
+	// Fetch texture
+    var texture = this.texture;
     
     // Bind texture
-    texture.bind(gl, shaderProgram);
+	if (texture != null)
+	{
+		texture.bind(gl, shaderProgram);
+	}
+	else
+	{
+		projectSandbox.textures.bindNoTexture(gl, shaderProgram);
+	}
 	
 	// Bind index data
 	gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this.bufferIndexes);
@@ -130,8 +182,21 @@ Primitive.prototype.render = function(gl, shaderProgram, modelView, perspective)
 	mat4.rotateZ(modelView, modelView, this.renderRotation);
 	mat4.translate(modelView, modelView, [-this.renderX, -this.renderY, -this.renderZ]);
 	
+	// Unbind colour data
+	if (this.bufferColour == null)
+	{
+		projectSandbox.textures.bindNoColour(gl, shaderProgram);
+	}
+	
 	// Unbind texture
-	texture.unbind(gl);
+	if (texture != null)
+	{
+		texture.unbind(gl);
+	}
+	else
+	{
+		projectSandbox.textures.unbindNoTexture(gl, shaderProgram);
+	}
 	
 	// Update render co-ordinates
 	this.renderX = this.x;
@@ -142,5 +207,20 @@ Primitive.prototype.render = function(gl, shaderProgram, modelView, perspective)
 
 Primitive.prototype.setTexture = function(name)
 {
-	this.texture = projectSandbox.textures.get(name);
+	if (name == null)
+	{
+		this.texture = null;
+	}
+	else
+	{
+		var texture = projectSandbox.textures.get(name);
+		
+		if (texture == undefined || texture == null)
+		{
+			// Fetch error texture
+			texture = projectSandbox.textures.get("error");
+		}
+		
+		this.texture = texture;
+	}
 }

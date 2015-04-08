@@ -2,6 +2,17 @@ projectSandbox.textures =
 {
 	textures: new Map(),
 	src: new Map(),
+	emptyTexture: null,
+	
+	flagColourDisabled: false,
+	
+	setup: function(gl)
+	{
+		var gl = projectSandbox.gl;
+		
+		// Fetch empty texture
+		this.emptyTexture = this.textures.get("white");
+	},
 	
 	get: function(name)
 	{
@@ -133,9 +144,36 @@ projectSandbox.textures =
         frameData[index2] = v;
     },
 	
-	ajaxJsonFailure: function(ajax, url)
+	bindNoTexture: function(gl, shaderProgram)
 	{
-		console.error("Failed to load resource at '" + url + "' - HTTP status code " + ajax.status + ".");
+		this.emptyTexture.bind(gl, shaderProgram);
+		//gl.disableVertexAttribArray(shaderProgram.textureCoordAttribute);
+	},
+	
+	unbindNoTexture: function(gl, shaderProgram)
+	{
+		this.emptyTexture.unbind(gl, shaderProgram);
+		//gl.enableVertexAttribArray(shaderProgram.textureCoordAttribute);
+	},
+	
+	bindNoColour: function(gl, shaderProgram)
+	{
+		if (!this.flagColourDisabled)
+		{
+			//gl.disableVertexAttribArray(shaderProgram.vertexColourAttribute);
+			gl.vertexAttrib4f(shaderProgram.vertexColourAttribute, 1, 1, 1, 1);
+			this.flagColourDisabled = true;
+		}
+	},
+	
+	unbindNoColour: function(gl, shaderProgram)
+	{
+		if (this.flagColourDisabled)
+		{
+			//gl.vertexAttrib4f(shaderProgram.vertexColourAttribute, 1, 1, 1, 1);
+			gl.enableVertexAttribArray(shaderProgram.vertexColourAttribute);
+			this.flagColourDisabled = false;
+		}
 	}
 	
 }

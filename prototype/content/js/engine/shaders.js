@@ -50,6 +50,10 @@ projectSandbox.shaders =
 		shaderProgram.vertexPositionAttribute = gl.getAttribLocation(shaderProgram, "aVertexPosition");
         gl.enableVertexAttribArray(shaderProgram.vertexPositionAttribute);
 		
+		// Setup colour vertex array
+		shaderProgram.vertexColourAttribute = gl.getAttribLocation(shaderProgram, "aColour");
+		gl.enableVertexAttribArray(shaderProgram.vertexColourAttribute);
+		
 		// Setup vertex texture array
 		shaderProgram.textureCoordAttribute = gl.getAttribLocation(shaderProgram, "aTextureCoord");
         gl.enableVertexAttribArray(shaderProgram.textureCoordAttribute);

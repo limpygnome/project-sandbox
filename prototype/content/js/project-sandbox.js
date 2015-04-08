@@ -84,10 +84,7 @@ var projectSandbox =
 		// Initialize request animation frame function
 		// -- Needs improving - what if null/fails?
 		this.initRequestAnimationFrame();
-		
-		// Load textures - this will call postResources when finished
-		//this.textures.load("/content/game/textures/list.json");
-		
+
 		// Load assets
 		this.assetLoader.loadFromAssetsFile("/content/game/shaders/list.json");
 		this.assetLoader.loadFromAssetsFile("/content/game/textures/list.json");
@@ -114,6 +111,9 @@ var projectSandbox =
 		
 		// Setup shader program
 		this.shaderProgram = this.shaders.createDefaultTextureProgram(this.gl);
+		
+		// Setup texture manager
+		this.textures.setup();
 		
 		// Start the game
 		this.gameStart();

@@ -15,10 +15,13 @@ function PrimitiveBar(width, height, horizontal)
 	var initHeight = horizontal ? height : 0;
 	
 	// Build two primitives for the bar
-	this.barValue = new Primitive(initWidth, initHeight);
-	this.barValue.setTexture("vehicles/ice-cream-van");
-	this.barEmpty = new Primitive(initWidth, initHeight);
-	this.barEmpty.setTexture("vehicles/ice-cream-van");
+	this.barValue = new Primitive(initWidth, initHeight, false);
+	this.barValue.setColour(1.0, 0.0, 0.0, 1.0);
+	this.barValue.compile();
+	
+	this.barEmpty = new Primitive(initWidth, initHeight, false);
+	this.barEmpty.setColour(0.0, 1.0, 0.0, 1.0);
+	this.barEmpty.compile();
 }
 
 // - Value must be 0.0 to 1.0
