@@ -141,22 +141,30 @@ public abstract class AbstractCar extends Entity
             }
         }
         
-        // Check if players want to get out
+        // Check if players want to get out / are still connected
         PlayerInfo playerInfo;
         for (int i = 0; i < players.length; i++)
         {
             playerInfo = players[i];
             
-            if (playerInfo != null && playerInfo.isKeyDown(PlayerKeys.Action))
+            if (playerInfo != null)
             {
-                // Set action key to handled
-                playerInfo.setKey(PlayerKeys.Action, false);
-                
-                // Eject them from the vehicle
-                playerEject(controller, playerInfo, playerEjectPositions[i]);
-                
-                // Free-up the space
-                players[i] = null;
+                if (!playerInfo.isConnected())
+                {
+                    // Free the seat...
+                    players[i] = null;
+                }
+                else if (playerInfo.isKeyDown(PlayerKeys.Action))
+                {
+                    // Set action key to handled
+                    playerInfo.setKey(PlayerKeys.Action, false);
+
+                    // Eject them from the vehicle
+                    playerEject(controller, playerInfo, playerEjectPositions[i]);
+
+                    // Free-up the space
+                    players[i] = null;
+                }
             }
         }
     }
@@ -216,9 +224,12 @@ public abstract class AbstractCar extends Entity
                 playerInfo.setKey(PlayerKeys.Action, false);
                 
                 // Check for next available seat
+                PlayerInfo plyInSeat;
                 for (int i = 0; i < players.length; i++)
                 {
-                    if (players[i] == null)
+                    plyInSeat = players[i];
+                    
+                    if (plyInSeat == null || !plyInSeat.isConnected())
                     {
                         // Set the player to use this entity
                         controller.playerManager.setPlayerEnt(playerInfo, this);

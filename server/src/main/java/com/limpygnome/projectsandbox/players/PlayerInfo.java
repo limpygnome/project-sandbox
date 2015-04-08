@@ -44,6 +44,11 @@ public class PlayerInfo
         this.session = session;
     }
     
+    public boolean isConnected()
+    {
+        return socket != null && socket.isOpen();
+    }
+    
     public boolean isKeyDown(PlayerKeys key)
     {
         return (keys & key.FLAG) == key.FLAG;
