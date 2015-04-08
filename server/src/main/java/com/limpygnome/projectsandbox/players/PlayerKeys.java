@@ -23,7 +23,9 @@ public enum PlayerKeys
     Number7(2048),
     Number8(4096),
     Number9(8192),
-    Number0(16384)
+    Number0(16384),
+    
+    Spacebar(32768)
     ;
 
     public final int FLAG;

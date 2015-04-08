@@ -23,7 +23,21 @@ projectSandbox.commsPacket =
 	MOVEMENT_LEFT: 2,
 	MOVEMENT_DOWN: 4,
 	MOVEMENT_RIGHT: 8,
+	
 	ACTION_KEY: 16,
+	
+	NUMBER1: 32,
+	NUMBER2: 64,
+	NUMBER3: 128,
+	NUMBER4: 256,
+	NUMBER5: 512,
+	NUMBER6: 1024,
+	NUMBER7: 2048,
+	NUMBER8: 4096,
+	NUMBER9: 8192,
+	NUMBER0: 16384,
+	
+	SPACEBAR: 32768,
 	
 	// Previous packet - no point updating the server if the value is the same!
 	previousMovement: 0,
@@ -71,6 +85,52 @@ projectSandbox.commsPacket =
 		if (projectSandbox.keyboard.E)
 		{
 			movement |= this.ACTION_KEY;
+		}
+		
+		if (projectSandbox.keyboard.NUMBER1)
+		{
+			movement |= this.NUMBER1;
+		}
+		if (projectSandbox.keyboard.NUMBER2)
+		{
+			movement |= this.NUMBER2;
+		}
+		if (projectSandbox.keyboard.NUMBER3)
+		{
+			movement |= this.NUMBER3;
+		}
+		if (projectSandbox.keyboard.NUMBER4)
+		{
+			movement |= this.NUMBER4;
+		}
+		if (projectSandbox.keyboard.NUMBER5)
+		{
+			movement |= this.NUMBER5;
+		}
+		if (projectSandbox.keyboard.NUMBER6)
+		{
+			movement |= this.NUMBER6;
+		}
+		if (projectSandbox.keyboard.NUMBER7)
+		{
+			movement |= this.NUMBER7;
+		}
+		if (projectSandbox.keyboard.NUMBER8)
+		{
+			movement |= this.NUMBER8;
+		}
+		if (projectSandbox.keyboard.NUMBER9)
+		{
+			movement |= this.NUMBER9;
+		}
+		if (projectSandbox.keyboard.NUMBER0)
+		{
+			movement |= this.NUMBER0;
+		}
+		
+		if (projectSandbox.keyboard.SPACEBAR)
+		{
+			movement |= this.SPACEBAR;
 		}
 		
 		// Compare and decide if to send
