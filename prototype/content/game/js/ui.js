@@ -40,6 +40,10 @@ game.ui =
 		this.healthBar = new PrimitiveBar(128, 8, true);
 		this.setPrimitivePosTopLeft(this.healthBar, width, height, 12, 78);
 		this.healthBar.setValue(0.8);
+		this.healthBar.setColour(
+			0.0,	1.0,	0.0,	1.0,
+			1.0,	0.0,	0.0,	1.0
+		);
 		
 		// Create bounty/wanted stars
 		var starCount = 6;

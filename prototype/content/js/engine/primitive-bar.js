@@ -15,16 +15,21 @@ function PrimitiveBar(width, height, horizontal)
 	var initHeight = horizontal ? height : 0;
 	
 	// Build two primitives for the bar
-	this.barValue = new Primitive(initWidth, initHeight, false);
-	this.barValue.setColour(1.0, 0.0, 0.0, 1.0);
-	this.barValue.compile();
+	this.barValue = new Primitive(initWidth, initHeight);
 	
-	this.barEmpty = new Primitive(initWidth, initHeight, false);
-	this.barEmpty.setColour(0.0, 1.0, 0.0, 1.0);
-	this.barEmpty.compile();
+	this.barEmpty = new Primitive(initWidth, initHeight);
 }
 
 // - Value must be 0.0 to 1.0
+PrimitiveBar.prototype.setColour = function(barFullR, barFullG, barFullB, barFullA, barEmptyR, barEmptyG, barEmptyB, barEmptyA)
+{
+	this.barValue.setColour(barFullR, barFullG, barFullB, barFullA);
+	this.barValue.compileColours();
+	
+	this.barEmpty.setColour(barEmptyR, barEmptyG, barEmptyB, barEmptyA);
+	this.barEmpty.compileColours();
+}
+
 PrimitiveBar.prototype.setValue = function(value)
 {
 	// Compute new sizes

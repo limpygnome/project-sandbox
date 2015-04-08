@@ -47,18 +47,6 @@ function Primitive(width, height, compile)
 	}
 }
 
-Primitive.prototype.setColourTest = function()
-{
-	// Setup test colour vertex array
-	this.verticesColour =
-	[
-		1.0, 0.0, 1.0, 1.0,
-		1.0, 0.0, 1.0, 1.0,
-		1.0, 0.0, 1.0, 1.0,
-		1.0, 0.0, 1.0, 1.0
-	];
-},
-
 Primitive.prototype.setColour = function(r, g, b, a)
 {
 	this.verticesColour =
@@ -68,6 +56,8 @@ Primitive.prototype.setColour = function(r, g, b, a)
 		r, g, b, a,
 		r, g, b, a
 	];
+	
+	this.compileColours();
 },
 
 Primitive.prototype.compile = function()
@@ -102,15 +92,8 @@ Primitive.prototype.compile = function()
 		this.bufferPosition.itemSize = 3;
 		this.bufferPosition.numItems = 4;
 		
-		// Create buffer for colours
-		if (this.verticesColour != null)
-		{
-			this.bufferColour = gl.createBuffer();
-			gl.bindBuffer(gl.ARRAY_BUFFER, this.bufferColour);
-			gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(this.verticesColour), gl.STATIC_DRAW);
-			this.bufferColour.itemSize = 4;
-			this.bufferColour.numItems = 4;
-		}
+		// Compile colours
+		this.compileColours();
 		
 		// Create buffer for index vertices
 		this.bufferIndexes = gl.createBuffer();
@@ -125,6 +108,28 @@ Primitive.prototype.compile = function()
 	else
 	{
 		this.flagRender = false;
+	}
+}
+
+Primitive.prototype.compileColours = function()
+{
+	var gl = projectSandbox.gl;
+	
+	if (gl != null && this.width > 0 && this.height > 0)
+	{
+		// Create buffer for colours
+		if (this.verticesColour != null)
+		{
+			this.bufferColour = gl.createBuffer();
+			gl.bindBuffer(gl.ARRAY_BUFFER, this.bufferColour);
+			gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(this.verticesColour), gl.STATIC_DRAW);
+			this.bufferColour.itemSize = 4;
+			this.bufferColour.numItems = 4;
+		}
+		else
+		{
+			this.bufferColour = null;
+		}
 	}
 }
 
@@ -182,12 +187,6 @@ Primitive.prototype.render = function(gl, shaderProgram, modelView, perspective)
 	mat4.rotateZ(modelView, modelView, this.renderRotation);
 	mat4.translate(modelView, modelView, [-this.renderX, -this.renderY, -this.renderZ]);
 	
-	// Unbind colour data
-	if (this.bufferColour == null)
-	{
-		projectSandbox.textures.bindNoColour(gl, shaderProgram);
-	}
-	
 	// Unbind texture
 	if (texture != null)
 	{
@@ -196,6 +195,12 @@ Primitive.prototype.render = function(gl, shaderProgram, modelView, perspective)
 	else
 	{
 		projectSandbox.textures.unbindNoTexture(gl, shaderProgram);
+	}
+	
+	// Unbind colour data
+	if (this.bufferColour == null)
+	{
+		projectSandbox.textures.unbindNoColour(gl, shaderProgram);
 	}
 	
 	// Update render co-ordinates
