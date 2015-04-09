@@ -4,7 +4,7 @@ import com.limpygnome.projectsandbox.Controller;
 import com.limpygnome.projectsandbox.ents.annotations.EntityType;
 import com.limpygnome.projectsandbox.ents.physics.Vector2;
 import com.limpygnome.projectsandbox.players.PlayerInfo;
-import com.limpygnome.projectsandbox.players.PlayerKeys;
+import com.limpygnome.projectsandbox.players.enums.PlayerKeys;
 
 /**
  * An entity which represents a player.

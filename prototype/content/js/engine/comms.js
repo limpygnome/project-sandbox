@@ -332,31 +332,57 @@ projectSandbox.comms =
 		return 2;
 	},
 	
+	UPDATEMASK_X: 1,
+	UPDATEMASK_Y: 2,
+	UPDATEMASK_ROTATION: 4,
+	UPDATEMASK_HEALTH: 8,
+	
 	packetEntityUpdatesEntUpdated : function(data, dataView, id, offset)
 	{
-		// Read data
-		x = dataView.getFloat32(offset); // 4
-		y = dataView.getFloat32(offset + 4); // 4
-		rotation = dataView.getFloat32(offset + 8); // 4
+		var originalOffset = offset;
 		
-		// Find entity and update position
+		// Find entity
 		ent = projectSandbox.entities.get(id);
-		if(ent)
+		
+		if (ent)
 		{
-			ent.x += x;
-			ent.x = x;
-			ent.y = y;
-			ent.rotation = rotation;
+			// Read mask
+			var mask = dataView.getInt8(offset);
+			offset += 1;
+			
+			// Read updated params
+			if ((mask & this.UPDATEMASK_X) == this.UPDATEMASK_X)
+			{
+				ent.x = dataView.getFloat32(offset);
+				offset += 4;
+			}
+			if ((mask & this.UPDATEMASK_Y) == this.UPDATEMASK_Y)
+			{
+				ent.y = dataView.getFloat32(offset);
+				offset += 4;
+			}
+			if ((mask & this.UPDATEMASK_ROTATION) == this.UPDATEMASK_ROTATION)
+			{
+				ent.rotation = dataView.getFloat32(offset);
+				offset += 4;
+			}
+			if ((mask & this.UPDATEMASK_HEALTH) == this.UPDATEMASK_HEALTH)
+			{
+				ent.health = dataView.getFloat32(offset);
+				offset += 4;
+			}
+			
+			// Allow ent to parse custom update bytes
+			offset = ent.readBytes_update(data, dataView, id, offset);
 			
 			console.log("Comms - entity " + id + " updated");
 		}
 		else
 		{
 			console.warn("Comms - entity with id " + id + " not found for update");
-			// TODO: request create packet for entity
 		}
 		
-		return 12;
+		return offset - originalOffset;
 	},
 	
 	packetEntityUpdatesEntDeleted : function(data, dataView, id, offset)

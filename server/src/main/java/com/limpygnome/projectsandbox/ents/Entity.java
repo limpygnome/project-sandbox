@@ -2,6 +2,8 @@ package com.limpygnome.projectsandbox.ents;
 
 import com.limpygnome.projectsandbox.Controller;
 import com.limpygnome.projectsandbox.ents.annotations.EntityType;
+import com.limpygnome.projectsandbox.ents.enums.StateChange;
+import com.limpygnome.projectsandbox.ents.enums.UpdateMasks;
 import com.limpygnome.projectsandbox.ents.physics.CollisionResult;
 import com.limpygnome.projectsandbox.ents.physics.Vector2;
 import com.limpygnome.projectsandbox.ents.physics.Vertices;
@@ -15,28 +17,6 @@ import java.lang.annotation.Annotation;
 @EntityType(typeId = 0)
 public strictfp abstract class Entity
 {
-    public enum StateChange
-    {
-        NONE,
-        /**
-         * Indicates a world update needs to be sent out before the entity
-         * can be deleted.
-         */
-        PENDING_DELETED,
-        /**
-         * Indicates the entity can now be deleted.
-         */
-        DELETED,
-        /**
-         * Indicates the entity's state has been updated.
-         */
-        UPDATED,
-        /**
-         * Indicates the entity has been created
-         */
-        CREATED
-    }
-    
     // The unique ID for the entity
     public short id;
     
@@ -45,6 +25,8 @@ public strictfp abstract class Entity
     
     // State flags
     private StateChange state;
+    /** Refer to {@link UpdateMasks} */
+    public char updateMask;
     
     // State data
     public short width;
@@ -105,7 +87,7 @@ public strictfp abstract class Entity
         cachedVertices = new Vertices(this);
         
         // Update state
-        setState(StateChange.UPDATED);
+        updateMask(UpdateMasks.ROTATION);
     }
     
     public void rotationOffset(float radians)
@@ -137,15 +119,35 @@ public strictfp abstract class Entity
      */
     public void position(float x, float y)
     {
-        // Update positionNew
+        boolean changeX = positionNew.x == x;
+        boolean changeY = positionNew.y == y;
+        
+        if (!changeX && !changeY)
+        {
+            // No changes...
+            return;
+        }
+        
+        // Update position new
         positionNew.x = x;
         positionNew.y = y;
         
         // Rebuild cached vertices
         cachedVertices = new Vertices(this);
         
-        // Update state to updated
-        setState(StateChange.UPDATED);
+        // Update state
+        if (changeX && changeY)
+        {
+            updateMask(UpdateMasks.X, UpdateMasks.Y);
+        }
+        else if (changeX)
+        {
+            updateMask(UpdateMasks.X);
+        }
+        else
+        {
+            updateMask(UpdateMasks.Y);
+        }
     }
     
     public StateChange getState()
@@ -185,16 +187,38 @@ public strictfp abstract class Entity
         {
             return;
         }
+        // Check damage is not 0.0 or infinity
+        else if
+        (
+            health == 0.0f || health == Float.NaN ||
+            health == Float.POSITIVE_INFINITY || 
+            health == Float.NEGATIVE_INFINITY
+        )
+        {
+            return;
+        }
         
         // Apply damage
         health -= damage;
         
+        // Update mask
+        updateMask(UpdateMasks.HEALTH);
+
         // Check health
         if (health < 0.0f)
         {
             // Entity is now dead!
             eventDeath(controller);
         }
+    }
+    
+    public void updateMask(UpdateMasks... masks)
+    {
+        for (UpdateMasks mask : masks)
+        {
+            this.updateMask |= mask.MASK;
+        }
+        setState(StateChange.UPDATED);
     }
     
     /**

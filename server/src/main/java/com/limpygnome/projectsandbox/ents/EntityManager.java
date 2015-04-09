@@ -1,6 +1,7 @@
 package com.limpygnome.projectsandbox.ents;
 
 import com.limpygnome.projectsandbox.Controller;
+import com.limpygnome.projectsandbox.ents.enums.StateChange;
 import com.limpygnome.projectsandbox.ents.physics.CollisionResult;
 import com.limpygnome.projectsandbox.ents.physics.CollisionResultMap;
 import com.limpygnome.projectsandbox.ents.physics.SAT;
@@ -72,7 +73,7 @@ public class EntityManager
             entitiesNew.put(id, ent);
             
             // Update state to created - for update to all players!
-            ent.setState(Entity.StateChange.CREATED);
+            ent.setState(StateChange.CREATED);
         }
         
         return true;
@@ -86,7 +87,7 @@ public class EntityManager
             Entity ent = entities.get(id);
             if(ent != null)
             {
-                ent.setState(Entity.StateChange.PENDING_DELETED);
+                ent.setState(StateChange.PENDING_DELETED);
             }
             else
             {
@@ -94,7 +95,7 @@ public class EntityManager
                 ent = entitiesNew.get(id);
                 if (ent != null)
                 {
-                    ent.setState(Entity.StateChange.PENDING_DELETED);
+                    ent.setState(StateChange.PENDING_DELETED);
                 }
             }
         }

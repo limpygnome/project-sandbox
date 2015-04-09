@@ -6,7 +6,7 @@ import com.limpygnome.projectsandbox.ents.Player;
 import com.limpygnome.projectsandbox.ents.physics.CollisionResult;
 import com.limpygnome.projectsandbox.ents.physics.Vector2;
 import com.limpygnome.projectsandbox.players.PlayerInfo;
-import com.limpygnome.projectsandbox.players.PlayerKeys;
+import com.limpygnome.projectsandbox.players.enums.PlayerKeys;
 import java.util.LinkedList;
 
 /**
