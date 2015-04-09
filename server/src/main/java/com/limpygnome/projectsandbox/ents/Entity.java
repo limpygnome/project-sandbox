@@ -9,6 +9,7 @@ import com.limpygnome.projectsandbox.ents.physics.Vector2;
 import com.limpygnome.projectsandbox.ents.physics.Vertices;
 import com.limpygnome.projectsandbox.utils.CustomMath;
 import java.lang.annotation.Annotation;
+import java.util.List;
 
 /**
  *
@@ -235,9 +236,16 @@ public strictfp abstract class Entity
         setState(StateChange.PENDING_DELETED);
     }
     
-    public byte[] eventPacketEntCreated()
+    public void eventPacketEntCreated(List<Object> packetData)
     {
-        return null;
+    }
+    
+    public void eventPacketEntUpdated(List<Object> packetData)
+    {
+    }
+    
+    public void eventPacketEntDeleted(List<Object> packetData)
+    {
     }
     
     public boolean eventActionKey(Entity cause)

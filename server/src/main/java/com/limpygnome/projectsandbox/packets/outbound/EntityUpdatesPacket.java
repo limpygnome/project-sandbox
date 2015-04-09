@@ -7,7 +7,6 @@ import com.limpygnome.projectsandbox.ents.enums.StateChange;
 import com.limpygnome.projectsandbox.ents.enums.UpdateMasks;
 import com.limpygnome.projectsandbox.utils.ByteHelper;
 import java.io.IOException;
-import java.nio.ByteBuffer;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.Map;
@@ -69,36 +68,30 @@ public class EntityUpdatesPacket extends OutboundPacket
                             break;
                     }
                 }
-            }
-            
+            }   
         }
     }
     
     private void writeEntCreated(Entity ent) throws IOException
     {
-        // Get ent custom bytes
-        byte[] customEntBytes = ent.eventPacketEntCreated();
-        int len = customEntBytes != null ? customEntBytes.length : 0;
+        LinkedList<Object> packetData = new LinkedList<>();
         
-        // Write creation data
-        ByteBuffer bb = ByteBuffer.allocate(5 + len);
-        bb.put((byte)'C');
-        bb.putShort(ent.id);
-        bb.putShort(ent.entityType);
+        // Add mandatory data
+        packetData.add((byte)'C');
+        packetData.add(ent.id);
+        packetData.add(ent.entityType);
         
-        // Write custom bytes
-        if (customEntBytes != null)
-        {
-            bb.put(customEntBytes);
-        }
+        // Add custom data
+        ent.eventPacketEntCreated(packetData);
         
-        writeClear(bb);
+        write(packetData);
     }
     
     private void writeEntUpdated(Entity ent) throws IOException
     {
         LinkedList<Object> packetData = new LinkedList<>();
         
+        // Add mandatory data
         packetData.add((byte)'U');
         packetData.add(ent.id);
         
@@ -122,22 +115,24 @@ public class EntityUpdatesPacket extends OutboundPacket
             packetData.add(ent.health);
         }
         
+        // Add custom datas
+        ent.eventPacketEntUpdated(packetData);
+        
         write(packetData);
     }
     
     private void writeEntDeleted(Entity ent) throws IOException
     {
-        ByteBuffer bb = ByteBuffer.allocate(3);
-        bb.put((byte)'D');
-        bb.putShort(ent.id);
+        LinkedList<Object> packetData = new LinkedList<>();
         
-        writeClear(bb);
-    }
-    
-    private void writeClear(ByteBuffer bb) throws IOException
-    {
-        buffer.write(bb.array());
-        bb.clear();
+        // Add mandatory data
+        packetData.add((byte)'D');
+        packetData.add(ent.id);
+        
+        // Add custom data
+        ent.eventPacketEntDeleted(packetData);
+        
+        write(packetData);
     }
     
     private void write(LinkedList<Object> packetData) throws IOException
