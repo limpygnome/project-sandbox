@@ -119,8 +119,8 @@ public strictfp abstract class Entity
      */
     public void position(float x, float y)
     {
-        boolean changeX = positionNew.x == x;
-        boolean changeY = positionNew.y == y;
+        boolean changeX = positionNew.x != x;
+        boolean changeY = positionNew.y != y;
         
         if (!changeX && !changeY)
         {
