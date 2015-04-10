@@ -7,25 +7,26 @@ import com.limpygnome.projectsandbox.ents.physics.CollisionResult;
 import com.limpygnome.projectsandbox.ents.physics.Vector2;
 import com.limpygnome.projectsandbox.players.PlayerInfo;
 import com.limpygnome.projectsandbox.players.enums.PlayerKeys;
-import java.util.LinkedList;
 
 /**
  *
  * @author limpygnome
  */
 public abstract class AbstractCar extends Entity
-{
+{   
     /**
      * The minimum (absolute) speed supported, until the speed is set to 0.
      * 
      * This avoids computation for very small movements.
      */
-    private final float SPEED_FP_MIN = 0.01f;
+    public static final float SPEED_FP_MIN = 0.01f;
     
     /**
      * The space between a vehicle and an ejected player.
      */
-    private final float EJECT_SPACING = 2.0f;
+    public static final float EJECT_SPACING = 2.0f;
+    
+    public static final float DEFAULT_HEALTH = 200.0f;
 
     // Car properties
     protected float accelerationFactor;
@@ -52,6 +53,8 @@ public abstract class AbstractCar extends Entity
         this.speed = 0.0f;
         this.playerEjectPositions = playerEjectPositions;
         this.players = new PlayerInfo[playerEjectPositions.length];
+        
+        setMaxHealth(DEFAULT_HEALTH);
     }
 
     @Override

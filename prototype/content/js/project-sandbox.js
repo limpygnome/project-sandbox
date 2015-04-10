@@ -165,6 +165,9 @@ var projectSandbox =
                 ent.logic();
             }
 		}
+		
+		// Update UI
+		this.ui.logic();
 	},
 	
 	gameRenderLoop: function(self)

@@ -9,7 +9,10 @@ public enum UpdateMasks
    X(1),
    Y(2),
    ROTATION(4),
-   HEALTH(8);
+   HEALTH(8),
+   
+   ALL_MASKS(1+2+4+8)
+   ;
 
    public final int MASK;
 

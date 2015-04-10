@@ -299,15 +299,21 @@ projectSandbox.comms =
 	
 	packetEntityUpdatesEntCreated : function(data, dataView, id, offset)
 	{
+		var originalOffset = offset;
+		
 		// Parse data
 		var entityType = dataView.getInt16(offset);
+		offset += 2;
+		var maxHealth = dataView.getFloat32(offset);
+		offset += 4;
 		
 		// Create entity based on type
-		var ent;
+		var ent = null;
 		switch(entityType)
 		{
 			default:
 				console.warn("Comms - unhandled ent type " + entityType);
+				break;
 			case 0:
 				ent = new Entity();
 				break;
@@ -319,17 +325,21 @@ projectSandbox.comms =
 				break;
 		}
 		
-		// TODO: read custom byte data here
+		if (ent != null)
+		{
+			// Set max health
+			ent.maxHealth = maxHealth;
+			ent.health = maxHealth;
+			
+			// TODO: read custom byte data here
+			
+			// Add to world
+			projectSandbox.entities.set(id, ent);
+			
+			console.log("Comms - entity " + id + " created");
+		}
 		
-		// Compile entity
-		//ent.compile(projectSandbox.gl);
-		
-		// Add to world
-		projectSandbox.entities.set(id, ent);
-		
-		console.log("Comms - entity " + id + " created");
-				
-		return 2;
+		return offset - originalOffset;
 	},
 	
 	UPDATEMASK_X: 1,
@@ -370,6 +380,11 @@ projectSandbox.comms =
 			{
 				ent.health = dataView.getFloat32(offset);
 				offset += 4;
+			}
+			else
+			{
+				console.error(data);
+				console.error("no health - " + ent.id + " - mask: " + mask);
 			}
 			
 			// Allow ent to parse custom update bytes

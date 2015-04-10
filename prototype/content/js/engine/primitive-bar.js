@@ -32,6 +32,12 @@ PrimitiveBar.prototype.setColour = function(barFullR, barFullG, barFullB, barFul
 
 PrimitiveBar.prototype.setValue = function(value)
 {
+	// Check if value has changed - ignore if not
+	if (this.value == value)
+	{
+		return;
+	}
+	
 	// Compute new sizes
 	var maxValue = this.horizontal ? this.width : this.height;
 	var valueFull = maxValue * value;
@@ -68,6 +74,9 @@ PrimitiveBar.prototype.setValue = function(value)
 	// Rebuild primitives
 	this.barValue.compile();
 	this.barEmpty.compile();
+	
+	// Update internal value
+	this.value = value;
 }
 
 PrimitiveBar.prototype.render = function(gl, shaderProgram, modelView, perspective)

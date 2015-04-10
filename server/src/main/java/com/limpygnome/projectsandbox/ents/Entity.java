@@ -38,6 +38,7 @@ public strictfp abstract class Entity
     public float rotation;
     // -- -1 for godmode
     public float health;
+    public float maxHealth;
     
     public Entity(short width, short height)
     {
@@ -63,11 +64,14 @@ public strictfp abstract class Entity
         // Create initial/default state data
         this.width = width;
         this.height = height;
+        
         this.position = new Vector2();
         this.positionNew = new Vector2();
         this.cachedVertices = new Vertices(this);
         this.rotation = 0.0f;
+        
         this.health = 0.0f;
+        this.maxHealth = 0.0f;
     }
     
     public void logic(Controller controller)
@@ -175,6 +179,13 @@ public strictfp abstract class Entity
         }
     }
     
+    public void setMaxHealth(float maxHealth)
+    {
+        this.maxHealth = maxHealth;
+        this.health = maxHealth;
+        updateMask(UpdateMasks.HEALTH);
+    }
+    
     /**
      * Inflicts damage on the entity.
      * 
@@ -206,7 +217,7 @@ public strictfp abstract class Entity
         updateMask(UpdateMasks.HEALTH);
 
         // Check health
-        if (health < 0.0f)
+        if (health <= 0.0f)
         {
             // Entity is now dead!
             eventDeath(controller);
@@ -220,6 +231,11 @@ public strictfp abstract class Entity
             this.updateMask |= mask.MASK;
         }
         setState(StateChange.UPDATED);
+    }
+    
+    public void resetUpdateMask()
+    {
+        this.updateMask = 0;
     }
     
     /**

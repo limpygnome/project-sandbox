@@ -1,6 +1,7 @@
 package com.limpygnome.projectsandbox.utils;
 
 import java.nio.ByteBuffer;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -9,6 +10,25 @@ import java.util.List;
  */
 public class ByteHelper
 {
+    public static String debug(byte[] data)
+    {
+        return Arrays.toString(data) + " (len: " + data.length + ")";
+    }
+    
+    public static String debug(List<Object> objs)
+    {
+        StringBuilder sb = new StringBuilder();
+        
+        sb.append("len: ").append(objs.size()).append(" - [\n");
+        for (Object obj : objs)
+        {
+            sb.append(obj.getClass()).append(" : ").append(obj).append("\n");
+        }
+        sb.append("]");
+        
+        return sb.toString();
+    }
+    
     public static byte[] convertListOfObjects(List<Object> objs)
     {
         // Compute size of array

@@ -14,6 +14,8 @@ import com.limpygnome.projectsandbox.players.enums.PlayerKeys;
 @EntityType(typeId = 1)
 public class Player extends Entity implements PropertyFaction
 {
+    public static final float DEFAULT_HEALTH = 100.0f;
+    
     public PlayerInfo playerInfo;
     
     public Player(Controller controller, PlayerInfo playerInfo)
@@ -30,6 +32,8 @@ public class Player extends Entity implements PropertyFaction
         }
         
         this.playerInfo = playerInfo;
+        
+        setMaxHealth(DEFAULT_HEALTH);
     }
 
     @Override
@@ -84,5 +88,12 @@ public class Player extends Entity implements PropertyFaction
     public Faction getPropertyFaction()
     {
         return Faction.NONE;
+    }
+
+    @Override
+    public strictfp void eventDeath(Controller controller)
+    {
+        // Respawn new ent for player
+        controller.playerManager.createSpawnNewPlayerEnt(playerInfo);
     }
 }

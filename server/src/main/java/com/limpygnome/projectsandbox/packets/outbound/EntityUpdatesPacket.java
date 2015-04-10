@@ -34,25 +34,27 @@ public class EntityUpdatesPacket extends OutboundPacket
             Entity ent;
             
             Iterator<Map.Entry<Short, Entity>> it = entityManager.entities.entrySet().iterator();
+            StateChange entState;
             
             while(it.hasNext())
             {
                 kv = it.next();
                 ent = kv.getValue();
+                entState = ent.getState();
                 
-                if(forceCreate)
+                if(forceCreate && entState != StateChange.DELETED && entState != StateChange.PENDING_DELETED)
                 {
-                    writeEntCreated(ent);
-                    writeEntUpdated(ent);
+                    writeEntCreated(ent, forceCreate);
+                    writeEntUpdated(ent, forceCreate);
                 }
                 else
                 {
                     // Handle state
-                    switch(ent.getState())
+                    switch(entState)
                     {
                         case CREATED:
-                            writeEntCreated(ent);
-                            writeEntUpdated(ent);
+                            writeEntCreated(ent, forceCreate);
+                            writeEntUpdated(ent, forceCreate);
                             ent.setState(StateChange.NONE);
                             break;
                         case PENDING_DELETED:
@@ -63,7 +65,7 @@ public class EntityUpdatesPacket extends OutboundPacket
                             it.remove();
                             break;
                         case UPDATED:
-                            writeEntUpdated(ent);
+                            writeEntUpdated(ent, forceCreate);
                             ent.setState(StateChange.NONE);
                             break;
                     }
@@ -72,7 +74,7 @@ public class EntityUpdatesPacket extends OutboundPacket
         }
     }
     
-    private void writeEntCreated(Entity ent) throws IOException
+    private void writeEntCreated(Entity ent, boolean forced) throws IOException
     {
         LinkedList<Object> packetData = new LinkedList<>();
         
@@ -80,6 +82,7 @@ public class EntityUpdatesPacket extends OutboundPacket
         packetData.add((byte)'C');
         packetData.add(ent.id);
         packetData.add(ent.entityType);
+        packetData.add(ent.maxHealth);
         
         // Add custom data
         ent.eventPacketEntCreated(packetData);
@@ -87,7 +90,7 @@ public class EntityUpdatesPacket extends OutboundPacket
         write(packetData);
     }
     
-    private void writeEntUpdated(Entity ent) throws IOException
+    private void writeEntUpdated(Entity ent, boolean forced) throws IOException
     {
         LinkedList<Object> packetData = new LinkedList<>();
         
@@ -95,8 +98,19 @@ public class EntityUpdatesPacket extends OutboundPacket
         packetData.add((byte)'U');
         packetData.add(ent.id);
         
-        char mask = ent.updateMask;
-        packetData.add((byte) mask);
+        char mask;
+        
+        if (forced)
+        {
+            mask = (char) UpdateMasks.ALL_MASKS.MASK;
+        }
+        else
+        {
+            mask = ent.updateMask;
+            packetData.add((byte) mask);
+        }
+        
+        System.err.println("ent " + ent.id + " - writing packet w mask : " + (byte) mask);
         
         if ((mask & UpdateMasks.X.MASK) == UpdateMasks.X.MASK)
         {
@@ -113,10 +127,14 @@ public class EntityUpdatesPacket extends OutboundPacket
         if ((mask & UpdateMasks.HEALTH.MASK) == UpdateMasks.HEALTH.MASK)
         {
             packetData.add(ent.health);
+            System.err.println("health set");
         }
         
         // Add custom datas
         ent.eventPacketEntUpdated(packetData);
+        
+        // Reset mask
+        ent.resetUpdateMask();
         
         write(packetData);
     }
@@ -138,6 +156,8 @@ public class EntityUpdatesPacket extends OutboundPacket
     private void write(LinkedList<Object> packetData) throws IOException
     {
         byte[] data = ByteHelper.convertListOfObjects(packetData);
+        System.err.println(ByteHelper.debug(data));
+        System.err.println(ByteHelper.debug(packetData));
         buffer.write(data);
     }
 }
