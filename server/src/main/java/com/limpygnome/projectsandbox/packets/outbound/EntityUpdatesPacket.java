@@ -107,11 +107,9 @@ public class EntityUpdatesPacket extends OutboundPacket
         else
         {
             mask = ent.updateMask;
-            packetData.add((byte) mask);
         }
-        
-        System.err.println("ent " + ent.id + " - writing packet w mask : " + (byte) mask);
-        
+        packetData.add((byte) mask);
+
         if ((mask & UpdateMasks.X.MASK) == UpdateMasks.X.MASK)
         {
             packetData.add(ent.positionNew.x);
@@ -127,7 +125,6 @@ public class EntityUpdatesPacket extends OutboundPacket
         if ((mask & UpdateMasks.HEALTH.MASK) == UpdateMasks.HEALTH.MASK)
         {
             packetData.add(ent.health);
-            System.err.println("health set");
         }
         
         // Add custom datas
@@ -156,8 +153,6 @@ public class EntityUpdatesPacket extends OutboundPacket
     private void write(LinkedList<Object> packetData) throws IOException
     {
         byte[] data = ByteHelper.convertListOfObjects(packetData);
-        System.err.println(ByteHelper.debug(data));
-        System.err.println(ByteHelper.debug(packetData));
         buffer.write(data);
     }
 }

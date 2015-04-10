@@ -266,7 +266,7 @@ projectSandbox.comms =
 		var id;
 		var bytesRead;
 		
-		while(offset < data.length)
+		while (offset < data.length)
 		{
 			// Retrieve update type and entity id
 			updateType = dataView.getInt8(offset);
@@ -329,7 +329,6 @@ projectSandbox.comms =
 		{
 			// Set max health
 			ent.maxHealth = maxHealth;
-			ent.health = maxHealth;
 			
 			// TODO: read custom byte data here
 			
@@ -380,11 +379,6 @@ projectSandbox.comms =
 			{
 				ent.health = dataView.getFloat32(offset);
 				offset += 4;
-			}
-			else
-			{
-				console.error(data);
-				console.error("no health - " + ent.id + " - mask: " + mask);
 			}
 			
 			// Allow ent to parse custom update bytes
