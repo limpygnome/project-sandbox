@@ -60,6 +60,27 @@ Primitive.prototype.setColour = function(r, g, b, a)
 	this.compileColours();
 },
 
+Primitive.prototype.setAlpha = function(a)
+{
+	if (a < 0.0 || a > 1.0)
+	{
+		console.warn("Primitive - attempted to set invalid alpha value of " + a);
+	}
+	else if (this.verticesColour != null && this.verticesColour.length == 16)
+	{
+		this.verticesColour[3] = a;
+		this.verticesColour[7] = a;
+		this.verticesColour[11] = a;
+		this.verticesColour[15] = a;
+		
+		this.compileColours();
+	}
+	else
+	{
+		console.error("Primitive - attempted to set alpha for a primitive with invalid colours");
+	}
+},
+
 Primitive.prototype.compile = function()
 {
 	var gl = projectSandbox.gl;

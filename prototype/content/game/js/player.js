@@ -29,4 +29,8 @@ Player.prototype.logic = function()
     this.running = moved;
     this.prevx = this.x;
     this.prevy = this.y;
+	
+	projectSandbox.effects.push(
+		new Effect("players/default", 32, 32, this.x, this.y, 1000, false)
+	);
 }

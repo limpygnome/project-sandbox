@@ -21,6 +21,9 @@ var projectSandbox =
 	// Entities
 	entities: new Map(),
 	
+	// Effects
+	effects: new Array(),
+	
 	// Identifier of current ent
 	playerEntityId: null,
 	
@@ -166,6 +169,20 @@ var projectSandbox =
             }
 		}
 		
+		// Update effects
+		var effect;
+		for (var i = 0; i < this.effects.length; i++)
+		{
+			effect = this.effects[i];
+			effect.logic();
+			
+			if (effect.isExpired())
+			{
+				this.effects.pop(effect);
+				i--;
+			}
+		}
+		
 		// Update UI
 		this.ui.logic();
 	},
@@ -218,6 +235,12 @@ var projectSandbox =
 			ent.render(gl, this.shaderProgram, this.modelView, this.perspective);
 		}
         gl.enable(gl.DEPTH_TEST);
+		
+		// Render effects
+		for (var i = 0; i < this.effects.length; i++)
+		{
+			this.effects[i].render(gl, this.shaderProgram, this.modelView, this.perspective);
+		}
 		
 		// Update FPS
 		var currentTime = (new Date).getTime();
