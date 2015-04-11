@@ -6,5 +6,7 @@ uniform sampler2D uSampler;
 void main(void)
 {
 	vec4 texel = texture2D(uSampler, vec2(vTextureCoord.s, vTextureCoord.t));
-	gl_FragColor = texel * vColour;
+	texel *= vColour;
+
+	gl_FragColor = texel;
 }

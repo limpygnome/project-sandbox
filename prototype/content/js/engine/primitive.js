@@ -37,6 +37,9 @@ function Primitive(width, height, compile)
 	this.renderZ = 0.0;
 	this.renderRotation = 0.0;
 	
+	// Set default colours
+	this.setColour(1.0, 1.0, 1.0, 1.0);
+	
 	this.buffer = null;
     this.texture = null;
 	
@@ -49,15 +52,10 @@ function Primitive(width, height, compile)
 
 Primitive.prototype.setColour = function(r, g, b, a)
 {
-	this.verticesColour =
-	[
-		r, g, b, a,
-		r, g, b, a,
-		r, g, b, a,
-		r, g, b, a
-	];
-	
-	this.compileColours();
+	this.r = r;
+	this.g = g;
+	this.b = b;
+	this.a = a;
 },
 
 Primitive.prototype.setAlpha = function(a)
@@ -66,19 +64,8 @@ Primitive.prototype.setAlpha = function(a)
 	{
 		console.warn("Primitive - attempted to set invalid alpha value of " + a);
 	}
-	else if (this.verticesColour != null && this.verticesColour.length == 16)
-	{
-		this.verticesColour[3] = a;
-		this.verticesColour[7] = a;
-		this.verticesColour[11] = a;
-		this.verticesColour[15] = a;
-		
-		this.compileColours();
-	}
-	else
-	{
-		console.error("Primitive - attempted to set alpha for a primitive with invalid colours");
-	}
+	
+	this.a = a;
 },
 
 Primitive.prototype.compile = function()
@@ -113,9 +100,6 @@ Primitive.prototype.compile = function()
 		this.bufferPosition.itemSize = 3;
 		this.bufferPosition.numItems = 4;
 		
-		// Compile colours
-		this.compileColours();
-		
 		// Create buffer for index vertices
 		this.bufferIndexes = gl.createBuffer();
 		gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this.bufferIndexes);
@@ -129,28 +113,6 @@ Primitive.prototype.compile = function()
 	else
 	{
 		this.flagRender = false;
-	}
-}
-
-Primitive.prototype.compileColours = function()
-{
-	var gl = projectSandbox.gl;
-	
-	if (gl != null && this.width > 0 && this.height > 0)
-	{
-		// Create buffer for colours
-		if (this.verticesColour != null)
-		{
-			this.bufferColour = gl.createBuffer();
-			gl.bindBuffer(gl.ARRAY_BUFFER, this.bufferColour);
-			gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(this.verticesColour), gl.STATIC_DRAW);
-			this.bufferColour.itemSize = 4;
-			this.bufferColour.numItems = 4;
-		}
-		else
-		{
-			this.bufferColour = null;
-		}
 	}
 }
 
@@ -171,15 +133,7 @@ Primitive.prototype.render = function(gl, shaderProgram, modelView, perspective)
 	gl.vertexAttribPointer(shaderProgram.vertexPositionAttribute, this.bufferPosition.itemSize, gl.FLOAT, false, 0, 0);
 	
 	// Bind colour data for shader program
-	if (this.bufferColour != null)
-	{
-		gl.bindBuffer(gl.ARRAY_BUFFER, this.bufferColour);
-		gl.vertexAttribPointer(shaderProgram.vertexColourAttribute, this.bufferColour.itemSize, gl.FLOAT, false, 0, 0);
-	}
-	else
-	{
-		projectSandbox.textures.bindNoColour(gl, shaderProgram);
-	}
+	gl.vertexAttrib4f(shaderProgram.vertexColourAttribute, this.r, this.g, this.b, this.a);
 	
 	// Fetch texture
     var texture = this.texture;
@@ -216,12 +170,6 @@ Primitive.prototype.render = function(gl, shaderProgram, modelView, perspective)
 	else
 	{
 		projectSandbox.textures.unbindNoTexture(gl, shaderProgram);
-	}
-	
-	// Unbind colour data
-	if (this.bufferColour == null)
-	{
-		projectSandbox.textures.unbindNoColour(gl, shaderProgram);
 	}
 	
 	// Update render co-ordinates

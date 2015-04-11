@@ -1,9 +1,10 @@
-function Effect(texture, width, height, x, y, timeout, fade)
+function Effect(texture, width, height, x, y, z, timeout, fade)
 {
     Primitive.call(this, width, height);
 	
 	this.x = x;
 	this.y = y;
+	this.z = z;
 	this.setTexture(texture);
 	this.created = projectSandbox.currentTime;
 	this.timeout = timeout;
@@ -33,7 +34,7 @@ Effect.prototype.logic = function()
 	if (this.fade && !this.expired)
 	{
 		// Calculate new opacity
-		this.setAlpha(lifespan / this.timeout);
+		this.setAlpha(1.0 - (lifespan / this.timeout));
 	}
 }
 

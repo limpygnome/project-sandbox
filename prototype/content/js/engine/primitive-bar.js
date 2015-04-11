@@ -24,10 +24,7 @@ function PrimitiveBar(width, height, horizontal)
 PrimitiveBar.prototype.setColour = function(barFullR, barFullG, barFullB, barFullA, barEmptyR, barEmptyG, barEmptyB, barEmptyA)
 {
 	this.barValue.setColour(barFullR, barFullG, barFullB, barFullA);
-	this.barValue.compileColours();
-	
 	this.barEmpty.setColour(barEmptyR, barEmptyG, barEmptyB, barEmptyA);
-	this.barEmpty.compileColours();
 }
 
 PrimitiveBar.prototype.setValue = function(value)

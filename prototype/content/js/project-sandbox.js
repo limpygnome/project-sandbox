@@ -178,7 +178,7 @@ var projectSandbox =
 			
 			if (effect.isExpired())
 			{
-				this.effects.pop(effect);
+				this.effects.splice(effect, 1);
 				i--;
 			}
 		}
@@ -223,23 +223,19 @@ var projectSandbox =
         
         // Render map
 		projectSandbox.map.render(gl, this.shaderProgram, this.modelView, this.perspective);
+
+		// Render effects
+		for (var i = 0; i < this.effects.length; i++)
+		{
+			this.effects[i].render(gl, this.shaderProgram, this.modelView, this.perspective);
+		}
 		
-		// Render all the objects
-        // If we use alpha blend ever, disable depth-test for ents on the same z as hack - also works, as
-        // opposed to alpha testing
-        gl.disable(gl.DEPTH_TEST);
+		// Render ents
 		var ent;
 		for(var kv of this.entities)
 		{
 			ent = kv[1];
 			ent.render(gl, this.shaderProgram, this.modelView, this.perspective);
-		}
-        gl.enable(gl.DEPTH_TEST);
-		
-		// Render effects
-		for (var i = 0; i < this.effects.length; i++)
-		{
-			this.effects[i].render(gl, this.shaderProgram, this.modelView, this.perspective);
 		}
 		
 		// Update FPS
@@ -310,7 +306,7 @@ var projectSandbox =
         var gl = this.gl;
         
 		gl.clearColor(0.0, 0.0, 0.0, 1.0);
-        gl.enable(gl.DEPTH_TEST);
+        gl.disable(gl.DEPTH_TEST);
         
         // Due to depth, we use alpha test rather than blending, implemented in shader
         gl.enable(gl.BLEND);

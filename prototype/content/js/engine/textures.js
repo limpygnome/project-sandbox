@@ -156,24 +156,4 @@ projectSandbox.textures =
 		//gl.enableVertexAttribArray(shaderProgram.textureCoordAttribute);
 	},
 	
-	bindNoColour: function(gl, shaderProgram)
-	{
-		if (!this.flagColourDisabled)
-		{
-			gl.disableVertexAttribArray(shaderProgram.vertexColourAttribute);
-			gl.vertexAttrib4f(shaderProgram.vertexColourAttribute, 1, 1, 1, 1);
-			this.flagColourDisabled = true;
-		}
-	},
-	
-	unbindNoColour: function(gl, shaderProgram)
-	{
-		if (this.flagColourDisabled)
-		{
-			gl.vertexAttrib4f(shaderProgram.vertexColourAttribute, 1, 1, 1, 1);
-			gl.enableVertexAttribArray(shaderProgram.vertexColourAttribute);
-			this.flagColourDisabled = false;
-		}
-	}
-	
 }

@@ -52,7 +52,7 @@ projectSandbox.shaders =
 		
 		// Setup colour vertex array
 		shaderProgram.vertexColourAttribute = gl.getAttribLocation(shaderProgram, "aColour");
-		gl.enableVertexAttribArray(shaderProgram.vertexColourAttribute);
+		gl.disableVertexAttribArray(shaderProgram.vertexColourAttribute);
 		
 		// Setup vertex texture array
 		shaderProgram.textureCoordAttribute = gl.getAttribLocation(shaderProgram, "aTextureCoord");

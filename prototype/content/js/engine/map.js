@@ -96,9 +96,6 @@ projectSandbox.map =
 		gl.bindBuffer(gl.ARRAY_BUFFER, this.bufferPosition);
 		gl.vertexAttribPointer(shaderProgram.vertexPositionAttribute, this.bufferPosition.itemSize, gl.FLOAT, false, 0, 0);
 		
-		// -- Bind no-colour
-		projectSandbox.textures.bindNoColour(gl, shaderProgram);
-		
 		// -- Bind index data
 		gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this.bufferIndexes);
 		
@@ -145,9 +142,6 @@ projectSandbox.map =
         {
             texture.unbind(gl);
         }
-		
-		// Unbind no-colour
-		projectSandbox.textures.unbindNoColour(gl, shaderProgram);
 		
 		// Undo translation for tiles
 		mat4.translate(modelView, modelView, [0, this.height * -this.scaledTileSize, 0]);
