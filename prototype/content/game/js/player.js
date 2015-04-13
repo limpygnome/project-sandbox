@@ -9,7 +9,18 @@ function Player()
     this.prevx = this.x;
     this.prevy = this.y;
 	
-	this.lastEffect = -1;
+	this.trail = new Trail(
+		"error",
+		16,
+		16,
+		400,
+		1500,
+		true,
+		-2,
+		2,
+		-2,
+		2
+	);
 }
 
 Player.inherits(Entity);
@@ -28,18 +39,10 @@ Player.prototype.logic = function()
         this.setTexture("players/default");
     }
 	
-	// Create movement particles
-	var currTime = projectSandbox.currentTime;
-	if (moved && currTime - this.lastEffect > 400)
+	// Update trail
+	if (moved)
 	{
-		this.lastEffect = currTime;
-		
-		var randX = projectSandbox.utils.rand(-2, 2);
-		var randY = projectSandbox.utils.rand(-2, 2);
-		
-		projectSandbox.effects.push(
-			new Effect("error", 16, 16, this.x + randX, this.y + randY, 1.0, 2000, true)
-		);
+		this.trail.logic(this.x, this.y, this.rotation);
 	}
     
     // Update running state

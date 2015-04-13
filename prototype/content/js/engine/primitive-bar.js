@@ -68,10 +68,6 @@ PrimitiveBar.prototype.setValue = function(value)
 		this.barEmpty.y = this.y + (valueFull / 2.0);
 	}
 	
-	// Rebuild primitives
-	this.barValue.compile();
-	this.barEmpty.compile();
-	
 	// Update internal value
 	this.value = value;
 }

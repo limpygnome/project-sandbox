@@ -1,41 +1,29 @@
-function Primitive(width, height, compile)
+function Primitive(width, height)
 {
-	// Set initial render flag
-	this.flagRender = false;
+	// Check for initial call to constructor - not during object construction
+	if (width == undefined || height == undefined)
+	{
+		return;
+	}
 	
 	// Set initial texture to null
 	this.texture = null;
 	
     // Set size
-	if (width == undefined || width == null)
-	{
-		this.width = 32;
-	}
-	else
-	{
-		this.width = width;
-	}
-	
-	if (height == undefined || height == null)
-	{
-		this.height = 32;
-	}
-	else
-	{
-		this.height = height;
-	}
-	
+	this.width = width;
+	this.height = height;
+		
 	// Actual live version of position
 	this.x = 0.0;
 	this.y = 0.0;
 	this.z = 0.0;
-	this.rotation = 0;
+	this.rotation = 0.0;
 	
 	// Keep a separate copy for rendering to avoid flickering from updates mid-way
 	this.renderX = null;
 	this.renderY = null;
 	this.renderZ = null;
-	this.renderRotation = 0.0;
+	this.renderRotation = null;
 	
 	// Set default colours
 	this.setColour(1.0, 1.0, 1.0, 1.0);
@@ -43,11 +31,11 @@ function Primitive(width, height, compile)
 	this.buffer = null;
     this.texture = null;
 	
-	// Compile vertices to graphics card
-	if (compile == undefined || compile == null || compile)
-	{
-		this.compile();
-	}
+	// Fetch buffer for vertices
+	this.bufferPosition = projectSandbox.bufferCache.fetchVertexBuffer2dRect(this.width, this.height);
+		
+	// Fetch buffer for vertex indices
+	this.bufferIndexes = projectSandbox.bufferCache.fetchIndexBuffer2dRect();
 }
 
 Primitive.prototype.setColour = function(r, g, b, a)
@@ -68,41 +56,15 @@ Primitive.prototype.setAlpha = function(a)
 	this.a = a;
 },
 
-Primitive.prototype.compile = function()
-{
-	var gl = projectSandbox.gl;
-	
-	if (gl != null && this.width > 0 && this.height > 0)
-	{
-		// Fetch buffer for vertices
-		this.bufferPosition = projectSandbox.bufferCache.fetchVertexBuffer2dRect(this.width, this.height);
-		
-		// Fetch buffer for vertex indices
-		this.bufferIndexes = projectSandbox.bufferCache.fetchIndexBuffer2dRect();
-		
-		// Set render flag
-		this.flagRender = true;
-	}
-	else
-	{
-		this.flagRender = false;
-	}
-}
-
 Primitive.prototype.render = function(gl, shaderProgram, modelView, perspective)
 {
-	// Check we are allowed to render
-	if (!this.flagRender)
-	{
-		return;
-	}
-	
 	// Check initial render co-ords have been setup
-	if (this.renderX == null || this.renderY == null || this.renderZ == null)
+	if (this.renderX == null || this.renderY == null || this.renderZ == null || this.renderRotation == null)
 	{
 		this.renderX = this.x;
 		this.renderY = this.y;
 		this.renderZ = this.z;
+		this.renderRotation = this.rotation;
 	}
 	
 	// Translate modelview to location of primitive
