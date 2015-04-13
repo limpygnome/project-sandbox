@@ -32,9 +32,9 @@ function Primitive(width, height, compile)
 	this.rotation = 0;
 	
 	// Keep a separate copy for rendering to avoid flickering from updates mid-way
-	this.renderX = 0.0;
-	this.renderY = 0.0;
-	this.renderZ = 0.0;
+	this.renderX = null;
+	this.renderY = null;
+	this.renderZ = null;
 	this.renderRotation = 0.0;
 	
 	// Set default colours
@@ -122,6 +122,14 @@ Primitive.prototype.render = function(gl, shaderProgram, modelView, perspective)
 	if (!this.flagRender)
 	{
 		return;
+	}
+	
+	// Check initial render co-ords have been setup
+	if (this.renderX == null || this.renderY == null || this.renderZ == null)
+	{
+		this.renderX = this.x;
+		this.renderY = this.y;
+		this.renderZ = this.z;
 	}
 	
 	// Translate modelview to location of primitive
