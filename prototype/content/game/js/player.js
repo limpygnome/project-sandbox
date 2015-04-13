@@ -6,10 +6,9 @@ function Player()
     this.setTexture("players/default");
 	
     this.running = false;
-    this.prevx = this.x;
-    this.prevy = this.y;
 	
 	this.trail = new Trail(
+		this,
 		"error",
 		16,
 		16,
@@ -27,9 +26,12 @@ Player.inherits(Entity);
 
 Player.prototype.logic = function()
 {
-    var moved = this.x != this.prevx || this.y != this.prevy;
+	// Update trail
+	this.trail.logic(this);
+	
+	// Update running state
+    var moved = this.trail.moved;
     
-	// Update texture
     if (moved && !this.running)
     {
         this.setTexture("players/default_running");
@@ -39,14 +41,6 @@ Player.prototype.logic = function()
         this.setTexture("players/default");
     }
 	
-	// Update trail
-	if (moved)
-	{
-		this.trail.logic(this.x, this.y, this.rotation);
-	}
-    
     // Update running state
     this.running = moved;
-    this.prevx = this.x;
-    this.prevy = this.y;
 }
