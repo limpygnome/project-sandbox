@@ -16,7 +16,6 @@ function PrimitiveBar(width, height, horizontal)
 	
 	// Build two primitives for the bar
 	this.barValue = new Primitive(initWidth, initHeight);
-	
 	this.barEmpty = new Primitive(initWidth, initHeight);
 }
 
@@ -34,7 +33,7 @@ PrimitiveBar.prototype.setValue = function(value)
 	{
 		return;
 	}
-	
+
 	// Compute new sizes
 	var maxValue = this.horizontal ? this.width : this.height;
 	var valueFull = maxValue * value;
@@ -67,6 +66,10 @@ PrimitiveBar.prototype.setValue = function(value)
 		this.barValue.y = this.y - (valueEmpty / 2.0);
 		this.barEmpty.y = this.y + (valueFull / 2.0);
 	}
+	
+	// Update sizes of primitives
+	this.barValue.updateSize();
+	this.barEmpty.updateSize();
 	
 	// Update internal value
 	this.value = value;

@@ -35,6 +35,10 @@ projectSandbox.bufferCache =
 	{
 		var gl = projectSandbox.gl;
 		
+		// Round value, to avoid lots of decimally-sized buffers which are similar
+		width = Math.round(width);
+		height = Math.round(height);
+		
 		// Attempt to fetch existing buffer
 		var bufferPosition = this.vertexBuffers.get(width + "x" + height);
 		

@@ -30,12 +30,18 @@ function Primitive(width, height)
 	
 	this.buffer = null;
     this.texture = null;
-	
-	// Fetch buffer for vertices
-	this.bufferPosition = projectSandbox.bufferCache.fetchVertexBuffer2dRect(this.width, this.height);
 		
 	// Fetch buffer for vertex indices
 	this.bufferIndexes = projectSandbox.bufferCache.fetchIndexBuffer2dRect();
+	
+	// Fetch vertices
+	this.updateSize();
+}
+
+Primitive.prototype.updateSize = function()
+{
+	// Fetch buffer for vertices
+	this.bufferPosition = projectSandbox.bufferCache.fetchVertexBuffer2dRect(this.width, this.height);
 }
 
 Primitive.prototype.setColour = function(r, g, b, a)
