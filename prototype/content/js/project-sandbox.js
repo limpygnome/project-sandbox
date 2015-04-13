@@ -87,6 +87,9 @@ var projectSandbox =
 		// Initialize request animation frame function
 		// -- Needs improving - what if null/fails?
 		this.initRequestAnimationFrame();
+		
+		// Setup buffer cache
+		this.bufferCache.setup();
 
 		// Load assets
 		this.assetLoader.loadFromAssetsFile("/content/game/shaders/list.json");

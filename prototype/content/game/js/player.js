@@ -30,7 +30,7 @@ Player.prototype.logic = function()
 	
 	// Create movement particles
 	var currTime = projectSandbox.currentTime;
-	if (moved && currTime - this.lastEffect > 200)
+	if (moved && currTime - this.lastEffect > 400)
 	{
 		this.lastEffect = currTime;
 		
@@ -38,7 +38,7 @@ Player.prototype.logic = function()
 		var randY = projectSandbox.utils.rand(-2, 2);
 		
 		projectSandbox.effects.push(
-			new Effect("error", 16, 16, this.x + randX, this.y + randY, 1.0, 1000, true)
+			new Effect("error", 16, 16, this.x + randX, this.y + randY, 1.0, 2000, true)
 		);
 	}
     

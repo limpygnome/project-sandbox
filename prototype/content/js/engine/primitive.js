@@ -74,38 +74,11 @@ Primitive.prototype.compile = function()
 	
 	if (gl != null && this.width > 0 && this.height > 0)
 	{
-		// Setup position vertices
-		var halfWidth = this.width / 2;
-		var halfHeight = this.height / 2;
+		// Fetch buffer for vertices
+		this.bufferPosition = projectSandbox.bufferCache.fetchVertexBuffer2dRect(this.width, this.height);
 		
-		this.verticesPosition =
-		[
-			-halfWidth,	-halfHeight,  0.0,
-			+halfWidth, -halfHeight,  0.0,
-			+halfWidth, +halfHeight,  0.0,
-			-halfWidth, +halfHeight,  0.0
-		];
-		
-		// Setup vertex index array
-		this.verticesIndex = 
-		[
-			0, 1, 2,
-			0, 2, 3
-		];
-		
-		// Create buffer for position vertices
-		this.bufferPosition = gl.createBuffer();
-		gl.bindBuffer(gl.ARRAY_BUFFER, this.bufferPosition);
-		gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(this.verticesPosition), gl.STATIC_DRAW);
-		this.bufferPosition.itemSize = 3;
-		this.bufferPosition.numItems = 4;
-		
-		// Create buffer for index vertices
-		this.bufferIndexes = gl.createBuffer();
-		gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this.bufferIndexes);
-		gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint16Array(this.verticesIndex), gl.STATIC_DRAW);
-		this.bufferIndexes.itemSize = 1;
-		this.bufferIndexes.numItems = 6;
+		// Fetch buffer for vertex indices
+		this.bufferIndexes = projectSandbox.bufferCache.fetchIndexBuffer2dRect();
 		
 		// Set render flag
 		this.flagRender = true;
