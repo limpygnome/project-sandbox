@@ -5,7 +5,6 @@ import com.limpygnome.projectsandbox.packets.OutboundPacket;
 import com.limpygnome.projectsandbox.ents.EntityManager;
 import com.limpygnome.projectsandbox.ents.enums.StateChange;
 import com.limpygnome.projectsandbox.ents.enums.UpdateMasks;
-import com.limpygnome.projectsandbox.utils.ByteHelper;
 import java.io.IOException;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -19,7 +18,6 @@ import java.util.Map;
  */
 public class EntityUpdatesPacket extends OutboundPacket
 {
-
     public EntityUpdatesPacket()
     {
         super((byte)'E', (byte)'U');
@@ -148,11 +146,5 @@ public class EntityUpdatesPacket extends OutboundPacket
         ent.eventPacketEntDeleted(packetData);
         
         write(packetData);
-    }
-    
-    private void write(LinkedList<Object> packetData) throws IOException
-    {
-        byte[] data = ByteHelper.convertListOfObjects(packetData);
-        buffer.write(data);
     }
 }

@@ -18,7 +18,8 @@
             
             "properties" :
             {
-                "solid" : true
+                "solid" : true,
+                "height" : 20.0
             }
         }
     ],

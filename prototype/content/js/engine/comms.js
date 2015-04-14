@@ -153,10 +153,18 @@ projectSandbox.comms =
 	
 	packetMapDataTileType: function(data, dataView, offset)
 	{
+		var originalOffset = offset;
+		
 		var id = dataView.getInt16(offset);
-        var textureNameLen = dataView.getInt8(offset + 2);
-        var textureName = String.fromCharCode.apply(String, data.subarray(offset + 3, offset + 3 + textureNameLen));
-        
+		offset += 2;
+		
+		var height = dataView.getInt16(offset);
+		offset += 2;
+		
+        var textureNameLen = dataView.getInt8(offset);
+        var textureName = String.fromCharCode.apply(String, data.subarray(offset + 1, offset + 1 + textureNameLen));
+        offset += 1 + textureNameLen;
+		
         // Fetch texture
         var texture = projectSandbox.textures.get(textureName);
         
@@ -167,9 +175,9 @@ projectSandbox.comms =
         }
         
         // Set tile type
-		projectSandbox.map.types[id] = [texture];
+		projectSandbox.map.types[id] = [texture, height];
 		
-		return 2 + 1 + textureNameLen;
+		return offset - originalOffset;
 	},
 	
 	packetTextureData: function(data)

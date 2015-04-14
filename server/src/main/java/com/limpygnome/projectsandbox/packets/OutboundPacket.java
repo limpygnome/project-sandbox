@@ -1,6 +1,9 @@
 package com.limpygnome.projectsandbox.packets;
 
+import com.limpygnome.projectsandbox.utils.ByteHelper;
 import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.util.LinkedList;
 
 /**
  *
@@ -24,5 +27,11 @@ public abstract class OutboundPacket extends Packet
     public byte[] getPacketData()
     {
         return buffer.toByteArray();
+    }
+    
+    protected void write(LinkedList<Object> packetData) throws IOException
+    {
+        byte[] data = ByteHelper.convertListOfObjects(packetData);
+        buffer.write(data);
     }
 }

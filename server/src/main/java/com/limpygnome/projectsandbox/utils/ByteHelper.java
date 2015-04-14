@@ -47,6 +47,10 @@ public class ByteHelper
             {
                 size += 1;
             }
+            else if (o instanceof byte[])
+            {
+                size += ( (byte[]) o).length;
+            }
             else
             {
                 throw new IllegalArgumentException("Unsupported byte object - " + o.getClass().getName());
@@ -72,6 +76,10 @@ public class ByteHelper
             else if (o instanceof Byte || o instanceof Character)
             {
                 bb.put((byte) o);
+            }
+            else if (o instanceof byte[])
+            {
+                bb.put((byte[]) o);
             }
         }
         

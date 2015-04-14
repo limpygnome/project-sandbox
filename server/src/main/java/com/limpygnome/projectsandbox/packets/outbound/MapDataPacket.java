@@ -4,7 +4,7 @@ import com.limpygnome.projectsandbox.packets.OutboundPacket;
 import com.limpygnome.projectsandbox.world.Map;
 import com.limpygnome.projectsandbox.world.TileType;
 import java.io.IOException;
-import java.nio.ByteBuffer;
+import java.util.LinkedList;
 
 /**
  * An outbound packet containing a snapshot of all the data needed to render the
@@ -23,14 +23,12 @@ public class MapDataPacket extends OutboundPacket
     
     public void build(Map map) throws IOException
     {
-        ByteBuffer bb;
+        LinkedList<Object> packetData = new LinkedList<>();
         
-        // Write number of tiles
-        bb = ByteBuffer.allocate(2);
-        bb.putShort((short) map.tileTypeMappings.size());
-        buffer.write(bb.array());
+        // Add number of tiles
+        packetData.add((short) map.tileTypeMappings.size());
         
-        // Write tile types
+        // Add tile types
         TileType tileType;
         byte[] textureNameBytes;
         for (int i = 0; i < map.tileTypes.length; i++)
@@ -41,37 +39,31 @@ public class MapDataPacket extends OutboundPacket
             // Convert texture name to bytes
             textureNameBytes = tileType.texture.getBytes("UTF-8");
             
-            // Allocate buffer dynamically for type
-            bb = ByteBuffer.allocate(2 + 1 + textureNameBytes.length);
-            
-            // Write data
-            bb.putShort(tileType.id);
-            bb.put((byte) tileType.texture.length());
-            bb.put(textureNameBytes);
-            
-            // Add data to packet buffer
-            buffer.write(bb.array());
+            // Add type data
+            packetData.add(tileType.id);
+            packetData.add((short) tileType.properties.height);
+            packetData.add((byte) tileType.texture.length());
+            packetData.add(textureNameBytes);
         }
         
-        // Write tilesize, w, h
-        bb = ByteBuffer.allocate(8);
-        bb.putShort(map.id);
-        bb.putShort(map.tileSize);
-        bb.putShort(map.width);
-        bb.putShort(map.height);
-        buffer.write(bb.array());
+        // Add map properties
+        packetData.add(map.id);
+        packetData.add(map.tileSize);
+        packetData.add(map.width);
+        packetData.add(map.height);
         
-        // Write tiles
-        bb = ByteBuffer.allocate(map.width * map.height * 2);
+        // Add tiles
         short[] tileRow;
         for(int y = 0; y < map.tiles.length; y++)
         {
             tileRow = map.tiles[y];
             for(int x = 0; x < tileRow.length; x++)
             {
-                bb.putShort(tileRow[x]);
+                packetData.add(tileRow[x]);
             }
         }
-        buffer.write(bb.array());
+        
+        // Write packet data
+        write(packetData);
     }
 }

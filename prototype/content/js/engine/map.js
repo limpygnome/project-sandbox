@@ -21,7 +21,7 @@ projectSandbox.map =
 	// The height of the tiles
 	height: 0,
 	
-	// Each type has {texture}
+	// Each type has {texture, height}
 	types: [],
 	
 	// Each tile is a short indicating the type
@@ -103,6 +103,7 @@ projectSandbox.map =
 		mat4.translate(modelView, modelView, [this.scaledTileSizeHalf, this.scaledTileSizeHalf, this.renderZ]);
 		
 		// Render tiles
+		var tileTypeId;
 		var tileType;
 		var texture = null;
 		var textureName = null;
@@ -112,8 +113,10 @@ projectSandbox.map =
 			// Translate to next row
 			for(x = startX; x <= endX; x++)
 			{
+				tileTypeId = this.tiles[y][x];
+				tileType = this.types[tileTypeId];
+				
 				// Rebind if texture is different
-				tileType = this.types[this.tiles[y][x]];
 				if(tileType[0] != textureName)
 				{
 					// Bind texture
