@@ -16,8 +16,8 @@ function IceCreamVan()
 		true,
 		-2,
 		2,
-		-2,
-		2
+		-16,
+		-16
 	);
 }
 

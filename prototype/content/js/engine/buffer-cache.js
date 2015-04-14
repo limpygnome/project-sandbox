@@ -11,7 +11,7 @@ projectSandbox.bufferCache =
 		var gl = projectSandbox.gl;
 		
 		// Compile initial index buffers
-		var indexBufferIndices = 
+		var indexBufferIndices2d = 
 		[
 			0, 1, 2,
 			0, 2, 3
@@ -19,7 +19,7 @@ projectSandbox.bufferCache =
 		
 		var indexBuffer2dRect = gl.createBuffer();
 		gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, indexBuffer2dRect);
-		gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint16Array(indexBufferIndices), gl.STATIC_DRAW);
+		gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint16Array(indexBufferIndices2d), gl.STATIC_DRAW);
 		indexBuffer2dRect.itemSize = 1;
 		indexBuffer2dRect.numItems = 6;
 		
@@ -69,4 +69,5 @@ projectSandbox.bufferCache =
 		
 		return bufferPosition;
 	}
+	
 }

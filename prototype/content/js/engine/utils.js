@@ -70,5 +70,27 @@ projectSandbox.utils =
 		return Math.floor(
 			(Math.random() * (max-min)) + min
 		);
-	}
+	},
+	
+	vectorRotate: function(originX, originY, x, y, rotation)
+	{
+		// Avoid any computation if possible
+		if (rotation == 0.0 || (x == originX && y == originY))
+		{
+			return [x, y];
+		}
+		
+		// Build reusable trig values
+		var sin = Math.sin(rotation);
+		var cos = Math.cos(rotation);
+		
+		// Build new co-ords
+		var newx = x - originX;
+		var newy = y - originY;
+		
+		var rx = (cos * newx) - (sin * newy);
+		var ry = (sin * newx) + (cos * newy)
+		
+		return [originX + rx, originY + ry];
+	},
 }
