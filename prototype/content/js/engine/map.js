@@ -105,8 +105,9 @@ projectSandbox.map =
 		// Render tiles
 		var tileTypeId;
 		var tileType;
-		var texture = null;
-		var textureName = null;
+		
+		var lastTexture = null;
+		var lastHeight = -1;
 		
 		for(y = endY; y >= startY; y--) // Y is inverse!
 		{
@@ -117,14 +118,18 @@ projectSandbox.map =
 				tileType = this.types[tileTypeId];
 				
 				// Rebind if texture is different
-				if(tileType[0] != textureName)
+				if(tileType[0] != lastTexture)
 				{
 					// Bind texture
-					texture = tileType[0];
-					texture.bind(gl, shaderProgram);
-					
-					// Update current texture
-					textureName = tileType[0];
+					lastTexture = tileType[0];
+					lastTexture.bind(gl, shaderProgram);
+				}
+				
+				// Rebind the buffers being used if the tile height is different
+				if (tileType[1] != lastHeight)
+				{
+					lastHeight = tileType[1];
+					this.bindTile(gl, shaderProgram, lastHeight);
 				}
 				
 				// -- Set shader matrix uniforms
@@ -141,9 +146,9 @@ projectSandbox.map =
 		}
         
         // Unbind texture
-        if (texture != null)
+        if (lastTexture != null)
         {
-            texture.unbind(gl);
+            lastTexture.unbind(gl);
         }
 		
 		// Undo translation for tiles
@@ -151,5 +156,27 @@ projectSandbox.map =
 		
 		// Undo bottom left translation
 		mat4.translate(modelView, modelView, [-this.scaledTileSizeHalf, -this.scaledTileSizeHalf, -this.renderZ]);
+	},
+	
+	bindTile: function(gl, shaderProgram, height)
+	{
+		if (true || height == 0)
+		{
+			// Bind 2D buffers
+			this.bufferIndexes = projectSandbox.bufferCache.fetchIndexBuffer2dRect();
+			this.bufferPosition = projectSandbox.bufferCache.fetchVertexBuffer2dRect(this.tileSize, this.tileSize);
+		}
+		else
+		{
+			// Bind 3D buffers
+			this.bufferIndexes = projectSandbox.bufferCache.fetchIndexBuffer3dRect();
+		}
+		
+		// Bind vertices
+		gl.bindBuffer(gl.ARRAY_BUFFER, this.bufferPosition);
+		gl.vertexAttribPointer(shaderProgram.vertexPositionAttribute, this.bufferPosition.itemSize, gl.FLOAT, false, 0, 0);
+		
+		// Bind index data
+		gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this.bufferIndexes);
 	}
 }
