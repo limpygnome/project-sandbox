@@ -41,7 +41,7 @@ Trail.prototype.logic = function()
 			randX = rotatedV[0];
 			randY = rotatedV[1];
 			
-			var effect = new Effect(this.textureName, this.width, this.height, this.primitive.x + randX, this.primitive.y + randY, 1.0, this.lifespan, true);
+			var effect = new Effect(this.textureName, this.width, this.height, this.primitive.x + randX, this.primitive.y + randY, -0.5, this.lifespan, true);
 			effect.rotation = this.primitive.rotation;
 			
 			projectSandbox.effects.push(effect);	

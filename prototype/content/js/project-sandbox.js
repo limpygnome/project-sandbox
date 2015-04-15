@@ -309,7 +309,7 @@ var projectSandbox =
         var gl = this.gl;
         
 		gl.clearColor(0.0, 0.0, 0.0, 1.0);
-        gl.disable(gl.DEPTH_TEST);
+        gl.enable(gl.DEPTH_TEST);
         
         // Due to depth, we use alpha test rather than blending, implemented in shader
         gl.enable(gl.BLEND);
