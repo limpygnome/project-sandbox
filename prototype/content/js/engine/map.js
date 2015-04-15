@@ -7,13 +7,13 @@ projectSandbox.map =
     renderZ: -1.0,
 	
 	// The size of each tile (scaled)
-	tileSize: 0,
+	tileSize: 0.0,
 	
 	// Scaled tile sizes used for rendering
-	scaledTileSize: 0,
+	scaledTileSize: 0.0,
 	
 	// Half of scaledTileSize
-	scaledTileSizeHalf: 0,
+	scaledTileSizeHalf: 0.0,
 	
 	// The width of the tiles
 	width: 0,
@@ -29,6 +29,10 @@ projectSandbox.map =
 	
 	setup: function()
 	{
+		// Setup scaled tile size
+		this.scaledTileSize = this.tileSize * projectSandbox.SCALE_FACTOR;
+		this.scaledTileSizeHalf = this.scaledTileSize / 2;
+
 		this.isSetup = true;
 	},
 	
@@ -40,46 +44,9 @@ projectSandbox.map =
 		this.tiles = [];
 		this.width = 0;
 		this.height = 0;
-		this.tileSize = 0;
-		this.scaledTileSize = 0;
-	},
-	
-	compileTile: function()
-	{
-		var gl = projectSandbox.gl;
-		
-		// Setup scaled tile size
-		this.scaledTileSize = this.tileSize * projectSandbox.SCALE_FACTOR;
-		this.scaledTileSizeHalf = this.scaledTileSize / 2;
-		
-		// Compile position vertices
-		var halfTileSize = this.scaledTileSizeHalf;
-		this.verticesPosition =
-		[
-			-halfTileSize, -halfTileSize,  0.0,
-			+halfTileSize, -halfTileSize,  0.0,
-			+halfTileSize, +halfTileSize,  0.0,
-			-halfTileSize, +halfTileSize,  0.0
-		];
-		
-		this.bufferPosition = gl.createBuffer();
-		gl.bindBuffer(gl.ARRAY_BUFFER, this.bufferPosition);
-		gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(this.verticesPosition), gl.STATIC_DRAW);
-		this.bufferPosition.itemSize = 3;
-		this.bufferPosition.numItems = 4;
-		
-		// Compile vertex index array
-		this.verticesIndex = 
-		[
-			0, 1, 2,
-			0, 2, 3
-		];
-		
-		this.bufferIndexes = gl.createBuffer();
-		gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this.bufferIndexes);
-		gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint16Array(this.verticesIndex), gl.STATIC_DRAW);
-		this.bufferIndexes.itemSize = 1;
-		this.bufferIndexes.numItems = 6;
+		this.tileSize = 0.0;
+		this.scaledTileSize = 0.0;
+		this.scaledTileSizeHalf = 0.0;
 	},
 	
 	render: function(gl, shaderProgram, modelView, perspective)

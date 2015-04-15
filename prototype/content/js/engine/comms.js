@@ -144,9 +144,6 @@ projectSandbox.comms =
 			}
 		}
 		
-		// Recompile map tiles
-		projectSandbox.map.compileTile();
-		
 		// Set map to setup
 		projectSandbox.map.setup();
 	},
