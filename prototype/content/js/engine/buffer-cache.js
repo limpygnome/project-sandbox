@@ -57,7 +57,7 @@ projectSandbox.bufferCache =
 		gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, indexBuffer3dRect);
 		gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint16Array(indexBufferIndices3d), gl.STATIC_DRAW);
 		indexBuffer3dRect.itemSize = 1;
-		indexBuffer3dRect.numItems = 30;
+		indexBuffer3dRect.numItems = 6;
 		
 		this.indexBuffer3dRect = indexBuffer3dRect;
 	},
@@ -75,7 +75,6 @@ projectSandbox.bufferCache =
 	fetchVertexBuffer3dRect: function(width, height, depth)
 	{
 		// Note: width is on x, height is on z, height is y, depth is z
-		
 		var gl = projectSandbox.gl;
 		
 		// Round value, to avoid lots of decimally-sized buffers which are similar

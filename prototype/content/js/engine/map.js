@@ -160,7 +160,7 @@ projectSandbox.map =
 	
 	bindTile: function(gl, shaderProgram, height)
 	{
-		if (true || height == 0)
+		if (height == 0)
 		{
 			// Bind 2D buffers
 			this.bufferIndexes = projectSandbox.bufferCache.fetchIndexBuffer2dRect();
@@ -170,6 +170,7 @@ projectSandbox.map =
 		{
 			// Bind 3D buffers
 			this.bufferIndexes = projectSandbox.bufferCache.fetchIndexBuffer3dRect();
+			this.bufferPosition = projectSandbox.bufferCache.fetchVertexBuffer3dRect(this.tileSize, this.tileSize, height);
 		}
 		
 		// Bind vertices
