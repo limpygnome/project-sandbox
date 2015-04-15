@@ -1,7 +1,7 @@
 projectSandbox.map =
 {
 	// Indicates if the map is setup
-	setup: false,
+	isSetup: false,
     
     // The z-level at which to render the map
     renderZ: -1.0,
@@ -27,9 +27,14 @@ projectSandbox.map =
 	// Each tile is a short indicating the type
 	tiles: [],
 	
+	setup: function()
+	{
+		this.isSetup = true;
+	},
+	
 	reset: function()
 	{
-		this.setup = false;
+		this.isSetup = false;
 		
 		this.types = [];
 		this.tiles = [];
@@ -80,7 +85,7 @@ projectSandbox.map =
 	render: function(gl, shaderProgram, modelView, perspective)
 	{
 		// Check map is setup
-		if(!this.setup)
+		if(!this.isSetup)
 		{
 			return;
 		}
@@ -90,14 +95,6 @@ projectSandbox.map =
 		var endX = this.width -1;
 		var startY = 0;
 		var endY = this.height -1;
-		
-		// Setup buffers for rendering
-		// -- Bind tile buffers
-		gl.bindBuffer(gl.ARRAY_BUFFER, this.bufferPosition);
-		gl.vertexAttribPointer(shaderProgram.vertexPositionAttribute, this.bufferPosition.itemSize, gl.FLOAT, false, 0, 0);
-		
-		// -- Bind index data
-		gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this.bufferIndexes);
 		
 		// Translate map so bottom left is 0,0
 		mat4.translate(modelView, modelView, [this.scaledTileSizeHalf, this.scaledTileSizeHalf, this.renderZ]);

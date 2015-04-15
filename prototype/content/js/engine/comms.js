@@ -106,8 +106,8 @@ projectSandbox.comms =
 		var dataView = new DataView(data.buffer);
 		var offset = 2;
 		
-		// Set map to setup mode
-		projectSandbox.map.setup = false;
+		// Reset map
+		projectSandbox.map.reset();
 		
 		// Parse number of tile types
 		var numTileTypes = dataView.getInt16(offset);
@@ -148,7 +148,7 @@ projectSandbox.comms =
 		projectSandbox.map.compileTile();
 		
 		// Set map to setup
-		projectSandbox.map.setup = true;
+		projectSandbox.map.setup();
 	},
 	
 	packetMapDataTileType: function(data, dataView, offset)
