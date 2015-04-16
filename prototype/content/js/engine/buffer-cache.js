@@ -109,7 +109,7 @@ projectSandbox.bufferCache =
 				-halfWidth,	-halfHeight,  0.0,
 				
 				// NW (7)
-				-halfWidth, +halfHeight,  0.0,
+				-halfWidth, +halfHeight,  0.0
 			];
 			
 			// Create buffer for position vertices

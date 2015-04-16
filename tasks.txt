@@ -1,5 +1,7 @@
 tbc:
+- support for 3d textures i.e. more than 6 vertices
 - 3d cubes
+- remove old js
 
 consider:
 - moving tile types into json, which client can cache for a long time?

@@ -1,24 +1,5 @@
 projectSandbox.shaders =
 {
-	defaultFragment:
-		"precision mediump float;" +
-		"void main(void) {" +
-		"	gl_FragColor = vec4(1.0, 0.0, 0.0, 1.0);" +
-		"}",
-	
-	defaultVertex:
-		"attribute vec3 aVertexPosition;" +
-		"uniform mat4 uMVMatrix;" +
-		"uniform mat4 uPMatrix;" +
-		"void main(void) {" +
-		"	gl_Position = uPMatrix * uMVMatrix * vec4(aVertexPosition, 1.0);" +
-		"}",
-		
-	createDefaultProgram: function(gl)
-	{
-		return this.createProgram(gl, this.defaultFragment, this.defaultVertex);
-	},
-	
 	createDefaultTextureProgram: function(gl)
 	{
 		var fragmentShader = projectSandbox.assetLoader.get("/content/game/shaders/default-texture.frag");
@@ -26,7 +7,7 @@ projectSandbox.shaders =
 		
 		return this.createProgram(gl, fragmentShader, vertexShaderSrc);
 	},
-		
+	
 	createProgram: function(gl, dataFragment, dataVertex)
 	{
 		// Compile shaders
