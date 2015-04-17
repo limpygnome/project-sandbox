@@ -8,10 +8,10 @@ void main(void)
 	vec4 texel = texture2D(uSampler, vec2(vTextureCoord.s, vTextureCoord.t));
 	texel *= vColour;
 	
-	if (texel.a < 0.1)
+	if (texel.a < 0.01)
 	{
 		discard;
-	}
+	}	
 
 	gl_FragColor = texel;
 }

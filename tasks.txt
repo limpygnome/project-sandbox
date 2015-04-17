@@ -1,7 +1,9 @@
 tbc:
+- fix "kv of entities" syntax in project-sandbox; doesn't work with IE11
 - support for 3d textures i.e. more than 6 vertices
 - 3d cubes
 - remove old js
+- #wrekt in big, wben player dies
 
 consider:
 - moving tile types into json, which client can cache for a long time?

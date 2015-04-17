@@ -163,7 +163,7 @@ var projectSandbox =
         
         // Update ents
         var ent;
-		for(var kv of this.entities)
+		for (var kv of this.entities)
 		{
 			ent = kv[1];
 			if (ent.logic)
