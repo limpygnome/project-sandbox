@@ -121,7 +121,7 @@ projectSandbox.textures =
 		}
 		
 		// -- frames * 8 floats (4 verts)
-		var frameData = new Float32Array(frames.length * 8);
+		var frameData = new Float32Array(frames.length * expectedVertsPerFrame);
 		var frameDataOffset = 0;
 		var frame;
 		var frameVertices;

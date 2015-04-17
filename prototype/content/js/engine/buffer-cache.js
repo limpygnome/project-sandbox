@@ -57,7 +57,7 @@ projectSandbox.bufferCache =
 		gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, indexBuffer3dRect);
 		gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint16Array(indexBufferIndices3d), gl.STATIC_DRAW);
 		indexBuffer3dRect.itemSize = 1;
-		indexBuffer3dRect.numItems = 6;
+		indexBuffer3dRect.numItems = 30;
 		
 		this.indexBuffer3dRect = indexBuffer3dRect;
 	},
