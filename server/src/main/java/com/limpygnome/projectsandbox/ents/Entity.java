@@ -220,8 +220,18 @@ public strictfp abstract class Entity
         if (health <= 0.0f)
         {
             // Entity is now dead!
-            eventDeath(controller);
+            kill(controller);
         }
+    }
+    
+    /**
+     * Should be invoked to kill the ent; allows the ent to decide what to do.
+     * 
+     * @param controller
+     */
+    public void kill(Controller controller)
+    {
+        eventDeath(controller);
     }
     
     public void updateMask(UpdateMasks... masks)

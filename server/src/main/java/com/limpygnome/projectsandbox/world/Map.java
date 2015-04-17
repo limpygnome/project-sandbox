@@ -30,6 +30,8 @@ public class Map
     public short tileSize;
     public short width;
     public short height;
+    public float maxX;
+    public float maxY;
     
     /** Mapped by [y][x] or [row][column]; bottom-left at 0, top-right at n */
     public short tiles[][];
@@ -81,6 +83,10 @@ public class Map
         map.tileSize = (short) (long) obj.get("tile_size");
         map.width = (short) (long) obj.get("width");
         map.height = (short) (long) obj.get("height");
+        
+        // Compute max boundries
+        map.maxX = (float) map.tileSize * (float) map.width;
+        map.maxY = (float) map.tileSize * (float) map.height;
         
         // Setup tiles array
         map.tiles = new short[map.height][map.width];

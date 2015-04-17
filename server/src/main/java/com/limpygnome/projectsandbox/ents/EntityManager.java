@@ -115,6 +115,11 @@ public class EntityManager
             Entity a;
             Entity b;
             
+            // Fetch map boundries
+            // TODO: update if we have multiple maps
+            float mapMaxX = controller.mapManager.main.maxX;
+            float mapMaxY = controller.mapManager.main.maxY;
+            
             // Perform collision check for each entity
             CollisionResult result;
             Collection<CollisionResultMap> mapResults;
@@ -164,6 +169,14 @@ public class EntityManager
                 
                 // Update position for ent
                 a.position.copy(a.positionNew);
+                
+                // Check ent is not outside map
+                if (a.positionNew.x < 0.0f || a.positionNew.y < 0.0f ||
+                    a.positionNew.x > mapMaxX || a.positionNew.y > mapMaxY)
+                {
+                    // Kill the ent...
+                    a.kill(controller);
+                }
             }
             
             // Add pending ents
