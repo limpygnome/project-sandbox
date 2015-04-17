@@ -37,20 +37,20 @@ projectSandbox.bufferCache =
 			0, 2, 3,
 			
 			// North
-			4, 7, 3,
-			4, 3, 2,
+			4, 5, 6,
+			4, 6, 7,
 			
 			// East
-			5, 4, 2,
-			5, 2, 1,
+			8, 9, 10,
+			8, 10, 11,
 			
 			// South
-			6, 5, 1,
-			6, 1, 0,
+			12, 13, 14,
+			12, 14, 15,
 			
 			// West
-			7, 6, 0,
-			7, 0, 3
+			16, 17, 18,
+			16, 18, 19
 		];
 		
 		var indexBuffer3dRect = gl.createBuffer();
@@ -99,17 +99,29 @@ projectSandbox.bufferCache =
 				+halfWidth, +halfHeight,  depth,
 				-halfWidth, +halfHeight,  depth,
 				
-				// NE (4)
-				+halfWidth, +halfHeight,  0.0,
+				// North
+				+halfWidth, +halfHeight, 0.0,
+				-halfWidth, +halfHeight, 0.0,
+				-halfWidth, +halfHeight, depth,
+				+halfWidth, +halfHeight, depth,
 				
-				// SE (5)
-				+halfWidth, -halfHeight,  0.0,
+				// East
+				+halfWidth, -halfHeight, 0.0,
+				+halfWidth, +halfHeight, 0.0,
+				+halfWidth, +halfHeight, depth,
+				+halfWidth, -halfHeight, depth,
 				
-				// SW (6)
-				-halfWidth,	-halfHeight,  0.0,
+				// South
+				-halfWidth, -halfHeight, 0.0,
+				+halfWidth, -halfHeight, 0.0,
+				+halfWidth, -halfHeight, depth,
+				-halfWidth, -halfHeight, depth,
 				
-				// NW (7)
-				-halfWidth, +halfHeight,  0.0
+				// West
+				-halfWidth, +halfHeight, 0.0,
+				-halfWidth, -halfHeight, 0.0,
+				-halfWidth, -halfHeight, depth,
+				-halfWidth, +halfHeight, depth
 			];
 			
 			// Create buffer for position vertices
@@ -117,7 +129,7 @@ projectSandbox.bufferCache =
 			gl.bindBuffer(gl.ARRAY_BUFFER, bufferPosition);
 			gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(verticesPosition), gl.STATIC_DRAW);
 			bufferPosition.itemSize = 3;
-			bufferPosition.numItems = 8;
+			bufferPosition.numItems = 30;
 			
 			// Store buffer
 			this.vertexBuffers.set(width + "x" + height + "x" + depth, bufferPosition);
