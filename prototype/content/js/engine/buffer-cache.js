@@ -94,34 +94,34 @@ projectSandbox.bufferCache =
 			var verticesPosition =
 			[
 				// Top (T - 0 to 3)
-				-halfWidth,	-halfHeight,  depth,
-				+halfWidth, -halfHeight,  depth,
-				+halfWidth, +halfHeight,  depth,
 				-halfWidth, +halfHeight,  depth,
+				+halfWidth, +halfHeight,  depth,
+				+halfWidth, -halfHeight,  depth,
+				-halfWidth,	-halfHeight,  depth,
 				
 				// North
-				+halfWidth, +halfHeight, 0.0,
-				-halfWidth, +halfHeight, 0.0,
-				-halfWidth, +halfHeight, depth,
 				+halfWidth, +halfHeight, depth,
+				-halfWidth, +halfHeight, depth,
+				-halfWidth, +halfHeight, 0.0,
+				+halfWidth, +halfHeight, 0.0,
 				
 				// East
-				+halfWidth, -halfHeight, 0.0,
-				+halfWidth, +halfHeight, 0.0,
-				+halfWidth, +halfHeight, depth,
 				+halfWidth, -halfHeight, depth,
+				+halfWidth, +halfHeight, depth,
+				+halfWidth, +halfHeight, 0.0,
+				+halfWidth, -halfHeight, 0.0,
 				
 				// South
-				-halfWidth, -halfHeight, 0.0,
-				+halfWidth, -halfHeight, 0.0,
-				+halfWidth, -halfHeight, depth,
 				-halfWidth, -halfHeight, depth,
+				+halfWidth, -halfHeight, depth,
+				+halfWidth, -halfHeight, 0.0,
+				-halfWidth, -halfHeight, 0.0,
 				
 				// West
-				-halfWidth, +halfHeight, 0.0,
-				-halfWidth, -halfHeight, 0.0,
+				-halfWidth, +halfHeight, depth,
 				-halfWidth, -halfHeight, depth,
-				-halfWidth, +halfHeight, depth
+				-halfWidth, -halfHeight, 0.0,
+				-halfWidth, +halfHeight, 0.0
 			];
 			
 			// Create buffer for position vertices
