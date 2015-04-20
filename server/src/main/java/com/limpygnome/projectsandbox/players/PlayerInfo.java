@@ -2,7 +2,6 @@ package com.limpygnome.projectsandbox.players;
 
 import com.limpygnome.projectsandbox.players.enums.PlayerKeys;
 import com.limpygnome.projectsandbox.ents.Entity;
-import com.limpygnome.projectsandbox.ents.Faction;
 import org.java_websocket.WebSocket;
 
 /**
@@ -29,7 +28,7 @@ public class PlayerInfo
     /**
      * Default faction for all new ents.
      */
-    public Faction defaultFaction;
+    public short defaultFaction;
     
     /**
      * The player's current entity.
@@ -41,7 +40,6 @@ public class PlayerInfo
         this.keys = 0;
         this.socket = socket;
         this.entity = null;
-        this.defaultFaction = Faction.NONE;
         this.session = session;
     }
     

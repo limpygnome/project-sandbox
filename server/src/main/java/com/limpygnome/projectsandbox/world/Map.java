@@ -1,7 +1,6 @@
 package com.limpygnome.projectsandbox.world;
 
 import com.limpygnome.projectsandbox.ents.Entity;
-import com.limpygnome.projectsandbox.ents.PropertyFaction;
 import com.limpygnome.projectsandbox.ents.physics.Vector2;
 import com.limpygnome.projectsandbox.ents.physics.Vertices;
 import com.limpygnome.projectsandbox.packets.outbound.MapDataPacket;
@@ -231,15 +230,15 @@ public class Map
      * @param <T>
      * @param ent 
      */
-    public <T extends Entity & PropertyFaction> void spawn(T ent)
+    public <T extends Entity> void spawn(T ent)
     {
         // Fetch spawn for faction
-        Faction factionSpawns = factions.get(ent.getPropertyFaction().ID);
+        Faction factionSpawns = factions.get(ent.faction);
         
         if (factionSpawns == null)
         {
             // TODO: replace with log4j
-            System.err.println("no spawns available for faction " + ent.getPropertyFaction().ID);
+            System.err.println("no spawns available for faction " + ent.faction);
         }
         else
         {

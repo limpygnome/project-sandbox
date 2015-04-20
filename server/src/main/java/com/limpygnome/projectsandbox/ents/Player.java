@@ -12,7 +12,7 @@ import com.limpygnome.projectsandbox.players.enums.PlayerKeys;
  * @author limpygnome
  */
 @EntityType(typeId = 1)
-public class Player extends Entity implements PropertyFaction
+public class Player extends Entity
 {
     public static final float DEFAULT_HEALTH = 100.0f;
     
@@ -82,12 +82,6 @@ public class Player extends Entity implements PropertyFaction
         
         // Perform ent logic
         super.logic(controller);
-    }
-
-    @Override
-    public Faction getPropertyFaction()
-    {
-        return Faction.NONE;
     }
 
     @Override

@@ -18,8 +18,12 @@ import java.util.List;
 @EntityType(typeId = 0)
 public strictfp abstract class Entity
 {
+    public static final short DEFAULT_FACTION = 0;
+    
     // The unique ID for the entity
     public short id;
+    
+    public short faction;
     
     // The type of entity
     public short entityType;
@@ -43,6 +47,7 @@ public strictfp abstract class Entity
     public Entity(short width, short height)
     {
         this.id = 0;
+        this.faction = DEFAULT_FACTION;
         
         // Fetch entity ID
         final Class ENTITY_CLASS = getClass();
