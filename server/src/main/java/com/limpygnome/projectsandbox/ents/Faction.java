@@ -7,7 +7,8 @@ package com.limpygnome.projectsandbox.ents;
  */
 public enum Faction
 {
-    NONE((short) 0)
+    NONE((short) 0),
+    VEHICLES_RANDOM( (short) 1000)
     ;
 
     public final short ID;
@@ -25,6 +26,8 @@ public enum Faction
                 System.err.println("failed to find faction ID " + ID);
             case 0:
                 return NONE;
+            case 1000:
+                return VEHICLES_RANDOM;
         }
     }
 }

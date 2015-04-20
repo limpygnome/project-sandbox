@@ -40,14 +40,14 @@ public class Map
     // if this is updated, it needs thread protection
     public MapDataPacket packet;
     
-    private HashMap<Short, FactionSpawns> spawns;
+    private HashMap<Short, Faction> factions;
     
     public Map(MapManager mapManager)
     {
         this.mapManager = mapManager;
         this.tileTypeMappings = new HashMap<>();
         this.tileTypeIdCounter = 0;
-        this.spawns = new HashMap<>();
+        this.factions = new HashMap<>();
     }
     
     public static Map load(MapManager mapManager, JSONObject obj) throws IOException
@@ -146,28 +146,43 @@ public class Map
         
         // Spawn ents into world
         JSONArray ents = (JSONArray) obj.get("ents");
-        
-        JSONObject entData;
-        JSONObject entDataPosition;
-        Entity ent;
-        short entTypeId;
-        Class entClass;
-        
-        for (Object rawEnt : ents)
+        for (Object entData : ents)
         {
-            entData = (JSONObject) rawEnt;
+            parseEnts(mapManager, map, (JSONObject) entData);
+        }
+        
+        // Parse factions
+        JSONArray factions = (JSONArray) obj.get("factions");
+        for (Object factionData : factions)
+        {
+            parseFaction(map, (JSONObject) factionData);
+        }
+        
+        return map;
+    }
+    
+    private static void parseEnts(MapManager mapManager, Map map, JSONObject entData) throws IOException
+    {
+        short type = (short) (long) entData.get("type");
             
-            // Read type
-            entTypeId = (short)(long) entData.get("type");
-            
-            // Fetch ent type and create instance
-            entClass = mapManager.entTypeMappings.get(entTypeId);
-            
-            if (entClass == null)
-            {
-                throw new IOException("Entity type " + entTypeId + " not found");
-            }
-            
+        // Fetch class for ent type
+        Class entClass = mapManager.entTypeMappings.get(type);
+
+        // Check class was found
+        if (entClass == null)
+        {
+            throw new IOException("Entity type " + type + " not found");
+        }
+
+        short faction = (short) (long) entData.get("faction");
+        long count = (long) entData.get("count");
+        
+        // Create new instances of type
+        Entity ent;
+        
+        for (long i = 0; i < count ;i++)
+        {
+            // Create instance
             try
             {
                 ent = (Entity) entClass.newInstance();
@@ -177,61 +192,37 @@ public class Map
                 throw new IOException("Unable to create entity instance", e);
             }
             
-            // Set initial position, if available
-            entDataPosition = (JSONObject) entData.get("position");
-            
-            if (entDataPosition != null)
-            {
-                if (entDataPosition.containsKey("x") && entDataPosition.containsKey("y"))
-                {
-                    float x = (float) (double) entDataPosition.get("x");
-                    float y = (float) (double) entDataPosition.get("y");
-                    ent.position(x, y);
-                }
-                
-                if (entDataPosition.containsKey("rotation"))
-                {
-                    float rotation = (float) (double) entDataPosition.get("rotation");
-                    ent.rotation(rotation);
-                }
-            }
-            
             // Add to world
             mapManager.controller.entityManager.add(ent);
         }
+    }
+    
+    private static void parseFaction(Map map, JSONObject factionData)
+    {
+        short factionId = (short) (long) factionData.get("id");
         
-        JSONArray spawns = (JSONArray) obj.get("spawns");
+        Faction faction = new Faction(factionId);
         
-        JSONObject spawnData;
-        short faction;
-        float x;
-        float y;
-        float rotation;
-        FactionSpawns factionSpawns;
-        
-        for (Object rawSpawn : spawns)
+        // Parse spawns
+        JSONArray spawnsData = (JSONArray) factionData.get("spawns");
+        Spawn spawn;
+        for (Object spawnData : spawnsData)
         {
-            spawnData = (JSONObject) rawSpawn;
-            
-            // Parse data
-            faction = (short) (long) spawnData.get("faction");
-            x = (float) (double) spawnData.get("x");
-            y = (float) (double) spawnData.get("y");
-            rotation = (float) (double) spawnData.get("rotation");
-            
-            // Store in faction spawns
-            factionSpawns = map.spawns.get(faction);
-            
-            if (factionSpawns == null)
-            {
-                factionSpawns = new FactionSpawns();
-                map.spawns.put(faction, factionSpawns);
-            }
-            
-            factionSpawns.add(new Spawn(x, y, rotation));
+            spawn = parseFactionSpawn((JSONObject) spawnData);
+            faction.addSpawn(spawn);
         }
         
-        return map;
+        // Add to map
+        map.factions.put(faction.getFactionId(), faction);
+    }
+    
+    private static Spawn parseFactionSpawn(JSONObject spawn)
+    {
+        float x = (float) (double) spawn.get("x");
+        float y = (float) (double) spawn.get("y");
+        float rotation = (float) (double) spawn.get("rotation");
+        
+        return new Spawn(x, y, rotation);
     }
     
     /**
@@ -243,7 +234,7 @@ public class Map
     public <T extends Entity & PropertyFaction> void spawn(T ent)
     {
         // Fetch spawn for faction
-        FactionSpawns factionSpawns = spawns.get(ent.getPropertyFaction().ID);
+        Faction factionSpawns = factions.get(ent.getPropertyFaction().ID);
         
         if (factionSpawns == null)
         {
