@@ -148,6 +148,7 @@ public class Map
         JSONArray ents = (JSONArray) obj.get("ents");
         
         JSONObject entData;
+        JSONObject entDataPosition;
         Entity ent;
         short entTypeId;
         Class entClass;
@@ -174,6 +175,25 @@ public class Map
             catch (Exception e)
             {
                 throw new IOException("Unable to create entity instance", e);
+            }
+            
+            // Set initial position, if available
+            entDataPosition = (JSONObject) entData.get("position");
+            
+            if (entDataPosition != null)
+            {
+                if (entDataPosition.containsKey("x") && entDataPosition.containsKey("y"))
+                {
+                    float x = (float) (double) entDataPosition.get("x");
+                    float y = (float) (double) entDataPosition.get("y");
+                    ent.position(x, y);
+                }
+                
+                if (entDataPosition.containsKey("rotation"))
+                {
+                    float rotation = (float) (double) entDataPosition.get("rotation");
+                    ent.rotation(rotation);
+                }
             }
             
             // Add to world

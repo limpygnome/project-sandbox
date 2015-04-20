@@ -81,12 +81,21 @@ public strictfp abstract class Entity
     
     public void rotation(float radians)
     {
-        // Update rotation
-        this.rotation = CustomMath.clampRepeat(
+        // Clamp within valid range
+        radians = CustomMath.clampRepeat(
                 -CustomMath.PI_FLOAT,
                 CustomMath.PI_FLOAT,
                 radians
         );
+        
+        // Check the rotation will change
+        if (rotation == radians)
+        {
+            return;
+        }
+        
+        // Update rotation
+        this.rotation = radians;
         
         // Rebuild cached vertices
         cachedVertices = new Vertices(this);

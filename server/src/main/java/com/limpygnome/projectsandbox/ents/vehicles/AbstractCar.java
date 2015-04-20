@@ -248,4 +248,24 @@ public abstract class AbstractCar extends Entity
         
         super.eventCollision(controller, entCollider, entVictim, entOther, result);
     }
+
+    @Override
+    public strictfp void eventDeath(Controller controller)
+    {
+        // Respawn players in vehicle
+        PlayerInfo playerInfo;
+        for (int i = 0; i < players.length; i++)
+        {
+            playerInfo = players[i];
+            
+            if (playerInfo != null)
+            {
+                controller.playerManager.createSpawnNewPlayerEnt(playerInfo);
+                players[i] = null;
+            }
+        }
+        
+        super.eventDeath(controller);
+    }
+    
 }
