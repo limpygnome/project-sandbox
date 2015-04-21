@@ -267,5 +267,10 @@ public abstract class AbstractCar extends Entity
         
         super.eventDeath(controller);
     }
-    
+
+    @Override
+    public void reset()
+    {
+        this.speed = 0.0f;
+    }
 }

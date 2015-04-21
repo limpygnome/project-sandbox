@@ -85,9 +85,7 @@ public class Player extends Entity
     }
 
     @Override
-    public strictfp void eventDeath(Controller controller)
+    public void reset()
     {
-        // Respawn new ent for player
-        controller.playerManager.createSpawnNewPlayerEnt(playerInfo);
     }
 }

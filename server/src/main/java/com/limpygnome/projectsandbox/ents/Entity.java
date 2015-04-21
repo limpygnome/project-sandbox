@@ -72,7 +72,7 @@ public strictfp abstract class Entity
         
         this.position = new Vector2();
         this.positionNew = new Vector2();
-        this.cachedVertices = new Vertices(this);
+        rebuildCachedVertices();
         this.rotation = 0.0f;
         
         this.health = 0.0f;
@@ -103,10 +103,15 @@ public strictfp abstract class Entity
         this.rotation = radians;
         
         // Rebuild cached vertices
-        cachedVertices = new Vertices(this);
+        rebuildCachedVertices();
         
         // Update state
         updateMask(UpdateMasks.ROTATION);
+    }
+    
+    public void rebuildCachedVertices()
+    {
+        cachedVertices = new Vertices(this);
     }
     
     public void rotationOffset(float radians)
@@ -152,7 +157,7 @@ public strictfp abstract class Entity
         positionNew.y = y;
         
         // Rebuild cached vertices
-        cachedVertices = new Vertices(this);
+        rebuildCachedVertices();
         
         // Update state
         if (changeX && changeY)
@@ -272,8 +277,8 @@ public strictfp abstract class Entity
      */
     public void eventDeath(Controller controller)
     {
-        // Default action is to remove the entity
-        setState(StateChange.PENDING_DELETED);
+        // Default action is to respawn the entity
+        controller.mapManager.main.spawn(this);
     }
     
     public void eventPacketEntCreated(List<Object> packetData)
@@ -303,6 +308,8 @@ public strictfp abstract class Entity
             positionOffset(result.mtv);
         }
     }
+    
+    public abstract void reset();
 
     @Override
     public String toString()

@@ -2,6 +2,7 @@ package com.limpygnome.projectsandbox.world;
 
 import com.limpygnome.projectsandbox.ents.Entity;
 import com.limpygnome.projectsandbox.ents.enums.StateChange;
+import com.limpygnome.projectsandbox.ents.enums.UpdateMasks;
 import com.limpygnome.projectsandbox.ents.physics.Vector2;
 import com.limpygnome.projectsandbox.ents.physics.Vertices;
 import com.limpygnome.projectsandbox.packets.outbound.MapDataPacket;
@@ -251,13 +252,28 @@ public class Map
             ent.setState(StateChange.PENDING_DELETED);
         }
         else
-        {
+        {   
             Spawn spawn = factionSpawns.getNextSpawn();
+            
+            // Setup entity for its new life
+            ent.reset();
+            
+            ent.positionNew.x = spawn.x;
+            ent.positionNew.y = spawn.y;
+            ent.position.copy(ent.positionNew);
+            ent.rotation = spawn.rotation;
+            ent.updateMask(UpdateMasks.ALL_MASKS);
+            
+            ent.rebuildCachedVertices();
+            
             // TODO: this should be one call; we're rebuilding vertices twice - inefficient!
             ent.position(new Vector2(spawn.x, spawn.y));
             ent.rotation(spawn.rotation);
             
-            System.out.println("Map - spawned entity - " + ent);
+            // Reset ent
+            ent.reset();
+            
+            System.out.println("Map - spawned entity - " + ent + " - " + spawn);
         }
     }
 
