@@ -16,4 +16,10 @@ public class Spawn
         this.y = y;
         this.rotation = rotation;
     }
+
+    @Override
+    public String toString()
+    {
+        return "[x: " + x + ", y: " + y + ", rotation: " + rotation + "]";
+    }
 }

@@ -1,6 +1,7 @@
 package com.limpygnome.projectsandbox.world;
 
 import com.limpygnome.projectsandbox.ents.Entity;
+import com.limpygnome.projectsandbox.ents.enums.StateChange;
 import com.limpygnome.projectsandbox.ents.physics.Vector2;
 import com.limpygnome.projectsandbox.ents.physics.Vertices;
 import com.limpygnome.projectsandbox.packets.outbound.MapDataPacket;
@@ -143,18 +144,18 @@ public class Map
         map.packet = new MapDataPacket();
         map.packet.build(map);
         
-        // Spawn ents into world
-        JSONArray ents = (JSONArray) obj.get("ents");
-        for (Object entData : ents)
-        {
-            parseEnts(mapManager, map, (JSONObject) entData);
-        }
-        
         // Parse factions
         JSONArray factions = (JSONArray) obj.get("factions");
         for (Object factionData : factions)
         {
             parseFaction(map, (JSONObject) factionData);
+        }
+        
+        // Spawn ents into world
+        JSONArray ents = (JSONArray) obj.get("ents");
+        for (Object entData : ents)
+        {
+            parseEnts(mapManager, map, (JSONObject) entData);
         }
         
         return map;
@@ -185,6 +186,7 @@ public class Map
             try
             {
                 ent = (Entity) entClass.newInstance();
+                ent.faction = faction;
             }
             catch (Exception e)
             {
@@ -193,6 +195,9 @@ public class Map
             
             // Add to world
             mapManager.controller.entityManager.add(ent);
+            
+            // Spawn
+            map.spawn(ent);
         }
     }
     
@@ -213,6 +218,8 @@ public class Map
         
         // Add to map
         map.factions.put(faction.getFactionId(), faction);
+        
+        System.out.println("Map - added faction - " + faction);
     }
     
     private static Spawn parseFactionSpawn(JSONObject spawn)
@@ -239,12 +246,18 @@ public class Map
         {
             // TODO: replace with log4j
             System.err.println("no spawns available for faction " + ent.faction);
+            
+            // Set ent to deleted - not much we can do...
+            ent.setState(StateChange.PENDING_DELETED);
         }
         else
         {
             Spawn spawn = factionSpawns.getNextSpawn();
+            // TODO: this should be one call; we're rebuilding vertices twice - inefficient!
             ent.position(new Vector2(spawn.x, spawn.y));
             ent.rotation(spawn.rotation);
+            
+            System.out.println("Map - spawned entity - " + ent);
         }
     }
 

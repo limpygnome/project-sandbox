@@ -42,4 +42,20 @@ public class Faction
         
         return spawnIterator.next();
     }
+
+    @Override
+    public String toString()
+    {
+        StringBuilder sb = new StringBuilder();
+        
+        sb.append("[id: ").append(factionId).append(", spawns: ");
+        for (Spawn s : spawns)
+        {
+            sb.append(s).append(",");
+        }
+        sb.deleteCharAt(sb.length()-1).append("]");
+        
+        return sb.toString();
+    }
+    
 }

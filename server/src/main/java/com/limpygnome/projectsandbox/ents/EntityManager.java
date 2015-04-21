@@ -74,6 +74,8 @@ public class EntityManager
             
             // Update state to created - for update to all players!
             ent.setState(StateChange.CREATED);
+            
+            System.out.println("Entity manager - added ent - " + ent);
         }
         
         return true;
