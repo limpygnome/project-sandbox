@@ -3,6 +3,8 @@ package com.limpygnome.projectsandbox.ents;
 import com.limpygnome.projectsandbox.Controller;
 import com.limpygnome.projectsandbox.ents.annotations.EntityType;
 import com.limpygnome.projectsandbox.ents.physics.Vector2;
+import com.limpygnome.projectsandbox.inventory.Inventory;
+import com.limpygnome.projectsandbox.inventory.InventoryItem;
 import com.limpygnome.projectsandbox.players.PlayerInfo;
 import com.limpygnome.projectsandbox.players.enums.PlayerKeys;
 
@@ -14,9 +16,8 @@ import com.limpygnome.projectsandbox.players.enums.PlayerKeys;
 @EntityType(typeId = 1)
 public class Player extends Entity
 {
-    public static final float DEFAULT_HEALTH = 100.0f;
-    
     public PlayerInfo playerInfo;
+    public Inventory inventory;
     
     public Player(Controller controller, PlayerInfo playerInfo)
     {
@@ -31,9 +32,25 @@ public class Player extends Entity
             throw new IllegalArgumentException("A player must have associated PlayerInfo instance!");
         }
         
-        this.playerInfo = playerInfo;
+        setMaxHealth(PlayerConstants.DEFAULT_HEALTH);
         
-        setMaxHealth(DEFAULT_HEALTH);
+        this.playerInfo = playerInfo;
+        this.inventory = new Inventory(this);
+        
+        // Give player default inventory items
+        InventoryItem itemInstance;
+        for (Class item : PlayerConstants.DEFAULT_INVENTORY_ITEMS)
+        {
+            try
+            {
+                itemInstance = (InventoryItem) item.getConstructor(Inventory.class).newInstance(inventory);
+                this.inventory.add(itemInstance);
+            }
+            catch (Exception ex)
+            {
+                throw new IllegalArgumentException("Default player inventory not setup correctly");
+            }
+        }
     }
 
     @Override
