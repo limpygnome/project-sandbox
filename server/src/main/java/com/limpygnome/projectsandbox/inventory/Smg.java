@@ -10,8 +10,8 @@ public class Smg extends Weapon
     {
         super(
                 inventory,
-                60,
-                5,
+                (short) 60,
+                (short) 5,
                 120,
                 1500
         );
