@@ -1,33 +1,57 @@
 package com.limpygnome.projectsandbox.inventory;
 
 import com.limpygnome.projectsandbox.ents.Entity;
+import java.io.Serializable;
+import java.util.LinkedList;
 
 /**
- *
+ * Represents an inventory.
+ * 
  * @author limpygnome
  */
-public class Inventory
+public class Inventory implements Serializable
 {
-    public Entity owner;
-    public InventoryItem[] items;
+    public static final long serialVersionUID = 1L;
+    
+    public transient Entity owner;
+    
+    public InventoryItem selected;
+    public LinkedList<InventoryItem> items;
     
     public Inventory(Entity owner)
     {
         this.owner = owner;
-        this.items = new InventoryItem[InventoryConstants.DEFAULT_ITEMS];
+        this.items = new LinkedList<>();
     }
     
     public synchronized boolean add(InventoryItem item)
     {
-        // TODO: consider optimisation
-        for (int i = 0; i < items.length; i++)
+        // Attempt to find similar inventory item and merge
+        InventoryMergeResult result;
+        for (InventoryItem iitem : items)
         {
-            if (items[i] == null)
+            if (iitem.getClass() == item.getClass())
             {
-                items[i] = item;
-                return true;
+                result = iitem.merge(item);
+                
+                switch (result)
+                {
+                    case ADD:
+                        // Do nothing...we should check with all the items
+                        break;
+                    case DONT_ADD:
+                        // Conflicts with another item, dont add it...
+                        return false;
+                    case MERGED:
+                        // Merged with another item, success!
+                        return true;
+                }
             }
+            items.add(item);
         }
-        return false;
+        
+        // Looks like the item can be added
+        items.add(item);
+        return true;
     }
 }
