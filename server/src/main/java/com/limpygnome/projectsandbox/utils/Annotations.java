@@ -9,7 +9,7 @@ import java.util.HashMap;
  * @author limpygnome
  */
 public final class Annotations
-{
+{    
     /**
      * Finds all of the classes annotated within a package, including
      * sub-packages.
@@ -40,14 +40,18 @@ public final class Annotations
                 /// Retrieve typeId
                 typeId = (short) annotationType.getMethod("typeId").invoke(annotationInstance);
                 
-                if (typeId != 0)
+                if (result.containsKey(typeId))
+                {
+                    throw new IllegalArgumentException("Annotations - " + annotationType.getName() + " - " + clazz.getName() + " - non-unique ID of " + typeId);
+                }
+                else if (typeId != 0)
                 {
                     result.put(typeId, clazz);
                     System.out.println("Annotations - " + annotationType.getName() + " - added type " + clazz.getName());
                 }
                 else if (!Modifier.isAbstract(clazz.getModifiers()))
                 {
-                    throw new IllegalArgumentException("Annotations - " + annotationType.getName() + " - invalid type identifier");
+                    throw new IllegalArgumentException("Annotations - " + annotationType.getName() + " - " + clazz.getName() + " - invalid type identifier");
                 }
             }
         }

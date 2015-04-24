@@ -2,6 +2,7 @@ package com.limpygnome.projectsandbox;
 
 import com.limpygnome.projectsandbox.threading.SocketEndpoint;
 import com.limpygnome.projectsandbox.ents.EntityManager;
+import com.limpygnome.projectsandbox.inventory.InventoryManager;
 import com.limpygnome.projectsandbox.players.PlayerManager;
 import com.limpygnome.projectsandbox.threading.GameLogic;
 import com.limpygnome.projectsandbox.world.MapManager;
@@ -18,6 +19,7 @@ public class Controller
     
     public EntityManager entityManager;
     public PlayerManager playerManager;
+    public InventoryManager inventoryManager;
     public MapManager mapManager;
     
     public Controller()
@@ -28,8 +30,12 @@ public class Controller
     {
         try
         {
-            // Clear entities
+            // Setup manager for entities
             entityManager = new EntityManager(this);
+            
+            // Setup manager for inventories
+            inventoryManager = new InventoryManager();
+            inventoryManager.load();
             
             // Setup manager for players
             playerManager = new PlayerManager(this);

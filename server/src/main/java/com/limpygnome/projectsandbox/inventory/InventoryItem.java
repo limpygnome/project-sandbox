@@ -2,6 +2,7 @@ package com.limpygnome.projectsandbox.inventory;
 
 import com.limpygnome.projectsandbox.inventory.annotations.InventyoryItemTypeId;
 import java.io.Serializable;
+import java.util.LinkedList;
 
 /**
  *
@@ -10,7 +11,9 @@ import java.io.Serializable;
 @InventyoryItemTypeId(typeId = 0)
 public abstract class InventoryItem implements Serializable
 {
-    public static final long serialUID = 1L;
+    public static final long serialVersionUID = 1L;
+    
+    static short typeId = 0;
     
     public Inventory inventory;
     
@@ -30,5 +33,20 @@ public abstract class InventoryItem implements Serializable
     public InventoryMergeResult merge(InventoryItem item)
     {
         return InventoryMergeResult.DONT_ADD;
+    }
+    
+    public void writeInventoryCreatePacket(LinkedList<Object> packetData)
+    {
+        // Nothing by default...
+    }
+    
+    public void writeInventoryUpdatePacket(LinkedList<Object> packetData)
+    {
+        // Nothing by default...
+    }
+    
+    public final short getTypeId()
+    {
+        return typeId;
     }
 }
