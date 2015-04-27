@@ -1,0 +1,55 @@
+{
+    "name" : "ui",
+    "width" : 256,
+    "height" : 256,
+    "url" : "/content/images/ui.png",
+    "description" : "The source file for general UI textures.",
+	"textures" :
+	[
+		{
+			"name" : "ui/star_flash",
+			"speed" : 500,
+			"frames" :
+			[
+                [
+                    0   ,   128	,
+                    127 ,   128	,
+                    127 ,   0 	,
+                    0   ,   0
+                ],
+				[
+                    128 ,	128	,
+                    256	,   128	,
+                    256 ,   0 	,
+                    128 ,   0
+                ]
+			]
+		},
+        {
+			"name" : "ui/star_on",
+			"speed" : 0,
+			"frames" :
+			[
+                [
+                    0   ,   128	,
+                    127 ,   128	,
+                    127 ,   0 	,
+                    0   ,   0
+                ]
+			]
+		},
+		{
+			"name" : "ui/star_off",
+			"speed" : 0,
+			"frames" :
+			[
+                [
+                    128 ,	128	,
+                    256	,   128	,
+                    256 ,   0 	,
+                    128 ,   0
+                ]
+			]
+		}
+	]
+}
