@@ -8,7 +8,7 @@
         <artifactId>project-sandbox</artifactId>
         <version>1.0</version>
     </parent>
-    <artifactId>projectsandbox-website</artifactId>
+    <artifactId>website</artifactId>
     <packaging>war</packaging>
 
     <name>projectsandbox website</name>
@@ -149,15 +149,6 @@
 					<outputFile>${project.build.outputDirectory}/schema.sql</outputFile>
 				</configuration>
 			</plugin>
-            
-            <!-- Pack only required files -->
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-war-plugin</artifactId>
-                <configuration>
-                    <warSourceExcludes>**/content/css/**,**/content/js/**</warSourceExcludes>
-                </configuration>
-            </plugin>
             
 		</plugins>
 	</build>
