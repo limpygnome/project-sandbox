@@ -128,10 +128,7 @@ public class PlayerManager
         // Create packet to update ID for clientside
         PlayerIdentityPacket packet = new PlayerIdentityPacket();
         packet.writeIdentity(entity);
-        byte[] data = packet.getPacketData();
-        
-        // Send identity packet
-        playerInfo.socket.send(data);
+        packet.send(playerInfo);
     }
 
     public PlayerInfo getPlayerByWebSocket(WebSocket ws)

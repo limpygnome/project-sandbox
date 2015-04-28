@@ -1,5 +1,6 @@
 package com.limpygnome.projectsandbox.server.inventory;
 
+import com.limpygnome.projectsandbox.server.Controller;
 import com.limpygnome.projectsandbox.server.inventory.annotations.InventyoryItemTypeId;
 
 import java.io.Serializable;
@@ -15,12 +16,17 @@ public abstract class InventoryItem implements Serializable
     public static final long serialVersionUID = 1L;
     
     static short typeId = 0;
+
+    public InventorySlotData slot;
     
-    public Inventory inventory;
-    
-    public InventoryItem(Inventory inventory)
+    public InventoryItem()
     {
-        this.inventory = inventory;
+        this.slot = null;
+    }
+
+    public void logic(Controller controller)
+    {
+        // Does nothing by default...
     }
     
     /**
