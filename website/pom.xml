@@ -159,7 +159,6 @@
                     <port>8080</port>
                     <path>/</path>
                     <contextFile>src/main/webapp/META-INF/context.xml</contextFile>
-                    <warSourceDirectory>${project.build.directory}/${project.build.finalName}</warSourceDirectory>
                 </configuration>
             </plugin>
         </plugins>
