@@ -1,0 +1,214 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
+                             http://maven.apache.org/maven-v4_0_0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>com.annieglover</groupId>
+        <artifactId>annieglover-dot-com</artifactId>
+        <version>1.0</version>
+    </parent>
+    <artifactId>annieglover-war</artifactId>
+    <packaging>war</packaging>
+
+    <name>annieglover.com website</name>
+    
+    <dependencies>
+	
+		<!-- Core: JEE Web 7 -->
+		<dependency>
+			<groupId>javax</groupId>
+			<artifactId>javaee-web-api</artifactId>
+			<version>7.0</version>
+			<scope>provided</scope>
+		</dependency>
+        
+        <!-- Core: JSTL (tag) Library - needed for Tomcat embedded -->
+        <dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>jstl</artifactId>
+            <version>1.2</version>
+            <scope>runtime</scope>
+        </dependency>
+        
+        <!-- Frameworks: Spring -->
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-core</artifactId>
+			<version>4.1.6.RELEASE</version>
+		</dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-webmvc</artifactId>
+            <version>4.1.6.RELEASE</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-context-support</artifactId>
+            <version>4.1.6.RELEASE</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-tx</artifactId>
+            <version>4.1.6.RELEASE</version>
+        </dependency>
+
+        
+        <!-- Template Engine: Apache Tiles -->
+        <dependency>
+            <groupId>org.apache.tiles</groupId>
+            <artifactId>tiles-core</artifactId>
+            <version>3.0.5</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.tiles</groupId>
+            <artifactId>tiles-servlet</artifactId>
+            <version>3.0.5</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.tiles</groupId>
+            <artifactId>tiles-jsp</artifactId>
+            <version>3.0.5</version>
+        </dependency>
+	
+		<!-- Frameworks: JPA -->
+		<dependency>
+		  <groupId>org.hibernate</groupId>
+		  <artifactId>hibernate-core</artifactId>
+		  <version>4.3.8.Final</version>
+		</dependency>
+		<dependency>
+			<groupId>org.hibernate</groupId>
+			<artifactId>hibernate-entitymanager</artifactId>
+			<version>4.3.8.Final</version>
+		</dependency>
+		<dependency>
+			<groupId>mysql</groupId>
+			<artifactId>mysql-connector-java</artifactId>
+			<version>5.1.34</version>
+		</dependency>
+		
+		<!-- Joda Time -->
+		<dependency>
+			<groupId>joda-time</groupId>
+			<artifactId>joda-time</artifactId>
+			<version>2.7</version>
+		</dependency>
+        <dependency>
+            <groupId>joda-time</groupId>
+            <artifactId>joda-time-hibernate</artifactId>
+            <version>1.3</version>
+        </dependency>
+
+		
+		<!-- Quartz Scheduling -->
+		<dependency>
+			<groupId>org.quartz-scheduler</groupId>
+			<artifactId>quartz</artifactId>
+			<version>2.2.1</version>
+		</dependency>
+		<dependency>
+			<groupId>org.quartz-scheduler</groupId>
+			<artifactId>quartz-jobs</artifactId>
+			<version>2.2.1</version>
+		</dependency>
+        
+        <!-- Logging -->
+        <dependency>
+            <groupId>org.apache.logging.log4j</groupId>
+            <artifactId>log4j-api</artifactId>
+            <version>2.2</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.logging.log4j</groupId>
+            <artifactId>log4j-core</artifactId>
+            <version>2.2</version>
+        </dependency>
+
+    </dependencies>
+	
+	<build>
+		<plugins>
+        
+			<!-- Automatic generation of schema -->
+			<plugin>
+				<groupId>de.juplo</groupId>
+				<artifactId>hibernate4-maven-plugin</artifactId>
+				<version>1.0.4</version>
+				<executions>
+					<execution>
+						<phase>compile</phase>
+						<goals>
+							<goal>export</goal>
+						</goals>
+					</execution>
+				</executions>
+				<configuration>
+					<hibernateDialect>org.hibernate.dialect.MySQLDialect</hibernateDialect>
+					<target>NONE</target>
+					<type>CREATE</type>
+					<outputFile>${project.build.outputDirectory}/schema.sql</outputFile>
+				</configuration>
+			</plugin>
+            
+            <!-- Embedded Tomcat server -->
+            <plugin>
+                <groupId>org.apache.tomcat.maven</groupId>
+                <artifactId>tomcat7-maven-plugin</artifactId>
+                <version>2.2</version>
+                <configuration>
+                    <port>80</port>
+                    <path>/</path>
+                    <contextFile>src/main/webapp/META-INF/context.xml</contextFile>
+                    <warSourceDirectory>${project.build.directory}/${project.build.finalName}</warSourceDirectory>
+                </configuration>
+            </plugin>
+            
+            <!-- Minify JS and CSS files -->
+            <plugin>
+            <groupId>com.samaxes.maven</groupId>
+            <artifactId>minify-maven-plugin</artifactId>
+            <version>1.7.4</version>
+            <executions>
+                <execution>
+                    <id>default-minify</id>
+                    <goals>
+                        <goal>minify</goal>
+                    </goals>
+                    <phase>compile</phase>
+                    <configuration>
+                        <charset>UTF-8</charset>
+                        
+                        <cssSourceDir>resources/content/css</cssSourceDir>
+                        <cssSourceIncludes>
+                            <cssSourceInclude>*.css</cssSourceInclude>
+                        </cssSourceIncludes>
+                        <cssTargetDir>resources/content</cssTargetDir>
+                        <cssFinalFile>site.css</cssFinalFile>
+
+                        <jsSourceDir>resources/content/js</jsSourceDir>
+                        <jsSourceIncludes>
+                            <jsSourceInclude>*.js</jsSourceInclude>
+                        </jsSourceIncludes>
+                        <jsTargetDir>resources/content</jsTargetDir>
+                        <jsFinalFile>site.js</jsFinalFile>
+                        
+                        <jsEngine>CLOSURE</jsEngine>
+                    </configuration>
+                </execution>
+            </executions>
+            </plugin>
+            
+            <!-- Pack only required files -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-war-plugin</artifactId>
+                <configuration>
+                    <warSourceExcludes>**/content/css/**,**/content/js/**</warSourceExcludes>
+                </configuration>
+            </plugin>
+            
+		</plugins>
+	</build>
+	
+</project>

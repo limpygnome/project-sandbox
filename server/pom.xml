@@ -72,7 +72,7 @@
 				<configuration>
 					<archive>
 						<manifest>
-							<mainClass>com.limpygnome.projectsandbox.Program</mainClass>
+							<mainClass>com.limpygnome.projectsandbox.website.Program</mainClass>
 						</manifest>
 					</archive>
 					<descriptorRefs>
