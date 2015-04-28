@@ -39,7 +39,8 @@ public class MapManager
     
     public void buildEntMappings() throws Exception
     {
-        this.entTypeMappings = Annotations.findAnnotatedClasses(EntityType.class, "/com/limpygnome/projectsandbox/ents");
+        // TODO: move into properties file
+        this.entTypeMappings = Annotations.findAnnotatedClasses(EntityType.class, "/com/limpygnome/projectsandbox/server/ents");
     }
     
     public void load() throws Exception
