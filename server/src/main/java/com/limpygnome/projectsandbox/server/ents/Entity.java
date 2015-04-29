@@ -64,10 +64,10 @@ public strictfp abstract class Entity
         EntityType entType = (EntityType) annotationEntityType;
         this.entityType = entType.typeId();
         
-        // Set initial state
+        // Set initial slotState
         this.state = StateChange.CREATED;
         
-        // Create initial/default state data
+        // Create initial/default slotState data
         this.width = width;
         this.height = height;
         
@@ -106,7 +106,7 @@ public strictfp abstract class Entity
         // Rebuild cached vertices
         rebuildCachedVertices();
         
-        // Update state
+        // Update slotState
         updateMask(UpdateMasks.ROTATION);
     }
     
@@ -136,7 +136,7 @@ public strictfp abstract class Entity
     }
     
     /**
-     * Updates the position of the entity, as well as any needed state changes
+     * Updates the position of the entity, as well as any needed slotState changes
      * needed.
      * 
      * @param x The new X position.
@@ -160,7 +160,7 @@ public strictfp abstract class Entity
         // Rebuild cached vertices
         rebuildCachedVertices();
         
-        // Update state
+        // Update slotState
         if (changeX && changeY)
         {
             updateMask(UpdateMasks.X, UpdateMasks.Y);
@@ -182,7 +182,7 @@ public strictfp abstract class Entity
     
     public synchronized void setState(StateChange state)
     {
-        // Only allow delete state to progress
+        // Only allow delete slotState to progress
         // TODO: disallow created -> update change
         if (state == StateChange.UPDATED && this.state == StateChange.CREATED)
         {

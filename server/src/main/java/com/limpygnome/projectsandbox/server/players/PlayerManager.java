@@ -5,8 +5,8 @@ import com.limpygnome.projectsandbox.server.Controller;
 import com.limpygnome.projectsandbox.server.ents.Entity;
 import com.limpygnome.projectsandbox.server.ents.Player;
 import com.limpygnome.projectsandbox.server.ents.physics.Vector2;
-import com.limpygnome.projectsandbox.server.packets.outbound.EntityUpdatesPacket;
-import com.limpygnome.projectsandbox.server.packets.outbound.PlayerIdentityPacket;
+import com.limpygnome.projectsandbox.server.packets.types.ents.EntityUpdatesOutboundPacket;
+import com.limpygnome.projectsandbox.server.packets.types.players.PlayerIdentityOutboundPacket;
 import java.io.IOException;
 import java.util.HashMap;
 import org.java_websocket.WebSocket;
@@ -46,7 +46,7 @@ public class PlayerManager
         // Send update of entire world
         try
         {
-            EntityUpdatesPacket packetUpdates = new EntityUpdatesPacket();
+            EntityUpdatesOutboundPacket packetUpdates = new EntityUpdatesOutboundPacket();
             packetUpdates.build(controller.entityManager, true);
             data = packetUpdates.getPacketData();
             ws.send(data);
@@ -126,7 +126,7 @@ public class PlayerManager
         playerInfo.entity = entity;
         
         // Create packet to update ID for clientside
-        PlayerIdentityPacket packet = new PlayerIdentityPacket();
+        PlayerIdentityOutboundPacket packet = new PlayerIdentityOutboundPacket();
         packet.writeIdentity(entity);
         packet.send(playerInfo);
     }

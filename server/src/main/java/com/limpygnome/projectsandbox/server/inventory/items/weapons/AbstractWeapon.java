@@ -1,15 +1,20 @@
-package com.limpygnome.projectsandbox.server.inventory;
+package com.limpygnome.projectsandbox.server.inventory.items.weapons;
 
 import com.limpygnome.projectsandbox.server.Controller;
 import com.limpygnome.projectsandbox.server.ents.Entity;
 import com.limpygnome.projectsandbox.server.ents.physics.Casting;
 import com.limpygnome.projectsandbox.server.ents.physics.CastingResult;
+import com.limpygnome.projectsandbox.server.inventory.Inventory;
+import com.limpygnome.projectsandbox.server.inventory.InventoryItem;
+import com.limpygnome.projectsandbox.server.inventory.InventorySlotData;
+import com.limpygnome.projectsandbox.server.inventory.WeaponConstants;
+import com.limpygnome.projectsandbox.server.inventory.enums.InventoryMergeResult;
 
 /**
  *
  * @author limpygnome
  */
-public abstract class Weapon extends InventoryItem
+public abstract class AbstractWeapon extends InventoryItem
 {   
     public short bullets;
     public short bulletsPerMag;
@@ -22,10 +27,8 @@ public abstract class Weapon extends InventoryItem
     public float step;
     public float maxDistance;
     
-    public Weapon(Inventory inventory, short bulletsPerMag, short mags, long fireDelay, long reloadDelay)
+    public AbstractWeapon(short bulletsPerMag, short mags, long fireDelay, long reloadDelay)
     {
-        super(inventory);
-        
         this.bullets = bulletsPerMag;
         this.bulletsPerMag = bulletsPerMag;
         this.mags = --mags;
@@ -98,9 +101,9 @@ public abstract class Weapon extends InventoryItem
     public InventoryMergeResult merge(InventoryItem item)
     {
         // This check should not be needed, but just for sanity purposes
-        if (item instanceof Weapon)
+        if (item instanceof AbstractWeapon)
         {
-            Weapon weapon = (Weapon) item;
+            AbstractWeapon weapon = (AbstractWeapon) item;
             
             // Add bullets from item
             short combinedBullets = (short) (this.bullets + weapon.bullets);

@@ -1,7 +1,7 @@
 package com.limpygnome.projectsandbox.server.threading;
 
 import com.limpygnome.projectsandbox.server.Controller;
-import com.limpygnome.projectsandbox.server.packets.outbound.EntityUpdatesPacket;
+import com.limpygnome.projectsandbox.server.packets.types.ents.EntityUpdatesOutboundPacket;
 import java.io.IOException;
 
 /**
@@ -34,7 +34,7 @@ public class GameLogic implements Runnable
                     controller.entityManager.logic();
 
                     // Build update data
-                    EntityUpdatesPacket packet = new EntityUpdatesPacket();
+                    EntityUpdatesOutboundPacket packet = new EntityUpdatesOutboundPacket();
                     packet.build(controller.entityManager, false);
                     
                     // Write update packet to each client

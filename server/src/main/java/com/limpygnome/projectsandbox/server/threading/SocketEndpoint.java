@@ -1,11 +1,7 @@
 package com.limpygnome.projectsandbox.server.threading;
 
-import com.limpygnome.projectsandbox.server.packets.inbound.PlayerMovementPacket;
 import com.limpygnome.projectsandbox.server.Controller;
-import com.limpygnome.projectsandbox.server.packets.InboundPacket;
-import com.limpygnome.projectsandbox.server.packets.inbound.SessionIdentifierPacket;
-import com.limpygnome.projectsandbox.server.players.PlayerInfo;
-import com.limpygnome.projectsandbox.server.players.Session;
+
 import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.nio.ByteBuffer;
@@ -15,6 +11,7 @@ import org.java_websocket.handshake.ClientHandshake;
 import org.java_websocket.server.WebSocketServer;
 
 /**
+ * TODO: abstract websocket to allow switching of libs easily
  *
  * @author limpygnome
  */
@@ -30,78 +27,17 @@ public class SocketEndpoint extends WebSocketServer
     }
 
     @Override
-    public void onMessage(WebSocket ws, String msg)
+    public void onMessage(WebSocket socket, String msg)
     {
-        // Do nothing; all data expected to be binary...
+        // We're only allowing binary, most likely user tampering with us...
+        // TODO: debug logging
+        socket.close();
     }
 
     @Override
-    public void onMessage(WebSocket ws, ByteBuffer message)
+    public void onMessage(WebSocket socket, ByteBuffer message)
     {
-        byte[] data = message.array();
-        byte mainType = data[0];
-        byte subType = data[1];
-        
-        // Fetch the player's info
-        PlayerInfo playerInfo = controller.playerManager.getPlayerByWebSocket(ws);
-
-        // Check if we're expecting a session packet - always first packet to system!
-        if (playerInfo == null)
-        {
-            // Check we have received session packet
-            if (mainType == 'U' && subType == 'S')
-            {
-                // Parse packet and load session associated with player
-                SessionIdentifierPacket sessPacket = new SessionIdentifierPacket();
-                sessPacket.parse(controller, ws, message, data);
-                
-                // Check data / socket valid
-                if (sessPacket.sessionId != null && ws.isOpen())
-                {
-                    // Load session data from database
-                    // TODO: actually load from DB
-                    Session session = new Session();
-
-                    // Log event
-                    System.out.println("Session " + session.sessionId + " <> " + ws.getRemoteSocketAddress());
-                    
-                    // Register player
-                    controller.playerManager.register(ws, session);
-                    return;
-                }
-            }
-            
-            // Some other packet / invalid data / no session
-            // TODO: add debug msg; nothing else. could be attack...
-            ws.close();
-            return;
-        }
-        
-        // Create packet based on types
-        InboundPacket packet = null;
-        
-        switch(mainType)
-        {
-            case 'U':
-                switch(subType)
-                {
-                    case 'M':
-                        // Player movement/update packet
-                        packet = new PlayerMovementPacket();
-                        break;
-                }
-                break;
-        }
-        
-        // Check we found a packet
-        if(packet == null)
-        {
-            System.out.println("Unhandled message - type: '" + mainType + "', sub-type: '" + subType + "'");
-            return;
-        }
-        
-        // Parse data
-        packet.parse(controller, ws, message, data);
+        controller.packetManager.handleInbound(socket, message);
     }
 
     @Override
@@ -128,8 +64,11 @@ public class SocketEndpoint extends WebSocketServer
     }
 
     @Override
-    public void onError(WebSocket ws, Exception excptn)
+    public void onError(WebSocket socket, Exception e)
     {
+        // Probably tampering...
+        // TODO: debug logging
+        socket.close();
     }
     
     public void broadcast(byte[] data)

@@ -1,12 +1,12 @@
 package com.limpygnome.projectsandbox.server.ents.enums;
 
 /**
-* State changes in regards to the entity's state in the world.
+* State changes in regards to the entity's slotState in the world.
 */
 public enum StateChange
 {
     /**
-    * Indicates no change to ent state.
+    * Indicates no change to ent slotState.
     */
    NONE,
    /**
@@ -19,7 +19,7 @@ public enum StateChange
     */
    DELETED,
    /**
-    * Indicates the entity's state has been updated.
+    * Indicates the entity's slotState has been updated.
     */
    UPDATED,
    /**

@@ -2,13 +2,17 @@ package com.limpygnome.projectsandbox.server.inventory;
 
 import com.limpygnome.projectsandbox.server.Controller;
 import com.limpygnome.projectsandbox.server.ents.Entity;
-import com.limpygnome.projectsandbox.server.packets.outbound.inventory.InventoryUpdatesPacket;
+import com.limpygnome.projectsandbox.server.inventory.enums.InventoryInvokeState;
+import com.limpygnome.projectsandbox.server.inventory.enums.InventoryMergeResult;
+import com.limpygnome.projectsandbox.server.inventory.enums.InventorySlotState;
+import com.limpygnome.projectsandbox.server.packets.types.inventory.InventoryUpdatesOutboundPacket;
 import com.limpygnome.projectsandbox.server.players.PlayerInfo;
 
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.Iterator;
-import java.util.LinkedList;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 /**
  * Represents an inventory.
@@ -22,20 +26,22 @@ public class Inventory implements Serializable
     /**
      * Indicates if selected item is dirty / has changed.
      */
-    public boolean flagSelectedDirty;
+    private boolean flagSelectedDirty;
 
     /**
      * Indicates if to send a reset packet to the current entity i.e. new player.
      */
-    public boolean flagReset;
+    private boolean flagReset;
 
-    // TODO: should this be transient?
+    // TODO: should this be transient? How to connect them up?
     public transient Entity parent;
 
+    // TODO: should this be transient? How to connect them up?
     private PlayerInfo owner;
 
     public InventoryItem selected;
-    public LinkedList<InventoryItem> items;
+    public LinkedHashMap<Short, InventoryItem> items;
+    private short cachedNextAvailableItemId;
 
     public Inventory(Entity parent)
     {
@@ -43,7 +49,8 @@ public class Inventory implements Serializable
         this.flagSelectedDirty = false;
         this.flagReset = false;
         this.selected = null;
-        this.items = new LinkedList<>();
+        this.items = new LinkedHashMap<>();
+        this.cachedNextAvailableItemId = 0;
     }
 
     public void setOwner(PlayerInfo owner)
@@ -52,10 +59,20 @@ public class Inventory implements Serializable
         this.flagReset = true;
     }
 
+    public void setSelected(Short slotId)
+    {
+        InventoryItem item = items.get(slotId);
+        if (item != null)
+        {
+            this.selected = item;
+            this.flagSelectedDirty = true;
+        }
+    }
+
     public void logic(Controller controller)
     {
         // Build packet as we execute logic, saves on computation
-        InventoryUpdatesPacket packet = new InventoryUpdatesPacket();
+        InventoryUpdatesOutboundPacket packet = new InventoryUpdatesOutboundPacket();
 
         // Check if to raise inventory reset
         if (flagReset)
@@ -70,18 +87,20 @@ public class Inventory implements Serializable
         }
 
         // Update logic of items
-        Iterator<InventoryItem> iterator = items.iterator();
+        Iterator<Map.Entry<Short, InventoryItem>> iterator = items.entrySet().iterator();
+        Map.Entry<Short, InventoryItem> entry;
         InventoryItem item;
 
         while (iterator.hasNext())
         {
-            item = iterator.next();
+            entry = iterator.next();
+            item = entry.getValue();
 
             // Execute logic
             item.logic(controller);
 
-            // Handle state changes
-            switch (item.slot.state)
+            // Handle slotState changes
+            switch (item.slot.slotState)
             {
                 case CREATED:
                     packet.eventItemCreated(controller, item);
@@ -110,7 +129,7 @@ public class Inventory implements Serializable
             try
             {
                 // Write data
-                packet.finalize();
+                packet.build();
 
                 // Send to player
                 packet.send(owner);
@@ -125,12 +144,16 @@ public class Inventory implements Serializable
     public boolean add(InventoryItem item)
     {
         // Attempt to find similar inventory item and merge
+        InventoryItem invItem;
         InventoryMergeResult result;
-        for (InventoryItem iitem : items)
+
+        for (Map.Entry<Short, InventoryItem> kv : items.entrySet())
         {
-            if (iitem.getClass() == item.getClass())
+            invItem = kv.getValue();
+
+            if (item.getClass() == invItem.getClass())
             {
-                result = iitem.merge(item);
+                result = invItem.merge(item);
 
                 switch (result)
                 {
@@ -145,17 +168,84 @@ public class Inventory implements Serializable
                         return true;
                 }
             }
-            items.add(item);
         }
 
         // Find next identifier for slot
-        int slotId;
+        Short slotId = nextAvailableIdentifier();
 
-        // Create slot data for item
-        item.slot = new InventorySlotData(slotId);
+        if (slotId == null)
+        {
+            // TODO: logging
+            return false;
+        }
 
-        // Looks like the item can be added
-        items.add(item);
+        // Create slot data for item and add
+        item.slot = new InventorySlotData(slotId, this);
+        items.put(slotId, item);
+
         return true;
+    }
+
+    public Short nextAvailableIdentifier()
+    {
+        final short maxValue = 255;
+
+        short attempts = 0;
+        short slotId = cachedNextAvailableItemId;
+
+        // Find next available slot ID
+        while(!items.containsKey(slotId) && attempts <= maxValue)
+        {
+            if (slotId == maxValue)
+            {
+                slotId = 0;
+            }
+            else
+            {
+                slotId++;
+            }
+            attempts++;
+        }
+
+        // Check we didn't exceed max attempts
+        if (attempts > maxValue)
+        {
+            return null;
+        }
+
+        // Update cache of next ID
+        if (slotId == maxValue)
+        {
+            cachedNextAvailableItemId = 0;
+        }
+        else
+        {
+            cachedNextAvailableItemId++;
+        }
+
+        return slotId;
+    }
+
+    public InventoryItem remove(Short slotId)
+    {
+        InventoryItem item = items.get(slotId);
+
+        if (item != null)
+        {
+            item.slot.slotState = InventorySlotState.PENDING_REMOVE;
+        }
+
+        return item;
+    }
+
+    public void invokeItem(Controller controller, short slotId, InventoryInvokeState invokeState)
+    {
+        InventoryItem item = items.get(slotId);
+
+        if (item != null)
+        {
+            item.slot.invokeState = invokeState;
+            item.eventInvoke(controller, invokeState);
+        }
     }
 }

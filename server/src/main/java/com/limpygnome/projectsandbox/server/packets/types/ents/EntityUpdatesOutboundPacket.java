@@ -1,4 +1,4 @@
-package com.limpygnome.projectsandbox.server.packets.outbound;
+package com.limpygnome.projectsandbox.server.packets.types.ents;
 
 import com.limpygnome.projectsandbox.server.ents.EntityManager;
 import com.limpygnome.projectsandbox.server.packets.OutboundPacket;
@@ -17,9 +17,9 @@ import java.util.Map;
  * 
  * @author limpygnome
  */
-public class EntityUpdatesPacket extends OutboundPacket
+public class EntityUpdatesOutboundPacket extends OutboundPacket
 {
-    public EntityUpdatesPacket()
+    public EntityUpdatesOutboundPacket()
     {
         super((byte)'E', (byte)'U');
     }
@@ -28,7 +28,7 @@ public class EntityUpdatesPacket extends OutboundPacket
     {
         synchronized(entityManager.entities)
         {
-            // Add each entity with a changed state
+            // Add each entity with a changed slotState
             Map.Entry<Short, Entity> kv;
             Entity ent;
             
@@ -48,7 +48,7 @@ public class EntityUpdatesPacket extends OutboundPacket
                 }
                 else
                 {
-                    // Handle state
+                    // Handle slotState
                     switch(entState)
                     {
                         case CREATED:

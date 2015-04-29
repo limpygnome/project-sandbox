@@ -1,6 +1,6 @@
 package com.limpygnome.projectsandbox.server.ents;
 
-import com.limpygnome.projectsandbox.server.inventory.Smg;
+import com.limpygnome.projectsandbox.server.inventory.items.weapons.Smg;
 
 /**
  *

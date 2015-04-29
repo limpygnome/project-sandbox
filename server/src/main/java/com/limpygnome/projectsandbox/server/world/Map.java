@@ -3,7 +3,7 @@ package com.limpygnome.projectsandbox.server.world;
 import com.limpygnome.projectsandbox.server.ents.enums.UpdateMasks;
 import com.limpygnome.projectsandbox.server.ents.physics.Vector2;
 import com.limpygnome.projectsandbox.server.ents.physics.Vertices;
-import com.limpygnome.projectsandbox.server.packets.outbound.MapDataPacket;
+import com.limpygnome.projectsandbox.server.packets.types.map.MapDataOutboundPacket;
 import com.limpygnome.projectsandbox.server.ents.Entity;
 import com.limpygnome.projectsandbox.server.ents.enums.StateChange;
 
@@ -41,7 +41,7 @@ public class Map
     public Vertices[][] tileVertices;
     
     // if this is updated, it needs thread protection
-    public MapDataPacket packet;
+    public MapDataOutboundPacket packet;
     
     private HashMap<Short, Faction> factions;
     
@@ -144,7 +144,7 @@ public class Map
         }
         
         // Build map packet
-        map.packet = new MapDataPacket();
+        map.packet = new MapDataOutboundPacket();
         map.packet.build(map);
         
         // Parse factions

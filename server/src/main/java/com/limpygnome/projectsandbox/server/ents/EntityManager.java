@@ -73,7 +73,7 @@ public class EntityManager
             // Add entity to pending map
             entitiesNew.put(id, ent);
             
-            // Update state to created - for update to all players!
+            // Update slotState to created - for update to all players!
             ent.setState(StateChange.CREATED);
             
             System.out.println("Entity manager - added ent - " + ent);

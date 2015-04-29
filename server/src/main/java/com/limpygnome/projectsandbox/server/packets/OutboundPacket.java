@@ -13,11 +13,14 @@ import java.util.LinkedList;
  */
 public abstract class OutboundPacket extends Packet
 {
+    protected byte mainType;
+    protected byte subType;
     protected ByteArrayOutputStream buffer;
     
     public OutboundPacket(byte mainType, byte subType)
     {
-        super(mainType, subType);
+        this.mainType = mainType;
+        this.subType = subType;
         
         buffer = new ByteArrayOutputStream();
         

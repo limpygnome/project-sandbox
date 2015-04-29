@@ -2,6 +2,7 @@ package com.limpygnome.projectsandbox.server;
 
 import com.limpygnome.projectsandbox.server.ents.EntityManager;
 import com.limpygnome.projectsandbox.server.inventory.InventoryManager;
+import com.limpygnome.projectsandbox.server.packets.PacketManager;
 import com.limpygnome.projectsandbox.server.players.PlayerManager;
 import com.limpygnome.projectsandbox.server.threading.GameLogic;
 import com.limpygnome.projectsandbox.server.threading.SocketEndpoint;
@@ -16,7 +17,8 @@ public class Controller
     public SocketEndpoint endpoint;
     public GameLogic logic;
     public Thread threadLogic;
-    
+
+    public PacketManager packetManager;
     public EntityManager entityManager;
     public PlayerManager playerManager;
     public InventoryManager inventoryManager;
@@ -30,6 +32,9 @@ public class Controller
     {
         try
         {
+            // Setup manager for packets
+            packetManager = new PacketManager(this);
+
             // Setup manager for entities
             entityManager = new EntityManager(this);
             
@@ -61,5 +66,7 @@ public class Controller
     
     public void stop()
     {
+        // TODO: dispose managers etc...kill sockets / plys etc
+        // TODO: consider sending packet to clients explaining shutdown reason?
     }
 }

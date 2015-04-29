@@ -1,4 +1,4 @@
-package com.limpygnome.projectsandbox.server.packets.inbound;
+package com.limpygnome.projectsandbox.server.packets.types.session;
 
 import com.limpygnome.projectsandbox.server.Controller;
 import com.limpygnome.projectsandbox.server.packets.InboundPacket;
@@ -13,14 +13,12 @@ import org.java_websocket.WebSocket;
  * 
  * @author limpygnome
  */
-public class SessionIdentifierPacket extends InboundPacket
+public class SessionIdentifierInboundPacket extends InboundPacket
 {
     public UUID sessionId;
     
-    public SessionIdentifierPacket()
+    public SessionIdentifierInboundPacket()
     {
-        super((byte)'U', (byte)'S');
-        
         this.sessionId = null;
     }
 

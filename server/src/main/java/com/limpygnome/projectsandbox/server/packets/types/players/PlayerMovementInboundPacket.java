@@ -1,4 +1,4 @@
-package com.limpygnome.projectsandbox.server.packets.inbound;
+package com.limpygnome.projectsandbox.server.packets.types.players;
 
 import com.limpygnome.projectsandbox.server.Controller;
 import com.limpygnome.projectsandbox.server.packets.InboundPacket;
@@ -7,19 +7,14 @@ import java.nio.ByteBuffer;
 import org.java_websocket.WebSocket;
 
 /**
- * A packet sent by the client to update their movement state.
+ * A packet sent by the client to update their movement slotState.
  * 
  * @author limpygnome
  */
-public class PlayerMovementPacket extends InboundPacket
+public class PlayerMovementInboundPacket extends InboundPacket
 {
     public short id;
     public short keys;
-    
-    public PlayerMovementPacket()
-    {
-        super((byte)'P', (byte)'U');
-    }
 
     @Override
     public void parse(Controller controller, WebSocket ws, ByteBuffer bb, byte[] data)

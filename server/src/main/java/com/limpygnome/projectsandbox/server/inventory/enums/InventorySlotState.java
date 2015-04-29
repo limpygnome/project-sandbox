@@ -1,9 +1,9 @@
-package com.limpygnome.projectsandbox.server.inventory;
+package com.limpygnome.projectsandbox.server.inventory.enums;
 
 /**
  * Created by limpygnome on 28/04/15.
  */
-public enum InventoryItemState
+public enum InventorySlotState
 {
     /**
      * No changes have occurred.

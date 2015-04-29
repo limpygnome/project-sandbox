@@ -2,6 +2,8 @@ package com.limpygnome.projectsandbox.server.inventory;
 
 import com.limpygnome.projectsandbox.server.Controller;
 import com.limpygnome.projectsandbox.server.inventory.annotations.InventyoryItemTypeId;
+import com.limpygnome.projectsandbox.server.inventory.enums.InventoryInvokeState;
+import com.limpygnome.projectsandbox.server.inventory.enums.InventoryMergeResult;
 
 import java.io.Serializable;
 import java.util.LinkedList;
@@ -41,16 +43,19 @@ public abstract class InventoryItem implements Serializable
     {
         return InventoryMergeResult.DONT_ADD;
     }
-    
-    public void writeInventoryCreatePacket(LinkedList<Object> packetData)
+
+    public void eventInvoke(Controller controller, InventoryInvokeState invokeState)
     {
         // Nothing by default...
     }
+
+    public void eventInventoryWritePacketSelected(Controller controller, LinkedList<Object> packetData) { }
+
+    public void eventInventoryWritePacketCreated(Controller controller, LinkedList<Object> packetData) { }
     
-    public void writeInventoryUpdatePacket(LinkedList<Object> packetData)
-    {
-        // Nothing by default...
-    }
+    public void eventInventoryWritePacketRemoved(Controller controller, LinkedList<Object> packetData) { }
+
+    public void eventInventoryWritePacketChanged(Controller controller, LinkedList<Object> packetData) { }
     
     public final short getTypeId()
     {

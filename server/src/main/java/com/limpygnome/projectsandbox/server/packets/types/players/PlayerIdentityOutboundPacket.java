@@ -1,4 +1,4 @@
-package com.limpygnome.projectsandbox.server.packets.outbound;
+package com.limpygnome.projectsandbox.server.packets.types.players;
 
 import com.limpygnome.projectsandbox.server.packets.OutboundPacket;
 import com.limpygnome.projectsandbox.server.ents.Entity;
@@ -10,9 +10,9 @@ import java.nio.ByteBuffer;
  *
  * @author limpygnome
  */
-public class PlayerIdentityPacket extends OutboundPacket
+public class PlayerIdentityOutboundPacket extends OutboundPacket
 {
-    public PlayerIdentityPacket()
+    public PlayerIdentityOutboundPacket()
     {
         super((byte)'P', (byte)'I');
     }

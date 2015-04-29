@@ -1,5 +1,8 @@
 package com.limpygnome.projectsandbox.server.inventory;
 
+import com.limpygnome.projectsandbox.server.inventory.enums.InventoryInvokeState;
+import com.limpygnome.projectsandbox.server.inventory.enums.InventorySlotState;
+
 /**
  * All of the data regarding an item being held in an inventory, as a slot.
  *
@@ -7,14 +10,18 @@ package com.limpygnome.projectsandbox.server.inventory;
  */
 public class InventorySlotData
 {
-    public int id;
+    public short id;
+    public byte idByte;
     public Inventory inventory;
-    public InventoryItemState state;
+    public InventorySlotState slotState;
+    public InventoryInvokeState invokeState;
 
-    public InventorySlotData(int id, Inventory inventory)
+    public InventorySlotData(short id, Inventory inventory)
     {
         this.id = id;
+        this.idByte = (byte) id;
         this.inventory = inventory;
-        this.state = InventoryItemState.CREATED;
+        this.slotState = InventorySlotState.CREATED;
+        this.invokeState = InventoryInvokeState.OFF;
     }
 }

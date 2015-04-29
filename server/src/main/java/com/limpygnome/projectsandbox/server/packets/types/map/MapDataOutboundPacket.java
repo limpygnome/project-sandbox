@@ -1,4 +1,4 @@
-package com.limpygnome.projectsandbox.server.packets.outbound;
+package com.limpygnome.projectsandbox.server.packets.types.map;
 
 import com.limpygnome.projectsandbox.server.world.TileType;
 import com.limpygnome.projectsandbox.server.packets.OutboundPacket;
@@ -15,9 +15,9 @@ import java.util.LinkedList;
  * 
  * @author limpygnome
  */
-public class MapDataPacket extends OutboundPacket
+public class MapDataOutboundPacket extends OutboundPacket
 {
-    public MapDataPacket()
+    public MapDataOutboundPacket()
     {
         super((byte)'M', (byte)'D');
     }

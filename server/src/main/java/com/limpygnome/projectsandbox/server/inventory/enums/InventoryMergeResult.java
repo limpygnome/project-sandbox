@@ -1,4 +1,4 @@
-package com.limpygnome.projectsandbox.server.inventory;
+package com.limpygnome.projectsandbox.server.inventory.enums;
 
 /**
  * Used to indicate the result from similar inventory types being merged.

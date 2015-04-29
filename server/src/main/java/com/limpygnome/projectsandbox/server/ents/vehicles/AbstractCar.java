@@ -34,10 +34,10 @@ public abstract class AbstractCar extends Entity
     protected float steeringAngle;
     protected float maxSpeed;
     
-    // Car state
+    // Car slotState
     protected float speed;
     
-    // Player state
+    // Player slotState
     protected Vector2[] playerEjectPositions;
     protected PlayerInfo[] players;
     
