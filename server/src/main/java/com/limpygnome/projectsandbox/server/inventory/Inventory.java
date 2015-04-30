@@ -251,9 +251,12 @@ public class Inventory implements Serializable
         return item;
     }
 
-    public void selectedInvoke(boolean keyDown)
+    public void selectedInvoke(Controller controller, boolean keyDown)
     {
-        // set keydown to false on select.
+        if (selected != null)
+        {
+            selected.slot.keyDown = keyDown;
+        }
     }
 
     public void selectedSet(Controller controller, short slotId, boolean keyDown)
@@ -262,11 +265,22 @@ public class Inventory implements Serializable
 
         if (item != null)
         {
+            // Set existing item's state to false for keydown
+            if (selected != null)
+            {
+                selected.slot.keyDown = false;
+                selected.slot.keyAlreadyDown = false;
+            }
+
             // Set key state
             item.slot.keyDown = keyDown;
 
             // Item is now selected
             selected = item;
+        }
+        else
+        {
+            // TODO: logging
         }
     }
 }

@@ -13,17 +13,15 @@ import java.nio.ByteBuffer;
  *
  * Created by limpygnome on 29/04/15.
  */
-public class InventoryInvocationSelectedInboundPacket extends InboundPacket
+public class InventoryInvocationInboundPacket extends InboundPacket
 {
     @Override
     public void parse(Controller controller, WebSocket socket, ByteBuffer bb, byte[] data)
     {
         // Read raw data
-        byte rawSlotId = bb.get(0);
         byte rawKeyDown = bb.get(1);
 
         // Parse raw data
-        short slotId = (short) rawSlotId;
         boolean keyDown = rawKeyDown != 0;
 
         // Fetch the player's inventory
@@ -33,7 +31,7 @@ public class InventoryInvocationSelectedInboundPacket extends InboundPacket
         if (inventory != null)
         {
             // Cause invocation on item
-            inventory.invokeItem(controller, slotId, keyDown);
+            inventory.selectedInvoke(controller, keyDown);
         }
     }
 }
