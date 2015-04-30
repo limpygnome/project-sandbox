@@ -105,4 +105,17 @@ public class Player extends Entity
     public void reset()
     {
     }
+
+    @Override
+    public Inventory retrieveInventory(PlayerInfo playerInfo)
+    {
+        if (this.playerInfo == playerInfo)
+        {
+            return inventory;
+        }
+        else
+        {
+            throw new RuntimeException("Attempted to retrieveInventory inventory for different player");
+        }
+    }
 }

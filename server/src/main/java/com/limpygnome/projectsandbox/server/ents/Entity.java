@@ -276,7 +276,7 @@ public strictfp abstract class Entity
      * @param playerInfo
      * @return Instance, or null if no inventory is available / not allowed.
      */
-    public Inventory retrieve(PlayerInfo playerInfo)
+    public Inventory retrieveInventory(PlayerInfo playerInfo)
     {
         // No inventory by default
         return null;

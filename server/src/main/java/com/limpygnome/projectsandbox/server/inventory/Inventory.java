@@ -47,7 +47,7 @@ public class Inventory implements Serializable
     {
         this.parent = parent;
         this.flagSelectedDirty = false;
-        this.flagReset = false;
+        this.flagReset = true;
         this.selected = null;
         this.items = new LinkedHashMap<>();
         this.cachedNextAvailableItemId = 0;

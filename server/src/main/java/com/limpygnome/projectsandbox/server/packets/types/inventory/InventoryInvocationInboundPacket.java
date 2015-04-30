@@ -26,7 +26,7 @@ public class InventoryInvocationInboundPacket extends InboundPacket
 
         // Fetch the player's inventory
         PlayerInfo playerInfo = fetchPlayer(controller, socket);
-        Inventory inventory = playerInfo.entity.retrieve(playerInfo);
+        Inventory inventory = playerInfo.entity.retrieveInventory(playerInfo);
 
         if (inventory != null)
         {
