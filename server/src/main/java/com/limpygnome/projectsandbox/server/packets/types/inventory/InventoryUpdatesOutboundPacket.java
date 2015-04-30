@@ -22,14 +22,23 @@ public class InventoryUpdatesOutboundPacket extends OutboundPacket
 
     public void eventReset()
     {
-        packetData.add((byte)'R');
+        packetData.add((byte) 'R');
     }
 
     public  void eventSelected(Controller controller, InventoryItem item)
     {
-        packetData.add((byte)'S');
-        packetData.add(item.slot.idByte);
-        item.eventInventoryWritePacketSelected(controller, packetData);
+        if (item != null)
+        {
+            packetData.add((byte)'S');
+            packetData.add(item.slot.idByte);
+            item.eventInventoryWritePacketSelected(controller, packetData);
+        }
+        else
+        {
+            // No item selected / no items in inventory
+            packetData.add((byte)'N');
+        }
+
 
     }
 

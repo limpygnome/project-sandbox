@@ -3,6 +3,7 @@ package com.limpygnome.projectsandbox.server.inventory;
 import com.limpygnome.projectsandbox.server.Controller;
 import com.limpygnome.projectsandbox.server.inventory.annotations.InventyoryItemTypeId;
 import com.limpygnome.projectsandbox.server.inventory.enums.InventoryInvokeState;
+import com.limpygnome.projectsandbox.server.inventory.enums.InventoryInvokeType;
 import com.limpygnome.projectsandbox.server.inventory.enums.InventoryMergeResult;
 
 import java.io.Serializable;
@@ -20,15 +21,42 @@ public abstract class InventoryItem implements Serializable
     static short typeId = 0;
 
     public InventorySlotData slot;
+    public InventoryInvokeType invokeType;
     
     public InventoryItem()
     {
         this.slot = null;
+        this.invokeType = InventoryInvokeType.FIRE_ONCE;
     }
 
     public void logic(Controller controller)
     {
-        // Does nothing by default...
+        switch (invokeType)
+        {
+            case TOGGLE:
+                if (slot.keyDown)
+                {
+                    eventInvoke(controller, InventoryInvokeState.ON);
+                }
+                else
+                {
+                    eventInvoke(controller, InventoryInvokeState.OFF);
+                }
+                break;
+            case FIRE_ONCE:
+                if (!slot.keyAlreadyDown && slot.keyDown)
+                {
+                    eventInvoke(controller, InventoryInvokeState.INVOKE_ONCE);
+                }
+                else if (slot.keyAlreadyDown && !slot.keyDown)
+                {
+                    slot.keyAlreadyDown = false;
+                    eventInvoke(controller, InventoryInvokeState.OFF);
+                }
+                break;
+            default:
+                throw new IllegalArgumentException("Unhandled invoke type");
+        }
     }
     
     /**

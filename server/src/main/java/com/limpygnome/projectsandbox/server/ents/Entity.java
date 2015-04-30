@@ -5,6 +5,8 @@ import com.limpygnome.projectsandbox.server.ents.enums.UpdateMasks;
 import com.limpygnome.projectsandbox.server.ents.physics.CollisionResult;
 import com.limpygnome.projectsandbox.server.ents.physics.Vector2;
 import com.limpygnome.projectsandbox.server.ents.physics.Vertices;
+import com.limpygnome.projectsandbox.server.inventory.Inventory;
+import com.limpygnome.projectsandbox.server.players.PlayerInfo;
 import com.limpygnome.projectsandbox.server.utils.CustomMath;
 import com.limpygnome.projectsandbox.server.Controller;
 import com.limpygnome.projectsandbox.server.ents.enums.StateChange;
@@ -266,6 +268,18 @@ public strictfp abstract class Entity
     public void resetUpdateMask()
     {
         this.updateMask = 0;
+    }
+
+    /**
+     * Retrieves the inventory for a player associated with this instance.
+     *
+     * @param playerInfo
+     * @return Instance, or null if no inventory is available / not allowed.
+     */
+    public Inventory retrieve(PlayerInfo playerInfo)
+    {
+        // No inventory by default
+        return null;
     }
     
     /**

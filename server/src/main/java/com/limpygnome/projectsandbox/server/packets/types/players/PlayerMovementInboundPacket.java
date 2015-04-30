@@ -17,14 +17,14 @@ public class PlayerMovementInboundPacket extends InboundPacket
     public short keys;
 
     @Override
-    public void parse(Controller controller, WebSocket ws, ByteBuffer bb, byte[] data)
+    public void parse(Controller controller, WebSocket socket, ByteBuffer bb, byte[] data)
     {
         // Parse data
         id = bb.getShort(2);
         keys = bb.getShort(4);
         
         // Fetch player
-        PlayerInfo playerInfo = controller.playerManager.getPlayerByWebSocket(ws);
+        PlayerInfo playerInfo = fetchPlayer(controller, socket);
         
         if (playerInfo != null)
         {

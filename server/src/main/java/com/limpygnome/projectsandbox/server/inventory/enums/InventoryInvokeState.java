@@ -8,7 +8,7 @@ public enum InventoryInvokeState
     /**
      * Indicates a toggle slotState. This should be set to OFF once handled.
      */
-    TOGGLE,
+    INVOKE_ONCE,
     /**
      * Indicates invoke slotState is ON - e.g. fire weapon.
      */
@@ -17,4 +17,5 @@ public enum InventoryInvokeState
      * Indicates invoke slotState is OFF - e.g. stop firing weapon.
      */
     OFF
+    ;
 }

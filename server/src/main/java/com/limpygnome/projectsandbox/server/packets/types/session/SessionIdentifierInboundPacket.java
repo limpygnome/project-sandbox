@@ -23,7 +23,7 @@ public class SessionIdentifierInboundPacket extends InboundPacket
     }
 
     @Override
-    public void parse(Controller controller, WebSocket ws, ByteBuffer bb, byte[] data)
+    public void parse(Controller controller, WebSocket socket, ByteBuffer bb, byte[] data)
     {
         // TODO: upgrade to 16 bytes; at present, we want this to just be simple, but could be optimised
         

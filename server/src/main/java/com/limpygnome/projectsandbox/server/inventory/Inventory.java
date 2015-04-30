@@ -183,6 +183,13 @@ public class Inventory implements Serializable
         item.slot = new InventorySlotData(slotId, this);
         items.put(slotId, item);
 
+        // Set as selected if no prior item
+        if (selected == null)
+        {
+            selected = item;
+            flagSelectedDirty = true;
+        }
+
         return true;
     }
 
@@ -233,19 +240,33 @@ public class Inventory implements Serializable
         if (item != null)
         {
             item.slot.slotState = InventorySlotState.PENDING_REMOVE;
+
+            if (selected == item)
+            {
+                selected = null;
+                flagSelectedDirty = true;
+            }
         }
 
         return item;
     }
 
-    public void invokeItem(Controller controller, short slotId, InventoryInvokeState invokeState)
+    public void selectedInvoke(boolean keyDown)
+    {
+        // set keydown to false on select.
+    }
+
+    public void selectedSet(Controller controller, short slotId, boolean keyDown)
     {
         InventoryItem item = items.get(slotId);
 
         if (item != null)
         {
-            item.slot.invokeState = invokeState;
-            item.eventInvoke(controller, invokeState);
+            // Set key state
+            item.slot.keyDown = keyDown;
+
+            // Item is now selected
+            selected = item;
         }
     }
 }

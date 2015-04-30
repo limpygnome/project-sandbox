@@ -12,7 +12,8 @@ import java.nio.ByteBuffer;
 public class InventoryItemSelectedInboundPacket extends InboundPacket
 {
     @Override
-    public void parse(Controller controller, WebSocket ws, ByteBuffer bb, byte[] data)
+    public void parse(Controller controller, WebSocket socket, ByteBuffer bb, byte[] data)
     {
+
     }
 }

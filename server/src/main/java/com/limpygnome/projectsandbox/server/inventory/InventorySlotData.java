@@ -16,6 +16,9 @@ public class InventorySlotData
     public InventorySlotState slotState;
     public InventoryInvokeState invokeState;
 
+    public boolean keyDown;
+    public boolean keyAlreadyDown;
+
     public InventorySlotData(short id, Inventory inventory)
     {
         this.id = id;
@@ -23,5 +26,8 @@ public class InventorySlotData
         this.inventory = inventory;
         this.slotState = InventorySlotState.CREATED;
         this.invokeState = InventoryInvokeState.OFF;
+
+        this.keyDown = false;
+        this.keyAlreadyDown = false;
     }
 }
