@@ -36,6 +36,7 @@ public class Player extends Entity
         
         this.playerInfo = playerInfo;
         this.inventory = new Inventory(this);
+        this.inventory.setOwner(playerInfo);
         
         // Give player default inventory items
         this.inventory.add(PlayerConstants.DEFAULT_INVENTORY_ITEMS);
@@ -84,7 +85,10 @@ public class Player extends Entity
         {
             rotationOffset(changeRotation);
         }
-        
+
+        // Run logic for inventory
+        inventory.logic(controller);
+
         // Perform ent logic
         super.logic(controller);
     }
@@ -105,5 +109,11 @@ public class Player extends Entity
         {
             throw new RuntimeException("Attempted to retrieveInventory inventory for different player");
         }
+    }
+
+    @Override
+    public void eventPendingDeleted(Controller controller)
+    {
+        inventory.setOwner(null);
     }
 }

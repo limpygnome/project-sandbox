@@ -77,8 +77,6 @@ public abstract class InventoryItem implements Serializable
         // Nothing by default...
     }
 
-    public void eventInventoryWritePacketSelected(Controller controller, LinkedList<Object> packetData) { }
-
     public void eventInventoryWritePacketCreated(Controller controller, LinkedList<Object> packetData) { }
     
     public void eventInventoryWritePacketRemoved(Controller controller, LinkedList<Object> packetData) { }

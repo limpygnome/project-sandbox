@@ -54,6 +54,13 @@ public class Inventory implements Serializable
 
     public void setOwner(PlayerInfo owner)
     {
+        // TODO: if we switch owner to null and set new owner, concurrency reset issue
+        // Inform previous owner to reset
+        if (this.owner != null)
+        {
+        }
+
+        // Set new owner
         this.owner = owner;
         this.flagReset = true;
     }
@@ -77,12 +84,14 @@ public class Inventory implements Serializable
         if (flagReset)
         {
             packet.eventReset();
+            this.flagReset = false;
         }
 
         // Check if to raise selected item change
         if (flagSelectedDirty)
         {
             packet.eventItemSelected(controller, selected);
+            this.flagSelectedDirty = false;
         }
 
         // Update logic of items
@@ -123,7 +132,7 @@ public class Inventory implements Serializable
         }
 
         // Send packet to current player of inventory
-        if (owner != null)
+        if (!packet.isEmpty())
         {
             try
             {

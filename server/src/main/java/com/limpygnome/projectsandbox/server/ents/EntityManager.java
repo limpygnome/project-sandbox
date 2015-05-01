@@ -91,6 +91,7 @@ public class EntityManager
             if(ent != null)
             {
                 ent.setState(StateChange.PENDING_DELETED);
+                ent.eventPendingDeleted(controller);
             }
             else
             {

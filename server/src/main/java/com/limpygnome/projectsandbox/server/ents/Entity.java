@@ -281,7 +281,9 @@ public strictfp abstract class Entity
         // No inventory by default
         return null;
     }
-    
+
+    public void eventPendingDeleted(Controller controller) { }
+
     /**
      * Event for death of entity.
      * 

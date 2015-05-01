@@ -3,6 +3,7 @@ package com.limpygnome.projectsandbox.server.packets.types.inventory;
 import com.limpygnome.projectsandbox.server.Controller;
 import com.limpygnome.projectsandbox.server.inventory.InventoryItem;
 import com.limpygnome.projectsandbox.server.packets.OutboundPacket;
+import com.limpygnome.projectsandbox.server.utils.ByteHelper;
 
 import java.io.IOException;
 import java.util.LinkedList;
@@ -31,7 +32,6 @@ public class InventoryUpdatesOutboundPacket extends OutboundPacket
         {
             packetData.add((byte)'S');
             packetData.add(item.slot.idByte);
-            item.eventInventoryWritePacketSelected(controller, packetData);
         }
         else
         {
@@ -67,6 +67,14 @@ public class InventoryUpdatesOutboundPacket extends OutboundPacket
     public void build() throws IOException
     {
         write(packetData);
+
+        System.err.println(ByteHelper.debug(packetData));
+
         packetData = null;
+    }
+
+    public boolean isEmpty()
+    {
+        return packetData.isEmpty();
     }
 }
