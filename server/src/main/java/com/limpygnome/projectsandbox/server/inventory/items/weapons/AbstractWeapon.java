@@ -43,7 +43,7 @@ public abstract class AbstractWeapon extends InventoryItem
     
     public synchronized void fire(Controller controller)
     {
-        Entity owner = inventory.owner;
+        Entity owner = slot.inventory.parent;
         if (owner == null)
         {
             return;

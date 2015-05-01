@@ -68,6 +68,7 @@ public class SocketEndpoint extends WebSocketServer
     {
         // Probably tampering...
         // TODO: debug logging
+        e.printStackTrace();
         socket.close();
     }
     

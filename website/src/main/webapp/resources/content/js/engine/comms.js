@@ -62,10 +62,10 @@ projectSandbox.comms =
 		var mainType = data[0];
 		var subType = data[1];
 		
-		switch(mainType)
+		switch (mainType)
 		{
 			case 69: // Entities
-				switch(subType)
+				switch (subType)
 				{
 					case 85:
 						this.packetEntityUpdates(data);
@@ -73,7 +73,7 @@ projectSandbox.comms =
 				}
 				break;
 			case 77: // Maps
-				switch(subType)
+				switch (subType)
 				{
 					case 68:
 						this.packetMapData(data);
@@ -81,7 +81,7 @@ projectSandbox.comms =
 				}
 				break;
 			case 80: // Players
-				switch(subType)
+				switch (subType)
 				{
 					case 73:
 						this.packetPlayerIdentity(data);
@@ -89,13 +89,21 @@ projectSandbox.comms =
 				}
 				break;
 			case 84: // Textures
-				switch(subType)
+				switch (subType)
 				{
 					case 68: // Data
 						//this.packetTextureData(data);
 						return;
 				}
 				break;
+         case 00: // Inventory
+            switch (subType)
+            {
+            	case 00: // Updates
+            		this.packetInventoryUpdates(data);
+					return;
+            }
+            break;
 		}
 		
 		console.error("Comms - unhandled message - type: " + mainType + ", sub-type: " + subType);
@@ -407,7 +415,46 @@ projectSandbox.comms =
 		
 		return 0;
 	},
-	
+
+	packetInventoryUpdates: function(data)
+	{
+		var dataView = new DataView(data.buffer);
+
+		var offset = 2; // maintype/subtype
+
+		var updateType;
+
+		while (offset < data.length)
+		{
+			// Read the type of update
+			updateType = dataView.getInt8(offset);
+			offset += 1;
+
+			// Handle the rest of the data based on the type
+			switch (updateType)
+			{
+				case 00:
+					offset = projectSandbox.inventory.packetInventoryReset(data, dataView, offset);
+					break;
+				case 00:
+					offset = projectSandbox.inventory.packetInventoryItemSelected(data, dataView, offset);
+					break;
+				case 00:
+					offset = projectSandbox.inventory.packetInventoryItemNonSelected(data, dataView, offset);
+					break;
+				case 00:
+					offset = projectSandbox.inventory.packetInventoryItemCreated(data, dataView, offset);
+					break;
+				case 00:
+					offset = projectSandbox.inventory.packetInventoryItemRemoved(data, dataView, offset);
+					break;
+				case 00:
+					offset = projectSandbox.inventory.packetInventoryItemChanged(data, dataView, offset);
+					break;
+			}
+		}
+	},
+
 	wsEventError: function(event)
 	{
 		console.error("Comms - error - " + event);

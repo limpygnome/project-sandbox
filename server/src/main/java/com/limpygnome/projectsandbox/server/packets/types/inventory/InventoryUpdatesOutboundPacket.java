@@ -25,7 +25,7 @@ public class InventoryUpdatesOutboundPacket extends OutboundPacket
         packetData.add((byte) 'R');
     }
 
-    public  void eventSelected(Controller controller, InventoryItem item)
+    public  void eventItemSelected(Controller controller, InventoryItem item)
     {
         if (item != null)
         {
@@ -46,6 +46,7 @@ public class InventoryUpdatesOutboundPacket extends OutboundPacket
     {
         packetData.add((byte)'C');
         packetData.add(item.slot.idByte);
+        packetData.add(item.getTypeId());
         item.eventInventoryWritePacketCreated(controller, packetData);
     }
 

@@ -2,7 +2,6 @@ package com.limpygnome.projectsandbox.server.inventory;
 
 import com.limpygnome.projectsandbox.server.Controller;
 import com.limpygnome.projectsandbox.server.ents.Entity;
-import com.limpygnome.projectsandbox.server.inventory.enums.InventoryInvokeState;
 import com.limpygnome.projectsandbox.server.inventory.enums.InventoryMergeResult;
 import com.limpygnome.projectsandbox.server.inventory.enums.InventorySlotState;
 import com.limpygnome.projectsandbox.server.packets.types.inventory.InventoryUpdatesOutboundPacket;
@@ -83,7 +82,7 @@ public class Inventory implements Serializable
         // Check if to raise selected item change
         if (flagSelectedDirty)
         {
-            packet.eventSelected(controller, selected);
+            packet.eventItemSelected(controller, selected);
         }
 
         // Update logic of items
@@ -138,6 +137,29 @@ public class Inventory implements Serializable
             {
                 // TODO: log exception
             }
+        }
+    }
+
+    public boolean add(Class[] itemClasses)
+    {
+        for (Class itemClass : itemClasses)
+        {
+            add(itemClass);
+        }
+
+        return true;
+    }
+
+    public boolean add(Class itemClass)
+    {
+        try
+        {
+            InventoryItem itemInstance = (InventoryItem) itemClass.getConstructor().newInstance();
+            return add(itemInstance);
+        }
+        catch (Exception ex)
+        {
+            throw new IllegalArgumentException("Could not add item from class", ex);
         }
     }
 

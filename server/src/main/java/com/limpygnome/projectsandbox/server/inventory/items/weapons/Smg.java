@@ -10,10 +10,9 @@ import com.limpygnome.projectsandbox.server.inventory.annotations.InventyoryItem
 @InventyoryItemTypeId(typeId = 100)
 public class Smg extends AbstractWeapon
 {
-    public Smg(Inventory inventory)
+    public Smg()
     {
         super(
-                inventory,
                 (short) 60,
                 (short) 5,
                 120,

@@ -38,19 +38,7 @@ public class Player extends Entity
         this.inventory = new Inventory(this);
         
         // Give player default inventory items
-        InventoryItem itemInstance;
-        for (Class item : PlayerConstants.DEFAULT_INVENTORY_ITEMS)
-        {
-            try
-            {
-                itemInstance = (InventoryItem) item.getConstructor(Inventory.class).newInstance(inventory);
-                this.inventory.add(itemInstance);
-            }
-            catch (Exception ex)
-            {
-                throw new IllegalArgumentException("Default player inventory not setup correctly");
-            }
-        }
+        this.inventory.add(PlayerConstants.DEFAULT_INVENTORY_ITEMS);
     }
 
     @Override
