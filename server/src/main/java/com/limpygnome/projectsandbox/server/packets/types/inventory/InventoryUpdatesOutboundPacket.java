@@ -66,8 +66,6 @@ public class InventoryUpdatesOutboundPacket extends OutboundPacket
     {
         write(packetData);
 
-        System.err.println(ByteHelper.debug(packetData));
-
         packetData = null;
     }
 

@@ -11,6 +11,8 @@ import com.limpygnome.projectsandbox.server.Controller;
 import java.io.IOException;
 import java.util.HashMap;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.json.simple.JSONObject;
 
 /**
@@ -19,6 +21,8 @@ import org.json.simple.JSONObject;
  */
 public class MapManager
 {
+    private final static Logger LOG = LogManager.getLogger(MapManager.class);
+
     public Controller controller;
     
     public HashMap<Short, Class> entTypeMappings;
@@ -64,8 +68,8 @@ public class MapManager
             
             // Add mapping
             maps.put(map.name, map);
-            
-            System.out.println("Map manager - loaded map  - " + map.toString());
+
+            LOG.debug("Loaded map - {}", map);
         }
         
         // Set the main map file

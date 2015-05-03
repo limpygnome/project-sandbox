@@ -35,7 +35,7 @@ public class SocketEndpoint extends WebSocketServer
     public void onMessage(WebSocket socket, String msg)
     {
         // We're only allowing binary, most likely user tampering with us...
-        LOG.error("Received text, closing socket - ip: {}", socket.getRemoteSocketAddress());
+        LOG.error("Non-binary- ip: {}", socket.getRemoteSocketAddress());
         socket.close();
     }
 
@@ -58,23 +58,20 @@ public class SocketEndpoint extends WebSocketServer
         remove entries for them. Could still perform DOS by spamming 5, open
         one. Going to be fun to protect against attacks.
         */
-        LOG.debug("Client connected - ip: {}", ws.getRemoteSocketAddress());
+        LOG.info("Client connected - ip: {}", ws.getRemoteSocketAddress());
     }
     
     @Override
     public void onClose(WebSocket ws, int i, String string, boolean bln)
     {
-        System.out.println("client disconnected - " + ws.getRemoteSocketAddress());
+        LOG.info("Client disconnected - ip: {}", ws.getRemoteSocketAddress());
         controller.playerManager.unregister(ws);
     }
 
     @Override
     public void onError(WebSocket socket, Exception e)
     {
-        // Probably tampering...
-        // TODO: debug logging
         LOG.error("Socket exception, terminating - ip: {} - {}", socket.getRemoteSocketAddress(), e);
-
         socket.close();
     }
     

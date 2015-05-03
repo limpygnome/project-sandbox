@@ -37,8 +37,6 @@ public class SessionIdentifierInboundPacket extends InboundPacket
                 
                 // Parse into type, essentially validating the data
                 this.sessionId = UUID.fromString(rawUuid);
-                
-                System.out.println("SESSION ID :: " + sessionId);
             }
             catch (Exception e)
             {

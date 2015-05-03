@@ -10,6 +10,8 @@ import com.limpygnome.projectsandbox.server.ents.enums.StateChange;
 import java.io.IOException;
 import java.util.HashMap;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
@@ -19,6 +21,8 @@ import org.json.simple.JSONObject;
  */
 public class Map
 {
+    private final static Logger LOG = LogManager.getLogger(Map.class);
+
     // auto-gen by map manager
     public short id;
     
@@ -221,8 +225,8 @@ public class Map
         
         // Add to map
         map.factions.put(faction.getFactionId(), faction);
-        
-        System.out.println("Map - added faction - " + faction);
+
+        LOG.debug("Added faction - {}", faction);
     }
     
     private static Spawn parseFactionSpawn(JSONObject spawn)
@@ -248,8 +252,8 @@ public class Map
         if (factionSpawns == null)
         {
             // TODO: replace with log4j
-            System.err.println("no spawns available for faction " + ent.faction);
-            
+            LOG.warn("No spawns available for faction - faction id: {}", ent.faction);
+
             // Set ent to deleted - not much we can do...
             ent.setState(StateChange.PENDING_DELETED);
         }
@@ -274,8 +278,8 @@ public class Map
             
             // Reset ent
             ent.reset();
-            
-            System.out.println("Map - spawned entity - " + ent + " - " + spawn);
+
+            LOG.debug("Spawned entity - ent: {} - spawn: {}", ent, spawn);
         }
     }
 

@@ -7,6 +7,8 @@ import com.limpygnome.projectsandbox.server.packets.types.players.PlayerMovement
 import com.limpygnome.projectsandbox.server.packets.types.session.SessionIdentifierInboundPacket;
 import com.limpygnome.projectsandbox.server.players.PlayerInfo;
 import com.limpygnome.projectsandbox.server.players.Session;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.java_websocket.WebSocket;
 
 import java.nio.ByteBuffer;
@@ -16,6 +18,8 @@ import java.nio.ByteBuffer;
  */
 public class PacketManager
 {
+    private final static Logger LOG = LogManager.getLogger(PacketManager.class);
+
     private Controller controller;
 
     public PacketManager(Controller controller)
@@ -49,11 +53,18 @@ public class PacketManager
                     // TODO: actually load from DB
                     Session session = new Session();
 
+                    // TODO: remove this stub
+                    session.sessionId = sessPacket.sessionId;
+
                     // Log event
-                    System.out.println("Session " + session.sessionId + " <> " + socket.getRemoteSocketAddress());
+                    LOG.info("Session mapped - {} <> {}", session.sessionId, socket.getRemoteSocketAddress());
 
                     // Register player
-                    controller.playerManager.register(socket, session);
+                    if (controller.playerManager.register(socket, session) == null)
+                    {
+                        LOG.error("Failed to register player - sid: {}", session.sessionId);
+                        socket.close();
+                    }
                     return;
                 }
             }
@@ -96,7 +107,7 @@ public class PacketManager
         // Check we found a packet
         if(packet == null)
         {
-            System.out.println("Unhandled message - type: '" + mainType + "', sub-type: '" + subType + "'");
+            LOG.error("Unhandled message - type: {}, sub-type: {}", mainType, subType);
             return;
         }
 

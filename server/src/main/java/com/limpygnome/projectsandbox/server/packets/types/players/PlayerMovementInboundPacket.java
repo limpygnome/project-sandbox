@@ -4,6 +4,9 @@ import com.limpygnome.projectsandbox.server.Controller;
 import com.limpygnome.projectsandbox.server.packets.InboundPacket;
 import com.limpygnome.projectsandbox.server.players.PlayerInfo;
 import java.nio.ByteBuffer;
+
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.java_websocket.WebSocket;
 
 /**
@@ -13,6 +16,8 @@ import org.java_websocket.WebSocket;
  */
 public class PlayerMovementInboundPacket extends InboundPacket
 {
+    private final static Logger LOG = LogManager.getLogger(PlayerMovementInboundPacket.class);
+
     public short id;
     public short keys;
 
@@ -29,19 +34,17 @@ public class PlayerMovementInboundPacket extends InboundPacket
         if (playerInfo != null)
         {
             // Check the socket is allowed to update the player, or drop them...
-            // TODO: ...
+            // TODO: check player can move player - MAJOR SECURITY RISK
             
             // Update the movement
             playerInfo.keys = keys;
             
-            System.out.println("Player movement - ent id: " + id + ", flags: " + keys);
+            LOG.debug("Movement - ent id: {}, flags: {}", id, keys);
         }
         else
         {
-            System.out.println("Player movement - invalid; ent id: " + id);
+            // Potential tampering...
+            LOG.warn("Invalid entity - ip: {}, ent id: {}", socket.getRemoteSocketAddress(), id);
         }
     }
-    
-    
-    
 }

@@ -2,7 +2,7 @@
 <Configuration status="DEBUG">
     <Appenders>
         <Console name="Console" target="SYSTEM_OUT">
-            <PatternLayout pattern="%d{YYYY-MM-dd HH:mm:ss} : %-5level : %-70c : %msg%n"/>
+            <PatternLayout pattern="%d{YYYY-MM-dd HH:mm:ss} : %-5level : %-65c : %msg%n"/>
         </Console>
     </Appenders>
     <Loggers>

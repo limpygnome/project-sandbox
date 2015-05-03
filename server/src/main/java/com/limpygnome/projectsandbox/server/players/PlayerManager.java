@@ -9,6 +9,9 @@ import com.limpygnome.projectsandbox.server.packets.types.ents.EntityUpdatesOutb
 import com.limpygnome.projectsandbox.server.packets.types.players.PlayerIdentityOutboundPacket;
 import java.io.IOException;
 import java.util.HashMap;
+
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.java_websocket.WebSocket;
 
 /**
@@ -17,6 +20,8 @@ import org.java_websocket.WebSocket;
  */
 public class PlayerManager
 {
+    private final static Logger LOG = LogManager.getLogger(PlayerManager.class);
+
     private final Controller controller;
     
     private final HashMap<WebSocket, PlayerInfo> mappingsSock2Ply;
@@ -53,11 +58,12 @@ public class PlayerManager
         }
         catch(IOException e)
         {
-            e.printStackTrace(System.err);
+            LOG.error("Failed to register player", e);
+            return null;
         }
-        
-        System.out.println("Player manager - mapped " + ws.getRemoteSocketAddress() + " <> " + playerInfo.entity);
-        
+
+        LOG.info("Mapped - sid: {}", session.sessionId);
+
         return playerInfo;
     }
     public synchronized void unregister(WebSocket ws)
@@ -66,12 +72,11 @@ public class PlayerManager
         PlayerInfo playerInfo = mappingsSock2Ply.get(ws);
         Entity ent = playerInfo.entity;
         
-        if (ent != null && ent instanceof Player)
+        if (playerInfo != null && ent != null && ent instanceof Player)
         {
             controller.entityManager.remove(ent);
+            LOG.info("Unmapped - sid: {}", playerInfo.session.sessionId);
         }
-        
-        System.out.println("Player manager - unmapped " + ws.getRemoteSocketAddress() + " <> " + ent);
     }
     
     public synchronized void handleDeath(Entity plyEntity)
