@@ -1,5 +1,8 @@
 package com.limpygnome.projectsandbox.server.threading;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import com.limpygnome.projectsandbox.server.Controller;
 
 import java.io.IOException;
@@ -17,6 +20,8 @@ import org.java_websocket.server.WebSocketServer;
  */
 public class SocketEndpoint extends WebSocketServer
 {
+    private final static Logger LOG = LogManager.getLogger(SocketEndpoint.class);
+
     private Controller controller;
     
     public SocketEndpoint(Controller controller, int port) throws IOException
@@ -30,7 +35,7 @@ public class SocketEndpoint extends WebSocketServer
     public void onMessage(WebSocket socket, String msg)
     {
         // We're only allowing binary, most likely user tampering with us...
-        // TODO: debug logging
+        LOG.error("Received text, closing socket - ip: {}", socket.getRemoteSocketAddress());
         socket.close();
     }
 
@@ -53,7 +58,7 @@ public class SocketEndpoint extends WebSocketServer
         remove entries for them. Could still perform DOS by spamming 5, open
         one. Going to be fun to protect against attacks.
         */
-        System.out.println("Endpoint - client connected - " + ws.getRemoteSocketAddress());
+        LOG.debug("Client connected - ip: {}", ws.getRemoteSocketAddress());
     }
     
     @Override
@@ -68,7 +73,8 @@ public class SocketEndpoint extends WebSocketServer
     {
         // Probably tampering...
         // TODO: debug logging
-        e.printStackTrace();
+        LOG.error("Socket exception, terminating - ip: {} - {}", socket.getRemoteSocketAddress(), e);
+
         socket.close();
     }
     

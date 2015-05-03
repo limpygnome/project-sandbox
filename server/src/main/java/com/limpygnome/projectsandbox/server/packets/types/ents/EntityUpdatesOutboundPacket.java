@@ -85,7 +85,7 @@ public class EntityUpdatesOutboundPacket extends OutboundPacket
         
         // Add custom data
         ent.eventPacketEntCreated(packetData);
-        
+
         write(packetData);
     }
     

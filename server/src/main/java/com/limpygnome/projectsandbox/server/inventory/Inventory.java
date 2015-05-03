@@ -132,7 +132,7 @@ public class Inventory implements Serializable
         }
 
         // Send packet to current player of inventory
-        if (!packet.isEmpty())
+        if (owner != null && !packet.isEmpty())
         {
             try
             {

@@ -38,8 +38,6 @@ public class InventoryUpdatesOutboundPacket extends OutboundPacket
             // No item selected / no items in inventory
             packetData.add((byte)'N');
         }
-
-
     }
 
     public void eventItemCreated(Controller controller, InventoryItem item)

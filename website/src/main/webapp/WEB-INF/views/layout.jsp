@@ -41,8 +41,10 @@
 		<script src="/content/game/js/_namespace.js"></script>
 		<script src="/content/game/js/ui.js"></script>
 
-		<script src="/content/game/js/player.js"></script>
-		<script src="/content/game/js/ice-cream-van.js"></script>
+		<script src="/content/game/js/ents/player.js"></script>
+		<script src="/content/game/js/ents/ice-cream-van.js"></script>
+
+		<script src="/content/game/js/inventory/smg.js"></script>
 
 	</head>
 	<body>
