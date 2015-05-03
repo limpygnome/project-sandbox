@@ -49,6 +49,9 @@ var projectSandbox =
 		
 		// Reset map
 		projectSandbox.map.reset();
+
+		// Reset inventory
+		projectSandbox.inventory.reset();
 		
 		// Reset player
 		this.playerEntityId = null;

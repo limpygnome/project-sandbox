@@ -13,16 +13,20 @@ projectSandbox.inventory =
 	{
 	},
 
+	reset: function()
+	{
+	    this.items = new Map();
+	    this.renderOrder = new Array();
+
+	    console.debug("Inventory - reset");
+	},
+
 	packetInventory: function(subType, data)
 	{
 		switch (subType)
 		{
-			case 'R': // Reset
-			    console.debug("Inventory - reset packet");
-				this.packetInventoryReset(data);
-				return;
 			case 'U': // Updates
-			    console.debug("Inventroy - updates packet");
+			    console.debug("Inventory - updates packet");
 				this.packetInventoryUpdates(data);
 				return;
 			default:
@@ -30,14 +34,6 @@ projectSandbox.inventory =
 				break;
 		}
 	},
-
-    packetInventoryReset: function(data, dataView, offset)
-    {
-        this.renderOrder = new Array();
-        this.items = new Map();
-
-        return offset;
-    },
 
 	packetInventoryUpdates: function(data)
 	{
@@ -74,13 +70,25 @@ projectSandbox.inventory =
 				case "M":
 					offset = this.packetInventoryItemChanged(data, dataView, offset);
 					break;
+                default:
+                    console.error("Inventory - unhandled update type - " + updateType);
+                    break;
 			}
 		}
 	},
 
+    packetInventoryReset: function(data, dataView, offset)
+    {
+        this.reset();
+
+        return offset;
+    },
+
 	packetInventoryItemSelected: function(data, dataView, offset)
 	{
 		this.selectedSlotId = dataView.getInt8(offset);
+
+		console.debug("Inventory - item selected - " + this.selectedSlotId);
 
 		return offset + 1;
 	},
@@ -88,6 +96,8 @@ projectSandbox.inventory =
 	packetInventoryItemNonSelected: function(data, dataView, offset)
 	{
 		this.selected = -1;
+
+		console.debug("Inventory - no item selected");
 
 		return offset;
 	},
@@ -116,9 +126,10 @@ projectSandbox.inventory =
 			// Weapons -> SMG
 			case 100:
 				item = new Smg(slotId);
+				console.debug("Inventory - created SMG");
 				break;
 			default:
-				console.error("Inventory - no type exists - " + typeId);
+				console.error("Inventory - cannot create item - no type exists - " + typeId);
 				return offset;
 		}
 
@@ -149,10 +160,12 @@ projectSandbox.inventory =
             // Remove from collections
             this.items.delete(slotId);
             this.renderOrder.splice(item, 1);
+
+            console.debug("Inventory - removed item - " + slotId);
 		}
 		else
 		{
-		    console.log("Inventory - attempted to remove missing item: " + slotId);
+		    console.error("Inventory - attempted to remove missing item: " + slotId);
 		}
 
 		return offset;
@@ -170,11 +183,13 @@ projectSandbox.inventory =
         if (item != null)
         {
 		    // Allow item to read custom data
-            item.packetChanged(data, dataView, offset);
+            offset = item.packetChanged(data, dataView, offset);
+
+            console.debug("Inventory - item changed - " + slotId);
 		}
 		else
 		{
-		    console.log("Inventory - change occurred for missing item: " + slotId);
+		    console.error("Inventory - change occurred for missing item: " + slotId);
 		}
 
 		return offset;

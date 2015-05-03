@@ -14,6 +14,7 @@ import java.util.LinkedList;
 public class InventoryUpdatesOutboundPacket extends OutboundPacket
 {
     private LinkedList<Object> packetData;
+
     public InventoryUpdatesOutboundPacket()
     {
         super((byte) 'I', (byte) 'U');
@@ -40,6 +41,12 @@ public class InventoryUpdatesOutboundPacket extends OutboundPacket
         }
     }
 
+    /**
+     * Adds creation data i.e. type / initial setup params
+     *
+     * @param controller
+     * @param item
+     */
     public void eventItemCreated(Controller controller, InventoryItem item)
     {
         packetData.add((byte)'C');
@@ -48,6 +55,12 @@ public class InventoryUpdatesOutboundPacket extends OutboundPacket
         item.eventInventoryWritePacketCreated(controller, packetData);
     }
 
+    /**
+     * Adds state data i.e. bullets etc
+     *
+     * @param controller
+     * @param item
+     */
     public void eventItemRemoved(Controller controller, InventoryItem item)
     {
         packetData.add((byte)'R');

@@ -139,54 +139,62 @@ public class EntityManager
                 {
                     a = kv.getValue();
 
-                    // Perform ent logic
-                    a.logic(controller);
+                    // Perform ent logic if not in removal process; this
+                    // avoids a situation where an ent might get deleted, but
+                    // sets its self to changed i.e. god mode / never deletes
 
-                    // Perform collision detection/handling with other ents
-                    for (Map.Entry<Short, Entity> kv2 : entities.entrySet())
+                    if (a.getState() != StateChange.PENDING_DELETED &&
+                            a.getState() != StateChange.DELETED)
                     {
-                        b = kv2.getValue();
+                        // Perform ent logic
+                        a.logic(controller);
 
-                        if (a.id != b.id)
+                        // Perform collision detection/handling with other ents
+                        for (Map.Entry<Short, Entity> kv2 : entities.entrySet())
                         {
-                            result = SAT.collision(a, b);
+                            b = kv2.getValue();
 
-                            if (result.collision)
+                            if (a.id != b.id)
                             {
-                                // Inform both ents of event
-                                a.eventCollision(controller, b, a, b, result);
-                                b.eventCollision(controller, b, a, a, result);
+                                result = SAT.collision(a, b);
+
+                                if (result.collision)
+                                {
+                                    // Inform both ents of event
+                                    a.eventCollision(controller, b, a, b, result);
+                                    b.eventCollision(controller, b, a, a, result);
+                                }
                             }
                         }
-                    }
 
-                    // Perform collision with map
-                    mapResults = SAT.collisionMap(controller.mapManager.main, a);
+                        // Perform collision with map
+                        mapResults = SAT.collisionMap(controller.mapManager.main, a);
 
-                    for (CollisionResultMap mapResult : mapResults)
-                    {
-                        // Check if solid for collision response
-                        if (mapResult.tileType.properties.solid)
+                        for (CollisionResultMap mapResult : mapResults)
                         {
-                            a.positionOffset(mapResult.result.mtv);
+                            // Check if solid for collision response
+                            if (mapResult.tileType.properties.solid)
+                            {
+                                a.positionOffset(mapResult.result.mtv);
+                            }
+
+                            // Check if to apply damage
+                            if (mapResult.tileType.properties.damage != 0)
+                            {
+                                // TODO: apply damage from tile
+                            }
                         }
 
-                        // Check if to apply damage
-                        if (mapResult.tileType.properties.damage != 0)
+                        // Update position for ent
+                        a.position.copy(a.positionNew);
+
+                        // Check ent is not outside map
+                        if (a.positionNew.x < 0.0f || a.positionNew.y < 0.0f ||
+                                a.positionNew.x > mapMaxX || a.positionNew.y > mapMaxY)
                         {
-                            // TODO: apply damage from tile
+                            // Kill the ent...
+                            a.kill(controller);
                         }
-                    }
-
-                    // Update position for ent
-                    a.position.copy(a.positionNew);
-
-                    // Check ent is not outside map
-                    if (a.positionNew.x < 0.0f || a.positionNew.y < 0.0f ||
-                            a.positionNew.x > mapMaxX || a.positionNew.y > mapMaxY)
-                    {
-                        // Kill the ent...
-                        a.kill(controller);
                     }
                 }
 

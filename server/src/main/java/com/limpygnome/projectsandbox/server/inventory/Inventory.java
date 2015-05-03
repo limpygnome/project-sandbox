@@ -6,6 +6,8 @@ import com.limpygnome.projectsandbox.server.inventory.enums.InventoryMergeResult
 import com.limpygnome.projectsandbox.server.inventory.enums.InventorySlotState;
 import com.limpygnome.projectsandbox.server.packets.types.inventory.InventoryUpdatesOutboundPacket;
 import com.limpygnome.projectsandbox.server.players.PlayerInfo;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.io.IOException;
 import java.io.Serializable;
@@ -21,6 +23,8 @@ import java.util.Map;
 public class Inventory implements Serializable
 {
     public static final long serialVersionUID = 1L;
+
+    private final static Logger LOG = LogManager.getLogger(Inventory.class);
 
     /**
      * Indicates if selected item is dirty / has changed.
@@ -54,24 +58,55 @@ public class Inventory implements Serializable
 
     public void setOwner(PlayerInfo owner)
     {
-        // TODO: if we switch owner to null and set new owner, concurrency reset issue
-        // Inform previous owner to reset
-        if (this.owner != null)
-        {
-        }
-
         // Set new owner
         this.owner = owner;
         this.flagReset = true;
+
+        if (owner != null)
+        {
+            LOG.debug("Owner changed - sid: {}", owner.session.sessionId);
+        }
+        else
+        {
+            LOG.debug("Owner changed to no one");
+        }
     }
 
+    /**
+     *
+     * @param slotId Can be null for no item selected
+     */
     public void setSelected(Short slotId)
     {
-        InventoryItem item = items.get(slotId);
-        if (item != null)
+        if (slotId == null)
         {
-            this.selected = item;
+            this.selected = null;
             this.flagSelectedDirty = true;
+            LOG.debug("Selected item set to empty");
+        }
+        else
+        {
+            InventoryItem item = items.get(slotId);
+
+            if (item != null)
+            {
+                // Reset keys of previous item
+                if (selected != null)
+                {
+                    selected.slot.keyDown = false;
+                    selected.slot.keyAlreadyDown = false;
+                }
+
+                // Set new item + flag to dirty
+                this.selected = item;
+                this.flagSelectedDirty = true;
+
+                LOG.debug("Selected item - slot id: {}", slotId);
+            }
+            else
+            {
+                LOG.warn("Attempted to set selected to invalid item - slot id: {}", slotId);
+            }
         }
     }
 
@@ -84,51 +119,78 @@ public class Inventory implements Serializable
         if (flagReset)
         {
             packet.eventReset();
-            this.flagReset = false;
         }
 
         // Check if to raise selected item change
-        if (flagSelectedDirty)
+        if (flagReset || flagSelectedDirty)
         {
             packet.eventItemSelected(controller, selected);
-            this.flagSelectedDirty = false;
+            flagSelectedDirty = false;
         }
 
         // Update logic of items
         Iterator<Map.Entry<Short, InventoryItem>> iterator = items.entrySet().iterator();
         Map.Entry<Short, InventoryItem> entry;
         InventoryItem item;
+        boolean pendingRemoval;
 
         while (iterator.hasNext())
         {
             entry = iterator.next();
             item = entry.getValue();
 
-            // Execute logic
-            item.logic(controller);
+            // Execute logic if not being removed - avoids situation
+            // where it updates its own state to avoid death i.e. god-mode
+            // - this caused a similar issue to be discovered with ents,
+            //   since the logic process is similar
+            pendingRemoval = item.slot.slotState != InventorySlotState.PENDING_REMOVE &&
+                    item.slot.slotState != InventorySlotState.REMOVED;
+
+            if (!pendingRemoval)
+            {
+                item.logic(controller);
+            }
 
             // Handle slotState changes
-            switch (item.slot.slotState)
+            if (!pendingRemoval && flagReset)
             {
-                case CREATED:
-                    packet.eventItemCreated(controller, item);
-                    break;
-                case CHANGED:
-                    packet.eventItemChanged(controller, item);
-                    break;
-                case PENDING_REMOVE:
-                    packet.eventItemRemoved(controller, item);
-                    break;
-                case REMOVED:
-                    // Remove from collection - no longer needed
-                    iterator.remove();
-                    break;
-                case NONE:
-                    // Do nothing...
-                    break;
-                default:
-                    throw new RuntimeException("Unhandled item slot");
+                packet.eventItemCreated(controller, item);
+                packet.eventItemChanged(controller, item);
             }
+            else
+            {
+                // Handle state of slot
+                switch (item.slot.slotState)
+                {
+                    case CREATED:
+                        packet.eventItemCreated(controller, item);
+                        break;
+                    case CHANGED:
+                        packet.eventItemChanged(controller, item);
+                        break;
+                    case PENDING_REMOVE:
+                        packet.eventItemRemoved(controller, item);
+                        break;
+                    case REMOVED:
+                        // Remove from collection - no longer needed
+                        iterator.remove();
+                        break;
+                    case NONE:
+                        // Do nothing...
+                        break;
+                    default:
+                        throw new RuntimeException("Unhandled item slot");
+                }
+            }
+
+            // Reset state
+            item.slot.slotState = InventorySlotState.NONE;
+        }
+
+        // Reset reset-flag
+        if (flagReset)
+        {
+            flagReset = false;
         }
 
         // Send packet to current player of inventory
@@ -193,9 +255,11 @@ public class Inventory implements Serializable
                         break;
                     case DONT_ADD:
                         // Conflicts with another item, dont add it...
+                        LOG.debug("Add item - conflict - type id: {}, conflicted slot id: {}", item.getTypeId(), invItem.slot.id);
                         return false;
                     case MERGED:
                         // Merged with another item, success!
+                        LOG.debug("Add item - merged - type id: {}, merged slot id: {}", item.getTypeId(), invItem.slot.id);
                         return true;
                 }
             }
@@ -206,7 +270,7 @@ public class Inventory implements Serializable
 
         if (slotId == null)
         {
-            // TODO: logging
+            LOG.warn("Failed to add item, no available slot identifier");
             return false;
         }
 
@@ -214,11 +278,12 @@ public class Inventory implements Serializable
         item.slot = new InventorySlotData(slotId, this);
         items.put(slotId, item);
 
+        LOG.debug("Added item - slot id: {}, type id: {}", slotId, item.getTypeId());
+
         // Set as selected if no prior item
         if (selected == null)
         {
-            selected = item;
-            flagSelectedDirty = true;
+            setSelected(slotId);
         }
 
         return true;
@@ -231,10 +296,17 @@ public class Inventory implements Serializable
         short attempts = 0;
         short slotId = cachedNextAvailableItemId;
 
+        Short assignedSlotId = null;
+
         // Find next available slot ID
-        while(!items.containsKey(slotId) && attempts <= maxValue)
+        while(assignedSlotId == null && attempts <= maxValue)
         {
-            if (slotId == maxValue)
+            // Check if free
+            if (!items.containsKey(slotId))
+            {
+                assignedSlotId = slotId;
+            }
+            else if (slotId == maxValue)
             {
                 slotId = 0;
             }
@@ -242,16 +314,12 @@ public class Inventory implements Serializable
             {
                 slotId++;
             }
+
+            // Increment attempts to avoid infinite checking
             attempts++;
         }
 
-        // Check we didn't exceed max attempts
-        if (attempts > maxValue)
-        {
-            return null;
-        }
-
-        // Update cache of next ID
+        // Update cache of next available ID
         if (slotId == maxValue)
         {
             cachedNextAvailableItemId = 0;
@@ -271,12 +339,40 @@ public class Inventory implements Serializable
         if (item != null)
         {
             item.slot.slotState = InventorySlotState.PENDING_REMOVE;
+            LOG.debug("Slot set to be removed - slot id: {}", slotId);
 
+            // Check if item to be removed is selected
             if (selected == item)
             {
-                selected = null;
-                flagSelectedDirty = true;
+                // Set next selected item as previous or next available item
+                Short nextSlotId = null;
+                boolean foundRemovedItem = false;
+                for (Map.Entry<Short, InventoryItem> kv : items.entrySet())
+                {
+                    // Check if the current item is being removed
+                    if (!foundRemovedItem && kv.getValue() == item)
+                    {
+                        foundRemovedItem = true;
+                    }
+
+                    // Check if we have a candidate yet
+                    if (nextSlotId != null && foundRemovedItem)
+                    {
+                        break;
+                    }
+                    else
+                    {
+                        nextSlotId = kv.getValue().slot.id;
+                    }
+                }
+
+                // Update selected item
+                setSelected(nextSlotId);
             }
+        }
+        else
+        {
+            LOG.warn("Attempted to remove missing slot - slot id: {}", slotId);
         }
 
         return item;
@@ -287,31 +383,7 @@ public class Inventory implements Serializable
         if (selected != null)
         {
             selected.slot.keyDown = keyDown;
-        }
-    }
-
-    public void selectedSet(Controller controller, short slotId, boolean keyDown)
-    {
-        InventoryItem item = items.get(slotId);
-
-        if (item != null)
-        {
-            // Set existing item's state to false for keydown
-            if (selected != null)
-            {
-                selected.slot.keyDown = false;
-                selected.slot.keyAlreadyDown = false;
-            }
-
-            // Set key state
-            item.slot.keyDown = keyDown;
-
-            // Item is now selected
-            selected = item;
-        }
-        else
-        {
-            // TODO: logging
+            LOG.debug("Selected item invoked - key down: {}", keyDown);
         }
     }
 }

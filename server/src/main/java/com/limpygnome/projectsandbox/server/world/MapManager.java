@@ -44,6 +44,8 @@ public class MapManager
     public void buildEntMappings() throws Exception
     {
         // TODO: move into properties file
+        // TODO: refactor and move into entitymanager
+        LOG.debug("Building ent types map...");
         this.entTypeMappings = Annotations.findAnnotatedClasses(EntityType.class, "/com/limpygnome/projectsandbox/server/ents");
     }
     

@@ -36,6 +36,7 @@
 		<script src="/content/js/engine/comms-packet.js"></script>
 		<script src="/content/js/engine/utils.js"></script>
 		<script src="/content/js/engine/inventory.js"></script>
+		<script src="/content/js/engine/inventory-item.js"></script>
 
 		<!-- Game -->
 		<script src="/content/game/js/_namespace.js"></script>

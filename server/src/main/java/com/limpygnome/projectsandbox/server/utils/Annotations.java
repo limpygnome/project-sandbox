@@ -1,5 +1,8 @@
 package com.limpygnome.projectsandbox.server.utils;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Modifier;
 import java.util.HashMap;
@@ -9,7 +12,9 @@ import java.util.HashMap;
  * @author limpygnome
  */
 public final class Annotations
-{    
+{
+    private final static Logger LOG = LogManager.getLogger(Annotations.class);
+
     /**
      * Finds all of the classes annotated within a package, including
      * sub-packages.
@@ -47,7 +52,7 @@ public final class Annotations
                 else if (typeId != 0)
                 {
                     result.put(typeId, clazz);
-                    System.out.println("Annotations - " + annotationType.getName() + " - added type " + clazz.getName());
+                    LOG.debug("{} - added type: {}", annotationType.getName(), clazz.getName());
                 }
                 else if (!Modifier.isAbstract(clazz.getModifiers()))
                 {
