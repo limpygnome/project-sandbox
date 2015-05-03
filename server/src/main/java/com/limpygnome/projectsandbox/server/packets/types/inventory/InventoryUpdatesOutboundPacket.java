@@ -1,9 +1,8 @@
 package com.limpygnome.projectsandbox.server.packets.types.inventory;
 
 import com.limpygnome.projectsandbox.server.Controller;
-import com.limpygnome.projectsandbox.server.inventory.InventoryItem;
+import com.limpygnome.projectsandbox.server.inventory.items.AbstractInventoryItem;
 import com.limpygnome.projectsandbox.server.packets.OutboundPacket;
-import com.limpygnome.projectsandbox.server.utils.ByteHelper;
 
 import java.io.IOException;
 import java.util.LinkedList;
@@ -27,7 +26,7 @@ public class InventoryUpdatesOutboundPacket extends OutboundPacket
         packetData.add((byte) 'R');
     }
 
-    public  void eventItemSelected(Controller controller, InventoryItem item)
+    public  void eventItemSelected(Controller controller, AbstractInventoryItem item)
     {
         if (item != null)
         {
@@ -47,11 +46,11 @@ public class InventoryUpdatesOutboundPacket extends OutboundPacket
      * @param controller
      * @param item
      */
-    public void eventItemCreated(Controller controller, InventoryItem item)
+    public void eventItemCreated(Controller controller, AbstractInventoryItem item)
     {
         packetData.add((byte)'C');
         packetData.add(item.slot.idByte);
-        packetData.add(item.getTypeId());
+        packetData.add(item.typeId);
         item.eventInventoryWritePacketCreated(controller, packetData);
     }
 
@@ -61,14 +60,14 @@ public class InventoryUpdatesOutboundPacket extends OutboundPacket
      * @param controller
      * @param item
      */
-    public void eventItemRemoved(Controller controller, InventoryItem item)
+    public void eventItemRemoved(Controller controller, AbstractInventoryItem item)
     {
         packetData.add((byte)'R');
         packetData.add(item.slot.idByte);
         item.eventInventoryWritePacketRemoved(controller, packetData);
     }
 
-    public void eventItemChanged(Controller controller, InventoryItem item)
+    public void eventItemChanged(Controller controller, AbstractInventoryItem item)
     {
         packetData.add((byte)'M');
         packetData.add(item.slot.idByte);

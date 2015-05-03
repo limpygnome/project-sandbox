@@ -123,6 +123,11 @@ projectSandbox.inventory =
 
 		switch (typeId)
 		{
+		    // Fist
+		    case 1:
+		        item = new Fist(slotId);
+		        console.debug("Inventory - created fist");
+		        break;
 			// Weapons -> SMG
 			case 100:
 				item = new Smg(slotId);

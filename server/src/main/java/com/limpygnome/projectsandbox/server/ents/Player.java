@@ -4,7 +4,6 @@ import com.limpygnome.projectsandbox.server.Controller;
 import com.limpygnome.projectsandbox.server.ents.annotations.EntityType;
 import com.limpygnome.projectsandbox.server.ents.physics.Vector2;
 import com.limpygnome.projectsandbox.server.inventory.Inventory;
-import com.limpygnome.projectsandbox.server.inventory.InventoryItem;
 import com.limpygnome.projectsandbox.server.players.PlayerInfo;
 import com.limpygnome.projectsandbox.server.players.enums.PlayerKeys;
 

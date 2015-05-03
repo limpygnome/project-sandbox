@@ -35,41 +35,6 @@ public class InventoryManager
         {
             throw new RuntimeException("No inventory item types found for inventory manager mapping, looks like an error!");
         }
-        
-        // Set the type ID within classes
-        Class clazz;
-        Field field;
-        boolean found;
-        
-        for (Map.Entry<Short, Class> kv : types.entrySet())
-        {
-            clazz = kv.getValue();
-            found = false;
-
-            do
-            {
-                try
-                {
-                    field = clazz.getDeclaredField("typeId");
-                    field.setAccessible(true);
-                    field.setShort(null, kv.getKey());
-            
-                    found = true;
-
-                    LOG.debug("Inventory item mapped - class: {}, type id: {}", clazz.getName(), kv.getKey());
-                }
-                catch (Exception e)
-                {
-                    clazz = clazz.getSuperclass();
-                }
-            }
-            while (!found && clazz != null);
-
-            if (!found)
-            {
-                throw new IllegalArgumentException("Unable to set typeId on " + kv.getValue().getName());
-            }
-        }
     }
     
     public void load() throws Exception

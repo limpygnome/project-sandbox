@@ -4,6 +4,7 @@ import com.limpygnome.projectsandbox.server.Controller;
 import com.limpygnome.projectsandbox.server.ents.Entity;
 import com.limpygnome.projectsandbox.server.inventory.enums.InventoryMergeResult;
 import com.limpygnome.projectsandbox.server.inventory.enums.InventorySlotState;
+import com.limpygnome.projectsandbox.server.inventory.items.AbstractInventoryItem;
 import com.limpygnome.projectsandbox.server.packets.types.inventory.InventoryUpdatesOutboundPacket;
 import com.limpygnome.projectsandbox.server.players.PlayerInfo;
 import org.apache.logging.log4j.LogManager;
@@ -42,8 +43,8 @@ public class Inventory implements Serializable
     // TODO: should this be transient? How to connect them up?
     private PlayerInfo owner;
 
-    public InventoryItem selected;
-    public LinkedHashMap<Short, InventoryItem> items;
+    public AbstractInventoryItem selected;
+    public LinkedHashMap<Short, AbstractInventoryItem> items;
     private short cachedNextAvailableItemId;
 
     public Inventory(Entity parent)
@@ -86,7 +87,7 @@ public class Inventory implements Serializable
         }
         else
         {
-            InventoryItem item = items.get(slotId);
+            AbstractInventoryItem item = items.get(slotId);
 
             if (item != null)
             {
@@ -129,9 +130,9 @@ public class Inventory implements Serializable
         }
 
         // Update logic of items
-        Iterator<Map.Entry<Short, InventoryItem>> iterator = items.entrySet().iterator();
-        Map.Entry<Short, InventoryItem> entry;
-        InventoryItem item;
+        Iterator<Map.Entry<Short, AbstractInventoryItem>> iterator = items.entrySet().iterator();
+        Map.Entry<Short, AbstractInventoryItem> entry;
+        AbstractInventoryItem item;
         boolean pendingRemoval;
 
         while (iterator.hasNext())
@@ -225,7 +226,7 @@ public class Inventory implements Serializable
     {
         try
         {
-            InventoryItem itemInstance = (InventoryItem) itemClass.getConstructor().newInstance();
+            AbstractInventoryItem itemInstance = (AbstractInventoryItem) itemClass.getConstructor().newInstance();
             return add(itemInstance);
         }
         catch (Exception ex)
@@ -234,13 +235,13 @@ public class Inventory implements Serializable
         }
     }
 
-    public boolean add(InventoryItem item)
+    public boolean add(AbstractInventoryItem item)
     {
         // Attempt to find similar inventory item and merge
-        InventoryItem invItem;
+        AbstractInventoryItem invItem;
         InventoryMergeResult result;
 
-        for (Map.Entry<Short, InventoryItem> kv : items.entrySet())
+        for (Map.Entry<Short, AbstractInventoryItem> kv : items.entrySet())
         {
             invItem = kv.getValue();
 
@@ -255,11 +256,11 @@ public class Inventory implements Serializable
                         break;
                     case DONT_ADD:
                         // Conflicts with another item, dont add it...
-                        LOG.debug("Add item - conflict - type id: {}, conflicted slot id: {}", item.getTypeId(), invItem.slot.id);
+                        LOG.debug("Add item - conflict - type id: {}, conflicted slot id: {}", item.typeId, invItem.slot.id);
                         return false;
                     case MERGED:
                         // Merged with another item, success!
-                        LOG.debug("Add item - merged - type id: {}, merged slot id: {}", item.getTypeId(), invItem.slot.id);
+                        LOG.debug("Add item - merged - type id: {}, merged slot id: {}", item.typeId, invItem.slot.id);
                         return true;
                 }
             }
@@ -278,7 +279,7 @@ public class Inventory implements Serializable
         item.slot = new InventorySlotData(slotId, this);
         items.put(slotId, item);
 
-        LOG.debug("Added item - slot id: {}, type id: {}", slotId, item.getTypeId());
+        LOG.debug("Added item - slot id: {}, type id: {}", slotId, item.typeId);
 
         // Set as selected if no prior item
         if (selected == null)
@@ -332,9 +333,9 @@ public class Inventory implements Serializable
         return slotId;
     }
 
-    public InventoryItem remove(Short slotId)
+    public AbstractInventoryItem remove(Short slotId)
     {
-        InventoryItem item = items.get(slotId);
+        AbstractInventoryItem item = items.get(slotId);
 
         if (item != null)
         {
@@ -347,7 +348,7 @@ public class Inventory implements Serializable
                 // Set next selected item as previous or next available item
                 Short nextSlotId = null;
                 boolean foundRemovedItem = false;
-                for (Map.Entry<Short, InventoryItem> kv : items.entrySet())
+                for (Map.Entry<Short, AbstractInventoryItem> kv : items.entrySet())
                 {
                     // Check if the current item is being removed
                     if (!foundRemovedItem && kv.getValue() == item)

@@ -62,8 +62,8 @@ projectSandbox.comms =
 		var mainType = String.fromCharCode(data[0]);
 		var subType = String.fromCharCode(data[1]);
 
-		console.debug("Received packet - mt: " + mainType + ", st: " + subType);
-		console.debug(data);
+		//console.debug("Received packet - mt: " + mainType + ", st: " + subType);
+		//console.debug(data);
 
 		switch (mainType)
 		{

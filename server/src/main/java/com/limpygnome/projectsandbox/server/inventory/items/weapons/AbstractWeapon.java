@@ -4,9 +4,7 @@ import com.limpygnome.projectsandbox.server.Controller;
 import com.limpygnome.projectsandbox.server.ents.Entity;
 import com.limpygnome.projectsandbox.server.ents.physics.Casting;
 import com.limpygnome.projectsandbox.server.ents.physics.CastingResult;
-import com.limpygnome.projectsandbox.server.inventory.Inventory;
-import com.limpygnome.projectsandbox.server.inventory.InventoryItem;
-import com.limpygnome.projectsandbox.server.inventory.InventorySlotData;
+import com.limpygnome.projectsandbox.server.inventory.items.AbstractInventoryItem;
 import com.limpygnome.projectsandbox.server.inventory.WeaponConstants;
 import com.limpygnome.projectsandbox.server.inventory.enums.InventoryMergeResult;
 
@@ -14,7 +12,7 @@ import com.limpygnome.projectsandbox.server.inventory.enums.InventoryMergeResult
  *
  * @author limpygnome
  */
-public abstract class AbstractWeapon extends InventoryItem
+public abstract class AbstractWeapon extends AbstractInventoryItem
 {   
     public short bullets;
     public short bulletsPerMag;
@@ -98,7 +96,7 @@ public abstract class AbstractWeapon extends InventoryItem
     }
 
     @Override
-    public InventoryMergeResult merge(InventoryItem item)
+    public InventoryMergeResult merge(AbstractInventoryItem item)
     {
         // This check should not be needed, but just for sanity purposes
         if (item instanceof AbstractWeapon)

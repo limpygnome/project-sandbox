@@ -55,14 +55,8 @@ public strictfp abstract class Entity
         // Fetch entity ID
         final Class ENTITY_CLASS = getClass();
         
-        // -- Check annotation present
-        if (!ENTITY_CLASS.isAnnotationPresent(EntityType.class))
-        {
-            throw new IllegalArgumentException("No entity-type annotation present.");
-        }
-        
-        // -- Read ID from annotation
-        Annotation annotationEntityType = ENTITY_CLASS.getAnnotation(EntityType.class);
+        // Read type from annotation
+        Annotation annotationEntityType = getClass().getAnnotation(EntityType.class);
         EntityType entType = (EntityType) annotationEntityType;
         this.entityType = entType.typeId();
         

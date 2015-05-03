@@ -1,12 +1,14 @@
-package com.limpygnome.projectsandbox.server.inventory;
+package com.limpygnome.projectsandbox.server.inventory.items;
 
 import com.limpygnome.projectsandbox.server.Controller;
+import com.limpygnome.projectsandbox.server.inventory.InventorySlotData;
 import com.limpygnome.projectsandbox.server.inventory.annotations.InventyoryItemTypeId;
 import com.limpygnome.projectsandbox.server.inventory.enums.InventoryInvokeState;
 import com.limpygnome.projectsandbox.server.inventory.enums.InventoryInvokeType;
 import com.limpygnome.projectsandbox.server.inventory.enums.InventoryMergeResult;
 
 import java.io.Serializable;
+import java.lang.annotation.Annotation;
 import java.util.LinkedList;
 
 /**
@@ -14,19 +16,24 @@ import java.util.LinkedList;
  * @author limpygnome
  */
 @InventyoryItemTypeId(typeId = 0)
-public abstract class InventoryItem implements Serializable
+public abstract class AbstractInventoryItem implements Serializable
 {
     public static final long serialVersionUID = 1L;
     
-    static short typeId = 0;
+    public short typeId = 0;
 
     public InventorySlotData slot;
     public InventoryInvokeType invokeType;
     
-    public InventoryItem()
+    public AbstractInventoryItem()
     {
         this.slot = null;
         this.invokeType = InventoryInvokeType.FIRE_ONCE;
+
+        // Read type from annotation
+        Annotation annotation = getClass().getAnnotation(InventyoryItemTypeId.class);
+        InventyoryItemTypeId inventoryType = (InventyoryItemTypeId) annotation;
+        this.typeId = inventoryType.typeId();
     }
 
     public void logic(Controller controller)
@@ -67,7 +74,7 @@ public abstract class InventoryItem implements Serializable
      * @param item The item being added to the inventory.
      * @return The result from the merge process.
      */
-    public InventoryMergeResult merge(InventoryItem item)
+    public InventoryMergeResult merge(AbstractInventoryItem item)
     {
         return InventoryMergeResult.DONT_ADD;
     }
@@ -82,9 +89,4 @@ public abstract class InventoryItem implements Serializable
     public void eventInventoryWritePacketRemoved(Controller controller, LinkedList<Object> packetData) { }
 
     public void eventInventoryWritePacketChanged(Controller controller, LinkedList<Object> packetData) { }
-    
-    public final short getTypeId()
-    {
-        return typeId;
-    }
 }
