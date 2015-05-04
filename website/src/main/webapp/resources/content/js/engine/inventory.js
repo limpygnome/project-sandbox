@@ -24,8 +24,8 @@ projectSandbox.inventory =
 	logic: function()
 	{
 	    // Check if to switch items
-	    var q = projectSandbox.keyboard.Q;
-	    var e = projectSandbox.keyboard.E;
+	    var q = projectSandbox.keyboard.isKeyDown("Q");
+	    var e = projectSandbox.keyboard.isKeyDown("E");
 
 	    // -- Previous
 	    if (!this.selectPrevKeyDown && q)

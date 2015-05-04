@@ -13,17 +13,6 @@ public enum PlayerKeys
     MovementRight(8),
     
     Action(16),
-    
-    Number1(32),
-    Number2(64),
-    Number3(128),
-    Number4(256),
-    Number5(512),
-    Number6(1024),
-    Number7(2048),
-    Number8(4096),
-    Number9(8192),
-    Number0(16384),
 
     Spacebar(32768)
     ;

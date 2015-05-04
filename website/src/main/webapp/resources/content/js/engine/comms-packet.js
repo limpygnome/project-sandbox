@@ -25,17 +25,6 @@ projectSandbox.commsPacket =
 	MOVEMENT_RIGHT: 8,
 	
 	ACTION_KEY: 16,
-	
-	NUMBER1: 32,
-	NUMBER2: 64,
-	NUMBER3: 128,
-	NUMBER4: 256,
-	NUMBER5: 512,
-	NUMBER6: 1024,
-	NUMBER7: 2048,
-	NUMBER8: 4096,
-	NUMBER9: 8192,
-	NUMBER0: 16384,
 
 	SPACEBAR: 32768,
 	
@@ -65,70 +54,29 @@ projectSandbox.commsPacket =
 		// Compute new movement packet
 		var movement = 0;
 		
-		if(projectSandbox.keyboard.W)
+		if(projectSandbox.keyboard.isKeyDown("W"))
 		{
 			movement |= this.MOVEMENT_UP;
 		}
-		if(projectSandbox.keyboard.S)
+		if(projectSandbox.keyboard.isKeyDown("S"))
 		{
 			movement |= this.MOVEMENT_DOWN;
 		}
-		if(projectSandbox.keyboard.A)
+		if(projectSandbox.keyboard.isKeyDown("A"))
 		{
 			movement |= this.MOVEMENT_LEFT;
 		}
-		if(projectSandbox.keyboard.D)
+		if(projectSandbox.keyboard.isKeyDown("D"))
 		{
 			movement |= this.MOVEMENT_RIGHT;
 		}
 		
-		if (projectSandbox.keyboard.T)
+		if (projectSandbox.keyboard.isKeyDown("F"))
 		{
 			movement |= this.ACTION_KEY;
 		}
-		
-		if (projectSandbox.keyboard.NUMBER1)
-		{
-			movement |= this.NUMBER1;
-		}
-		if (projectSandbox.keyboard.NUMBER2)
-		{
-			movement |= this.NUMBER2;
-		}
-		if (projectSandbox.keyboard.NUMBER3)
-		{
-			movement |= this.NUMBER3;
-		}
-		if (projectSandbox.keyboard.NUMBER4)
-		{
-			movement |= this.NUMBER4;
-		}
-		if (projectSandbox.keyboard.NUMBER5)
-		{
-			movement |= this.NUMBER5;
-		}
-		if (projectSandbox.keyboard.NUMBER6)
-		{
-			movement |= this.NUMBER6;
-		}
-		if (projectSandbox.keyboard.NUMBER7)
-		{
-			movement |= this.NUMBER7;
-		}
-		if (projectSandbox.keyboard.NUMBER8)
-		{
-			movement |= this.NUMBER8;
-		}
-		if (projectSandbox.keyboard.NUMBER9)
-		{
-			movement |= this.NUMBER9;
-		}
-		if (projectSandbox.keyboard.NUMBER0)
-		{
-			movement |= this.NUMBER0;
-		}
 
-		if (projectSandbox.keyboard.SPACEBAR)
+		if (projectSandbox.keyboard.isKeyDown(" "))
 		{
 			movement |= this.SPACEBAR;
 		}

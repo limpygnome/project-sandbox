@@ -182,8 +182,8 @@ public class Inventory implements Serializable
             item.slot.slotState = InventorySlotState.NONE;
         }
 
-        // Update invocation state
-        checkSelectedInvokeChange(controller, owner.isKeyDown(PlayerKeys.Spacebar));
+        // Check state of keys
+        checkKeys(controller);
 
         // Check if to raise selected item change
         if (flagReset || flagSelectedDirty)
@@ -383,15 +383,21 @@ public class Inventory implements Serializable
         return item;
     }
 
-    private void checkSelectedInvokeChange(Controller controller, boolean keyDown)
+    private void checkKeys(Controller controller)
     {
-        if (selected != null)
+        // Must be an item selected and owner
+        if (owner == null || selected == null)
         {
-            if (keyDown != selected.slot.keyDown)
-            {
-                selected.slot.keyDown = keyDown;
-                LOG.debug("Selected item invoke change - key down: {}", keyDown);
-            }
+            return;
+        }
+
+        // Check if to update fire key-down state
+        final boolean FIRE = owner.isKeyDown(PlayerKeys.Spacebar);
+
+        if (FIRE != selected.slot.keyDown)
+        {
+            selected.slot.keyDown = FIRE;
+            LOG.debug("Selected item invoke change - key down: {}", FIRE);
         }
     }
 }
