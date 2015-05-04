@@ -1,7 +1,7 @@
 package com.limpygnome.projectsandbox.server.inventory.items.weapons;
 
-import com.limpygnome.projectsandbox.server.inventory.Inventory;
 import com.limpygnome.projectsandbox.server.inventory.annotations.InventyoryItemTypeId;
+import com.limpygnome.projectsandbox.server.inventory.enums.InventoryInvokeType;
 
 /**
  *
@@ -18,5 +18,7 @@ public class Smg extends AbstractWeapon
                 120,
                 1500
         );
+
+        this.invokeType = InventoryInvokeType.FIRE_ONCE;
     }
 }

@@ -4,16 +4,21 @@ import com.limpygnome.projectsandbox.server.Controller;
 import com.limpygnome.projectsandbox.server.ents.Entity;
 import com.limpygnome.projectsandbox.server.ents.physics.Casting;
 import com.limpygnome.projectsandbox.server.ents.physics.CastingResult;
+import com.limpygnome.projectsandbox.server.inventory.enums.InventoryInvokeState;
 import com.limpygnome.projectsandbox.server.inventory.items.AbstractInventoryItem;
 import com.limpygnome.projectsandbox.server.inventory.WeaponConstants;
 import com.limpygnome.projectsandbox.server.inventory.enums.InventoryMergeResult;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /**
  *
  * @author limpygnome
  */
 public abstract class AbstractWeapon extends AbstractInventoryItem
-{   
+{
+    private final static Logger LOG = LogManager.getLogger(AbstractWeapon.class);
+
     public short bullets;
     public short bulletsPerMag;
     public short mags;
@@ -38,7 +43,13 @@ public abstract class AbstractWeapon extends AbstractInventoryItem
         this.step = WeaponConstants.DEFAULT_STEP;
         this.maxDistance = WeaponConstants.DEFAULT_MAX_DISTANCE;
     }
-    
+
+    @Override
+    public void eventInvoke(Controller controller, InventoryInvokeState invokeState)
+    {
+        LOG.debug("Invoke change - state: {}", invokeState);
+    }
+
     public synchronized void fire(Controller controller)
     {
         Entity owner = slot.inventory.parent;

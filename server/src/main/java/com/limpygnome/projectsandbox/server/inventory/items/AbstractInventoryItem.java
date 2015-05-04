@@ -6,6 +6,8 @@ import com.limpygnome.projectsandbox.server.inventory.annotations.InventyoryItem
 import com.limpygnome.projectsandbox.server.inventory.enums.InventoryInvokeState;
 import com.limpygnome.projectsandbox.server.inventory.enums.InventoryInvokeType;
 import com.limpygnome.projectsandbox.server.inventory.enums.InventoryMergeResult;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.io.Serializable;
 import java.lang.annotation.Annotation;
@@ -18,6 +20,8 @@ import java.util.LinkedList;
 @InventyoryItemTypeId(typeId = 0)
 public abstract class AbstractInventoryItem implements Serializable
 {
+    private final static Logger LOG = LogManager.getLogger(AbstractInventoryItem.class);
+
     public static final long serialVersionUID = 1L;
     
     public short typeId = 0;
@@ -41,24 +45,28 @@ public abstract class AbstractInventoryItem implements Serializable
         switch (invokeType)
         {
             case TOGGLE:
-                if (slot.keyDown)
+                if (!slot.keyAlreadyDown && slot.keyDown)
                 {
+                    slot.keyAlreadyDown = true;
+
                     eventInvoke(controller, InventoryInvokeState.ON);
                 }
-                else
+                else if (slot.keyAlreadyDown && !slot.keyDown)
                 {
+                    slot.keyAlreadyDown = false;
+
                     eventInvoke(controller, InventoryInvokeState.OFF);
                 }
                 break;
             case FIRE_ONCE:
                 if (!slot.keyAlreadyDown && slot.keyDown)
                 {
+                    slot.keyAlreadyDown = true;
                     eventInvoke(controller, InventoryInvokeState.INVOKE_ONCE);
                 }
                 else if (slot.keyAlreadyDown && !slot.keyDown)
                 {
                     slot.keyAlreadyDown = false;
-                    eventInvoke(controller, InventoryInvokeState.OFF);
                 }
                 break;
             default:

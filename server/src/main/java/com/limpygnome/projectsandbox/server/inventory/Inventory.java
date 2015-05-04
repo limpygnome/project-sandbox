@@ -123,6 +123,9 @@ public class Inventory implements Serializable
             packet.eventReset();
         }
 
+        // Check state of keys
+        checkKeys(controller);
+
         // Update logic of items
         Iterator<Map.Entry<Short, AbstractInventoryItem>> iterator = items.entrySet().iterator();
         Map.Entry<Short, AbstractInventoryItem> entry;
@@ -138,8 +141,8 @@ public class Inventory implements Serializable
             // where it updates its own state to avoid death i.e. god-mode
             // - this caused a similar issue to be discovered with ents,
             //   since the logic process is similar
-            pendingRemoval = item.slot.slotState != InventorySlotState.PENDING_REMOVE &&
-                    item.slot.slotState != InventorySlotState.REMOVED;
+            pendingRemoval = item.slot.slotState == InventorySlotState.PENDING_REMOVE ||
+                    item.slot.slotState == InventorySlotState.REMOVED;
 
             if (!pendingRemoval)
             {
@@ -181,9 +184,6 @@ public class Inventory implements Serializable
             // Reset state
             item.slot.slotState = InventorySlotState.NONE;
         }
-
-        // Check state of keys
-        checkKeys(controller);
 
         // Check if to raise selected item change
         if (flagReset || flagSelectedDirty)
@@ -374,8 +374,7 @@ public class Inventory implements Serializable
                 // Update selected item
                 setSelected(nextSlotId);
             }
-        }
-        else
+        } else
         {
             LOG.warn("Attempted to remove missing slot - slot id: {}", slotId);
         }
