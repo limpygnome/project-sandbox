@@ -5,6 +5,11 @@ projectSandbox.keyboard =
 	S: false,
 	A: false,
 	D: false,
+
+	Q: false,
+	E: false,
+
+	F: false,
 	
 	// Special
 	E: false,
@@ -37,57 +42,66 @@ projectSandbox.keyboard =
 	
 	setKeyCode: function(keyCode, value)
 	{
-		switch(keyCode)
+		var strKeyCode = String.fromCharCode(keyCode);
+
+		switch(strKeyCode)
 		{
-			case 87:
+			case "W":
 				this.W = value;
 				break;
-			case 83:
+			case "S":
 				this.S = value;
 				break;
-			case 65:
+			case "A":
 				this.A = value;
 				break;
-			case 68:
+			case "D":
 				this.D = value;
 				break;
-				
-			case 69:
-				this.E = value;
+
+			case "Q":
+                this.Q = value;
 				break;
+			case "E":
+                this.E = value;
+				break;
+
+            case "F":
+                this.T = value;
+                break;
 				
-			case 49:
+			case "1":
 				this.NUMBER1 = value;
 				break;
-			case 50:
+			case "2":
 				this.NUMBER2 = value;
 				break;
-			case 51:
+			case "3":
 				this.NUMBER3 = value;
 				break;
-			case 52:
+			case "4":
 				this.NUMBER4 = value;
 				break;
-			case 53:
+			case "5":
 				this.NUMBER5 = value;
 				break;
-			case 54:
+			case "6":
 				this.NUMBER6 = value;
 				break;
-			case 55:
+			case "7":
 				this.NUMBER7 = value;
 				break;
-			case 56:
+			case "8":
 				this.NUMBER8 = value;
 				break;
-			case 57:
+			case "9":
 				this.NUMBER9 = value;
 				break;
-			case 48:
+			case "0":
 				this.NUMBER0 = value;
 				break;
 				
-			case 32:
+			case " ":
 				this.SPACEBAR = value;
 				break;
 			default:

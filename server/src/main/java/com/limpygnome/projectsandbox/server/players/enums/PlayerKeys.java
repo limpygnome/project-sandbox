@@ -24,7 +24,7 @@ public enum PlayerKeys
     Number8(4096),
     Number9(8192),
     Number0(16384),
-    
+
     Spacebar(32768)
     ;
 

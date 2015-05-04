@@ -17,7 +17,7 @@ public class InventoryItemSelectedInboundPacket extends InboundPacket
     public void parse(Controller controller, WebSocket socket, ByteBuffer bb, byte[] data)
     {
         // Read raw data
-        byte rawSlotId = bb.get(0);
+        byte rawSlotId = bb.get(2);
 
         // Parse raw data
         short slotId = (short) rawSlotId;

@@ -1,7 +1,6 @@
 package com.limpygnome.projectsandbox.server.packets;
 
 import com.limpygnome.projectsandbox.server.Controller;
-import com.limpygnome.projectsandbox.server.packets.types.inventory.InventoryInvocationInboundPacket;
 import com.limpygnome.projectsandbox.server.packets.types.inventory.InventoryItemSelectedInboundPacket;
 import com.limpygnome.projectsandbox.server.packets.types.players.PlayerMovementInboundPacket;
 import com.limpygnome.projectsandbox.server.packets.types.session.SessionIdentifierInboundPacket;
@@ -95,10 +94,6 @@ public class PacketManager
                     case 'S':
                         // Inventory item selected packet
                         packet = new InventoryItemSelectedInboundPacket();
-                        break;
-                    case 'I':
-                        // Inventory item invocation packet
-                        packet = new InventoryInvocationInboundPacket();
                         break;
                 }
                 break;

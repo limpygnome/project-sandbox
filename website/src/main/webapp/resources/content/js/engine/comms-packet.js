@@ -36,7 +36,7 @@ projectSandbox.commsPacket =
 	NUMBER8: 4096,
 	NUMBER9: 8192,
 	NUMBER0: 16384,
-	
+
 	SPACEBAR: 32768,
 	
 	// Previous packet - no point updating the server if the value is the same!
@@ -82,7 +82,7 @@ projectSandbox.commsPacket =
 			movement |= this.MOVEMENT_RIGHT;
 		}
 		
-		if (projectSandbox.keyboard.E)
+		if (projectSandbox.keyboard.T)
 		{
 			movement |= this.ACTION_KEY;
 		}
@@ -127,7 +127,7 @@ projectSandbox.commsPacket =
 		{
 			movement |= this.NUMBER0;
 		}
-		
+
 		if (projectSandbox.keyboard.SPACEBAR)
 		{
 			movement |= this.SPACEBAR;

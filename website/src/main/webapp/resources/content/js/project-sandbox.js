@@ -160,6 +160,9 @@ var projectSandbox =
 		
 		// Update movement of player to server
 		this.commsPacket.updateMovement();
+
+		// Update inventory
+		this.inventory.logic();
 		
 		// Update textures
 		this.textures.logic();

@@ -7,6 +7,7 @@ import com.limpygnome.projectsandbox.server.inventory.enums.InventorySlotState;
 import com.limpygnome.projectsandbox.server.inventory.items.AbstractInventoryItem;
 import com.limpygnome.projectsandbox.server.packets.types.inventory.InventoryUpdatesOutboundPacket;
 import com.limpygnome.projectsandbox.server.players.PlayerInfo;
+import com.limpygnome.projectsandbox.server.players.enums.PlayerKeys;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -180,6 +181,9 @@ public class Inventory implements Serializable
             // Reset state
             item.slot.slotState = InventorySlotState.NONE;
         }
+
+        // Update invocation state
+        checkSelectedInvokeChange(controller, owner.isKeyDown(PlayerKeys.Spacebar));
 
         // Check if to raise selected item change
         if (flagReset || flagSelectedDirty)
@@ -379,12 +383,15 @@ public class Inventory implements Serializable
         return item;
     }
 
-    public void selectedInvoke(Controller controller, boolean keyDown)
+    private void checkSelectedInvokeChange(Controller controller, boolean keyDown)
     {
         if (selected != null)
         {
-            selected.slot.keyDown = keyDown;
-            LOG.debug("Selected item invoked - key down: {}", keyDown);
+            if (keyDown != selected.slot.keyDown)
+            {
+                selected.slot.keyDown = keyDown;
+                LOG.debug("Selected item invoke change - key down: {}", keyDown);
+            }
         }
     }
 }
