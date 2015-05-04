@@ -122,13 +122,6 @@ public class Inventory implements Serializable
             packet.eventReset();
         }
 
-        // Check if to raise selected item change
-        if (flagReset || flagSelectedDirty)
-        {
-            packet.eventItemSelected(controller, selected);
-            flagSelectedDirty = false;
-        }
-
         // Update logic of items
         Iterator<Map.Entry<Short, AbstractInventoryItem>> iterator = items.entrySet().iterator();
         Map.Entry<Short, AbstractInventoryItem> entry;
@@ -186,6 +179,13 @@ public class Inventory implements Serializable
 
             // Reset state
             item.slot.slotState = InventorySlotState.NONE;
+        }
+
+        // Check if to raise selected item change
+        if (flagReset || flagSelectedDirty)
+        {
+            packet.eventItemSelected(controller, selected);
+            flagSelectedDirty = false;
         }
 
         // Reset reset-flag

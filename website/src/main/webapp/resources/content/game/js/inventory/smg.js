@@ -4,3 +4,8 @@ function Smg(slotId)
 }
 
 Smg.inherits(InventoryItem);
+
+Smg.prototype.getIcon = function()
+{
+    return "ui-weapons/smg"
+}

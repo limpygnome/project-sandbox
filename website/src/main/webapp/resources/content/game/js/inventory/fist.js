@@ -4,3 +4,8 @@ function Fist(slotId)
 }
 
 Fist.inherits(InventoryItem);
+
+Fist.prototype.getIcon = function()
+{
+    return "ui-weapons/fist"
+}

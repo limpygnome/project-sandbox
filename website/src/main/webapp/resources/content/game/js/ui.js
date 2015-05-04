@@ -1,11 +1,13 @@
 game.ui =
 {
 	// Size of the UI viewport
+	// TODO: update when resized
 	uiWidth: 800,
 	uiHeight: 600,
 	
 	// Indicates if to render UI regarding player
 	renderPlayerUI: false,
+	renderWeapon: false,
 	
 	// Weapon icon
 	iconWeapon: null,
@@ -36,7 +38,7 @@ game.ui =
 		
 		// Create weapons icon
 		this.iconWeapon = new Primitive(48 * ratio, 48 * ratio);
-		this.iconWeapon.setTexture("ui-weapons/fist");
+		this.iconWeapon.setTexture("error");
 		this.setPrimitivePosTopLeft(this.iconWeapon, width, height, 8, 8);
 		
 		// Create health bar
@@ -125,7 +127,10 @@ game.ui =
 			this.healthBar.render(gl, shaderProgram, modelView, perspective);
 			
 			// Render weapon icon
-			this.iconWeapon.render(gl, shaderProgram, modelView, perspective);
+			if (this.renderWeapon)
+			{
+			    this.iconWeapon.render(gl, shaderProgram, modelView, perspective);
+			}
 			
 			// Render stars / bounty level
 			if (this.starsOn)
@@ -136,5 +141,24 @@ game.ui =
 				}
 			}
 		}
+	},
+
+	hookInventory_selectedChanged: function()
+	{
+		console.debug("UI - inventory selectedChanged hook invoked");
+
+		// Update icon to current item
+		var item = projectSandbox.inventory.getSelected();
+
+		if (item != null)
+		{
+            this.iconWeapon.setTexture(item.getIcon());
+            this.renderWeapon = true;
+        }
+        else
+        {
+            this.renderWeapon = false;
+        }
 	}
+
 }

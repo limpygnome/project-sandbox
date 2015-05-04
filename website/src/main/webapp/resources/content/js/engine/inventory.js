@@ -9,9 +9,6 @@ projectSandbox.inventory =
 	// Slot ID selected
 	selectedSlotId: -1,
 
-	render: function()
-	{
-	},
 
 	reset: function()
 	{
@@ -90,6 +87,9 @@ projectSandbox.inventory =
 
 		console.debug("Inventory - item selected - " + this.selectedSlotId);
 
+		// Call UI hook
+		projectSandbox.ui.hookInventory_selectedChanged();
+
 		return offset + 1;
 	},
 
@@ -126,12 +126,12 @@ projectSandbox.inventory =
 		    // Fist
 		    case 1:
 		        item = new Fist(slotId);
-		        console.debug("Inventory - created fist");
+		        console.debug("Inventory - created fist - " + slotId);
 		        break;
 			// Weapons -> SMG
 			case 100:
 				item = new Smg(slotId);
-				console.debug("Inventory - created SMG");
+				console.debug("Inventory - created SMG - " + slotId);
 				break;
 			default:
 				console.error("Inventory - cannot create item - no type exists - " + typeId);
@@ -198,5 +198,15 @@ projectSandbox.inventory =
 		}
 
 		return offset;
+	},
+
+	getSelected: function()
+	{
+	    if (this.selectedSlotId == -1)
+	    {
+	        return null;
+	    }
+
+	    return this.items.get(this.selectedSlotId);
 	}
 }

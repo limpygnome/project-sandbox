@@ -3,6 +3,11 @@ function InventoryItem(slotId)
     this.slotId = slotId;
 }
 
+InventoryItem.prototype.getIcon = function()
+{
+    return "error";
+}
+
 InventoryItem.prototype.packetCreate = function(data, dataView, offset)
 {
     // No custom data is read by default
