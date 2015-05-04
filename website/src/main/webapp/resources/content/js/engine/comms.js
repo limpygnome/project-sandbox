@@ -254,6 +254,9 @@ projectSandbox.comms =
 		
 		// Update camera chase
 		projectSandbox.camera.chaseEntityId = id;
+
+		// Reset UI
+		projectSandbox.ui.hookPlayer_entChanged();
 		
 		console.log("Comms - updated player id to " + id);
 	},

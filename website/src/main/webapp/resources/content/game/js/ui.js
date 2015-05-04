@@ -143,6 +143,12 @@ game.ui =
 		}
 	},
 
+	hookPlayer_entChanged: function()
+	{
+	    // Assume inventory reset
+	    this.renderWeapon = false;
+	},
+
 	hookInventory_selectedChanged: function()
 	{
 		console.debug("UI - inventory selectedChanged hook invoked");
