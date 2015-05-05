@@ -49,7 +49,7 @@ public class Casting
             if (ent != origin)
             {
                 // Check ent is within correct direction and vertices of ent cross the line
-                collision = castTestOthersideOfLine(linePerpStart, linePerpEnd, ent);
+                collision = castTestOthersideOfLine(lineStart, lineEnd, linePerpStart, linePerpEnd, ent);
 
                 if (collision)
                 {
@@ -65,20 +65,44 @@ public class Casting
         return result;
     }
 
-    private static boolean castTestOthersideOfLine(Vector2 lineStart, Vector2 lineEnd, Entity ent)
+    private static boolean castTestOthersideOfLine(Vector2 lineStart, Vector2 lineEnd, Vector2 linePerpStart, Vector2 linePerpEnd, Entity ent)
     {
         // Test each vertex to see if it's left of the line i.e. not within the direction of a bullet
         boolean resultCorrectSide = false;
-        for (Vector2 vertex : ent.cachedVertices.vertices)
-        {
-            resultCorrectSide = (lineEnd.x - lineStart.x) * (vertex.y - lineStart.y) > (lineEnd.y - lineStart.y) * (vertex.x - lineStart.x);
+        boolean resultVerticesCrossLine = false;
 
-            if (resultCorrectSide)
+        Vector2 vertex;
+        boolean firstVertexLeftOfLine = false;
+        boolean leftSide;
+
+        for (int i = 0; i < ent.cachedVertices.vertices.length && !(resultCorrectSide &&    resultVerticesCrossLine); i++)
+        {
+            vertex = ent.cachedVertices.vertices[i];
+
+            // Test if vertex is on the correct perp side
+            leftSide = Vector2.leftSide(linePerpStart, linePerpEnd, vertex);
+
+            if (leftSide)
             {
                 resultCorrectSide = true;
             }
+
+            // Test if vertex has crossed the line compared to a previous vertex
+            if (i == 0)
+            {
+                firstVertexLeftOfLine = Vector2.leftSide(lineStart, lineEnd, vertex);
+            }
+            else
+            {
+                leftSide = Vector2.leftSide(lineStart, lineEnd, vertex);
+
+                if (leftSide != firstVertexLeftOfLine)
+                {
+                    resultVerticesCrossLine = true;
+                }
+            }
         }
 
-        return resultCorrectSide;
+        return resultCorrectSide && resultVerticesCrossLine;
     }
 }

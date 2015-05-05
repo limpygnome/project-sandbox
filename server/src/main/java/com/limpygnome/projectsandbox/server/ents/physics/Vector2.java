@@ -190,7 +190,7 @@ public class Vector2
         float expB = a.y - b.y;
         expB *= expB;
         
-        return Math.abs((float) Math.sqrt( expA + expB ));
+        return Math.abs((float) Math.sqrt(expA + expB));
     }
     
     public static Vector2 vectorFromAngle(float radians, float distance)
@@ -199,6 +199,11 @@ public class Vector2
         float y = distance * (float) Math.cos(radians);
         
         return new Vector2(x, y);
+    }
+
+    public static boolean leftSide(Vector2 lineStart, Vector2 lineEnd, Vector2 vertex)
+    {
+        return (lineEnd.x - lineStart.x) * (vertex.y - lineStart.y) > (lineEnd.y - lineStart.y) * (vertex.x - lineStart.x);
     }
     
     @Override
