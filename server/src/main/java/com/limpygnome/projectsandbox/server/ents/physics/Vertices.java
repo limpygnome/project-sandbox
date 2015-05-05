@@ -66,10 +66,23 @@ public class Vertices
             bottomRight,
             bottomLeft
         };
-        
+
         // Build axes
         this.axes = buildAxes();
-        
+
+        // Build collision radius
+        this.collisionRadius = buildCollisionRadius();
+    }
+
+    public Vertices(Vector2 center, Vector2[] vertices)
+    {
+        this.center = center.clone();
+
+        this.vertices = vertices;
+
+        // Build axes
+        this.axes = buildAxes();
+
         // Build collision radius
         this.collisionRadius = buildCollisionRadius();
     }
@@ -153,20 +166,20 @@ public class Vertices
     {
         // TODO: check this algorithm, seems hmhmmmm, especially *2,
         // should it not be the max vertex distance?
-        
+
         float max = 0.0f;
         float v;
-        
+
         for (int i = 0; i < vertices.length; i++)
         {
             v = Vector2.distance(center, vertices[i]);
-            
+
             if (v > max)
             {
                 max = v;
             }
         }
-        
+
         // Must be within double of distance from center to furthest vertex
         return max;
     }

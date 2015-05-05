@@ -21,18 +21,18 @@ public class Casting
 
         CastingResult result = new CastingResult();
         
-        // Create vector of line
+        // Create line from origin
         Vector2 lineStart = new Vector2(origin.positionNew.x, origin.positionNew.y);
         Vector2 lineEnd = Vector2.vectorFromAngle(radians, maxDistance);
         lineEnd.offset(lineStart);
 
+        // Create perpendicular line from origin
         Vector2 linePerpStart = lineStart.clone();
         Vector2 linePerpEnd = Vector2.vectorFromAngle(radians + RADIANS_90_DEGREES, maxDistance);
-        linePerpEnd.offset(linePerpStart    );
+        linePerpEnd.offset(linePerpStart);
 
-        LOG.debug("line - {} to {}", lineStart, lineEnd);
-
-        LOG.debug("line perp - {} to {}", linePerpStart, linePerpEnd);
+        // Create vertices for bullet line
+        Vertices bulletLineVertices = new Vertices(origin.positionNew, new Vector2[]{ lineStart, lineEnd });
 
         // Iterate and find each entity within the radius of being hit
         LinkedList<Entity> possibleEnts = controller.entityManager.nearbyEnts(origin, maxDistance, true);
@@ -41,25 +41,56 @@ public class Casting
         // 2. Iterate each vertex; a collision has occurred when a vertex is on the different side of the line to
         //    another vertex
         // 3. Perform SAT on the line and each ent; the closest intersection point wins
-        LinkedList<CollisionResult> collisions = new LinkedList<>();
         boolean collision;
+        CollisionResult collisionResult;
+        float distance;
+
+        CollisionResult closestCollisionResult = null;
+        float closestDistance = 0.0f;
+        Entity closestEnt = null;
 
         for (Entity ent : possibleEnts)
         {
             if (ent != origin)
             {
-                // Check ent is within correct direction and vertices of ent cross the line
+                // Check ent is within correct direction and vertices of ent cross the line i.e. intersection
                 collision = castTestOthersideOfLine(lineStart, lineEnd, linePerpStart, linePerpEnd, ent);
 
                 if (collision)
                 {
-                    LOG.debug(ent.id + " - COLLIDESSSSSSSSSSSSSSS");
-                }
-                else
-                {
-                    LOG.debug(ent.id + " - no collision");
+                    // Perform SAT to retrieve the MTV
+                    collisionResult = SAT.collision(ent.cachedVertices, bulletLineVertices);
+
+
+                    // Check we did get a collision, or something odd occurred
+                    if (!collisionResult.collision)
+                    {
+                        LOG.warn("Initial steps found bullet collision, but SAT did not - ent id: {}, origin id: {}", ent.id, origin.id);
+                    }
+                    else
+                    {
+                        distance = Vector2.distance(lineStart, collisionResult.mtv);
+
+                        // Store closest result from each ent
+                        if (closestCollisionResult == null || distance < closestDistance)
+                        {
+                            closestCollisionResult = collisionResult;
+                            closestDistance = distance;
+                            closestEnt = ent;
+                        }
+                    }
                 }
             }
+        }
+
+        // Check if we found a result
+        if (closestCollisionResult != null)
+        {
+            // Copy to actual result for this call
+            result.distance = closestDistance;
+            result.collision = true;
+            result.collisionResult = closestCollisionResult;
+            result.victim = closestEnt;
         }
 
         return result;

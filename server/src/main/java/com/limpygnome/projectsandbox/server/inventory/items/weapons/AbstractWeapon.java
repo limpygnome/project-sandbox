@@ -53,7 +53,10 @@ public abstract class AbstractWeapon extends AbstractInventoryItem
         switch (invokeState)
         {
             case INVOKE_ONCE:
-                Casting.cast(controller, slot.inventory.parent, slot.inventory.parent.rotation, 200.0f);
+                CastingResult castingResult = Casting.cast(controller, slot.inventory.parent, slot.inventory.parent.rotation, 200.0f);
+
+                LOG.debug("CASTING RESULT: {}", castingResult);
+
                 break;
         }
     }

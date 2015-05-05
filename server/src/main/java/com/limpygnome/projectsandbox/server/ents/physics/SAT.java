@@ -96,7 +96,7 @@ public class SAT
     public static CollisionResult collision(Vertices verticesA, Vertices verticesB)
     {
         float dist = Vector2.distance(verticesA.center, verticesB.center);
-        
+
         // Check ents are at least within each other's combined radius's
         if (dist > verticesA.collisionRadius + verticesB.collisionRadius)
         {
