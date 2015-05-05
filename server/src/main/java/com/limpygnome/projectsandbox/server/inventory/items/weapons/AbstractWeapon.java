@@ -48,6 +48,14 @@ public abstract class AbstractWeapon extends AbstractInventoryItem
     public void eventInvoke(Controller controller, InventoryInvokeState invokeState)
     {
         LOG.debug("Invoke change - state: {}", invokeState);
+
+        // only temp code for testing the casting stuff
+        switch (invokeState)
+        {
+            case INVOKE_ONCE:
+                Casting.cast(controller, slot.inventory.parent, slot.inventory.parent.rotation, 200.0f);
+                break;
+        }
     }
 
     public synchronized void fire(Controller controller)
@@ -91,14 +99,14 @@ public abstract class AbstractWeapon extends AbstractInventoryItem
             }
             
             // Cast bullet to find collision point
-            CastingResult result = Casting.cast(
-                    controller,
-                    owner.positionNew.x,
-                    owner.positionNew.y,
-                    owner.rotation,
-                    step,
-                    maxDistance
-            );
+//            CastingResult result = Casting.cast(
+//                    controller,
+//                    owner.positionNew.x,
+//                    owner.positionNew.y,
+//                    owner.rotation,
+//                    step,
+//                    maxDistance
+//            );
             
             // Create effect at collision point
             

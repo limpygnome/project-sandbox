@@ -210,7 +210,7 @@ public class EntityManager
     }
 
     // TODO: consider removal of the below code
-    public Entity[] nearbyEnts(Entity a, float distance, boolean testAllVertices)
+    public LinkedList<Entity> nearbyEnts(Entity a, float distance, boolean testAllVertices)
     {
         LinkedList<Entity> result = new LinkedList<>();
 
@@ -259,7 +259,7 @@ public class EntityManager
             }
         }
 
-        return result.toArray(new Entity[result.size()]);
+        return result;
     }
 
 }
