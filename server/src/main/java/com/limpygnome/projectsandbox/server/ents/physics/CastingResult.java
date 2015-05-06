@@ -33,8 +33,8 @@ public class CastingResult
     {
         StringBuilder sb = new StringBuilder();
 
-        sb.append("[collision: ").append(collision).append(", distance: ").append(distance).append(", ");
-        sb.append("victim: ").append(victim).append(", collision result: ").append(collisionResult).append("]");
+        sb.append("[collision result: ").append(collisionResult).append(", distance: ").append(distance).append(", ");
+        sb.append("victim: ").append(victim).append("]");
 
         return sb.toString();
     }

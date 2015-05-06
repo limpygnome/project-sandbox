@@ -36,15 +36,15 @@ var projectSandbox =
 	fpsTime: (new Date).getTime(),
 	fpsFrames : 0,
 	
-	// The current UI
-	ui: null,
+	// The current game
+	game: { },
 	
 	reset: function()
 	{
 		// Reset UI
-		if (this.ui != null)
+		if (this.game.ui != null)
 		{
-			this.ui.reset();
+			this.game.ui.reset();
 		}
 		
 		// Reset map
@@ -99,8 +99,8 @@ var projectSandbox =
 		this.assetLoader.loadFromAssetsFile("/content/game/textures/list.json");
 		
 		// Setup game
-		this.effects = game.effects;
-		this.ui = game.ui;
+		this.game.effects = game.effects;
+		this.game.ui = game.ui;
 	},
 	
 	postResources: function()
@@ -136,7 +136,7 @@ var projectSandbox =
 		var self = this;
 		
 		// Setup UI
-		this.ui.setup();
+		this.game.ui.setup();
 		
 		// Setup logic loop
 		window.setInterval(
@@ -194,7 +194,7 @@ var projectSandbox =
 		}
 		
 		// Update UI
-		this.ui.logic();
+		this.game.ui.logic();
 	},
 	
 	gameRenderLoop: function(self)
@@ -267,9 +267,9 @@ var projectSandbox =
 		}
 		
 		// Render UI
-		if (this.ui != null)
+		if (this.game.ui != null)
 		{
-			this.ui.render(gl, this.shaderProgram, this.modelView, this.perspective);
+			this.game.ui.render(gl, this.shaderProgram, this.modelView, this.perspective);
 		}
 	},
 	

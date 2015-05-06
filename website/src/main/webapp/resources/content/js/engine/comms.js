@@ -96,7 +96,7 @@ projectSandbox.comms =
 				projectSandbox.inventory.packetInventory(subType, data);
 				return;
 			case "Z":
-				projectSandbox.effects.packet(data, dataView, subType);
+				projectSandbox.game.effects.packet(data, dataView, subType);
 				return;
 		}
 		
@@ -260,7 +260,7 @@ projectSandbox.comms =
 		projectSandbox.camera.chaseEntityId = id;
 
 		// Reset UI
-		projectSandbox.ui.hookPlayer_entChanged();
+		projectSandbox.game.ui.hookPlayer_entChanged();
 		
 		console.log("Comms - updated player id to " + id);
 	},

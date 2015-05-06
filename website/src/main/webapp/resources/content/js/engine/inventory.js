@@ -177,7 +177,7 @@ projectSandbox.inventory =
 		console.debug("Inventory - item selected - " + this.selectedSlotId);
 
 		// Call UI hook
-		projectSandbox.ui.hookInventory_selectedChanged();
+		projectSandbox.game.ui.hookInventory_selectedChanged();
 
 		return offset + 1;
 	},
