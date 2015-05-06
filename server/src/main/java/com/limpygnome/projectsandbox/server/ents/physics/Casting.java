@@ -19,8 +19,6 @@ public class Casting
     {
         final float RADIANS_90_DEGREES = 1.57079633f;
 
-        CastingResult result = new CastingResult();
-        
         // Create line from origin
         Vector2 lineStart = new Vector2(origin.positionNew.x, origin.positionNew.y);
         Vector2 lineEnd = Vector2.vectorFromAngle(radians, maxDistance);
@@ -42,12 +40,9 @@ public class Casting
         //    another vertex
         // 3. Perform SAT on the line and each ent; the closest intersection point wins
         boolean collision;
-        CollisionResult collisionResult;
-        float distance;
 
-        CollisionResult closestCollisionResult = null;
-        float closestDistance = 0.0f;
-        Entity closestEnt = null;
+        CastingResult result;
+        CastingResult closestResult = null;
 
         for (Entity ent : possibleEnts)
         {
@@ -58,44 +53,96 @@ public class Casting
 
                 if (collision)
                 {
-                    // Perform SAT to retrieve the MTV
-                    collisionResult = SAT.collision(bulletLineVertices, ent.cachedVertices);
+                    // Find closest intersection between ent edges and lines
+                    result = findLineIntersection(origin.positionNew, lineStart, lineEnd, ent.cachedVertices);
 
-                    // Check we did get a collision, or something odd occurred
-                    if (!collisionResult.collision)
+                    // Store closest intersection to origin
+                    if (closestResult == null || result.distance < closestResult.distance)
                     {
-                        LOG.warn("Initial steps found bullet collision, but SAT did not - ent id: {}, origin id: {}", ent.id, origin.id);
-                    }
-                    else
-                    {
-                        distance = Vector2.distance(lineStart, collisionResult.mtv);
-
-                        // Store closest result from each ent
-                        if (closestCollisionResult == null || distance < closestDistance)
-                        {
-                            closestCollisionResult = collisionResult;
-                            closestDistance = distance;
-                            closestEnt = ent;
-                        }
+                        closestResult = result;
+                        closestResult.victim = ent;
                     }
                 }
             }
         }
 
-        // Check if we found a result
-        if (closestCollisionResult != null)
+        //  Check if we found anything
+        if (closestResult == null)
         {
-            // Copy to actual result for this call
-            result.distance = closestDistance;
-            result.collision = true;
-            result.collisionResult = closestCollisionResult;
-            result.victim = closestEnt;
-
-            result.x = closestEnt.positionNew.x - closestCollisionResult.mtv.x;
-            result .y = closestEnt.positionNew.y - closestCollisionResult.mtv.y;
+            closestResult = new CastingResult();
+        }
+        else
+        {
+            closestResult.collision = true;
         }
 
-        return result;
+        return closestResult;
+    }
+
+    private static CastingResult findLineIntersection(Vector2 origin, Vector2 lineStart, Vector2 lineEnd, Vertices vertices)
+    {
+        // Test each axis for an intersection and pick the closest
+        Vector2[] entVerts = vertices.vertices;
+
+        Vector2 entLineStart;
+        Vector2 entLineEnd;
+        Vector2 intersection;
+        float intersectionDistance;
+
+        Vector2 closestIntersection = null;
+        float closestIntersectionDistance = 0.0f;
+
+        for (int i = 0; i < entVerts.length; i++)
+        {
+            // Create "line" using edge of ent
+            entLineStart = entVerts[i];
+            entLineEnd = entVerts[i + 1 >= entVerts.length ? 0 : i + 1];
+
+            // Find the intersection between edge of ent and casted ray/line
+            intersection = findLinesIntersection(lineStart, lineEnd, entLineStart, entLineEnd);
+
+            if (intersection != null)
+            {
+                intersectionDistance = Vector2.distance(intersection, origin);
+
+                // Save closest intersection
+                if (closestIntersection == null || intersectionDistance < closestIntersectionDistance)
+                {
+                    closestIntersection = intersection;
+                    closestIntersectionDistance = intersectionDistance;
+                }
+            }
+        }
+
+        return new CastingResult(closestIntersection.x, closestIntersection.y, closestIntersectionDistance);
+    }
+
+    private static Vector2 findLinesIntersection(Vector2 aStart, Vector2 aEnd, Vector2 bStart, Vector2 bEnd)
+    {
+        // http://jsfiddle.net/justin_c_rounds/Gd2S2/
+        // http://en.wikipedia.org/wiki/Line%E2%80%93line_intersection
+        float denominator = ((bEnd.y - bStart.y) * (aEnd.x - aStart.x)) - ((bEnd.x - bStart.x) * (aEnd.y - aStart.y));
+
+        float a = aStart.y - bStart.y;
+        float b = aStart.x - bStart.x;
+
+        float numerator1 = ((bEnd.x - bStart.x) * a) - ((bEnd.y - bStart.y) * b);
+        float numerator2 = ((aEnd.x - aStart.x) * a) - ((aEnd.y - aStart.y) * b);
+
+        a = numerator1 / denominator;
+        b = numerator2 / denominator;
+
+        float intersectX = aStart.x + (a * (aEnd.x - aStart.x));
+        float intersectY = aStart.y + (a * (aEnd.y - aStart.y));
+
+        boolean aIntersects = a > 0.0f && a < 1.0f;
+        boolean bIntersects = b > 0.0f && b < 1.0f;
+
+        //LOG.debug("a: {} -> {} ## b: {} -> {}", aStart, aEnd, bStart, bEnd);
+//        LOG.debug("n1: {} \t n2: {} \t den : {}", numerator1, numerator2, denominator);
+//        LOG.debug("METHOD #2 - iX: {}, iY: {}, aI: {}, bI: {}", intersectX, intersectY, aIntersects, bIntersects);
+
+        return aIntersects && bIntersects ? new Vector2(intersectX, intersectY) : null;
     }
 
     private static boolean castTestOthersideOfLine(Vector2 lineStart, Vector2 lineEnd, Vector2 linePerpStart, Vector2 linePerpEnd, Entity ent)
