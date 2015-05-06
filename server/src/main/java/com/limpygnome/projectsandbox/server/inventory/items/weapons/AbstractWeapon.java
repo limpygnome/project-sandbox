@@ -60,6 +60,9 @@ public abstract class AbstractWeapon extends AbstractInventoryItem
 
                 if (castingResult.collision)
                 {
+                    // IDEA: create tracer effect between intersection x,y and origin
+                    // note: we want all players to see it
+
                     float x = castingResult.x;
                     float y = castingResult.y;
                     controller.effectsManager.add(new BulletEffect(x, y));
