@@ -58,6 +58,7 @@ projectSandbox.comms =
 	wsEventMessage: function(event)
 	{
 		var data = new Uint8Array(event.data);
+		var dataView = new DataView(data.buffer);
 		
 		var mainType = String.fromCharCode(data[0]);
 		var subType = String.fromCharCode(data[1]);
@@ -93,6 +94,9 @@ projectSandbox.comms =
 				break;
 			case "I": // Inventory
 				projectSandbox.inventory.packetInventory(subType, data);
+				return;
+			case "Z":
+				projectSandbox.effects.packet(data, dataView, subType);
 				return;
 		}
 		

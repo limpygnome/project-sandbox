@@ -1,5 +1,6 @@
 package com.limpygnome.projectsandbox.server.threading;
 
+import com.limpygnome.projectsandbox.server.packets.OutboundPacket;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -73,6 +74,11 @@ public class SocketEndpoint extends WebSocketServer
     {
         LOG.error("Socket exception, terminating - ip: {} - {}", socket.getRemoteSocketAddress(), e);
         socket.close();
+    }
+
+    public void broadcast(OutboundPacket packet)
+    {
+        broadcast(packet.getPacketData());
     }
     
     public void broadcast(byte[] data)

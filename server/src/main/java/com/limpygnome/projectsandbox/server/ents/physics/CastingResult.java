@@ -12,7 +12,10 @@ public class CastingResult
     
     public CollisionResult collisionResult;
     public float distance;
-    
+
+    public float x;
+    public float y;
+
     public Entity victim;
     
     public CastingResult()
@@ -21,6 +24,8 @@ public class CastingResult
         collisionResult = null;
         distance = -1.0f;
         victim = null;
+        x = 0.0f;
+        y = 0.0f;
     }
 
     @Override

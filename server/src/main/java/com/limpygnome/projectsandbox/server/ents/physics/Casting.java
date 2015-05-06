@@ -61,7 +61,6 @@ public class Casting
                     // Perform SAT to retrieve the MTV
                     collisionResult = SAT.collision(ent.cachedVertices, bulletLineVertices);
 
-
                     // Check we did get a collision, or something odd occurred
                     if (!collisionResult.collision)
                     {
@@ -91,6 +90,9 @@ public class Casting
             result.collision = true;
             result.collisionResult = closestCollisionResult;
             result.victim = closestEnt;
+
+            result.x = closestEnt.positionNew.x + closestCollisionResult.mtv.x;
+            result .y = closestEnt.positionNew.y + closestCollisionResult.mtv.y;
         }
 
         return result;
@@ -106,7 +108,7 @@ public class Casting
         boolean firstVertexLeftOfLine = false;
         boolean leftSide;
 
-        for (int i = 0; i < ent.cachedVertices.vertices.length && !(resultCorrectSide &&    resultVerticesCrossLine); i++)
+        for (int i = 0; i < ent.cachedVertices.vertices.length && !(resultCorrectSide && resultVerticesCrossLine); i++)
         {
             vertex = ent.cachedVertices.vertices[i];
 

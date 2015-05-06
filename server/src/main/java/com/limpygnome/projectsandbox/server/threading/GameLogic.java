@@ -33,6 +33,7 @@ public class GameLogic implements Runnable
                     // Run logic for entities
                     controller.entityManager.logic();
 
+                    // TODO: refactor this into ent manager logic, like effects manager
                     // Build update data
                     EntityUpdatesOutboundPacket packet = new EntityUpdatesOutboundPacket();
                     packet.build(controller.entityManager, false);
@@ -40,6 +41,9 @@ public class GameLogic implements Runnable
                     // Write update packet to each client
                     byte[] data = packet.getPacketData();
                     controller.endpoint.broadcast(data);
+
+                    // Run logic for effects
+                    controller.effectsManager.logic();
                 }
                 catch(IOException ex)
                 {

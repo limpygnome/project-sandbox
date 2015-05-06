@@ -40,6 +40,7 @@
 
 		<!-- Game -->
 		<script src="/content/game/js/_namespace.js"></script>
+		<script src="/content/game/js/effects.js"></script>
 		<script src="/content/game/js/ui.js"></script>
 
 		<script src="/content/game/js/ents/player.js"></script>

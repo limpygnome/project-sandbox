@@ -99,6 +99,7 @@ var projectSandbox =
 		this.assetLoader.loadFromAssetsFile("/content/game/textures/list.json");
 		
 		// Setup game
+		this.effects = game.effects;
 		this.ui = game.ui;
 	},
 	

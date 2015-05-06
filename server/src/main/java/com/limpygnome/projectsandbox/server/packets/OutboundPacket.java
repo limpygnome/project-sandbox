@@ -13,16 +13,23 @@ import java.util.LinkedList;
  */
 public abstract class OutboundPacket extends Packet
 {
-    protected byte mainType;
-    protected byte subType;
     protected ByteArrayOutputStream buffer;
-    
+
+    public OutboundPacket()
+    {
+        buffer = new ByteArrayOutputStream();
+    }
+
+    public OutboundPacket(byte mainType)
+    {
+        this();
+
+        buffer.write(mainType);
+    }
+
     public OutboundPacket(byte mainType, byte subType)
     {
-        this.mainType = mainType;
-        this.subType = subType;
-        
-        buffer = new ByteArrayOutputStream();
+        this();
         
         // Write header data
         buffer.write(mainType);

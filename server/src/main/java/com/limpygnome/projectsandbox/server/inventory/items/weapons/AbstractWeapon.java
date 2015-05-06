@@ -1,6 +1,7 @@
 package com.limpygnome.projectsandbox.server.inventory.items.weapons;
 
 import com.limpygnome.projectsandbox.server.Controller;
+import com.limpygnome.projectsandbox.server.effects.types.BulletEffect;
 import com.limpygnome.projectsandbox.server.ents.Entity;
 import com.limpygnome.projectsandbox.server.ents.physics.Casting;
 import com.limpygnome.projectsandbox.server.ents.physics.CastingResult;
@@ -56,6 +57,15 @@ public abstract class AbstractWeapon extends AbstractInventoryItem
                 CastingResult castingResult = Casting.cast(controller, slot.inventory.parent, slot.inventory.parent.rotation, 200.0f);
 
                 LOG.debug("CASTING RESULT: {}", castingResult);
+
+                if (castingResult.collision)
+                {
+                    float x = castingResult.x;
+                    float y = castingResult.y;
+                    controller.effectsManager.add(new BulletEffect(x, y));
+
+                    LOG.debug("bullet created at {}, {}", x, y);
+                }
 
                 break;
         }

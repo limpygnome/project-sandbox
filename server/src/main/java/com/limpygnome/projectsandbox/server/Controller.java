@@ -1,5 +1,6 @@
 package com.limpygnome.projectsandbox.server;
 
+import com.limpygnome.projectsandbox.server.effects.EffectsManager;
 import com.limpygnome.projectsandbox.server.ents.EntityManager;
 import com.limpygnome.projectsandbox.server.inventory.InventoryManager;
 import com.limpygnome.projectsandbox.server.packets.PacketManager;
@@ -23,6 +24,7 @@ public class Controller
     public PlayerManager playerManager;
     public InventoryManager inventoryManager;
     public MapManager mapManager;
+    public EffectsManager effectsManager;
     
     public Controller()
     {
@@ -37,6 +39,9 @@ public class Controller
 
             // Setup manager for entities
             entityManager = new EntityManager(this);
+
+            // Setup manager for effects
+            effectsManager = new EffectsManager(this);
             
             // Setup manager for inventories
             inventoryManager = new InventoryManager();
