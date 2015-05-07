@@ -29,9 +29,6 @@ public class Casting
         Vector2 linePerpEnd = Vector2.vectorFromAngle(radians + RADIANS_90_DEGREES, maxDistance);
         linePerpEnd.offset(linePerpStart);
 
-        // Create vertices for bullet line
-        Vertices bulletLineVertices = new Vertices(origin.positionNew, new Vector2[]{ lineStart, lineEnd });
-
         // Iterate and find each entity within the radius of being hit
         LinkedList<Entity> possibleEnts = controller.entityManager.nearbyEnts(origin, maxDistance, true);
 
@@ -137,10 +134,6 @@ public class Casting
 
         boolean aIntersects = a > 0.0f && a < 1.0f;
         boolean bIntersects = b > 0.0f && b < 1.0f;
-
-        //LOG.debug("a: {} -> {} ## b: {} -> {}", aStart, aEnd, bStart, bEnd);
-//        LOG.debug("n1: {} \t n2: {} \t den : {}", numerator1, numerator2, denominator);
-//        LOG.debug("METHOD #2 - iX: {}, iY: {}, aI: {}, bI: {}", intersectX, intersectY, aIntersects, bIntersects);
 
         return aIntersects && bIntersects ? new Vector2(intersectX, intersectY) : null;
     }

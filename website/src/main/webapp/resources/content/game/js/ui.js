@@ -105,7 +105,11 @@ game.ui =
 		else
 		{
 			this.renderPlayerUI = false;
-			console.warn("UI - unable to find player entity, cannot update UI");
+
+			if (!projectSandbox.comms.closed)
+			{
+				console.warn("UI - unable to find player entity, cannot update UI");
+			}
 		}
 	},
 	

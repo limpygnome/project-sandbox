@@ -1,15 +1,17 @@
 projectSandbox.comms =
 {
 	webSocket: null,
+
+	closed: true,
 	
 	setup: function()
 	{
 		// Create socket
 		webSocket = new WebSocket("ws://localhost:4857");
 		webSocket.binaryType = 'arraybuffer';
-		
+
 		// Hook events
-		var self = this;
+		var self = projectSandbox.comms;
 		webSocket.onopen = function(event)
 		{
 			self.wsEventOpen(event);
@@ -39,20 +41,34 @@ projectSandbox.comms =
 	wsEventOpen: function(event)
 	{
 		console.log("Comms - connection established");
+
+		this.closed = false;
 		
 		// Send session ID - must always be done first
 		projectSandbox.commsPacket.sendSessionId();
 	},
+
+	wsEventError: function(event)
+	{
+		if (!this.closed)
+		{
+			console.error("Comms - error - " + event);
+		}
+	},
 	
 	wsEventClose: function(event)
 	{
-		console.log("Comms - socket closed");
-		
-		// Reset world
-		projectSandbox.reset();
-		
+		if (!this.closed)
+		{
+			console.log("Comms - socket closed");
+			this.closed = true;
+
+			// Reset world
+			projectSandbox.reset();
+		}
+
 		// Attempt to reconnect
-		this.setup();
+		setTimeout(this.setup, 1000);
 	},
 	
 	wsEventMessage: function(event)
@@ -411,10 +427,5 @@ projectSandbox.comms =
 		console.log("Comms - entity " + id + " deleted");
 		
 		return 0;
-	},
-
-	wsEventError: function(event)
-	{
-		console.error("Comms - error - " + event);
 	}
 }
