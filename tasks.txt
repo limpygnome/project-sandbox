@@ -1,9 +1,23 @@
-tbc:
+high priority:
+- add turret to shoot players as a test of ray performance
+- player's showing weapons / muzzle flashes on weapons etc
+- run down players
+- frustruum culling
+- sound effects
+- lighting
+- server chat (use html overlaying game)
+- score system
+- website:
+   - scoreboard
+   - optional registration
+   - player customisation -> upload custom image for player
+
+bugs:
 - fix "kv of entities" syntax in project-sandbox; doesn't work with IE11
-- support for 3d textures i.e. more than 6 vertices
-- 3d cubes
 - remove old js
 - #wrekt in big, wben player dies
 
-consider:
+future ideas / consider:
+- change clientside logic from 60ms to 100ms to reduce computation
 - moving tile types into json, which client can cache for a long time?
+
