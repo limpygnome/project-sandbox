@@ -2,6 +2,7 @@ package com.limpygnome.projectsandbox.server.ents.physics;
 
 import com.limpygnome.projectsandbox.server.Controller;
 import com.limpygnome.projectsandbox.server.ents.Entity;
+import com.limpygnome.projectsandbox.server.world.Map;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -15,10 +16,10 @@ public class Casting
 {
     private final static Logger LOG = LogManager.getLogger(Casting.class);
 
+    private static final float RADIANS_90_DEGREES = 1.57079633f;
+
     public static CastingResult cast(Controller controller, Entity origin, float radians, float maxDistance)
     {
-        final float RADIANS_90_DEGREES = 1.57079633f;
-
         // Create line from origin
         Vector2 lineStart = new Vector2(origin.positionNew.x, origin.positionNew.y);
         Vector2 lineEnd = Vector2.vectorFromAngle(radians, maxDistance);
@@ -29,13 +30,58 @@ public class Casting
         Vector2 linePerpEnd = Vector2.vectorFromAngle(radians + RADIANS_90_DEGREES, maxDistance);
         linePerpEnd.offset(linePerpStart);
 
+        // Find closest entity intersection
+        CastingResult resultEnt = castEnts(controller, origin, lineStart, lineEnd, linePerpStart, linePerpEnd, maxDistance);
+
+        // Find closest map intersection
+        CastingResult resultMap = castMap(controller, origin, lineStart, lineEnd, linePerpStart, linePerpEnd, maxDistance);
+
+        // Prepare the result from our tests
+        CastingResult result = null;
+
+        if (resultEnt != null && resultMap != null)
+        {
+            if (resultEnt.distance < resultMap.distance)
+            {
+                result = resultEnt;
+            }
+            else
+            {
+                result = resultMap;
+            }
+        }
+        else if (resultEnt != null)
+        {
+            result = resultEnt;
+        }
+        else if (resultMap != null)
+        {
+            result = resultMap;
+        }
+
+        // Set collision flag, or an empty new instance if no result (false flag by default)
+        if (result != null)
+        {
+            result.collision = true;
+        }
+        else
+        {
+            result = new CastingResult();
+        }
+
+        return result;
+    }
+
+    private static CastingResult castEnts(Controller controller, Entity origin, Vector2 lineStart, Vector2 lineEnd,
+                                          Vector2 linePerpStart, Vector2 linePerpEnd, float maxDistance)
+    {
         // Iterate and find each entity within the radius of being hit
         LinkedList<Entity> possibleEnts = controller.entityManager.nearbyEnts(origin, maxDistance, true);
 
         // 1. Ignore all the ents which are on the other side of the perp of origin i.e. complete opposite direction
         // 2. Iterate each vertex; a collision has occurred when a vertex is on the different side of the line to
         //    another vertex
-        // 3. Perform SAT on the line and each ent; the closest intersection point wins
+        // 3. Perform line intersection and store the closest; this will be where the bullet hits
         boolean collision;
 
         CastingResult result;
@@ -63,15 +109,56 @@ public class Casting
             }
         }
 
-        //  Check if we found anything
-        if (closestResult == null)
+        return closestResult;
+    }
+
+    private static CastingResult castMap(Controller controller, Entity origin, Vector2 lineStart, Vector2 lineEnd,
+                                         Vector2 linePerpStart, Vector2 linePerpEnd, float maxDistance)
+    {
+        // Get the area the line can cross for the map tiles
+        CastingResult closestResult = null;
+
+        // Form start and end x/y based on small to large
+        float startX;
+        float startY;
+        float endX;
+        float endY;
+
+        // -- X
+        if (lineStart.x < lineEnd.x)
         {
-            closestResult = new CastingResult();
+            startX = lineStart.x;
+            endX = lineEnd.x;
         }
         else
         {
-            closestResult.collision = true;
+            startX = lineEnd.x;
+            endX = lineStart.x;
         }
+
+
+        // -- Y
+        if (lineStart.y < lineEnd.y)
+        {
+            startY = lineStart.y;
+            endY = lineEnd.y;
+        }
+        else
+        {
+            startY = lineEnd.y;
+            endY = lineStart.y;
+        }
+
+        // Now find the start/end indexes for tiles to consider
+        Map map = controller.mapManager.main;
+        float tileSize = (float) map.tileSize;
+
+        int tileStartX = (int) Math.floor(startX / map.tileSize);
+        int tileStartY = (int) Math.floor(startY / map.tileSize);
+        int tileEndX = (int) Math.ceil(endX / map.tileSize);
+        int tileEndY = (int) Math.ceil(endY / map.tileSize);
+
+        // Iterate each tile
 
         return closestResult;
     }
