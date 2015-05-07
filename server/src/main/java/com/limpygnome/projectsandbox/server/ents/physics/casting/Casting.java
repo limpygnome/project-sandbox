@@ -1,8 +1,14 @@
-package com.limpygnome.projectsandbox.server.ents.physics;
+package com.limpygnome.projectsandbox.server.ents.physics.casting;
 
 import com.limpygnome.projectsandbox.server.Controller;
 import com.limpygnome.projectsandbox.server.ents.Entity;
+import com.limpygnome.projectsandbox.server.ents.physics.Vector2;
+import com.limpygnome.projectsandbox.server.ents.physics.Vertices;
+import com.limpygnome.projectsandbox.server.ents.physics.casting.victims.EntityCastVictim;
+import com.limpygnome.projectsandbox.server.ents.physics.casting.victims.MapCastVictim;
+import com.limpygnome.projectsandbox.server.utils.CustomMath;
 import com.limpygnome.projectsandbox.server.world.Map;
+import com.limpygnome.projectsandbox.server.world.TileType;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -92,7 +98,7 @@ public class Casting
             if (ent != origin)
             {
                 // Check ent is within correct direction and vertices of ent cross the line i.e. intersection
-                collision = castTestOthersideOfLine(lineStart, lineEnd, linePerpStart, linePerpEnd, ent);
+                collision = castTestOthersideOfLine(lineStart, lineEnd, linePerpStart, linePerpEnd, ent.cachedVertices);
 
                 if (collision)
                 {
@@ -100,10 +106,10 @@ public class Casting
                     result = findLineIntersection(origin.positionNew, lineStart, lineEnd, ent.cachedVertices);
 
                     // Store closest intersection to origin
-                    if (closestResult == null || result.distance < closestResult.distance)
+                    if (result != null && (closestResult == null || result.distance < closestResult.distance))
                     {
                         closestResult = result;
-                        closestResult.victim = ent;
+                        closestResult.victim = new EntityCastVictim(ent);
                     }
                 }
             }
@@ -116,9 +122,7 @@ public class Casting
                                          Vector2 linePerpStart, Vector2 linePerpEnd, float maxDistance)
     {
         // Get the area the line can cross for the map tiles
-        CastingResult closestResult = null;
-
-        // Form start and end x/y based on small to large
+        // -- Form start and end x/y based on small to large
         float startX;
         float startY;
         float endX;
@@ -151,14 +155,57 @@ public class Casting
 
         // Now find the start/end indexes for tiles to consider
         Map map = controller.mapManager.main;
-        float tileSize = (float) map.tileSize;
 
         int tileStartX = (int) Math.floor(startX / map.tileSize);
         int tileStartY = (int) Math.floor(startY / map.tileSize);
         int tileEndX = (int) Math.ceil(endX / map.tileSize);
         int tileEndY = (int) Math.ceil(endY / map.tileSize);
 
+        // Clamp to size of map
+        tileStartX = CustomMath.clamp(0, map.width - 1, tileStartX);
+        tileStartY = CustomMath.clamp(0, map.height - 1, tileStartY);
+        tileEndX = CustomMath.clamp(0, map.width - 1, tileEndX);
+        tileEndY = CustomMath.clamp(0, map.height - 1, tileEndY);
+
         // Iterate each tile
+        boolean collision;
+        short tileTypeId;
+        TileType tileType;
+        CastingResult result;
+        Vertices tileVertices;
+
+        CastingResult closestResult = null;
+
+        for (int y = tileStartY; y <= tileEndY; y++)
+        {
+            for (int x = tileStartX; x <= tileEndX; x++)
+            {
+                tileTypeId = map.tiles[y][x];
+                tileType = map.tileTypes[tileTypeId];
+
+                // Only perform checks on solid tiles
+                if (tileType.properties.solid)
+                {
+                    tileVertices = map.tileVertices[y][x];
+
+                    // Check tile is within correct direction and vertices of ent cross the line i.e. intersection
+                    collision = castTestOthersideOfLine(lineStart, lineEnd, linePerpStart, linePerpEnd, tileVertices);
+
+                    if (collision)
+                    {
+                        // Find closest intersection between ent edges and lines
+                        result = findLineIntersection(origin.positionNew, lineStart, lineEnd, tileVertices);
+
+                        // Store closest intersection to origin
+                        if (result != null && (closestResult == null || result.distance < closestResult.distance))
+                        {
+                            closestResult = result;
+                            closestResult.victim = new MapCastVictim(x, y);
+                        }
+                    }
+                }
+            }
+        }
 
         return closestResult;
     }
@@ -166,7 +213,7 @@ public class Casting
     private static CastingResult findLineIntersection(Vector2 origin, Vector2 lineStart, Vector2 lineEnd, Vertices vertices)
     {
         // Test each axis for an intersection and pick the closest
-        Vector2[] entVerts = vertices.vertices;
+        Vector2[] verts = vertices.vertices;
 
         Vector2 entLineStart;
         Vector2 entLineEnd;
@@ -176,11 +223,11 @@ public class Casting
         Vector2 closestIntersection = null;
         float closestIntersectionDistance = 0.0f;
 
-        for (int i = 0; i < entVerts.length; i++)
+        for (int i = 0; i < verts.length; i++)
         {
             // Create "line" using edge of ent
-            entLineStart = entVerts[i];
-            entLineEnd = entVerts[i + 1 >= entVerts.length ? 0 : i + 1];
+            entLineStart = verts[i];
+            entLineEnd = verts[i + 1 >= verts.length ? 0 : i + 1];
 
             // Find the intersection between edge of ent and casted ray/line
             intersection = findLinesIntersection(lineStart, lineEnd, entLineStart, entLineEnd);
@@ -198,7 +245,14 @@ public class Casting
             }
         }
 
-        return new CastingResult(closestIntersection.x, closestIntersection.y, closestIntersectionDistance);
+        if (closestIntersection != null)
+        {
+            return new CastingResult(closestIntersection.x, closestIntersection.y, closestIntersectionDistance);
+        }
+        else
+        {
+            return null;
+        }
     }
 
     private static Vector2 findLinesIntersection(Vector2 aStart, Vector2 aEnd, Vector2 bStart, Vector2 bEnd)
@@ -225,7 +279,7 @@ public class Casting
         return aIntersects && bIntersects ? new Vector2(intersectX, intersectY) : null;
     }
 
-    private static boolean castTestOthersideOfLine(Vector2 lineStart, Vector2 lineEnd, Vector2 linePerpStart, Vector2 linePerpEnd, Entity ent)
+    private static boolean castTestOthersideOfLine(Vector2 lineStart, Vector2 lineEnd, Vector2 linePerpStart, Vector2 linePerpEnd, Vertices vertices)
     {
         // Test each vertex to see if it's left of the line i.e. not within the direction of a bullet
         boolean resultCorrectSide = false;
@@ -235,9 +289,9 @@ public class Casting
         boolean firstVertexLeftOfLine = false;
         boolean leftSide;
 
-        for (int i = 0; i < ent.cachedVertices.vertices.length && !(resultCorrectSide && resultVerticesCrossLine); i++)
+        for (int i = 0; i < vertices.vertices.length && !(resultCorrectSide && resultVerticesCrossLine); i++)
         {
-            vertex = ent.cachedVertices.vertices[i];
+            vertex = vertices.vertices[i];
 
             // Test if vertex is on the correct perp side
             leftSide = Vector2.leftSide(linePerpStart, linePerpEnd, vertex);

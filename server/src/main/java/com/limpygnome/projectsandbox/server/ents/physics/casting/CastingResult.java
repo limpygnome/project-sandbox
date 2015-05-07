@@ -1,6 +1,6 @@
-package com.limpygnome.projectsandbox.server.ents.physics;
+package com.limpygnome.projectsandbox.server.ents.physics.casting;
 
-import com.limpygnome.projectsandbox.server.ents.Entity;
+import com.limpygnome.projectsandbox.server.ents.physics.casting.victims.AbstractCastVictim;
 
 /**
  *
@@ -9,13 +9,11 @@ import com.limpygnome.projectsandbox.server.ents.Entity;
 public class CastingResult
 {
     public boolean collision;
-
     public float x;
     public float y;
-
     public float distance;
 
-    public Entity victim;
+    public AbstractCastVictim victim;
     
     public CastingResult()
     {
@@ -38,7 +36,7 @@ public class CastingResult
         StringBuilder sb = new StringBuilder();
 
         sb  .append("[collision: ").append(collision).append(", distance: ").append(distance).append(", x: ")
-            .append(x).append(", y: ").append(y).append(". victim ent id: ").append(victim != null ? victim.id : "null").append("]");
+            .append(x).append(", y: ").append(y).append(". victim: ").append(victim != null ? victim : "null").append("]");
 
         return sb.toString();
     }
