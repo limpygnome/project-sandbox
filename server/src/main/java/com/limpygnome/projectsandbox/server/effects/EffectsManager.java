@@ -1,6 +1,7 @@
 package com.limpygnome.projectsandbox.server.effects;
 
 import com.limpygnome.projectsandbox.server.Controller;
+import com.limpygnome.projectsandbox.server.effects.types.AbstractEffect;
 import com.limpygnome.projectsandbox.server.packets.types.effects.EffectUpdatesOutboundPacket;
 
 import java.io.IOException;

@@ -2,7 +2,9 @@ package com.limpygnome.projectsandbox.server.inventory.items.weapons;
 
 import com.limpygnome.projectsandbox.server.Controller;
 import com.limpygnome.projectsandbox.server.effects.types.BulletEffect;
+import com.limpygnome.projectsandbox.server.effects.types.TracerEffect;
 import com.limpygnome.projectsandbox.server.ents.Entity;
+import com.limpygnome.projectsandbox.server.ents.physics.Vector2;
 import com.limpygnome.projectsandbox.server.ents.physics.casting.Casting;
 import com.limpygnome.projectsandbox.server.ents.physics.casting.CastingResult;
 import com.limpygnome.projectsandbox.server.inventory.enums.InventoryInvokeState;
@@ -66,6 +68,8 @@ public abstract class AbstractWeapon extends AbstractInventoryItem
                     float x = castingResult.x;
                     float y = castingResult.y;
                     controller.effectsManager.add(new BulletEffect(x, y));
+
+                    controller.effectsManager.add(new TracerEffect(slot.inventory.parent.positionNew, new Vector2(x, y)));
 
                     LOG.debug("bullet created at {}, {}", x, y);
                 }
