@@ -56,12 +56,17 @@ projectSandbox.map =
 		{
 			return;
 		}
-		
-		// Clip to render tiles within view of camera
+
 		var startX = 0;
 		var endX = this.width -1;
 		var startY = 0;
 		var endY = this.height -1;
+
+		var clippedIndexes = projectSandbox.frustrum.mapRegionToRender(this.tileSize);
+		var renderStartX = clippedIndexes[0];
+		var renderEndX = clippedIndexes[2];
+		var renderStartY = clippedIndexes[1];
+		var renderEndY = clippedIndexes[3];
 		
 		// Translate map so bottom left is 0,0
 		mat4.translate(modelView, modelView, [this.scaledTileSizeHalf, this.scaledTileSizeHalf, this.renderZ]);
@@ -80,28 +85,31 @@ projectSandbox.map =
 			{
 				tileTypeId = this.tiles[y][x];
 				tileType = this.types[tileTypeId];
-				
-				// Rebind if texture is different
-				if(tileType[0] != lastTexture)
+
+				if (x >= renderStartX && x < renderEndX && y >= renderStartY && y <= renderEndY)
 				{
-					// Bind texture
-					lastTexture = tileType[0];
-					lastTexture.bind(gl, shaderProgram);
+                    // Rebind if texture is different
+                    if(tileType[0] != lastTexture)
+                    {
+                        // Bind texture
+                        lastTexture = tileType[0];
+                        lastTexture.bind(gl, shaderProgram);
+                    }
+
+                    // Rebind the buffers being used if the tile height is different
+                    if (tileType[1] != lastHeight)
+                    {
+                        lastHeight = tileType[1];
+                        this.bindTile(gl, shaderProgram, lastHeight);
+                    }
+
+                    // -- Set shader matrix uniforms
+                    gl.uniformMatrix4fv(shaderProgram.pMatrixUniform, false, perspective);
+                    gl.uniformMatrix4fv(shaderProgram.mvMatrixUniform, false, modelView);
+
+                    // Render tile
+                    gl.drawElements(gl.TRIANGLES, this.bufferIndexes.numItems, gl.UNSIGNED_SHORT, 0);
 				}
-				
-				// Rebind the buffers being used if the tile height is different
-				if (tileType[1] != lastHeight)
-				{
-					lastHeight = tileType[1];
-					this.bindTile(gl, shaderProgram, lastHeight);
-				}
-				
-				// -- Set shader matrix uniforms
-				gl.uniformMatrix4fv(shaderProgram.pMatrixUniform, false, perspective);
-				gl.uniformMatrix4fv(shaderProgram.mvMatrixUniform, false, modelView);
-				
-				// Render tile
-				gl.drawElements(gl.TRIANGLES, this.bufferIndexes.numItems, gl.UNSIGNED_SHORT, 0);
 				
 				// Translate for next tile
 				mat4.translate(modelView, modelView, [this.scaledTileSize, 0, 0]);

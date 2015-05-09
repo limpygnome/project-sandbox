@@ -17,6 +17,7 @@
 
 		<!-- Engine -->
 		<script src="/content/js/engine/_prototype_inheritence.js"></script>
+		<script src="/content/js/engine/frustrum.js"></script>
 		<script src="/content/js/engine/asset-loader.js"></script>
 		<script src="/content/js/engine/buffer-cache.js"></script>
 		<script src="/content/js/engine/camera.js"></script>

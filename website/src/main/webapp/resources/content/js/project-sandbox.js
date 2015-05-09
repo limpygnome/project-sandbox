@@ -220,7 +220,18 @@ var projectSandbox =
 		gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 		
 		// Reset perspective matrix
-        mat4.perspective(this.perspective, 45, gl.viewportWidth / gl.viewportHeight, 1, 1000.0);
+		// -- fovy (vertical field of view)
+		// -- aspect ratio
+		// -- near bound of frustrum
+		// -- far bound of frustrum
+        mat4.perspective(
+            this.perspective,
+
+            projectSandbox.frustrum.FRUSTRUM_VERTICAL_FOV,
+            gl.viewportWidth / gl.viewportHeight,
+            projectSandbox.frustrum.FRUSTRUM_DISTANCE_NEAR,
+            projectSandbox.frustrum.FRUSTRUM_DISTANCE_FAR
+        );
 		
 		// Reset identity matrix
 		mat4.identity(this.modelView);

@@ -3,7 +3,7 @@ projectSandbox.camera =
 	// Zoom settings
 	zoomFactor: 10,
 	zoomMin: 1,
-	zoomMax: 500,
+	zoomMax: 1000,
 	
 	// Co-ordinates of the camera
 	x: 0,
@@ -50,9 +50,16 @@ projectSandbox.camera =
 			
 			if(ent != null)
 			{
-				this.x = ent.renderX;
-				this.y = ent.renderY;
-				this.z = ent.renderZ;
+			    if (this.x != ent.renderX || this.y != ent.renderY || this.z != ent.renderZ)
+			    {
+                    // Update camera
+                    this.x = ent.renderX;
+                    this.y = ent.renderY;
+                    this.z = ent.renderZ;
+
+                    // Update frustrum
+                    projectSandbox.frustrum.update();
+				}
 			}
 			else
 			{
