@@ -63,6 +63,13 @@ projectSandbox.map =
 		var endY = this.height -1;
 
 		var clippedIndexes = projectSandbox.frustrum.mapRegionToRender(this.tileSize);
+
+		if (clippedIndexes == null)
+		{
+		    // Scene not ready to render / no frustrum built
+		    return;
+		}
+
 		var renderStartX = clippedIndexes[0];
 		var renderEndX = clippedIndexes[2];
 		var renderStartY = clippedIndexes[1];
@@ -86,7 +93,7 @@ projectSandbox.map =
 				tileTypeId = this.tiles[y][x];
 				tileType = this.types[tileTypeId];
 
-				if (x >= renderStartX && x < renderEndX && y >= renderStartY && y <= renderEndY)
+				if (x >= renderStartX && x < renderEndX)// && y >= renderStartY && y <= renderEndY)
 				{
                     // Rebind if texture is different
                     if(tileType[0] != lastTexture)

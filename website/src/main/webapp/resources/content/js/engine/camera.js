@@ -53,9 +53,9 @@ projectSandbox.camera =
 			    if (this.x != ent.renderX || this.y != ent.renderY || this.z != ent.renderZ)
 			    {
                     // Update camera
-                    this.x = ent.renderX;
-                    this.y = ent.renderY;
-                    this.z = ent.renderZ;
+                    this.x = 0.0;//ent.renderX;
+                    this.y = 0.0;//ent.renderY;
+                    this.z = 0.0;//ent.renderZ;
 
                     // Update frustrum
                     projectSandbox.frustrum.update();

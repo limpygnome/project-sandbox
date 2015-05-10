@@ -4,7 +4,7 @@ projectSandbox.frustrum =
     FRUSTRUM_DISTANCE_NEAR: 1.0,
     FRUSTRUM_DISTANCE_FAR: 1000.0,
 
-    planeVerts: new Array(),
+    planeVerts: null,
 
     /*
         Should be invoked when the camera changes, so the frustrum can be recomputed.
@@ -49,8 +49,11 @@ projectSandbox.frustrum =
             camearaPos[2] + cameraDirection[2] * this.FRUSTRUM_DISTANCE_NEAR
 	    ];
 
+        // Build frustrum vert
+        planeVerts = new Array();
+
 	    // Far top left
-        this.planeVerts[0] =
+        planeVerts[0] =
         [
             farCenter[0] - (farWidth / 2.0),
             farCenter[1] + (farHeight / 2.0),
@@ -58,7 +61,7 @@ projectSandbox.frustrum =
         ];
 
 	    // Far top right
-        this.planeVerts[1] =
+        planeVerts[1] =
         [
             farCenter[0] + (farWidth / 2.0),
             farCenter[1] + (farHeight / 2.0),
@@ -66,7 +69,7 @@ projectSandbox.frustrum =
         ];
 
 	    // Far bottom left
-        this.planeVerts[2] =
+        planeVerts[2] =
         [
             farCenter[0] - (farWidth / 2.0),
             farCenter[1] - (farHeight / 2.0),
@@ -74,7 +77,7 @@ projectSandbox.frustrum =
         ];
 
 	    // Far bottom right
-        this.planeVerts[3] =
+        planeVerts[3] =
         [
             farCenter[0] + (farWidth / 2.0),
             farCenter[1] - (farHeight / 2.0),
@@ -82,7 +85,7 @@ projectSandbox.frustrum =
         ];
 
 	    // Near top left
-        this.planeVerts[4] =
+        planeVerts[4] =
         [
             nearCenter[0] - (nearWidth / 2.0),
             nearCenter[1] + (nearHeight / 2.0),
@@ -90,7 +93,7 @@ projectSandbox.frustrum =
         ];
 
 	    // Near top right
-        this.planeVerts[5] =
+        planeVerts[5] =
         [
             nearCenter[0] + (nearWidth / 2.0),
             nearCenter[1] + (nearHeight / 2.0),
@@ -98,7 +101,7 @@ projectSandbox.frustrum =
         ];
 
 	    // Near bottom left
-        this.planeVerts[6] =
+        planeVerts[6] =
         [
             nearCenter[0] - (nearWidth / 2.0),
             nearCenter[1] - (nearHeight / 2.0),
@@ -106,12 +109,20 @@ projectSandbox.frustrum =
         ];
 
 	    // Near bottom right
-        this.planeVerts[7] =
+        planeVerts[7] =
         [
             nearCenter[0] + (nearWidth / 2.0),
             nearCenter[1] - (nearHeight / 2.0),
             nearCenter[2]
         ];
+
+        // Update frustrum computation
+        this.planeVerts = planeVerts;
+
+        this.nearWidth = nearWidth;
+        this.nearHeight = nearHeight;
+        this.farWidth = farWidth;
+        this.farHeight = farHeight;
 	},
 
 	/*
@@ -124,14 +135,32 @@ projectSandbox.frustrum =
 	*/
 	mapRegionToRender: function(tileSize)
 	{
+	    // Check initial frustrum built
+	    if (this.planeVerts == null)
+	    {
+	        return null;
+	    }
+
+	    // Determine z-level of map relative to camera
+	    var mapZ = (projectSandbox.map.renderZ * -1.0) + projectSandbox.camera.z + projectSandbox.camera.zoom;
+
+	    // Calculate ratio from near to far plane
+	    var zVolume = this.planeVerts[0][2] - this.planeVerts[4][2];
+	    var mapZRatio = (mapZ - this.planeVerts[4][2]) / zVolume;
+
+	    console.debug("map z: " + mapZ, "ratio: " + mapZRatio);
+	    console.debug("x - " + (this.planeVerts[2][0] * mapZRatio) + " ->" + (this.planeVerts[1][0] * mapZRatio));
+
 	    // Generate initial indexes from frustrum
 	    var mapIndexes =
 	    [
-	        Math.floor(this.planeVerts[6][0] / tileSize),
-	        Math.floor(this.planeVerts[6][1] / tileSize),
+	        //Math.floor((this.planeVerts[2][0] * mapZRatio) / tileSize),
+	        Math.floor((-125.49) / tileSize),
+	        Math.floor((this.planeVerts[2][1] * mapZRatio) / tileSize),
 
-	        Math.ceil(this.planeVerts[5][0] / tileSize),
-	        Math.ceil(this.planeVerts[5][1] / tileSize)
+	        //Math.ceil((this.planeVerts[1][0] * mapZRatio) / tileSize),
+	        Math.ceil((180) / tileSize),
+	        Math.ceil((this.planeVerts[1][1] * mapZRatio) / tileSize)
 	    ];
 
 	    // Clamp to size of map
@@ -140,7 +169,10 @@ projectSandbox.frustrum =
 	    mapIndexes[2] = this.clampIndexes(mapIndexes[2], 0, projectSandbox.map.width - 1);
 	    mapIndexes[3] = this.clampIndexes(mapIndexes[3], 0, projectSandbox.map.height - 1);
 
-        console.debug(this.planeVerts[6][0]);
+        // Invert y
+        //mapIndexes[1] = projectSandbox.map.height - mapIndexes[1];
+        //mapIndexes[3] = projectSandbox.map.height - mapIndexes[3];
+
 	    console.debug(mapIndexes);
 
 	    return mapIndexes;
