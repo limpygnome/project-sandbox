@@ -57,16 +57,13 @@ projectSandbox.map =
 			return;
 		}
 
-		var startX = 0;
-		var endX = this.width -1;
-		var startY = 0;
-		var endY = this.height -1;
-
+        // Fetch frustrum culled region to render
 		var clippedIndexes = projectSandbox.frustrum.mapRegionToRender(this.tileSize);
 
 		if (clippedIndexes == null)
 		{
 		    // Scene not ready to render / no frustrum built
+		    console.warn("Map - frustrum not yet computed");
 		    return;
 		}
 
@@ -74,8 +71,6 @@ projectSandbox.map =
 		var renderEndX = clippedIndexes[2];
 		var renderStartY = clippedIndexes[1];
 		var renderEndY = clippedIndexes[3];
-
-		console.debug(clippedIndexes);
 		
 		// Translate map so bottom left is 0,0
 		mat4.translate(modelView, modelView, [this.scaledTileSizeHalf, this.scaledTileSizeHalf, this.renderZ]);
@@ -92,47 +87,45 @@ projectSandbox.map =
 
 		for(y = renderEndY; y >= renderStartY; y--) // Y is inverse!
 		{
+            // Move to start of x
+            mat4.translate(modelView, modelView, [this.scaledTileSize * renderStartX, 0, 0]);
+
 			// Translate to next row
 			for(x = renderStartX; x <= renderEndX; x++)
 			{
 				tileTypeId = this.tiles[y][x];
 				tileType = this.types[tileTypeId];
 
-				// Move to start of x
-				mat4.translate(modelView, modelView, [this.scaledTileSize * renderStartX, 0, 0]);
+                // Rebind if texture is different
+                if(tileType[0] != lastTexture)
+                {
+                    // Bind texture
+                    lastTexture = tileType[0];
+                    lastTexture.bind(gl, shaderProgram);
+                }
 
-				// Check tile is rendered - this can be removed soon
-				if (x >= renderStartX && x <= renderEndX && y >= renderStartY && y <= renderEndY)
-				{
-                    // Rebind if texture is different
-                    if(tileType[0] != lastTexture)
-                    {
-                        // Bind texture
-                        lastTexture = tileType[0];
-                        lastTexture.bind(gl, shaderProgram);
-                    }
+                // Rebind the buffers being used if the tile height is different
+                if (tileType[1] != lastHeight)
+                {
+                    lastHeight = tileType[1];
+                    this.bindTile(gl, shaderProgram, lastHeight);
+                }
 
-                    // Rebind the buffers being used if the tile height is different
-                    if (tileType[1] != lastHeight)
-                    {
-                        lastHeight = tileType[1];
-                        this.bindTile(gl, shaderProgram, lastHeight);
-                    }
+                // -- Set shader matrix uniforms
+                gl.uniformMatrix4fv(shaderProgram.pMatrixUniform, false, perspective);
+                gl.uniformMatrix4fv(shaderProgram.mvMatrixUniform, false, modelView);
 
-                    // -- Set shader matrix uniforms
-                    gl.uniformMatrix4fv(shaderProgram.pMatrixUniform, false, perspective);
-                    gl.uniformMatrix4fv(shaderProgram.mvMatrixUniform, false, modelView);
-
-                    // Render tile
-                    gl.drawElements(gl.TRIANGLES, this.bufferIndexes.numItems, gl.UNSIGNED_SHORT, 0);
-				}
+                // Render tile
+                gl.drawElements(gl.TRIANGLES, this.bufferIndexes.numItems, gl.UNSIGNED_SHORT, 0);
 				
 				// Translate for next tile
 				mat4.translate(modelView, modelView, [this.scaledTileSize, 0, 0]);
 			}
 
 			// Undo x translation and move to next row
-			mat4.translate(modelView, modelView, [-this.scaledTileSize * (renderEndX + 1), this.scaledTileSize, 0]);
+		    mat4.translate(modelView, modelView, [-this.scaledTileSize * (renderEndX + 1), this.scaledTileSize, 0]);
+
+			//mat4.translate(modelView, modelView, [-this.scaledTileSize * (this.width), this.scaledTileSize, 0]);
 		}
         
 		// Undo translation for Y

@@ -4,6 +4,7 @@ var projectSandbox =
 	// -- The rate at which logic is executed in ms
 	RATE_LOGIC_MS: 60,
 	// -- Pixel scaling factor for co-ords
+	// TODO: remove this...
 	SCALE_FACTOR: null,
 	
 	// Session ID

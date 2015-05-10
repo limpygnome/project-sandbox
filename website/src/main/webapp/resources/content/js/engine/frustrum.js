@@ -4,6 +4,7 @@ projectSandbox.frustrum =
     FRUSTRUM_DISTANCE_NEAR: 1.0,
     FRUSTRUM_DISTANCE_FAR: 1000.0,
 
+    ratio: null,
     planeVerts: null,
 
     /*
@@ -11,7 +12,8 @@ projectSandbox.frustrum =
     */
 	update: function()
 	{
-	    var ratio = 800.0/600.0;
+	    // Compute ratio
+	    this.ratio = projectSandbox.gl.viewportWidth / projectSandbox.gl.viewportHeight;
 
 	    // Camera variables
 	    var camearaPos =
@@ -26,13 +28,14 @@ projectSandbox.frustrum =
 	        0.0, 0.0, 1.0
 	    ];
 
-	    // Calculate size of near plane
-	    var nearHeight = 2 * Math.tan(this.FRUSTRUM_VERTICAL_FOV / 2.0) * this.FRUSTRUM_DISTANCE_NEAR;
-	    var nearWidth = nearHeight * ratio;
+	    // Calculate size of near and far plane
+	    var nearSize = this.computeFrustrumSize(this.FRUSTRUM_DISTANCE_NEAR);
+	    var nearWidth = nearSize[0];
+        var nearHeight = nearSize[1];
 
-        // Calculate size of far plane
-	    var farHeight = 2 * Math.tan(this.FRUSTRUM_VERTICAL_FOV / 2.0) * this.FRUSTRUM_DISTANCE_FAR;
-	    var farWidth = farHeight * ratio;
+	    var farSize = this.computeFrustrumSize(this.FRUSTRUM_DISTANCE_FAR);
+	    var farWidth = farSize[0];
+	    var farHeight = farSize[1];
 
 	    // Calculate center points of far and near
 	    var farCenter =
@@ -144,20 +147,21 @@ projectSandbox.frustrum =
 	    // Determine z-level of map relative to camera
 	    var mapZ = (projectSandbox.map.renderZ * -1.0) + projectSandbox.camera.z + projectSandbox.camera.zoom;
 
-	    // Determine frustrum width/height
-	    var ratio = 800.0/600.0;
-	    var frustrumHeight = 2 * Math.tan(this.FRUSTRUM_VERTICAL_FOV / 2.0) * mapZ;
-        var frustrumWidth = frustrumHeight * ratio;
+	    // Determine frustrum size
+	    var frustrumSize = this.computeFrustrumSize(mapZ);
+
+        var frustrumWidthHalf = frustrumSize[0] / 2.0;
+        var frustrumHeightHalf = frustrumSize[1] / 2.0;
 
 	    // Generate initial indexes from frustrum
 	    // Note: y is inverted since we subtract it from the map height (invert it)
 	    var mapIndexes =
 	    [
-	        Math.floor((projectSandbox.camera.x - (frustrumWidth / 2.0)) / tileSize),
-	        Math.floor((projectSandbox.camera.y + (frustrumHeight / 2.0)) / tileSize),
+	        Math.floor((projectSandbox.camera.x - frustrumWidthHalf) / tileSize),
+	        Math.floor((projectSandbox.camera.y + frustrumHeightHalf) / tileSize),
 
-	        Math.floor((projectSandbox.camera.x + (frustrumWidth / 2.0)) / tileSize),
-	        Math.floor((projectSandbox.camera.y - (frustrumHeight / 2.0)) / tileSize),
+	        Math.floor((projectSandbox.camera.x + frustrumWidthHalf) / tileSize),
+	        Math.floor((projectSandbox.camera.y - frustrumHeightHalf) / tileSize),
 	    ];
 
 	    // Invert y
@@ -165,31 +169,23 @@ projectSandbox.frustrum =
         mapIndexes[3] = (projectSandbox.map.height - 1) - mapIndexes[3];
 
 	    // Clamp to size of map
-	    mapIndexes[0] = this.clampIndexes(mapIndexes[0], 0, projectSandbox.map.width - 1);
-	    mapIndexes[1] = this.clampIndexes(mapIndexes[1], 0, projectSandbox.map.height - 1);
-	    mapIndexes[2] = this.clampIndexes(mapIndexes[2], 0, projectSandbox.map.width - 1);
-	    mapIndexes[3] = this.clampIndexes(mapIndexes[3], 0, projectSandbox.map.height - 1);
+	    mapIndexes[0] = projectSandbox.utils.clamp(mapIndexes[0], 0, projectSandbox.map.width - 1);
+	    mapIndexes[1] = projectSandbox.utils.clamp(mapIndexes[1], 0, projectSandbox.map.height - 1);
+	    mapIndexes[2] = projectSandbox.utils.clamp(mapIndexes[2], 0, projectSandbox.map.width - 1);
+	    mapIndexes[3] = projectSandbox.utils.clamp(mapIndexes[3], 0, projectSandbox.map.height - 1);
 
 	    return mapIndexes;
 	},
 
-	clampIndexes: function(value, min, max)
+	computeFrustrumSize: function(distance)
 	{
-        if (value < min)
-	    {
-	        return min;
-	    }
-	    else if (value > max)
-	    {
-	        return max;
-	    }
-	    else
-	    {
-	        return value;
-	    }
+	    var frustrumHeight = 2 * Math.tan(this.FRUSTRUM_VERTICAL_FOV / 2.0) * distance;
+        var frustrumWidth = frustrumHeight * this.ratio;
+
+        return [frustrumWidth, frustrumHeight];
 	},
 
-	intersects: function()
+	intersects: function(primitive)
 	{
 	}
 }
