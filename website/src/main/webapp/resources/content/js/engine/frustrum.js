@@ -150,6 +150,7 @@ projectSandbox.frustrum =
         var frustrumWidth = frustrumHeight * ratio;
 
 	    // Generate initial indexes from frustrum
+	    // Note: y is inverted since we subtract it from the map height (invert it)
 	    var mapIndexes =
 	    [
 	        Math.floor((projectSandbox.camera.x - (frustrumWidth / 2.0)) / tileSize),
@@ -159,7 +160,7 @@ projectSandbox.frustrum =
 	        Math.floor((projectSandbox.camera.y - (frustrumHeight / 2.0)) / tileSize),
 	    ];
 
-	    // Swap and invert y
+	    // Invert y
         mapIndexes[1] = (projectSandbox.map.height - 1) - mapIndexes[1];
         mapIndexes[3] = (projectSandbox.map.height - 1) - mapIndexes[3];
 
@@ -168,10 +169,6 @@ projectSandbox.frustrum =
 	    mapIndexes[1] = this.clampIndexes(mapIndexes[1], 0, projectSandbox.map.height - 1);
 	    mapIndexes[2] = this.clampIndexes(mapIndexes[2], 0, projectSandbox.map.width - 1);
 	    mapIndexes[3] = this.clampIndexes(mapIndexes[3], 0, projectSandbox.map.height - 1);
-
-        console.log("y: " + projectSandbox.map.height  +" ->" +mapIndexes[1]);
-
-	    console.debug(mapIndexes);
 
 	    return mapIndexes;
 	},

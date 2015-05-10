@@ -88,11 +88,15 @@ projectSandbox.map =
 		for(y = endY; y >= startY; y--) // Y is inverse!
 		{
 			// Translate to next row
-			for(x = startX; x <= endX; x++)
+			for(x = renderStartX; x <= renderEndX; x++)
 			{
 				tileTypeId = this.tiles[y][x];
 				tileType = this.types[tileTypeId];
 
+				// Move to start of x
+				mat4.translate(modelView, modelView, [this.scaledTileSize * renderStartX, 0, 0]);
+
+				// Check tile is rendered - this can be removed soon
 				if (x >= renderStartX && x <= renderEndX && y >= renderStartY && y <= renderEndY)
 				{
                     // Rebind if texture is different
@@ -121,7 +125,9 @@ projectSandbox.map =
 				// Translate for next tile
 				mat4.translate(modelView, modelView, [this.scaledTileSize, 0, 0]);
 			}
-			mat4.translate(modelView, modelView, [-this.scaledTileSize * this.width, this.scaledTileSize, 0]);
+
+			// Undo x translation and move to next row
+			mat4.translate(modelView, modelView, [-this.scaledTileSize * (renderEndX + 1), this.scaledTileSize, 0]);
 		}
         
         // Unbind texture
