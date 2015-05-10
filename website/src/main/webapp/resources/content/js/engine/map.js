@@ -74,6 +74,8 @@ projectSandbox.map =
 		var renderEndX = clippedIndexes[2];
 		var renderStartY = clippedIndexes[1];
 		var renderEndY = clippedIndexes[3];
+
+		console.debug(clippedIndexes);
 		
 		// Translate map so bottom left is 0,0
 		mat4.translate(modelView, modelView, [this.scaledTileSizeHalf, this.scaledTileSizeHalf, this.renderZ]);
@@ -84,8 +86,11 @@ projectSandbox.map =
 		
 		var lastTexture = null;
 		var lastHeight = -1;
-		
-		for(y = endY; y >= startY; y--) // Y is inverse!
+
+        // Translate to start Y
+        mat4.translate(modelView, modelView, [0, this.scaledTileSize * ((this.height - 1) - renderEndY), 0]);
+
+		for(y = renderEndY; y >= renderStartY; y--) // Y is inverse!
 		{
 			// Translate to next row
 			for(x = renderStartX; x <= renderEndX; x++)
@@ -130,17 +135,18 @@ projectSandbox.map =
 			mat4.translate(modelView, modelView, [-this.scaledTileSize * (renderEndX + 1), this.scaledTileSize, 0]);
 		}
         
-        // Unbind texture
+		// Undo translation for Y
+		// -- We don't subtract 1 from height since the last translation in the loop always shifts on Y by ts
+		mat4.translate(modelView, modelView, [0, this.scaledTileSize * -((this.height) - renderStartY), 0]);
+
+		// Undo bottom left translation
+		mat4.translate(modelView, modelView, [-this.scaledTileSizeHalf, -this.scaledTileSizeHalf, -this.renderZ]);
+
+		// Unbind texture
         if (lastTexture != null)
         {
             lastTexture.unbind(gl);
         }
-		
-		// Undo translation for tiles
-		mat4.translate(modelView, modelView, [0, this.height * -this.scaledTileSize, 0]);
-		
-		// Undo bottom left translation
-		mat4.translate(modelView, modelView, [-this.scaledTileSizeHalf, -this.scaledTileSizeHalf, -this.renderZ]);
 	},
 	
 	bindTile: function(gl, shaderProgram, height)
