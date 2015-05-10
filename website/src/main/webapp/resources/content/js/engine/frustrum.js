@@ -153,21 +153,21 @@ projectSandbox.frustrum =
 	    var mapIndexes =
 	    [
 	        Math.floor((projectSandbox.camera.x - (frustrumWidth / 2.0)) / tileSize),
-	        Math.floor((projectSandbox.camera.y - (frustrumHeight / 2.0)) / tileSize),
+	        Math.floor((projectSandbox.camera.y + (frustrumHeight / 2.0)) / tileSize),
 
 	        Math.floor((projectSandbox.camera.x + (frustrumWidth / 2.0)) / tileSize),
-	        Math.floor((projectSandbox.camera.y + (frustrumHeight / 2.0)) / tileSize),
+	        Math.floor((projectSandbox.camera.y - (frustrumHeight / 2.0)) / tileSize),
 	    ];
+
+	    // Swap and invert y
+        mapIndexes[1] = (projectSandbox.map.height - 1) - mapIndexes[1];
+        mapIndexes[3] = (projectSandbox.map.height - 1) - mapIndexes[3];
 
 	    // Clamp to size of map
 	    mapIndexes[0] = this.clampIndexes(mapIndexes[0], 0, projectSandbox.map.width - 1);
 	    mapIndexes[1] = this.clampIndexes(mapIndexes[1], 0, projectSandbox.map.height - 1);
 	    mapIndexes[2] = this.clampIndexes(mapIndexes[2], 0, projectSandbox.map.width - 1);
 	    mapIndexes[3] = this.clampIndexes(mapIndexes[3], 0, projectSandbox.map.height - 1);
-
-        // Swap and invert y
-        mapIndexes[1] = 0;//projectSandbox.map.height - mapIndexes[1];
-        mapIndexes[3] = 8;//projectSandbox.map.height - mapIndexes[3];
 
         console.log("y: " + projectSandbox.map.height  +" ->" +mapIndexes[1]);
 
