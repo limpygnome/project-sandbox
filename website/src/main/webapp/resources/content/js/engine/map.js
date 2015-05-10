@@ -93,7 +93,7 @@ projectSandbox.map =
 				tileTypeId = this.tiles[y][x];
 				tileType = this.types[tileTypeId];
 
-				if (x >= renderStartX && x < renderEndX)// && y >= renderStartY && y <= renderEndY)
+				if (x >= renderStartX && x <= renderEndX && y >= renderStartY && y <= renderEndY)
 				{
                     // Rebind if texture is different
                     if(tileType[0] != lastTexture)

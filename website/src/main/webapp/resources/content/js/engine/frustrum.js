@@ -144,23 +144,19 @@ projectSandbox.frustrum =
 	    // Determine z-level of map relative to camera
 	    var mapZ = (projectSandbox.map.renderZ * -1.0) + projectSandbox.camera.z + projectSandbox.camera.zoom;
 
-	    // Calculate ratio from near to far plane
-	    var zVolume = this.planeVerts[0][2] - this.planeVerts[4][2];
-	    var mapZRatio = (mapZ - this.planeVerts[4][2]) / zVolume;
-
-	    console.debug("map z: " + mapZ, "ratio: " + mapZRatio);
-	    console.debug("x - " + (this.planeVerts[2][0] * mapZRatio) + " ->" + (this.planeVerts[1][0] * mapZRatio));
+	    // Determine frustrum width/height
+	    var ratio = 800.0/600.0;
+	    var frustrumHeight = 2 * Math.tan(this.FRUSTRUM_VERTICAL_FOV / 2.0) * mapZ;
+        var frustrumWidth = frustrumHeight * ratio;
 
 	    // Generate initial indexes from frustrum
 	    var mapIndexes =
 	    [
-	        //Math.floor((this.planeVerts[2][0] * mapZRatio) / tileSize),
-	        Math.floor((-125.49) / tileSize),
-	        Math.floor((this.planeVerts[2][1] * mapZRatio) / tileSize),
+	        Math.floor((projectSandbox.camera.x - (frustrumWidth / 2.0)) / tileSize),
+	        Math.floor((projectSandbox.camera.y - (frustrumHeight / 2.0)) / tileSize),
 
-	        //Math.ceil((this.planeVerts[1][0] * mapZRatio) / tileSize),
-	        Math.ceil((180) / tileSize),
-	        Math.ceil((this.planeVerts[1][1] * mapZRatio) / tileSize)
+	        Math.floor((projectSandbox.camera.x + (frustrumWidth / 2.0)) / tileSize),
+	        Math.floor((projectSandbox.camera.y + (frustrumHeight / 2.0)) / tileSize),
 	    ];
 
 	    // Clamp to size of map
@@ -169,9 +165,11 @@ projectSandbox.frustrum =
 	    mapIndexes[2] = this.clampIndexes(mapIndexes[2], 0, projectSandbox.map.width - 1);
 	    mapIndexes[3] = this.clampIndexes(mapIndexes[3], 0, projectSandbox.map.height - 1);
 
-        // Invert y
-        //mapIndexes[1] = projectSandbox.map.height - mapIndexes[1];
-        //mapIndexes[3] = projectSandbox.map.height - mapIndexes[3];
+        // Swap and invert y
+        mapIndexes[1] = 0;//projectSandbox.map.height - mapIndexes[1];
+        mapIndexes[3] = 8;//projectSandbox.map.height - mapIndexes[3];
+
+        console.log("y: " + projectSandbox.map.height  +" ->" +mapIndexes[1]);
 
 	    console.debug(mapIndexes);
 
