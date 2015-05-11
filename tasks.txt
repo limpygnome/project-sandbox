@@ -1,4 +1,5 @@
 high priority:
+- camera limits - lock camera within map
 - add turret to shoot players as a test of ray performance
 - player's showing weapons / muzzle flashes on weapons etc
 - run down players
