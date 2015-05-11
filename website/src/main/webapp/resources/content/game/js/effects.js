@@ -16,8 +16,6 @@ game.effects =
 	{
 		var offset = 1;
 
-		console.debug(data);
-
 		var subType;
 		while (offset < data.length)
 		{
@@ -35,7 +33,7 @@ game.effects =
 					var effect = new Effect("error", this.BULLET_WIDTH, this.BULLET_HEIGHT, effectX, effectY, this.BULLET_Z, this.BULLET_LIFESPAN, this.BULLET_FADE);
 					effect.rotation = this.randRotation();
 					projectSandbox.effects.push(effect);
-					console.debug("Created bullet at " + effect.x + " , " + effect.y);
+					console.debug("game/effects - created bullet at " + effect.x + " , " + effect.y);
 
 					offset += 8;
 					break;
@@ -68,13 +66,11 @@ game.effects =
 
 		// - Compute rotation
 		var rotation = Math.atan2(x2 - x1, y2 - y1);
-		console.error("theta: " + rotation);
 
 		// - Finally create the effect
 		var effect = new Effect("error", this.TRACER_WIDTH, size, midx, midy, this.TRACER_Z, this.TRACER_LIFESPAN, this.TRACER_FADE);
 		effect.rotation = rotation;
 		projectSandbox.effects.push(effect);
-		console.debug("Created tracer - " + x1 + ", " + y1 + " -> " + x2 + ", " + y2 + ", size: " + size + ", midx: " + midx + ", midy: " + midy);
 
 		return 16;
 	},

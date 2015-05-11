@@ -35,7 +35,6 @@
 		<script src="/content/js/engine/keyboard.js"></script>
 		<script src="/content/js/engine/mouse.js"></script>
 		<script src="/content/js/engine/network.js"></script>
-		<script src="/content/js/engine/comms-packet.js"></script>
 		<script src="/content/js/engine/utils.js"></script>
 		<script src="/content/js/engine/inventory.js"></script>
 		<script src="/content/js/engine/inventory-item.js"></script>

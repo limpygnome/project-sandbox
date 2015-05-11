@@ -161,7 +161,7 @@ var projectSandbox =
 		this.camera.logic();
 		
 		// Update movement of player to server
-		this.commsPacket.updateMovement();
+		this.network.player.sendUpdateMovementPacket();
 
 		// Update inventory
 		this.inventory.logic();

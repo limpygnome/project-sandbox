@@ -46,7 +46,7 @@ projectSandbox.network =
 		this.closed = false;
 		
 		// Send session ID - must always be done first
-		projectSandbox.commsPacket.sendSessionId();
+		this.player.sendSessionIdPacket();
 	},
 
 	wsEventError: function(event)

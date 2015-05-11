@@ -16,7 +16,7 @@ projectSandbox.camera =
 	rotationZ: 0,
 	
 	// Zoom of the camera from the co-ordinates
-	zoom: 250,
+	zoom: 300,
 	
 	// The entity id to chase; if not null, the xyz of the camera is the entity
 	chaseEntityId: null,
