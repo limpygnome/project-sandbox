@@ -7,6 +7,8 @@ projectSandbox.frustrum =
     ratio: null,
     planeVerts: null,
 
+    frustrumDistanceBoxes: new Map(),
+
     /*
         Should be invoked when the camera changes, so the frustrum can be recomputed.
     */
@@ -122,10 +124,14 @@ projectSandbox.frustrum =
         // Update frustrum computation
         this.planeVerts = planeVerts;
 
+		// Update sizes
         this.nearWidth = nearWidth;
         this.nearHeight = nearHeight;
         this.farWidth = farWidth;
         this.farHeight = farHeight;
+
+        // Reset boxes cache
+        this.frustrumDistanceBoxes.clear();
 	},
 
 	/*
@@ -187,5 +193,33 @@ projectSandbox.frustrum =
 
 	intersects: function(primitive)
 	{
+		// Fetcb/generate box for Z level
+		var z = primitive.z + projectSandbox.camera.z + projectSandbox.camera.zoom;
+		var box = this.frustrumDistanceBoxes.get(z);
+
+		if (boxSize == null)
+		{
+			// Cache for speed
+			var boxSize = this.computeFrustrumSize(z);
+			var frustrumWidthHalf = boxSize[0] / 2.0;
+			var frustrumHeightHalf = boxSize[1] / 2.0;
+
+			var box =
+			[
+				projectSandbox.camera.x - frustrumWidthHalf,
+				projectSandbox.camera.y - frustrumHeightHalf,
+				projectSandbox.camera.x + frustrumWidthHalf,	// (+ w)
+				projectSandbox.camera.y + frustrumHeightHalf,	// (+ h)
+			];
+
+			this.frustrumDistanceBoxes.set(z, box);
+		}
+
+		var intersects =	primitive.x 					< 	box[2] 	&&
+							primitive.x + primitive.radius	>	box[0]	&&
+							primitive.y						<	box[3]	&&
+							primitive.y + primitive.radius	>	box[1]	;
+
+		return intersects;
 	}
 }

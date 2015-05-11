@@ -247,9 +247,14 @@ var projectSandbox =
 		projectSandbox.map.render(gl, this.shaderProgram, this.modelView, this.perspective);
 
 		// Render effects
+		var effect;
 		for (var i = 0; i < this.effects.length; i++)
 		{
-			this.effects[i].render(gl, this.shaderProgram, this.modelView, this.perspective);
+			effect = this.effects[i];
+			if (projectSandbox.frustrum.intersects(effect))
+			{
+				effect.render(gl, this.shaderProgram, this.modelView, this.perspective);
+			}
 		}
 		
 		// Render ents
@@ -257,7 +262,10 @@ var projectSandbox =
 		for(var kv of this.entities)
 		{
 			ent = kv[1];
-			ent.render(gl, this.shaderProgram, this.modelView, this.perspective);
+			if (projectSandbox.frustrum.intersects(ent))
+			{
+				ent.render(gl, this.shaderProgram, this.modelView, this.perspective);
+			}
 		}
 		
 		// Update FPS
