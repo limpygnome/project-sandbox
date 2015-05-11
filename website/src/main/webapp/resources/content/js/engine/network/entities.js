@@ -1,0 +1,160 @@
+projectSandbox.network.entities =
+{
+	packet: function(data, dataView, subType)
+	{
+		switch (subType)
+		{
+			case "U":
+				this.packetUpdates(data, dataView);
+				break;
+			default:
+				console.error("entities - unknown sub-type - " + subType);
+				break;
+		}
+	},
+
+	packetUpdates: function(data, dataView)
+	{
+		var offset = 2; // maintype / subtype = 2 bytes
+
+		var updateType;
+		var id;
+		var bytesRead;
+
+		while (offset < data.length)
+		{
+			// Retrieve update type and entity id
+			updateType = dataView.getInt8(offset);
+			id = dataView.getInt16(offset + 1);
+
+			// Increment offset
+			offset += 3; // 1 byte for update type, 2 bytes for id
+
+			// Handle update based on type
+			switch(updateType)
+			{
+				case 67: // C
+					bytesRead = this.packetUpdatesEntCreated(data, dataView, id, offset);
+					break;
+				case 85: // U
+					bytesRead = this.packetUpdatesEntUpdated(data, dataView, id, offset);
+					break;
+				case 68: // D
+					bytesRead = this.packetUpdatesEntDeleted(data, dataView, id, offset);
+					break;
+				default:
+					console.log("Comms - unknown entity update type '" + updateType + "'");
+					break;
+			}
+
+			// Increment offset
+			offset += bytesRead; // 1 byte for update type, 2 bytes for ent id
+		}
+	},
+
+	packetUpdatesEntCreated: function(data, dataView, id, offset)
+	{
+		var originalOffset = offset;
+
+		// Parse data
+		var entityType = dataView.getInt16(offset);
+		offset += 2;
+		var maxHealth = dataView.getFloat32(offset);
+		offset += 4;
+
+		// Create entity based on type
+		var ent = null;
+		switch(entityType)
+		{
+			default:
+				console.warn("Comms - unhandled ent type " + entityType);
+				break;
+			case 0:
+				ent = new Entity();
+				break;
+			case 1:
+				ent = new Player();
+				break;
+			case 20:
+				ent = new IceCreamVan();
+				break;
+		}
+
+		if (ent != null)
+		{
+			// Set max health
+			ent.maxHealth = maxHealth;
+
+			// TODO: read custom byte data here
+
+			// Add to world
+			projectSandbox.entities.set(id, ent);
+
+			console.log("Comms - entity " + id + " created");
+		}
+
+		return offset - originalOffset;
+	},
+
+	UPDATEMASK_X: 1,
+	UPDATEMASK_Y: 2,
+	UPDATEMASK_ROTATION: 4,
+	UPDATEMASK_HEALTH: 8,
+
+	packetUpdatesEntUpdated: function(data, dataView, id, offset)
+	{
+		var originalOffset = offset;
+
+		// Find entity
+		ent = projectSandbox.entities.get(id);
+
+		if (ent)
+		{
+			// Read mask
+			var mask = dataView.getInt8(offset);
+			offset += 1;
+
+			// Read updated params
+			if ((mask & this.UPDATEMASK_X) == this.UPDATEMASK_X)
+			{
+				ent.x = dataView.getFloat32(offset);
+				offset += 4;
+			}
+			if ((mask & this.UPDATEMASK_Y) == this.UPDATEMASK_Y)
+			{
+				ent.y = dataView.getFloat32(offset);
+				offset += 4;
+			}
+			if ((mask & this.UPDATEMASK_ROTATION) == this.UPDATEMASK_ROTATION)
+			{
+				ent.rotation = dataView.getFloat32(offset);
+				offset += 4;
+			}
+			if ((mask & this.UPDATEMASK_HEALTH) == this.UPDATEMASK_HEALTH)
+			{
+				ent.health = dataView.getFloat32(offset);
+				offset += 4;
+			}
+
+			// Allow ent to parse custom update bytes
+			offset = ent.readBytes_update(data, dataView, id, offset);
+
+			console.log("Comms - entity " + id + " updated");
+		}
+		else
+		{
+			console.warn("Comms - entity with id " + id + " not found for update");
+		}
+
+		return offset - originalOffset;
+	},
+
+	packetUpdatesEntDeleted: function(data, dataView, id, offset)
+	{
+		// Remove entity from the world
+		projectSandbox.entities.delete(id);
+		console.log("Comms - entity " + id + " deleted");
+
+		return 0;
+	}
+}

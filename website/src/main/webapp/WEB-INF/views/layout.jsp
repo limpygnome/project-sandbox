@@ -16,6 +16,7 @@
 		<script src="/content/js/project-sandbox.js"></script>
 
 		<!-- Engine -->
+		<script src="/content/js/engine/_namespace.js"></script>
 		<script src="/content/js/engine/_prototype_inheritence.js"></script>
 		<script src="/content/js/engine/frustrum.js"></script>
 		<script src="/content/js/engine/asset-loader.js"></script>
@@ -38,6 +39,8 @@
 		<script src="/content/js/engine/utils.js"></script>
 		<script src="/content/js/engine/inventory.js"></script>
 		<script src="/content/js/engine/inventory-item.js"></script>
+
+		<script src="/content/js/engine/network/entities.js"></script>
 
 		<!-- Game -->
 		<script src="/content/game/js/_namespace.js"></script>
