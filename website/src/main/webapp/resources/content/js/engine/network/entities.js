@@ -43,7 +43,7 @@ projectSandbox.network.entities =
 					bytesRead = this.packetUpdatesEntDeleted(data, dataView, id, offset);
 					break;
 				default:
-					console.log("Comms - unknown entity update type '" + updateType + "'");
+					console.log("engine/network/entities - unknown entity update type '" + updateType + "'");
 					break;
 			}
 
@@ -67,7 +67,7 @@ projectSandbox.network.entities =
 		switch(entityType)
 		{
 			default:
-				console.warn("Comms - unhandled ent type " + entityType);
+				console.warn("engine/network/entities - unhandled ent type " + entityType);
 				break;
 			case 0:
 				ent = new Entity();
@@ -90,7 +90,7 @@ projectSandbox.network.entities =
 			// Add to world
 			projectSandbox.entities.set(id, ent);
 
-			console.log("Comms - entity " + id + " created");
+			console.log("engine/network/entities - entity " + id + " created");
 		}
 
 		return offset - originalOffset;
@@ -139,11 +139,11 @@ projectSandbox.network.entities =
 			// Allow ent to parse custom update bytes
 			offset = ent.readBytes_update(data, dataView, id, offset);
 
-			console.log("Comms - entity " + id + " updated");
+			console.log("engine/network/entities - entity " + id + " updated");
 		}
 		else
 		{
-			console.warn("Comms - entity with id " + id + " not found for update");
+			console.warn("engine/network/entities - entity with id " + id + " not found for update");
 		}
 
 		return offset - originalOffset;
@@ -153,7 +153,7 @@ projectSandbox.network.entities =
 	{
 		// Remove entity from the world
 		projectSandbox.entities.delete(id);
-		console.log("Comms - entity " + id + " deleted");
+		console.log("engine/network/entities - entity " + id + " deleted");
 
 		return 0;
 	}

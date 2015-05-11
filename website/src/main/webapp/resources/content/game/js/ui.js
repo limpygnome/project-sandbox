@@ -106,7 +106,7 @@ game.ui =
 		{
 			this.renderPlayerUI = false;
 
-			if (!projectSandbox.comms.closed)
+			if (!projectSandbox.network.closed)
 			{
 				console.warn("UI - unable to find player entity, cannot update UI");
 			}

@@ -39,7 +39,7 @@ public class PacketManager
         if (playerInfo == null)
         {
             // Check we have received session packet
-            if (mainType == 'U' && subType == 'S')
+            if (mainType == 'P' && subType == 'S')
             {
                 // Parse packet and load session associated with player
                 SessionIdentifierInboundPacket sessPacket = new SessionIdentifierInboundPacket();
@@ -79,7 +79,7 @@ public class PacketManager
 
         switch(mainType)
         {
-            case 'U':
+            case 'P':
                 switch (subType)
                 {
                     case 'M':

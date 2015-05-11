@@ -1,4 +1,4 @@
-projectSandbox.comms =
+projectSandbox.network =
 {
 	webSocket: null,
 
@@ -11,7 +11,8 @@ projectSandbox.comms =
 		webSocket.binaryType = 'arraybuffer';
 
 		// Hook events
-		var self = projectSandbox.comms;
+		var self = projectSandbox.network;
+
 		webSocket.onopen = function(event)
 		{
 			self.wsEventOpen(event);
@@ -40,7 +41,7 @@ projectSandbox.comms =
 	
 	wsEventOpen: function(event)
 	{
-		console.log("Comms - connection established");
+		console.log("engine/network - connection established");
 
 		this.closed = false;
 		
@@ -52,7 +53,7 @@ projectSandbox.comms =
 	{
 		if (!this.closed)
 		{
-			console.error("Comms - error - " + event);
+			console.error("engine/network - error - " + event);
 		}
 	},
 	
@@ -60,7 +61,7 @@ projectSandbox.comms =
 	{
 		if (!this.closed)
 		{
-			console.log("Comms - socket closed");
+			console.log("engine/network - socket closed");
 			this.closed = true;
 
 			// Reset world

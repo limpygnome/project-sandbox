@@ -109,7 +109,7 @@ var projectSandbox =
 		console.log("Starting project sandbox...");
         
 		// Setup comms
-		projectSandbox.comms.setup();
+		projectSandbox.network.setup();
 		
 		// Hook keyboard
 		projectSandbox.keyboard.hook();

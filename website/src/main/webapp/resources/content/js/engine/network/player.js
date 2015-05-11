@@ -28,6 +28,6 @@ projectSandbox.network.player =
         // Reset UI
         projectSandbox.game.ui.hookPlayer_entChanged();
 
-        console.log("Comms - updated player id to " + id);
+        console.log("engine/network/player - updated player id to " + id);
     }
 }

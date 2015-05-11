@@ -36,7 +36,7 @@ projectSandbox.commsPacket =
 		var buff = new Uint8Array(38);
 		
 		// Header data
-		buff[0] = "U".charCodeAt(0); // U
+		buff[0] = "P".charCodeAt(0); // U
 		buff[1] = "S".charCodeAt(0); // S
 		
 		// Session ID / UUID
@@ -46,7 +46,7 @@ projectSandbox.commsPacket =
 		}
 		
 		// Send packet
-		projectSandbox.comms.send(buff.buffer);
+		projectSandbox.network.send(buff.buffer);
 	},
 	
 	updateMovement: function()
@@ -91,15 +91,15 @@ projectSandbox.commsPacket =
 			var buff = new Uint8Array(6);
 			var dv = new DataView(buff.buffer);
 			// -- Header data
-			buff[0] = 85; // U
-			buff[1] = 77; // M
+			buff[0] = "P".charCodeAt(0);
+			buff[1] = "M".charCodeAt(0);
 			// -- Entity ID
 			dv.setInt16(2, projectSandbox.playerEntityId);
 			// -- Movement flags
 			dv.setInt16(4, movement);
 			
 			// Send packet
-			projectSandbox.comms.send(buff.buffer);
+			projectSandbox.network.send(buff.buffer);
 		}
 	}
 	

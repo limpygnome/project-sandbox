@@ -63,12 +63,12 @@ projectSandbox.camera =
 			}
 			else
 			{
-				console.warn("Camera - chase entity " + this.chaseEntityId + " not found");
+				console.warn("engine/camera - chase entity " + this.chaseEntityId + " not found");
 			}
 		}
-		else if (!projectSandbox.comms.closed)
+		else if (!projectSandbox.network.closed)
 		{
-			console.warn("Camera - no chase entity");
+			console.warn("engine/camera - no chase entity");
 		}
 	},
 	

@@ -103,7 +103,7 @@ projectSandbox.inventory =
             dv.setInt8(2, newSlotId);
 
             // Send packet to server
-            projectSandbox.comms.send(buff.buffer);
+            projectSandbox.network.send(buff.buffer);
         }
 	},
 
