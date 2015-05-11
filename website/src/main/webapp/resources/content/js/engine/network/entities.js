@@ -8,7 +8,7 @@ projectSandbox.network.entities =
 				this.packetUpdates(data, dataView);
 				break;
 			default:
-				console.error("entities - unknown sub-type - " + subType);
+				console.error("engine/network/entities - unknown sub-type - " + subType);
 				break;
 		}
 	},
