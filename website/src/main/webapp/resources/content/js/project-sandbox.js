@@ -303,6 +303,8 @@ var projectSandbox =
 			gl = this.canvas.getContext("webgl", {alpha: false}) || this.canvas.getContext("experimental-webgl", {alpha: false});
 			gl.viewportWidth = this.canvas.width;
             gl.viewportHeight = this.canvas.height;
+
+            // Invoke resize of game
 		}
 		catch(e)
 		{
@@ -341,5 +343,8 @@ var projectSandbox =
         // Due to depth, we use alpha test rather than blending, implemented in shader
         gl.enable(gl.BLEND);
         gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
+
+        // Setup camera
+        projectSandbox.camera.setup();
 	}
 }

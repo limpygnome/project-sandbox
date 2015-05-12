@@ -33,7 +33,12 @@ projectSandbox.map =
 		this.scaledTileSize = this.tileSize * projectSandbox.SCALE_FACTOR;
 		this.scaledTileSizeHalf = this.scaledTileSize / 2;
 
+		// Set state to setup
 		this.isSetup = true;
+
+		// TODO: create hook/event system for this?
+		// Rebuild camera limits
+		projectSandbox.camera.buildLimits();
 	},
 	
 	reset: function()

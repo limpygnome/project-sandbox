@@ -20,12 +20,26 @@ projectSandbox.camera =
 	
 	// The entity id to chase; if not null, the xyz of the camera is the entity
 	chaseEntityId: null,
+
+	// The limits of the camera
+	// - 0,1 - XY lower limit
+	// - 2,3 - XY upper limit
+	limits: null,
 	
 	// Last co-ordinates of mouse
 	mouseX: 0,
 	mouseY: 0,
 	mouseMove: false,
 	mouseRotationFactor: 0.1,
+
+	setup: function()
+	{
+		// Build camera limits
+		this.buildLimits();
+
+		// Update position to check it's within limits
+		this.setPosition(this.x, this.y, this.z);
+	},
 	
 	applyToModelView: function()
 	{
@@ -53,12 +67,7 @@ projectSandbox.camera =
 			    if (this.x != ent.renderX || this.y != ent.renderY || this.z != ent.renderZ)
 			    {
                     // Update camera
-                    this.x = ent.x;
-                    this.y = ent.y;
-                    this.z = ent.z;
-
-                    // Update frustrum
-                    projectSandbox.frustrum.update();
+                    this.setPosition(ent.x, ent.y, ent.z);
 				}
 			}
 			else
@@ -79,6 +88,8 @@ projectSandbox.camera =
 		
 		if(delta != 0)
 		{
+			var oldZoom = this.zoom;
+
 			// Adjust zoom
 			if(delta < 0)
 			{
@@ -97,6 +108,13 @@ projectSandbox.camera =
 			else if(this.zoom > this.zoomMax)
 			{
 				this.zoom = this.zoomMax;
+			}
+
+			// Check if zoom changed
+			if (this.zoom != oldZoom)
+			{
+				// Rebuild camera limits
+				this.buildLimits();
 			}
 			
 			// Reset delta
@@ -127,6 +145,76 @@ projectSandbox.camera =
 			// Reset ready for next loop
 			this.mouseMove = false;
 		}
-		
+	},
+
+	setPosition: function(x, y, z)
+	{
+		var limits = this.limits;
+
+		// Check limits have been built yet
+		if (limits == null)
+		{
+			console.warn("engine/camera - limits not built yet, no restrictions on position");
+		}
+		else
+		{
+			// Limit position
+			// -- X
+			if (x < limits[0])
+			{
+				x = limits[0];
+			}
+			else if (x > limits[2])
+			{
+				x = limits[2];
+			}
+			// -- Y
+			if (y < limits[1])
+			{
+				y = limits[1];
+			}
+			else if (y > limits[3])
+			{
+				y = limits[3];
+			}
+		}
+
+		// Update camera
+		this.x = x;
+		this.y = y;
+		this.z = z;
+
+		// Update frustrum
+		projectSandbox.frustrum.update();
+	},
+
+	buildLimits: function()
+	{
+		// Check map is ready
+		if (!projectSandbox.map.isSetup)
+		{
+			console.warn("engine/camera - unable to build limits, map not setup");
+			return;
+		}
+
+		var cameraZ = this.z + this.zoom;
+
+		var mapTileSize = projectSandbox.map.tileSize;
+		var mapWidth = projectSandbox.map.width * mapTileSize;
+		var mapHeight = projectSandbox.map.height * mapTileSize;
+
+		var frustrumSize = projectSandbox.frustrum.computeFrustrumSize(cameraZ);
+		var frustumWidthHalf = frustrumSize[0] / 2.0;
+		var frustumHeightHalf = frustrumSize[1] / 2.0;
+
+		this.limits =
+		[
+			Math.ceil(frustumWidthHalf),
+			Math.ceil(frustumHeightHalf),
+			Math.floor(mapWidth - frustumWidthHalf),
+			Math.floor(mapHeight - frustumHeightHalf)
+		];
+
+		console.debug("engine/camera - limits rebuild - " + this.limits[0] + "," + this.limits[1] + "," + this.limits[2] + "," + this.limits[3]);
 	}
 }
