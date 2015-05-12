@@ -56,23 +56,20 @@ public abstract class AbstractWeapon extends AbstractInventoryItem
         switch (invokeState)
         {
             case INVOKE_ONCE:
+                // TODO: remove this test code into an actual fire method
                 CastingResult castingResult = Casting.cast(controller, slot.inventory.parent, slot.inventory.parent.rotation, 300.0f);
 
                 LOG.debug("CASTING RESULT: {}", castingResult);
 
                 if (castingResult.collision)
                 {
-                    // IDEA: create tracer effect between intersection x,y and origin
-                    // note: we want all players to see it
-
-                    float x = castingResult.x;
-                    float y = castingResult.y;
-                    controller.effectsManager.add(new BulletEffect(x, y));
-
-                    controller.effectsManager.add(new TracerEffect(slot.inventory.parent.positionNew, new Vector2(x, y)));
-
-                    LOG.debug("bullet created at {}, {}", x, y);
+                    LOG.debug("BULLET COLLISION");
                 }
+
+                float x = castingResult.x;
+                float y = castingResult.y;
+                controller.effectsManager.add(new BulletEffect(x, y));
+                controller.effectsManager.add(new TracerEffect(slot.inventory.parent.positionNew, new Vector2(x, y)));
 
                 break;
         }

@@ -73,6 +73,8 @@ public class Casting
         else
         {
             result = new CastingResult();
+            result.x = lineEnd.x;
+            result.y = lineEnd.y;
         }
 
         return result;

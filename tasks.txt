@@ -1,9 +1,11 @@
 high priority:
-- camera limits - lock camera within map
+- allow ents to spawn with pre-defined spawn point for map objects, rather than faction spawn -> and only use that spawn
+= allow ents to have a property where they cannot be moved -> physics properties . static
 - add turret to shoot players as a test of ray performance
 - player's showing weapons / muzzle flashes on weapons etc
 - run down players
-- frustruum culling
+- limited spawn protection e.g. cant die for 10s
+- network interpolation
 - sound effects
 - lighting
 - server chat (use html overlaying game)
@@ -12,13 +14,16 @@ high priority:
    - scoreboard
    - optional registration
    - player customisation -> upload custom image for player
+- deployment scripts / ansible
 
 bugs:
-- fix "kv of entities" syntax in project-sandbox; doesn't work with IE11
+- fix "kv of entities" syntax in project-sandbox; doesn't work with IE11 or minify
 - remove old js
 - #wrekt in big, wben player dies
 
 future ideas / consider:
 - change clientside logic from 60ms to 100ms to reduce computation
 - moving tile types into json, which client can cache for a long time?
+- update exact tiles/segments of map
+- chunk map and cache, rather than send entire map
 

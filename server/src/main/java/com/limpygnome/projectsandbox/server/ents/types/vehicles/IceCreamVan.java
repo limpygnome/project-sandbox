@@ -1,4 +1,4 @@
-package com.limpygnome.projectsandbox.server.ents.vehicles;
+package com.limpygnome.projectsandbox.server.ents.types.vehicles;
 
 import com.limpygnome.projectsandbox.server.ents.annotations.EntityType;
 import com.limpygnome.projectsandbox.server.ents.physics.Vector2;
@@ -8,7 +8,7 @@ import com.limpygnome.projectsandbox.server.ents.physics.Vector2;
  * @author limpygnome
  */
 @EntityType(typeId = 20)
-public class IceCreamVan extends AbstractCar
+public class IceCreamVan extends AbstractVehicle
 {
     public IceCreamVan()
     {

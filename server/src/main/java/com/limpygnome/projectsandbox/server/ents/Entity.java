@@ -36,16 +36,24 @@ public strictfp abstract class Entity
     /** Refer to {@link UpdateMasks} */
     public char updateMask;
     
-    // State data
+    // Size
     public short width;
     public short height;
+
+    // Position
+    // TODO: consider if position/positionNew need to be separate
     public Vector2 position;
     public Vector2 positionNew;
     public Vertices cachedVertices;
     public float rotation;
+
+    // Health
     // -- -1 for godmode
     public float health;
     public float maxHealth;
+
+    // Physics
+    public boolean physicsStatic;
     
     public Entity(short width, short height)
     {
@@ -74,6 +82,8 @@ public strictfp abstract class Entity
         
         this.health = 0.0f;
         this.maxHealth = 0.0f;
+
+        this.physicsStatic = false;
     }
     
     public void logic(Controller controller)

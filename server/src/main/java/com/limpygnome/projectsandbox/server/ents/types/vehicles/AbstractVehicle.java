@@ -1,9 +1,9 @@
-package com.limpygnome.projectsandbox.server.ents.vehicles;
+package com.limpygnome.projectsandbox.server.ents.types.vehicles;
 
 import com.limpygnome.projectsandbox.server.ents.physics.CollisionResult;
 import com.limpygnome.projectsandbox.server.Controller;
 import com.limpygnome.projectsandbox.server.ents.Entity;
-import com.limpygnome.projectsandbox.server.ents.Player;
+import com.limpygnome.projectsandbox.server.ents.types.Player;
 import com.limpygnome.projectsandbox.server.ents.physics.Vector2;
 import com.limpygnome.projectsandbox.server.players.PlayerInfo;
 import com.limpygnome.projectsandbox.server.players.enums.PlayerKeys;
@@ -12,7 +12,7 @@ import com.limpygnome.projectsandbox.server.players.enums.PlayerKeys;
  *
  * @author limpygnome
  */
-public abstract class AbstractCar extends Entity
+public abstract class AbstractVehicle extends Entity
 {   
     /**
      * The minimum (absolute) speed supported, until the speed is set to 0.
@@ -41,7 +41,7 @@ public abstract class AbstractCar extends Entity
     protected Vector2[] playerEjectPositions;
     protected PlayerInfo[] players;
     
-    public AbstractCar(short width, short height, Vector2[] playerEjectPositions)
+    public AbstractVehicle(short width, short height, Vector2[] playerEjectPositions)
     {
         super(width, height);
         

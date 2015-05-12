@@ -154,7 +154,7 @@ public class EntityManager
                         {
                             b = kv2.getValue();
 
-                            if (a.id != b.id)
+                            if (a.id != b.id && !b.physicsStatic)
                             {
                                 result = SAT.collision(a, b);
 

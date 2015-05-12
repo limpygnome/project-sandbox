@@ -1,6 +1,8 @@
-package com.limpygnome.projectsandbox.server.ents;
+package com.limpygnome.projectsandbox.server.ents.types;
 
 import com.limpygnome.projectsandbox.server.Controller;
+import com.limpygnome.projectsandbox.server.ents.Entity;
+import com.limpygnome.projectsandbox.server.ents.PlayerConstants;
 import com.limpygnome.projectsandbox.server.ents.annotations.EntityType;
 import com.limpygnome.projectsandbox.server.ents.physics.Vector2;
 import com.limpygnome.projectsandbox.server.inventory.Inventory;
