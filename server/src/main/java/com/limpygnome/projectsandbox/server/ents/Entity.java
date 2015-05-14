@@ -2,7 +2,7 @@ package com.limpygnome.projectsandbox.server.ents;
 
 import com.limpygnome.projectsandbox.server.ents.annotations.EntityType;
 import com.limpygnome.projectsandbox.server.ents.enums.UpdateMasks;
-import com.limpygnome.projectsandbox.server.ents.physics.CollisionResult;
+import com.limpygnome.projectsandbox.server.ents.physics.collisions.CollisionResult;
 import com.limpygnome.projectsandbox.server.ents.physics.Vector2;
 import com.limpygnome.projectsandbox.server.ents.physics.Vertices;
 import com.limpygnome.projectsandbox.server.inventory.Inventory;
@@ -328,6 +328,11 @@ public strictfp abstract class Entity
             // Push ent out by default
             positionOffset(result.mtv);
         }
+    }
+
+    public void eventSpawn()
+    {
+        // Nothing by default...
     }
     
     public abstract void reset();

@@ -7,6 +7,7 @@ package com.limpygnome.projectsandbox.server.utils;
 public class CustomMath
 {
     public static final float PI_FLOAT = (float) Math.PI;
+    public static final float PI_FLOAT_HALF = (float) Math.PI / 2.0f;
     
     /**
      * Clamps value inclusively within min and max.

@@ -1,6 +1,9 @@
-package com.limpygnome.projectsandbox.server.ents.physics;
+package com.limpygnome.projectsandbox.server.ents.physics.collisions;
 
 import com.limpygnome.projectsandbox.server.ents.Entity;
+import com.limpygnome.projectsandbox.server.ents.physics.Projection;
+import com.limpygnome.projectsandbox.server.ents.physics.Vector2;
+import com.limpygnome.projectsandbox.server.ents.physics.Vertices;
 import com.limpygnome.projectsandbox.server.utils.CustomMath;
 import com.limpygnome.projectsandbox.server.world.Map;
 import com.limpygnome.projectsandbox.server.world.TileType;

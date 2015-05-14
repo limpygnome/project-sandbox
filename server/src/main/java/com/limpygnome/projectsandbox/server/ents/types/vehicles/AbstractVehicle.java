@@ -1,6 +1,6 @@
 package com.limpygnome.projectsandbox.server.ents.types.vehicles;
 
-import com.limpygnome.projectsandbox.server.ents.physics.CollisionResult;
+import com.limpygnome.projectsandbox.server.ents.physics.collisions.CollisionResult;
 import com.limpygnome.projectsandbox.server.Controller;
 import com.limpygnome.projectsandbox.server.ents.Entity;
 import com.limpygnome.projectsandbox.server.ents.types.Player;

@@ -67,7 +67,7 @@ projectSandbox.camera =
 			    if (this.x != ent.renderX || this.y != ent.renderY || this.z != ent.renderZ)
 			    {
                     // Update camera
-                    this.setPosition(ent.x, ent.y, ent.z);
+                    this.setPosition(ent.renderX, ent.renderY, ent.renderZ);
 				}
 			}
 			else

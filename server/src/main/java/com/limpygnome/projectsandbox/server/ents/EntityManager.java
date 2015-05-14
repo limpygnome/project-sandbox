@@ -1,10 +1,10 @@
 package com.limpygnome.projectsandbox.server.ents;
 
-import com.limpygnome.projectsandbox.server.ents.physics.CollisionResult;
+import com.limpygnome.projectsandbox.server.ents.physics.collisions.CollisionResult;
 import com.limpygnome.projectsandbox.server.Controller;
 import com.limpygnome.projectsandbox.server.ents.enums.StateChange;
-import com.limpygnome.projectsandbox.server.ents.physics.CollisionResultMap;
-import com.limpygnome.projectsandbox.server.ents.physics.SAT;
+import com.limpygnome.projectsandbox.server.ents.physics.collisions.CollisionResultMap;
+import com.limpygnome.projectsandbox.server.ents.physics.collisions.SAT;
 import com.limpygnome.projectsandbox.server.ents.physics.Vector2;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -207,59 +207,6 @@ public class EntityManager
         {
             LOG.error("Exception during logic", e);
         }
-    }
-
-    // TODO: consider removal of the below code
-    public LinkedList<Entity> nearbyEnts(Entity a, float distance, boolean testAllVertices)
-    {
-        LinkedList<Entity> result = new LinkedList<>();
-
-        synchronized (entities)
-        {
-            Entity b;
-            float entDistance;
-            boolean found;
-            int i, j;
-
-            for (Map.Entry<Short, Entity> kv : entities.entrySet())
-            {
-                b = kv.getValue();
-
-                // Get distance to center
-                entDistance = Vector2.distance(a.position, b.position);
-
-                // Check distance to center
-                if (entDistance <= distance)
-                {
-                    result.add(b);
-                }
-                else if
-                (
-                    testAllVertices &&
-                    // Must be within collision radius to even be testable
-                    entDistance <= distance + b.cachedVertices.collisionRadius
-                )
-                {
-                    // Test all the vertices - expensive!
-                    found = false;
-                    for (i = 0; !found && i < a.cachedVertices.vertices.length; i++)
-                    {
-                        for (j = 0; !found && j < b.cachedVertices.vertices.length; j++)
-                        {
-                            entDistance = Vector2.distance(a.cachedVertices.vertices[i], b.cachedVertices.vertices[i]);
-
-                            if (entDistance < distance)
-                            {
-                                found = true;
-                                result.add(b);
-                            }
-                        }
-                    }
-                }
-            }
-        }
-
-        return result;
     }
 
 }

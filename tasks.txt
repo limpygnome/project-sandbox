@@ -26,4 +26,5 @@ future ideas / consider:
 - moving tile types into json, which client can cache for a long time?
 - update exact tiles/segments of map
 - chunk map and cache, rather than send entire map
-
+- textures allow limitless faces for frame, thus we could have pointed buildings if we add a type, which corresponds to a
+  polygon (2d or 3d) -> make generic way to do it -> game loads in models, associated with type id/number

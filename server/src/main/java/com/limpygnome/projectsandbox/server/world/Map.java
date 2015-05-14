@@ -262,6 +262,7 @@ public class Map
             Spawn spawn = factionSpawns.getNextSpawn();
             
             // Setup entity for its new life
+            // TODO: consider removal of reset, for pool idea, or make sure it's implemented in all ents
             ent.reset();
             
             ent.positionNew.x = spawn.x;
@@ -275,9 +276,9 @@ public class Map
             // TODO: this should be one call; we're rebuilding vertices twice - inefficient!
             ent.position(new Vector2(spawn.x, spawn.y));
             ent.rotation(spawn.rotation);
-            
-            // Reset ent
-            ent.reset();
+
+            // Inform the ent it has been spawned
+            ent.eventSpawn();
 
             LOG.debug("Spawned entity - ent: {} - spawn: {}", ent, spawn);
         }

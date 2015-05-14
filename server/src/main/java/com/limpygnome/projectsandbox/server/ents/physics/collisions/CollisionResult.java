@@ -1,4 +1,6 @@
-package com.limpygnome.projectsandbox.server.ents.physics;
+package com.limpygnome.projectsandbox.server.ents.physics.collisions;
+
+import com.limpygnome.projectsandbox.server.ents.physics.Vector2;
 
 /**
  *

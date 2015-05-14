@@ -6,6 +6,8 @@ import com.limpygnome.projectsandbox.server.ents.physics.Vector2;
 import com.limpygnome.projectsandbox.server.ents.physics.Vertices;
 import com.limpygnome.projectsandbox.server.ents.physics.casting.victims.EntityCastVictim;
 import com.limpygnome.projectsandbox.server.ents.physics.casting.victims.MapCastVictim;
+import com.limpygnome.projectsandbox.server.ents.physics.proximity.DefaultProximity;
+import com.limpygnome.projectsandbox.server.ents.physics.proximity.ProximityResult;
 import com.limpygnome.projectsandbox.server.utils.CustomMath;
 import com.limpygnome.projectsandbox.server.world.Map;
 import com.limpygnome.projectsandbox.server.world.TileType;
@@ -13,6 +15,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.util.LinkedList;
+import java.util.List;
 
 /**
  *
@@ -84,7 +87,7 @@ public class Casting
                                           Vector2 linePerpStart, Vector2 linePerpEnd, float maxDistance)
     {
         // Iterate and find each entity within the radius of being hit
-        LinkedList<Entity> possibleEnts = controller.entityManager.nearbyEnts(origin, maxDistance, true);
+        List<ProximityResult> possibleEnts = DefaultProximity.nearbyEnts(controller, origin, maxDistance, true, true);
 
         // 1. Ignore all the ents which are on the other side of the perp of origin i.e. complete opposite direction
         // 2. Iterate each vertex; a collision has occurred when a vertex is on the different side of the line to
@@ -95,8 +98,11 @@ public class Casting
         CastingResult result;
         CastingResult closestResult = null;
 
-        for (Entity ent : possibleEnts)
+        Entity ent;
+        for (ProximityResult proximityResult : possibleEnts)
         {
+            ent = proximityResult.entity;
+
             if (ent != origin)
             {
                 // Check ent is within correct direction and vertices of ent cross the line i.e. intersection
