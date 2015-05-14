@@ -53,7 +53,24 @@ public class Sentry extends Entity
             Vector2 a = positionNew;
 
             // Compute rotation towards ent
-            float rotation = (float) -(Math.atan2(a.y - b.y, a.x - b.x) + CustomMath.PI_FLOAT_HALF);
+            float targetRotation = CustomMath.PI_FLOAT_HALF - (float) Math.atan2(b.y - a.y, b.x - a.x);
+            float angleDiff = targetRotation - rotation;
+
+            while (angleDiff < -CustomMath.PI_FLOAT) angleDiff += 2 * CustomMath.PI_FLOAT;
+            while (angleDiff >= CustomMath.PI_FLOAT) angleDiff -= 2 * CustomMath.PI_FLOAT;
+
+            if (Math.abs(angleDiff) < ROTATION_RATE)
+            {
+                rotationOffset(angleDiff);
+            }
+            else
+            {
+
+                rotationOffset(angleDiff < 0.0f ? -ROTATION_RATE : ROTATION_RATE);
+            }
+            LOG.debug("DIFF {}", angleDiff);
+
+
 //            rotation -= CustomMath.PI_FLOAT;
 //            rotation = CustomMath.clampRepeat(
 //                       -CustomMath.PI_FLOAT,
@@ -61,14 +78,14 @@ public class Sentry extends Entity
 //                    rotation
 //            );
 
-            LOG.debug("ent: {}, rotation: {}", result.entity.id, rotation);
+//            LOG.debug("ent: {}, rotation: {}", result.entity.id, rotation);
 
             // Rotate towards ent
-            if (moveToRotation(controller, rotation))
-            {
-                // Fire at ent
-                fire(result.entity);
-            }
+//            if (moveToRotation(controller, rotation))
+//            {
+//                // Fire at ent
+//                fire(result.entity);
+//            }
         }
         else
         {
@@ -87,11 +104,13 @@ public class Sentry extends Entity
         float differenceToTarget = rotationTarget - rotation;
 
         float clampAmount = CustomMath.PI_FLOAT;
+
         float rotationOffset = CustomMath.clampRepeat(-clampAmount, clampAmount, differenceToTarget);
+        LOG.debug("OFFSET {}", rotationOffset);
 
         // Now clamp for gradual rotation
 
-        rotationOffset(rotationOffset);
+        rotationOffset(differenceToTarget);
 
         CastingResult castingResult = Casting.cast(controller, this, rotation, RANGE);
 
