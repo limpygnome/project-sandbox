@@ -36,6 +36,16 @@ Effect.prototype.logic = function()
 		// Calculate new opacity
 		this.setAlpha(1.0 - (lifespan / this.timeout));
 	}
+
+	// Update position if vx/vy defined
+	if (this.vx)
+	{
+		this.x += vx;
+	}
+	if (this.vy)
+	{
+		this.y += vy;
+	}
 }
 
 Effect.prototype.isExpired = function()

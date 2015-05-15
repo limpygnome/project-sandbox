@@ -181,7 +181,13 @@ public class Map
             throw new IOException("Entity type " + type + " not found");
         }
 
+        // Parse faction
         short faction = (short) (long) entData.get("faction");
+
+        // Parse spawn (optional)
+        Spawn spawn = parseSpawn((JSONObject) entData.get("spawn"));
+
+        // Parse count to spawn / instances to create
         long count = (long) entData.get("count");
         
         // Create new instances of type
@@ -194,6 +200,7 @@ public class Map
             {
                 ent = (Entity) entClass.newInstance();
                 ent.faction = faction;
+                ent.spawn = spawn;
             }
             catch (Exception e)
             {
@@ -216,11 +223,14 @@ public class Map
         
         // Parse spawns
         JSONArray spawnsData = (JSONArray) factionData.get("spawns");
-        Spawn spawn;
-        for (Object spawnData : spawnsData)
+        if (spawnsData != null)
         {
-            spawn = parseFactionSpawn((JSONObject) spawnData);
-            faction.addSpawn(spawn);
+            Spawn spawn;
+            for (Object spawnData : spawnsData)
+            {
+                spawn = parseSpawn((JSONObject) spawnData);
+                faction.addSpawn(spawn);
+            }
         }
         
         // Add to map
@@ -229,13 +239,20 @@ public class Map
         LOG.debug("Added faction - {}", faction);
     }
     
-    private static Spawn parseFactionSpawn(JSONObject spawn)
+    private static Spawn parseSpawn(JSONObject spawn)
     {
-        float x = (float) (double) spawn.get("x");
-        float y = (float) (double) spawn.get("y");
-        float rotation = (float) (double) spawn.get("rotation");
-        
-        return new Spawn(x, y, rotation);
+        if (spawn != null)
+        {
+            float x = (float) (double) spawn.get("x");
+            float y = (float) (double) spawn.get("y");
+            float rotation = (float) (double) spawn.get("rotation");
+
+            return new Spawn(x, y, rotation);
+        }
+        else
+        {
+            return null;
+        }
     }
     
     /**
@@ -247,41 +264,48 @@ public class Map
     public <T extends Entity> void spawn(T ent)
     {
         // Fetch spawn for faction
-        Faction factionSpawns = factions.get(ent.faction);
-        
-        if (factionSpawns == null)
-        {
-            // TODO: replace with log4j
-            LOG.warn("No spawns available for faction - faction id: {}", ent.faction);
+        Faction faction = factions.get(ent.faction);
 
-            // Set ent to deleted - not much we can do...
+        if (ent.spawn != null)
+        {
+            spawnEnt(ent, ent.spawn);
+        }
+        else if (faction == null)
+        {
+            LOG.warn("Cannot find faction for entity - id: {}, faction: {}", ent.id, ent.faction);
             ent.setState(StateChange.PENDING_DELETED);
         }
-        else
+        else if (faction.hasSpawns())
         {   
-            Spawn spawn = factionSpawns.getNextSpawn();
-            
-            // Setup entity for its new life
-            // TODO: consider removal of reset, for pool idea, or make sure it's implemented in all ents
-            ent.reset();
-            
-            ent.positionNew.x = spawn.x;
-            ent.positionNew.y = spawn.y;
-            ent.position.copy(ent.positionNew);
-            ent.rotation = spawn.rotation;
-            ent.updateMask(UpdateMasks.ALL_MASKS);
-            
-            ent.rebuildCachedVertices();
-            
-            // TODO: this should be one call; we're rebuilding vertices twice - inefficient!
-            ent.position(new Vector2(spawn.x, spawn.y));
-            ent.rotation(spawn.rotation);
-
-            // Inform the ent it has been spawned
-            ent.eventSpawn();
-
-            LOG.debug("Spawned entity - ent: {} - spawn: {}", ent, spawn);
+            Spawn spawn = faction.getNextSpawn();
+            spawnEnt(ent, spawn);
         }
+        else
+        {
+            LOG.warn("No spawns available for faction - id: {}, faction: {}", ent.id, ent.faction);
+            ent.setState(StateChange.PENDING_DELETED);
+        }
+    }
+
+    private void spawnEnt(Entity ent, Spawn spawn)
+    {
+        // Setup entity for its new life
+        ent.reset();
+
+        // Set position etc for spawn
+        ent.positionNew.x = spawn.x;
+        ent.positionNew.y = spawn.y;
+        ent.position.copy(ent.positionNew);
+        ent.rotation = spawn.rotation;
+        ent.updateMask(UpdateMasks.ALL_MASKS);
+
+        // Rebuild vertices
+        ent.rebuildCachedVertices();
+
+        // Inform the ent it has been spawned
+        ent.eventSpawn();
+
+        LOG.debug("Spawned entity - ent: {} - spawn: {}", ent, spawn);
     }
 
     @Override

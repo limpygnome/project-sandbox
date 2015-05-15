@@ -29,6 +29,7 @@ public class Sentry extends Entity
     public final static float ROTATION_RATE = 0.1f;
     public final static float ROTATION_DIFF_FIRE = 0.26f;
     public final static float FIRE_RATE_MS = 180.0f;
+    public final static float BULLET_DAMAGE = 20.0f;
 
     public float defaultRotation;
     private long lastFired;
@@ -60,7 +61,7 @@ public class Sentry extends Entity
             // Rotate towards default rotation
             rotateToTarget(controller, defaultRotation - rotation, false);
         }
-        
+
         // Perform ent logic
         super.logic(controller);
     }
@@ -109,6 +110,11 @@ public class Sentry extends Entity
         // Check we hit an entity
         if (castingResult.collision && castingResult.victim instanceof EntityCastVictim)
         {
+            // Inflict damage
+            EntityCastVictim castVictim = (EntityCastVictim) castingResult.victim;
+            castVictim.entity.damage(controller, BULLET_DAMAGE);
+
+            // Create bullet effect
             controller.effectsManager.add(new BulletEffect(x, y));
         }
 
@@ -120,10 +126,5 @@ public class Sentry extends Entity
     public void eventSpawn()
     {
         this.defaultRotation = rotation;
-    }
-
-    @Override
-    public void reset()
-    {
     }
 }

@@ -43,6 +43,11 @@ public class Faction
         return spawnIterator.next();
     }
 
+    public boolean hasSpawns()
+    {
+        return !spawns.isEmpty();
+    }
+
     @Override
     public String toString()
     {

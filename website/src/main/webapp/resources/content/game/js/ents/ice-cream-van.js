@@ -28,3 +28,9 @@ IceCreamVan.prototype.logic = function()
 	// Update trail
 	this.trail.logic();
 }
+
+IceCreamVan.prototype.eventDeath = function()
+{
+	console.error("death called");
+	game.effects.createExplosion(this.x, this.y, 16, 4000, -15, 15);
+}

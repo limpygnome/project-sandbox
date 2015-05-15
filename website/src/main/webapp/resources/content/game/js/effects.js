@@ -31,7 +31,7 @@ game.effects =
 					var effectY = dataView.getFloat32(offset + 4);
 
 					var effect = new Effect("error", this.BULLET_WIDTH, this.BULLET_HEIGHT, effectX, effectY, this.BULLET_Z, this.BULLET_LIFESPAN, this.BULLET_FADE);
-					effect.rotation = this.randRotation();
+					effect.rotation = projectSandbox.utils.randRotation();
 					projectSandbox.effects.push(effect);
 					console.debug("game/effects - created bullet at " + effect.x + " , " + effect.y);
 
@@ -75,8 +75,21 @@ game.effects =
 		return 16;
 	},
 
-	randRotation: function()
+	EXPLOSION_Z: -0.5,
+	EXPLOSION_FADE: true,
+	EXPLOSION_WIDTH: 16,
+	EXPLOSION_HEIGHT: 16,
+
+	createExplosion: function(x, y, particles, lifeSpan, velocityMin, velocityMax)
 	{
-		return projectSandbox.utils.rand(0.0, 6.28318531);
+		var effect;
+		for (var i = 0; i < particles; i++)
+		{
+			effect = new Effect("error", this.EXPLOSION_WIDTH, this.EXPLOSION_HEIGHT, x, y, this.EXPLOSION_Z, lifeSpan, this.EXPLOSION_FADE);
+			effect.rotation = projectSandbox.utils.randRotation();
+			effect.vx = projectSandbox.utils.rand(velocityMin, velocityMax);
+			effect.vy = projectSandbox.utils.rand(velocityMin, velocityMax);
+			projectSandbox.effects.push(effect);
+		}
 	}
 }

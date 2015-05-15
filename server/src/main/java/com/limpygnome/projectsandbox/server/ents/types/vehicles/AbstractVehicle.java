@@ -272,5 +272,7 @@ public abstract class AbstractVehicle extends Entity
     public void reset()
     {
         this.speed = 0.0f;
+
+        super.reset();
     }
 }

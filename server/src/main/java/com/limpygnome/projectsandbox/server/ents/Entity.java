@@ -10,6 +10,7 @@ import com.limpygnome.projectsandbox.server.players.PlayerInfo;
 import com.limpygnome.projectsandbox.server.utils.CustomMath;
 import com.limpygnome.projectsandbox.server.Controller;
 import com.limpygnome.projectsandbox.server.ents.enums.StateChange;
+import com.limpygnome.projectsandbox.server.world.Spawn;
 
 import java.lang.annotation.Annotation;
 import java.util.List;
@@ -25,11 +26,15 @@ public strictfp abstract class Entity
     
     // The unique ID for the entity
     public short id;
-    
+
+    // The ID of the faction to which the player belongs
     public short faction;
     
     // The type of entity
     public short entityType;
+
+    // The default spawn
+    public Spawn spawn;
     
     // State flags
     private StateChange state;
@@ -59,6 +64,7 @@ public strictfp abstract class Entity
     {
         this.id = 0;
         this.faction = DEFAULT_FACTION;
+        this.spawn = null;
         
         // Fetch entity ID
         final Class ENTITY_CLASS = getClass();
@@ -221,19 +227,20 @@ public strictfp abstract class Entity
     public void damage(Controller controller, float damage)
     {
         // Check entity does not have godmode
-        if (health == -1.0f)
+        if (maxHealth <= 0.0f)
         {
             return;
         }
-        // Check damage is not 0.0 or infinity
-        else if
+
+        // Check health is not infinity
+        if
         (
-            health == 0.0f || health == Float.NaN ||
+            health == Float.NaN ||
             health == Float.POSITIVE_INFINITY || 
             health == Float.NEGATIVE_INFINITY
         )
         {
-            return;
+            health = 0.0f;
         }
         
         // Apply damage
@@ -335,7 +342,10 @@ public strictfp abstract class Entity
         // Nothing by default...
     }
     
-    public abstract void reset();
+    public void reset()
+    {
+        health = maxHealth;
+    }
 
     @Override
     public String toString()

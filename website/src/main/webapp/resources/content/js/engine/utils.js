@@ -71,6 +71,11 @@ projectSandbox.utils =
 			(Math.random() * (max-min)) + min
 		);
 	},
+
+	randRotation: function()
+	{
+		return projectSandbox.utils.rand(0.0, 6.28318531);
+	},
 	
 	vectorRotate: function(originX, originY, x, y, rotation)
 	{

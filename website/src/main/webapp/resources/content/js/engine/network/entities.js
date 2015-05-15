@@ -155,9 +155,24 @@ projectSandbox.network.entities =
 	packetUpdatesEntDeleted: function(data, dataView, id, offset)
 	{
 		// Remove entity from the world
-		projectSandbox.entities.delete(id);
-		console.log("engine/network/entities - entity " + id + " deleted");
+		var entity = projectSandbox.entities.get(id);
+		if (entity != null)
+		{
+			// Remove from world
+			projectSandbox.entities.delete(id);
 
+			// Invoke death event
+			if (entity.eventDeath)
+			{
+				entity.eventDeath();
+			}
+
+			console.log("engine/network/entities - entity " + id + " deleted");
+		}
+		else
+		{
+			console.warn("engine/network/entities - entity " + id + " not found for deletion");
+		}
 		return 0;
 	}
 }

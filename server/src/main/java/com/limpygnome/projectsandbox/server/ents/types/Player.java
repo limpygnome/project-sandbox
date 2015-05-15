@@ -95,11 +95,6 @@ public class Player extends Entity
     }
 
     @Override
-    public void reset()
-    {
-    }
-
-    @Override
     public Inventory retrieveInventory(PlayerInfo playerInfo)
     {
         if (this.playerInfo == playerInfo)
