@@ -1,5 +1,7 @@
 package com.limpygnome.projectsandbox.server.ents.physics;
 
+import com.limpygnome.projectsandbox.server.utils.CustomMath;
+
 /**
  * Vector data-structure with operations.
  * 
@@ -205,7 +207,24 @@ public class Vector2
     {
         return (lineEnd.x - lineStart.x) * (vertex.y - lineStart.y) > (lineEnd.y - lineStart.y) * (vertex.x - lineStart.x);
     }
-    
+
+    /**
+     * Calculates the rotation offset required to face a target.
+     *
+     * @param source The source position.
+     * @param sourceRotation The rotation of the source.
+     * @param target The target position.
+     * @return The rotation offset to face the target.
+     */
+    public static float angleToFaceTarget(Vector2 source, float sourceRotation, Vector2 target)
+    {
+        // Calculate target rotation relative to us
+        float targetRotation = CustomMath.PI_FLOAT_HALF - (float) Math.atan2(target.y - source.y, target.x - source.x);
+
+        // Return the difference
+        return CustomMath.clampAngle(targetRotation - sourceRotation);
+    }
+
     @Override
     public String toString()
     {

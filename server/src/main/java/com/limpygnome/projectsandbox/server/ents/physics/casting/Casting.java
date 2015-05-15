@@ -14,7 +14,6 @@ import com.limpygnome.projectsandbox.server.world.TileType;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -170,10 +169,10 @@ public class Casting
         int tileEndY = (int) Math.ceil(endY / map.tileSize);
 
         // Clamp to size of map
-        tileStartX = CustomMath.clamp(0, map.width - 1, tileStartX);
-        tileStartY = CustomMath.clamp(0, map.height - 1, tileStartY);
-        tileEndX = CustomMath.clamp(0, map.width - 1, tileEndX);
-        tileEndY = CustomMath.clamp(0, map.height - 1, tileEndY);
+        tileStartX = CustomMath.limit(0, map.width - 1, tileStartX);
+        tileStartY = CustomMath.limit(0, map.height - 1, tileStartY);
+        tileEndX = CustomMath.limit(0, map.width - 1, tileEndX);
+        tileEndY = CustomMath.limit(0, map.height - 1, tileEndY);
 
         // Iterate each tile
         boolean collision;

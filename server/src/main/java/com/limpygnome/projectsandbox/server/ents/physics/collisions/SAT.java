@@ -52,10 +52,10 @@ public class SAT
         int indexMaxY = (int) Math.ceil(maxY / ts) - 1;
         
         // Clamp within bounds of array
-        indexMinX = CustomMath.clamp(0, map.width - 1, indexMinX);
-        indexMaxX = CustomMath.clamp(0, map.width - 1, indexMaxX);
-        indexMinY = CustomMath.clamp(0, map.height - 1, indexMinY);
-        indexMaxY = CustomMath.clamp(0, map.height - 1, indexMaxY);
+        indexMinX = CustomMath.limit(0, map.width - 1, indexMinX);
+        indexMaxX = CustomMath.limit(0, map.width - 1, indexMaxX);
+        indexMinY = CustomMath.limit(0, map.height - 1, indexMinY);
+        indexMaxY = CustomMath.limit(0, map.height - 1, indexMaxY);
 
         // Fetch tiles within range and test for collision with solid tiles
         short tileTypeIndex;

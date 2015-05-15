@@ -6,18 +6,19 @@ package com.limpygnome.projectsandbox.server.utils;
  */
 public class CustomMath
 {
+    public static final float PI_FLOAT_DOUBLE = (float) Math.PI * 2.0f;
     public static final float PI_FLOAT = (float) Math.PI;
     public static final float PI_FLOAT_HALF = (float) Math.PI / 2.0f;
     
     /**
-     * Clamps value inclusively within min and max.
+     * Limits value inclusively within min and max.
      * 
      * @param min The min value.
      * @param max The max value.
      * @param value The value.
-     * @return The clamped value.
+     * @return The limited value.
      */
-    public static int clamp(int min, int max, int value)
+    public static int limit(int min, int max, int value)
     {
         if (value < min)
         {
@@ -33,7 +34,7 @@ public class CustomMath
         }
     }
     
-    public static float clampRepeat(float min, float max, float value)
+    public static float clamp(float min, float max, float value)
     {
         float diff = max - min;
         float v = value - min;
@@ -54,6 +55,17 @@ public class CustomMath
         }
         
         return min + v;
+    }
+
+    public static float clampAngle(float radians)
+    {
+        while (radians < -CustomMath.PI_FLOAT) {
+            radians += PI_FLOAT_DOUBLE;
+        }
+        while (radians >= CustomMath.PI_FLOAT) {
+            radians -= PI_FLOAT_DOUBLE;
+        }
+        return radians;
     }
     
     public static float deg2rad(float deg)

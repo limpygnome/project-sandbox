@@ -8,13 +8,13 @@ import com.limpygnome.projectsandbox.server.ents.annotations.EntityType;
 import com.limpygnome.projectsandbox.server.ents.physics.Vector2;
 import com.limpygnome.projectsandbox.server.ents.physics.casting.Casting;
 import com.limpygnome.projectsandbox.server.ents.physics.casting.CastingResult;
+import com.limpygnome.projectsandbox.server.ents.physics.casting.victims.EntityCastVictim;
 import com.limpygnome.projectsandbox.server.ents.physics.proximity.DefaultProximity;
 import com.limpygnome.projectsandbox.server.ents.physics.proximity.ProximityResult;
 import com.limpygnome.projectsandbox.server.utils.CustomMath;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -25,16 +25,20 @@ public class Sentry extends Entity
 {
     private final static Logger LOG = LogManager.getLogger(Sentry.class);
 
-    public final static float RANGE = 300.0f;
+    public final static float RANGE = 150.0f;
     public final static float ROTATION_RATE = 0.1f;
+    public final static float ROTATION_DIFF_FIRE = 0.26f;
+    public final static float FIRE_RATE_MS = 180.0f;
 
     public float defaultRotation;
+    private long lastFired;
 
     public Sentry()
     {
         super((short) 32, (short) 32);
 
         this.defaultRotation = 0.0f;
+        this.lastFired = 0;
     }
 
     @Override
@@ -47,137 +51,69 @@ public class Sentry extends Entity
         {
             ProximityResult result = ents.get(0);
 
-//            LOG.debug("locked onto " + result.entity.id);
+            float targetAngleOffset = Vector2.angleToFaceTarget(positionNew, rotation, result.entity.positionNew);
 
-            Vector2 b = result.entity.positionNew;
-            Vector2 a = positionNew;
-
-            // Compute rotation towards ent
-            float targetRotation = CustomMath.PI_FLOAT_HALF - (float) Math.atan2(b.y - a.y, b.x - a.x);
-            float angleDiff = targetRotation - rotation;
-
-            while (angleDiff < -CustomMath.PI_FLOAT) angleDiff += 2 * CustomMath.PI_FLOAT;
-            while (angleDiff >= CustomMath.PI_FLOAT) angleDiff -= 2 * CustomMath.PI_FLOAT;
-
-            if (Math.abs(angleDiff) < ROTATION_RATE)
-            {
-                rotationOffset(angleDiff);
-            }
-            else
-            {
-
-                rotationOffset(angleDiff < 0.0f ? -ROTATION_RATE : ROTATION_RATE);
-            }
-            LOG.debug("DIFF {}", angleDiff);
-
-
-//            rotation -= CustomMath.PI_FLOAT;
-//            rotation = CustomMath.clampRepeat(
-//                       -CustomMath.PI_FLOAT,
-//                    CustomMath.PI_FLOAT,
-//                    rotation
-//            );
-
-//            LOG.debug("ent: {}, rotation: {}", result.entity.id, rotation);
-
-            // Rotate towards ent
-//            if (moveToRotation(controller, rotation))
-//            {
-//                // Fire at ent
-//                fire(result.entity);
-//            }
+            rotateToTarget(controller, targetAngleOffset, true);
         }
         else
         {
             // Rotate towards default rotation
-            //moveToRotation(defaultRotation);
+            rotateToTarget(controller, defaultRotation - rotation, false);
         }
-
-        // Fire on ent if sentry aligns with target
-
+        
         // Perform ent logic
         super.logic(controller);
     }
 
-    private boolean moveToRotation(Controller controller, float rotationTarget)
+    private void rotateToTarget(Controller controller, float targetAngleOffset, boolean fireMode)
     {
-        float differenceToTarget = rotationTarget - rotation;
+        float targetAngleOffsetAbs = Math.abs(targetAngleOffset);
 
-        float clampAmount = CustomMath.PI_FLOAT;
+        // Rotate towards target
+        if (targetAngleOffsetAbs < ROTATION_RATE)
+        {
+            rotationOffset(targetAngleOffset);
+        }
+        else if (targetAngleOffset < 0.0f)
+        {
+            rotationOffset(-ROTATION_RATE);
+        }
+        else if (targetAngleOffset > 0.0f)
+        {
+            rotationOffset(ROTATION_RATE);
+        }
 
-        float rotationOffset = CustomMath.clampRepeat(-clampAmount, clampAmount, differenceToTarget);
-        LOG.debug("OFFSET {}", rotationOffset);
-
-        // Now clamp for gradual rotation
-
-        rotationOffset(differenceToTarget);
-
-        CastingResult castingResult = Casting.cast(controller, this, rotation, RANGE);
-
-        float x = castingResult.x;
-        float y = castingResult.y;
-        controller.effectsManager.add(new BulletEffect(x, y));
-        controller.effectsManager.add(new TracerEffect(positionNew, new Vector2(x, y)));
-
-
-
-
-
-        // Decide which way to rotate
-//        float remainingLeft = Math.abs(
-//                CustomMath.clampRepeat(
-//                        -CustomMath.PI_FLOAT,
-//                        CustomMath.PI_FLOAT,
-//                        rotation - rotationTarget
-//                )
-//        );
-//        float remainingRight = Math.abs(
-//                CustomMath.clampRepeat(
-//                        -CustomMath.PI_FLOAT,
-//                        CustomMath.PI_FLOAT,
-//                        rotation + rotationTarget
-//                )
-//        );
-
-//        LOG.debug("r1 {}, r2 {}", remainingLeft, remainingRight);
-
-//        float rotateAmount = ROTATION_RATE;
-
-        // Invert rate if going left / anti-clockwise
-//        if (remainingLeft < remainingRight)
-//        {
-//            rotateAmount *= -1;
-//        }
-
-        // Check if the rotation amount is smaller than rate
-//        float remainingAfter = Math.abs(
-//                CustomMath.clampRepeat(
-//                        -CustomMath.PI_FLOAT,
-//                        CustomMath.PI_FLOAT,
-//                        rotationTarget - (rotation + rotateAmount)
-//                )
-//        );
-
-//        if (remainingAfter < rotateAmount)
-//        {
-//            rotateAmount = remainingAfter;
-//
-//            if (remainingLeft < remainingRight)
-//            {
-//                rotateAmount *= -1;
-//            }
-//        }
-
-        // Update rotation
-        //rotationOffset(rotateAmount);
-
-//        LOG.debug("rotation amount {} " + rotateAmount);
-
-        return rotation == rotationTarget;
+        // Check if we can fire and  we're within the right angle to fire
+        if (fireMode && targetAngleOffsetAbs <= ROTATION_DIFF_FIRE)
+        {
+            fire(controller);
+        }
     }
 
-    private void fire(Entity target)
+    private void fire(Controller controller)
     {
+        long currTime = System.currentTimeMillis();
+
+        // Check we can fire
+        if (currTime - lastFired < FIRE_RATE_MS)
+        {
+            return;
+        }
+        lastFired = currTime;
+
+        // Cast bullet
+        CastingResult castingResult = Casting.cast(controller, this, rotation, RANGE);
+        float x = castingResult.x;
+        float y = castingResult.y;
+
+        // Check we hit an entity
+        if (castingResult.collision && castingResult.victim instanceof EntityCastVictim)
+        {
+            controller.effectsManager.add(new BulletEffect(x, y));
+        }
+
+        // Show red target tracer
+        controller.effectsManager.add(new TracerEffect(positionNew, new Vector2(x, y)));
     }
 
     @Override

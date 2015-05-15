@@ -94,7 +94,7 @@ public strictfp abstract class Entity
     public void rotation(float radians)
     {
         // Clamp within valid range
-        radians = CustomMath.clampRepeat(
+        radians = CustomMath.clamp(
                 -CustomMath.PI_FLOAT,
                 CustomMath.PI_FLOAT,
                 radians
