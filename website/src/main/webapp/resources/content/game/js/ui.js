@@ -18,6 +18,8 @@ game.ui =
 	
 	// Health
 	healthBar: null,
+
+    testText: null,
 	
 	setup: function()
 	{
@@ -63,6 +65,8 @@ game.ui =
 			
 			this.starsIcon[i] = star;
 		}
+
+		this.testText = projectSandbox.text.buildPrimitive('hello world', 18);
 	},
 	
 	setPrimitivePosTopLeft: function(primitive, viewWidth, viewHeight, x, y)
@@ -145,6 +149,11 @@ game.ui =
 				}
 			}
 		}
+
+        this.testText.x = this.testText.renderX = 100;
+        this.testText.y = this.testText.renderY = 500;
+
+		this.testText.render(gl, shaderProgram, modelView, perspective);
 	},
 
 	hookPlayer_entChanged: function()

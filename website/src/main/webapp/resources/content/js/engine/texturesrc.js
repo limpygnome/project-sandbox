@@ -1,36 +1,36 @@
-function TextureSrc(name, url, width, height)
+function TextureSrc(name, url, width, height, texture)
 {
 	var gl = projectSandbox.gl;
 
 	// Assign data
 	this.name = name;
-	this.url = url;
-    this.width = width;
-    this.height = height;
-	
-	// Create new texture
-	this.texture = gl.createTexture();
-	this.image = new Image();
-	
-	// Attempt to load image from URL
-	var self = this;
-	this.image.onload = function()
-	{
-		self.bindData(gl);
-	};
-	this.image.onerror = function()
-	{
-		console.error("Texture src - failed to load texture - " + url);
-	};
-	this.image.src = url;
-}
-
-function TextureSrc(texture, width, height)
-{
     this.width = width;
     this.height = height;
 
-    this.texture = texture;
+	if (url != null)
+	{
+	    this.url = url;
+
+        // Create new texture
+        this.texture = gl.createTexture();
+        this.image = new Image();
+
+        // Attempt to load image from URL
+        var self = this;
+        this.image.onload = function()
+        {
+            self.bindData(gl);
+        };
+        this.image.onerror = function()
+        {
+            console.error("Texture src - failed to load texture - " + url);
+        };
+        this.image.src = url;
+	}
+	else if (texture != null)
+	{
+	    this.texture = texture;
+	}
 }
 
 TextureSrc.prototype.bindData = function(gl)

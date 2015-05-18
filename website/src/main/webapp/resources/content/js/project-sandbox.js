@@ -90,10 +90,6 @@ var projectSandbox =
 
 		// Setup text rendering
 		this.text.setup();
-		var primitive = this.text.buildPrimitive("hello world test text long long long", 14);
-		
-		// temp to build text system
-		return;
 		
 		// Initialize request animation frame function
 		// -- Needs improving - what if null/fails?

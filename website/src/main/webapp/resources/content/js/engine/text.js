@@ -50,14 +50,25 @@ projectSandbox.text =
         gl.generateMipmap(gl.TEXTURE_2D);
 
         gl.bindTexture(gl.TEXTURE_2D, null);
+        gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, false);
 
         return texture;
     },
 
     buildVertices: function(width, height)
     {
-        // we cant use this, NEEDS TO BE VECTOR ARRAY...
-        return projectSandbox.bufferCache.fetchVertexBuffer2dRect(width, height);
+        var vectorWidth = width / this.canvasText.width;
+        var vectorHeight = height / this.canvasText.height;
+
+        // TODO: is 0.0 the right away? isnt 0.0 at the bottom left?
+
+        var frameData = new Float32Array(8);
+        frameData[0] = 0.0;         frameData[1] = 0.0;
+        frameData[2] = vectorWidth; frameData[3] = 0.0;
+        frameData[4] = vectorWidth; frameData[5] = vectorHeight;
+        frameData[6] = 0.0;         frameData[7] = vectorHeight;
+
+        return frameData;
     },
 
     buildPrimitive: function(text, fontSize)
@@ -83,12 +94,24 @@ projectSandbox.text =
         var texture = this.buildTexture();
         var textureVertices = this.buildVertices(textureWidth, textureHeight);
 
-        // Create primitive
-        var textureSrc = new TextureSrc(texture, textureWidth, textureHeight);
-        var primitiveTexture = new Texture(textureSrc, textureVertices);
+        // Build texture src
+        var textureSrc = new TextureSrc(null, null, textureWidth, textureHeight, texture);
 
+        // Build texture (obj)
+        var primitiveTexture = new Texture(
+            textureSrc,
+            null,
+            -1,
+            1,
+            4,
+            textureVertices
+        );
+
+        // Create primitive
         var primitive = new Primitive(textureWidth, textureHeight);
         primitive.setTextureRaw(primitiveTexture);
+        //primitive.setTexture("error");
+
 
         return primitive;
     }
