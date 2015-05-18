@@ -148,3 +148,8 @@ Primitive.prototype.setTexture = function(name)
 		this.texture = texture;
 	}
 }
+
+Primitive.prototype.setTextureRaw = function(texture)
+{
+	this.texture = texture;
+}

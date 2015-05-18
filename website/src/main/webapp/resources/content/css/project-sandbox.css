@@ -1,0 +1,18 @@
+body
+{
+    font: normal 12px Arial;
+    background: #333;
+}
+
+#projectsandbox
+{
+    width: 800px;
+    margin: 0em auto;
+    color: #FFF;
+}
+
+#projectsandbox #ps_render_text
+{
+    background: #FFF;
+    border: solid 0.2em #F00;
+}

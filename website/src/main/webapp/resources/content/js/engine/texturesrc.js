@@ -25,6 +25,14 @@ function TextureSrc(name, url, width, height)
 	this.image.src = url;
 }
 
+function TextureSrc(texture, width, height)
+{
+    this.width = width;
+    this.height = height;
+
+    this.texture = texture;
+}
+
 TextureSrc.prototype.bindData = function(gl)
 {
 	// Bind to texture

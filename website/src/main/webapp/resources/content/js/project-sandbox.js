@@ -77,7 +77,7 @@ var projectSandbox =
 		this.SCALE_FACTOR = 1.0;//0.05;
 		
 		// Fetch FPS counter
-		this.htmlFpsCounter = document.getElementById("fps");
+		this.htmlFpsCounter = document.getElementById("ps_fps");
 		
 		// Initialise WebGL
 		this.gl = this.initWebGl();
@@ -87,6 +87,13 @@ var projectSandbox =
 			alert("Browser does not support WebGL.");
 			return;
 		}
+
+		// Setup text rendering
+		this.text.setup();
+		var primitive = this.text.buildPrimitive("hello world test text long long long", 14);
+		
+		// temp to build text system
+		return;
 		
 		// Initialize request animation frame function
 		// -- Needs improving - what if null/fails?

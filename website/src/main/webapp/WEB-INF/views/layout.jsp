@@ -9,6 +9,8 @@
 	<head>
 		<title>Project Sandbox - Prototype</title>
 
+		<link rel="stylesheet" href="/content/css/project-sandbox.css" />
+
 		<!-- Third-Party -->
 		<script src="/content/js/third-party/gl-matrix-min.js"></script>
 
@@ -38,6 +40,7 @@
 		<script src="/content/js/engine/utils.js"></script>
 		<script src="/content/js/engine/inventory.js"></script>
 		<script src="/content/js/engine/inventory-item.js"></script>
+		<script src="/content/js/engine/text.js"></script>
 
 		<script src="/content/js/engine/network/entities.js"></script>
 		<script src="/content/js/engine/network/inventory.js"></script>
