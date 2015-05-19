@@ -67,8 +67,13 @@ game.ui =
 			this.starsIcon[i] = star;
 		}
 
-		this.testText = projectSandbox.text.buildPrimitive('#wrektp', 50);
+		this.testText = projectSandbox.text.buildPrimitive('#wrektp', 60);
+        this.testText.x = (width / 2.0) - (this.testText.width / 2.0);
+        this.testText.y = (height / 2.0) - (this.testText.height / 2.0);
+
 		this.testError = new Primitive(this.testText.width, this.testText.height);
+		this.testError.x = this.testText.x;
+		this.testError.y = this.testText.y;
 		this.testError.setTexture("error");
 	},
 	
@@ -153,13 +158,7 @@ game.ui =
 			}
 		}
 
-        this.testText.x = this.testText.renderX = 400 - (this.testText.width / 2.0);
-        this.testText.y = this.testText.renderY = 300 - (this.testText.height / 2.0);
-
 		this.testText.render(gl, shaderProgram, modelView, perspective);
-
-		this.testError.x = this.testError.renderX = this.testText.x;
-		this.testError.y = this.testError.renderY = this.testText.y;
 		this.testError.render(gl, shaderProgram, modelView, perspective);
 	},
 

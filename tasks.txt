@@ -1,7 +1,7 @@
 high priority:
-- allow ents to spawn with pre-defined spawn point for map objects, rather than faction spawn -> and only use that spawn
-= allow ents to have a property where they cannot be moved -> physics properties . static
-- add turret to shoot players as a test of ray performance
+- text is cached
+- buffer cache has limit and purges items / look at optimizing and disposing buffer cache -> hook verts with an array of prims using them, prim dispose removes from array etc
+- allow ents to have a property where they cannot be moved -> physics properties . static
 - player's showing weapons / muzzle flashes on weapons etc
 - run down players
 - limited spawn protection e.g. cant die for 10s
