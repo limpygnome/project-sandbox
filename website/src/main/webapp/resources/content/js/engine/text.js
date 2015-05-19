@@ -54,12 +54,10 @@ projectSandbox.text =
         return texture;
     },
 
-    buildVertices: function(width, height)
+    buildVertices: function(width, height, blurSize)
     {
-        var vectorWidth = width / this.canvasText.width;
-        var vectorHeight = height / this.canvasText.height;
-
-        // TODO: is 0.0 the right away? isnt 0.0 at the bottom left?
+        var vectorWidth = (width + blurSize) / this.canvasText.width;
+        var vectorHeight = (height + blurSize) / this.canvasText.height;
 
         var frameData = new Float32Array(8);
         frameData[0] = 0.0;         frameData[1] = vectorHeight;
@@ -106,8 +104,8 @@ projectSandbox.text =
         }
 
         // Render text
-        var x = blurSize;//(canvasSize[0] / 2.0) - (canvasSize[2] / 2.0);
-        var y = 0.0;//(canvasSize[1] / 2.0) - (canvasSize[3] / 2.0);
+        var x = blurSize;
+        var y = 0.0;
         this.canvasTextContext.fillText(text, x, y);
 
         // Create texture / verts
@@ -115,7 +113,7 @@ projectSandbox.text =
         var textHeight = fontSize * 1.25;
 
         var texture = this.buildTexture();
-        var textureVertices = this.buildVertices(textWidth, textHeight);
+        var textureVertices = this.buildVertices(textWidth, textHeight, blurSize);
 
         // Build texture src
         var textureSrc = new TextureSrc(null, null, textWidth, textHeight, texture);
@@ -135,6 +133,7 @@ projectSandbox.text =
         primitive.setTextureRaw(primitiveTexture);
 
         // Set unique name for caching
+        // TODO: build name here
         primitive.textName = "";
 
         return primitive;

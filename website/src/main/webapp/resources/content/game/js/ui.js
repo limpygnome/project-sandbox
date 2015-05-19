@@ -20,25 +20,28 @@ game.ui =
 	healthBar: null,
 
     testText: null,
+    wrektContinueText: null,
     testError: null,
+    wrektBackground2: null,
 	
 	setup: function()
 	{
 	    // Set UI size
         this.resize();
-
-	    // Rebuild UI components
-		this.rebuildUI();
 	},
 	
 	resize: function()
 	{
 	    var gl = projectSandbox.gl;
 
+        // Recompute size
 		this.uiWidth = gl.viewportWidth;
         this.uiHeight = gl.viewportHeight;
 
         console.debug("engine/ui - size set to " + this.uiWidth + "x" + this.uiHeight);
+
+        // Rebuild UI
+        this.rebuildUI();
 	},
 	
 	rebuildUI: function()
@@ -76,12 +79,20 @@ game.ui =
 		this.testText = projectSandbox.text.buildPrimitive('#wrekt', 80, 'white', 15.0, 'black');
         this.testText.x = this.uiWidth / 2.0;
         this.testText.y = this.uiHeight / 2.0;
-        this.testText.z = 0.0;
 
-		this.testError = new Primitive(this.testText.width, this.testText.height);
+        this.wrektContinueText = projectSandbox.text.buildPrimitive('press space to respawn', 45.0, 'white', 20.0, 'black');
+        this.wrektContinueText.x = this.uiWidth / 2.0;
+        this.wrektContinueText.y = this.wrektContinueText.height;
+
+		this.testError = new Primitive(this.uiWidth, this.uiHeight);
 		this.testError.x = this.testText.x;
 		this.testError.y = this.testText.y;
-		this.testError.z = 0.5;
+		this.testError.setColour(0.0, 0.0, 0.0, 0.3);
+
+		this.wrektBackground2 = new Primitive(this.uiWidth, this.testText.height);
+		this.wrektBackground2.x = this.uiWidth / 2.0;
+		this.wrektBackground2.y = this.uiHeight / 2.0;
+		this.wrektBackground2.setColour(0.0, 0.0, 0.0, 0.1);
 	},
 	
 	setPrimitivePosTopLeft: function(primitive, x, y)
@@ -134,13 +145,19 @@ game.ui =
 	
 	render: function(gl, shaderProgram, modelView, perspective)
 	{
+	    // Disable depth for transparency
+	    gl.disable(gl.DEPTH_TEST);
+
 		// Switch into orthographic mode
 		mat4.ortho(perspective, 0, this.uiWidth, 0, this.uiHeight, 0, 1);
 		mat4.identity(modelView);
 
 
-		this.testText.render(gl, shaderProgram, modelView, perspective);
 		this.testError.render(gl, shaderProgram, modelView, perspective);
+		this.wrektBackground2.render(gl, shaderProgram, modelView, perspective);
+
+		this.testText.render(gl, shaderProgram, modelView, perspective);
+		this.wrektContinueText.render(gl, shaderProgram, modelView, perspective);
 
 		
 		if (this.renderPlayerUI)
@@ -166,7 +183,8 @@ game.ui =
 			}
 		}
 
-
+        // Re-enable depth testing
+        gl.enable(gl.DEPTH_TEST);
 	},
 
 	hookPlayer_entChanged: function()
