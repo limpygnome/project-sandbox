@@ -87,22 +87,22 @@ projectSandbox.text =
         //this.canvasTextContext.textAlign = "center";
         this.canvasTextContext.textBaseline = "top";
         this.canvasTextContext.shadowColor = "black";
-        //this.canvasTextContext.shadowBlur = 10;
+        this.canvasTextContext.shadowBlur = 10;
 
         // Render text
         var x = 0.0;//(canvasSize[0] / 2.0) - (canvasSize[2] / 2.0);
-        var y = (canvasSize[1] / 2.0) - (canvasSize[3] / 2.0);
+        var y = 0.0;//(canvasSize[1] / 2.0) - (canvasSize[3] / 2.0);
         this.canvasTextContext.fillText(text, x, y);
 
         // Create texture / verts
-        var textureWidth = canvasSize[2];
-        var textureHeight = canvasSize[3];
+        var textWidth = canvasSize[2];
+        var textHeight = fontSize * 1.25;// canvasSize[3];
 
         var texture = this.buildTexture();
-        var textureVertices = this.buildVertices(textureWidth, textureHeight);
+        var textureVertices = this.buildVertices(textWidth, textHeight);
 
         // Build texture src
-        var textureSrc = new TextureSrc(null, null, textureWidth, textureHeight, texture);
+        var textureSrc = new TextureSrc(null, null, textWidth, textHeight, texture);
 
         // Build texture (obj)
         var primitiveTexture = new Texture(
@@ -115,7 +115,7 @@ projectSandbox.text =
         );
 
         // Create primitive
-        var primitive = new Primitive(textureWidth, textureHeight);
+        var primitive = new Primitive(textWidth, textHeight);
         primitive.setTextureRaw(primitiveTexture);
         //primitive.setTexture("error");
 
