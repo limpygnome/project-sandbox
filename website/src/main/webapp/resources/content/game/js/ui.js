@@ -20,6 +20,7 @@ game.ui =
 	healthBar: null,
 
     testText: null,
+    testError: null,
 	
 	setup: function()
 	{
@@ -66,7 +67,9 @@ game.ui =
 			this.starsIcon[i] = star;
 		}
 
-		this.testText = projectSandbox.text.buildPrimitive('hello world', 18);
+		this.testText = projectSandbox.text.buildPrimitive('hello world p T qgG', 38);
+		this.testError = new Primitive(this.testText.width, this.testText.height);
+		this.testError.setTexture("error");
 	},
 	
 	setPrimitivePosTopLeft: function(primitive, viewWidth, viewHeight, x, y)
@@ -150,10 +153,14 @@ game.ui =
 			}
 		}
 
-        this.testText.x = this.testText.renderX = 100;
+        this.testText.x = this.testText.renderX = 200;
         this.testText.y = this.testText.renderY = 500;
 
 		this.testText.render(gl, shaderProgram, modelView, perspective);
+
+		this.testError.x = this.testError.renderX = this.testText.x;
+		this.testError.y = this.testError.renderY = this.testText.y;
+		this.testError.render(gl, shaderProgram, modelView, perspective);
 	},
 
 	hookPlayer_entChanged: function()
