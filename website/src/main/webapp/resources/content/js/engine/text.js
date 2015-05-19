@@ -10,11 +10,11 @@ projectSandbox.text =
         this.canvasTextContext = this.canvasText.getContext("2d");
     },
 
-    calculateCanvasSize: function(text, fontSize)
+    calculateCanvasSize: function(text, fontSize, blurSize)
     {
         var textSize = this.canvasTextContext.measureText(text);
-        var textWidth = textSize.width;
-        var textHeight = fontSize * 2.0;
+        var textWidth = (textSize.width) + blurSize;
+        var textHeight = (fontSize * 2.0) + blurSize;
 
         // Build result
         var canvasSize = new Array();
@@ -70,33 +70,49 @@ projectSandbox.text =
         return frameData;
     },
 
-    buildPrimitive: function(text, fontSize)
+    buildPrimitive: function(text, fontSize, colour, blurSize, blurColour)
     {
+        // Check blur size defined to avoid calculations resulting to NaN
+        if (!blurSize)
+        {
+            blurSize = 0.0;
+        }
+
         // Setup font
         var font = fontSize + "px serif";
         this.canvasTextContext.font = font;
 
         // Re-setup canvas
-        var canvasSize = this.calculateCanvasSize(text, fontSize);
+        var canvasSize = this.calculateCanvasSize(text, fontSize, blurSize);
 
         this.canvasText.width = canvasSize[0];
         this.canvasText.height = canvasSize[1];
 
-        // Setup context
+        // Set font and layout
         this.canvasTextContext.font = font;
-        //this.canvasTextContext.textAlign = "center";
         this.canvasTextContext.textBaseline = "top";
-        this.canvasTextContext.shadowColor = "black";
-        this.canvasTextContext.shadowBlur = 10;
+
+        // Set colour
+        if (colour != null)
+        {
+            this.canvasTextContext.fillStyle = colour;
+        }
+
+        // Set blur
+        if (blurSize != null && blurColour != null && blurSize > 0.0)
+        {
+            this.canvasTextContext.shadowColor = blurColour;
+            this.canvasTextContext.shadowBlur = blurSize;
+        }
 
         // Render text
-        var x = 0.0;//(canvasSize[0] / 2.0) - (canvasSize[2] / 2.0);
+        var x = blurSize;//(canvasSize[0] / 2.0) - (canvasSize[2] / 2.0);
         var y = 0.0;//(canvasSize[1] / 2.0) - (canvasSize[3] / 2.0);
         this.canvasTextContext.fillText(text, x, y);
 
         // Create texture / verts
         var textWidth = canvasSize[2];
-        var textHeight = fontSize * 1.25;// canvasSize[3];
+        var textHeight = fontSize * 1.25;
 
         var texture = this.buildTexture();
         var textureVertices = this.buildVertices(textWidth, textHeight);
@@ -117,8 +133,9 @@ projectSandbox.text =
         // Create primitive
         var primitive = new Primitive(textWidth, textHeight);
         primitive.setTextureRaw(primitiveTexture);
-        //primitive.setTexture("error");
 
+        // Set unique name for caching
+        primitive.textName = "";
 
         return primitive;
     }

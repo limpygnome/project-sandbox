@@ -2,8 +2,8 @@ game.ui =
 {
 	// Size of the UI viewport
 	// TODO: update when resized
-	uiWidth: 800,
-	uiHeight: 600,
+	uiWidth: null,
+	uiHeight: null,
 	
 	// Indicates if to render UI regarding player
 	renderPlayerUI: false,
@@ -24,29 +24,35 @@ game.ui =
 	
 	setup: function()
 	{
+	    // Set UI size
+        this.resize();
+
+	    // Rebuild UI components
 		this.rebuildUI();
 	},
 	
 	resize: function()
 	{
-		// TODO: call this.
+	    var gl = projectSandbox.gl;
+
+		this.uiWidth = gl.viewportWidth;
+        this.uiHeight = gl.viewportHeight;
+
+        console.debug("engine/ui - size set to " + this.uiWidth + "x" + this.uiHeight);
 	},
 	
 	rebuildUI: function()
 	{
-		var gl = projectSandbox.gl;
-		var width = gl.viewportWidth;
-		var height = gl.viewportHeight;
-		var ratio = width / height;
+		var ratio = this.uiWidth / this.uiHeight;
 		
 		// Create weapons icon
 		this.iconWeapon = new Primitive(48 * ratio, 48 * ratio);
 		this.iconWeapon.setTexture("error");
-		this.setPrimitivePosTopLeft(this.iconWeapon, width, height, 8, 8);
+		this.setPrimitivePosTopLeft(this.iconWeapon, 8, 8);
 		
 		// Create health bar
 		this.healthBar = new PrimitiveBar(128, 8, true);
-		this.setPrimitivePosTopLeft(this.healthBar, width, height, 12, 78);
+		this.setPrimitivePosTopLeft(this.healthBar, 12, 78);
 		this.healthBar.setValue(0.5);
 		this.healthBar.setColour(
 			0.0,	1.0,	0.0,	1.0,
@@ -62,25 +68,26 @@ game.ui =
 		{
 			star = new Primitive(16 * ratio, 16 * ratio);
 			star.setTexture("ui/star_off");
-			this.setPrimitivePosTopLeft(star, width, height, 8 + ((star.width) * i), 90);
+			this.setPrimitivePosTopLeft(star, 8 + ((star.width) * i), 90);
 			
 			this.starsIcon[i] = star;
 		}
 
-		this.testText = projectSandbox.text.buildPrimitive('#wrektp', 60);
-        this.testText.x = (width / 2.0) - (this.testText.width / 2.0);
-        this.testText.y = (height / 2.0) - (this.testText.height / 2.0);
+		this.testText = projectSandbox.text.buildPrimitive('#wrekt', 80, 'white', 15.0, 'black');
+        this.testText.x = this.uiWidth / 2.0;
+        this.testText.y = this.uiHeight / 2.0;
+        this.testText.z = 0.0;
 
 		this.testError = new Primitive(this.testText.width, this.testText.height);
 		this.testError.x = this.testText.x;
 		this.testError.y = this.testText.y;
-		this.testError.setTexture("error");
+		this.testError.z = 0.5;
 	},
 	
-	setPrimitivePosTopLeft: function(primitive, viewWidth, viewHeight, x, y)
+	setPrimitivePosTopLeft: function(primitive, x, y)
 	{
-		primitive.x = viewWidth - x - (primitive.width / 2.0);
-		primitive.y = viewHeight - y - (primitive.height / 2.0);
+		primitive.x = this.uiWidth - x - (primitive.width / 2.0);
+		primitive.y = this.uiHeight - y - (primitive.height / 2.0);
 	},
 
 	reset: function()
@@ -127,13 +134,14 @@ game.ui =
 	
 	render: function(gl, shaderProgram, modelView, perspective)
 	{
-		var width = gl.viewportWidth;
-		var height = gl.viewportHeight;
-		var ratio = width / height;
-		
 		// Switch into orthographic mode
 		mat4.ortho(perspective, 0, this.uiWidth, 0, this.uiHeight, 0, 1);
 		mat4.identity(modelView);
+
+
+		this.testText.render(gl, shaderProgram, modelView, perspective);
+		this.testError.render(gl, shaderProgram, modelView, perspective);
+
 		
 		if (this.renderPlayerUI)
 		{
@@ -158,8 +166,7 @@ game.ui =
 			}
 		}
 
-		this.testText.render(gl, shaderProgram, modelView, perspective);
-		this.testError.render(gl, shaderProgram, modelView, perspective);
+
 	},
 
 	hookPlayer_entChanged: function()
