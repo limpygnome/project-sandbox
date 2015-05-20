@@ -19,11 +19,6 @@ game.ui =
 	// Health
 	healthBar: null,
 
-    testText: null,
-    wrektContinueText: null,
-    testError: null,
-    wrektBackground2: null,
-	
 	setup: function()
 	{
 	    // Set UI size
@@ -76,23 +71,9 @@ game.ui =
 			this.starsIcon[i] = star;
 		}
 
-		this.testText = projectSandbox.text.buildPrimitive('#wrekt', 80, 'white', 15.0, 'black');
-        this.testText.x = this.uiWidth / 2.0;
-        this.testText.y = this.uiHeight / 2.0;
-
-        this.wrektContinueText = projectSandbox.text.buildPrimitive('press space to respawn', 45.0, 'white', 20.0, 'black');
-        this.wrektContinueText.x = this.uiWidth / 2.0;
-        this.wrektContinueText.y = this.wrektContinueText.height;
-
-		this.testError = new Primitive(this.uiWidth, this.uiHeight);
-		this.testError.x = this.testText.x;
-		this.testError.y = this.testText.y;
-		this.testError.setColour(0.0, 0.0, 0.0, 0.3);
-
-		this.wrektBackground2 = new Primitive(this.uiWidth, this.testText.height);
-		this.wrektBackground2.x = this.uiWidth / 2.0;
-		this.wrektBackground2.y = this.uiHeight / 2.0;
-		this.wrektBackground2.setColour(0.0, 0.0, 0.0, 0.1);
+		// Set death screen position
+		var canvasPosition = $("#ps_render").position();
+		$("#ps-death-screen").offset(canvasPosition);
 	},
 	
 	setPrimitivePosTopLeft: function(primitive, x, y)
@@ -113,24 +94,32 @@ game.ui =
 		
 		if (ent != null)
 		{
-			// Update health
-			var maxHealth = ent.maxHealth;
-			var health = ent.health;
-			
-			var healthPercent;
-			if (health > 0 && maxHealth > 0)
+			// Check if dead
+			if (maxHealth != -1 && health <= 0.0)
 			{
-				healthPercent = health / maxHealth;
+			    this.renderPlayerUI = false;
 			}
 			else
 			{
-				healthPercent = 0.0;
+                // Update health bar
+                var maxHealth = ent.maxHealth;
+                var health = ent.health;
+
+                var healthPercent;
+                if (health > 0 && maxHealth > 0)
+                {
+                    healthPercent = health / maxHealth;
+                }
+                else
+                {
+                    healthPercent = 0.0;
+                }
+
+                this.healthBar.setValue(healthPercent);
+
+			    // Update player UI to render
+			    this.renderPlayerUI = true;
 			}
-			
-			this.healthBar.setValue(healthPercent);
-			
-			// Update player UI to render
-			this.renderPlayerUI = true;
 		}
 		else
 		{
@@ -152,14 +141,6 @@ game.ui =
 		mat4.ortho(perspective, 0, this.uiWidth, 0, this.uiHeight, 0, 1);
 		mat4.identity(modelView);
 
-
-		this.testError.render(gl, shaderProgram, modelView, perspective);
-		this.wrektBackground2.render(gl, shaderProgram, modelView, perspective);
-
-		this.testText.render(gl, shaderProgram, modelView, perspective);
-		this.wrektContinueText.render(gl, shaderProgram, modelView, perspective);
-
-		
 		if (this.renderPlayerUI)
 		{
 			// Render cash score
@@ -191,6 +172,25 @@ game.ui =
 	{
 	    // Assume inventory reset
 	    this.renderWeapon = false;
+	},
+
+	hookPlayer_entKilled: function()
+	{
+	    this.deathScreenShow();
+	},
+
+    deathScreenShow: function()
+    {
+        $("#ps-death-screen").css({
+            "visibility" : "visible"
+        });
+    },
+
+	deathScreenHide: function()
+	{
+        $("#ps-death-screen").css({
+            "visibility" : "hidden"
+        });
 	},
 
 	hookInventory_selectedChanged: function()

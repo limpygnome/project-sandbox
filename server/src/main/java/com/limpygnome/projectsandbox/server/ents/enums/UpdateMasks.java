@@ -6,12 +6,13 @@ package com.limpygnome.projectsandbox.server.ents.enums;
 */
 public enum UpdateMasks
 {
-   X(1),
-   Y(2),
-   ROTATION(4),
-   HEALTH(8),
+   SPAWNED(1),
+   X(2),
+   Y(4),
+   ROTATION(8),
+   HEALTH(16),
    
-   ALL_MASKS(1+2+4+8)
+   ALL_MASKS(1+2+4+8+16)
    ;
 
    public final int MASK;

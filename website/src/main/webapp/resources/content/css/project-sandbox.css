@@ -11,8 +11,89 @@ body
     color: #FFF;
 }
 
+#projectsandbox #ps_render,
+#projectsandbox #ps-death-screen
+{
+    border-radius: 1em;
+}
+
 #projectsandbox #ps_render_text
 {
     background: #FFF;
     border: solid 0.2em #F00;
+}
+
+
+#projectsandbox #ps-death-screen
+{
+    display: table;
+    position: fixed;
+    width: 800px;
+    height: 600px;
+    background: rgba(0, 0, 0, 0.5);
+    text-align: center;
+    visibility: hidden;
+}
+
+#projectsandbox #ps-death-screen .message
+{
+    display: table-cell;
+    vertical-align: middle;
+    width: 100%;
+    height: 10em;
+    margin: 0em auto;
+    -webkit-animation: flyin 1s ease-out;
+    -webkit-animation-iteration-count: 1;
+}
+
+#projectsandbox #ps-death-screen .message .wrekt
+{
+    font-size: 8em;
+    text-shadow: 0em 0em 0.5em #000;
+}
+
+#projectsandbox #ps-death-screen .message .cause
+{
+    font-size: 2em;
+}
+
+#projectsandbox #ps-death-screen .continue
+{
+    position: absolute;
+    font-size: 2em;
+    width: 100%;
+    left: 0;
+    bottom: 0;
+    margin-bottom: 0.5em;
+
+    -webkit-animation: flash 1s linear;
+    -webkit-animation-iteration-count: infinite;
+}
+
+@-webkit-keyframes flyin
+{
+   0%      {
+                -webkit-transform: scale(0.1, 0.1);
+                opacity: 0.0;
+            }
+    90%     {
+                -webkit-transform: scale(1.2, 1.2);
+                opacity: 1.0;
+            }
+    100%    {
+                -webkit-transform: scale(1.0, 1.0);
+            }
+}
+
+@-webkit-keyframes flash
+{
+    0%      {
+                opacity: 0.0;
+            }
+    50%     {
+                opacity: 1.0;
+            }
+    100%    {
+                opacity: 0.0;
+            }
 }

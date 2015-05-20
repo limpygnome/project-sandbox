@@ -13,6 +13,7 @@
 
 		<!-- Third-Party -->
 		<script src="/content/js/third-party/gl-matrix-min.js"></script>
+		<script src="/content/js/third-party/jquery-1.11.3.min.js"></script>
 
 		<!-- Main -->
 		<script src="/content/js/project-sandbox.js"></script>

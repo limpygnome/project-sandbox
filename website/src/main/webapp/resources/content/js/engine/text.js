@@ -68,7 +68,7 @@ projectSandbox.text =
         return frameData;
     },
 
-    buildPrimitive: function(text, fontSize, colour, blurSize, blurColour)
+    buildPrimitive: function(text, fontSize, colour, blurSize, blurColour, fontFace)
     {
         // Check blur size defined to avoid calculations resulting to NaN
         if (!blurSize)
@@ -76,8 +76,14 @@ projectSandbox.text =
             blurSize = 0.0;
         }
 
+        // Check font defined, or set default
+        if (!fontFace)
+        {
+            fontFace = "arial";
+        }
+
         // Setup font
-        var font = fontSize + "px serif";
+        var font = fontSize + "px " + fontFace;
         this.canvasTextContext.font = font;
 
         // Re-setup canvas

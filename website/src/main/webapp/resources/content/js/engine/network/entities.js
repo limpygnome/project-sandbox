@@ -99,10 +99,11 @@ projectSandbox.network.entities =
 		return offset - originalOffset;
 	},
 
-	UPDATEMASK_X: 1,
-	UPDATEMASK_Y: 2,
-	UPDATEMASK_ROTATION: 4,
-	UPDATEMASK_HEALTH: 8,
+    UPDATEMASK_SPAWNED: 1,
+	UPDATEMASK_X: 2,
+	UPDATEMASK_Y: 4,
+	UPDATEMASK_ROTATION: 8,
+	UPDATEMASK_HEALTH: 16,
 
 	packetUpdatesEntUpdated: function(data, dataView, id, offset)
 	{
@@ -118,6 +119,10 @@ projectSandbox.network.entities =
 			offset += 1;
 
 			// Read updated params
+			if ((mask & this.UPDATEMASK_SPAWNED) == this.UPDATEMASK_SPAWNED)
+            {
+                this.invokeEntityDeath(id, ent);
+            }
 			if ((mask & this.UPDATEMASK_X) == this.UPDATEMASK_X)
 			{
 				ent.x = dataView.getFloat32(offset);
@@ -161,11 +166,8 @@ projectSandbox.network.entities =
 			// Remove from world
 			projectSandbox.entities.delete(id);
 
-			// Invoke death event
-			if (entity.eventDeath)
-			{
-				entity.eventDeath();
-			}
+            // Raise death event
+			this.invokeEntityDeath(id, entity);
 
 			console.log("engine/network/entities - entity " + id + " deleted");
 		}
@@ -174,5 +176,21 @@ projectSandbox.network.entities =
 			console.warn("engine/network/entities - entity " + id + " not found for deletion");
 		}
 		return 0;
+	},
+
+	invokeEntityDeath: function(id, entity)
+	{
+	    // Invoke death event
+        if (entity.eventDeath)
+        {
+            entity.eventDeath();
+        }
+
+        // Check if the current player died
+        if (id == projectSandbox.playerEntityId)
+        {
+            // Inform UI
+            projectSandbox.ui.hookPlayer_entKilled();
+        }
 	}
 }

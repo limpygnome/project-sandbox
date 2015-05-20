@@ -1,5 +1,8 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 
+<p>
+    test
+</p>
 <div id="projectsandbox">
     <canvas id="ps_render" width="800" height="600">
         <p>
@@ -14,6 +17,19 @@
             No support for HTML5 canvas.
         </p>
     </canvas>
+    <div id="ps-death-screen">
+        <div class="message">
+            <div class="wrekt">
+                #wrekt
+            </div>
+            <div class="cause">
+                killed by unknown causes
+            </div>
+        </div>
+        <div class="continue">
+            ~ press space to close ~
+        </div>
+    </div>
 </div>
 
 
