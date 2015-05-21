@@ -21,6 +21,11 @@ game.ui =
 
 	setup: function()
 	{
+	    // Bind death screen to close
+        $("#ps-death-screen").keyup(function(){
+            game.ui.deathScreenHide();
+        });
+
 	    // Set UI size
         this.resize();
 	},
@@ -174,16 +179,23 @@ game.ui =
 	    this.renderWeapon = false;
 	},
 
-	hookPlayer_entKilled: function()
+	hookPlayer_entKilled: function(causeText)
 	{
-	    this.deathScreenShow();
+	    this.deathScreenShow(causeText);
 	},
 
-    deathScreenShow: function()
+    deathScreenShow: function(causeText)
     {
+        // Set cause text
+        $("#ps-death-screen-cause").text(causeText);
+
+        // Set to visible
         $("#ps-death-screen").css({
             "visibility" : "visible"
         });
+
+        // Set focus to control
+        $("#ps-death-screen").focus();
     },
 
 	deathScreenHide: function()

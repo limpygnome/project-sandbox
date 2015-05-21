@@ -17,17 +17,10 @@ public class PlayerIdentityOutboundPacket extends OutboundPacket
         super((byte)'P', (byte)'I');
     }
     
-    public void writeIdentity(Entity ply)
+    public void writeIdentity(Entity ply) throws IOException
     {
         ByteBuffer bb = ByteBuffer.allocate(2);
         bb.putShort(ply.id);
-        try
-        {
-            buffer.write(bb.array());
-        }
-        catch(IOException ex)
-        {
-            ex.printStackTrace(System.err);
-        }
+        buffer.write(bb.array());
     }
 }

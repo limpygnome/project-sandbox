@@ -1,5 +1,9 @@
 projectSandbox.network.player =
 {
+    /*
+        Inbound
+        ----------------------------------------------------------------------------------------------------------------
+    */
     packet: function(data, dataView, subType)
     {
         switch (subType)
@@ -7,6 +11,11 @@ projectSandbox.network.player =
             // Identity
             case "I":
                 this.packetPlayerIdentity(dataView);
+                return;
+
+            // Killed
+            case "K":
+                this.packetPlayerKilled(data, dataView);
                 return;
 
             default:
@@ -31,7 +40,25 @@ projectSandbox.network.player =
         console.log("engine/network/player - updated player id to " + id);
     },
 
+    packetPlayerKilled: function(data, dataView)
+    {
+        // Parse packet
+        var id = dataView.getInt16(2);
+        var causeTextLength = dataView.getInt8(4);
+        var causeText = String.fromCharCode.apply(String, data.subarray(5, 5 + causeTextLength));
 
+        // Check if we were killed
+        if (id == projectSandbox.playerEntityId)
+        {
+            projectSandbox.game.ui.hookPlayer_entKilled(causeText);
+        }
+    },
+
+
+    /*
+        Outbound
+        ----------------------------------------------------------------------------------------------------------------
+    */
 
     // Movement constants
     MOVEMENT_UP: 1,

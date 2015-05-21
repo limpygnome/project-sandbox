@@ -50,7 +50,7 @@ public class PacketManager
                 {
                     // Load session data from database
                     // TODO: actually load from DB
-                    Session session = new Session();
+                    Session session = new Session(null, "unnamed", System.currentTimeMillis());
 
                     // TODO: remove this stub
                     session.sessionId = sessPacket.sessionId;

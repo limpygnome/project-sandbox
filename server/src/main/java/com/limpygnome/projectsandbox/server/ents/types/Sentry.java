@@ -5,12 +5,14 @@ import com.limpygnome.projectsandbox.server.effects.types.BulletEffect;
 import com.limpygnome.projectsandbox.server.effects.types.TracerEffect;
 import com.limpygnome.projectsandbox.server.ents.Entity;
 import com.limpygnome.projectsandbox.server.ents.annotations.EntityType;
+import com.limpygnome.projectsandbox.server.ents.death.SentryKiller;
 import com.limpygnome.projectsandbox.server.ents.physics.Vector2;
 import com.limpygnome.projectsandbox.server.ents.physics.casting.Casting;
 import com.limpygnome.projectsandbox.server.ents.physics.casting.CastingResult;
 import com.limpygnome.projectsandbox.server.ents.physics.casting.victims.EntityCastVictim;
 import com.limpygnome.projectsandbox.server.ents.physics.proximity.DefaultProximity;
 import com.limpygnome.projectsandbox.server.ents.physics.proximity.ProximityResult;
+import com.limpygnome.projectsandbox.server.players.PlayerInfo;
 import com.limpygnome.projectsandbox.server.utils.CustomMath;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -112,7 +114,7 @@ public class Sentry extends Entity
         {
             // Inflict damage
             EntityCastVictim castVictim = (EntityCastVictim) castingResult.victim;
-            castVictim.entity.damage(controller, BULLET_DAMAGE);
+            castVictim.entity.damage(controller, this, BULLET_DAMAGE, SentryKiller.class);
 
             // Create bullet effect
             controller.effectsManager.add(new BulletEffect(x, y));
@@ -126,5 +128,17 @@ public class Sentry extends Entity
     public void eventSpawn()
     {
         this.defaultRotation = rotation;
+    }
+
+    @Override
+    public String friendlyName()
+    {
+        return "Sentry";
+    }
+
+    @Override
+    public PlayerInfo[] getPlayers()
+    {
+        return null;
     }
 }

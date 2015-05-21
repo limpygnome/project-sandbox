@@ -1,5 +1,6 @@
 package com.limpygnome.projectsandbox.server.ents.types.vehicles;
 
+import com.limpygnome.projectsandbox.server.ents.death.AbstractKiller;
 import com.limpygnome.projectsandbox.server.ents.physics.collisions.CollisionResult;
 import com.limpygnome.projectsandbox.server.Controller;
 import com.limpygnome.projectsandbox.server.ents.Entity;
@@ -13,7 +14,7 @@ import com.limpygnome.projectsandbox.server.players.enums.PlayerKeys;
  * @author limpygnome
  */
 public abstract class AbstractVehicle extends Entity
-{   
+{
     /**
      * The minimum (absolute) speed supported, until the speed is set to 0.
      * 
@@ -250,7 +251,7 @@ public abstract class AbstractVehicle extends Entity
     }
 
     @Override
-    public strictfp void eventDeath(Controller controller)
+    public strictfp void eventDeath(Controller controller, AbstractKiller killer)
     {
         // Respawn players in vehicle
         PlayerInfo playerInfo;
@@ -260,12 +261,13 @@ public abstract class AbstractVehicle extends Entity
             
             if (playerInfo != null)
             {
+                playerInfo.eventPlayerKilled(controller, killer);
                 controller.playerManager.createSpawnNewPlayerEnt(playerInfo);
                 players[i] = null;
             }
         }
         
-        super.eventDeath(controller);
+        super.eventDeath(controller, killer);
     }
 
     @Override
@@ -274,5 +276,28 @@ public abstract class AbstractVehicle extends Entity
         this.speed = 0.0f;
 
         super.reset();
+    }
+
+    @Override
+    public String friendlyName()
+    {
+        PlayerInfo driver = players[0];
+
+        if (driver != null)
+        {
+            return driver.session.displayName;
+        }
+        else
+        {
+            return friendlyNameVehicle();
+        }
+    }
+
+    public abstract String friendlyNameVehicle();
+
+    @Override
+    public PlayerInfo[] getPlayers()
+    {
+        return players;
     }
 }

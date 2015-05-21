@@ -17,17 +17,17 @@
             No support for HTML5 canvas.
         </p>
     </canvas>
-    <div id="ps-death-screen">
+    <div id="ps-death-screen" tabindex="1">
         <div class="message">
             <div class="wrekt">
                 #wrekt
             </div>
-            <div class="cause">
+            <div id="ps-death-screen-cause" class="cause">
                 killed by unknown causes
             </div>
         </div>
         <div class="continue">
-            ~ press space to close ~
+            ~ press any key to close ~
         </div>
     </div>
 </div>

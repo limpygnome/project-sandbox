@@ -1,5 +1,6 @@
 package com.limpygnome.projectsandbox.server.ents;
 
+import com.limpygnome.projectsandbox.server.ents.death.MapBoundsKiller;
 import com.limpygnome.projectsandbox.server.ents.physics.collisions.CollisionResult;
 import com.limpygnome.projectsandbox.server.Controller;
 import com.limpygnome.projectsandbox.server.ents.enums.StateChange;
@@ -193,7 +194,7 @@ public class EntityManager
                                 a.positionNew.x > mapMaxX || a.positionNew.y > mapMaxY)
                         {
                             // Kill the ent...
-                            a.kill(controller);
+                            a.kill(controller, null, MapBoundsKiller.class);
                         }
                     }
                 }

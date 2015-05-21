@@ -1,8 +1,15 @@
 package com.limpygnome.projectsandbox.server.players;
 
+import com.limpygnome.projectsandbox.server.Controller;
+import com.limpygnome.projectsandbox.server.ents.death.AbstractKiller;
+import com.limpygnome.projectsandbox.server.packets.types.players.PlayerKilledOutboundPacket;
 import com.limpygnome.projectsandbox.server.players.enums.PlayerKeys;
 import com.limpygnome.projectsandbox.server.ents.Entity;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.java_websocket.WebSocket;
+
+import java.io.IOException;
 
 /**
  *
@@ -10,6 +17,8 @@ import org.java_websocket.WebSocket;
  */
 public class PlayerInfo
 {
+    private final static Logger LOG = LogManager.getLogger(PlayerInfo.class);
+
     /**
      * The current session tied to the player; null if no session assigned.
      */
@@ -62,6 +71,23 @@ public class PlayerInfo
         else
         {
             keys &= ~key.FLAG;
+        }
+    }
+
+    public void eventPlayerKilled(Controller controller, AbstractKiller killer)
+    {
+        try
+        {
+            // Inform server we died
+            PlayerKilledOutboundPacket packet = new PlayerKilledOutboundPacket();
+            packet.writePlayerKilled(killer, entity);
+            controller.endpoint.broadcast(packet);
+
+            LOG.info("Player killed - sess id: {}", session.sessionId);
+        }
+        catch (IOException e)
+        {
+            LOG.error(e);
         }
     }
 }

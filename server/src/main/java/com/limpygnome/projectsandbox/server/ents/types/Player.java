@@ -112,4 +112,16 @@ public class Player extends Entity
     {
         inventory.setOwner(null);
     }
+
+    @Override
+    public String friendlyName()
+    {
+        return playerInfo.session.displayName;
+    }
+
+    @Override
+    public PlayerInfo[] getPlayers()
+    {
+        return new PlayerInfo[] { playerInfo };
+    }
 }

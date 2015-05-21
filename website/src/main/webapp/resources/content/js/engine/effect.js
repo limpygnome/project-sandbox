@@ -40,11 +40,11 @@ Effect.prototype.logic = function()
 	// Update position if vx/vy defined
 	if (this.vx)
 	{
-		this.x += vx;
+		this.x += this.vx;
 	}
 	if (this.vy)
 	{
-		this.y += vy;
+		this.y += this.vy;
 	}
 }
 

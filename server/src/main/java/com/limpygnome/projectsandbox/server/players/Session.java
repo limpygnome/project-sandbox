@@ -16,12 +16,7 @@ public class Session
     
     public String displayName;
     public long joinTimestamp;
-    
-    public Session()
-    {
-        this(null, null, System.currentTimeMillis());
-    }
-    
+
     public Session(UUID sessionId, String displayName, long joinTimestamp)
     {
         this.sessionId = sessionId;

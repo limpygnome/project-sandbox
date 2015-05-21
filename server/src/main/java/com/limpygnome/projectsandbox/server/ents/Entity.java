@@ -1,6 +1,7 @@
 package com.limpygnome.projectsandbox.server.ents;
 
 import com.limpygnome.projectsandbox.server.ents.annotations.EntityType;
+import com.limpygnome.projectsandbox.server.ents.death.AbstractKiller;
 import com.limpygnome.projectsandbox.server.ents.enums.UpdateMasks;
 import com.limpygnome.projectsandbox.server.ents.physics.collisions.CollisionResult;
 import com.limpygnome.projectsandbox.server.ents.physics.Vector2;
@@ -11,6 +12,8 @@ import com.limpygnome.projectsandbox.server.utils.CustomMath;
 import com.limpygnome.projectsandbox.server.Controller;
 import com.limpygnome.projectsandbox.server.ents.enums.StateChange;
 import com.limpygnome.projectsandbox.server.world.Spawn;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.lang.annotation.Annotation;
 import java.util.List;
@@ -22,6 +25,8 @@ import java.util.List;
 @EntityType(typeId = 0)
 public strictfp abstract class Entity
 {
+    private final static Logger LOG = LogManager.getLogger(EntityManager.class);
+
     public static final short DEFAULT_FACTION = 0;
     
     // The unique ID for the entity
@@ -222,9 +227,11 @@ public strictfp abstract class Entity
      * Inflicts damage on the entity.
      * 
      * @param controller
-     * @param damage The damage; can be negative for health/healing.
+     * @param damage The damage; can be negative for health/healing
+     * @param inflicter The entity causing damage, can be null
+     * @param killerType The type of death in the event this Entity dies
      */
-    public void damage(Controller controller, float damage)
+    public <T extends Class<? extends AbstractKiller>> void damage(Controller controller, Entity inflicter, float damage, T killerType)
     {
         // Check entity does not have godmode
         if (maxHealth <= 0.0f)
@@ -253,7 +260,7 @@ public strictfp abstract class Entity
         if (health <= 0.0f)
         {
             // Entity is now dead!
-            kill(controller);
+            kill(controller, inflicter, killerType);
         }
     }
     
@@ -261,10 +268,43 @@ public strictfp abstract class Entity
      * Should be invoked to kill the ent; allows the ent to decide what to do.
      * 
      * @param controller
+     * @param inflicter The entity killing this entity, can be null
+     * @param killType The type of kill, in the event the player dies
      */
-    public void kill(Controller controller)
+    public <T extends Class<? extends AbstractKiller>> void kill(Controller controller, Entity inflicter, T killType)
     {
-        eventDeath(controller);
+        // Inform all associated players they've been killed
+        PlayerInfo[] playerInfos = getPlayers();
+
+        if (playerInfos != null)
+        {
+            AbstractKiller killer;
+
+            for (PlayerInfo playerInfo : playerInfos)
+            {
+                if (playerInfo != null)
+                {
+                    // Create instance of killer type
+                    try
+                    {
+                        killer = killType.newInstance();
+
+                        // Setup victim/killer
+                        killer.victim = this;
+                        killer.killer = inflicter;
+                    }
+                    catch (InstantiationException | IllegalAccessException e)
+                    {
+                        LOG.error("Incorrectly setup killer class", e);
+                        throw new RuntimeException("Incorrectly setup killer class - " + killType.getName(), e);
+                    }
+                    playerInfo.eventPlayerKilled(controller, killer);
+
+                    // Raise death event
+                    eventDeath(controller, killer);
+                }
+            }
+        }
     }
     
     public void updateMask(UpdateMasks... masks)
@@ -301,9 +341,10 @@ public strictfp abstract class Entity
      * Default behaviour is to delete entity. Method should be overridden to
      * change behaviour.
      * 
-     * @param controller 
+     * @param controller
+     * @param killer The cause of death.
      */
-    public void eventDeath(Controller controller)
+    public void eventDeath(Controller controller, AbstractKiller killer)
     {
         // Default action is to respawn the entity
         controller.mapManager.main.spawn(this);
@@ -346,6 +387,15 @@ public strictfp abstract class Entity
     {
         health = maxHealth;
     }
+
+    public abstract String friendlyName();
+
+    /**
+     * Used to fetch all the associated players with this Entity.
+     *
+     * @return
+     */
+    public abstract PlayerInfo[] getPlayers();
 
     @Override
     public String toString()

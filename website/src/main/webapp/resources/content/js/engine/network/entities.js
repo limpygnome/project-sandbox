@@ -185,12 +185,5 @@ projectSandbox.network.entities =
         {
             entity.eventDeath();
         }
-
-        // Check if the current player died
-        if (id == projectSandbox.playerEntityId)
-        {
-            // Inform UI
-            projectSandbox.ui.hookPlayer_entKilled();
-        }
 	}
 }

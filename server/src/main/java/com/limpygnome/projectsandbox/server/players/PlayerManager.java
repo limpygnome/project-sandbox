@@ -131,9 +131,16 @@ public class PlayerManager
         playerInfo.entity = entity;
         
         // Create packet to update ID for clientside
-        PlayerIdentityOutboundPacket packet = new PlayerIdentityOutboundPacket();
-        packet.writeIdentity(entity);
-        packet.send(playerInfo);
+        try
+        {
+            PlayerIdentityOutboundPacket packet = new PlayerIdentityOutboundPacket();
+            packet.writeIdentity(entity);
+            packet.send(playerInfo);
+        }
+        catch (IOException e)
+        {
+            LOG.error("Failed to set entity for player", e);
+        }
     }
 
     public PlayerInfo getPlayerByWebSocket(WebSocket ws)
