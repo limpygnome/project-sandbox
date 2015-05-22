@@ -22,8 +22,11 @@ game.ui =
 	setup: function()
 	{
 	    // Bind death screen to close
-        $("#ps-death-screen").keyup(function(){
-            game.ui.deathScreenHide();
+        $("#ps-death-screen").keyup(function(event){
+        	if (String.fromCharCode(event.which) == " ")
+        	{
+            	game.ui.deathScreenHide();
+            }
         });
 
 	    // Set UI size
@@ -191,7 +194,7 @@ game.ui =
 
         // Set to visible
         $("#ps-death-screen").css({
-            "visibility" : "visible"
+            "display" : "block"
         });
 
         // Set focus to control
@@ -201,7 +204,7 @@ game.ui =
 	deathScreenHide: function()
 	{
         $("#ps-death-screen").css({
-            "visibility" : "hidden"
+            "display" : "none"
         });
 	},
 

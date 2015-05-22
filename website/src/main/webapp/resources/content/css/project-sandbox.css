@@ -26,13 +26,18 @@ body
 
 #projectsandbox #ps-death-screen
 {
-    display: table;
-    position: fixed;
+    position: static;
+    display: block;
     width: 800px;
     height: 600px;
     background: rgba(0, 0, 0, 0.5);
     text-align: center;
-    visibility: hidden;
+}
+#projectsandbox #ps-death-screen .container
+{
+    display: table;
+    width: 100%;
+    height: 100%;
 }
 
 #projectsandbox #ps-death-screen .message
