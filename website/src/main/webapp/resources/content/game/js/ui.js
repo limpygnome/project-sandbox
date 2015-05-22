@@ -82,6 +82,10 @@ game.ui =
 		// Set death screen position
 		var canvasPosition = $("#ps_render").position();
 		$("#ps-death-screen").offset(canvasPosition);
+
+        var w = $("ps_render").width();
+        var h = $("ps_render").height();
+		$("#ps-death-screen").width(800);
 	},
 	
 	setPrimitivePosTopLeft: function(primitive, x, y)

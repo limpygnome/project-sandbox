@@ -1,14 +1,26 @@
+.clear
+{
+    clear: both;
+}
 body
 {
     font: normal 12px Arial;
     background: #333;
+    margin: 0em;
 }
 
 #projectsandbox
 {
+    width: 100%;
+    height: 100%;
+    color: #FFF;
+}
+
+#projectsandbox #ps-render-container
+{
     width: 800px;
     margin: 0em auto;
-    color: #FFF;
+    padding: 1em;
 }
 
 #projectsandbox #ps_render,
@@ -19,6 +31,7 @@ body
 
 #projectsandbox #ps_render_text
 {
+    display: none;
     background: #FFF;
     border: solid 0.2em #F00;
 }
@@ -27,7 +40,6 @@ body
 #projectsandbox #ps-death-screen
 {
     position: static;
-    display: block;
     width: 800px;
     height: 600px;
     background: rgba(0, 0, 0, 0.5);
@@ -39,7 +51,6 @@ body
     width: 100%;
     height: 100%;
 }
-
 #projectsandbox #ps-death-screen .message
 {
     display: table-cell;
@@ -50,18 +61,15 @@ body
     -webkit-animation: flyin 1s ease-out;
     -webkit-animation-iteration-count: 1;
 }
-
 #projectsandbox #ps-death-screen .message .wrekt
 {
     font-size: 8em;
     text-shadow: 0em 0em 0.5em #000;
 }
-
 #projectsandbox #ps-death-screen .message .cause
 {
     font-size: 2em;
 }
-
 #projectsandbox #ps-death-screen .continue
 {
     position: absolute;
@@ -73,6 +81,25 @@ body
 
     -webkit-animation: flash 1s linear;
     -webkit-animation-iteration-count: infinite;
+}
+
+#projectsandbox #ps-chat,
+#projectsandbox #ps-activity
+{
+    width: 20em;
+    height: 100%;
+    background: red;
+    overflow: hidden;
+}
+
+#projectsandbox #ps-chat
+{
+    float: left;
+}
+
+#projectsandbox #ps-activity
+{
+    float: right;
 }
 
 @-webkit-keyframes flyin
