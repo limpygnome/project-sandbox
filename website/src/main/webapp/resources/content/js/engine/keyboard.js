@@ -5,14 +5,14 @@ projectSandbox.keyboard =
 	hook: function()
 	{
 		var self = this;
-		window.onkeydown = function(event)
-		{
-			self.handlerDown(event);
-		};
-		window.onkeyup = function(event)
-		{
-			self.handlerUp(event);
-		};
+
+		// Hook canvas for keydown event
+		$(window).keydown(function (event) {
+		    self.handlerDown(event);
+		});
+		$(window).keyup(function (event) {
+            self.handlerUp(event);
+        });
 	},
 	
 	handlerDown: function(event)

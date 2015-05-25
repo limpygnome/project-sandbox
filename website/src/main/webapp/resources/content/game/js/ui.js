@@ -21,12 +21,22 @@ game.ui =
 
 	setup: function()
 	{
+	    // Bind resize event for window
+        $(window).resize(function () {
+            game.ui.resize();
+        });
+
 	    // Bind death screen to close
-        $("#ps-death-screen").keyup(function(event){
+        $("#ps-death-screen").keyup(function (event) {
         	if (String.fromCharCode(event.which) == " ")
         	{
             	game.ui.deathScreenHide();
             }
+        });
+
+        // Bind options / fullscreen
+        $(".options.button.fullscreen").click(function () {
+            game.ui.toggleFullScreen();
         });
 
 	    // Set UI size
@@ -43,15 +53,14 @@ game.ui =
         var sidebarRightWidth = $("#ps-sidebar-right").width();
 
         var newWidth = totalWidth - (sidebarLeftWidth + sidebarRightWidth);
-        var newHeight = $("#projectsandbox").height();
+        newWidth *= 0.95;
+        var newHeight = newWidth / 1.33; $("#projectsandbox").height();
 
         // Update render canvas
         $("#ps_render").width(newWidth).height(newHeight);
 
         // Update death screen
         $("#ps-death-screen").width(newWidth).height(newHeight);
-        var canvasPosition = $("#ps_render").position();
-        $("#ps-death-screen").offset(canvasPosition);
 
         console.debug("engine/ui - render size changed - " + newWidth + "x" + newHeight);
 
@@ -203,6 +212,11 @@ game.ui =
 
     deathScreenShow: function(causeText)
     {
+        // Set offset of death screen to render location
+        $("#ps-death-screen").offset(
+            $("#ps_render").position()
+        );
+
         // Set cause text
         $("#ps-death-screen-cause").text(causeText);
 
@@ -237,6 +251,57 @@ game.ui =
         else
         {
             this.renderWeapon = false;
+        }
+	},
+
+	toggleFullScreen: function()
+	{
+	    var isFullscreen = document.fullscreenElement || document.mozFullScreenElement || document.webkitFullscreenElement;
+	    console.debug("game/ui - fullscreen already: " + isFullscreen);
+
+        if (!isFullscreen)
+        {
+            var target = document.documentElement;
+
+            if (target.requestFullscreen)
+            {
+                target.requestFullscreen();
+            }
+            else if (target.mozRequestFullScreen)
+            {
+                target.mozRequestFullScreen();
+            }
+            else if (target.webkitRequestFullscreen)
+            {
+                target.webkitRequestFullscreen();
+            }
+            else if (target.msRequestFullscreen)
+            {
+                target.msRequestFullscreen();
+            }
+            else
+            {
+                alert("Fullscreen not supported by your browser :_:");
+            }
+        }
+        else
+        {
+            if (document.exitFullscreen)
+            {
+                document.exitFullscreen();
+            }
+            else if (document.mozCancelFullScreen)
+            {
+                document.mozCancelFullScreen();
+            }
+            else if (document.webkitExitFullscreen)
+            {
+                document.webkitExitFullscreen();
+            }
+            else
+            {
+                alert("Fullscreen exit not supported by your browser :_:");
+            }
         }
 	}
 

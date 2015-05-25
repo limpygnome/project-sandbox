@@ -168,7 +168,9 @@
                     FPS: <span id="ps_fps">--</span>
                 </p>
                 <p>
-                    none
+                    <div class="options button fullscreen">
+                        Toggle Fullscreen
+                    </div>
                 </p>
             </div>
         </div>
