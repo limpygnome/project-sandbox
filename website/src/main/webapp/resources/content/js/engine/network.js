@@ -6,8 +6,11 @@ projectSandbox.network =
 	
 	setup: function()
 	{
+	    var host = projectSandbox.assetLoader.get("/content/game/settings.json")["host"];
+	    console.debug("engine/network - host: '" + host + "'");
+
 		// Create socket
-		webSocket = new WebSocket("ws://localhost:4857");
+		webSocket = new WebSocket("ws://" + host);
 		webSocket.binaryType = 'arraybuffer';
 
 		// Hook events

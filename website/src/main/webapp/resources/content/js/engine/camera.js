@@ -16,7 +16,7 @@ projectSandbox.camera =
 	rotationZ: 0,
 	
 	// Zoom of the camera from the co-ordinates
-	zoom: 300,
+	zoom: 400,
 	
 	// The entity id to chase; if not null, the xyz of the camera is the entity
 	chaseEntityId: null,
@@ -35,10 +35,10 @@ projectSandbox.camera =
 	setup: function()
 	{
 		// Build camera limits
-		this.buildLimits();
+        this.buildLimits();
 
-		// Update position to check it's within limits
-		this.setPosition(this.x, this.y, this.z);
+        // Update position to check it's within limits
+        this.setPosition(this.x, this.y, this.z);
 	},
 	
 	applyToModelView: function()

@@ -25,15 +25,12 @@ body
 
 #projectsandbox #ps-render-container
 {
-    width: 800px;
-    margin: 0em auto;
-    padding: 1em;
+    text-align: center;
 }
 
-#projectsandbox #ps_render,
-#projectsandbox #ps-death-screen
+#projectsandbox #ps_render
 {
-    border-radius: 1em;
+    box-shadow: #111 0em 0em 4.5em;
 }
 
 #projectsandbox #ps_render_text
@@ -43,13 +40,14 @@ body
     border: solid 0.2em #F00;
 }
 
-
+/*
+    Death Screen
+    ********************************************************************************************************************
+*/
 #projectsandbox #ps-death-screen
 {
-    position: absolute;
     display: none;
-    width: 800px;
-    height: 600px;
+    position: fixed;
     background: rgba(0, 0, 0, 0.5);
     text-align: center;
     outline: none;
@@ -99,21 +97,24 @@ body
 
 #projectsandbox .ps-sidebar
 {
+    position: fixed;
+    top: 0;
     width: 25em;
     height: 100%;
     background: #222;
     overflow: hidden;
+    z-index: 1;
 }
 #projectsandbox .ps-sidebar.left
 {
-    float: left;
+    left: 0;
     border-right: solid 0.2em #111;
     box-shadow: #222 0.5em 0em 4.5em;
 }
 
 #projectsandbox .ps-sidebar.right
 {
-    float: right;
+    right: 0;
     border-left: solid 0.2em #111;
     box-shadow: #222 -0.5em 0em 4.5em;
 }

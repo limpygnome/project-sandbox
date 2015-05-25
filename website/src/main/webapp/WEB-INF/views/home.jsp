@@ -2,7 +2,7 @@
 
 <div id="projectsandbox">
 
-    <div class="ps-sidebar left">
+    <div id="ps-sidebar-left" class="ps-sidebar left">
 
         <div class="container">
             <h3>
@@ -133,7 +133,7 @@
 
     </div>
 
-    <div class="ps-sidebar right">
+    <div id="ps-sidebar-right" class="ps-sidebar right">
 
         <div class="container">
             <h3>
@@ -165,6 +165,9 @@
             </h3>
             <div id="ps-options">
                 <p>
+                    FPS: <span id="ps_fps">--</span>
+                </p>
+                <p>
                     none
                 </p>
             </div>
@@ -191,7 +194,7 @@
         </div>
 
 
-        <canvas id="ps_render" width="800" height="600">
+        <canvas id="ps_render" width="1024" height="768">
             <p>
                 No support for HTML5 canvas.
             </p>
@@ -202,10 +205,6 @@
                 No support for HTML5 canvas.
             </p>
         </canvas>
-
-        <p>
-            FPS: <span id="ps_fps">--</span>
-        </p>
 
     </div>
 

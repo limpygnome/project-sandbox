@@ -42,10 +42,12 @@ projectSandbox.assetLoader =
 		// Fetch list of assets
 		var assets = json["assets"];
 		
-		// Check we have assets array
+		// Check we have assets array, else it must be an asset
 		if (assets == null)
 		{
-			console.error("Assets loader - malformed assets list - " + assetListUrl);
+			self.expectedAssets[assetListIndexId][0] = false;
+			console.warn("engine/asset-loader - loading list as asset - " + assetListUrl);
+			self.loadAssetCallback(assetListIndexId, 0, assetListUrl, json);
 			return;
 		}
 		
@@ -63,14 +65,14 @@ projectSandbox.assetLoader =
 				self.loadFromAssetsFile(url);
 			}
 			else
-				{
-					self.loadAsset(assetListIndexId, i, url);
-				}
+			{
+				self.loadAsset(assetListIndexId, i, url);
 			}
-		},
+		}
+	},
 		
-		loadAsset: function(assetListIndexId, assetId, url)
-		{
+	loadAsset: function(assetListIndexId, assetId, url)
+	{
 		var self = this;
 		
 		// If the extension is .json, load as json

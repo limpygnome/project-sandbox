@@ -99,6 +99,7 @@ var projectSandbox =
 		this.bufferCache.setup();
 
 		// Load assets
+		this.assetLoader.loadFromAssetsFile("/content/game/settings.json");
 		this.assetLoader.loadFromAssetsFile("/content/game/shaders/list.json");
 		this.assetLoader.loadFromAssetsFile("/content/game/textures/list.json");
 		
@@ -304,10 +305,10 @@ var projectSandbox =
 		{
             // Setup WebGL
 			gl = this.canvas.getContext("webgl", {alpha: false}) || this.canvas.getContext("experimental-webgl", {alpha: false});
+
+			// Set default size to use canvas
 			gl.viewportWidth = this.canvas.width;
             gl.viewportHeight = this.canvas.height;
-
-            // Invoke resize of game
 		}
 		catch(e)
 		{

@@ -37,11 +37,29 @@ game.ui =
 	{
 	    var gl = projectSandbox.gl;
 
-        // Recompute size
+        // Calculate size of render area
+        var totalWidth = $("#projectsandbox").width();
+        var sidebarLeftWidth = $("#ps-sidebar-left").width();
+        var sidebarRightWidth = $("#ps-sidebar-right").width();
+
+        var newWidth = totalWidth - (sidebarLeftWidth + sidebarRightWidth);
+        var newHeight = $("#projectsandbox").height();
+
+        // Update render canvas
+        $("#ps_render").width(newWidth).height(newHeight);
+
+        // Update death screen
+        $("#ps-death-screen").width(newWidth).height(newHeight);
+        var canvasPosition = $("#ps_render").position();
+        $("#ps-death-screen").offset(canvasPosition);
+
+        console.debug("engine/ui - render size changed - " + newWidth + "x" + newHeight);
+
+        // Recompute size of UI
 		this.uiWidth = gl.viewportWidth;
         this.uiHeight = gl.viewportHeight;
 
-        console.debug("engine/ui - size set to " + this.uiWidth + "x" + this.uiHeight);
+        console.debug("engine/ui - size set to viewport - " + this.uiWidth + "x" + this.uiHeight);
 
         // Rebuild UI
         this.rebuildUI();
@@ -78,14 +96,6 @@ game.ui =
 			
 			this.starsIcon[i] = star;
 		}
-
-		// Set death screen position
-		var canvasPosition = $("#ps_render").position();
-		$("#ps-death-screen").offset(canvasPosition);
-
-        var w = $("ps_render").width();
-        var h = $("ps_render").height();
-		$("#ps-death-screen").width(800);
 	},
 	
 	setPrimitivePosTopLeft: function(primitive, x, y)
