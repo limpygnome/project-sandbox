@@ -62,6 +62,9 @@ game.ui =
         // Update death screen
         $("#ps-death-screen").width(newWidth).height(newHeight);
 
+        // Apply death screen offset
+        this.deathScreenOffset();
+
         console.debug("engine/ui - render size changed - " + newWidth + "x" + newHeight);
 
         // Recompute size of UI
@@ -212,11 +215,6 @@ game.ui =
 
     deathScreenShow: function(causeText)
     {
-        // Set offset of death screen to render location
-        $("#ps-death-screen").offset(
-            $("#ps_render").position()
-        );
-
         // Set cause text
         $("#ps-death-screen-cause").text(causeText);
 
@@ -227,6 +225,9 @@ game.ui =
 
         // Set focus to control
         $("#ps-death-screen").focus();
+
+        // Apply offset
+        this.deathScreenOffset();
     },
 
 	deathScreenHide: function()
@@ -234,6 +235,14 @@ game.ui =
         $("#ps-death-screen").css({
             "display" : "none"
         });
+	},
+
+	deathScreenOffset: function()
+	{
+	    // Set offset of death screen to render location
+        $("#ps-death-screen").offset(
+            $("#ps_render").position()
+        );
 	},
 
 	hookInventory_selectedChanged: function()
@@ -257,7 +266,6 @@ game.ui =
 	toggleFullScreen: function()
 	{
 	    var isFullscreen = document.fullscreenElement || document.mozFullScreenElement || document.webkitFullscreenElement;
-	    console.debug("game/ui - fullscreen already: " + isFullscreen);
 
         if (!isFullscreen)
         {
