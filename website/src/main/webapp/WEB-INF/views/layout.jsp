@@ -9,8 +9,9 @@
 	<head>
 		<title>Project Sandbox - Prototype</title>
 
-		<link rel="stylesheet" href="/content/css/project-sandbox.css" />
-		<link rel="stylesheet" href="/content/css/project-sandbox-anims.css" />
+		<link rel="stylesheet" href="/content/css/project-sandbox/main.css" />
+		<link rel="stylesheet" href="/content/css/project-sandbox/main-anims.css" />
+		<link rel="stylesheet" href="/content/css/project-sandbox/weapons.css" />
 
 		<!-- Third-Party -->
 		<script src="/content/js/third-party/gl-matrix-min.js"></script>

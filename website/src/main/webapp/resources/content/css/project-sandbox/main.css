@@ -152,20 +152,23 @@ body
 
 #projectsandbox #ps-ui #ps-ui-top-right
 {
-    display: table-cell;
-    vertical-align: top;
+    display: table;
     float: right;
+    height: 100%;
+    background: yellow;
     padding: 0.5em;
     font-size: large;
     text-align: right;
 }
-#projectsandbox #ps-ui #ps-ui-top-right #ps-ui-weapon-icon
+
+#projectsandbox #ps-ui #ps-ui-top-right #ps-ui-score
 {
-    width: 5em;
-    height: 5em;
+
 }
+
 #projectsandbox #ps-ui #ps-ui-top-right #ps-ui-healthbar
 {
+    margin-top: 1em;
     width: 10em;
     height: 0.5em;
     background: #F00;
@@ -177,6 +180,24 @@ body
 {
     width: 50%;
     background: #0F0;
+}
+
+#projectsandbox #ps-ui #ps-ui-inventory
+{
+    float: left;
+    margin-bottom: 0.25em;
+    background: #CCC;
+    border-top-right-radius: 0.5em;
+    border-bottom-right-radius: 0.5em;
+    box-shadow: #666 0em 0em 1.5em;
+}
+#projectsandbox #ps-ui #ps-ui-inventory .slot
+{
+    width: 5em;
+    height: 5em;
+    margin: 0.5em;
+    background-size: 100%;
+    background-repeat: no-repeat;
 }
 
 /*
