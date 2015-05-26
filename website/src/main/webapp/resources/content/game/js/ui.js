@@ -220,7 +220,7 @@ game.ui =
 
         // Set to visible
         $("#ps-death-screen").css({
-            "display" : "block"
+            "visibility" : "visible"
         });
 
         // Set focus to control
@@ -233,7 +233,7 @@ game.ui =
 	deathScreenHide: function()
 	{
         $("#ps-death-screen").css({
-            "display" : "none"
+            "visibility" : "hidden"
         });
 	},
 
