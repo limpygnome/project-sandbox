@@ -113,6 +113,74 @@ body
 }
 
 /*
+    UI
+    ********************************************************************************************************************
+*/
+
+#projectsandbox #ps-ui
+{
+    position: fixed;
+    display: table;
+    background: rgba(255, 255, 255, 0.8);
+}
+
+#projectsandbox #ps-ui #ps-ui-stars
+{
+    display: block;
+    vertical-align: top;
+
+    font-size: larger;
+    color: red;
+}
+#projectsandbox #ps-ui #ps-ui-stars img
+{
+    width: 3em;
+    height: 3em;
+    margin: 0.5em;
+
+    -webkit-animation: flash 1s linear;
+    -webkit-animation-iteration-count: infinite;
+
+    -moz-animation: flash 1s linear;
+    -moz-animation-iteration-count: infinite;
+
+    -o-animation: flash 1s linear;
+    -o-animation-iteration-count: infinite;
+
+    animation: flash 1s linear;
+    animation-iteration-count: infinite;
+}
+
+#projectsandbox #ps-ui #ps-ui-top-right
+{
+    display: table-cell;
+    vertical-align: top;
+    float: right;
+    padding: 0.5em;
+    font-size: large;
+    text-align: right;
+}
+#projectsandbox #ps-ui #ps-ui-top-right #ps-ui-weapon-icon
+{
+    width: 5em;
+    height: 5em;
+}
+#projectsandbox #ps-ui #ps-ui-top-right #ps-ui-healthbar
+{
+    width: 10em;
+    height: 0.5em;
+    background: #F00;
+    border-radius: 1.5em;
+    overflow: hidden;
+}
+
+#projectsandbox #ps-ui #ps-ui-top-right #ps-ui-healthbar #ps-ui-healthbar-fill
+{
+    width: 50%;
+    background: #0F0;
+}
+
+/*
     Sidebar
     ********************************************************************************************************************
 */

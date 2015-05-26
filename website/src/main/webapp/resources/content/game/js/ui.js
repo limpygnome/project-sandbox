@@ -65,6 +65,12 @@ game.ui =
         // Apply death screen offset
         this.deathScreenOffset();
 
+        // Update UI
+        $("#ps-ui").width(newWidth).height(newHeight);
+
+        // Apply offset to UI
+        this.uiOffset();
+
         console.debug("engine/ui - render size changed - " + newWidth + "x" + newHeight);
 
         // Recompute size of UI
@@ -241,6 +247,13 @@ game.ui =
 	{
 	    // Set offset of death screen to render location
         $("#ps-death-screen").offset(
+            $("#ps_render").position()
+        );
+	},
+
+	uiOffset: function()
+	{
+	    $("#ps-ui").offset(
             $("#ps_render").position()
         );
 	},

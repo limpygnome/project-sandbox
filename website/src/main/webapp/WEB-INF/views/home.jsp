@@ -195,6 +195,27 @@
             </div>
         </div>
 
+        <div id="ps-ui">
+
+            <div id="ps-ui-stars">
+                <img id="ps-ui-star1" src="/content/images/ui.png" alt="Wanted Star" />
+                <img id="ps-ui-star2" src="/content/images/ui.png" alt="Wanted Star" />
+                <img id="ps-ui-star3" src="/content/images/ui.png" alt="Wanted Star" />
+                <img id="ps-ui-star4" src="/content/images/ui.png" alt="Wanted Star" />
+                <img id="ps-ui-star5" src="/content/images/ui.png" alt="Wanted Star" />
+            </div>
+
+            <div id="ps-ui-top-right">
+
+                <img id="ps-ui-weapon-icon" src="/content/images/ui-weapons.png" alt="Weapon icon" />
+
+                <div id="ps-ui-healthbar">
+                    <div id="ps-ui-healthbar-fill">&nbsp;</div>
+                </div>
+
+            </div>
+
+        </div>
 
         <canvas id="ps_render" width="1024" height="768">
             <p>
