@@ -207,7 +207,9 @@
 
             <div id="ps-ui-top-right">
 
-                <img id="ps-ui-weapon-icon" src="/content/images/ui-weapons.png" alt="Weapon icon" />
+                <div class="weapon-frame">
+                    <img id="ps-ui-weapon-icon" src="/content/images/ui-weapons.png" alt="Weapon icon" />
+                </div>
 
                 <div id="ps-ui-healthbar">
                     <div id="ps-ui-healthbar-fill">&nbsp;</div>

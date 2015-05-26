@@ -120,13 +120,12 @@ body
 #projectsandbox #ps-ui
 {
     position: fixed;
-    display: table;
-    background: rgba(255, 255, 255, 0.8);
+    display: table-cell;
 }
 
 #projectsandbox #ps-ui #ps-ui-stars
 {
-    display: block;
+    display: inline-block;
     vertical-align: top;
 
     font-size: larger;

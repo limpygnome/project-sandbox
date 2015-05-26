@@ -174,6 +174,8 @@ game.ui =
 	
 	render: function(gl, shaderProgram, modelView, perspective)
 	{
+		return;
+
 	    // Disable depth for transparency
 	    gl.disable(gl.DEPTH_TEST);
 
