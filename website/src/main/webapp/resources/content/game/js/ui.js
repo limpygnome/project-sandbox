@@ -19,15 +19,39 @@ game.ui =
 	// Health
 	healthBar: null,
 
+
+
+    // Elements - main
+    elementRender: null,
+    elementDeathScreen: null,
+
+    // Elements - UI
+    elementUI: null,
+	elementUIHealthBar: null,
+	elementUIInventory: null,
+
+
 	setup: function()
 	{
+	    // Fetch elements
+	    // -- Main
+	    this.elementRender = document.getElementById("ps_render");
+	    this.elementDeathScreen = document.getElementById("ps-death-screen");
+
+	    // -- UI
+	    this.elementUI = document.getElementById("ps-ui");
+        this.elementUIHealthBar = document.getElementById("ps-ui-healthbar-fill");
+        this.elementUIInventory = document.getElementById("ps-ui-inventory");
+
+
+
 	    // Bind resize event for window
         $(window).resize(function () {
             game.ui.resize();
         });
 
 	    // Bind death screen to close
-        $("#ps-death-screen").keyup(function (event) {
+        $(this.elementDeathScreen).keyup(function (event) {
         	if (String.fromCharCode(event.which) == " ")
         	{
             	game.ui.deathScreenHide();
@@ -38,6 +62,8 @@ game.ui =
         $(".options.button.fullscreen").click(function () {
             game.ui.toggleFullScreen();
         });
+
+
 
 	    // Set UI size
         this.resize();
@@ -57,16 +83,16 @@ game.ui =
         var newHeight = newWidth / 1.33; $("#projectsandbox").height();
 
         // Update render canvas
-        $("#ps_render").width(newWidth).height(newHeight);
+        $(this.elementRender).width(newWidth).height(newHeight);
 
         // Update death screen
-        $("#ps-death-screen").width(newWidth).height(newHeight);
+        $(this.elementDeathScreen).width(newWidth).height(newHeight);
 
         // Apply death screen offset
         this.deathScreenOffset();
 
         // Update UI
-        $("#ps-ui").width(newWidth).height(newHeight);
+        $(this.elementUI).width(newWidth).height(newHeight);
 
         // Apply offset to UI
         this.uiOffset();
@@ -146,14 +172,16 @@ game.ui =
                 var health = ent.health;
 
                 var healthPercent;
-                if (health > 0 && maxHealth > 0)
+                if (health > 0 && maxHealth > 0 && health <= maxHealth)
                 {
-                    healthPercent = health / maxHealth;
+                    healthPercent = (health / maxHealth) * 100.0;
                 }
                 else
                 {
-                    healthPercent = 0.0;
+                    healthPercent = 0;
                 }
+
+                $(this.elementUIHealthBar).width(healthPercent + "%");
 
                 this.healthBar.setValue(healthPercent);
 
@@ -227,12 +255,12 @@ game.ui =
         $("#ps-death-screen-cause").text(causeText);
 
         // Set to visible
-        $("#ps-death-screen").css({
+        $(this.elementDeathScreen).css({
             "visibility" : "visible"
         });
 
         // Set focus to control
-        $("#ps-death-screen").focus();
+        $(this.elementDeathScreen).focus();
 
         // Apply offset
         this.deathScreenOffset();
@@ -240,7 +268,7 @@ game.ui =
 
 	deathScreenHide: function()
 	{
-        $("#ps-death-screen").css({
+        $(this.elementDeathScreen).css({
             "visibility" : "hidden"
         });
 	},
@@ -248,15 +276,15 @@ game.ui =
 	deathScreenOffset: function()
 	{
 	    // Set offset of death screen to render location
-        $("#ps-death-screen").offset(
+        $(this.elementDeathScreen).offset(
             $("#ps_render").position()
         );
 	},
 
 	uiOffset: function()
 	{
-	    $("#ps-ui").offset(
-            $("#ps_render").position()
+	    $(this.elementUI).offset(
+            $(this.elementRender).position()
         );
 	},
 
@@ -326,6 +354,34 @@ game.ui =
                 alert("Fullscreen exit not supported by your browser :_:");
             }
         }
+	},
+
+
+
+	inventorySlotCreate: function(slotId, weaponType, text)
+	{
+	    $(this.elementUIInventory).append("<div id='ps-ui-slot-" + slotId + "' class='slot " + weaponType + "'>" + text + "</div>");
+	},
+
+	inventorySlotUpdate: function(slotId, text)
+	{
+	    $("#ps-ui-slot-" + slotId).text(text);
+	},
+
+	inventorySlotRemove: function(slotId)
+	{
+	    $("#ps-ui-slot-" + slotId).remove();
+	},
+
+	inventorySlotSelected: function(slotId)
+	{
+	    $(this.elementUIInventory).siblings().removeClass("selected");
+	    $("#ps-ui-slot-" + slotId).addClass("selected");
+	},
+
+	inventoryReset: function()
+	{
+	    $(this.elementUIInventory).empty();
 	}
 
 }

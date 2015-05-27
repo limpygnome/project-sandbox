@@ -63,6 +63,8 @@ projectSandbox.network.inventory =
 
         inventory.reset();
 
+        projectSandbox.game.ui.inventoryReset();
+
         return offset;
     },
 
@@ -128,6 +130,8 @@ projectSandbox.network.inventory =
 				console.error("engine/network/inventory - cannot create item - no type exists - " + typeId);
 				return offset;
 		}
+
+		projectSandbox.game.ui.inventorySlotCreate(123, "fist", "");
 
 		// Allow item to read custom data
 		offset = item.packetCreate(data, dataView, offset);

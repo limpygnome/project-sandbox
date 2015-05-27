@@ -242,6 +242,10 @@ body
     text-align: right;
     text-shadow: #000 0em 0em 0.2em;
 }
+#projectsandbox #ps-ui #ps-ui-inventory .slot.selected
+{
+    background: rgba(51, 174, 255, 0.4);
+}
 
 /*
     Sidebar
