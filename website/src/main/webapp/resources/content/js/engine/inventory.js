@@ -13,14 +13,6 @@ projectSandbox.inventory =
 	selectNextKeyDown: false,
 
 
-	reset: function()
-	{
-	    this.items = new Map();
-	    this.renderOrder = new Array();
-
-	    console.debug("Inventory - reset");
-	},
-
 	logic: function()
 	{
 	    // Check if to switch items
@@ -49,6 +41,14 @@ projectSandbox.inventory =
             this.selectNextKeyDown = false;
         }
 
+	},
+
+	reset: function()
+	{
+		this.items = new Map();
+		this.renderOrder = new Array();
+
+		console.debug("engine/inventory - reset");
 	},
 
     findItemIndex: function(slotId)
@@ -104,16 +104,8 @@ projectSandbox.inventory =
 
             // Send packet to server
             projectSandbox.network.send(buff.buffer);
+
+            console.debug("engine/inventory - packet sent to select slot ID: " + newSlotId);
         }
-	},
-
-	getSelected: function()
-	{
-	    if (this.selectedSlotId == -1)
-	    {
-	        return null;
-	    }
-
-	    return this.items.get(this.selectedSlotId);
 	}
 }

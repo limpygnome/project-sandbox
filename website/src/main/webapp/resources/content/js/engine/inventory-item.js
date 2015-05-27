@@ -1,27 +1,5 @@
-function InventoryItem(slotId)
+function InventoryItem(slotId, typeId)
 {
     this.slotId = slotId;
-}
-
-InventoryItem.prototype.getIcon = function()
-{
-    return "error";
-}
-
-InventoryItem.prototype.packetCreate = function(data, dataView, offset)
-{
-    // No custom data is read by default
-    return offset;
-}
-
-InventoryItem.prototype.packetRemove = function(data, dataView, offset)
-{
-    // No custom data is read by default
-    return offset;
-}
-
-InventoryItem.prototype.packetChanged = function(data, dataView, offset)
-{
-    // No custom data is read by default
-    return offset;
+    this.typeId = typeId;
 }

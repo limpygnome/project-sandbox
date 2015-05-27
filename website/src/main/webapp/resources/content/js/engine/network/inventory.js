@@ -59,34 +59,47 @@ projectSandbox.network.inventory =
 
     packetInventoryReset: function(data, dataView, offset)
     {
+        // Reset internal inventory
         var inventory = projectSandbox.inventory;
-
         inventory.reset();
 
-        projectSandbox.game.ui.inventoryReset();
+        // Inform UI to reset
+        var gameUI = projectSandbox.game.ui;
+        gameUI.hook_inventoryReset();
 
         return offset;
     },
 
 	packetInventoryItemSelected: function(data, dataView, offset)
 	{
+	    // Read data
+	    var slotId = dataView.getInt8(offset);
+
+	    // Update internal selected slot
 	    var inventory = projectSandbox.inventory;
+		inventory.selectedSlotId = slotId;
 
-		inventory.selectedSlotId = dataView.getInt8(offset);
+        // Fetch inventory item
+        var inventoryItem = inventory.items.get(slotId);
 
-		console.debug("engine/network/inventory - item selected - " + projectSandbox.inventory.selectedSlotId);
+        // Inform UI
+        var gameUI = projectSandbox.game.ui;
+        gameUI.hook_inventorySlotSelected(inventoryItem);
 
-		// Call UI hook
-		projectSandbox.game.ui.hookInventory_selectedChanged();
+        console.debug("engine/network/inventory - item selected - " + slotId);
 
 		return offset + 1;
 	},
 
 	packetInventoryItemNonSelected: function(data, dataView, offset)
 	{
+	    // Update internal inventory
 	    var inventory = projectSandbox.inventory;
-
 		inventory.selected = -1;
+
+		// Inform UI
+		var gameUI = projectSandbox.game.ui;
+        gameUI.hook_inventorySlotSelected(null);
 
 		console.debug("engine/network/inventory - no item selected");
 
@@ -95,73 +108,55 @@ projectSandbox.network.inventory =
 
 	packetInventoryItemCreated: function(data, dataView, offset)
 	{
-	    var inventory = projectSandbox.inventory;
+	    // Read data
+	    var slotId = dataView.getInt8(offset);
+        offset += 1;
 
-		// Parse mandatory data
-		var slotId = dataView.getInt8(offset);
-		offset += 1;
+        var typeId = dataView.getInt16(offset);
+        offset += 2;
 
-		var typeId = dataView.getInt16(offset);
-		offset += 2;
+        // Check it doesn't already exist
+        var inventory = projectSandbox.inventory;
 
-		// Check it doesn't already exist
-		if (inventory.items.has(slotId))
-		{
-			console.error("engine/network/inventory - unable to add duplicate slot to inventory - " + slotId);
-			return;
-		}
+        if (inventory.items.has(slotId))
+        {
+            console.error("engine/network/inventory - unable to add duplicate slot to inventory - " + slotId);
+            return;
+        }
 
-		// Create type
-		var item;
-
-		switch (typeId)
-		{
-		    // Fist
-		    case 1:
-		        item = new Fist(slotId);
-		        console.debug("engine/network/inventory - created fist - " + slotId);
-		        break;
-			// Weapons -> SMG
-			case 100:
-				item = new Smg(slotId);
-				console.debug("engine/network/inventory - created SMG - " + slotId);
-				break;
-			default:
-				console.error("engine/network/inventory - cannot create item - no type exists - " + typeId);
-				return offset;
-		}
-
-		projectSandbox.game.ui.inventorySlotCreate(123, "fist", "");
-
-		// Allow item to read custom data
-		offset = item.packetCreate(data, dataView, offset);
+        // Create inventory item
+        var inventoryItem = new InventoryItem(slotId, typeId);
 
 		// Add to inventory
-		inventory.items.set(slotId, item);
+		inventory.items.set(slotId, inventoryItem);
 		inventory.renderOrder.push(slotId);
+
+		// Inform UI
+		var gameUI = projectSandbox.game.ui;
+		gameUI.hook_inventorySlotCreate(inventoryItem);
 
 		return offset;
 	},
 
 	packetInventoryItemRemoved: function(data, dataView, offset)
 	{
-	    var inventory = projectSandbox.inventory;
-
-		// Parse mandatory data
-		var slotId = dataView.getInt8(offset);
-		offset += 1;
+	    // Read data
+	    var slotId = dataView.getInt8(offset);
+        offset += 1;
 
 		// Fetch item
-		var item = inventory.items.get(slotId);
+		var inventory = projectSandbox.inventory;
+		var inventoryItem = inventory.items.get(slotId);
 
-        if (item != null)
+        if (inventoryItem != null)
         {
-            // Allow item to read custom data
-            offset = item.packetRemove(data, dataView, offset);
-
             // Remove from collections
             inventory.items.delete(slotId);
-            inventory.renderOrder.splice(item, 1);
+            inventory.renderOrder.splice(inventoryItem, 1);
+
+            // Inform UI
+            var gameUI = projectSandbox.game.ui;
+            gameUI.hook_inventorySlotRemove(inventoryItem);
 
             console.debug("engine/network/inventory - removed item - " + slotId);
 		}
@@ -175,19 +170,19 @@ projectSandbox.network.inventory =
 
 	packetInventoryItemChanged: function(data, dataView, offset)
 	{
+	    // Read data
+	    var slotId = dataView.getInt8(offset);
+        offset += 1;
+
+	    // Fetch item
 	    var inventory = projectSandbox.inventory;
+		var inventoryItem = inventory.items.get(slotId);
 
-		// Parse mandatory data
-		var slotId = dataView.getInt8(offset);
-		offset += 1;
-
-		// Fetch item
-		var item = inventory.items.get(slotId);
-
-        if (item != null)
+        if (inventoryItem != null)
         {
-		    // Allow item to read custom data
-            offset = item.packetChanged(data, dataView, offset);
+            // Inform UI
+            var gameUI = projectSandbox.game.ui;
+            gameUI.hook_inventorySlotUpdate(inventoryItem);
 
             console.debug("engine/network/inventory - item changed - " + slotId);
 		}

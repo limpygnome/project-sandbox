@@ -288,24 +288,6 @@ game.ui =
         );
 	},
 
-	hookInventory_selectedChanged: function()
-	{
-		console.debug("UI - inventory selectedChanged hook invoked");
-
-		// Update icon to current item
-		var item = projectSandbox.inventory.getSelected();
-
-		if (item != null)
-		{
-            this.iconWeapon.setTexture(item.getIcon());
-            this.renderWeapon = true;
-        }
-        else
-        {
-            this.renderWeapon = false;
-        }
-	},
-
 	toggleFullScreen: function()
 	{
 	    var isFullscreen = document.fullscreenElement || document.mozFullScreenElement || document.webkitFullscreenElement;
@@ -356,30 +338,38 @@ game.ui =
         }
 	},
 
-
-
-	inventorySlotCreate: function(slotId, weaponType, text)
+	hook_inventorySlotCreate: function(inventoryItem)
 	{
-	    $(this.elementUIInventory).append("<div id='ps-ui-slot-" + slotId + "' class='slot " + weaponType + "'>" + text + "</div>");
+		// Build text
+		var text = "test";
+
+		// Create new slot
+	    $(this.elementUIInventory).append(
+	        "<div id='ps-ui-slot-" + inventoryItem.slotId + "' class='slot item_" + inventoryItem.typeId + "'>" + text + "</div>"
+        );
 	},
 
-	inventorySlotUpdate: function(slotId, text)
+	hook_inventorySlotUpdate: function(inventoryItem)
 	{
-	    $("#ps-ui-slot-" + slotId).text(text);
+	    $("#ps-ui-slot-" + inventoryItem.slotId).text("test");
 	},
 
-	inventorySlotRemove: function(slotId)
+	hook_inventorySlotRemove: function(inventoryItem)
 	{
-	    $("#ps-ui-slot-" + slotId).remove();
+	    $("#ps-ui-slot-" + inventoryItem.slotId).remove();
 	},
 
-	inventorySlotSelected: function(slotId)
+	hook_inventorySlotSelected: function(inventoryItem)
 	{
-	    $(this.elementUIInventory).siblings().removeClass("selected");
-	    $("#ps-ui-slot-" + slotId).addClass("selected");
+	    $(this.elementUIInventory).find('*').removeClass("selected");
+
+	    if (inventoryItem != null)
+	    {
+	    	$("#ps-ui-slot-" + inventoryItem.slotId).addClass("selected");
+	    }
 	},
 
-	inventoryReset: function()
+	hook_inventoryReset: function()
 	{
 	    $(this.elementUIInventory).empty();
 	}
