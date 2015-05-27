@@ -208,7 +208,7 @@
             <div id="ps-ui-top-right">
 
                 <div id="ps-ui-score">
-                    $1,000,000,000
+                    $3,000,000,000
                 </div>
 
                 <div id="ps-ui-healthbar">
@@ -217,17 +217,21 @@
 
             </div>
 
-            <div id="ps-ui-inventory">
-                <div id="ps-ui-slot1" class="slot fist">&nbsp;</div>
-                <div id="ps-ui-slot2" class="slot fist">&nbsp;</div>
-                <div id="ps-ui-slot3" class="slot fist">&nbsp;</div>
-                <div id="ps-ui-slot4" class="slot fist">&nbsp;</div>
-                <div id="ps-ui-slot5" class="slot fist">&nbsp;</div>
-                <div id="ps-ui-slot6" class="slot fist">&nbsp;</div>
-                <div id="ps-ui-slot7" class="slot fist">&nbsp;</div>
-                <div id="ps-ui-slot8" class="slot fist">&nbsp;</div>
-                <div id="ps-ui-slot9" class="slot fist">&nbsp;</div>
-                <div id="ps-ui-slot10" class="slot fist">&nbsp;</div>
+            <div class="inventory-container">
+                <div id="ps-ui-inventory">
+                    <div id="ps-ui-slot1" class="slot fist">
+                        10
+                    </div>
+                    <div id="ps-ui-slot2" class="slot fist">&nbsp;</div>
+                    <div id="ps-ui-slot3" class="slot fist">&nbsp;</div>
+                    <div id="ps-ui-slot4" class="slot fist">&nbsp;</div>
+                    <div id="ps-ui-slot5" class="slot fist">&nbsp;</div>
+                    <div id="ps-ui-slot6" class="slot fist">&nbsp;</div>
+                    <div id="ps-ui-slot7" class="slot fist">&nbsp;</div>
+                    <div id="ps-ui-slot8" class="slot fist">&nbsp;</div>
+                    <div id="ps-ui-slot9" class="slot fist">&nbsp;</div>
+                    <div id="ps-ui-slot10" class="slot fist">&nbsp;</div>
+                </div>
             </div>
 
         </div>
