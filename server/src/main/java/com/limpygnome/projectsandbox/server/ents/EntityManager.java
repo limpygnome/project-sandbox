@@ -7,6 +7,7 @@ import com.limpygnome.projectsandbox.server.ents.enums.StateChange;
 import com.limpygnome.projectsandbox.server.ents.physics.collisions.CollisionResultMap;
 import com.limpygnome.projectsandbox.server.ents.physics.collisions.SAT;
 import com.limpygnome.projectsandbox.server.ents.physics.Vector2;
+import com.limpygnome.projectsandbox.server.packets.types.ents.EntityUpdatesOutboundPacket;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -202,6 +203,13 @@ public class EntityManager
                 // Add pending ents
                 entities.putAll(entitiesNew);
                 entitiesNew.clear();
+
+                // Build update packet
+                EntityUpdatesOutboundPacket packet = new EntityUpdatesOutboundPacket();
+                packet.build(controller.entityManager, false);
+
+                // Send updates to all players
+                controller.playerManager.broadcast(packet);
             }
         }
         catch (Exception e)

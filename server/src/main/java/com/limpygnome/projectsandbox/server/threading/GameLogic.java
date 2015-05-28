@@ -33,14 +33,6 @@ public class GameLogic implements Runnable
                     // Run logic for entities
                     controller.entityManager.logic();
 
-                    // TODO: refactor this into ent manager logic, like effects manager
-                    // Build update data
-                    EntityUpdatesOutboundPacket packet = new EntityUpdatesOutboundPacket();
-                    packet.build(controller.entityManager, false);
-                    
-                    // Write update packet to each client
-                    controller.playerManager.broadcast(packet);
-
                     // Run logic for effects
                     controller.effectsManager.logic();
                 }
