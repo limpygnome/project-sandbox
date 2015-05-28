@@ -19,8 +19,6 @@ public class PlayerIdentityOutboundPacket extends OutboundPacket
     
     public void writeIdentity(Entity ply) throws IOException
     {
-        ByteBuffer bb = ByteBuffer.allocate(2);
-        bb.putShort(ply.id);
-        buffer.write(bb.array());
+        packetData.add(ply.id);
     }
 }

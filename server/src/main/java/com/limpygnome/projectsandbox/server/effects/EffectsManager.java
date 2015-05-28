@@ -40,7 +40,7 @@ public class EffectsManager
             pendingSend.clear();
 
             // Broadcast to all players
-            controller.endpoint.broadcast(packet);
+            controller.playerManager.broadcast(packet);
         }
     }
 

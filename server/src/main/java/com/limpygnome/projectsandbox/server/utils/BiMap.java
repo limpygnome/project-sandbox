@@ -1,13 +1,15 @@
 package com.limpygnome.projectsandbox.server.utils;
 
 import java.util.HashMap;
+import java.util.Iterator;
 
 /**
- * TODO: consider deletion
+ * A bi-directional hash map, which works by containing two maps with key-values going either way. Therefore
+ * the K and V must be one-to-one.
  * 
  * @author limpygnome
  */
-public class BiMap<K, V>
+public class BiMap<K, V> implements Iterable
 {
     private HashMap<K, V> mappingKeyToValue;
     private HashMap<V, K> mappingValueToKey;
@@ -18,20 +20,26 @@ public class BiMap<K, V>
         this.mappingValueToKey = new HashMap<>();
     }
     
-    public void put(K key, V value)
+    public synchronized void put(K key, V value)
     {
         // Put new values
         mappingKeyToValue.put(key, value);
         mappingValueToKey.put(value, key);
     }
     
-    public V getByKey(K key)
+    public synchronized V getByKey(K key)
     {
         return mappingKeyToValue.get(key);
     }
     
-    public K getByValue(V value)
+    public synchronized K getByValue(V value)
     {
         return mappingValueToKey.get(value);
+    }
+
+    @Override
+    public synchronized Iterator iterator()
+    {
+        return mappingKeyToValue.entrySet().iterator();
     }
 }

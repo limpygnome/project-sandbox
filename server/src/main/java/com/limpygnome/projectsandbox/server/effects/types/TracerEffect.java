@@ -1,6 +1,7 @@
 package com.limpygnome.projectsandbox.server.effects.types;
 
 import com.limpygnome.projectsandbox.server.ents.physics.Vector2;
+import com.limpygnome.projectsandbox.server.packets.PacketData;
 
 import java.util.List;
 
@@ -21,7 +22,7 @@ public class TracerEffect extends AbstractEffect
     }
 
     @Override
-    public void writeCustomData(List<Object> packetData)
+    public void writeCustomData(PacketData packetData)
     {
         packetData.add(start.x);
         packetData.add(start.y);

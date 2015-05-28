@@ -4,11 +4,12 @@ package com.limpygnome.projectsandbox.server.players;
 import com.limpygnome.projectsandbox.server.Controller;
 import com.limpygnome.projectsandbox.server.ents.Entity;
 import com.limpygnome.projectsandbox.server.ents.types.Player;
-import com.limpygnome.projectsandbox.server.ents.physics.Vector2;
+import com.limpygnome.projectsandbox.server.packets.OutboundPacket;
 import com.limpygnome.projectsandbox.server.packets.types.ents.EntityUpdatesOutboundPacket;
 import com.limpygnome.projectsandbox.server.packets.types.players.PlayerIdentityOutboundPacket;
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.Map;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -23,53 +24,49 @@ public class PlayerManager
     private final static Logger LOG = LogManager.getLogger(PlayerManager.class);
 
     private final Controller controller;
-    
-    private final HashMap<WebSocket, PlayerInfo> mappingsSock2Ply;
-    
+    private final HashMap<WebSocket, PlayerInfo> mappings;
+
     public PlayerManager(Controller controller)
     {
         this.controller = controller;
-        this.mappingsSock2Ply = new HashMap<>();
+        this.mappings = new HashMap<>();
     }
     
     public PlayerInfo register(WebSocket ws, Session session)
     {
-        // Create new player
-        PlayerInfo playerInfo = new PlayerInfo(ws, session);
-        
-        // Add mapping for sock
-        mappingsSock2Ply.put(ws, playerInfo);
-        
-        // Create and spawn entity for player
-        createSpawnNewPlayerEnt(playerInfo);
-        
-        byte[] data;
-        
-        // Send map data
-        ws.send(controller.mapManager.main.packet.getPacketData());
-        
-        // Send update of entire world
         try
         {
+            // Create new player
+            PlayerInfo playerInfo = new PlayerInfo(ws, session);
+
+            // Add mapping for sock
+            mappings.put(ws, playerInfo);
+
+            // Create and spawn entity for player
+            createAndSpawnNewPlayerEnt(playerInfo);
+
+            // Send map data
+            controller.mapManager.main.packet.send(playerInfo);
+
+            // Send update of entire world
             EntityUpdatesOutboundPacket packetUpdates = new EntityUpdatesOutboundPacket();
             packetUpdates.build(controller.entityManager, true);
-            data = packetUpdates.getPacketData();
-            ws.send(data);
+            packetUpdates.send(playerInfo);
+
+            LOG.info("Mapped - sid: {}", session.sessionId);
+
+            return playerInfo;
         }
         catch(IOException e)
         {
             LOG.error("Failed to register player", e);
             return null;
         }
-
-        LOG.info("Mapped - sid: {}", session.sessionId);
-
-        return playerInfo;
     }
     public synchronized void unregister(WebSocket ws)
     {
         // Fetch and remove entity associated with connection if player
-        PlayerInfo playerInfo = mappingsSock2Ply.get(ws);
+        PlayerInfo playerInfo = mappings.get(ws);
         Entity ent = playerInfo.entity;
         
         if (playerInfo != null && ent != null && ent instanceof Player)
@@ -79,25 +76,14 @@ public class PlayerManager
         }
     }
     
-    public synchronized void handleDeath(Entity plyEntity)
+    public synchronized Player createAndSpawnNewPlayerEnt(PlayerInfo playerInfo)
     {
-    }
-    
-    public synchronized Player createSpawnNewPlayerEnt(PlayerInfo playerInfo)
-    {
-        Player ply = createSetNewPlayerEnt(playerInfo);
+        Player ply = createNewPlayerEnt(playerInfo);
         controller.mapManager.main.spawn(ply);
         return ply;
     }
     
-    public synchronized Player createSetNewPlayerEnt(PlayerInfo playerInfo, Vector2 position)
-    {
-        Player ply = createSetNewPlayerEnt(playerInfo);
-        ply.position(position);
-        return ply;
-    }
-    
-    public synchronized Player createSetNewPlayerEnt(PlayerInfo playerInfo)
+    public synchronized Player createNewPlayerEnt(PlayerInfo playerInfo)
     {
         // Create new entity
         Player ply = new Player(controller, playerInfo);
@@ -145,7 +131,15 @@ public class PlayerManager
 
     public PlayerInfo getPlayerByWebSocket(WebSocket ws)
     {
-        return mappingsSock2Ply.get(ws);
+        return mappings.get(ws);
+    }
+
+    public synchronized void broadcast(OutboundPacket outboundPacket)
+    {
+        for (Map.Entry<WebSocket, PlayerInfo> kv : mappings.entrySet())
+        {
+            outboundPacket.send(kv.getValue());
+        }
     }
     
 }

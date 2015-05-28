@@ -39,8 +39,7 @@ public class GameLogic implements Runnable
                     packet.build(controller.entityManager, false);
                     
                     // Write update packet to each client
-                    byte[] data = packet.getPacketData();
-                    controller.endpoint.broadcast(data);
+                    controller.playerManager.broadcast(packet);
 
                     // Run logic for effects
                     controller.effectsManager.logic();

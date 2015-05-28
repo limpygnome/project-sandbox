@@ -7,6 +7,7 @@ import com.limpygnome.projectsandbox.server.ents.physics.collisions.CollisionRes
 import com.limpygnome.projectsandbox.server.ents.physics.Vector2;
 import com.limpygnome.projectsandbox.server.ents.physics.Vertices;
 import com.limpygnome.projectsandbox.server.inventory.Inventory;
+import com.limpygnome.projectsandbox.server.packets.PacketData;
 import com.limpygnome.projectsandbox.server.players.PlayerInfo;
 import com.limpygnome.projectsandbox.server.utils.CustomMath;
 import com.limpygnome.projectsandbox.server.Controller;
@@ -350,15 +351,15 @@ public strictfp abstract class Entity
         controller.mapManager.main.spawn(this);
     }
     
-    public void eventPacketEntCreated(List<Object> packetData)
+    public void eventPacketEntCreated(PacketData packetData)
     {
     }
     
-    public void eventPacketEntUpdated(List<Object> packetData)
+    public void eventPacketEntUpdated(PacketData packetData)
     {
     }
     
-    public void eventPacketEntDeleted(List<Object> packetData)
+    public void eventPacketEntDeleted(PacketData packetData)
     {
     }
     

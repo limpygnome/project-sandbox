@@ -156,4 +156,10 @@ public abstract class AbstractWeapon extends AbstractInventoryItem
             throw new IllegalArgumentException("Attempted to merge different inventory item type as weapon");
         }
     }
+
+    @Override
+    public String eventFetchItemText(Controller controller)
+    {
+        return "00 XXXX";
+    }
 }

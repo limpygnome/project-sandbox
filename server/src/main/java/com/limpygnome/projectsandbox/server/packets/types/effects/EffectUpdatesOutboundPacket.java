@@ -19,13 +19,9 @@ public class EffectUpdatesOutboundPacket extends OutboundPacket
 
     public void writeEffects(List<AbstractEffect> effects) throws IOException
     {
-        LinkedList<Object> packetData = new LinkedList<>();
-
         for (AbstractEffect effect : effects)
         {
             effect.writePacketData(packetData);
         }
-
-        write(packetData);
     }
 }

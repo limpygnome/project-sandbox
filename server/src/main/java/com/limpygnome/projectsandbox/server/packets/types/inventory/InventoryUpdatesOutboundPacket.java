@@ -3,6 +3,7 @@ package com.limpygnome.projectsandbox.server.packets.types.inventory;
 import com.limpygnome.projectsandbox.server.Controller;
 import com.limpygnome.projectsandbox.server.inventory.items.AbstractInventoryItem;
 import com.limpygnome.projectsandbox.server.packets.OutboundPacket;
+import com.limpygnome.projectsandbox.server.packets.PacketData;
 
 import java.io.IOException;
 import java.util.LinkedList;
@@ -12,13 +13,9 @@ import java.util.LinkedList;
  */
 public class InventoryUpdatesOutboundPacket extends OutboundPacket
 {
-    private LinkedList<Object> packetData;
-
     public InventoryUpdatesOutboundPacket()
     {
         super((byte) 'I', (byte) 'U');
-
-        this.packetData = new LinkedList<>();;
     }
 
     public void eventReset()
@@ -51,7 +48,6 @@ public class InventoryUpdatesOutboundPacket extends OutboundPacket
         packetData.add((byte)'C');
         packetData.add(item.slot.idByte);
         packetData.add(item.typeId);
-        item.eventInventoryWritePacketCreated(controller, packetData);
     }
 
     /**
@@ -64,25 +60,17 @@ public class InventoryUpdatesOutboundPacket extends OutboundPacket
     {
         packetData.add((byte)'R');
         packetData.add(item.slot.idByte);
-        item.eventInventoryWritePacketRemoved(controller, packetData);
     }
 
     public void eventItemChanged(Controller controller, AbstractInventoryItem item)
     {
         packetData.add((byte)'M');
         packetData.add(item.slot.idByte);
-        item.eventInventoryWritePacketChanged(controller, packetData);
-    }
-
-    public void build() throws IOException
-    {
-        write(packetData);
-
-        packetData = null;
     }
 
     public boolean isEmpty()
     {
-        return packetData.isEmpty();
+        // Two objects for header expected
+        return packetData.getSize() == 2;
     }
 }

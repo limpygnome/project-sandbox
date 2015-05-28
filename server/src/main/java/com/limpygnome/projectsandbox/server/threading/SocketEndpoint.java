@@ -75,18 +75,5 @@ public class SocketEndpoint extends WebSocketServer
         LOG.error("Socket exception, terminating - ip: {} - {}", socket.getRemoteSocketAddress(), e);
         socket.close();
     }
-
-    public void broadcast(OutboundPacket packet)
-    {
-        broadcast(packet.getPacketData());
-    }
-    
-    public void broadcast(byte[] data)
-    {
-        for(WebSocket ws : connections())
-        {
-            ws.send(data);
-        }
-    }
     
 }

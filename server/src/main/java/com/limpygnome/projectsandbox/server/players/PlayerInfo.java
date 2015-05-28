@@ -78,10 +78,12 @@ public class PlayerInfo
     {
         try
         {
-            // Inform server we died
+            // Build death packet
             PlayerKilledOutboundPacket packet = new PlayerKilledOutboundPacket();
             packet.writePlayerKilled(killer, entity);
-            controller.endpoint.broadcast(packet);
+
+            // Broadcast to all players
+            controller.playerManager.broadcast(packet);
 
             LOG.info("Player killed - sess id: {}", session.sessionId);
         }

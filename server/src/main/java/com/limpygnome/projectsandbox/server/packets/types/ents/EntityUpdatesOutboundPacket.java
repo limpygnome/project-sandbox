@@ -75,8 +75,6 @@ public class EntityUpdatesOutboundPacket extends OutboundPacket
     
     private void writeEntCreated(Entity ent, boolean forced) throws IOException
     {
-        LinkedList<Object> packetData = new LinkedList<>();
-        
         // Add mandatory data
         packetData.add((byte)'C');
         packetData.add(ent.id);
@@ -85,14 +83,10 @@ public class EntityUpdatesOutboundPacket extends OutboundPacket
         
         // Add custom data
         ent.eventPacketEntCreated(packetData);
-
-        write(packetData);
     }
     
     private void writeEntUpdated(Entity ent, boolean forced) throws IOException
     {
-        LinkedList<Object> packetData = new LinkedList<>();
-        
         // Add mandatory data
         packetData.add((byte)'U');
         packetData.add(ent.id);
@@ -131,21 +125,15 @@ public class EntityUpdatesOutboundPacket extends OutboundPacket
         
         // Reset mask
         ent.resetUpdateMask();
-        
-        write(packetData);
     }
     
     private void writeEntDeleted(Entity ent) throws IOException
     {
-        LinkedList<Object> packetData = new LinkedList<>();
-        
         // Add mandatory data
         packetData.add((byte)'D');
         packetData.add(ent.id);
         
         // Add custom data
         ent.eventPacketEntDeleted(packetData);
-        
-        write(packetData);
     }
 }

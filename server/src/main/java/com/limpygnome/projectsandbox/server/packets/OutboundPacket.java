@@ -1,11 +1,6 @@
 package com.limpygnome.projectsandbox.server.packets;
 
 import com.limpygnome.projectsandbox.server.players.PlayerInfo;
-import com.limpygnome.projectsandbox.server.utils.ByteHelper;
-
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.util.LinkedList;
 
 /**
  *
@@ -13,18 +8,20 @@ import java.util.LinkedList;
  */
 public abstract class OutboundPacket extends Packet
 {
-    protected ByteArrayOutputStream buffer;
+    protected PacketData packetData;
+    byte[] dataCached;
 
     public OutboundPacket()
     {
-        buffer = new ByteArrayOutputStream();
+        this.packetData = new PacketData();
+        this.dataCached = null;
     }
 
     public OutboundPacket(byte mainType)
     {
         this();
 
-        buffer.write(mainType);
+        packetData.add(mainType);
     }
 
     public OutboundPacket(byte mainType, byte subType)
@@ -32,23 +29,21 @@ public abstract class OutboundPacket extends Packet
         this();
         
         // Write header data
-        buffer.write(mainType);
-        buffer.write(subType);
+        packetData.add(mainType);
+        packetData.add(subType);
     }
 
-    public byte[] getPacketData()
+    public PacketData getPacketData()
     {
-        return buffer.toByteArray();
-    }
-
-    protected void write(LinkedList<Object> packetData) throws IOException
-    {
-        byte[] data = ByteHelper.convertListOfObjects(packetData);
-        buffer.write(data);
+        return packetData;
     }
 
     public void send(PlayerInfo player)
     {
-        player.socket.send(buffer.toByteArray());
+        if (dataCached == null)
+        {
+            dataCached = packetData.build();
+        }
+        player.socket.send(dataCached);
     }
 }

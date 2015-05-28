@@ -1,5 +1,7 @@
 package com.limpygnome.projectsandbox.server.effects.types;
 
+import com.limpygnome.projectsandbox.server.packets.PacketData;
+
 import java.util.List;
 
 /**
@@ -19,7 +21,7 @@ public class BulletEffect extends AbstractEffect
     }
 
     @Override
-    public void writeCustomData(List<Object> packetData)
+    public void writeCustomData(PacketData packetData)
     {
         packetData.add(x);
         packetData.add(y);

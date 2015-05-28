@@ -271,7 +271,7 @@ game.ui =
 
 	hook_inventorySlotUpdate: function(inventoryItem)
 	{
-	    $("#ps-ui-slot-" + inventoryItem.slotId).text("test");
+	    $("#ps-ui-slot-" + inventoryItem.slotId).text("00 0000");
 	},
 
 	hook_inventorySlotRemove: function(inventoryItem)

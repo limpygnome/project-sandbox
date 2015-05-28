@@ -92,9 +92,12 @@ public abstract class AbstractInventoryItem implements Serializable
         // Nothing by default...
     }
 
-    public void eventInventoryWritePacketCreated(Controller controller, LinkedList<Object> packetData) { }
-    
-    public void eventInventoryWritePacketRemoved(Controller controller, LinkedList<Object> packetData) { }
-
-    public void eventInventoryWritePacketChanged(Controller controller, LinkedList<Object> packetData) { }
+    /**
+     * When an item has an updated state, the text is re-sent to the client. This should display the state or/and ammo,
+     * although only a limited amount of chars can be sent.
+     *
+     * @param controller
+     * @return
+     */
+    public abstract String eventFetchItemText(Controller controller);
 }

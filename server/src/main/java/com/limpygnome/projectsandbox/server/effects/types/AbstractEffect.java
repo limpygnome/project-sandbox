@@ -1,5 +1,7 @@
 package com.limpygnome.projectsandbox.server.effects.types;
 
+import com.limpygnome.projectsandbox.server.packets.PacketData;
+
 import java.util.List;
 
 /**
@@ -14,11 +16,11 @@ public abstract class AbstractEffect
         this.type = type;
     }
 
-    public void writePacketData(List<Object> packetData)
+    public void writePacketData(PacketData packetData)
     {
         packetData.add(type);
         writeCustomData(packetData);
     }
 
-    public abstract void writeCustomData(List<Object> packetData);
+    public abstract void writeCustomData(PacketData packetData);
 }

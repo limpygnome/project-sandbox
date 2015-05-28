@@ -20,13 +20,7 @@ public class PlayerKilledOutboundPacket extends OutboundPacket
     
     public void writePlayerKilled(AbstractKiller killer, Entity ply) throws IOException
     {
-        byte[] causeTextRaw = killer.causeText().getBytes("UTF-8");
-        int causeTextLength = causeTextRaw.length;
-
-        ByteBuffer bb = ByteBuffer.allocate(2 + 1 + causeTextLength);
-        bb.putShort(ply.id);
-        bb.put((byte) causeTextLength);
-        bb.put(causeTextRaw);
-        buffer.write(bb.array());
+        packetData.add(ply.id);
+        packetData.add(killer.causeText());
     }
 }

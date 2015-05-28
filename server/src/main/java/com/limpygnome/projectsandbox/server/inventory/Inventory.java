@@ -198,21 +198,11 @@ public class Inventory implements Serializable
             flagReset = false;
         }
 
-        // Send packet to current player of inventory
+        // Check we have an owner and data got written to the packet
         if (owner != null && !packet.isEmpty())
         {
-            try
-            {
-                // Write data
-                packet.build();
-
-                // Send to player
-                packet.send(owner);
-            }
-            catch (IOException e)
-            {
-                // TODO: log exception
-            }
+            // Send to player / owner of inventory
+            packet.send(owner);
         }
     }
 

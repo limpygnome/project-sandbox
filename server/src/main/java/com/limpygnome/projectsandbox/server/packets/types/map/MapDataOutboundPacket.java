@@ -24,14 +24,13 @@ public class MapDataOutboundPacket extends OutboundPacket
     
     public void build(Map map) throws IOException
     {
-        LinkedList<Object> packetData = new LinkedList<>();
-        
         // Add number of tiles
         packetData.add((short) map.tileTypeMappings.size());
         
         // Add tile types
         TileType tileType;
         byte[] textureNameBytes;
+
         for (int i = 0; i < map.tileTypes.length; i++)
         {
             // Fetch tile type
@@ -63,8 +62,5 @@ public class MapDataOutboundPacket extends OutboundPacket
                 packetData.add(tileRow[x]);
             }
         }
-        
-        // Write packet data
-        write(packetData);
     }
 }
