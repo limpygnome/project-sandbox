@@ -221,9 +221,9 @@ body
 }
 #projectsandbox #ps-ui #ps-ui-inventory .slot
 {
-    width: 4em;
-    height: 4em;
-    line-height: 7.5em;
+    width: 4.5em;
+    height: 4.5em;
+    line-height: 8em;
 
     padding: 0.5em;
     margin: 0.5em;

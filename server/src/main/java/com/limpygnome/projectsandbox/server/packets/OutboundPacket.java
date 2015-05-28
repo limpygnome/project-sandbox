@@ -1,6 +1,8 @@
 package com.limpygnome.projectsandbox.server.packets;
 
 import com.limpygnome.projectsandbox.server.players.PlayerInfo;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /**
  *
@@ -8,6 +10,8 @@ import com.limpygnome.projectsandbox.server.players.PlayerInfo;
  */
 public abstract class OutboundPacket extends Packet
 {
+    private final static Logger LOG = LogManager.getLogger(OutboundPacket.class);
+
     protected PacketData packetData;
     byte[] dataCached;
 
@@ -40,10 +44,23 @@ public abstract class OutboundPacket extends Packet
 
     public void send(PlayerInfo player)
     {
+        // Build data and cache it, if not already cached
         if (dataCached == null)
         {
             dataCached = packetData.build();
         }
-        player.socket.send(dataCached);
+
+        // Check socket not closed
+        if (!player.socket.isClosed())
+        {
+            try
+            {
+                player.socket.send(dataCached);
+            }
+            catch (Exception e)
+            {
+                LOG.error("Failed to send data to player", e);
+            }
+        }
     }
 }

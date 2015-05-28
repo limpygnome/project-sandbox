@@ -48,6 +48,7 @@ public class InventoryUpdatesOutboundPacket extends OutboundPacket
         packetData.add((byte)'C');
         packetData.add(item.slot.idByte);
         packetData.add(item.typeId);
+        packetData.add(item.eventFetchItemText(controller));
     }
 
     /**
@@ -66,6 +67,7 @@ public class InventoryUpdatesOutboundPacket extends OutboundPacket
     {
         packetData.add((byte)'M');
         packetData.add(item.slot.idByte);
+        packetData.add(item.eventFetchItemText(controller));
     }
 
     public boolean isEmpty()

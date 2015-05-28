@@ -115,6 +115,10 @@ projectSandbox.network.inventory =
         var typeId = dataView.getInt16(offset);
         offset += 2;
 
+        var textLen = dataView.getInt8(offset);
+		var text = String.fromCharCode.apply(String, data.subarray(offset + 1, offset + 1 + textLen));
+		offset += 1 + textLen;
+
         // Check it doesn't already exist
         var inventory = projectSandbox.inventory;
 
@@ -125,7 +129,7 @@ projectSandbox.network.inventory =
         }
 
         // Create inventory item
-        var inventoryItem = new InventoryItem(slotId, typeId);
+        var inventoryItem = new InventoryItem(slotId, typeId, text);
 
 		// Add to inventory
 		inventory.items.set(slotId, inventoryItem);
@@ -174,12 +178,19 @@ projectSandbox.network.inventory =
 	    var slotId = dataView.getInt8(offset);
         offset += 1;
 
+        var textLen = dataView.getInt8(offset);
+		var text = String.fromCharCode.apply(String, data.subarray(offset + 1, offset + 1 + textLen));
+		offset += 1 + textLen;
+
 	    // Fetch item
 	    var inventory = projectSandbox.inventory;
 		var inventoryItem = inventory.items.get(slotId);
 
         if (inventoryItem != null)
         {
+            // Update item
+            inventoryItem.text = text;
+
             // Inform UI
             var gameUI = projectSandbox.game.ui;
             gameUI.hook_inventorySlotUpdate(inventoryItem);
