@@ -9,6 +9,8 @@ import com.limpygnome.projectsandbox.server.inventory.annotations.InventoryItemT
 @InventoryItemTypeId(typeId = 1)
 public class Fist extends AbstractInventoryItem
 {
+    public static final long serialVersionUID = 1L;
+
     @Override
     public String eventFetchItemText(Controller controller)
     {

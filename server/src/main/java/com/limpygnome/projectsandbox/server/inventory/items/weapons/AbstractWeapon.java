@@ -32,7 +32,7 @@ public abstract class AbstractWeapon extends AbstractInventoryItem
     
     public long fireDelay;
     public long reloadDelay;
-    public long cooldownEnd;
+    public transient long cooldownEnd;
     
     public float maxDistance;
     

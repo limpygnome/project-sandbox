@@ -13,11 +13,11 @@ public class InventorySlotData
     public short id;
     public byte idByte;
     public Inventory inventory;
-    public InventorySlotState slotState;
-    public InventoryInvokeState invokeState;
+    public transient InventorySlotState slotState;
+    public transient InventoryInvokeState invokeState;
 
-    public boolean keyDown;
-    public boolean keyAlreadyDown;
+    public transient boolean keyDown;
+    public transient boolean keyAlreadyDown;
 
     public InventorySlotData(short id, Inventory inventory)
     {

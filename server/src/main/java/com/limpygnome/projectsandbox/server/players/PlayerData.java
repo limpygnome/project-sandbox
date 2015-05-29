@@ -24,12 +24,17 @@ public class PlayerData<T extends Serializable>
         return data.containsKey(key);
     }
 
+    public synchronized T get(String key)
+    {
+        return data.get(key);
+    }
+
     public synchronized void put(String key, T value)
     {
         data.put(key, value);
     }
 
-    public synchronized T value(String key)
+    public synchronized T remove(String key)
     {
         return data.remove(key);
     }

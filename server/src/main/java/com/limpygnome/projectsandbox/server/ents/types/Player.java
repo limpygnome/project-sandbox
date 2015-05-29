@@ -17,6 +17,8 @@ import com.limpygnome.projectsandbox.server.players.enums.PlayerKeys;
 @EntityType(typeId = 1)
 public class Player extends Entity
 {
+    public static final String PLAYERDATA_INVENTORY_KEY = "player_inventory";
+
     public PlayerInfo playerInfo;
     public Inventory inventory;
     
@@ -36,7 +38,16 @@ public class Player extends Entity
         setMaxHealth(PlayerConstants.DEFAULT_HEALTH);
         
         this.playerInfo = playerInfo;
-        this.inventory = new Inventory(this);
+
+        // Load inventory
+        this.inventory = (Inventory) playerInfo.session.playerData.get(PLAYERDATA_INVENTORY_KEY);
+
+        if (this.inventory == null)
+        {
+            // Give player default inventory
+            this.inventory = new Inventory(this);
+        }
+        
         this.inventory.setOwner(playerInfo);
         
         // Give player default inventory items

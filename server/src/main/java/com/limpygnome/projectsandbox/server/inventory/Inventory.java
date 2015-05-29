@@ -24,25 +24,25 @@ import java.util.Map;
  */
 public class Inventory implements Serializable
 {
-    public static final long serialVersionUID = 1L;
-
     private final static Logger LOG = LogManager.getLogger(Inventory.class);
+
+    public static final long serialVersionUID = 1L;
 
     /**
      * Indicates if selected item is dirty / has changed.
      */
-    private boolean flagSelectedDirty;
+    private transient boolean flagSelectedDirty;
 
     /**
      * Indicates if to send a reset packet to the current entity i.e. new player.
      */
-    private boolean flagReset;
+    private transient boolean flagReset;
 
     // TODO: should this be transient? How to connect them up?
     public transient Entity parent;
 
     // TODO: should this be transient? How to connect them up?
-    private PlayerInfo owner;
+    private transient PlayerInfo owner;
 
     public AbstractInventoryItem selected;
     public LinkedHashMap<Short, AbstractInventoryItem> items;

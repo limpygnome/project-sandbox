@@ -10,6 +10,8 @@ import com.limpygnome.projectsandbox.server.inventory.enums.InventoryInvokeType;
 @InventoryItemTypeId(typeId = 100)
 public class Smg extends AbstractWeapon
 {
+    public static final long serialVersionUID = 1L;
+
     public Smg()
     {
         super(
