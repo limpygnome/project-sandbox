@@ -49,11 +49,15 @@ public class PacketManager
                 if (sessPacket.sessionId != null && socket.isOpen())
                 {
                     // Load session data from database
-                    // TODO: actually load from DB
-                    Session session = new Session(null, "unnamed", System.currentTimeMillis());
+                    Session session = Session.load(sessPacket.sessionId);
 
-                    // TODO: remove this stub
-                    session.sessionId = sessPacket.sessionId;
+                    // Check we found session
+                    if (session == null)
+                    {
+                        LOG.warn("Session not found - sid: {}", session.sessionId);
+                        socket.close();
+                        return;
+                    }
 
                     // Log event
                     LOG.info("Session mapped - {} <> {}", session.sessionId, socket.getRemoteSocketAddress());
