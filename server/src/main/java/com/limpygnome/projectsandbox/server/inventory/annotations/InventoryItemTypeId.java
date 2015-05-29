@@ -14,7 +14,7 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.TYPE)
 @Inherited
-public @interface InventyoryItemTypeId
+public @interface InventoryItemTypeId
 {
-    public short typeId();
+    short typeId();
 }

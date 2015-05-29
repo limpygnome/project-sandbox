@@ -3,7 +3,7 @@ package com.limpygnome.projectsandbox.server.ents.death;
 /**
  * Created by limpygnome on 21/05/15.
  */
-public class EntityEntKiller extends AbstractKiller
+public class GunshotKiller extends AbstractKiller
 {
     private static final String[] CAUSES =
     {

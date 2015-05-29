@@ -1,13 +1,11 @@
 package com.limpygnome.projectsandbox.server.inventory;
 
-import com.limpygnome.projectsandbox.server.inventory.annotations.InventyoryItemTypeId;
+import com.limpygnome.projectsandbox.server.inventory.annotations.InventoryItemTypeId;
 import com.limpygnome.projectsandbox.server.utils.Annotations;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.lang.reflect.Field;
 import java.util.HashMap;
-import java.util.Map;
 
 /**
  *
@@ -26,7 +24,7 @@ public class InventoryManager
         // Load types
         // TODO: move string constant to properties file
         this.types = Annotations.findAnnotatedClasses(
-                InventyoryItemTypeId.class,
+                InventoryItemTypeId.class,
                 "/com/limpygnome/projectsandbox/server/inventory/"
         );
 

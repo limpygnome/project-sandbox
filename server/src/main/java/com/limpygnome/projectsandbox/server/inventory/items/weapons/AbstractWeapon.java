@@ -4,10 +4,14 @@ import com.limpygnome.projectsandbox.server.Controller;
 import com.limpygnome.projectsandbox.server.effects.types.BulletEffect;
 import com.limpygnome.projectsandbox.server.effects.types.TracerEffect;
 import com.limpygnome.projectsandbox.server.ents.Entity;
+import com.limpygnome.projectsandbox.server.ents.death.GunshotKiller;
 import com.limpygnome.projectsandbox.server.ents.physics.Vector2;
 import com.limpygnome.projectsandbox.server.ents.physics.casting.Casting;
 import com.limpygnome.projectsandbox.server.ents.physics.casting.CastingResult;
+import com.limpygnome.projectsandbox.server.ents.physics.casting.victims.EntityCastVictim;
+import com.limpygnome.projectsandbox.server.ents.physics.collisions.CollisionResult;
 import com.limpygnome.projectsandbox.server.inventory.enums.InventoryInvokeState;
+import com.limpygnome.projectsandbox.server.inventory.enums.InventorySlotState;
 import com.limpygnome.projectsandbox.server.inventory.items.AbstractInventoryItem;
 import com.limpygnome.projectsandbox.server.inventory.WeaponConstants;
 import com.limpygnome.projectsandbox.server.inventory.enums.InventoryMergeResult;
@@ -22,15 +26,14 @@ public abstract class AbstractWeapon extends AbstractInventoryItem
 {
     private final static Logger LOG = LogManager.getLogger(AbstractWeapon.class);
 
-    public short bullets;
     public short bulletsPerMag;
+    public short bullets;
     public short mags;
     
     public long fireDelay;
     public long reloadDelay;
     public long cooldownEnd;
     
-    public float step;
     public float maxDistance;
     
     public AbstractWeapon(short bulletsPerMag, short mags, long fireDelay, long reloadDelay)
@@ -43,7 +46,6 @@ public abstract class AbstractWeapon extends AbstractInventoryItem
         this.reloadDelay = reloadDelay;
         this.cooldownEnd = 0;
         
-        this.step = WeaponConstants.DEFAULT_STEP;
         this.maxDistance = WeaponConstants.DEFAULT_MAX_DISTANCE;
     }
 
@@ -52,32 +54,30 @@ public abstract class AbstractWeapon extends AbstractInventoryItem
     {
         LOG.debug("Invoke change - state: {}", invokeState);
 
-        // only temp code for testing the casting stuff
-        switch (invokeState)
+        if (invokeState == InventoryInvokeState.INVOKE_ONCE)
         {
-            case INVOKE_ONCE:
-                // TODO: remove this test code into an actual fire method
-                CastingResult castingResult = Casting.cast(controller, slot.inventory.parent, slot.inventory.parent.rotation, 300.0f);
+            fire(controller);
+        }
+    }
 
-                LOG.debug("CASTING RESULT: {}", castingResult);
+    @Override
+    public void logic(Controller controller)
+    {
+        // Run logic for item
+        super.logic(controller);
 
-                if (castingResult.collision)
-                {
-                    LOG.debug("BULLET COLLISION");
-                }
-
-                float x = castingResult.x;
-                float y = castingResult.y;
-                controller.effectsManager.add(new BulletEffect(x, y));
-                controller.effectsManager.add(new TracerEffect(slot.inventory.parent.positionNew, new Vector2(x, y)));
-
-                break;
+        // Check if state is on
+        if (slot.invokeState == InventoryInvokeState.ON)
+        {
+            fire(controller);
         }
     }
 
     public synchronized void fire(Controller controller)
     {
         Entity owner = slot.inventory.parent;
+
+        // Check we have an owner
         if (owner == null)
         {
             return;
@@ -114,21 +114,39 @@ public abstract class AbstractWeapon extends AbstractInventoryItem
                 // Add fire delay
                 cooldownEnd = currTime + fireDelay;
             }
-            
+
             // Cast bullet to find collision point
-//            CastingResult result = Casting.cast(
-//                    controller,
-//                    owner.positionNew.x,
-//                    owner.positionNew.y,
-//                    owner.rotation,
-//                    step,
-//                    maxDistance
-//            );
-            
-            // Create effect at collision point
-            
-            
+            CastingResult castingResult = Casting.cast(controller, slot.inventory.parent, slot.inventory.parent.rotation, maxDistance);
+
+            LOG.debug("Bullet casting result: {}", castingResult);
+
+            if (castingResult.collision)
+            {
+                if (castingResult.victim instanceof EntityCastVictim)
+                {
+                    // Inflict damage on the entity
+                    EntityCastVictim victim = (EntityCastVictim) castingResult.victim;
+                    fireDamageEntity(controller, castingResult, victim);
+                }
+            }
+
+            // Render effect
+            createBulletShotEffects(controller, slot.inventory.parent.positionNew, castingResult.x, castingResult.y);
+
+            // Set slot to updated
+            slot.slotState = InventorySlotState.CHANGED;
         }
+    }
+
+    protected void createBulletShotEffects(Controller controller, Vector2 source, float destX, float destY)
+    {
+        controller.effectsManager.add(new BulletEffect(destX, destY));
+        controller.effectsManager.add(new TracerEffect(source, new Vector2(destX, destY)));
+    }
+
+    protected void fireDamageEntity(Controller controller, CastingResult castingResult, EntityCastVictim victim)
+    {
+        victim.entity.damage(controller, slot.inventory.parent, 10.0f, GunshotKiller.class);
     }
 
     @Override
@@ -160,6 +178,6 @@ public abstract class AbstractWeapon extends AbstractInventoryItem
     @Override
     public String eventFetchItemText(Controller controller)
     {
-        return "00 XXXX";
+        return String.format("%02d %04d", mags, bullets);
     }
 }

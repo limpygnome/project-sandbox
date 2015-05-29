@@ -2,7 +2,7 @@ package com.limpygnome.projectsandbox.server.inventory.items;
 
 import com.limpygnome.projectsandbox.server.Controller;
 import com.limpygnome.projectsandbox.server.inventory.InventorySlotData;
-import com.limpygnome.projectsandbox.server.inventory.annotations.InventyoryItemTypeId;
+import com.limpygnome.projectsandbox.server.inventory.annotations.InventoryItemTypeId;
 import com.limpygnome.projectsandbox.server.inventory.enums.InventoryInvokeState;
 import com.limpygnome.projectsandbox.server.inventory.enums.InventoryInvokeType;
 import com.limpygnome.projectsandbox.server.inventory.enums.InventoryMergeResult;
@@ -11,13 +11,12 @@ import org.apache.logging.log4j.Logger;
 
 import java.io.Serializable;
 import java.lang.annotation.Annotation;
-import java.util.LinkedList;
 
 /**
  *
  * @author limpygnome
  */
-@InventyoryItemTypeId(typeId = 0)
+@InventoryItemTypeId(typeId = 0)
 public abstract class AbstractInventoryItem implements Serializable
 {
     private final static Logger LOG = LogManager.getLogger(AbstractInventoryItem.class);
@@ -35,8 +34,8 @@ public abstract class AbstractInventoryItem implements Serializable
         this.invokeType = InventoryInvokeType.FIRE_ONCE;
 
         // Read type from annotation
-        Annotation annotation = getClass().getAnnotation(InventyoryItemTypeId.class);
-        InventyoryItemTypeId inventoryType = (InventyoryItemTypeId) annotation;
+        Annotation annotation = getClass().getAnnotation(InventoryItemTypeId.class);
+        InventoryItemTypeId inventoryType = (InventoryItemTypeId) annotation;
         this.typeId = inventoryType.typeId();
     }
 
@@ -48,12 +47,14 @@ public abstract class AbstractInventoryItem implements Serializable
                 if (!slot.keyAlreadyDown && slot.keyDown)
                 {
                     slot.keyAlreadyDown = true;
+                    slot.invokeState = InventoryInvokeState.ON;
 
                     eventInvoke(controller, InventoryInvokeState.ON);
                 }
                 else if (slot.keyAlreadyDown && !slot.keyDown)
                 {
                     slot.keyAlreadyDown = false;
+                    slot.invokeState = InventoryInvokeState.OFF;
 
                     eventInvoke(controller, InventoryInvokeState.OFF);
                 }

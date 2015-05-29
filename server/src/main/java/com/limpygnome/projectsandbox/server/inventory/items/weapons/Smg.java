@@ -1,24 +1,24 @@
 package com.limpygnome.projectsandbox.server.inventory.items.weapons;
 
-import com.limpygnome.projectsandbox.server.inventory.annotations.InventyoryItemTypeId;
+import com.limpygnome.projectsandbox.server.inventory.annotations.InventoryItemTypeId;
 import com.limpygnome.projectsandbox.server.inventory.enums.InventoryInvokeType;
 
 /**
  *
  * @author limpygnome
  */
-@InventyoryItemTypeId(typeId = 100)
+@InventoryItemTypeId(typeId = 100)
 public class Smg extends AbstractWeapon
 {
     public Smg()
     {
         super(
-                (short) 60,
-                (short) 5,
-                120,
-                1500
+                (short) 60, // bullets per mag
+                (short) 5,  // mags
+                60,         // fire delay
+                1500        // reload delay
         );
 
-        this.invokeType = InventoryInvokeType.FIRE_ONCE;
+        this.invokeType = InventoryInvokeType.TOGGLE;
     }
 }
