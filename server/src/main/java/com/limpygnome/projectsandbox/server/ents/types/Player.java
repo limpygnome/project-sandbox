@@ -47,7 +47,7 @@ public class Player extends Entity
             // Give player default inventory
             this.inventory = new Inventory(this);
         }
-        
+
         this.inventory.setOwner(playerInfo);
         
         // Give player default inventory items

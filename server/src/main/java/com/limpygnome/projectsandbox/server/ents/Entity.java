@@ -274,38 +274,39 @@ public strictfp abstract class Entity
      */
     public <T extends Class<? extends AbstractKiller>> void kill(Controller controller, Entity inflicter, T killType)
     {
+        AbstractKiller killer;
+
+        // Create instance of killer type
+        try
+        {
+            killer = killType.newInstance();
+
+            // Setup victim/killer
+            killer.victim = this;
+            killer.killer = inflicter;
+        }
+        catch (InstantiationException | IllegalAccessException e)
+        {
+            LOG.error("Incorrectly setup killer class", e);
+            throw new RuntimeException("Incorrectly setup killer class - " + killType.getName(), e);
+        }
+
         // Inform all associated players they've been killed
         PlayerInfo[] playerInfos = getPlayers();
 
         if (playerInfos != null)
         {
-            AbstractKiller killer;
-
             for (PlayerInfo playerInfo : playerInfos)
             {
                 if (playerInfo != null)
                 {
-                    // Create instance of killer type
-                    try
-                    {
-                        killer = killType.newInstance();
-
-                        // Setup victim/killer
-                        killer.victim = this;
-                        killer.killer = inflicter;
-                    }
-                    catch (InstantiationException | IllegalAccessException e)
-                    {
-                        LOG.error("Incorrectly setup killer class", e);
-                        throw new RuntimeException("Incorrectly setup killer class - " + killType.getName(), e);
-                    }
                     playerInfo.eventPlayerKilled(controller, killer);
-
-                    // Raise death event
-                    eventDeath(controller, killer);
                 }
             }
         }
+
+        // Raise death event
+        eventDeath(controller, killer);
     }
     
     public void updateMask(UpdateMasks... masks)
