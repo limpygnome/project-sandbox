@@ -1,4 +1,8 @@
 high priority:
+- need  to assign players an ID, which we can send to other players -> send table of info at start / when players join
+-- player info updates -> consider making update packets generic, foreach stuff or something
+-- create: player id | player name | current score |
+-- update score: player id - short 2 bytes | score - should be long 4 bytes |
 - text is cached
 - buffer cache has limit and purges items / look at optimizing and disposing buffer cache -> hook verts with an array of prims using them, prim dispose removes from array etc
 - allow ents to have a property where they cannot be moved -> physics properties . static

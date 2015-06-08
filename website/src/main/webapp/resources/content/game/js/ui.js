@@ -9,6 +9,11 @@ game.ui =
 	elementUIHealthBar: null,
 	elementUIInventory: null,
 
+	// Elements - side
+	elementSidebarActivity: null,
+	elementSidebarChat: null,
+	elementSidebarScoreboard: null,
+
 
 	setup: function()
 	{
@@ -22,6 +27,10 @@ game.ui =
         this.elementUIHealthBar = document.getElementById("ps-ui-healthbar-fill");
         this.elementUIInventory = document.getElementById("ps-ui-inventory");
 
+        // -- Sidebar
+        this.elementSidebarActivity = document.getElementById("ps-activity");
+        this.elementSidebarChat = document.getElementById("ps-chat");
+        this.elementSidebarScoreboard = document.getElementById("ps-scoreboard");
 
 	    // Bind resize event for window
         $(window).resize(function () {
@@ -44,6 +53,9 @@ game.ui =
 
 	    // Set UI size
         this.resize();
+
+        // Reset UI
+        this.reset();
 	},
 	
 	resize: function()
@@ -91,7 +103,11 @@ game.ui =
 
 	reset: function()
 	{
-		// Does nothing at present...
+		// Clear activity
+		$(this.elementSidebarActivity).children().remove();
+
+		// Clear scoreboard
+		$(this.elementSidebarScoreboard).children().remove();
 	},
 	
 	logic: function()

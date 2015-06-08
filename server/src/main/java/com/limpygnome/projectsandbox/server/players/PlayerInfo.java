@@ -21,6 +21,8 @@ public class PlayerInfo
 
     /**
      * The current session tied to the player; null if no session assigned.
+     *
+     * Note: this should NEVER reach other players, since this is the temp token to identify the player for the duration of the session.
      */
     public Session session;
     
@@ -35,6 +37,8 @@ public class PlayerInfo
     public WebSocket socket;
     
     /**
+     * TODO: consider removal or move into player data
+     *
      * Default faction for all new ents.
      */
     public short defaultFaction;
