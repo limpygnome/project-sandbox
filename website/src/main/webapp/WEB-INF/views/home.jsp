@@ -10,8 +10,66 @@
             </h3>
             <div id="ps-activity">
                 <p>
-                    activity
+                    <span class="left">
+                        <img src="" />
+                    </span>
+                    <span class="info">
+                        blah was wrket by blahblahblah
+                    </span>
+                    <span class="right">
+                        <img src="" />
+                    </span>
                 </p>
+                <p>
+                    <span class="left">
+                        <img src="" />
+                    </span>
+                    <span class="info">
+                        blah was wrket by blahblahblah fskfodsof odskf okfo skfok
+                    </span>
+                    <span class="right">
+                        <img src="" />
+                    </span>
+                </p>
+                <p>
+                    <span class="left">
+                        <img src="" />
+                    </span>
+                    <span class="info">
+                        blah has won
+                    </span>
+                    <span class="right">
+                    </span>
+                </p>
+                <p>
+                    <span class="left">
+                        <img src="" />
+                    </span>
+                    <span class="info">
+                        blah was wrket by blahblahblah fskfodsof odskf okfo skfok
+                    </span>
+                    <span class="right">
+                        <img src="" />
+                    </span>
+                </p>
+
+                <p><span class="left"><img src="" /></span><span class="info">blah was wrket by blahblahblah fskfodsof odskf okfo skfok</span><span class="right"><img src="" /></span></p>
+                <p><span class="left"><img src="" /></span><span class="info">blah was wrket by blahblahblah fskfodsof odskf okfo skfok</span><span class="right"><img src="" /></span></p>
+                <p><span class="left"><img src="" /></span><span class="info">blah was wrket by blahblahblah fskfodsof odskf okfo skfok</span><span class="right"><img src="" /></span></p>
+                <p><span class="left"><img src="" /></span><span class="info">blah was wrket by blahblahblah fskfodsof odskf okfo skfok</span><span class="right"><img src="" /></span></p>
+                <p><span class="left"><img src="" /></span><span class="info">blah was wrket by blahblahblah fskfodsof odskf okfo skfok</span><span class="right"><img src="" /></span></p>
+                <p><span class="left"><img src="" /></span><span class="info">blah was wrket by blahblahblah fskfodsof odskf okfo skfok</span><span class="right"><img src="" /></span></p>
+                <p><span class="left"><img src="" /></span><span class="info">blah was wrket by blahblahblah fskfodsof odskf okfo skfok</span><span class="right"><img src="" /></span></p>
+                <p><span class="left"><img src="" /></span><span class="info">blah was wrket by blahblahblah fskfodsof odskf okfo skfok</span><span class="right"><img src="" /></span></p>
+                <p><span class="left"><img src="" /></span><span class="info">blah was wrket by blahblahblah fskfodsof odskf okfo skfok</span><span class="right"><img src="" /></span></p>
+                <p><span class="left"><img src="" /></span><span class="info">blah was wrket by blahblahblah fskfodsof odskf okfo skfok</span><span class="right"><img src="" /></span></p>
+                <p><span class="left"><img src="" /></span><span class="info">blah was wrket by blahblahblah fskfodsof odskf okfo skfok</span><span class="right"><img src="" /></span></p>
+                <p><span class="left"><img src="" /></span><span class="info">blah was wrket by blahblahblah fskfodsof odskf okfo skfok</span><span class="right"><img src="" /></span></p>
+                <p><span class="left"><img src="" /></span><span class="info">blah was wrket by blahblahblah fskfodsof odskf okfo skfok</span><span class="right"><img src="" /></span></p>
+                <p><span class="left"><img src="" /></span><span class="info">blah was wrket by blahblahblah fskfodsof odskf okfo skfok</span><span class="right"><img src="" /></span></p>
+                <p><span class="left"><img src="" /></span><span class="info">blah was wrket by blahblahblah fskfodsof odskf okfo skfok</span><span class="right"><img src="" /></span></p>
+                <p><span class="left"><img src="" /></span><span class="info">blah was wrket by blahblahblah fskfodsof odskf okfo skfok</span><span class="right"><img src="" /></span></p>
+
             </div>
         </div>
 
@@ -143,18 +201,51 @@
                 <ol>
                     <li>
                         <span>
-                            1000
+                            1,000,000,000
                         </span>
-
                         test #1
+                    </li>
+                    <li>
+                        <span>
+                            1,000,000,000
+                        </span>
+                        unifsfddosofkfq39r8ejfs
+                    </li>
+                    <li>
+                        <span>
+                            1,000,000
+                        </span>
+                        test #2
                     </li>
                     <li>
                         <span>
                             448
                         </span>
-
-                        test #2
+                        test #3
                     </li>
+                    <li>
+                        <span class="current-player">
+                            123
+                        </span>
+                        current player
+                    </li>
+
+                    <li><span>1,234</span>span user</li>
+                    <li><span>1,234</span>span user</li>
+                    <li><span>1,234</span>span user</li>
+                    <li><span>1,234</span>span user</li>
+                    <li><span>1,234</span>span user</li>
+                    <li><span>1,234</span>span user</li>
+                    <li><span>1,234</span>span user</li>
+                    <li><span>1,234</span>span user</li>
+                    <li><span>1,234</span>span user</li>
+                    <li><span>1,234</span>span user</li>
+                    <li><span>1,234</span>span user</li>
+                    <li><span>1,234</span>span user</li>
+                    <li><span>1,234</span>span user</li>
+                    <li><span>1,234</span>span user</li>
+                    <li><span>1,234</span>span user</li>
+                    <li><span>1,234</span>span user</li>
                 </ol>
             </div>
         </div>

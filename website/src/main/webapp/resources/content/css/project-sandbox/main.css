@@ -369,3 +369,96 @@ body
     background: #666;
     cursor: pointer;
 }
+
+/*
+    Sidebar - Activity
+    ********************************************************************************************************************
+*/
+
+#projectsandbox .ps-sidebar #ps-activity
+{
+    height: calc(100% - 3em);
+    overflow-y: scroll;
+}
+#projectsandbox .ps-sidebar #ps-activity p
+{
+    display: table;
+    width: 100%;
+    margin: 0em;
+    border-bottom: solid 0.1em #111;
+    min-height: 2.5em;
+}
+#projectsandbox .ps-sidebar #ps-activity p span
+{
+    display: table-cell;
+}
+#projectsandbox .ps-sidebar #ps-activity p span.info
+{
+    padding: 0.5em;
+    vertical-align: middle;
+    text-align: center;
+}
+#projectsandbox .ps-sidebar #ps-activity p span.left,
+#projectsandbox .ps-sidebar #ps-activity p span.right,
+#projectsandbox .ps-sidebar #ps-activity p span img
+{
+    width: 2.5em;
+    vertical-align: middle;
+}
+#projectsandbox .ps-sidebar #ps-activity p span
+{
+    height: 100%;
+}
+#projectsandbox .ps-sidebar #ps-activity p span img
+{
+    height: 2.5em;
+}
+#projectsandbox .ps-sidebar #ps-activity p span.right
+{
+    width: 3em;
+}
+
+/*
+    Sidebar - Scoreboard
+    ********************************************************************************************************************
+*/
+
+#projectsandbox .ps-sidebar #ps-scoreboard
+{
+    height: calc(100% - 3em);
+    overflow-x: hidden;
+    overflow-y: scroll;
+}
+#projectsandbox .ps-sidebar #ps-scoreboard ol
+{
+    margin: 0em;
+    padding: 0em;
+    padding-left: 3em;
+}
+#projectsandbox .ps-sidebar #ps-scoreboard ol li
+{
+    padding: 0.5em;
+    border-bottom: solid 0.1em #111;
+}
+#projectsandbox .ps-sidebar #ps-scoreboard ol li span
+{
+    display: inline-block;
+    min-width: 5em;
+    color: #999;
+    font-size: larger;
+    font-weight: bold;
+}
+#projectsandbox .ps-sidebar #ps-scoreboard ol li span.current-player
+{
+    color: #33AEFF;
+}
+#projectsandbox .ps-sidebar #ps-scoreboard ol li:nth-child(1) span
+{
+    color: #FFC506;
+}
+
+
+
+
+
+
