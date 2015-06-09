@@ -1,4 +1,4 @@
-package com.limpygnome.projectsandbox.server.packets.types.players;
+package com.limpygnome.projectsandbox.server.packets.types.players.individual;
 
 import com.limpygnome.projectsandbox.server.Controller;
 import com.limpygnome.projectsandbox.server.ents.Entity;

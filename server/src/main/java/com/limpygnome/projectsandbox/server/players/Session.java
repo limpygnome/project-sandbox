@@ -1,8 +1,5 @@
 package com.limpygnome.projectsandbox.server.players;
 
-import com.limpygnome.projectsandbox.server.world.Map;
-
-import java.io.Serializable;
 import java.util.Random;
 import java.util.UUID;
 
@@ -16,17 +13,20 @@ import java.util.UUID;
  */
 public class Session
 {
+    // The UUID for the current user's web session.
     public UUID sessionId;
     // Null for a guest user.
-    public UUID playerId;
+    public UUID registeredPlayerId;
     public String displayName;
     public long joinTimestamp;
     public PlayerData playerData;
 
-    private Session(UUID sessionId, UUID playerId, String displayName, long joinTimestamp)
+    public SessionMetrics metrics;
+
+    private Session(UUID sessionId, UUID registeredPlayerId, String displayName, long joinTimestamp)
     {
         this.sessionId = sessionId;
-        this.playerId = playerId;
+        this.registeredPlayerId = registeredPlayerId;
         this.displayName = displayName;
         this.joinTimestamp = joinTimestamp;
     }
@@ -41,7 +41,7 @@ public class Session
         Session session = new Session(sessionId, null, "unnamed" + rand, System.currentTimeMillis());
 
         // Load player data
-        session.playerData = PlayerData.load(session.playerId);
+        session.playerData = PlayerData.load(session.registeredPlayerId);
 
         return session;
     }

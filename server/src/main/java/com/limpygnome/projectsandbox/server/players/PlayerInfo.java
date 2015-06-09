@@ -2,7 +2,7 @@ package com.limpygnome.projectsandbox.server.players;
 
 import com.limpygnome.projectsandbox.server.Controller;
 import com.limpygnome.projectsandbox.server.ents.death.AbstractKiller;
-import com.limpygnome.projectsandbox.server.packets.types.players.PlayerKilledOutboundPacket;
+import com.limpygnome.projectsandbox.server.packets.types.players.global.PlayerKilledOutboundPacket;
 import com.limpygnome.projectsandbox.server.players.enums.PlayerKeys;
 import com.limpygnome.projectsandbox.server.ents.Entity;
 import org.apache.logging.log4j.LogManager;

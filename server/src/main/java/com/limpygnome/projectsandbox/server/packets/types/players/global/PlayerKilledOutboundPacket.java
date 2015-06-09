@@ -1,4 +1,4 @@
-package com.limpygnome.projectsandbox.server.packets.types.players;
+package com.limpygnome.projectsandbox.server.packets.types.players.global;
 
 import com.limpygnome.projectsandbox.server.ents.Entity;
 import com.limpygnome.projectsandbox.server.ents.death.AbstractKiller;

@@ -6,7 +6,7 @@ import com.limpygnome.projectsandbox.server.ents.Entity;
 import com.limpygnome.projectsandbox.server.ents.types.Player;
 import com.limpygnome.projectsandbox.server.packets.OutboundPacket;
 import com.limpygnome.projectsandbox.server.packets.types.ents.EntityUpdatesOutboundPacket;
-import com.limpygnome.projectsandbox.server.packets.types.players.PlayerIdentityOutboundPacket;
+import com.limpygnome.projectsandbox.server.packets.types.players.individual.PlayerIdentityOutboundPacket;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;

@@ -2,7 +2,7 @@ package com.limpygnome.projectsandbox.server.packets;
 
 import com.limpygnome.projectsandbox.server.Controller;
 import com.limpygnome.projectsandbox.server.packets.types.inventory.InventoryItemSelectedInboundPacket;
-import com.limpygnome.projectsandbox.server.packets.types.players.PlayerMovementInboundPacket;
+import com.limpygnome.projectsandbox.server.packets.types.players.individual.PlayerMovementInboundPacket;
 import com.limpygnome.projectsandbox.server.packets.types.session.SessionIdentifierInboundPacket;
 import com.limpygnome.projectsandbox.server.players.PlayerInfo;
 import com.limpygnome.projectsandbox.server.players.Session;
