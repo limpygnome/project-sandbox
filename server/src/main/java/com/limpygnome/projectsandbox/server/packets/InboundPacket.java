@@ -12,7 +12,17 @@ import org.java_websocket.WebSocket;
  */
 public abstract class InboundPacket extends Packet
 {
-    public abstract void parse(Controller controller, WebSocket socket, ByteBuffer bb, byte[] data);
+    /**
+     * Parses an inbound packet.
+     *
+     * @param controller Current instance of Controller
+     * @param socket The origin of the message
+     * @param playerInfo The player associated with the socket; can be null for packets outside of a session
+     * @param bb Used to read primitives from the packet
+     * @param data The packet data
+     * @throws PacketParseException Thrown if the packet cannot be parsed
+     */
+    public abstract void parse(Controller controller, WebSocket socket, PlayerInfo playerInfo, ByteBuffer bb, byte[] data) throws PacketParseException;
 
     public PlayerInfo fetchPlayer(Controller controller, WebSocket socket)
     {

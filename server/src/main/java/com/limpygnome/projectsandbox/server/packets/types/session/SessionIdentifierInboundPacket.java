@@ -6,6 +6,7 @@ import com.limpygnome.projectsandbox.server.packets.InboundPacket;
 import java.nio.ByteBuffer;
 import java.util.UUID;
 
+import com.limpygnome.projectsandbox.server.players.PlayerInfo;
 import org.java_websocket.WebSocket;
 
 /**
@@ -23,7 +24,7 @@ public class SessionIdentifierInboundPacket extends InboundPacket
     }
 
     @Override
-    public void parse(Controller controller, WebSocket socket, ByteBuffer bb, byte[] data)
+    public void parse(Controller controller, WebSocket socket, PlayerInfo playerInfo, ByteBuffer bb, byte[] data)
     {
         // TODO: upgrade to 16 bytes; at present, we want this to just be simple, but could be optimised
         

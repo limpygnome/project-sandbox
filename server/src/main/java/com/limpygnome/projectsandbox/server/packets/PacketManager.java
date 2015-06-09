@@ -43,7 +43,7 @@ public class PacketManager
             {
                 // Parse packet and load session associated with player
                 SessionIdentifierInboundPacket sessPacket = new SessionIdentifierInboundPacket();
-                sessPacket.parse(controller, socket, message, data);
+                sessPacket.parse(controller, socket, null, message, data);
 
                 // Check data / socket valid
                 if (sessPacket.sessionId != null && socket.isOpen())
@@ -111,6 +111,13 @@ public class PacketManager
         }
 
         // Parse data
-        packet.parse(controller, socket, message, data);
+        try
+        {
+            packet.parse(controller, socket, playerInfo, message, data);
+        }
+        catch (PacketParseException e)
+        {
+            LOG.warn("Failed to parse inbound packet", e);
+        }
     }
 }

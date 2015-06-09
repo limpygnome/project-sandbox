@@ -1,5 +1,6 @@
 high priority:
 - need  to assign players an ID, which we can send to other players -> send table of info at start / when players join
+- secure/lockdown reading data from client sockets -> we do no validation / checking length isnt out of bounds etc
 -- player info updates -> consider making update packets generic, foreach stuff or something
 -- create: player id | player name | current score |
 -- update score: player id - short 2 bytes | score - should be long 4 bytes |

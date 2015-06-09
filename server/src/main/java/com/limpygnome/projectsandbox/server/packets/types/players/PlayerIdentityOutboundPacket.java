@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.nio.ByteBuffer;
 
 /**
+ * A packet used to set the current Entity which belongs to the player.
  *
  * @author limpygnome
  */

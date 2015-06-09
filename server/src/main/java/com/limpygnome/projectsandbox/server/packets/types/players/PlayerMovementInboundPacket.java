@@ -1,7 +1,9 @@
 package com.limpygnome.projectsandbox.server.packets.types.players;
 
 import com.limpygnome.projectsandbox.server.Controller;
+import com.limpygnome.projectsandbox.server.ents.Entity;
 import com.limpygnome.projectsandbox.server.packets.InboundPacket;
+import com.limpygnome.projectsandbox.server.packets.PacketParseException;
 import com.limpygnome.projectsandbox.server.players.PlayerInfo;
 import java.nio.ByteBuffer;
 
@@ -22,29 +24,35 @@ public class PlayerMovementInboundPacket extends InboundPacket
     public short keys;
 
     @Override
-    public void parse(Controller controller, WebSocket socket, ByteBuffer bb, byte[] data)
+    public void parse(Controller controller, WebSocket socket, PlayerInfo playerInfo, ByteBuffer bb, byte[] data) throws PacketParseException
     {
+        // Check length
+        if (data.length != 6)
+        {
+            throw new PacketParseException("Incorrect length", data);
+        }
+
         // Parse data
         id = bb.getShort(2);
         keys = bb.getShort(4);
-        
-        // Fetch player
-        PlayerInfo playerInfo = fetchPlayer(controller, socket);
-        
-        if (playerInfo != null)
+
+        Entity currentEntity = playerInfo.entity;
+
+        if (currentEntity == null || currentEntity.id != id)
         {
             // Check the socket is allowed to update the player, or drop them...
             // TODO: check player can move player - MAJOR SECURITY RISK
-            
-            // Update the movement
-            playerInfo.keys = keys;
-            
-            LOG.debug("Movement - ent id: {}, flags: {}", id, keys);
+
+            // Now update player keys belonging to player of ent
+            // TODO: update player of entity - tricky
+            // TODO: consider dropping this feature; we want it so admins can control/watch players etc
         }
         else
         {
-            // Potential tampering...
-            LOG.warn("Invalid entity - ip: {}, ent id: {}", socket.getRemoteSocketAddress(), id);
+            // Update current player
+            playerInfo.keys = keys;
         }
+
+        LOG.debug("Movement - ply id: {}, ent id: {}, flags: {}", playerInfo.playerId, id, keys);
     }
 }

@@ -22,7 +22,7 @@ public class PlayerInfo
     /**
      * The identifier used for the player during their current session.
      */
-    public short playerId;
+    public final short playerId;
 
     /**
      * The current session tied to the player; null if no session assigned.
