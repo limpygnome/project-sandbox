@@ -20,6 +20,11 @@ public class PlayerInfo
     private final static Logger LOG = LogManager.getLogger(PlayerInfo.class);
 
     /**
+     * The identifier used for the player during their current session.
+     */
+    public short playerId;
+
+    /**
      * The current session tied to the player; null if no session assigned.
      *
      * Note: this should NEVER reach other players, since this is the temp token to identify the player for the duration of the session.
@@ -48,12 +53,13 @@ public class PlayerInfo
      */
     public Entity entity;
     
-    public PlayerInfo(WebSocket socket, Session session)
+    public PlayerInfo(WebSocket socket, Session session, short playerId)
     {
         this.keys = 0;
         this.socket = socket;
         this.entity = null;
         this.session = session;
+        this.playerId = playerId;
     }
     
     public boolean isConnected()

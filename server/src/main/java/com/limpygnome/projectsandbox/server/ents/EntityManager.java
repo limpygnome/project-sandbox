@@ -8,6 +8,8 @@ import com.limpygnome.projectsandbox.server.ents.physics.collisions.CollisionRes
 import com.limpygnome.projectsandbox.server.ents.physics.collisions.SAT;
 import com.limpygnome.projectsandbox.server.ents.physics.Vector2;
 import com.limpygnome.projectsandbox.server.packets.types.ents.EntityUpdatesOutboundPacket;
+import com.limpygnome.projectsandbox.server.utils.IdCounterProvider;
+import com.limpygnome.projectsandbox.server.utils.counters.IdCounterConsumer;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -19,20 +21,21 @@ import java.util.Map;
 /**
  * @author limpygnome
  */
-public class EntityManager
+public class EntityManager implements IdCounterConsumer
 {
     private final static Logger LOG = LogManager.getLogger(EntityManager.class);
 
     private final Controller controller;
     public final HashMap<Short, Entity> entities;
     public final HashMap<Short, Entity> entitiesNew;
-    private short entityIdCounter;
+    private IdCounterProvider idCounterProvider;
 
     public EntityManager(Controller controller)
     {
         this.controller = controller;
         this.entities = new HashMap<>();
         this.entitiesNew = new HashMap<>();
+        this.idCounterProvider = new IdCounterProvider(this);
     }
 
     public Entity fetch(Short key)
@@ -46,25 +49,10 @@ public class EntityManager
     public boolean add(Entity ent)
     {
         // Fetch the next available identifier
-        short id;
-        boolean foundNewId = false;
-        int attempts = 0;
-
-        synchronized (entities)
-        {
-            do
-            {
-                id = entityIdCounter++;
-                if (!entities.containsKey(id) && !entitiesNew.containsKey(id))
-                {
-                    foundNewId = true;
-                }
-            }
-            while (!foundNewId && ++attempts < Short.MAX_VALUE);
-        }
+        Short id = idCounterProvider.nextId();
 
         // Check we found an identifier
-        if (!foundNewId)
+        if (id == null)
         {
             return false;
         }
@@ -85,6 +73,12 @@ public class EntityManager
         }
 
         return true;
+    }
+
+    @Override
+    public boolean containsId(short id)
+    {
+        return entities.containsKey(id) || entitiesNew.containsKey(id);
     }
 
     public boolean remove(short id)

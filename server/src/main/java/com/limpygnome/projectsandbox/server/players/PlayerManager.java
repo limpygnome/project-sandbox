@@ -11,6 +11,8 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.limpygnome.projectsandbox.server.utils.IdCounterProvider;
+import com.limpygnome.projectsandbox.server.utils.counters.IdCounterConsumer;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.java_websocket.WebSocket;
@@ -19,28 +21,51 @@ import org.java_websocket.WebSocket;
  *
  * @author limpygnome
  */
-public class PlayerManager
+public class PlayerManager implements IdCounterConsumer
 {
     private final static Logger LOG = LogManager.getLogger(PlayerManager.class);
 
     private final Controller controller;
     private final HashMap<WebSocket, PlayerInfo> mappings;
+    private final HashMap<Short, PlayerInfo> mappingsById;
+    private final IdCounterProvider idCounterProvider;
 
     public PlayerManager(Controller controller)
     {
         this.controller = controller;
         this.mappings = new HashMap<>();
+        this.mappingsById = new HashMap<>();
+        this.idCounterProvider = new IdCounterProvider(this);
     }
-    
-    public PlayerInfo register(WebSocket ws, Session session)
+
+    /**
+     * Attempts to register a new player.
+     *
+     * @param ws The socket
+     * @param session The session
+     * @return An instance, or null if the player cannot be registered.
+     */
+    public synchronized PlayerInfo register(WebSocket ws, Session session)
     {
         try
         {
+            // Generate new identifier
+            Short playerId = idCounterProvider.nextId();
+
+            // Check we got an identiier
+            if (playerId == null)
+            {
+                return null;
+            }
+
             // Create new player
-            PlayerInfo playerInfo = new PlayerInfo(ws, session);
+            PlayerInfo playerInfo = new PlayerInfo(ws, session, playerId);
 
             // Add mapping for sock
             mappings.put(ws, playerInfo);
+
+            // Add mapping for identifier
+            mappingsById.put(playerId, playerInfo);
 
             // Create and spawn entity for player
             createAndSpawnNewPlayerEnt(playerInfo);
@@ -65,17 +90,34 @@ public class PlayerManager
     }
     public synchronized void unregister(WebSocket ws)
     {
-        // Fetch and remove entity associated with connection if player
+        // Fetch associated player, and entity
         PlayerInfo playerInfo = mappings.get(ws);
         Entity ent = playerInfo.entity;
         
-        if (playerInfo != null && ent != null && ent instanceof Player)
+        if (playerInfo != null)
         {
-            controller.entityManager.remove(ent);
+            // Remove entity
+            if (ent != null && ent instanceof Player)
+            {
+                controller.entityManager.remove(ent);
+            }
+
+            // Remove socket mapping
+            mappings.remove(ws);
+
+            // Remove ID mapping
+            mappingsById.remove(playerInfo.playerId);
+
             LOG.info("Unmapped - sid: {}", playerInfo.session.sessionId);
         }
     }
-    
+
+    @Override
+    public boolean containsId(short id)
+    {
+        return mappingsById.containsKey(id);
+    }
+
     public synchronized Player createAndSpawnNewPlayerEnt(PlayerInfo playerInfo)
     {
         Player ply = createNewPlayerEnt(playerInfo);
