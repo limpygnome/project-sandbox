@@ -113,5 +113,13 @@ projectSandbox.utils =
 		{
 			return value;
 		}
+	},
+
+	parseText: function(data, dataView, offset)
+	{
+		var length = dataView.getInt8(offset);
+		var text = String.fromCharCode.apply(String, data.subarray(offset + 1, offset + 1 + length));
+
+		return text;
 	}
 }

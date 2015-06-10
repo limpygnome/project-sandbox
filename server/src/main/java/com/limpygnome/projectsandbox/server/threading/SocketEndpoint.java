@@ -73,6 +73,8 @@ public class SocketEndpoint extends WebSocketServer
     public void onError(WebSocket socket, Exception e)
     {
         LOG.error("Socket exception, terminating - ip: {} - {}", socket.getRemoteSocketAddress(), e);
+        LOG.debug("Full stack trace from socket exception", e);
+
         socket.close();
     }
     

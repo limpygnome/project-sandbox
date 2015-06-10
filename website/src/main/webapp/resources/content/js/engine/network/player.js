@@ -18,6 +18,11 @@ projectSandbox.network.player =
                 this.packetPlayerKilled(data, dataView);
                 return;
 
+            // Events/Updates
+            case "E":
+                this.packetPlayerEvents(data, dataView);
+                return;
+
             default:
                 console.error("engine/network/player - unknown sub-type - " + subType);
                 break;
@@ -52,6 +57,83 @@ projectSandbox.network.player =
         {
             projectSandbox.game.ui.hookPlayer_entKilled(causeText);
         }
+    },
+
+    packetPlayerEvents: function(data, dataView)
+    {
+        var offset = 2; // main/sub type bytes
+
+        var eventType;
+        while (offset < data.length)
+        {
+            eventType = String.fromCharCode(dataView.getInt8(offset));
+            offset++;
+
+            switch (eventType)
+            {
+                case "J":
+                    offset += this.packetPlayerEvents_joined(data, dataView, offset);
+                    break;
+                case "U":
+                    offset += this.packetPlayerEvents_updates(data, dataView, offset);
+                    break;
+                case "L":
+                    offset += this.packetPlayerEvents_left(data, dataView, offset);
+                    break;
+            }
+        }
+    },
+
+    packetPlayerEvents_joined: function(data, dataView, offset)
+    {
+        // Parse data
+        var playerId = dataView.getInt16(offset);
+        offset += 2;
+
+        var displayName = projectSandbox.utils.parseText(data, dataView, offset);
+        offset += displayName.length + 1;
+
+        // Add player to player table
+
+
+        console.debug("engine/network/player - player joined - ply id: " + playerId + ", name: " + displayName);
+
+        return offset;
+    },
+
+    packetPlayerEvents_updates: function(data, dataView, offset)
+    {
+        // Parse data
+        var playerId = dataView.getInt16(offset);
+        offset += 2;
+
+        var kills = dataView.getInt16(offset);
+        offset += 2;
+
+        var deaths = dataView.getInt16(offset);
+        offset += 2;
+
+        var score = data.getInt64(offset);
+        offset += 8;
+
+        // Update player's metrics
+
+        console.debug("engine/network/player - updated player - ply id: " + playerId + ", kills: " + kills + ", deaths: " + deaths + ", score: " + score);
+
+        return offset;
+    },
+
+    packetPlayerEvents_left: function(data, dataView, offset)
+    {
+        // Parse data
+        var playerId = dataView.getInt16(offset);
+        offset += 2;
+
+        // Remove player from player table
+
+        console.debug("engine/network/player - player left game - ply id: " + playerId);
+
+        return offset;
     },
 
 

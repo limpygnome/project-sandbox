@@ -45,6 +45,16 @@ public class PacketData
         add(new ShortDataType(value));
     }
 
+    /**
+     * This will only add the long as a 32-bit number.
+     *
+     * @param value
+     */
+    public void add(long value)
+    {
+        add(new Long32DataType(value));
+    }
+
     public void add(String value)
     {
         add(new StringDataType(value));

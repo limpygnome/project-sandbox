@@ -13,7 +13,7 @@ import org.java_websocket.WebSocket;
 import java.nio.ByteBuffer;
 
 /**
- * Created by limpygnome on 29/04/15.
+ * Responsible for parsing inbound packets.
  */
 public class PacketManager
 {
@@ -38,46 +38,61 @@ public class PacketManager
         // Check if we're expecting a session packet - always first packet to system!
         if (playerInfo == null)
         {
-            // Check we have received session packet
-            if (mainType == 'P' && subType == 'S')
+            // Handle packet outside of session - newly joined user
+            handleInboundPacketNonSession(socket, mainType, subType, message, data);
+        }
+        else
+        {
+            // Handle packet within a session
+            handleInboundPacketSession(socket, mainType, subType, message, data, playerInfo);
+        }
+    }
+
+    private void handleInboundPacketNonSession(WebSocket socket, byte mainType, byte subType, ByteBuffer message, byte[] data)
+    {
+        // Check we have received session packet
+        if (mainType == 'P' && subType == 'S')
+        {
+            // Parse packet and load session associated with player
+            SessionIdentifierInboundPacket sessPacket = new SessionIdentifierInboundPacket();
+            sessPacket.parse(controller, socket, null, message, data);
+
+            // Check data / socket valid
+            if (sessPacket.sessionId != null && socket.isOpen())
             {
-                // Parse packet and load session associated with player
-                SessionIdentifierInboundPacket sessPacket = new SessionIdentifierInboundPacket();
-                sessPacket.parse(controller, socket, null, message, data);
+                // Load session data from database
+                Session session = Session.load(sessPacket.sessionId);
 
-                // Check data / socket valid
-                if (sessPacket.sessionId != null && socket.isOpen())
+                // Check we found session
+                if (session == null)
                 {
-                    // Load session data from database
-                    Session session = Session.load(sessPacket.sessionId);
-
-                    // Check we found session
-                    if (session == null)
-                    {
-                        LOG.warn("Session not found - sid: {}", session.sessionId);
-                        socket.close();
-                        return;
-                    }
-
-                    // Log event
-                    LOG.info("Session mapped - {} <> {}", session.sessionId, socket.getRemoteSocketAddress());
-
-                    // Register player
-                    if (controller.playerManager.register(socket, session) == null)
-                    {
-                        LOG.error("Failed to register player - sid: {}", session.sessionId);
-                        socket.close();
-                    }
+                    LOG.warn("Session not found - sid: {}", session.sessionId);
+                    socket.close();
                     return;
                 }
-            }
 
-            // Some other packet / invalid data / no session
-            // TODO: add debug msg; nothing else. could be attack...
-            socket.close();
-            return;
+                // Log event
+                LOG.info("Session mapped - {} <> {}", session.sessionId, socket.getRemoteSocketAddress());
+
+                // Register player
+                if (controller.playerManager.register(socket, session) == null)
+                {
+                    LOG.error("Failed to register player - sid: {}", session.sessionId);
+                    socket.close();
+                }
+                return;
+            }
         }
 
+        // Some other packet / invalid data / no session
+        // TODO: add debug msg; nothing else. could be attack...
+
+        socket.close();
+        return;
+    }
+
+    private void handleInboundPacketSession(WebSocket socket, byte mainType, byte subType, ByteBuffer message, byte[] data, PlayerInfo playerInfo)
+    {
         // Create packet based on types
         InboundPacket packet = null;
 
@@ -120,4 +135,5 @@ public class PacketManager
             LOG.warn("Failed to parse inbound packet", e);
         }
     }
+
 }

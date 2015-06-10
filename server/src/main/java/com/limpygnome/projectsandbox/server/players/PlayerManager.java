@@ -6,7 +6,7 @@ import com.limpygnome.projectsandbox.server.ents.Entity;
 import com.limpygnome.projectsandbox.server.ents.types.Player;
 import com.limpygnome.projectsandbox.server.packets.OutboundPacket;
 import com.limpygnome.projectsandbox.server.packets.types.ents.EntityUpdatesOutboundPacket;
-import com.limpygnome.projectsandbox.server.packets.types.players.global.PlayerDataUpdatesOutboundPacket;
+import com.limpygnome.projectsandbox.server.packets.types.players.global.PlayerEventsUpdatesOutboundPacket;
 import com.limpygnome.projectsandbox.server.packets.types.players.individual.PlayerIdentityOutboundPacket;
 import java.io.IOException;
 import java.util.HashMap;
@@ -80,15 +80,15 @@ public class PlayerManager implements IdCounterConsumer
             mappingsById.put(playerId, playerInfo);
 
             // Inform server player has joined
-            PlayerDataUpdatesOutboundPacket playerDataUpdatesOutboundPacket = new PlayerDataUpdatesOutboundPacket();
-            playerDataUpdatesOutboundPacket.writePlayerJoined(playerInfo);
-            broadcast(playerDataUpdatesOutboundPacket);
+            PlayerEventsUpdatesOutboundPacket playerEventsUpdatesOutboundPacket = new PlayerEventsUpdatesOutboundPacket();
+            playerEventsUpdatesOutboundPacket.writePlayerJoined(playerInfo);
+            broadcast(playerEventsUpdatesOutboundPacket);
 
             // Give the user all of the users and metrics/stats thus far
-            PlayerDataUpdatesOutboundPacket playerDataUpdatesOutboundSnapshotPacket = new PlayerDataUpdatesOutboundPacket();
-            writePlayersJoined(playerDataUpdatesOutboundSnapshotPacket);
-            writePlayerMetrics(playerDataUpdatesOutboundSnapshotPacket, true);
-            playerDataUpdatesOutboundSnapshotPacket.send(playerInfo);
+            PlayerEventsUpdatesOutboundPacket playerEventsUpdatesOutboundSnapshotPacket = new PlayerEventsUpdatesOutboundPacket();
+            writePlayersJoined(playerEventsUpdatesOutboundSnapshotPacket);
+            writePlayerMetrics(playerEventsUpdatesOutboundSnapshotPacket, true);
+            playerEventsUpdatesOutboundSnapshotPacket.send(playerInfo);
 
 
             // Create and spawn entity for player
@@ -148,9 +148,9 @@ public class PlayerManager implements IdCounterConsumer
             playerInfo.session.playerData.persist();
 
             // Inform server the player has left
-            PlayerDataUpdatesOutboundPacket playerDataUpdatesOutboundPacket = new PlayerDataUpdatesOutboundPacket();
-            playerDataUpdatesOutboundPacket.writePlayerLeft(playerInfo);
-            broadcast(playerDataUpdatesOutboundPacket);
+            PlayerEventsUpdatesOutboundPacket playerEventsUpdatesOutboundPacket = new PlayerEventsUpdatesOutboundPacket();
+            playerEventsUpdatesOutboundPacket.writePlayerLeft(playerInfo);
+            broadcast(playerEventsUpdatesOutboundPacket);
 
             LOG.info(
                     "Player left - sid: {}, reg id: {}, ply id: {}",
@@ -168,26 +168,26 @@ public class PlayerManager implements IdCounterConsumer
     public synchronized void logic()
     {
         // Build updates of players
-        PlayerDataUpdatesOutboundPacket playerDataUpdatesOutboundPacket = new PlayerDataUpdatesOutboundPacket();
-        writePlayerMetrics(playerDataUpdatesOutboundPacket, false);
+        PlayerEventsUpdatesOutboundPacket playerEventsUpdatesOutboundPacket = new PlayerEventsUpdatesOutboundPacket();
+        writePlayerMetrics(playerEventsUpdatesOutboundPacket, false);
 
         // Send updates to everyone
-        broadcast(playerDataUpdatesOutboundPacket);
+        broadcast(playerEventsUpdatesOutboundPacket);
     }
 
-    private synchronized void writePlayersJoined(PlayerDataUpdatesOutboundPacket playerDataUpdatesOutboundPacket)
+    private synchronized void writePlayersJoined(PlayerEventsUpdatesOutboundPacket playerEventsUpdatesOutboundPacket)
     {
         for (PlayerInfo playerInfo : mappings.values())
         {
-            playerDataUpdatesOutboundPacket.writePlayerJoined(playerInfo);
+            playerEventsUpdatesOutboundPacket.writePlayerJoined(playerInfo);
         }
     }
 
-    private synchronized void writePlayerMetrics(PlayerDataUpdatesOutboundPacket playerDataUpdatesOutboundPacket, boolean forced)
+    private synchronized void writePlayerMetrics(PlayerEventsUpdatesOutboundPacket playerEventsUpdatesOutboundPacket, boolean forced)
     {
         for (PlayerInfo playerInfo : mappings.values())
         {
-            playerDataUpdatesOutboundPacket.writePlayerInfoUpdates(playerInfo, false);
+            playerEventsUpdatesOutboundPacket.writePlayerInfoUpdates(playerInfo, false);
         }
     }
 

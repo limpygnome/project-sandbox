@@ -8,12 +8,12 @@ public class SessionMetrics
     /**
      * Total kills this session.
      */
-    public long kills;
+    public short kills;
 
     /**
      * Total deaths this session.
      */
-    public long deaths;
+    public short deaths;
 
     /**
      * Total accumulated score for only this session.
@@ -60,8 +60,8 @@ public class SessionMetrics
 
     public synchronized void reset()
     {
-        this.kills = 0L;
-        this.deaths = 0L;
+        this.kills = 0;
+        this.deaths = 0;
         this.score = 0L;
 
         this.dirty = true;

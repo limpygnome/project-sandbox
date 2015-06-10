@@ -6,8 +6,12 @@ import com.limpygnome.projectsandbox.server.players.PlayerInfo;
 /**
  * Used to update the data regarding all players on the server, which is sent to each player.
  */
-public class PlayerDataUpdatesOutboundPacket extends OutboundPacket
+public class PlayerEventsUpdatesOutboundPacket extends OutboundPacket
 {
+    public PlayerEventsUpdatesOutboundPacket()
+    {
+        super((byte) 'P', (byte) 'E');
+    }
 
     public void writePlayerJoined(PlayerInfo playerInfo)
     {

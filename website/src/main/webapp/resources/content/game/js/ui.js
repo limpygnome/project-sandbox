@@ -142,8 +142,6 @@ game.ui =
 
                 $(this.elementUIHealthBar).width(healthPercent + "%");
 
-                this.healthBar.setValue(healthPercent);
-
 			    // Update player UI to render
 			    this.renderPlayerUI = true;
 			}

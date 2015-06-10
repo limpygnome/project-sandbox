@@ -49,6 +49,8 @@ public class Session
         this.registeredPlayerId = registeredPlayerId;
         this.displayName = displayName;
         this.joinTimestamp = joinTimestamp;
+        this.playerData = null;
+        this.metrics = new SessionMetrics();
     }
 
     public static Session load(UUID sessionId)

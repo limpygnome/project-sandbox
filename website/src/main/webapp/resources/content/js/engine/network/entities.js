@@ -24,7 +24,7 @@ projectSandbox.network.entities =
 		while (offset < data.length)
 		{
 			// Retrieve update type and entity id
-			updateType = dataView.getInt8(offset);
+			updateType = String.fromCharCode(dataView.getInt8(offset));
 			id = dataView.getInt16(offset + 1);
 
 			// Increment offset
@@ -33,13 +33,13 @@ projectSandbox.network.entities =
 			// Handle update based on type
 			switch(updateType)
 			{
-				case 67: // C
+				case "C":
 					bytesRead = this.packetUpdatesEntCreated(data, dataView, id, offset);
 					break;
-				case 85: // U
+				case "U":
 					bytesRead = this.packetUpdatesEntUpdated(data, dataView, id, offset);
 					break;
-				case 68: // D
+				case "D":
 					bytesRead = this.packetUpdatesEntDeleted(data, dataView, id, offset);
 					break;
 				default:
