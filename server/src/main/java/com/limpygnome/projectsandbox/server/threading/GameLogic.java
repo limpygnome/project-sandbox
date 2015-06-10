@@ -35,6 +35,9 @@ public class GameLogic implements Runnable
 
                     // Run logic for effects
                     controller.effectsManager.logic();
+
+                    // Run logic for players
+                    controller.playerManager.logic();
                 }
                 catch(IOException ex)
                 {

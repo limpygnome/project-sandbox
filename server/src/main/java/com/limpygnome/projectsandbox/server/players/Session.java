@@ -13,14 +13,34 @@ import java.util.UUID;
  */
 public class Session
 {
-    // The UUID for the current user's web session.
+    /**
+     * The UUID for the current user's web session.
+     */
     public UUID sessionId;
-    // Null for a guest user.
+
+    /**
+     * Registered player ID (UUID); null if guest.
+     */
     public UUID registeredPlayerId;
+
+    /**
+     * The display name of the user.
+     */
     public String displayName;
+
+    /**
+     * The timestamp at which the player joined.
+     */
     public long joinTimestamp;
+
+    /**
+     * Persisted player data.
+     */
     public PlayerData playerData;
 
+    /**
+     * Metrics regarding the user's current session.
+     */
     public SessionMetrics metrics;
 
     private Session(UUID sessionId, UUID registeredPlayerId, String displayName, long joinTimestamp)
@@ -33,11 +53,11 @@ public class Session
 
     public static Session load(UUID sessionId)
     {
-        // TODO: load player data
-        // TODO: remove stub and load from DB
         int rand = new Random(System.currentTimeMillis()).nextInt(100);
 
         // Load session data
+        // TODO: remove stub and load session from DB
+        // TODO: check name is not in use, else append number
         Session session = new Session(sessionId, null, "unnamed" + rand, System.currentTimeMillis());
 
         // Load player data

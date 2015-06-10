@@ -6,16 +6,16 @@ import java.util.Map;
 import java.util.UUID;
 
 /**
- * Used to store key-value data, for a player, persisted beyond the session.
+ * Used to store key-value data, for a player, which is persisted beyond the session for registered players.
  */
 public class PlayerData
 {
-    private UUID playerId;
+    private UUID registeredPlayerId;
     private Map<String, Serializable> data;
 
-    private PlayerData(UUID playerId)
+    private PlayerData(UUID registeredPlayerId)
     {
-        this.playerId = playerId;
+        this.registeredPlayerId = registeredPlayerId;
         this.data = new HashMap<>();
     }
 
@@ -69,8 +69,32 @@ public class PlayerData
         return data.remove(key);
     }
 
-    public static PlayerData load(UUID playerId)
+    /**
+     * Persists the player's data.
+     */
+    public void persist()
     {
-        return new PlayerData(playerId);
+        if (registeredPlayerId != null)
+        {
+            // TODO: persist player data
+        }
+    }
+
+    /**
+     * Loads data for a player.
+     *
+     * @param registeredPlayerId The registered player's ID; can be null for a guest.
+     * @return An instance.
+     */
+    public static PlayerData load(UUID registeredPlayerId)
+    {
+        PlayerData playerData = new PlayerData(registeredPlayerId);
+
+        if (registeredPlayerId != null)
+        {
+            // TODO: load previously persisted data
+        }
+
+        return playerData;
     }
 }

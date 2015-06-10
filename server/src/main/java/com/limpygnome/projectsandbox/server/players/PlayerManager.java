@@ -6,10 +6,13 @@ import com.limpygnome.projectsandbox.server.ents.Entity;
 import com.limpygnome.projectsandbox.server.ents.types.Player;
 import com.limpygnome.projectsandbox.server.packets.OutboundPacket;
 import com.limpygnome.projectsandbox.server.packets.types.ents.EntityUpdatesOutboundPacket;
+import com.limpygnome.projectsandbox.server.packets.types.players.global.PlayerDataUpdatesOutboundPacket;
 import com.limpygnome.projectsandbox.server.packets.types.players.individual.PlayerIdentityOutboundPacket;
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.UUID;
 
 import com.limpygnome.projectsandbox.server.utils.IdCounterProvider;
 import com.limpygnome.projectsandbox.server.utils.counters.IdCounterConsumer;
@@ -28,6 +31,7 @@ public class PlayerManager implements IdCounterConsumer
     private final Controller controller;
     private final HashMap<WebSocket, PlayerInfo> mappings;
     private final HashMap<Short, PlayerInfo> mappingsById;
+    private final HashSet<UUID> connectedRegisteredPlayers;
     private final IdCounterProvider idCounterProvider;
 
     public PlayerManager(Controller controller)
@@ -35,6 +39,7 @@ public class PlayerManager implements IdCounterConsumer
         this.controller = controller;
         this.mappings = new HashMap<>();
         this.mappingsById = new HashMap<>();
+        this.connectedRegisteredPlayers = new HashSet<>();
         this.idCounterProvider = new IdCounterProvider(this);
     }
 
@@ -49,6 +54,13 @@ public class PlayerManager implements IdCounterConsumer
     {
         try
         {
+            // Check a registered user is not already connected
+            if (session.registeredPlayerId != null && connectedRegisteredPlayers.contains(session.registeredPlayerId))
+            {
+                // TODO: this needs to throw an exception, detailing why the user cannot connect
+                return null;
+            }
+
             // Generate new identifier
             Short playerId = idCounterProvider.nextId();
 
@@ -67,18 +79,35 @@ public class PlayerManager implements IdCounterConsumer
             // Add mapping for identifier
             mappingsById.put(playerId, playerInfo);
 
+            // Inform server player has joined
+            PlayerDataUpdatesOutboundPacket playerDataUpdatesOutboundPacket = new PlayerDataUpdatesOutboundPacket();
+            playerDataUpdatesOutboundPacket.writePlayerJoined(playerInfo);
+            broadcast(playerDataUpdatesOutboundPacket);
+
+            // Give the user all of the users and metrics/stats thus far
+            PlayerDataUpdatesOutboundPacket playerDataUpdatesOutboundSnapshotPacket = new PlayerDataUpdatesOutboundPacket();
+            writePlayersJoined(playerDataUpdatesOutboundSnapshotPacket);
+            writePlayerMetrics(playerDataUpdatesOutboundSnapshotPacket, true);
+            playerDataUpdatesOutboundSnapshotPacket.send(playerInfo);
+
+
             // Create and spawn entity for player
             createAndSpawnNewPlayerEnt(playerInfo);
 
             // Send map data
             controller.mapManager.main.packet.send(playerInfo);
 
-            // Send update of entire world
+            // Send update of entire world to the player
             EntityUpdatesOutboundPacket packetUpdates = new EntityUpdatesOutboundPacket();
             packetUpdates.build(controller.entityManager, true);
             packetUpdates.send(playerInfo);
 
-            LOG.info("Mapped - sid: {}", session.sessionId);
+            LOG.info(
+                    "Player joined - sid: {}, reg id: {}, ply id: {}",
+                    session.sessionId,
+                    session.registeredPlayerId,
+                    playerId
+            );
 
             return playerInfo;
         }
@@ -100,6 +129,7 @@ public class PlayerManager implements IdCounterConsumer
             if (ent != null && ent instanceof Player)
             {
                 controller.entityManager.remove(ent);
+                LOG.debug("Removed entity for disconnecting player - ent id: {}", ent.id);
             }
 
             // Remove socket mapping
@@ -108,7 +138,56 @@ public class PlayerManager implements IdCounterConsumer
             // Remove ID mapping
             mappingsById.remove(playerInfo.playerId);
 
-            LOG.info("Unmapped - sid: {}", playerInfo.session.sessionId);
+            // Remove from connected registered players (if registered)
+            if (connectedRegisteredPlayers.contains(playerInfo.session.registeredPlayerId != null))
+            {
+                connectedRegisteredPlayers.remove(playerInfo.session.registeredPlayerId);
+            }
+
+            // Persist player data
+            playerInfo.session.playerData.persist();
+
+            // Inform server the player has left
+            PlayerDataUpdatesOutboundPacket playerDataUpdatesOutboundPacket = new PlayerDataUpdatesOutboundPacket();
+            playerDataUpdatesOutboundPacket.writePlayerLeft(playerInfo);
+            broadcast(playerDataUpdatesOutboundPacket);
+
+            LOG.info(
+                    "Player left - sid: {}, reg id: {}, ply id: {}",
+                    playerInfo.session.sessionId,
+                    playerInfo.session.registeredPlayerId,
+                    playerInfo.playerId
+            );
+        }
+        else
+        {
+            LOG.warn("Attempted to unregister unknown player - socket addr: {}", ws.getRemoteSocketAddress());
+        }
+    }
+
+    public synchronized void logic()
+    {
+        // Build updates of players
+        PlayerDataUpdatesOutboundPacket playerDataUpdatesOutboundPacket = new PlayerDataUpdatesOutboundPacket();
+        writePlayerMetrics(playerDataUpdatesOutboundPacket, false);
+
+        // Send updates to everyone
+        broadcast(playerDataUpdatesOutboundPacket);
+    }
+
+    private synchronized void writePlayersJoined(PlayerDataUpdatesOutboundPacket playerDataUpdatesOutboundPacket)
+    {
+        for (PlayerInfo playerInfo : mappings.values())
+        {
+            playerDataUpdatesOutboundPacket.writePlayerJoined(playerInfo);
+        }
+    }
+
+    private synchronized void writePlayerMetrics(PlayerDataUpdatesOutboundPacket playerDataUpdatesOutboundPacket, boolean forced)
+    {
+        for (PlayerInfo playerInfo : mappings.values())
+        {
+            playerDataUpdatesOutboundPacket.writePlayerInfoUpdates(playerInfo, false);
         }
     }
 
