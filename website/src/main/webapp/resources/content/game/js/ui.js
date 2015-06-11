@@ -322,13 +322,17 @@ game.ui =
 
     scoreboardSort: function()
     {
-        var scoreboardItems = $(this.elementSidebarScoreboard).find("ol").children();
+        var parent = $(this.elementSidebarScoreboard).find("ol");
+        var scoreboardItems = $(parent).children();
 
+        // Sort indexes
         scoreboardItems.sort(
             function(a, b)
             {
                 var scoreA = $(a).find("span");
                 var scoreB = $(b).find("span");
+                var displayNameA = $(a).text();
+                var displayNameB = $(b).text();
 
                 if (scoreA > scoreB)
                 {
@@ -338,12 +342,21 @@ game.ui =
                 {
                     return -1;
                 }
-                else
+                else if (displayNameA > displayNameB)
                 {
-                    return 0;
+                    return 1;
                 }
+                else if (displayNameA < displayNameB)
+                {
+                    return -1;
+                }
+
+                return 0;
             }
         );
+
+        // Reattach elements to show changes
+        $(scoreboardItems).detach().appendTo(parent);
     },
 
 	/*
