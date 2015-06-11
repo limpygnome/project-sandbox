@@ -107,7 +107,7 @@ game.ui =
 		$(this.elementSidebarActivity).children().remove();
 
 		// Clear scoreboard
-		$(this.elementSidebarScoreboard).children().remove();
+		$(this.elementSidebarScoreboard).find("ol").children().remove();
 
 		// Clear chat
 		$(this.elementSidebarChat).children().remove();
@@ -295,14 +295,55 @@ game.ui =
 
     scoreboardAdd: function(player)
     {
+        // Build HTML
+        var html = "<li id='scoreboard_item_" + player.playerId + "'><span>" + player.score + "</span>" + player.displayName + "</li>";
+
+        // Add element
+        $(this.elementSidebarScoreboard).find("ol").append(html);
+
+        // Sort
+        this.scoreboardSort();
     },
 
     scoreboardUpdate: function(player)
     {
+        // Find element and update
+        var element = $("#scoreboard_item_" + player.playerId).find("span").text(player.score);
+
+        // Sort
+        this.scoreboardSort();
     },
 
     scoreboardRemove: function(player)
     {
+        // Remove the element
+        $("#scoreboard_item_" + player.playerId).remove();
+    },
+
+    scoreboardSort: function()
+    {
+        var scoreboardItems = $(this.elementSidebarScoreboard).find("ol").children();
+
+        scoreboardItems.sort(
+            function(a, b)
+            {
+                var scoreA = $(a).find("span");
+                var scoreB = $(b).find("span");
+
+                if (scoreA > scoreB)
+                {
+                    return 1;
+                }
+                else if (scoreA < scoreB)
+                {
+                    return -1;
+                }
+                else
+                {
+                    return 0;
+                }
+            }
+        );
     },
 
 	/*
