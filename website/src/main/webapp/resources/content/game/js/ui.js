@@ -108,6 +108,9 @@ game.ui =
 
 		// Clear scoreboard
 		$(this.elementSidebarScoreboard).children().remove();
+
+		// Clear chat
+		$(this.elementSidebarChat).children().remove();
 	},
 	
 	logic: function()
@@ -155,6 +158,8 @@ game.ui =
 	render: function(gl, shaderProgram, modelView, perspective)
 	{
 	    // Not used at present, replaced by HTML...
+
+	    // TODO: remove this function
 
 	    /*
 	    // Disable depth for transparency
@@ -260,6 +265,51 @@ game.ui =
         }
 	},
 
+	/*
+        Functions for creating UI elements
+        ----------------------------------------------------------------------------------------------------------------
+    */
+
+    activityAdd: function(text, icon1, icon2)
+    {
+        // Construct HTML
+        var html = "<p>";
+
+        if (icon1 != null)
+        {
+            html += "<span class='left'><img src='" + icon1 + "' /></span>";
+        }
+
+        html += "<span class='info'>" + text + "</span>";
+
+        if (icon2 != null)
+        {
+            html += "<span class='left'><img src='" + icon2 + "' /></span>";
+        }
+
+        html += "</p>";
+
+        // Add HTML as element
+        $(this.elementSidebarActivity).prepend(html);
+    },
+
+    scoreboardAdd: function(player)
+    {
+    },
+
+    scoreboardUpdate: function(player)
+    {
+    },
+
+    scoreboardRemove: function(player)
+    {
+    },
+
+	/*
+        Entity Hooks
+        ----------------------------------------------------------------------------------------------------------------
+    */
+
 	hookPlayer_entChanged: function()
     {
         // Reset inventory
@@ -271,6 +321,11 @@ game.ui =
         // Show death screen
         this.deathScreenShow(causeText);
     },
+
+    /*
+	    Inventory Hooks
+	    ----------------------------------------------------------------------------------------------------------------
+	*/
 
 	hook_inventorySlotCreate: function(inventoryItem)
 	{
@@ -306,6 +361,28 @@ game.ui =
 	hook_inventoryReset: function()
 	{
 	    $(this.elementUIInventory).empty();
-	}
+	},
+
+	/*
+        Player Event Hooks
+        ----------------------------------------------------------------------------------------------------------------
+    */
+
+    hook_playerJoined: function(player)
+    {
+        this.activityAdd(player.displayName + " has joined");
+        this.scoreboardAdd(player);
+    },
+
+    hook_playerUpdated: function(player)
+    {
+        this.scoreboardUpdate(player);
+    },
+
+    hook_playerLeft: function(player)
+    {
+        this.activityAdd(player.displayName + " has left");
+        this.scoreboardRemove(player);
+    }
 
 }

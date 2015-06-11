@@ -46,7 +46,7 @@ public class PacketData
     }
 
     /**
-     * This will only add the long as a 32-bit number.
+     * This will only add the long as a 32-bit unsigned number.
      *
      * @param value
      */

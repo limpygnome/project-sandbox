@@ -215,6 +215,6 @@ projectSandbox.camera =
 			Math.floor(mapHeight - frustumHeightHalf)
 		];
 
-		console.debug("engine/camera - limits rebuild - " + this.limits[0] + "," + this.limits[1] + "," + this.limits[2] + "," + this.limits[3]);
+		console.debug("engine/camera - limits rebuilt - " + this.limits[0] + "," + this.limits[1] + "," + this.limits[2] + "," + this.limits[3]);
 	}
 }

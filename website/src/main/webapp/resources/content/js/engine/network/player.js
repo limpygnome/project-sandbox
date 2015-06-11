@@ -93,10 +93,22 @@ projectSandbox.network.player =
         var displayName = projectSandbox.utils.parseText(data, dataView, offset);
         offset += displayName.length + 1;
 
-        // Add player to player table
+        // Check player does not already exist
+        if (!projectSandbox.players.contains(playerId))
+        {
+            // Create model and add to players table
+            var player = new projectSandbox.types.player(playerId, displayName);
+            projectSandbox.players.add(player);
 
+            // Invoke UI hook
+            projectSandbox.game.ui.hook_playerJoined(player);
 
-        console.debug("engine/network/player - player joined - ply id: " + playerId + ", name: " + displayName);
+            console.debug("engine/network/player - player joined - ply id: " + playerId + ", name: " + displayName);
+        }
+        else
+        {
+            console.debug("engine/network/player - ignoring duplicate player join event - ply id: " + playerId);
+        }
 
         return offset;
     },
@@ -113,10 +125,18 @@ projectSandbox.network.player =
         var deaths = dataView.getInt16(offset);
         offset += 2;
 
-        var score = data.getInt64(offset);
+        // TODO: fix and test score
+        var score = data.getUInt32(offset);
         offset += 8;
 
         // Update player's metrics
+        var player = projectSandbox.players.get(playerId);
+        player.kills = kills;
+        player.deaths = deaths;
+        player.score = score;
+
+        // Invoke UI hook
+        projectSandbox.game.ui.hook_playerUpdated(player);
 
         console.debug("engine/network/player - updated player - ply id: " + playerId + ", kills: " + kills + ", deaths: " + deaths + ", score: " + score);
 
@@ -129,7 +149,21 @@ projectSandbox.network.player =
         var playerId = dataView.getInt16(offset);
         offset += 2;
 
-        // Remove player from player table
+        // Fetch player
+        var player = projectSandbox.players.get(playerId);
+
+        if (player != null)
+        {
+            // Remove player from player table
+            projectSandbox.players.remove(playerId);
+
+            // Invoke UI hook
+            projectSandbox.game.ui.hook_playerLeft(player);
+        }
+        else
+        {
+            console.debug("engine/network/player - player left, but not found - ply id: " + playerId);
+        }
 
         console.debug("engine/network/player - player left game - ply id: " + playerId);
 

@@ -44,11 +44,14 @@
 		<script src="/content/js/engine/inventory.js"></script>
 		<script src="/content/js/engine/inventory-item.js"></script>
 		<script src="/content/js/engine/text.js"></script>
+		<script src="/content/js/engine/players.js"></script>
 
 		<script src="/content/js/engine/network/entities.js"></script>
 		<script src="/content/js/engine/network/inventory.js"></script>
 		<script src="/content/js/engine/network/map.js"></script>
 		<script src="/content/js/engine/network/player.js"></script>
+
+		<script src="/content/js/engine/types/player.js"></script>
 
 		<!-- Game -->
 		<script src="/content/game/js/_namespace.js"></script>
