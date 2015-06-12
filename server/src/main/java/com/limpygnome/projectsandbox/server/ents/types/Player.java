@@ -2,12 +2,13 @@ package com.limpygnome.projectsandbox.server.ents.types;
 
 import com.limpygnome.projectsandbox.server.Controller;
 import com.limpygnome.projectsandbox.server.ents.Entity;
-import com.limpygnome.projectsandbox.server.ents.PlayerConstants;
 import com.limpygnome.projectsandbox.server.ents.annotations.EntityType;
 import com.limpygnome.projectsandbox.server.ents.physics.Vector2;
 import com.limpygnome.projectsandbox.server.inventory.Inventory;
 import com.limpygnome.projectsandbox.server.players.PlayerInfo;
 import com.limpygnome.projectsandbox.server.players.enums.PlayerKeys;
+
+import static com.limpygnome.projectsandbox.server.ents.PlayerConstants.*;
 
 /**
  * An entity which represents a player.
@@ -19,15 +20,36 @@ public class Player extends Entity
 {
     public static final String PLAYERDATA_INVENTORY_KEY = "player_inventory";
 
+    /**
+     * The distance the player travels each logic cycle.
+     */
+    public float movementSpeedFactor;
+
+    /**
+     * The radians the player can rotate each logic cycle.
+     */
+    public float rotationFactor;
+
     public PlayerInfo playerInfo;
     public Inventory inventory;
-    
-    public Player(Controller controller, PlayerInfo playerInfo)
+
+    public Player()
     {
         super(
                 (short) 16,
                 (short) 9
         );
+
+        // Set default values
+        this.movementSpeedFactor = DEFAULT_MOVEMENT_SPEED_FACCTOR;
+        this.rotationFactor = DEFAULT_ROTATION_FACTOR;
+    }
+    
+    public Player(Controller controller, PlayerInfo playerInfo)
+    {
+
+
+        this();
         
         // Check player info is valid
         if (playerInfo == null)
@@ -35,7 +57,7 @@ public class Player extends Entity
             throw new IllegalArgumentException("A player must have associated PlayerInfo instance!");
         }
         
-        setMaxHealth(PlayerConstants.DEFAULT_HEALTH);
+        setMaxHealth(DEFAULT_HEALTH);
         
         this.playerInfo = playerInfo;
 
@@ -51,26 +73,23 @@ public class Player extends Entity
         this.inventory.setOwner(playerInfo);
         
         // Give player default inventory items
-        this.inventory.add(PlayerConstants.DEFAULT_INVENTORY_ITEMS);
+        this.inventory.add(DEFAULT_INVENTORY_ITEMS);
     }
 
     @Override
     public void logic(Controller controller)
     {
-        final float movementFactor = 2.0f;
-        final float rotationFactor = 0.25f;
-        
         float changeDist = 0.0f;
         float changeRotation = 0.0f;
         
         // Update player's position
         if (playerInfo.isKeyDown(PlayerKeys.MovementUp))
         {
-            changeDist += movementFactor;
+            changeDist += movementSpeedFactor;
         }
         if (playerInfo.isKeyDown(PlayerKeys.MovementDown))
         {
-            changeDist -= movementFactor;
+            changeDist -= movementSpeedFactor;
         }
         
         // Check for rotation
