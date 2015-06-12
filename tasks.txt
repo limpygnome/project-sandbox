@@ -33,3 +33,7 @@ future ideas / consider:
 - chunk map and cache, rather than send entire map
 - textures allow limitless faces for frame, thus we could have pointed buildings if we add a type, which corresponds to a
   polygon (2d or 3d) -> make generic way to do it -> game loads in models, associated with type id/number
+- allow multiple killers, which is shown in cause text and icons - e.g. 3 icons overlayed together to represent the killing by 3 players; x got groupe'd by x,y,z etc
+
+
+

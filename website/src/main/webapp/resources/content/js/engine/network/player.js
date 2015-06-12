@@ -45,18 +45,31 @@ projectSandbox.network.player =
         console.log("engine/network/player - updated player id to " + id);
     },
 
+    PLAYER_KILLED_MASK_PLAYERID_KILLER: 1,
+
     packetPlayerKilled: function(data, dataView)
     {
-        // Parse packet
-        var id = dataView.getInt16(2);
-        var causeTextLength = dataView.getInt8(4);
-        var causeText = String.fromCharCode.apply(String, data.subarray(5, 5 + causeTextLength));
+        var flags = dataView.getInt8(2);
 
-        // Check if we were killed
-        if (id == projectSandbox.playerEntityId)
+        var causeText = projectSandbox.utils.parseText(data, dataView, 3);
+        var causeTextLenOffset = 4 + causeText.length;
+
+        var entityIdVictim = dataView.getInt16(causeTextLenOffset);
+        var entityIdKiller = dataView.getInt16(causeTextLenOffset + 2);
+        var playerIdVictim = dataView.getInt16(causeTextLenOffset + 4);
+        var playerIdKiller;
+
+        if ((flags & this.PLAYER_KILLED_MASK_PLAYERID_KILLER) == this.PLAYER_KILLED_MASK_PLAYERID_KILLER)
         {
-            projectSandbox.game.ui.hookPlayer_entKilled(causeText);
+            playerIdKiller = dataView.getInt16(2 + causeText.length + 6);
         }
+        else
+        {
+            playerIdKiller = null;
+        }
+
+        // Inform UI via hook
+        projectSandbox.game.ui.hookPlayer_entKilled(causeText, entityIdVictim, entityIdKiller, playerIdVictim, playerIdKiller);
     },
 
     packetPlayerEvents: function(data, dataView)
@@ -129,7 +142,6 @@ projectSandbox.network.player =
         var deaths = dataView.getInt16(offset);
         offset += 2;
 
-        // TODO: fix and test score
         var score = dataView.getUint32(offset);
         offset += 4;
 
@@ -264,4 +276,5 @@ projectSandbox.network.player =
             projectSandbox.network.send(buff.buffer);
         }
     }
+
 }

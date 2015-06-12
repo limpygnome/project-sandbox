@@ -376,10 +376,17 @@ game.ui =
         this.hook_inventoryReset();
     },
 
-    hookPlayer_entKilled: function(causeText)
+    hookPlayer_entKilled: function(causeText, entityIdVictim, entityIdKiller, playerIdVictim, playerIdKiller)
     {
-        // Show death screen
-        this.deathScreenShow(causeText);
+        // Create activity
+        this.activityAdd(causeText);
+
+        // Check if we were killed
+        if (playerIdVictim == projectSandbox.playerEntityId)
+        {
+            // Show death screen
+            this.deathScreenShow(causeText);
+        }
     },
 
     /*

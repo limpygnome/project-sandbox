@@ -95,7 +95,7 @@ public class PlayerInfo
 
                 // Build death packet
                 PlayerKilledOutboundPacket packet = new PlayerKilledOutboundPacket();
-                packet.writePlayerKilled(killer, entity);
+                packet.writePlayerKilled(killer, this);
 
                 // Broadcast to all players
                 controller.playerManager.broadcast(packet);

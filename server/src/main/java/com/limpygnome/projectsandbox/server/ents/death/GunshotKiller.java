@@ -1,5 +1,7 @@
 package com.limpygnome.projectsandbox.server.ents.death;
 
+import com.limpygnome.projectsandbox.server.players.PlayerInfo;
+
 /**
  * Created by limpygnome on 21/05/15.
  */
@@ -13,9 +15,22 @@ public class GunshotKiller extends AbstractKiller
         "{0} skool'd {1}"
     };
 
+    private PlayerInfo playerInfoKiller;
+
+    public GunshotKiller(PlayerInfo playerInfoKiller)
+    {
+        this.playerInfoKiller = playerInfoKiller;
+    }
+
     @Override
     public String causeText()
     {
         return formatRandomCauseText(CAUSES);
+    }
+
+    @Override
+    public PlayerInfo getPlayerKiller()
+    {
+        return playerInfoKiller;
     }
 }
