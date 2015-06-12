@@ -26,7 +26,7 @@ public interface PlayerConstants
     /**
      * The default distance a player will travel each logic cycle.
      */
-    float DEFAULT_MOVEMENT_SPEED_FACCTOR = 2.0f;
+    float DEFAULT_MOVEMENT_SPEED_FACTOR = 2.0f;
 
     /**
      * The default rotation a player can rotate each logic cycle.

@@ -41,7 +41,7 @@ public class Player extends Entity
         );
 
         // Set default values
-        this.movementSpeedFactor = DEFAULT_MOVEMENT_SPEED_FACCTOR;
+        this.movementSpeedFactor = DEFAULT_MOVEMENT_SPEED_FACTOR;
         this.rotationFactor = DEFAULT_ROTATION_FACTOR;
     }
     
