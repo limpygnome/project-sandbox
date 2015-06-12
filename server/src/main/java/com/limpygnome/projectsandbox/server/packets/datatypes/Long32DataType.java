@@ -2,6 +2,7 @@ package com.limpygnome.projectsandbox.server.packets.datatypes;
 
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
+import java.util.Arrays;
 
 /**
  * Created by limpygnome on 10/06/15.
@@ -31,5 +32,11 @@ public class Long32DataType implements AbstractDataType
     public void write(ByteBuffer buffer)
     {
         buffer.put(rawValue);
+    }
+
+    @Override
+    public String toString()
+    {
+        return "[long32 : " + rawValue.length + " : " + Arrays.toString(rawValue) + "]";
     }
 }

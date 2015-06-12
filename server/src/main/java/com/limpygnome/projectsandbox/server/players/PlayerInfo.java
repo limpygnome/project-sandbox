@@ -84,18 +84,31 @@ public class PlayerInfo
         }
     }
 
-    public void eventPlayerKilled(Controller controller, AbstractKiller killer)
+    public void eventPlayerKilled(Controller controller, AbstractKiller killer, boolean isVictim)
     {
         try
         {
-            // Build death packet
-            PlayerKilledOutboundPacket packet = new PlayerKilledOutboundPacket();
-            packet.writePlayerKilled(killer, entity);
+            if (isVictim)
+            {
+                // Update metrics
+                session.metrics.incrementDeaths();
 
-            // Broadcast to all players
-            controller.playerManager.broadcast(packet);
+                // Build death packet
+                PlayerKilledOutboundPacket packet = new PlayerKilledOutboundPacket();
+                packet.writePlayerKilled(killer, entity);
 
-            LOG.info("Player killed - sess id: {}", session.sessionId);
+                // Broadcast to all players
+                controller.playerManager.broadcast(packet);
+
+                LOG.info("Player killed - ply id: {}, killer: {}", playerId, killer);
+            }
+            else
+            {
+                // Update metrics
+                session.metrics.incrementKills();
+
+                LOG.debug("Player inflicted death - ply id: {}, killer: {}", playerId, killer);
+            }
         }
         catch (IOException e)
         {

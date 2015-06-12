@@ -291,22 +291,28 @@ public strictfp abstract class Entity
             throw new RuntimeException("Incorrectly setup killer class - " + killType.getName(), e);
         }
 
-        // Inform all associated players they've been killed
-        PlayerInfo[] playerInfos = getPlayers();
+        // Inform killer(s) of their act
+        killInformPlayerInfo(inflicter.getPlayers(), controller, killer, false);
 
+        // Inform all associated players they've been killed
+        killInformPlayerInfo(getPlayers(), controller, killer, true);
+
+        // Raise death event for this entity
+        eventDeath(controller, killer);
+    }
+
+    private void killInformPlayerInfo(PlayerInfo[] playerInfos, Controller controller, AbstractKiller killer, boolean isVictim)
+    {
         if (playerInfos != null)
         {
             for (PlayerInfo playerInfo : playerInfos)
             {
                 if (playerInfo != null)
                 {
-                    playerInfo.eventPlayerKilled(controller, killer);
+                    playerInfo.eventPlayerKilled(controller, killer, isVictim);
                 }
             }
         }
-
-        // Raise death event
-        eventDeath(controller, killer);
     }
     
     public void updateMask(UpdateMasks... masks)

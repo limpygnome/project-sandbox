@@ -6,7 +6,7 @@ import java.text.MessageFormat;
 import java.util.Random;
 
 /**
- * Created by limpygnome on 21/05/15.
+ * The abstract class for representing kill/death events.
  */
 public abstract class AbstractKiller
 {
@@ -26,5 +26,11 @@ public abstract class AbstractKiller
         Random rand = new Random(System.currentTimeMillis());
         String deathStr = possibleStrings[rand.nextInt(possibleStrings.length)];
         return MessageFormat.format(deathStr, victim.friendlyName(), killer.friendlyName());
+    }
+
+    @Override
+    public String toString()
+    {
+        return "[victim id: " + victim.id + ", killer id: " + killer.id + "]";
     }
 }

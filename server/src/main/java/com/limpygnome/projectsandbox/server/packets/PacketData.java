@@ -30,6 +30,11 @@ public class PacketData
         add(new ByteDataType(value));
     }
 
+    public void add(char value)
+    {
+        add((byte) value);
+    }
+
     public void add(float value)
     {
         add(new FloatDataType(value));

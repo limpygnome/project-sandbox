@@ -307,8 +307,14 @@ game.ui =
 
     scoreboardUpdate: function(player)
     {
-        // Find element and update
-        var element = $("#scoreboard_item_" + player.playerId).find("span").text(player.score);
+        // Find scoreboard item
+        var item = $("#scoreboard_item_" + player.playerId);
+
+        // Update score
+        $(item).find("span").text(player.score);
+
+        // Update K/D
+        $(item).attr("title", "kills: " + player.kills + ", deaths: " + player.deaths);
 
         // Sort
         this.scoreboardSort();

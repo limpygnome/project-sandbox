@@ -72,13 +72,17 @@ projectSandbox.network.player =
             switch (eventType)
             {
                 case "J":
-                    offset += this.packetPlayerEvents_joined(data, dataView, offset);
+                    offset = this.packetPlayerEvents_joined(data, dataView, offset);
                     break;
                 case "U":
-                    offset += this.packetPlayerEvents_updates(data, dataView, offset);
+                    offset = this.packetPlayerEvents_updates(data, dataView, offset);
                     break;
                 case "L":
-                    offset += this.packetPlayerEvents_left(data, dataView, offset);
+                    offset = this.packetPlayerEvents_left(data, dataView, offset);
+                    break;
+                default:
+                    console.error("engine/network/player - unhandled event type: " + eventType);
+                    console.error(data);
                     break;
             }
         }
@@ -126,8 +130,8 @@ projectSandbox.network.player =
         offset += 2;
 
         // TODO: fix and test score
-        var score = data.getUInt32(offset);
-        offset += 8;
+        var score = dataView.getUint32(offset);
+        offset += 4;
 
         // Update player's metrics
         var player = projectSandbox.players.get(playerId);

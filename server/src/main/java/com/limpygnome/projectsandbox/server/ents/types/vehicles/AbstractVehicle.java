@@ -261,7 +261,6 @@ public abstract class AbstractVehicle extends Entity
             
             if (playerInfo != null)
             {
-                playerInfo.eventPlayerKilled(controller, killer);
                 controller.playerManager.createAndSpawnNewPlayerEnt(playerInfo);
                 players[i] = null;
             }
