@@ -31,13 +31,17 @@ projectSandbox.network.player =
 
     packetPlayerIdentity: function(dataView)
     {
-        var id = dataView.getInt16(2);
+        var playerId = dataView.getInt16(2);
+        var entityId = dataView.getInt16(4);
 
-        // Update our playerid
-        projectSandbox.playerEntityId = id;
+        // Update our player ID
+        projectSandbox.playerId = playerId;
+
+        // Update our entity ID
+        projectSandbox.playerEntityId = entityId;
 
         // Update camera chase
-        projectSandbox.camera.chaseEntityId = id;
+        projectSandbox.camera.chaseEntityId = entityId;
 
         // Reset UI
         projectSandbox.game.ui.hookPlayer_entChanged();

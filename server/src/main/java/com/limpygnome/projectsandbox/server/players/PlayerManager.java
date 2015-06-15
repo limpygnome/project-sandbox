@@ -241,7 +241,7 @@ public class PlayerManager implements IdCounterConsumer
         try
         {
             PlayerIdentityOutboundPacket packet = new PlayerIdentityOutboundPacket();
-            packet.writeIdentity(entity);
+            packet.writeIdentity(playerInfo);
             packet.send(playerInfo);
         }
         catch (IOException e)

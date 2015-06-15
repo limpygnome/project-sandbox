@@ -382,7 +382,7 @@ game.ui =
         this.activityAdd(causeText);
 
         // Check if we were killed
-        if (playerIdVictim == projectSandbox.playerEntityId)
+        if (playerIdVictim == projectSandbox.playerId)
         {
             // Show death screen
             this.deathScreenShow(causeText);

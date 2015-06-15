@@ -306,6 +306,11 @@ var projectSandbox =
             // Setup WebGL
 			gl = this.canvas.getContext("webgl", {alpha: false}) || this.canvas.getContext("experimental-webgl", {alpha: false});
 
+			if (gl == null)
+			{
+				console.error("engine/project-sandbox - failed to setup WebGL context (critical)");
+			}
+
 			// Set default size to use canvas
 			gl.viewportWidth = this.canvas.width;
             gl.viewportHeight = this.canvas.height;

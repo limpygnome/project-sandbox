@@ -3,6 +3,7 @@ package com.limpygnome.projectsandbox.server.packets;
 import com.limpygnome.projectsandbox.server.players.PlayerInfo;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.java_websocket.exceptions.WebsocketNotConnectedException;
 
 /**
  *
@@ -57,7 +58,7 @@ public abstract class OutboundPacket extends Packet
             {
                 player.socket.send(dataCached);
             }
-            catch (Exception e)
+            catch (WebsocketNotConnectedException e)
             {
                 LOG.error("Failed to send data to player", e);
             }
