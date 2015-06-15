@@ -256,7 +256,7 @@
             </h3>
             <div id="ps-options">
                 <p>
-                    FPS: <span id="ps_fps">--</span>
+                    FPS: <span id="ps-options-fps">--</span>
                 </p>
                 <p>
                     <div class="options button fullscreen">

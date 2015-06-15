@@ -32,7 +32,6 @@ var projectSandbox =
 	currentTime: (new Date).getTime(),
 	
 	// FPS calculation
-	htmlFpsCounter: null,
 	fps: 0,
 	fpsTime: (new Date).getTime(),
 	fpsFrames : 0,
@@ -75,9 +74,6 @@ var projectSandbox =
 		// Setup scaling in respect to canvas
 		// TODO: remove this scale rubbish...probably not needed now.
 		this.SCALE_FACTOR = 1.0;//0.05;
-		
-		// Fetch FPS counter
-		this.htmlFpsCounter = document.getElementById("ps_fps");
 		
 		// Initialise WebGL
 		this.gl = this.initWebGl();
@@ -283,9 +279,6 @@ var projectSandbox =
 			this.fps = this.fpsFrames;
 			this.fpsTime = currentTime;
 			this.fpsFrames = 1;
-			
-			// Update counter on page
-			this.htmlFpsCounter.innerText = this.fps;
 		}
 		else
 		{

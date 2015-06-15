@@ -216,7 +216,21 @@ public abstract class AbstractVehicle extends Entity
     @Override
     public strictfp void eventCollision(Controller controller, Entity entCollider, Entity entVictim, Entity entOther, CollisionResult result)
     {
-        if (entOther instanceof Player)
+        // Check if another vehicle
+        if (entOther instanceof AbstractVehicle)
+        {
+            /*
+                Check speed of two cars. If above threshold, calculate from threshold to speed as percent. Use percent
+                against max health, e.g. threshold is 10, max speed is 100, current speed is 20...so % is (20-10)/100 = 0.1
+                say max health is 100...100*0.1 = 10...
+
+                thus we cause 10 damage to current vehicle...
+
+                idea is that if player's race around and hit something full speed, they instantly blowup/die
+             */
+        }
+        // Check if player
+        else if (entOther instanceof Player)
         {
             // Check if they're holding down action key to get in vehicle
             Player ply = (Player) entOther;

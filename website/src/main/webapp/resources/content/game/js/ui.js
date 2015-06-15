@@ -15,6 +15,9 @@ game.ui =
 	elementSidebarChat: null,
 	elementSidebarScoreboard: null,
 
+	// Elements - options
+	elementOptionsFpsCounter: null,
+
 
 	setup: function()
 	{
@@ -33,6 +36,9 @@ game.ui =
         this.elementSidebarActivity = document.getElementById("ps-activity");
         this.elementSidebarChat = document.getElementById("ps-chat");
         this.elementSidebarScoreboard = document.getElementById("ps-scoreboard");
+
+        // -- Options
+        this.elementOptionsFpsCounter = document.getElementById("ps-options-fps");
 
 	    // Bind resize event for window
         $(window).resize(function () {
@@ -117,7 +123,7 @@ game.ui =
 	
 	logic: function()
 	{
-	    // TODO: move this to be entirely event driven, so no logic loop is needed for UI
+	    // TODO: move this to be entirely event driven, so no logic loop is needed for UI except fps
 
 		var plyEntId = projectSandbox.playerEntityId;
 		var ent = projectSandbox.entities.get(plyEntId);
@@ -155,6 +161,9 @@ game.ui =
         {
             console.warn("UI - unable to find player entity, cannot update UI");
         }
+
+        // Update FPS counter
+        $(this.elementOptionsFpsCounter).text(projectSandbox.fps);
 	},
 	
 	render: function(gl, shaderProgram, modelView, perspective)

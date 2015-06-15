@@ -1,10 +1,5 @@
 high priority:
-- need  to assign players an ID, which we can send to other players -> send table of info at start / when players join
-- secure/lockdown reading data from client sockets -> we do no validation / checking length isnt out of bounds etc
 -- player info updates -> consider making update packets generic, foreach stuff or something
--- create: player id | player name | current score |
--- update score: player id - short 2 bytes | score - should be long 4 bytes |
-- text is cached
 - buffer cache has limit and purges items / look at optimizing and disposing buffer cache -> hook verts with an array of prims using them, prim dispose removes from array etc
 - allow ents to have a property where they cannot be moved -> physics properties . static
 - player's showing weapons / muzzle flashes on weapons etc
@@ -35,5 +30,7 @@ future ideas / consider:
   polygon (2d or 3d) -> make generic way to do it -> game loads in models, associated with type id/number
 - allow multiple killers, which is shown in cause text and icons - e.g. 3 icons overlayed together to represent the killing by 3 players; x got groupe'd by x,y,z etc
 
+
+- burnt cars -> car blows up, creates entity of same size which is black and creates smoke+fire light effect
 
 
