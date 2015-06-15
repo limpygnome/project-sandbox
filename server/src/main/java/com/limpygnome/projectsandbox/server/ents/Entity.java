@@ -292,7 +292,7 @@ public strictfp abstract class Entity
         }
 
         // Inform killer(s) of their act
-        killInformPlayerInfo(inflicter.getPlayers(), controller, killer, false);
+        killInformPlayerInfo(inflicter != null ? inflicter.getPlayers() : null, controller, killer, false);
 
         // Inform all associated players they've been killed
         killInformPlayerInfo(getPlayers(), controller, killer, true);

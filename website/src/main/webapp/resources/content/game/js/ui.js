@@ -8,6 +8,7 @@ game.ui =
     elementUI: null,
 	elementUIHealthBar: null,
 	elementUIInventory: null,
+	elementUIScore: null,
 
 	// Elements - side
 	elementSidebarActivity: null,
@@ -26,6 +27,7 @@ game.ui =
 	    this.elementUI = document.getElementById("ps-ui");
         this.elementUIHealthBar = document.getElementById("ps-ui-healthbar-fill");
         this.elementUIInventory = document.getElementById("ps-ui-inventory");
+        this.elementUIScore = document.getElementById("ps-ui-score");
 
         // -- Sidebar
         this.elementSidebarActivity = document.getElementById("ps-activity");
@@ -310,7 +312,13 @@ game.ui =
         // Find scoreboard item
         var item = $("#scoreboard_item_" + player.playerId);
 
-        // Update score
+        // Update UI score if the player is us
+        if (player.playerId == projectSandbox.playerId)
+        {
+            this.hook_updateLocalPlayerScore();
+        }
+
+        // Update score in scoreboard
         $(item).find("span").text(player.score);
 
         // Update K/D
@@ -374,6 +382,9 @@ game.ui =
     {
         // Reset inventory
         this.hook_inventoryReset();
+
+        // Update score
+        this.hook_updateLocalPlayerScore();
     },
 
     hookPlayer_entKilled: function(causeText, entityIdVictim, entityIdKiller, playerIdVictim, playerIdKiller)
@@ -450,6 +461,28 @@ game.ui =
     {
         this.activityAdd(player.displayName + " has left");
         this.scoreboardRemove(player);
+    },
+
+    /*
+        Score Hooks
+        ----------------------------------------------------------------------------------------------------------------
+    */
+
+    hook_updateLocalPlayerScore: function()
+    {
+        // Fetch player object
+        var player = projectSandbox.players.get(projectSandbox.playerId);
+
+        if (player != null)
+        {
+            var scoreText = "$" + projectSandbox.utils.formatNumberCommas(player.score);
+
+            $(this.elementUIScore).text(scoreText);
+        }
+        else
+        {
+            console.error("game/ui - failed to update local player score, cannot find player");
+        }
     }
 
 }

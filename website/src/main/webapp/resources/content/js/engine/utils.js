@@ -121,5 +121,10 @@ projectSandbox.utils =
 		var text = String.fromCharCode.apply(String, data.subarray(offset + 1, offset + 1 + length));
 
 		return text;
+	},
+
+	formatNumberCommas: function(value)
+	{
+		return value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")
 	}
 }

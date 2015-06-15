@@ -46,7 +46,7 @@ projectSandbox.network.player =
         // Reset UI
         projectSandbox.game.ui.hookPlayer_entChanged();
 
-        console.log("engine/network/player - updated player id to " + id);
+        console.log("engine/network/player - updated player - player ID: " + playerId + ", entity ID: " + entityId);
     },
 
     PLAYER_KILLED_MASK_PLAYERID_KILLER: 1,
