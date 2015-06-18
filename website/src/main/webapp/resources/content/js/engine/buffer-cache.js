@@ -134,7 +134,8 @@ projectSandbox.bufferCache =
 			// Store buffer
 			this.vertexBuffers.set(width + "x" + height + "x" + depth, bufferPosition);
 		}
-		
+
+
 		return bufferPosition;
 	},
 	
