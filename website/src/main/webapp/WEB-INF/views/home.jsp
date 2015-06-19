@@ -80,7 +80,7 @@
             <div id="ps-chat">
 
                 <div id="ps-chat-box">
-                    <input type="text" placeholder="Enter message here..." />
+                    <input type="text" placeholder="Enter message here..." id="ps-chat-box-field" />
                 </div>
 
                 <div id="ps-chat-messages">

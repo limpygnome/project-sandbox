@@ -329,6 +329,7 @@ body
     flex: 2;
     height: 100vh;
     overflow-y: scroll;
+    overflow-x: hidden;
 }
 #projectsandbox .ps-sidebar #ps-chat #ps-chat-messages p
 {
@@ -336,16 +337,25 @@ body
     margin: 0em;
     padding: 0.4em 0.2em;
     border-bottom: solid 0.1em #111;
-    min-height: 3em;
+    min-height: 2em;
 }
-#projectsandbox .ps-sidebar #ps-chat #ps-chat-messages p .thumb
+#projectsandbox .ps-sidebar #ps-chat #ps-chat-messages p .player
+{
+    font-weight: bold;
+    padding-right: 0.5em;
+}
+#projectsandbox .ps-sidebar #ps-chat #ps-chat-messages p .player img
 {
     float: left;
     vertical-align: middle;
-    width: 3em;
-    height: 3em;
+    width: 2em;
+    height: 2em;
     margin: 0em 0.4em 0em 0.2em;
 }
+#projectsandbox .ps-sidebar #ps-chat #ps-chat-messages p .text
+{
+}
+
 
 /*
     Sidebar - Options

@@ -62,7 +62,12 @@ public class PacketData
 
     public void add(String value)
     {
-        add(new StringDataType(value));
+        add(value, StringDataType.LengthSize.LENGTH_8);
+    }
+
+    public void add(String value, StringDataType.LengthSize lengthSize)
+    {
+        add(new StringDataType(value, lengthSize));
     }
 
     public void add(AbstractDataType abstractDataType)

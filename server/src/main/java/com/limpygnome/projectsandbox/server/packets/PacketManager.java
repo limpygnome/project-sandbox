@@ -2,6 +2,7 @@ package com.limpygnome.projectsandbox.server.packets;
 
 import com.limpygnome.projectsandbox.server.Controller;
 import com.limpygnome.projectsandbox.server.packets.types.inventory.InventoryItemSelectedInboundPacket;
+import com.limpygnome.projectsandbox.server.packets.types.players.chat.PlayerChatInboundPacket;
 import com.limpygnome.projectsandbox.server.packets.types.players.individual.PlayerMovementInboundPacket;
 import com.limpygnome.projectsandbox.server.packets.types.session.SessionIdentifierInboundPacket;
 import com.limpygnome.projectsandbox.server.players.PlayerInfo;
@@ -98,15 +99,21 @@ public class PacketManager
 
         switch(mainType)
         {
+            // Players
             case 'P':
                 switch (subType)
                 {
                     case 'M':
-                        // Player movement/update packet
+                        // Movement/update packet
                         packet = new PlayerMovementInboundPacket();
+                        break;
+                    case 'C':
+                        // Chat message
+                        packet = new PlayerChatInboundPacket();
                         break;
                 }
                 break;
+            // Inventory
             case 'I':
                 switch (subType)
                 {

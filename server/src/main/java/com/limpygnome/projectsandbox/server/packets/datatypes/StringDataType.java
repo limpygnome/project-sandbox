@@ -9,13 +9,21 @@ import java.util.Arrays;
  */
 public class StringDataType implements AbstractDataType
 {
+    public enum LengthSize
+    {
+        LENGTH_8,
+        LENGTH_16
+    }
+
+    private LengthSize lengthSize;
     private byte[] data;
 
-    public StringDataType(String value)
+    public StringDataType(String value, LengthSize lengthSize)
     {
         try
         {
-            data = value.getBytes("UTF-8");
+            this.data = value.getBytes("UTF-8");
+            this.lengthSize = lengthSize;
         }
         catch (UnsupportedEncodingException e)
         {
@@ -26,14 +34,35 @@ public class StringDataType implements AbstractDataType
     @Override
     public int getByteLength()
     {
+        switch (lengthSize)
+        {
+            case LENGTH_8:
+                return 1 + data.length;
+            case LENGTH_16:
+                return 2 + data.length;
+            default:
+                throw new RuntimeException("Unhandled string length size");
+        }
         // We'll use one byte for the length of the data
-        return 1 + data.length;
     }
 
     @Override
     public void write(ByteBuffer buffer)
     {
-        buffer.put((byte) data.length);
+        // Write length of data - varies for length size
+        switch (lengthSize)
+        {
+            case LENGTH_8:
+                buffer.put((byte) data.length);
+                break;
+            case LENGTH_16:
+                buffer.putShort((short) data.length);
+                break;
+            default:
+                throw new RuntimeException("Unhandled string length size");
+        }
+
+        // Write data
         buffer.put(data);
     }
 

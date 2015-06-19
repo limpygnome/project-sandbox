@@ -12,7 +12,8 @@ game.ui =
 
 	// Elements - side
 	elementSidebarActivity: null,
-	elementSidebarChat: null,
+	elementSidebarChatBox: null,
+	elementSidebarChatMessages: null,
 	elementSidebarScoreboard: null,
 
 	// Elements - options
@@ -34,7 +35,8 @@ game.ui =
 
         // -- Sidebar
         this.elementSidebarActivity = document.getElementById("ps-activity");
-        this.elementSidebarChat = document.getElementById("ps-chat");
+        this.elementSidebarChatBox = document.getElementById("ps-chat-box-field");
+        this.elementSidebarChatMessages = document.getElementById("ps-chat-messages");
         this.elementSidebarScoreboard = document.getElementById("ps-scoreboard");
 
         // -- Options
@@ -53,6 +55,9 @@ game.ui =
             }
         });
 
+        // Bind chatbox keydown
+        $(this.elementSidebarChatBox).keyup(this.chatboxKeyUp);
+
         // Bind options / fullscreen
         $(".options.button.fullscreen").click(function () {
             game.ui.toggleFullScreen();
@@ -65,7 +70,27 @@ game.ui =
         // Reset UI
         this.reset();
 	},
+
+	chatboxKeyUp: function(event)
+	{
+	    var keyCode = event.keyCode;
+
+	    if (keyCode == 13)
+	    {
+	        var message = $(game.ui.elementSidebarChatBox).val();
+
+	        if (message != null && message.length > 0)
+	        {
+	            // Reset field
+	            $(game.ui.elementSidebarChatBox).val("");
+
+	            // Send message
+	            projectSandbox.network.player.sendChatMessage(message);
+	        }
+	    }
+	},
 	
+
 	resize: function()
 	{
 	    var gl = projectSandbox.gl;
@@ -118,7 +143,7 @@ game.ui =
 		$(this.elementSidebarScoreboard).find("ol").children().remove();
 
 		// Clear chat
-		$(this.elementSidebarChat).children().remove();
+		$(this.elementSidebarChatMessages).children().remove();
 	},
 	
 	logic: function()
@@ -382,6 +407,19 @@ game.ui =
         $(scoreboardItems).detach().appendTo(parent);
     },
 
+    chatMessageAdd: function(player, message)
+    {
+        // Build chat message HTML
+        var html = "<p>";
+
+        html += "<span class='player'><img src='thumbnail' />" + player.name + "</span><span class='text'>" + message + "</span>";
+
+        html += "</p>";
+
+        // Prepend to chat
+        $(this.elementSidebarChatMessages).prepend(html);
+    },
+
 	/*
         Entity Hooks
         ----------------------------------------------------------------------------------------------------------------
@@ -492,6 +530,16 @@ game.ui =
         {
             console.error("game/ui - failed to update local player score, cannot find player");
         }
+    },
+
+    /*
+        Chat Hooks
+        ----------------------------------------------------------------------------------------------------------------
+    */
+
+    hook_playerChatMessage: function(player, message)
+    {
+        this.chatMessageAdd(player, message);
     }
 
 }

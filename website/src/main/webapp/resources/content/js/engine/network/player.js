@@ -23,6 +23,11 @@ projectSandbox.network.player =
                 this.packetPlayerEvents(data, dataView);
                 return;
 
+            // Chat message
+            case "C":
+                this.packetPlayerChatMessage(data, dataView);
+                return;
+
             default:
                 console.error("engine/network/player - unknown sub-type - " + subType);
                 break;
@@ -190,6 +195,27 @@ projectSandbox.network.player =
         return offset;
     },
 
+    packetPlayerChatMessage: function(data, dataView)
+    {
+        var playerId = dataView.getInt16(2);
+        var message = projectSandbox.utils.parseText16(data, dataView, 4);
+
+        // Fetch player
+        var player = projectSandbox.players.get(playerId);
+
+        if (player != null)
+        {
+            // Invoke UI to handle message
+            projectSandbox.game.ui.hook_playerChatMessage(player, message);
+
+            console.info("engine/player - chat message - player id: " + playerId, ", msg: " + message);
+        }
+        else
+        {
+            console.warn("engine/player - received chat message for non-existent player - player id: " + playerId);
+        }
+    },
+
 
     /*
         Outbound
@@ -279,6 +305,27 @@ projectSandbox.network.player =
             // Send packet
             projectSandbox.network.send(buff.buffer);
         }
+    },
+
+    sendChatMessage: function(message)
+    {
+        // Convert message to bytes
+        var messageBytes = projectSandbox.utils.str2bytes(message);
+
+        // Build packet
+        var packet = new Uint8Array(4 + messageBytes.length);
+        var packetDataView = new DataView(packet.buffer);
+
+        packet[0] = "P".charCodeAt(0);
+        packet[1] = "C".charCodeAt(0);
+
+        packetDataView.setInt16(2, messageBytes.length);
+        projectSandbox.utils.copy2array(packet, 4, messageBytes);
+
+        // Send packet
+        projectSandbox.network.send(packet.buffer);
+
+        console.debug("engine/network/players - sending chat message: " + message);
     }
 
 }
