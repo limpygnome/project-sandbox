@@ -18,4 +18,10 @@ public class SentryKiller extends AbstractKiller
     {
         return formatRandomCauseText(CAUSES);
     }
+
+    @Override
+    public int computeScore()
+    {
+        throw new RuntimeException(EXCEPTION_NO_SCORE_MESSAGE);
+    }
 }

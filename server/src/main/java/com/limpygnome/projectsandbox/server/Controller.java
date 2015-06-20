@@ -4,6 +4,7 @@ import com.limpygnome.projectsandbox.server.effects.EffectsManager;
 import com.limpygnome.projectsandbox.server.ents.EntityManager;
 import com.limpygnome.projectsandbox.server.inventory.InventoryManager;
 import com.limpygnome.projectsandbox.server.packets.PacketManager;
+import com.limpygnome.projectsandbox.server.players.ChatManager;
 import com.limpygnome.projectsandbox.server.players.PlayerManager;
 import com.limpygnome.projectsandbox.server.threading.GameLogic;
 import com.limpygnome.projectsandbox.server.threading.SocketEndpoint;
@@ -22,6 +23,7 @@ public class Controller
     public PacketManager packetManager;
     public EntityManager entityManager;
     public PlayerManager playerManager;
+    public ChatManager chatManager;
     public InventoryManager inventoryManager;
     public MapManager mapManager;
     public EffectsManager effectsManager;
@@ -34,27 +36,23 @@ public class Controller
     {
         try
         {
-            // Setup manager for packets
+            // Setup managers
             packetManager = new PacketManager(this);
 
-            // Setup manager for entities
             entityManager = new EntityManager(this);
 
-            // Setup manager for effects
             effectsManager = new EffectsManager(this);
             
-            // Setup manager for inventories
             inventoryManager = new InventoryManager();
             inventoryManager.load();
             
-            // Setup manager for players
             playerManager = new PlayerManager(this);
 
-            // Setup map manager
+            chatManager = new ChatManager();
+
             mapManager = new MapManager(this);
             mapManager.load();
             
-            // Setup endpoint
             endpoint = new SocketEndpoint(this, 4857);
             endpoint.start();
             

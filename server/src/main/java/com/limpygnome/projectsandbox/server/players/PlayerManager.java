@@ -90,7 +90,6 @@ public class PlayerManager implements IdCounterConsumer
             writePlayerMetrics(playerEventsUpdatesOutboundSnapshotPacket, true);
             playerEventsUpdatesOutboundSnapshotPacket.send(playerInfo);
 
-
             // Create and spawn entity for player
             createAndSpawnNewPlayerEnt(playerInfo);
 
@@ -101,6 +100,9 @@ public class PlayerManager implements IdCounterConsumer
             EntityUpdatesOutboundPacket packetUpdates = new EntityUpdatesOutboundPacket();
             packetUpdates.build(controller.entityManager, true);
             packetUpdates.send(playerInfo);
+
+            // Send previous chat messages
+            controller.chatManager.sendPreviousMessages(playerInfo);
 
             LOG.info(
                     "Player joined - sid: {}, reg id: {}, ply id: {}",
@@ -187,7 +189,7 @@ public class PlayerManager implements IdCounterConsumer
     {
         for (PlayerInfo playerInfo : mappings.values())
         {
-            playerEventsUpdatesOutboundPacket.writePlayerInfoUpdates(playerInfo, false);
+            playerEventsUpdatesOutboundPacket.writePlayerInfoUpdates(playerInfo, forced);
         }
     }
 

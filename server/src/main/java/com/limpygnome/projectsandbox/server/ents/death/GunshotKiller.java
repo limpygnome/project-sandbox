@@ -1,5 +1,6 @@
 package com.limpygnome.projectsandbox.server.ents.death;
 
+import com.limpygnome.projectsandbox.server.constants.ScoreConstants;
 import com.limpygnome.projectsandbox.server.players.PlayerInfo;
 
 /**
@@ -12,15 +13,8 @@ public class GunshotKiller extends AbstractKiller
         "{0} wrekt by {1}",
         "{0} got owned by {1}",
         "{0} killed {1}",
-        "{0} skool'd {1}"
+        "{0} skool''d {1}"
     };
-
-    private PlayerInfo playerInfoKiller;
-
-    public GunshotKiller(PlayerInfo playerInfoKiller)
-    {
-        this.playerInfoKiller = playerInfoKiller;
-    }
 
     @Override
     public String causeText()
@@ -29,8 +23,8 @@ public class GunshotKiller extends AbstractKiller
     }
 
     @Override
-    public PlayerInfo getPlayerKiller()
+    public int computeScore()
     {
-        return playerInfoKiller;
+        return ScoreConstants.PLAYER_KILL;
     }
 }

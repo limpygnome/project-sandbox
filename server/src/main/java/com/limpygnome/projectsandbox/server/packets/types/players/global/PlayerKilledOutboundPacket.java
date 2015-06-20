@@ -33,7 +33,8 @@ public class PlayerKilledOutboundPacket extends OutboundPacket
     
     public void writePlayerKilled(AbstractKiller killer, PlayerInfo victim) throws IOException
     {
-        PlayerInfo playerInfoKiller = killer.getPlayerKiller();
+        PlayerInfo[] playerInfoKillers = killer.killer.getPlayers();
+        PlayerInfo playerInfoKiller = playerInfoKillers != null && playerInfoKillers.length > 0 ? playerInfoKillers[0] : null;
 
         // Build flags
         byte flag = 0;

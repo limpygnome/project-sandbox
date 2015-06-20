@@ -11,6 +11,11 @@ import java.util.Random;
  */
 public abstract class AbstractKiller
 {
+    /**
+     * The exception message for kills where no score should be given.
+     */
+    protected static final String EXCEPTION_NO_SCORE_MESSAGE = "No score should be rewarded for this type of death";
+
     public Entity victim;
     public Entity killer;
 
@@ -34,17 +39,7 @@ public abstract class AbstractKiller
         return MessageFormat.format(deathStr, victim.friendlyName(), killer.friendlyName());
     }
 
-    /**
-     * Retrieves the individual player of whom is the killer.
-     *
-     * This will return null for non-player entities, or for someone killed by a group of players.
-     *
-     * @return An instance of {@link PlayerInfo}, or null.
-     */
-    public PlayerInfo getPlayerKiller()
-    {
-        return null;
-    }
+    public abstract int computeScore();
 
     @Override
     public String toString()

@@ -377,18 +377,18 @@ game.ui =
         scoreboardItems.sort(
             function(a, b)
             {
-                var scoreA = $(a).find("span");
-                var scoreB = $(b).find("span");
+                var scoreA = parseInt( $(a).find("span").text() );
+                var scoreB = parseInt( $(b).find("span").text() );
                 var displayNameA = $(a).text();
                 var displayNameB = $(b).text();
 
                 if (scoreA > scoreB)
                 {
-                    return 1;
+                    return -1;
                 }
                 else if (scoreA < scoreB)
                 {
-                    return -1;
+                    return 1;
                 }
                 else if (displayNameA > displayNameB)
                 {

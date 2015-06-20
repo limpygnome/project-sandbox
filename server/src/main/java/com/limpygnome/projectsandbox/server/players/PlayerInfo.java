@@ -104,8 +104,15 @@ public class PlayerInfo
             }
             else
             {
-                // Update metrics
+                // Update kills
                 session.metrics.incrementKills();
+
+                // Update score
+                int score = killer.computeScore();
+                if (score > 0)
+                {
+                    session.metrics.incrementScore(score);
+                }
 
                 LOG.debug("Player inflicted death - ply id: {}, killer: {}", playerId, killer);
             }

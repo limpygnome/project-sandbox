@@ -40,8 +40,9 @@ public class SessionMetrics
         this.dirty = true;
     }
 
-    public synchronized void incrementScore(long amount)
+    public synchronized void incrementScore(int amount)
     {
+        // TODO: check this works for negatives and high longs
         this.score += amount;
         this.dirty = true;
     }
