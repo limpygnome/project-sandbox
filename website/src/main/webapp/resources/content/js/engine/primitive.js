@@ -1,11 +1,14 @@
-function Primitive(width, height)
+function Primitive(params)
 {
-	// Check for initial call to constructor - not during object construction
-	if (width == undefined || height == undefined)
-	{
-		return;
-	}
-	
+    // Check for initial call to constructor - not during object construction
+    if (params == null)
+    {
+        return;
+    }
+
+    var width = params.width;
+    var height = params.height;
+
 	// Set initial texture to null
 	this.texture = null;
 	
@@ -32,17 +35,11 @@ function Primitive(width, height)
 	this.buffer = null;
     this.texture = null;
 		
-	// Fetch buffer for vertex indices
-	this.bufferIndexes = projectSandbox.bufferCache.fetchIndexBuffer2dRect();
+	// Fetch index buffer
+	this.bufferIndexes = projectSandbox.bufferCache.fetchIndexBuffer(params);
 	
-	// Fetch vertices
-	this.updateSize();
-}
-
-Primitive.prototype.updateSize = function()
-{
-	// Fetch buffer for vertices
-	this.bufferPosition = projectSandbox.bufferCache.fetchVertexBuffer2dRect(this.width, this.height);
+	// Fetch vertex buffer
+	this.bufferPosition = projectSandbox.bufferCache.fetchVertexBuffer(params);
 }
 
 Primitive.prototype.setColour = function(r, g, b, a)

@@ -1,6 +1,6 @@
-function Entity(width, height)
+function Entity(params)
 {
-	Primitive.call(this, width, height);
+	Primitive.call(this, params);
 	
 	// This default value should be kept in sync with the default on the server
 	this.health = 0.0;

@@ -1,6 +1,12 @@
 function Sentry()
 {
-    Entity.call(this, 32, 32);
+    Entity.call(this,
+        {
+            model: "2d-rect",
+            width: 32.0,
+            height: 32.0
+        }
+    );
 
     this.setTexture("players/default");
 

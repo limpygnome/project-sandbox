@@ -1,6 +1,12 @@
 function Player()
 {
-    Entity.call(this, 16, 20);
+    Entity.call(this,
+		{
+			model: "2d-rect",
+			width: 16.0,
+			height: 20.0
+		}
+	);
     
     // Set custom params for this ent
     this.setTexture("players/default");

@@ -1,79 +1,102 @@
 projectSandbox.bufferCache =
 {
-	// The index buffer for 2D rectangle polygons, which consists of two triangles
-	indexBuffer2dRect: null,
-	
-	// The index buffer for 3D cube polygons, which consists of 2 * 6 triangles
-	indexBuffer3dRect: null,
-	
+	// Map of index buffers by model
+	indexBuffers: new Map(),
+
 	// Map of vertices by sizes
 	vertexBuffers: new Map(),
 	
 	setup: function()
 	{
-		var gl = projectSandbox.gl;
-		
 		// Compile initial index buffers
-		// -- 2D
-		var indexBufferIndices2d = 
-		[
-			0, 1, 2,
-			0, 2, 3
-		];
-		
-		var indexBuffer2dRect = gl.createBuffer();
-		gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, indexBuffer2dRect);
-		gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint16Array(indexBufferIndices2d), gl.STATIC_DRAW);
-		indexBuffer2dRect.itemSize = 1;
-		indexBuffer2dRect.numItems = 6;
-		
-		this.indexBuffer2dRect = indexBuffer2dRect;
-		
-		// -- 3D
-		var indexBufferIndices3d = 
-		[
-			// Top
-			0, 1, 2,
-			0, 2, 3,
-			
-			// North
-			4, 5, 6,
-			4, 6, 7,
-			
-			// East
-			8, 9, 10,
-			8, 10, 11,
-			
-			// South
-			12, 13, 14,
-			12, 14, 15,
-			
-			// West
-			16, 17, 18,
-			16, 18, 19
-		];
-		
-		var indexBuffer3dRect = gl.createBuffer();
-		gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, indexBuffer3dRect);
-		gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint16Array(indexBufferIndices3d), gl.STATIC_DRAW);
-		indexBuffer3dRect.itemSize = 1;
-		indexBuffer3dRect.numItems = 30;
-		
-		this.indexBuffer3dRect = indexBuffer3dRect;
+		this.buildIndexBuffers();
+	},
+
+	buildIndexBuffers: function()
+	{
+	    var gl = projectSandbox.gl;
+
+	    // -- 2D
+        var indexBufferIndices2d =
+        [
+            0, 1, 2,
+            0, 2, 3
+        ];
+
+        var indexBuffer2dRect = gl.createBuffer();
+        gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, indexBuffer2dRect);
+        gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint16Array(indexBufferIndices2d), gl.STATIC_DRAW);
+        indexBuffer2dRect.itemSize = 1;
+        indexBuffer2dRect.numItems = 6;
+
+        this.indexBuffers.set("2d-rect", indexBuffer2dRect);
+
+        // -- 3D
+        var indexBufferIndices3d =
+        [
+            // Top
+            0, 1, 2,
+            0, 2, 3,
+
+            // North
+            4, 5, 6,
+            4, 6, 7,
+
+            // East
+            8, 9, 10,
+            8, 10, 11,
+
+            // South
+            12, 13, 14,
+            12, 14, 15,
+
+            // West
+            16, 17, 18,
+            16, 18, 19
+        ];
+
+        var indexBuffer3dRect = gl.createBuffer();
+        gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, indexBuffer3dRect);
+        gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint16Array(indexBufferIndices3d), gl.STATIC_DRAW);
+        indexBuffer3dRect.itemSize = 1;
+        indexBuffer3dRect.numItems = 30;
+
+        this.indexBuffers.set("3d-cube", indexBuffer3dRect);
+	},
+
+	fetchIndexBuffer: function(params)
+	{
+	    var model = params.model;
+
+	    if (model != null)
+	    {
+	        return this.indexBuffers.get(model);
+	    }
+	    else
+	    {
+	        return this.indexBuffers.get("2d-rect");
+	    }
+	},
+
+	fetchVertexBuffer: function(params)
+	{
+	    var model = params.model;
+
+	    switch (model)
+	    {
+	        case "3d-cube":
+	            return this.fetchVertexBuffer3dRect(params);
+            default:
+                return this.fetchVertexBuffer2dRect(params);
+	    }
 	},
 	
-	fetchIndexBuffer2dRect: function()
+	fetchVertexBuffer3dRect: function(params)
 	{
-		return this.indexBuffer2dRect;
-	},
-	
-	fetchIndexBuffer3dRect: function()
-	{
-		return this.indexBuffer3dRect;
-	},
-	
-	fetchVertexBuffer3dRect: function(width, height, depth)
-	{
+	    var width = params.width;
+	    var height = params.height;
+	    var depth = params.depth;
+
 		// Note: width is on x, height is on z, height is y, depth is z
 		var gl = projectSandbox.gl;
 		
@@ -139,8 +162,11 @@ projectSandbox.bufferCache =
 		return bufferPosition;
 	},
 	
-	fetchVertexBuffer2dRect: function(width, height)
+	fetchVertexBuffer2dRect: function(params)
 	{
+	    var width = params.width;
+        var height = params.height;
+
 		var gl = projectSandbox.gl;
 		
 		// Round value, to avoid lots of decimally-sized buffers which are similar

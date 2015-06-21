@@ -149,18 +149,21 @@ projectSandbox.map =
 	
 	bindTile: function(gl, shaderProgram, height)
 	{
-		if (height == 0)
+		// Determine model
+		var model = height == 0 ? "2d-rect" : "3d-cube";
+
+		// Build params
+		var params =
 		{
-			// Bind 2D buffers
-			this.bufferIndexes = projectSandbox.bufferCache.fetchIndexBuffer2dRect();
-			this.bufferPosition = projectSandbox.bufferCache.fetchVertexBuffer2dRect(this.tileSize, this.tileSize);
-		}
-		else
-		{
-			// Bind 3D buffers
-			this.bufferIndexes = projectSandbox.bufferCache.fetchIndexBuffer3dRect();
-			this.bufferPosition = projectSandbox.bufferCache.fetchVertexBuffer3dRect(this.tileSize, this.tileSize, height);
-		}
+			model: model,
+			width: this.tileSize,
+			height: this.tileSize,
+			depth: height
+		};
+
+		// Fetch buffers
+		this.bufferIndexes = projectSandbox.bufferCache.fetchIndexBuffer(params);
+		this.bufferPosition = projectSandbox.bufferCache.fetchVertexBuffer(params);
 		
 		// Bind vertices
 		gl.bindBuffer(gl.ARRAY_BUFFER, this.bufferPosition);

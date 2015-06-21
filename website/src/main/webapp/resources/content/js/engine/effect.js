@@ -1,7 +1,13 @@
 function Effect(texture, width, height, x, y, z, timeout, fade)
 {
-    Primitive.call(this, width, height);
-	
+	Primitive.call(this,
+        {
+            model: "2d-rect",
+            width: width,
+            height: height
+        }
+    );
+
 	this.x = x;
 	this.y = y;
 	this.z = z;

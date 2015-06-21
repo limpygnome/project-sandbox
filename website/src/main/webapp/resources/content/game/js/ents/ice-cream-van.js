@@ -1,10 +1,18 @@
 function IceCreamVan()
 {
-    Entity.call(this, 32, 64);
-    
+    Entity.call(this,
+    	{
+    		model: "3d-cube",
+    		width: 32.0,
+    		height: 64.0,
+    		depth: 10.0
+    	}
+    );
+
     // Set custom params for this ent
-    this.setTexture("vehicles/ice-cream-van");
-	
+    //this.setTexture("vehicles/ice-cream-van");
+    this.setTexture("world/building");
+
 	// Setup trail
 	this.trail = new Trail(
 		this,
