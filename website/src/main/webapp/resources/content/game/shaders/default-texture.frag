@@ -1,6 +1,7 @@
 precision mediump float;
 varying vec2 vTextureCoord;
 varying vec4 vColour;
+varying vec3 vLighting;
 uniform sampler2D uSampler;
 
 void main(void)
@@ -14,5 +15,5 @@ void main(void)
 		discard;
 	}
 
-	gl_FragColor = texel;
+	gl_FragColor = vec4(texel.rgb * vLighting, texel.a);
 }

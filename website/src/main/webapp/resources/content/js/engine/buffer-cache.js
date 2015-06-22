@@ -5,18 +5,22 @@ projectSandbox.bufferCache =
 
 	// Map of vertices by sizes
 	vertexBuffers: new Map(),
+
+	// Map of normal buffers
+	normalsBuffers: new Map(),
 	
 	setup: function()
 	{
 		// Compile initial index buffers
-		this.buildIndexBuffers();
+		this.buildBuffers2d();
+		this.buildBuffers3d();
 	},
 
-	buildIndexBuffers: function()
+	buildBuffers2d: function()
 	{
-	    var gl = projectSandbox.gl;
+		var gl = projectSandbox.gl;
 
-	    // -- 2D
+		// Index buffer
         var indexBufferIndices2d =
         [
             0, 1, 2,
@@ -31,7 +35,30 @@ projectSandbox.bufferCache =
 
         this.indexBuffers.set("2d-rect", indexBuffer2dRect);
 
-        // -- 3D
+        // Normals buffer
+        var normals = [
+
+            // Top
+			0.0,  0.0,  1.0,
+			0.0,  0.0,  1.0,
+			0.0,  0.0,  1.0,
+			0.0,  0.0,  1.0
+        ];
+
+        var normalsBuffer = gl.createBuffer();
+        gl.bindBuffer(gl.ARRAY_BUFFER, normalsBuffer);
+        gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(normals), gl.STATIC_DRAW);
+        normalsBuffer.itemSize = 3;
+        normalsBuffer.numItems = 4;
+
+        this.normalsBuffers.set("2d-rect", normalsBuffer);
+	},
+
+	buildBuffers3d: function()
+	{
+		var gl = projectSandbox.gl;
+
+		// Index buffer
         var indexBufferIndices3d =
         [
             // Top
@@ -62,6 +89,48 @@ projectSandbox.bufferCache =
         indexBuffer3dRect.numItems = 30;
 
         this.indexBuffers.set("3d-cube", indexBuffer3dRect);
+
+        // Normals buffer
+        var normals = [
+
+            // Top
+			0.0,  0.0,  1.0,
+			0.0,  0.0,  1.0,
+			0.0,  0.0,  1.0,
+			0.0,  0.0,  1.0,
+
+            // North
+			0.0,  1.0,  0.0,
+			0.0,  1.0,  0.0,
+			0.0,  1.0,  0.0,
+			0.0,  1.0,  0.0,
+
+            // East
+			1.0,  0.0,  0.0,
+			1.0,  0.0,  0.0,
+			1.0,  0.0,  0.0,
+			1.0,  0.0,  0.0,
+
+            // South
+			0.0, -1.0,  0.0,
+			0.0, -1.0,  0.0,
+			0.0, -1.0,  0.0,
+			0.0, -1.0,  0.0,
+
+            // West
+			-1.0,  0.0,  0.0,
+			-1.0,  0.0,  0.0,
+			-1.0,  0.0,  0.0,
+			-1.0,  0.0,  0.0
+        ];
+
+        var normalsBuffer = gl.createBuffer();
+        gl.bindBuffer(gl.ARRAY_BUFFER, normalsBuffer);
+        gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(normals), gl.STATIC_DRAW);
+        normalsBuffer.itemSize = 3;
+        normalsBuffer.numItems = 20;
+
+        this.normalsBuffers.set("3d-cube", normalsBuffer);
 	},
 
 	fetchIndexBuffer: function(params)
@@ -75,6 +144,20 @@ projectSandbox.bufferCache =
 	    else
 	    {
 	        return this.indexBuffers.get("2d-rect");
+	    }
+	},
+
+	fetchNormalsBuffer: function(params)
+	{
+	    var model = params.model;
+
+	    if (model != null)
+	    {
+	        return this.normalsBuffers.get(model);
+	    }
+	    else
+	    {
+	        return this.normalsBuffers.get("2d-rect");
 	    }
 	},
 
@@ -152,7 +235,7 @@ projectSandbox.bufferCache =
 			gl.bindBuffer(gl.ARRAY_BUFFER, bufferPosition);
 			gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(verticesPosition), gl.STATIC_DRAW);
 			bufferPosition.itemSize = 3;
-			bufferPosition.numItems = 30;
+			bufferPosition.numItems = 20;
 			
 			// Store buffer
 			this.vertexBuffers.set(width + "x" + height + "x" + depth, bufferPosition);

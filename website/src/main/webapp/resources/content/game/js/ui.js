@@ -218,9 +218,8 @@ game.ui =
         $("#ps-death-screen-cause").text(causeText);
 
         // Set to visible
-        $(this.elementDeathScreen).css({
-            "visibility" : "visible"
-        });
+        $(this.elementDeathScreen).show();
+        $(this.elementDeathScreen).addClass("visible");
 
         // Set focus to control
         $(this.elementDeathScreen).focus();
@@ -231,9 +230,8 @@ game.ui =
 
 	deathScreenHide: function()
 	{
-        $(this.elementDeathScreen).css({
-            "visibility" : "hidden"
-        });
+        $(this.elementDeathScreen).hide();
+        $(this.elementDeathScreen).removeClass("visible");
 	},
 
 	deathScreenOffset: function()

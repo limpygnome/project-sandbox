@@ -251,7 +251,7 @@ var projectSandbox =
 
 		// Render effects
 		var effect;
-		for (var i = 0; i < this.effects.length; i++)
+		for (var i = this.effects.length - 1; i >= 0; i--)
 		{
 			effect = this.effects[i];
 			if (projectSandbox.frustrum.intersects(effect))

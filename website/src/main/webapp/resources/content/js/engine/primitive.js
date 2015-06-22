@@ -40,6 +40,9 @@ function Primitive(params)
 	
 	// Fetch vertex buffer
 	this.bufferPosition = projectSandbox.bufferCache.fetchVertexBuffer(params);
+
+	// Fetch normals buffer
+	this.bufferNormals = projectSandbox.bufferCache.fetchNormalsBuffer(params);
 }
 
 Primitive.prototype.setColour = function(r, g, b, a)
@@ -74,7 +77,11 @@ Primitive.prototype.render = function(gl, shaderProgram, modelView, perspective)
 	// Translate modelview to location of primitive
 	mat4.translate(modelView, modelView, [this.renderX, this.renderY, this.renderZ]);
 	mat4.rotateZ(modelView, modelView, -this.renderRotation);
-	
+
+	// Bind normals data
+    gl.bindBuffer(gl.ARRAY_BUFFER, this.bufferNormals);
+    gl.vertexAttribPointer(shaderProgram.normalsAttribute, this.bufferNormals.itemSize, gl.FLOAT, false, 0, 0);
+
 	// Bind position data for shader program
 	gl.bindBuffer(gl.ARRAY_BUFFER, this.bufferPosition);
 	gl.vertexAttribPointer(shaderProgram.vertexPositionAttribute, this.bufferPosition.itemSize, gl.FLOAT, false, 0, 0);
@@ -94,14 +101,22 @@ Primitive.prototype.render = function(gl, shaderProgram, modelView, perspective)
 	{
 		projectSandbox.textures.bindNoTexture(gl, shaderProgram);
 	}
-	
+
 	// Bind index data
 	gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this.bufferIndexes);
-	
+
 	// Set matrix uniforms
 	gl.uniformMatrix4fv(shaderProgram.pMatrixUniform, false, perspective);
 	gl.uniformMatrix4fv(shaderProgram.mvMatrixUniform, false, modelView);
-	
+
+	// Set uniform normal matrix
+	var normalMatrix = mat4.create();
+
+	mat4.copy(normalMatrix, modelView);
+	mat4.invert(normalMatrix, normalMatrix);
+	mat4.transpose(normalMatrix, normalMatrix);
+	gl.uniformMatrix4fv(shaderProgram.nMatrixUniform, false, normalMatrix);
+
 	// Draw vertex data
 	gl.drawElements(gl.TRIANGLES, this.bufferIndexes.numItems, gl.UNSIGNED_SHORT, 0);
 

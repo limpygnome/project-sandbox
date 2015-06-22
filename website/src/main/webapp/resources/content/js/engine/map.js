@@ -120,6 +120,14 @@ projectSandbox.map =
                 gl.uniformMatrix4fv(shaderProgram.pMatrixUniform, false, perspective);
                 gl.uniformMatrix4fv(shaderProgram.mvMatrixUniform, false, modelView);
 
+                // Set uniform normal matrix
+				var normalMatrix = mat4.create();
+
+				mat4.copy(normalMatrix, modelView);
+				mat4.invert(normalMatrix, normalMatrix);
+				mat4.transpose(normalMatrix, normalMatrix);
+				gl.uniformMatrix4fv(shaderProgram.nMatrixUniform, false, normalMatrix);
+
                 // Render tile
                 gl.drawElements(gl.TRIANGLES, this.bufferIndexes.numItems, gl.UNSIGNED_SHORT, 0);
 				
@@ -164,11 +172,16 @@ projectSandbox.map =
 		// Fetch buffers
 		this.bufferIndexes = projectSandbox.bufferCache.fetchIndexBuffer(params);
 		this.bufferPosition = projectSandbox.bufferCache.fetchVertexBuffer(params);
+		this.bufferNormals = projectSandbox.bufferCache.fetchNormalsBuffer(params);
 		
 		// Bind vertices
 		gl.bindBuffer(gl.ARRAY_BUFFER, this.bufferPosition);
 		gl.vertexAttribPointer(shaderProgram.vertexPositionAttribute, this.bufferPosition.itemSize, gl.FLOAT, false, 0, 0);
-		
+
+		// Bind normals data
+		gl.bindBuffer(gl.ARRAY_BUFFER, this.bufferNormals);
+		gl.vertexAttribPointer(shaderProgram.normalsAttribute, this.bufferNormals.itemSize, gl.FLOAT, false, 0, 0);
+
 		// Bind index data
 		gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this.bufferIndexes);
 	}

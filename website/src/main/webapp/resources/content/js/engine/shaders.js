@@ -38,10 +38,15 @@ projectSandbox.shaders =
 		// Setup vertex texture array
 		shaderProgram.textureCoordAttribute = gl.getAttribLocation(shaderProgram, "aTextureCoord");
         gl.enableVertexAttribArray(shaderProgram.textureCoordAttribute);
+
+        // Enable normals buffer
+        shaderProgram.normalsAttribute = gl.getAttribLocation(shaderProgram, "aNormals");
+		gl.enableVertexAttribArray(shaderProgram.normalsAttribute);
 		
 		// Setup uniform matrices for perspective and model-view
 		shaderProgram.pMatrixUniform = gl.getUniformLocation(shaderProgram, "uPMatrix");
         shaderProgram.mvMatrixUniform = gl.getUniformLocation(shaderProgram, "uMVMatrix");
+        shaderProgram.nMatrixUniform = gl.getUniformLocation(shaderProgram, "uNMatrix");
 		shaderProgram.samplerUniform = gl.getUniformLocation(shaderProgram, "uSampler");
 		
 		return shaderProgram;

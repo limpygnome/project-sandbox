@@ -299,7 +299,7 @@
             <div id="ps-ui-top-right">
 
                 <div id="ps-ui-score">
-                    $3,000,000,000
+                    --
                 </div>
 
                 <div id="ps-ui-healthbar">

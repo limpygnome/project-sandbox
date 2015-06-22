@@ -54,11 +54,11 @@ body
 */
 #projectsandbox #ps-death-screen
 {
+    display: none;
     position: fixed;
     background: rgba(0, 0, 0, 0.5);
     text-align: center;
     outline: none;
-    visibility: hidden;
     z-index: 2;
 }
 #projectsandbox #ps-death-screen .container
