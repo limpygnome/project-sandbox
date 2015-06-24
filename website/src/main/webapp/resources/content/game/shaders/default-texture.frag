@@ -20,10 +20,11 @@ void main(void)
 
 
 
+	// Fixed light
 	vec3 color = vec3(1.0, 1.0, 1.0);
 
 	vec3 lightColour = vec3(1.0, 1.0, 1.0);
-	vec3 lightPos = vec3(0.0, 0.0, 380.0);
+	vec3 lightPos = vec3(0.0, 0.0, 370.0);
 	vec3 lightVec = normalize(lightPos - vPosition.xyz);
 	float l = dot(vNormals, lightVec);
 
@@ -33,23 +34,21 @@ void main(void)
 	if (l >= 0.0 && d <= maxDistance)
 	{
 		float constantAttenuation = 0.00;
-		float linearAttenuation = 0.04;
-		float quadraticAttenuation = 0.0;
+		float linearAttenuation = 0.01;
+		float quadraticAttenuation = 0.000001;
 
 		float attenuatedLight = 1.0/(
             constantAttenuation +
             linearAttenuation*d +
             quadraticAttenuation*d*d
 		);
-		//attenuatedLight = d * 100.0;
-
-
-		//color += l * lightColour * stepped;
-		color += l * lightColour * attenuatedLight;
+			color += l * lightColour * attenuatedLight;
 	}
 
 	gl_FragColor = clamp(vec4(texel.rgb * vLighting * color, texel.a), 0.0, 1.0);
 
+
+	// Cone light
 
 
 
