@@ -25,7 +25,7 @@ void main(void)
 
 
 
-	highp vec3 ambientLight = vec3(0.6, 0.6, 0.6);
+	highp vec3 ambientLight = vec3(0.4, 0.4, 0.4);
 	highp vec3 directionalLightColor = vec3(0.2, 0.2, 0.5);
 	highp vec3 directionalVector = vec3(0.85, 0.8, 0.75);
 
