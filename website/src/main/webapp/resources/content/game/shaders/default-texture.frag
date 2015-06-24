@@ -20,23 +20,28 @@ void main(void)
 
 
 
-	vec3 colour = vec3(1.0, 1.0, 1.0);
-	vec3 lightVec = vec3(0.0, 0.0, 400.0);
-	vec3 lightVecNormalized = lightVec - vPosition.xyz;//normalize(lightVec - vPosition.xyz);
-	float l = dot(vNormals, lightVec);
-	vec3 lightColour = vec3(1.0, 1.0, 1.0);
+	vec3 color = vec3(0.6, 0.6, 0.6);
 
-	if (l > 0.0)
+	vec3 lightColour = vec3(1.0, 1.0, 1.0);
+	vec3 lightPos = vec3(0.0, 0.0, 400.0);
+	vec3 lightVec = normalize(lightPos - vPosition.xyz);
+	float l = dot(vNormals, lightVec);
+
+	//if (l >= 0.0)
 	{
-		float attenuation = 50
+		float attenuation = 200.0;
+		float d = distance(vPosition.xyz, lightPos);
 		float a = 1.0/(
-			attenuation +
-			attenuation*d +
-			attenuation*d*d
-		);0.0;
-          		float d = 0.0;
-		colour += l*a*lightColour;
+		attenuation +
+		attenuation*d +
+		attenuation*d*d
+		);
+		float stepped = attenuation / d;
+		color += l * lightColour * stepped;//l * a * lightColour;
 	}
+
+	gl_FragColor = clamp(vec4(texel.rgb * vLighting * color, texel.a), 0.0, 1.0);
+
 
 
 
