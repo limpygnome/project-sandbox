@@ -10,6 +10,8 @@ uniform mat4 uNMatrix;
 varying vec2 vTextureCoord;
 varying vec4 vColour;
 varying vec3 vLighting;
+varying vec3 vNormals;
+varying vec4 vPosition;
 
 void main(void)
 {
@@ -17,8 +19,8 @@ void main(void)
 
 	vTextureCoord = aTextureCoord;
 	vColour = aColour;
-
-
+	vNormals = aNormals;
+	vPosition = gl_Position;
 
 
 
@@ -31,28 +33,11 @@ void main(void)
 
 
 
-	vec3 colour = directionalLightColor;
-	vec3 lightVec = vec3(0.0, 0.0, 0.0);
-	float l = dot(aNormals, lightVec);
-	vec3 lightColour = vec3(1.0, 1.0, 1.0);
-
-	if (l > 0.0)
-	{
-		float attenuation = 200;
-		float d = 0.0;
-		float a = 1.0/(
-			attenuation +
-			attenuation*d +
-			attenuation*d*d
-		);
-		colour += l*a*lightColour;
-	}
-
 
 
 
 
 
 	highp float directional = max(dot(transformedNormal.xyz, directionalVector), 0.0);
-	vLighting = ambientLight + (colour * directional);
+	vLighting = ambientLight + (directionalLightColor * directional);
 }
