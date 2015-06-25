@@ -28,7 +28,7 @@ void main(void)
 
 	// Light properties - attenuation
 	float constantAttenuation = 0.2;
-	float linearAttenuation = 0.01;
+	float linearAttenuation = 0.001;
 	float quadraticAttenuation = 0.000001;
 
 	// Calculations for light

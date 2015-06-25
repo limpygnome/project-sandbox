@@ -10,7 +10,7 @@ public class MapBoundsKiller extends AbstractKiller
     @Override
     public String causeText()
     {
-        return victim + " went outside the map";
+        return victim.friendlyName() + " went outside the map";
     }
 
     @Override
