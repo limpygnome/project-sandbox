@@ -47,7 +47,10 @@ projectSandbox.network =
 		console.log("engine/network - connection established");
 
 		this.closed = false;
-		
+
+		// Invoke UI hook
+		projectSandbox.game.ui.hookSocket_connected();
+
 		// Send session ID - must always be done first
 		this.player.sendSessionIdPacket();
 	},
@@ -69,6 +72,9 @@ projectSandbox.network =
 
 			// Reset world
 			projectSandbox.reset();
+
+			// Invoke UI hook
+			projectSandbox.game.ui.hookSocket_disconnected();
 		}
 
 		// Attempt to reconnect

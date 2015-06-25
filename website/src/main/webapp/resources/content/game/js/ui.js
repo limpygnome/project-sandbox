@@ -3,6 +3,7 @@ game.ui =
     // Elements - main
     elementRender: null,
     elementDeathScreen: null,
+    elementConnecting: null,
 
     // Elements - UI
     elementUI: null,
@@ -26,6 +27,7 @@ game.ui =
 	    // -- Main
 	    this.elementRender = document.getElementById("ps_render");
 	    this.elementDeathScreen = document.getElementById("ps-death-screen");
+	    this.elementConnecting = document.getElementById("ps-connecting");
 
 	    // -- UI
 	    this.elementUI = document.getElementById("ps-ui");
@@ -107,17 +109,10 @@ game.ui =
         // Update render canvas
         $(this.elementRender).width(newWidth).height(newHeight);
 
-        // Update death screen
-        $(this.elementDeathScreen).width(newWidth).height(newHeight);
-
-        // Apply death screen offset
-        this.deathScreenOffset();
-
-        // Update UI
-        $(this.elementUI).width(newWidth).height(newHeight);
-
-        // Apply offset to UI
-        this.uiOffset();
+        // Update layers
+        this.updateRenderOverlayElement(this.elementDeathScreen, newWidth, newHeight);
+        this.updateRenderOverlayElement(this.elementUI, newWidth, newHeight);
+        this.updateRenderOverlayElement(this.elementConnecting, newWidth, newHeight);
 
         console.debug("engine/ui - render size changed - " + newWidth + "x" + newHeight);
 
@@ -126,6 +121,20 @@ game.ui =
         this.uiHeight = gl.viewportHeight;
 
         console.debug("engine/ui - size set to viewport - " + this.uiWidth + "x" + this.uiHeight);
+	},
+
+	updateRenderOverlayElement: function(element, width, height)
+	{
+	    // Update size
+	    if (width != null && height != null)
+	    {
+	        $(element).width(width).height(height);
+	    }
+
+	    // Update offset
+	    $(element).offset(
+            $(this.elementRender).position()
+        );
 	},
 	
 	setPrimitivePosTopLeft: function(primitive, x, y)
@@ -225,28 +234,13 @@ game.ui =
         $(this.elementDeathScreen).focus();
 
         // Apply offset
-        this.deathScreenOffset();
+        this.updateRenderOverlayElement(this.elementDeathScreen);
     },
 
 	deathScreenHide: function()
 	{
         $(this.elementDeathScreen).hide();
         $(this.elementDeathScreen).removeClass("visible");
-	},
-
-	deathScreenOffset: function()
-	{
-	    // Set offset of death screen to render location
-        $(this.elementDeathScreen).offset(
-            $("#ps_render").position()
-        );
-	},
-
-	uiOffset: function()
-	{
-	    $(this.elementUI).offset(
-            $(this.elementRender).position()
-        );
 	},
 
 	toggleFullScreen: function()
@@ -416,6 +410,20 @@ game.ui =
 
         // Prepend to chat
         $(this.elementSidebarChatMessages).prepend(html);
+    },
+
+    /*
+
+    */
+
+    hookSocket_connected: function()
+    {
+        $(this.elementConnecting).hide();
+    },
+
+    hookSocket_disconnected: function()
+    {
+        $(this.elementConnecting).show();
     },
 
 	/*

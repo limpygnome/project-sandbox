@@ -270,6 +270,12 @@
 
     <div id="ps-render-container">
 
+        <div id="ps-connecting">
+            <div class="message">
+                connecting...
+            </div>
+        </div>
+
         <div id="ps-death-screen" tabindex="1">
             <div class="container">
                 <div class="message">

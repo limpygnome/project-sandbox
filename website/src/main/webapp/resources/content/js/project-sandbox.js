@@ -106,7 +106,7 @@ var projectSandbox =
 	
 	postResources: function()
 	{
-		console.log("Starting project sandbox...");
+		console.log("engine/project-sandbox - starting project sandbox...");
         
 		// Setup comms
 		projectSandbox.network.setup();
@@ -129,7 +129,7 @@ var projectSandbox =
 		// Start the game
 		this.gameStart();
 		
-		console.log("Done.");
+		console.log("engine/project-sandbox - load complete");
 	},
 	
 	gameStart: function()

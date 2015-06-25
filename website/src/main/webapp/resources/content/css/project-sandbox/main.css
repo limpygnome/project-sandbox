@@ -49,6 +49,26 @@ body
 }
 
 /*
+    Connecting Screen
+    ********************************************************************************************************************
+*/
+#projectsandbox #ps-connecting
+{
+    display: table;
+    position: fixed;
+    text-align: center;
+    outline: none;
+    z-index: 1;
+}
+
+#projectsandbox #ps-connecting .message
+{
+    display: table-cell;
+    vertical-align: middle;
+    font-size: 2.5em;
+}
+
+/*
     Death Screen
     ********************************************************************************************************************
 */
