@@ -53,6 +53,16 @@ projectSandbox.shaders =
 		// Normal vector (array)
 		shaderProgram.normalsAttribute = gl.getAttribLocation(shaderProgram, "aNormals");
 		gl.enableVertexAttribArray(shaderProgram.normalsAttribute);
+
+		// Camera position (vec3)
+		shaderProgram.cameraPosition = gl.getAttribLocation(shaderProgram, "aCameraPosition");
+        gl.enableVertexAttribArray(shaderProgram.cameraPosition);
+
+        // -- Set initial empty buffer
+        var cameraPositionInitialBuffer = gl.createBuffer();
+        gl.bindBuffer(gl.ARRAY_BUFFER, cameraPositionInitialBuffer);
+        gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([ 0.0, 0.0, 0.0 ]), gl.STATIC_DRAW);
+        gl.bindBuffer(gl.ARRAY_BUFFER, null);
 	},
 
 	createProgram_mapUniforms: function(gl, shaderProgram)

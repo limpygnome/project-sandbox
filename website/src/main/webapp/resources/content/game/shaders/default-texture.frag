@@ -4,8 +4,8 @@ varying vec4 vColour;
 varying vec3 vAmbientLighting;
 varying vec3 vNormals;
 varying vec4 vPosition;
-varying vec4 vWorldPosition;
 uniform sampler2D uSampler;
+varying vec3 vCameraPosition;
 
 void main(void)
 {
@@ -22,7 +22,7 @@ void main(void)
 	bool lightOn = true;
 	float lightDistance = 400.0;
 	vec3 lightColour = vec3(1.0, 1.0, 1.0);
-	vec3 lightPos = vec3(0.0, 0.0, 370.0); //370.0);
+	vec3 lightPos = vec3(0.0, 0.0, vCameraPosition.z - 30.0); //370.0);
 	float lightAngle = radians(0.0);
 	float lightConeAngle = radians(65.0);
 

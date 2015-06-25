@@ -186,6 +186,13 @@ projectSandbox.camera =
 
 		// Update frustrum
 		projectSandbox.frustrum.update();
+
+		// Update shader
+		var gl = projectSandbox.gl;
+		if (projectSandbox.shaderProgram != null)
+		{
+			gl.vertexAttrib3f(projectSandbox.shaderProgram.cameraPosition, this.x, this.y, this.z + this.zoom);
+		}
 	},
 
 	buildLimits: function()
@@ -215,6 +222,9 @@ projectSandbox.camera =
 			Math.floor(mapHeight - frustumHeightHalf)
 		];
 
-		console.debug("engine/camera - limits rebuilt - " + this.limits[0] + "," + this.limits[1] + "," + this.limits[2] + "," + this.limits[3]);
+		console.debug(
+			"engine/camera - limits rebuilt - " +
+			this.limits[0] + "," + this.limits[1] + "," + this.limits[2] + "," + this.limits[3]
+		);
 	}
 }
