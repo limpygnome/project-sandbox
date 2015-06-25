@@ -18,7 +18,7 @@ void main(void)
 {
 	// Transfer attributes for fragment shader
 	gl_Position = uPMatrix * uMVMatrix * vec4(aVertexPosition, 1.0);
-	vWorldPosition = uMVMatrix * vec4(aVertexPosition, 1.0);
+	vWorldPosition = uMVMatrix * vec4(1.0, 1.0, 1.0, 1.0);
 
 	vTextureCoord = aTextureCoord;
 	vColour = aColour;

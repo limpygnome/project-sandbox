@@ -26,30 +26,48 @@ projectSandbox.shaders =
 		
 		// Use the program
 		gl.useProgram(shaderProgram);
-		
-		// Setup vertex position array (?)
+
+		// Map fields
+		this.createProgram_mapVariables(gl, shaderProgram);
+
+		// Map uniform matrices
+		this.createProgram_mapUniforms(gl, shaderProgram);
+
+		return shaderProgram;
+	},
+
+	createProgram_mapVariables: function(gl, shaderProgram)
+	{
+		// Vertex position vector (array)
 		shaderProgram.vertexPositionAttribute = gl.getAttribLocation(shaderProgram, "aVertexPosition");
-        gl.enableVertexAttribArray(shaderProgram.vertexPositionAttribute);
-		
-		// Setup colour vertex array
+		gl.enableVertexAttribArray(shaderProgram.vertexPositionAttribute);
+
+		// Colour vector (array)
 		shaderProgram.vertexColourAttribute = gl.getAttribLocation(shaderProgram, "aColour");
 		gl.disableVertexAttribArray(shaderProgram.vertexColourAttribute);
-		
-		// Setup vertex texture array
-		shaderProgram.textureCoordAttribute = gl.getAttribLocation(shaderProgram, "aTextureCoord");
-        gl.enableVertexAttribArray(shaderProgram.textureCoordAttribute);
 
-        // Enable normals buffer
-        shaderProgram.normalsAttribute = gl.getAttribLocation(shaderProgram, "aNormals");
+		// Texture co-ordinate vector (array)
+		shaderProgram.textureCoordAttribute = gl.getAttribLocation(shaderProgram, "aTextureCoord");
+		gl.enableVertexAttribArray(shaderProgram.textureCoordAttribute);
+
+		// Normal vector (array)
+		shaderProgram.normalsAttribute = gl.getAttribLocation(shaderProgram, "aNormals");
 		gl.enableVertexAttribArray(shaderProgram.normalsAttribute);
-		
-		// Setup uniform matrices for perspective and model-view
+	},
+
+	createProgram_mapUniforms: function(gl, shaderProgram)
+	{
+		// Projection matrix
 		shaderProgram.pMatrixUniform = gl.getUniformLocation(shaderProgram, "uPMatrix");
-        shaderProgram.mvMatrixUniform = gl.getUniformLocation(shaderProgram, "uMVMatrix");
-        shaderProgram.nMatrixUniform = gl.getUniformLocation(shaderProgram, "uNMatrix");
+
+		// Model matrix
+		shaderProgram.mvMatrixUniform = gl.getUniformLocation(shaderProgram, "uMVMatrix");
+
+		// Normals matrix
+		shaderProgram.nMatrixUniform = gl.getUniformLocation(shaderProgram, "uNMatrix");
+
+		// Texture sampling
 		shaderProgram.samplerUniform = gl.getUniformLocation(shaderProgram, "uSampler");
-		
-		return shaderProgram;
 	},
 		
 	createFragment: function(gl, data)

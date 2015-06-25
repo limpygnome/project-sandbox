@@ -22,7 +22,7 @@ void main(void)
 	bool lightOn = true;
 	float lightDistance = 400.0;
 	vec3 lightColour = vec3(1.0, 1.0, 1.0);
-	vec3 lightPos = vec3(0.0, 0.0, 370.0);
+	vec3 lightPos = vec3(0.0, 0.0, 370.0); //370.0);
 	float lightAngle = radians(0.0);
 	float lightConeAngle = radians(65.0);
 
@@ -33,7 +33,7 @@ void main(void)
 
 	// Calculations for light
 	vec3 lightRelativePosition = normalize(lightPos - vPosition.xyz);
-	vec3 lightTarget = vec3(sin(lightAngle), cos(lightAngle), 370.0);
+	vec3 lightTarget = vec3(sin(lightAngle), cos(lightAngle), lightPos.z);
 	vec3 lightDir = normalize(lightTarget - lightPos);
 	float angle = acos(dot(-lightRelativePosition, lightDir));
 	float l = dot(vNormals, lightRelativePosition);
