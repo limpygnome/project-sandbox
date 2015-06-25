@@ -24,7 +24,7 @@ void main(void)
 	vColour = aColour;
 	vNormals = aNormals;
 	vPosition = gl_Position;
-	vCameraPosition = vec3(0.0, 0.0, 400.0);//aCameraPosition;
+	vCameraPosition = aCameraPosition;
 
 	// Ambient light settings
 	highp vec3 ambientLight = vec3(0.4, 0.4, 0.4);
