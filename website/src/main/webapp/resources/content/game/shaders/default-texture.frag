@@ -22,7 +22,7 @@ void main(void)
 	bool lightOn = true;
 	float lightDistance = 400.0;
 	vec3 lightColour = vec3(1.0, 1.0, 1.0);
-	vec3 lightPos = vec3(0.0, 0.0, vCameraPosition.z - 30.0); //370.0);
+	vec3 lightPos = vec3(100.0, 100.0, 30.0);
 	float lightAngle = radians(0.0);
 	float lightConeAngle = radians(65.0);
 
@@ -31,13 +31,16 @@ void main(void)
 	float linearAttenuation = 0.001;
 	float quadraticAttenuation = 0.000001;
 
+	// Calculate location of light
+	vec3 lightCameraPos = vec3(lightPos.x, lightPos.y, vCameraPosition.z - lightPos.z);
+	vec3 lightRelativePosition = normalize(lightCameraPos - vPosition.xyz);
+
 	// Calculations for light
-	vec3 lightRelativePosition = normalize(lightPos - vPosition.xyz);
-	vec3 lightTarget = vec3(sin(lightAngle), cos(lightAngle), lightPos.z);
-	vec3 lightDir = normalize(lightTarget - lightPos);
+	vec3 lightTarget = vec3(lightCameraPos.x + sin(lightAngle), lightCameraPos.y + cos(lightAngle), lightCameraPos.z);
+	vec3 lightDir = normalize(lightTarget - lightCameraPos);
 	float angle = acos(dot(-lightRelativePosition, lightDir));
 	float l = dot(vNormals, lightRelativePosition);
-    float distance = distance(vPosition.xyz, lightPos);
+    float distance = distance(vPosition.xyz, lightCameraPos);
 
     // The colour of the texel from the light - can be used between multiple lights for additive colour
 	vec3 additiveLightColour = vec3(1.0, 1.0, 1.0);
