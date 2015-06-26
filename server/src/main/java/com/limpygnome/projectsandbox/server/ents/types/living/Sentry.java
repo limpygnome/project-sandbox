@@ -1,4 +1,4 @@
-package com.limpygnome.projectsandbox.server.ents.types;
+package com.limpygnome.projectsandbox.server.ents.types.living;
 
 import com.limpygnome.projectsandbox.server.Controller;
 import com.limpygnome.projectsandbox.server.effects.types.BulletEffect;
@@ -13,7 +13,6 @@ import com.limpygnome.projectsandbox.server.ents.physics.casting.victims.EntityC
 import com.limpygnome.projectsandbox.server.ents.physics.proximity.DefaultProximity;
 import com.limpygnome.projectsandbox.server.ents.physics.proximity.ProximityResult;
 import com.limpygnome.projectsandbox.server.players.PlayerInfo;
-import com.limpygnome.projectsandbox.server.utils.CustomMath;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 

@@ -1,4 +1,4 @@
-package com.limpygnome.projectsandbox.server.ents.types;
+package com.limpygnome.projectsandbox.server.ents.types.living;
 
 import com.limpygnome.projectsandbox.server.Controller;
 import com.limpygnome.projectsandbox.server.ents.Entity;

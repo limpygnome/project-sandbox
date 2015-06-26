@@ -9,7 +9,6 @@ import com.limpygnome.projectsandbox.server.ents.physics.Vector2;
 import com.limpygnome.projectsandbox.server.ents.physics.casting.Casting;
 import com.limpygnome.projectsandbox.server.ents.physics.casting.CastingResult;
 import com.limpygnome.projectsandbox.server.ents.physics.casting.victims.EntityCastVictim;
-import com.limpygnome.projectsandbox.server.ents.physics.collisions.CollisionResult;
 import com.limpygnome.projectsandbox.server.inventory.enums.InventoryInvokeState;
 import com.limpygnome.projectsandbox.server.inventory.enums.InventorySlotState;
 import com.limpygnome.projectsandbox.server.inventory.items.AbstractInventoryItem;
@@ -115,27 +114,33 @@ public abstract class AbstractWeapon extends AbstractInventoryItem
                 cooldownEnd = currTime + fireDelay;
             }
 
-            // Cast bullet to find collision point
-            CastingResult castingResult = Casting.cast(controller, slot.inventory.parent, slot.inventory.parent.rotation, maxDistance);
-
-            LOG.debug("Bullet casting result: {}", castingResult);
-
-            if (castingResult.collision)
-            {
-                if (castingResult.victim instanceof EntityCastVictim)
-                {
-                    // Inflict damage on the entity
-                    EntityCastVictim victim = (EntityCastVictim) castingResult.victim;
-                    fireDamageEntity(controller, castingResult, victim);
-                }
-            }
-
-            // Render effect
-            createBulletShotEffects(controller, slot.inventory.parent.positionNew, castingResult.x, castingResult.y);
+            // Fire bullet - implementation can be overridden
+            fireBullet(controller);
 
             // Set slot to updated
             slot.slotState = InventorySlotState.CHANGED;
         }
+    }
+
+    protected void fireBullet(Controller controller)
+    {
+        // Cast bullet to find collision point
+        CastingResult castingResult = Casting.cast(controller, slot.inventory.parent, slot.inventory.parent.rotation, maxDistance);
+
+        LOG.debug("Bullet casting result: {}", castingResult);
+
+        if (castingResult.collision)
+        {
+            if (castingResult.victim instanceof EntityCastVictim)
+            {
+                // Inflict damage on the entity
+                EntityCastVictim victim = (EntityCastVictim) castingResult.victim;
+                fireDamageEntity(controller, castingResult, victim);
+            }
+        }
+
+        // Render effect
+        createBulletShotEffects(controller, slot.inventory.parent.positionNew, castingResult.x, castingResult.y);
     }
 
     protected void createBulletShotEffects(Controller controller, Vector2 source, float destX, float destY)
