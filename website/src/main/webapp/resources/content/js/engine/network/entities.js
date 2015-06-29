@@ -78,6 +78,9 @@ projectSandbox.network.entities =
 			case 500:
 				ent = new Sentry();
 				break;
+			case 600:
+				ent = new Rocket();
+				break;
 			case 20:
 				ent = new IceCreamVan();
 				break;

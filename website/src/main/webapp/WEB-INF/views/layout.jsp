@@ -61,6 +61,7 @@
 		<script src="/content/game/js/ents/player.js"></script>
 		<script src="/content/game/js/ents/ice-cream-van.js"></script>
 		<script src="/content/game/js/ents/sentry.js"></script>
+		<script src="/content/game/js/ents/rocket.js"></script>
 
 		<script src="/content/game/js/inventory/fist.js"></script>
 		<script src="/content/game/js/inventory/smg.js"></script>

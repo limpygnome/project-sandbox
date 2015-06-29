@@ -72,4 +72,10 @@ public class Controller
         // TODO: dispose managers etc...kill sockets / plys etc
         // TODO: consider sending packet to clients explaining shutdown reason?
     }
+
+    public long gameTime()
+    {
+        // TODO: we should change this to be pausable etc?
+        return System.currentTimeMillis();
+    }
 }

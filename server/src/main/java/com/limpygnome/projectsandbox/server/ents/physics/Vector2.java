@@ -1,5 +1,6 @@
 package com.limpygnome.projectsandbox.server.ents.physics;
 
+import com.limpygnome.projectsandbox.server.ents.Entity;
 import com.limpygnome.projectsandbox.server.utils.CustomMath;
 
 /**

@@ -9,9 +9,10 @@ public class ExplosionKiller extends AbstractKiller
 {
     private static final String[] CAUSES =
     {
-            "{0} wiped-out {1}",
-            "{0} killed {1}",
-            "{0} blasted {1}"
+            "{0} wiped out {1}",
+            "{0} blew up {1}",
+            "{0} blasted {1}",
+            "{0} toasted {1}"
     };
 
     @Override

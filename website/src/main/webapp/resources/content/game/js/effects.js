@@ -40,6 +40,9 @@ game.effects =
 				case "T":
 					offset += this.packetCreateTracer(data, dataView, offset);
 					break;
+				case "E":
+					offset += this.packetCreateExplosion(data, dataView, offset);
+					break;
 				default:
 					console.error("game/effects - unknown effect sub-type - " + subType);
 					break;
@@ -75,6 +78,30 @@ game.effects =
 		return 16;
 	},
 
+	packetCreateExplosion: function(data, dataView, offset)
+	{
+		// Parse data
+		var x = dataView.getFloat32(0);
+		var y = dataView.getFloat32(4);
+		var subType = dataView.getInt8(8);
+
+		// Create explosion based on subtype
+		switch (subType)
+		{
+			// Allah ackbar
+			case 100:
+				this.createExplosion(
+					x, y, 512, 4000, 6.0, 6.0
+				);
+				break;
+			default:
+				console.error("game/effects - unknown explosion effect sub-type - " + subType);
+				break;
+		}
+
+		return 9;
+	},
+
 	EXPLOSION_Z: -0.5,
 	EXPLOSION_FADE: true,
 	EXPLOSION_WIDTH: 16,
@@ -92,4 +119,5 @@ game.effects =
 			projectSandbox.effects.push(effect);
 		}
 	}
+
 }

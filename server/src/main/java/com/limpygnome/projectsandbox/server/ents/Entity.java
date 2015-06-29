@@ -6,6 +6,7 @@ import com.limpygnome.projectsandbox.server.ents.enums.UpdateMasks;
 import com.limpygnome.projectsandbox.server.ents.physics.collisions.CollisionResult;
 import com.limpygnome.projectsandbox.server.ents.physics.Vector2;
 import com.limpygnome.projectsandbox.server.ents.physics.Vertices;
+import com.limpygnome.projectsandbox.server.ents.physics.collisions.CollisionResultMap;
 import com.limpygnome.projectsandbox.server.inventory.Inventory;
 import com.limpygnome.projectsandbox.server.packets.PacketData;
 import com.limpygnome.projectsandbox.server.players.PlayerInfo;
@@ -17,7 +18,6 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.lang.annotation.Annotation;
-import java.util.List;
 
 /**
  *
@@ -192,6 +192,25 @@ public strictfp abstract class Entity
             updateMask(UpdateMasks.Y);
         }
     }
+
+    /**
+     * Places this entity in front of the specified parent.
+     *
+     * @param parent The parent entity
+     * @param spacing The spacing between the two ents
+     */
+    public void projectInFrontOfEntity(Entity parent, float spacing)
+    {
+        // Clone the rotation of the parent
+        rotation(parent.rotation);
+
+        // Calculate new position, so we're in front of parent
+        Vector2 newPosition = parent.positionNew.clone();
+        newPosition.offset(Vector2.vectorFromAngle(this.rotation, height));
+        newPosition.offset(Vector2.vectorFromAngle(this.rotation, spacing));
+
+        position(newPosition);
+    }
     
     public StateChange getState()
     {
@@ -298,7 +317,7 @@ public strictfp abstract class Entity
         killInformPlayerInfo(getPlayers(), controller, killer, true);
 
         // Raise death event for this entity
-        eventDeath(controller, killer);
+        eventHandleDeath(controller, killer);
     }
 
     private void killInformPlayerInfo(PlayerInfo[] playerInfos, Controller controller, AbstractKiller killer, boolean isVictim)
@@ -313,6 +332,14 @@ public strictfp abstract class Entity
                 }
             }
         }
+    }
+
+    /**
+     * Removes the entity from the world.
+     */
+    public void remove()
+    {
+        setState(StateChange.PENDING_DELETED);
     }
     
     public void updateMask(UpdateMasks... masks)
@@ -352,7 +379,7 @@ public strictfp abstract class Entity
      * @param controller
      * @param killer The cause of death.
      */
-    public void eventDeath(Controller controller, AbstractKiller killer)
+    public void eventHandleDeath(Controller controller, AbstractKiller killer)
     {
         // Default action is to respawn the entity
         controller.mapManager.main.spawn(this);
@@ -377,12 +404,27 @@ public strictfp abstract class Entity
         return false;
     }
 
-    public void eventCollision(Controller controller, Entity entCollider, Entity entVictim, Entity entOther, CollisionResult result)
+    public void eventHandleCollision(Controller controller, Entity entCollider, Entity entVictim, Entity entOther, CollisionResult result)
     {
         if (entCollider != this)
         {
             // Push ent out by default
             positionOffset(result.mtv);
+        }
+    }
+
+    public void eventHandleCollisionMap(Controller controller, CollisionResultMap collisionResultMap)
+    {
+        // Check if solid for collision response
+        if (collisionResultMap.tileType.properties.solid)
+        {
+            positionOffset(collisionResultMap.result.mtv);
+        }
+
+        // Check if to apply damage
+        if (collisionResultMap.tileType.properties.damage != 0)
+        {
+            // TODO: apply damage from tile
         }
     }
 

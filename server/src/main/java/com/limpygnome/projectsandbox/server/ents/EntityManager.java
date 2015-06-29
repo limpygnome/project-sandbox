@@ -6,7 +6,6 @@ import com.limpygnome.projectsandbox.server.Controller;
 import com.limpygnome.projectsandbox.server.ents.enums.StateChange;
 import com.limpygnome.projectsandbox.server.ents.physics.collisions.CollisionResultMap;
 import com.limpygnome.projectsandbox.server.ents.physics.collisions.SAT;
-import com.limpygnome.projectsandbox.server.ents.physics.Vector2;
 import com.limpygnome.projectsandbox.server.packets.types.ents.EntityUpdatesOutboundPacket;
 import com.limpygnome.projectsandbox.server.utils.IdCounterProvider;
 import com.limpygnome.projectsandbox.server.utils.counters.IdCounterConsumer;
@@ -15,7 +14,6 @@ import org.apache.logging.log4j.Logger;
 
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.LinkedList;
 import java.util.Map;
 
 /**
@@ -54,6 +52,7 @@ public class EntityManager implements IdCounterConsumer
         // Check we found an identifier
         if (id == null)
         {
+            LOG.error("Unable to create identifier for entity - {}", ent);
             return false;
         }
 
@@ -157,8 +156,8 @@ public class EntityManager implements IdCounterConsumer
                                 if (result.collision)
                                 {
                                     // Inform both ents of event
-                                    a.eventCollision(controller, b, a, b, result);
-                                    b.eventCollision(controller, b, a, a, result);
+                                    a.eventHandleCollision(controller, b, a, b, result);
+                                    b.eventHandleCollision(controller, b, a, a, result);
                                 }
                             }
                         }
@@ -168,17 +167,7 @@ public class EntityManager implements IdCounterConsumer
 
                         for (CollisionResultMap mapResult : mapResults)
                         {
-                            // Check if solid for collision response
-                            if (mapResult.tileType.properties.solid)
-                            {
-                                a.positionOffset(mapResult.result.mtv);
-                            }
-
-                            // Check if to apply damage
-                            if (mapResult.tileType.properties.damage != 0)
-                            {
-                                // TODO: apply damage from tile
-                            }
+                            a.eventHandleCollisionMap(controller, mapResult);
                         }
 
                         // Update position for ent

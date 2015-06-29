@@ -8,7 +8,7 @@ import com.limpygnome.projectsandbox.server.inventory.Inventory;
 import com.limpygnome.projectsandbox.server.players.PlayerInfo;
 import com.limpygnome.projectsandbox.server.players.enums.PlayerKeys;
 
-import static com.limpygnome.projectsandbox.server.ents.PlayerConstants.*;
+import static com.limpygnome.projectsandbox.server.constants.PlayerConstants.*;
 
 /**
  * An entity which represents a player.

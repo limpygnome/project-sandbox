@@ -9,12 +9,12 @@ public class ExplosionEffect extends AbstractEffect
 {
     public enum SubType
     {
-        RPG((short) 100)
+        ALLAH_ACKBAR((byte) 100)
         ;
 
-        private final short SUB_TYPE;
+        private final byte SUB_TYPE;
 
-        SubType(short SUB_TYPE)
+        SubType(byte SUB_TYPE)
         {
             this.SUB_TYPE = SUB_TYPE;
         }

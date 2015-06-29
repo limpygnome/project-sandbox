@@ -214,7 +214,7 @@ public abstract class AbstractVehicle extends Entity
     }
 
     @Override
-    public strictfp void eventCollision(Controller controller, Entity entCollider, Entity entVictim, Entity entOther, CollisionResult result)
+    public strictfp void eventHandleCollision(Controller controller, Entity entCollider, Entity entVictim, Entity entOther, CollisionResult result)
     {
         // Check if another vehicle
         if (entOther instanceof AbstractVehicle)
@@ -261,11 +261,11 @@ public abstract class AbstractVehicle extends Entity
             }
         }
         
-        super.eventCollision(controller, entCollider, entVictim, entOther, result);
+        super.eventHandleCollision(controller, entCollider, entVictim, entOther, result);
     }
 
     @Override
-    public strictfp void eventDeath(Controller controller, AbstractKiller killer)
+    public strictfp void eventHandleDeath(Controller controller, AbstractKiller killer)
     {
         // Respawn players in vehicle
         PlayerInfo playerInfo;
@@ -280,7 +280,7 @@ public abstract class AbstractVehicle extends Entity
             }
         }
         
-        super.eventDeath(controller, killer);
+        super.eventHandleDeath(controller, killer);
     }
 
     @Override

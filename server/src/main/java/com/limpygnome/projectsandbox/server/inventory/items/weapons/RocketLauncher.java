@@ -2,10 +2,14 @@ package com.limpygnome.projectsandbox.server.inventory.items.weapons;
 
 import com.limpygnome.projectsandbox.server.Controller;
 import com.limpygnome.projectsandbox.server.ents.Entity;
-import com.limpygnome.projectsandbox.server.ents.physics.Vector2;
-import com.limpygnome.projectsandbox.server.ents.types.weapons.RPG;
+import com.limpygnome.projectsandbox.server.ents.types.weapons.Rocket;
 import com.limpygnome.projectsandbox.server.inventory.annotations.InventoryItemTypeId;
 import com.limpygnome.projectsandbox.server.inventory.enums.InventoryInvokeType;
+import com.limpygnome.projectsandbox.server.players.PlayerInfo;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
+import static com.limpygnome.projectsandbox.server.constants.weapons.RocketConstants.ROCKET_LAUNCH_SPACING;
 
 /**
  * Created by limpygnome on 26/06/15.
@@ -14,6 +18,8 @@ import com.limpygnome.projectsandbox.server.inventory.enums.InventoryInvokeType;
 public class RocketLauncher extends AbstractWeapon
 {
     public static final long serialVersionUID = 1L;
+
+    private final static Logger LOG = LogManager.getLogger(RocketLauncher.class);
 
     public RocketLauncher()
     {
@@ -31,16 +37,22 @@ public class RocketLauncher extends AbstractWeapon
     protected void fireBullet(Controller controller)
     {
         Entity owner = this.slot.inventory.parent;
+        PlayerInfo[] playerInfoOwners = owner.getPlayers();
 
-        if (owner != null)
+        if (owner != null && playerInfoOwners != null && playerInfoOwners.length > 0)
         {
-            // Compute position in front of player for RPG
-            Vector2 position = owner.positionNew;
-            Vector2 positionOffset = Vector2.vectorFromAngle(owner.rotation, );
-            position.offset();
+            // Create Rocket
+            Entity rpg = new Rocket(controller, playerInfoOwners[0]);
+
+            // Project in front of player
+            rpg.projectInFrontOfEntity(owner, ROCKET_LAUNCH_SPACING);
 
             // Create rocket entity
-            controller.entityManager.add(new RPG());
+            controller.entityManager.add(rpg);
+        }
+        else
+        {
+            LOG.debug("Unable to create rocket, owner not correctly set");
         }
     }
 
