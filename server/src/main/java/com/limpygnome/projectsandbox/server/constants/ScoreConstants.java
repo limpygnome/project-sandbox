@@ -10,4 +10,9 @@ public class ScoreConstants
      */
     public static final int PLAYER_KILL = 200;
 
+    /**
+     * The score for any rocket kill.
+     */
+    public static final int PLAYER_KILL_ROCKET = 150;
+
 }

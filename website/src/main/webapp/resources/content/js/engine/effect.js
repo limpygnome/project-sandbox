@@ -43,7 +43,7 @@ Effect.prototype.logic = function()
 		this.setAlpha(1.0 - (lifespan / this.timeout));
 	}
 
-	// Update position if vx/vy defined
+	// Update position if vx/vy/vz defined
 	if (this.vx)
 	{
 		this.x += this.vx;
@@ -51,6 +51,10 @@ Effect.prototype.logic = function()
 	if (this.vy)
 	{
 		this.y += this.vy;
+	}
+	if (this.vz)
+	{
+		this.z += this.vz;
 	}
 }
 

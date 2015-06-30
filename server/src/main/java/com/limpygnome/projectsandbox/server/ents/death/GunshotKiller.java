@@ -1,7 +1,6 @@
 package com.limpygnome.projectsandbox.server.ents.death;
 
 import com.limpygnome.projectsandbox.server.constants.ScoreConstants;
-import com.limpygnome.projectsandbox.server.players.PlayerInfo;
 
 /**
  * Created by limpygnome on 21/05/15.
@@ -25,6 +24,6 @@ public class GunshotKiller extends AbstractKiller
     @Override
     public int computeScore()
     {
-        return ScoreConstants.PLAYER_KILL;
+        return isAnotherPlayer() ? ScoreConstants.PLAYER_KILL : 0;
     }
 }

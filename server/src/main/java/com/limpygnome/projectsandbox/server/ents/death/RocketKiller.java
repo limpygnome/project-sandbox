@@ -5,7 +5,7 @@ import com.limpygnome.projectsandbox.server.constants.ScoreConstants;
 /**
  * Created by limpygnome on 26/06/15.
  */
-public class ExplosionKiller extends AbstractKiller
+public class RocketKiller extends AbstractKiller
 {
     private static final String[] CAUSES =
     {
@@ -24,6 +24,6 @@ public class ExplosionKiller extends AbstractKiller
     @Override
     public int computeScore()
     {
-        return ScoreConstants.PLAYER_KILL;
+        return isAnotherPlayer() ? ScoreConstants.PLAYER_KILL_ROCKET : 0;
     }
 }

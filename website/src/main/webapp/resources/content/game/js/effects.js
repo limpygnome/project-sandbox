@@ -114,8 +114,9 @@ game.effects =
 		{
 			effect = new Effect("error", this.EXPLOSION_WIDTH, this.EXPLOSION_HEIGHT, x, y, this.EXPLOSION_Z, lifeSpan, this.EXPLOSION_FADE);
 			effect.rotation = projectSandbox.utils.randRotation();
-			effect.vx = projectSandbox.utils.rand(velocityMin, velocityMax);
-			effect.vy = projectSandbox.utils.rand(velocityMin, velocityMax);
+			effect.vx = projectSandbox.utils.randPrecise(velocityMin, velocityMax, 100.0);
+			effect.vy = projectSandbox.utils.randPrecise(velocityMin, velocityMax, 100.0);
+			effect.vz = projectSandbox.utils.randPrecise(velocityMin, velocityMax, 100.0);
 			projectSandbox.effects.push(effect);
 		}
 	}

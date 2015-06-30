@@ -72,9 +72,18 @@ projectSandbox.utils =
 		);
 	},
 
+	randPrecise: function(min, max, exponent)
+	{
+		var dExp = 10 ^ exponent;
+		var dMin = min * dExp;
+		var dMax = max * dExp;
+
+		return this.rand(dMin, dMax) / 100.0;
+	},
+
 	randRotation: function()
 	{
-		return projectSandbox.utils.rand(0.0, 6.28318531);
+		return this.randPrecise(0.0, 6.28318531, 1000.0);
 	},
 	
 	vectorRotate: function(originX, originY, x, y, rotation)

@@ -1,17 +1,17 @@
 package com.limpygnome.projectsandbox.server.ents.types.weapons;
 
 import com.limpygnome.projectsandbox.server.Controller;
-import com.limpygnome.projectsandbox.server.effects.types.ExplosionEffect;
 import com.limpygnome.projectsandbox.server.ents.Entity;
 import com.limpygnome.projectsandbox.server.ents.annotations.EntityType;
-import com.limpygnome.projectsandbox.server.ents.death.ExplosionKiller;
-import com.limpygnome.projectsandbox.server.ents.enums.StateChange;
+import com.limpygnome.projectsandbox.server.ents.death.RocketKiller;
 import com.limpygnome.projectsandbox.server.ents.physics.Vector2;
 import com.limpygnome.projectsandbox.server.ents.physics.collisions.CollisionResult;
 import com.limpygnome.projectsandbox.server.ents.physics.collisions.CollisionResultMap;
 import com.limpygnome.projectsandbox.server.ents.physics.proximity.DefaultProximity;
 import com.limpygnome.projectsandbox.server.ents.physics.proximity.ProximityResult;
 import com.limpygnome.projectsandbox.server.players.PlayerInfo;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.util.List;
 
@@ -23,6 +23,8 @@ import static com.limpygnome.projectsandbox.server.constants.weapons.RocketConst
 @EntityType(typeId = 600)
 public class Rocket extends Entity
 {
+    private final static Logger LOG = LogManager.getLogger(Rocket.class);
+
     private PlayerInfo playerInfoOwner;
     private long gameTimeCreated;
     private float speedStep;
@@ -34,6 +36,8 @@ public class Rocket extends Entity
         this.playerInfoOwner = playerInfoOwner;
         this.gameTimeCreated = controller.gameTime();
         this.speedStep = ROCKET_SPEED_STEP;
+
+        setMaxHealth(10);
     }
 
     @Override
@@ -101,10 +105,17 @@ public class Rocket extends Entity
         for (ProximityResult proximityResult : proximityResults)
         {
             // Calculate damage based on distance
-            damage = (proximityResult.distance / ROCKET_BLAST_RADIUS) * ROCKET_BLAST_DAMAGE;
+            damage = (1.0f - (proximityResult.distance / ROCKET_BLAST_RADIUS)) * ROCKET_BLAST_DAMAGE;
 
             // Apply damage
-            proximityResult.entity.damage(controller, this, damage, ExplosionKiller.class);
+            if (damage > 0.0f && damage <= ROCKET_BLAST_DAMAGE)
+            {
+                proximityResult.entity.damage(controller, this, damage, RocketKiller.class);
+            }
+            else
+            {
+                LOG.warn("Rocket blast radius precision failure - {}", damage);
+            }
         }
 
         // Mark this entity for removal

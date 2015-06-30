@@ -41,6 +41,47 @@ public abstract class AbstractKiller
 
     public abstract int computeScore();
 
+    /**
+     * Indicates if the victim is also one of the killers.
+     *
+     * @return
+     */
+    public boolean isAnotherPlayer()
+    {
+        PlayerInfo[] victims = victim != null ? victim.getPlayers() : null;
+        PlayerInfo[] killers = killer != null ? killer.getPlayers() : null;
+
+        // Check we have all the required info
+        if (victims == null || victims.length == 0 || killers == null || killers.length == 0)
+        {
+            return false;
+        }
+
+        // Expensive check...
+        boolean foundPlayers = false;
+        boolean compareNull;
+        boolean compareSame;
+        for (int i = 0; i < victims.length; i++)
+        {
+            for (int j = 0; j < killers.length; j++)
+            {
+                compareNull = victims[i] == null || killers[j] == null;
+                compareSame = victims[i] == killers[j];
+
+                if (compareSame && !compareNull)
+                {
+                    return false;
+                }
+                else if (!compareNull && !compareSame)
+                {
+                    foundPlayers = true;
+                }
+            }
+        }
+
+        return foundPlayers;
+    }
+
     @Override
     public String toString()
     {

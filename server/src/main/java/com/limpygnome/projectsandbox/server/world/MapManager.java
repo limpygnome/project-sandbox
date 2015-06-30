@@ -1,6 +1,6 @@
 package com.limpygnome.projectsandbox.server.world;
 
-import com.limpygnome.projectsandbox.server.Constants;
+import com.limpygnome.projectsandbox.server.constants.PathConstants;
 import com.limpygnome.projectsandbox.server.ents.annotations.EntityType;
 import com.limpygnome.projectsandbox.server.utils.Annotations;
 import com.limpygnome.projectsandbox.server.utils.FileSystem;
@@ -51,7 +51,7 @@ public class MapManager
     
     public void load() throws Exception
     {
-        FileSystemFile[] files = FileSystem.getResources(Constants.BASE_PACKAGE_MAPS);
+        FileSystemFile[] files = FileSystem.getResources(PathConstants.BASE_PACKAGE_MAPS);
         
         // Build ent mappings
         buildEntMappings();
