@@ -60,6 +60,8 @@
 
 		<script src="/content/game/js/ents/player.js"></script>
 		<script src="/content/game/js/ents/ice-cream-van.js"></script>
+		<script src="/content/game/js/ents/rocket-car.js"></script>
+		<script src="/content/game/js/ents/bus.js"></script>
 		<script src="/content/game/js/ents/sentry.js"></script>
 		<script src="/content/game/js/ents/rocket.js"></script>
 

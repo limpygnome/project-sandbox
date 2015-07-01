@@ -84,6 +84,12 @@ projectSandbox.network.entities =
 			case 20:
 				ent = new IceCreamVan();
 				break;
+			case 21:
+				ent = new RocketCar();
+				break;
+			case 22:
+				ent = new Bus();
+				break;
 		}
 
 		if (ent != null)

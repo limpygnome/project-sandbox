@@ -68,6 +68,16 @@
             "faction" : 1000
         },
         {
+            "type" : 21,
+            "count": 1,
+            "faction" : 1000
+        },
+        {
+            "type" : 22,
+            "count": 1,
+            "faction" : 1000
+        },
+        {
             "type"  :   500,
             "count" :   1,
             "faction" : 2000,
