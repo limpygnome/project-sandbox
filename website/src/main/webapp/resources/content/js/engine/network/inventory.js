@@ -44,7 +44,7 @@ projectSandbox.network.inventory =
 				case "C":
 					offset = this.packetInventoryItemCreated(data, dataView, offset);
 					break;
-				case "R":
+				case "D":
 					offset = this.packetInventoryItemRemoved(data, dataView, offset);
 					break;
 				case "M":

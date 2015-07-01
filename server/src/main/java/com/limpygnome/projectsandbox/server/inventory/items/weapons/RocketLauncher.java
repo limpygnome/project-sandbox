@@ -56,4 +56,10 @@ public class RocketLauncher extends AbstractWeapon
         }
     }
 
+    @Override
+    public String eventFetchItemText(Controller controller)
+    {
+        return String.format("%04d", mags);
+    }
+
 }

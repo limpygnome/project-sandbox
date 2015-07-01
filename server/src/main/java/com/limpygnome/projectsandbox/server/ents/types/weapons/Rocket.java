@@ -97,26 +97,8 @@ public class Rocket extends Entity
 
     private void performCollisionExplosion(Controller controller)
     {
-        // Fetch entities within blast radius
-        List<ProximityResult> proximityResults = DefaultProximity.nearbyEnts(controller, this, ROCKET_BLAST_RADIUS, true, false);
-
         // Apply damage to entities
-        float damage;
-        for (ProximityResult proximityResult : proximityResults)
-        {
-            // Calculate damage based on distance
-            damage = (1.0f - (proximityResult.distance / ROCKET_BLAST_RADIUS)) * ROCKET_BLAST_DAMAGE;
-
-            // Apply damage
-            if (damage > 0.0f && damage <= ROCKET_BLAST_DAMAGE)
-            {
-                proximityResult.entity.damage(controller, this, damage, RocketKiller.class);
-            }
-            else
-            {
-                LOG.warn("Rocket blast radius precision failure - {}", damage);
-            }
-        }
+        DefaultProximity.applyLinearRadiusDamage(controller, this, ROCKET_BLAST_RADIUS, ROCKET_BLAST_DAMAGE, true);
 
         // Mark this entity for removal
         remove();

@@ -2,20 +2,60 @@ package com.limpygnome.projectsandbox.server.ents.physics.proximity;
 
 import com.limpygnome.projectsandbox.server.Controller;
 import com.limpygnome.projectsandbox.server.ents.Entity;
+import com.limpygnome.projectsandbox.server.ents.death.RocketKiller;
 import com.limpygnome.projectsandbox.server.ents.physics.Vector2;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
+import static com.limpygnome.projectsandbox.server.constants.weapons.RocketConstants.ROCKET_BLAST_DAMAGE;
+import static com.limpygnome.projectsandbox.server.constants.weapons.RocketConstants.ROCKET_BLAST_RADIUS;
+
 /**
- * TODO: refactor this class to be a quadtree.
+ * TODO: refactor this class to use a quadtree.
  *
  * Created by limpygnome on 13/05/15.
  */
 public class DefaultProximity
 {
+    private final static Logger LOG = LogManager.getLogger(DefaultProximity.class);
+
+
+    /**
+     * Finds nearby entities and applies damage based on distance from center point.
+     *
+     * @param radius The radius of affected entities
+     * @param maximumDamage The maximum damage, linearly applied, relative to distance
+     * @param entityCenter Finds entities near this entity
+     * @param testAllVertices
+     */
+    public static void applyLinearRadiusDamage(Controller controller, Entity entityCenter, float radius,
+                                               float maximumDamage, boolean testAllVertices)
+    {
+        List<ProximityResult> proximityResults = nearbyEnts(controller, entityCenter, radius, testAllVertices, false);
+
+        float damage;
+        for (ProximityResult proximityResult : proximityResults)
+        {
+            // Calculate damage based on distance
+            damage = (1.0f - (proximityResult.distance / radius)) * maximumDamage;
+
+            // Apply damage
+            if (damage > 0.0f && damage <= maximumDamage)
+            {
+                proximityResult.entity.damage(controller, entityCenter, damage, RocketKiller.class);
+            }
+            else
+            {
+                LOG.warn("Linear radius damage precision failure - {}", damage);
+            }
+        }
+    }
+
     public static List<ProximityResult> nearbyEnts(Controller controller, Entity a, float distance, boolean testAllVertices, boolean sortList)
     {
         LinkedList<ProximityResult> result = new LinkedList<>();

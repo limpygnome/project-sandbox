@@ -59,7 +59,7 @@ public class InventoryUpdatesOutboundPacket extends OutboundPacket
      */
     public void eventItemRemoved(Controller controller, AbstractInventoryItem item)
     {
-        packetData.add((byte)'R');
+        packetData.add((byte)'D');
         packetData.add(item.slot.idByte);
     }
 

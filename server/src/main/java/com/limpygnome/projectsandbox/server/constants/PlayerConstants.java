@@ -3,6 +3,7 @@ package com.limpygnome.projectsandbox.server.constants;
 import com.limpygnome.projectsandbox.server.inventory.items.Fist;
 import com.limpygnome.projectsandbox.server.inventory.items.weapons.RocketLauncher;
 import com.limpygnome.projectsandbox.server.inventory.items.weapons.Smg;
+import com.limpygnome.projectsandbox.server.inventory.items.weapons.SuicideVest;
 
 /**
  *
@@ -22,7 +23,8 @@ public class PlayerConstants
     public static final Class[] DEFAULT_INVENTORY_ITEMS = {
             Fist.class,
             Smg.class,
-            RocketLauncher.class
+            RocketLauncher.class,
+            SuicideVest.class
     };
 
     /**

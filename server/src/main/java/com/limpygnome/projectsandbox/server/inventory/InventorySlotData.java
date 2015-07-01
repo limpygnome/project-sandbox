@@ -30,4 +30,34 @@ public class InventorySlotData
         this.keyDown = false;
         this.keyAlreadyDown = false;
     }
+
+    public void setState(InventorySlotState slotState)
+    {
+        // Check if we're allowed to update the state
+        boolean allowUpdate;
+        switch (slotState)
+        {
+            case CREATED:
+                allowUpdate = false;
+                break;
+            case PENDING_REMOVE:
+            case REMOVED:
+                allowUpdate = true;
+                break;
+            case CHANGED:
+                allowUpdate = this.slotState != InventorySlotState.PENDING_REMOVE && this.slotState != InventorySlotState.REMOVED;
+                break;
+            case NONE:
+                allowUpdate = false;
+                break;
+            default:
+                throw new RuntimeException("Unhandled inventory state");
+        }
+
+        // Update the state
+        if (allowUpdate)
+        {
+            this.slotState = slotState;
+        }
+    }
 }

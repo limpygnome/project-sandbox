@@ -9,7 +9,7 @@ public class ExplosionEffect extends AbstractEffect
 {
     public enum SubType
     {
-        ALLAH_ACKBAR((byte) 100)
+        SUICIDE_VEST((byte) 100)
         ;
 
         private final byte SUB_TYPE;
@@ -20,9 +20,9 @@ public class ExplosionEffect extends AbstractEffect
         }
     }
 
+    public byte subType;
     public float x;
     public float y;
-    public short subType;
 
     /**
      *
@@ -34,16 +34,16 @@ public class ExplosionEffect extends AbstractEffect
     {
         super((byte) 'E');
 
+        this.subType = subType.SUB_TYPE;
         this.x = x;
         this.y = y;
-        this.subType = subType.SUB_TYPE;
     }
 
     @Override
     public void writeCustomData(PacketData packetData)
     {
+        packetData.add(subType);
         packetData.add(x);
         packetData.add(y);
-        packetData.add(subType);
     }
 }

@@ -81,17 +81,23 @@ game.effects =
 	packetCreateExplosion: function(data, dataView, offset)
 	{
 		// Parse data
-		var x = dataView.getFloat32(0);
-		var y = dataView.getFloat32(4);
-		var subType = dataView.getInt8(8);
+		var subType = dataView.getInt8(2);
+		var x = dataView.getFloat32(3);
+		var y = dataView.getFloat32(7);
 
 		// Create explosion based on subtype
 		switch (subType)
 		{
-			// Allah ackbar
+			// Suicide vest explosion
 			case 100:
 				this.createExplosion(
-					x, y, 512, 4000, 6.0, 6.0
+					x, y, 512, 8000, -2.0, 2.0
+				);
+				this.createExplosion(
+					x, y, 128, 5000, -4.5, 4.5
+				);
+				this.createExplosion(
+					x, y, 128, 2500, -8.0, 8.0
 				);
 				break;
 			default:
@@ -113,10 +119,12 @@ game.effects =
 		for (var i = 0; i < particles; i++)
 		{
 			effect = new Effect("error", this.EXPLOSION_WIDTH, this.EXPLOSION_HEIGHT, x, y, this.EXPLOSION_Z, lifeSpan, this.EXPLOSION_FADE);
+
 			effect.rotation = projectSandbox.utils.randRotation();
 			effect.vx = projectSandbox.utils.randPrecise(velocityMin, velocityMax, 100.0);
 			effect.vy = projectSandbox.utils.randPrecise(velocityMin, velocityMax, 100.0);
 			effect.vz = projectSandbox.utils.randPrecise(velocityMin, velocityMax, 100.0);
+
 			projectSandbox.effects.push(effect);
 		}
 	}

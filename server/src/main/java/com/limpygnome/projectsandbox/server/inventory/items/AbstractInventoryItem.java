@@ -6,6 +6,7 @@ import com.limpygnome.projectsandbox.server.inventory.annotations.InventoryItemT
 import com.limpygnome.projectsandbox.server.inventory.enums.InventoryInvokeState;
 import com.limpygnome.projectsandbox.server.inventory.enums.InventoryInvokeType;
 import com.limpygnome.projectsandbox.server.inventory.enums.InventoryMergeResult;
+import com.limpygnome.projectsandbox.server.inventory.enums.InventorySlotState;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -74,7 +75,7 @@ public abstract class AbstractInventoryItem implements Serializable
                 throw new IllegalArgumentException("Unhandled invoke type");
         }
     }
-    
+
     /**
      * Used to merge similar inventory items.
      * 

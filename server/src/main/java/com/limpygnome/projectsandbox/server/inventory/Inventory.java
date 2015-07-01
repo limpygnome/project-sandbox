@@ -150,7 +150,7 @@ public class Inventory implements Serializable
             }
 
             // Handle slotState changes
-            if (!pendingRemoval && flagReset)
+            if (flagReset && !pendingRemoval)
             {
                 packet.eventItemCreated(controller, item);
                 packet.eventItemChanged(controller, item);
@@ -168,10 +168,12 @@ public class Inventory implements Serializable
                         break;
                     case PENDING_REMOVE:
                         packet.eventItemRemoved(controller, item);
+                        item.slot.slotState = InventorySlotState.REMOVED;
                         break;
                     case REMOVED:
                         // Remove from collection - no longer needed
                         iterator.remove();
+                        LOG.debug("Removed slot - slot id: {}", item.slot.id);
                         break;
                     case NONE:
                         // Do nothing...
@@ -182,7 +184,10 @@ public class Inventory implements Serializable
             }
 
             // Reset state
-            item.slot.slotState = InventorySlotState.NONE;
+            if (item.slot.slotState != InventorySlotState.PENDING_REMOVE)
+            {
+                item.slot.slotState = InventorySlotState.NONE;
+            }
         }
 
         // Check if to raise selected item change
@@ -329,12 +334,23 @@ public class Inventory implements Serializable
 
     public AbstractInventoryItem remove(Short slotId)
     {
-        AbstractInventoryItem item = items.get(slotId);
+        return remove(items.get(slotId));
+    }
 
-        if (item != null)
+    public AbstractInventoryItem remove(AbstractInventoryItem item)
+    {
+        if (item == null)
+        {
+            LOG.warn("Attempted to remove null inventory item");
+        }
+        else if (item.slot.inventory != this)
+        {
+            LOG.warn("Attempted to remove item from a different inventory");
+        }
+        else
         {
             item.slot.slotState = InventorySlotState.PENDING_REMOVE;
-            LOG.debug("Slot set to be removed - slot id: {}", slotId);
+            LOG.debug("Slot set to be removed - slot id: {}", item.slot.id);
 
             // Check if item to be removed is selected
             if (selected == item)
@@ -364,9 +380,6 @@ public class Inventory implements Serializable
                 // Update selected item
                 setSelected(nextSlotId);
             }
-        } else
-        {
-            LOG.warn("Attempted to remove missing slot - slot id: {}", slotId);
         }
 
         return item;
