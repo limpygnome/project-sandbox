@@ -67,9 +67,6 @@ public class SuicideVest extends AbstractWeapon
             // Apply damage to entities
             DefaultProximity.applyLinearRadiusDamage(controller, parent, SUICIDE_VEST_RADIUS, SUICIDE_VEST_BLAST_DAMAGE, true, SuicideVestKiller.class);
 
-            // Kill the current player
-            parent.kill(controller, parent, SuicideVestKiller.class);
-
             // Create explosion effect
             ExplosionEffect explosionEffect = new ExplosionEffect(
                     parent.positionNew.x,
@@ -77,6 +74,9 @@ public class SuicideVest extends AbstractWeapon
                     ExplosionEffect.SubType.SUICIDE_VEST
             );
             controller.effectsManager.add(explosionEffect);
+
+            // Kill the current player
+            parent.kill(controller, parent, SuicideVestKiller.class);
         }
     }
 
