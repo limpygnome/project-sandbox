@@ -98,7 +98,7 @@ public class Rocket extends Entity
     private void performCollisionExplosion(Controller controller)
     {
         // Apply damage to entities
-        DefaultProximity.applyLinearRadiusDamage(controller, this, ROCKET_BLAST_RADIUS, ROCKET_BLAST_DAMAGE, true);
+        DefaultProximity.applyLinearRadiusDamage(controller, this, ROCKET_BLAST_RADIUS, ROCKET_BLAST_DAMAGE, true, RocketKiller.class);
 
         // Mark this entity for removal
         remove();

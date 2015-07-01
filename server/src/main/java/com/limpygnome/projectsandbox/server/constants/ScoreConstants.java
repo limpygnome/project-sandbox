@@ -15,4 +15,6 @@ public class ScoreConstants
      */
     public static final int PLAYER_KILL_ROCKET = 150;
 
+    public static final int PLAYER_KILL_SUICIDE_VEST = 200;
+
 }

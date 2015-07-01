@@ -2,6 +2,7 @@ package com.limpygnome.projectsandbox.server.ents.physics.proximity;
 
 import com.limpygnome.projectsandbox.server.Controller;
 import com.limpygnome.projectsandbox.server.ents.Entity;
+import com.limpygnome.projectsandbox.server.ents.death.AbstractKiller;
 import com.limpygnome.projectsandbox.server.ents.death.RocketKiller;
 import com.limpygnome.projectsandbox.server.ents.physics.Vector2;
 import org.apache.logging.log4j.LogManager;
@@ -33,8 +34,8 @@ public class DefaultProximity
      * @param entityCenter Finds entities near this entity
      * @param testAllVertices
      */
-    public static void applyLinearRadiusDamage(Controller controller, Entity entityCenter, float radius,
-                                               float maximumDamage, boolean testAllVertices)
+    public static <T extends Class<? extends AbstractKiller>> void applyLinearRadiusDamage(Controller controller, Entity entityCenter, float radius,
+                                               float maximumDamage, boolean testAllVertices, T killerType)
     {
         List<ProximityResult> proximityResults = nearbyEnts(controller, entityCenter, radius, testAllVertices, false);
 
@@ -47,7 +48,7 @@ public class DefaultProximity
             // Apply damage
             if (damage > 0.0f && damage <= maximumDamage)
             {
-                proximityResult.entity.damage(controller, entityCenter, damage, RocketKiller.class);
+                proximityResult.entity.damage(controller, entityCenter, damage, killerType);
             }
             else
             {

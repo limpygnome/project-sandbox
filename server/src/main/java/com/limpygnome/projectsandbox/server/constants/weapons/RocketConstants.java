@@ -28,7 +28,7 @@ public class RocketConstants
     /**
      * The amount to increment the rocket speed.
      */
-    public static final float ROCKET_SPEED_STEP = 0.2f;
+    public static final float ROCKET_SPEED_STEP = 0.4f;
 
     /**
      * The maximum speed of a rocket.
