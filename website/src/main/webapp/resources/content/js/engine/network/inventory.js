@@ -156,7 +156,16 @@ projectSandbox.network.inventory =
         {
             // Remove from collections
             inventory.items.delete(slotId);
-            inventory.renderOrder.splice(inventoryItem, 1);
+
+            var renderOrderIndex = inventory.findItemIndex(slotId);
+            if (renderOrderIndex != null)
+            {
+            	inventory.renderOrder.splice(renderOrderIndex, 1);
+            }
+            else
+            {
+            	console.warn("engine/network/inventory - no render order inventory item present - slot id: " + slotId);
+            }
 
             // Inform UI
             var gameUI = projectSandbox.game.ui;
