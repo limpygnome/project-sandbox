@@ -2,6 +2,8 @@ package com.limpygnome.projectsandbox.server.inventory.items.weapons;
 
 import com.limpygnome.projectsandbox.server.Controller;
 import com.limpygnome.projectsandbox.server.ents.Entity;
+import com.limpygnome.projectsandbox.server.ents.physics.Vector2;
+import com.limpygnome.projectsandbox.server.ents.types.vehicles.AbstractVehicle;
 import com.limpygnome.projectsandbox.server.ents.types.weapons.Rocket;
 import com.limpygnome.projectsandbox.server.inventory.annotations.InventoryItemTypeId;
 import com.limpygnome.projectsandbox.server.inventory.enums.InventoryInvokeType;
@@ -41,8 +43,11 @@ public class RocketLauncher extends AbstractWeapon
 
         if (owner != null && playerInfoOwners != null && playerInfoOwners.length > 0)
         {
+            // Get current speed of owner, so that they don't go into their own rocket
+            float plySpeed = owner.width > owner.height ? owner.width : owner.height;
+
             // Create Rocket
-            Entity rpg = new Rocket(controller, playerInfoOwners[0]);
+            Entity rpg = new Rocket(controller, playerInfoOwners[0], plySpeed);
 
             // Project in front of player
             rpg.projectInFrontOfEntity(owner, ROCKET_LAUNCH_SPACING);

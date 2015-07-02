@@ -432,7 +432,7 @@ public strictfp abstract class Entity
     {
         // Nothing by default...
     }
-    
+
     public void reset()
     {
         health = maxHealth;
@@ -446,6 +446,17 @@ public strictfp abstract class Entity
      * @return
      */
     public abstract PlayerInfo[] getPlayers();
+
+    /**
+     * Used to indicate the speed of the entity, since different entities may have different mechanics for handling
+     * physics.
+     *
+     * @return The speed of the entity
+     */
+    public float getSpeed()
+    {
+        return 0.0f;
+    }
 
     @Override
     public String toString()

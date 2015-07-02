@@ -36,7 +36,7 @@ public abstract class AbstractVehicle extends Entity
     protected float maxSpeed;
     
     // Car slotState
-    protected float speed;
+    public float speed;
     
     // Player slotState
     protected Vector2[] playerEjectPositions;
@@ -168,6 +168,9 @@ public abstract class AbstractVehicle extends Entity
 
                     // Free-up the space
                     players[i] = null;
+
+                    // Invoke event hook
+                    eventPlayerExit(playerInfo, i);
                 }
             }
         }
@@ -254,13 +257,32 @@ public abstract class AbstractVehicle extends Entity
                         
                         // Add as passenger
                         players[i] = playerInfo;
+
+                        // Invoke event hook
+                        eventPlayerEnter(playerInfo, i);
                         
                         break;
                     }
                 }
             }
         }
-        
+
+        // Compute collision speed
+        Vector2 velocityVictim = Vector2.vectorFromAngle(entVictim.rotation, entVictim.getSpeed());
+        Vector2 velocityCollider = Vector2.vectorFromAngle(entCollider.rotation, entCollider.getSpeed());
+
+        float collisionVelocityX = Math.abs(velocityCollider.x - velocityVictim.x);
+        float collisionVelocityY = Math.abs(velocityCollider.y - velocityVictim.y);
+        float collisionSpeed = Vector2.length(new Vector2(collisionVelocityX, collisionVelocityY));
+
+        if (collisionSpeed > 3.0f)
+        {
+            if (entOther instanceof Player)
+            {
+                entOther.damage(controller, this, damage, );
+            }
+        }
+
         super.eventHandleCollision(controller, entCollider, entVictim, entOther, result);
     }
 
@@ -312,5 +334,21 @@ public abstract class AbstractVehicle extends Entity
     public PlayerInfo[] getPlayers()
     {
         return players;
+    }
+
+    @Override
+    public float getSpeed()
+    {
+        return speed;
+    }
+
+    public void eventPlayerEnter(PlayerInfo playerInfo, int seat)
+    {
+        // Nothing by default...
+    }
+
+    public void eventPlayerExit(PlayerInfo playerInfo, int seat)
+    {
+        // Nothing by default...
     }
 }

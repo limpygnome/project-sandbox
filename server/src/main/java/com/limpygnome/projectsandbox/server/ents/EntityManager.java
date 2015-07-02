@@ -121,6 +121,17 @@ public class EntityManager implements IdCounterConsumer
                 Entity a;
                 Entity b;
 
+                // Execute logic for each entity
+                for (Map.Entry<Short, Entity> kv : entities.entrySet())
+                {
+                    a = kv.getValue();
+
+                    if (a.getState() != StateChange.PENDING_DELETED && a.getState() != StateChange.DELETED)
+                    {
+                        a.logic(controller);
+                    }
+                }
+
                 // Fetch map boundries
                 // TODO: update if we have multiple maps
                 float mapMaxX = controller.mapManager.main.maxX;
@@ -141,9 +152,6 @@ public class EntityManager implements IdCounterConsumer
                     if (a.getState() != StateChange.PENDING_DELETED &&
                             a.getState() != StateChange.DELETED)
                     {
-                        // Perform ent logic
-                        a.logic(controller);
-
                         // Perform collision detection/handling with other ents
                         for (Map.Entry<Short, Entity> kv2 : entities.entrySet())
                         {

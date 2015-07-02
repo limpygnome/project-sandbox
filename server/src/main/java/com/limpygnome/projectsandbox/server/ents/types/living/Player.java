@@ -47,8 +47,6 @@ public class Player extends Entity
     
     public Player(Controller controller, PlayerInfo playerInfo)
     {
-
-
         this();
         
         // Check player info is valid
@@ -66,14 +64,15 @@ public class Player extends Entity
 
         if (this.inventory == null)
         {
-            // Give player default inventory
+            // Create new inventory
             this.inventory = new Inventory(this);
-        }
 
-        this.inventory.setOwner(playerInfo);
-        
-        // Give player default inventory items
-        this.inventory.add(DEFAULT_INVENTORY_ITEMS);
+            // Give player default inventory items
+            this.inventory.add(DEFAULT_INVENTORY_ITEMS);
+
+            // Setup owner
+            this.inventory.setOwner(playerInfo);
+        }
     }
 
     @Override

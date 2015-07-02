@@ -124,7 +124,7 @@ public class Vector2
     
     public static Vector2 normalise(Vector2 v)
     {
-        float length = (float) Math.sqrt(v.x*v.x + v.y*v.y);
+        float length = length(v);
         
         float normX;
         float normY;
@@ -141,6 +141,17 @@ public class Vector2
         }
         
         return new Vector2(normX, normY);
+    }
+
+    /**
+     * The length of the vector.
+     *
+     * @param vector
+     * @return
+     */
+    public static float length(Vector2 vector)
+    {
+        return (float) Math.sqrt(vector.x * vector.x + vector.y * vector.y);
     }
     
     /**

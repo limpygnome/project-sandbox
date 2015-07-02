@@ -29,15 +29,20 @@ public class Rocket extends Entity
     private long gameTimeCreated;
     private float speedStep;
 
-    public Rocket(Controller controller, PlayerInfo playerInfoOwner)
+    public Rocket(Controller controller, PlayerInfo playerInfoOwner, float initialSpeed)
     {
         super((short) 9, (short) 12);
 
         this.playerInfoOwner = playerInfoOwner;
         this.gameTimeCreated = controller.gameTime();
-        this.speedStep = ROCKET_SPEED_STEP;
+        this.speedStep = initialSpeed;
 
         setMaxHealth(10);
+    }
+
+    public Rocket(Controller controller, PlayerInfo playerInfo)
+    {
+        this(controller, playerInfo, ROCKET_SPEED_STEP);
     }
 
     @Override
