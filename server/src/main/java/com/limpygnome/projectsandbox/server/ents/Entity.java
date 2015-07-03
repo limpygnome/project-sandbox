@@ -293,43 +293,54 @@ public strictfp abstract class Entity
      */
     public <T extends Class<? extends AbstractKiller>> void kill(Controller controller, Entity inflicter, T killType)
     {
-        AbstractKiller killer;
+        AbstractKiller death;
 
-        // Create instance of killer type
+        // Create instance of death type
         try
         {
-            killer = killType.newInstance();
+            death = killType.newInstance();
 
-            // Setup victim/killer
-            killer.victim = this;
-            killer.killer = inflicter;
+            // Setup death
+            death.victim = this;
+            death.killer = inflicter;
         }
         catch (InstantiationException | IllegalAccessException e)
         {
-            LOG.error("Incorrectly setup killer class", e);
-            throw new RuntimeException("Incorrectly setup killer class - " + killType.getName(), e);
+            LOG.error("Incorrectly setup death class", e);
+            throw new RuntimeException("Incorrectly setup death class - " + killType.getName(), e);
         }
 
         // Inform killer(s) of their act
-        PlayerInfo[] playerInfoInflicter = inflicter.getPlayers();
-        PlayerInfo[] playerInfos = getPlayers();
+        PlayerInfo[] playerInfoInflicters = inflicter.getPlayers();
+        PlayerInfo[] playerInfoVictims = getPlayers();
 
-        if (killHasPlayers(playerInfoInflicter) && killHasPlayers(playerInfos))
+        if (killHasPlayers(playerInfoInflicters) && killHasPlayers(playerInfoVictims))
         {
-            boolean suicide = killIsSuicide(playerInfoInflicter, playerInfos);
+            boolean suicide = killIsSuicide( playerInfoInflicters, playerInfoVictims);
 
-            // Inform inflicting players of their kill
+            // Inform inflicters of their kills
             if (!suicide)
             {
-                killInformPlayerInfo(playerInfoInflicter, controller, killer, false);
+                for (PlayerInfo playerInfoInflicter : playerInfoInflicters)
+                {
+                    playerInfoInflicter.eventPlayerKill(controller, death, playerInfoVictims);
+                }
             }
 
-            // Inform all associated players they've been killed
-            killInformPlayerInfo(playerInfos, controller, killer, true);
+            // Inform victims of their killers
+            for (PlayerInfo playerInfoVictim : playerInfoVictims)
+            {
+                // Check player is actually in this entity, else it's a transient relationship i.e. an entity owned
+                // by player, such as rocket
+                if (playerInfoVictim.entity == this)
+                {
+                    playerInfoVictim.eventPlayerKilled(controller, death, playerInfoInflicters);
+                }
+            }
         }
 
         // Raise death event for this entity
-        eventHandleDeath(controller, killer);
+        eventHandleDeath(controller, death);
     }
 
     private boolean killIsSuicide(PlayerInfo[] playerInfosA, PlayerInfo[] playerInfosB)
@@ -366,20 +377,6 @@ public strictfp abstract class Entity
         }
 
         return false;
-    }
-
-    private void killInformPlayerInfo(PlayerInfo[] playerInfos, Controller controller, AbstractKiller killer, boolean isVictim)
-    {
-        if (playerInfos != null && playerInfos.length > 0)
-        {
-            for (PlayerInfo playerInfo : playerInfos)
-            {
-                if (playerInfo != null)
-                {
-                    playerInfo.eventPlayerKilled(controller, killer, isVictim);
-                }
-            }
-        }
     }
 
     /**

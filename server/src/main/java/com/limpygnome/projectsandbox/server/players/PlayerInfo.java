@@ -83,41 +83,41 @@ public class PlayerInfo
         }
     }
 
-    public void eventPlayerKilled(Controller controller, AbstractKiller killer, boolean isVictim)
+    public void eventPlayerKilled(Controller controller, AbstractKiller death, PlayerInfo[] playerInfoKillers)
     {
         try
         {
-            if (isVictim)
-            {
-                // Update metrics
-                session.metrics.incrementDeaths();
+            // Update metrics
+            session.metrics.incrementDeaths();
 
-                // Build death packet
-                PlayerKilledOutboundPacket packet = new PlayerKilledOutboundPacket();
-                packet.writePlayerKilled(killer, this);
+            // Build death packet
+            PlayerKilledOutboundPacket packet = new PlayerKilledOutboundPacket();
+            packet.writePlayerKilled(death, this);
 
-                // Broadcast to all players
-                controller.playerManager.broadcast(packet);
+            // Broadcast to all players
+            controller.playerManager.broadcast(packet);
 
-                LOG.info("Player killed - ply id: {}, killer: {}", playerId, killer);
-            }
-            else
-            {
-                // Update kills
-                session.metrics.incrementKills();
-
-                // Update score
-                int score = killer.computeScore();
-                if (score > 0)
-                {
-                    session.metrics.incrementScore(score);
-                }
-
-                LOG.debug("Player inflicted death - ply id: {}, killer: {}", playerId, killer);
-            }
-        } catch (IOException e)
+            LOG.info("Player killed - ply id: {}, killer: {}", playerId, death);
+        }
+        catch (IOException ex)
         {
-            LOG.error(e);
+            LOG.error("Failed to handle player being killed", ex);
         }
     }
+
+    public void eventPlayerKill(Controller controller, AbstractKiller death, PlayerInfo[] playerInfoVictims)
+    {
+        // Update kills
+        session.metrics.incrementKills();
+
+        // Update score
+        int score = death.computeScore();
+        if (score > 0)
+        {
+            session.metrics.incrementScore(score);
+        }
+
+        LOG.debug("Player inflicted death - ply id: {}, killer: {}", playerId, death);
+    }
+
 }
