@@ -7,7 +7,14 @@ import com.limpygnome.projectsandbox.server.constants.ScoreConstants;
  */
 public class CarDamage extends AbstractKiller
 {
-    private static final String[] CAUSES =
+    private static final String[] CAUSES_SUICIDE =
+    {
+        "{0} is a wreckless driver",
+        "{0} is a bad driver",
+        "{0} wrekt the metal too hard"
+    };
+
+    private static final String[] CAUSES_OTHER =
     {
         "{0} smoked by {1}",
         "{0} wrekt by {1}",
@@ -17,7 +24,7 @@ public class CarDamage extends AbstractKiller
     @Override
     public String causeText()
     {
-        return formatRandomCauseText(CAUSES);
+        return formatRandomCauseText(isAnotherPlayer() ? CAUSES_OTHER : CAUSES_SUICIDE);
     }
 
     @Override

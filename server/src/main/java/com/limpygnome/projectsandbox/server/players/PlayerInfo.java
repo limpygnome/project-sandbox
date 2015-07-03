@@ -2,6 +2,7 @@ package com.limpygnome.projectsandbox.server.players;
 
 import com.limpygnome.projectsandbox.server.Controller;
 import com.limpygnome.projectsandbox.server.ents.death.AbstractKiller;
+import com.limpygnome.projectsandbox.server.ents.types.living.Player;
 import com.limpygnome.projectsandbox.server.packets.types.players.global.PlayerKilledOutboundPacket;
 import com.limpygnome.projectsandbox.server.players.enums.PlayerKeys;
 import com.limpygnome.projectsandbox.server.ents.Entity;
@@ -12,7 +13,6 @@ import org.java_websocket.WebSocket;
 import java.io.IOException;
 
 /**
- *
  * @author limpygnome
  */
 public class PlayerInfo
@@ -26,33 +26,33 @@ public class PlayerInfo
 
     /**
      * The current session tied to the player; null if no session assigned.
-     *
+     * <p>
      * Note: this should NEVER reach other players, since this is the temp token to identify the player for the duration of the session.
      */
     public Session session;
-    
+
     /**
      * The keys currently held down by the player.
      */
     public short keys;
-    
+
     /**
      * The player's web socket.
      */
     public WebSocket socket;
-    
+
     /**
      * TODO: consider removal or move into player data
-     *
+     * <p>
      * Default faction for all new ents.
      */
     public short defaultFaction;
-    
+
     /**
      * The player's current entity.
      */
     public Entity entity;
-    
+
     public PlayerInfo(WebSocket socket, Session session, short playerId)
     {
         this.keys = 0;
@@ -61,24 +61,23 @@ public class PlayerInfo
         this.session = session;
         this.playerId = playerId;
     }
-    
+
     public boolean isConnected()
     {
         return socket != null && socket.isOpen();
     }
-    
+
     public boolean isKeyDown(PlayerKeys key)
     {
         return (keys & key.FLAG) == key.FLAG;
     }
-    
+
     public void setKey(PlayerKeys key, boolean down)
     {
         if (down)
         {
             keys |= key.FLAG;
-        }
-        else
+        } else
         {
             keys &= ~key.FLAG;
         }
@@ -116,8 +115,7 @@ public class PlayerInfo
 
                 LOG.debug("Player inflicted death - ply id: {}, killer: {}", playerId, killer);
             }
-        }
-        catch (IOException e)
+        } catch (IOException e)
         {
             LOG.error(e);
         }

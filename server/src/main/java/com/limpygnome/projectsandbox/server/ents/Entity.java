@@ -311,18 +311,66 @@ public strictfp abstract class Entity
         }
 
         // Inform killer(s) of their act
-        killInformPlayerInfo(inflicter != null ? inflicter.getPlayers() : null, controller, killer, false);
+        PlayerInfo[] playerInfoInflicter = inflicter.getPlayers();
+        PlayerInfo[] playerInfos = getPlayers();
 
-        // Inform all associated players they've been killed
-        killInformPlayerInfo(getPlayers(), controller, killer, true);
+        if (killHasPlayers(playerInfoInflicter) && killHasPlayers(playerInfos))
+        {
+            boolean suicide = killIsSuicide(playerInfoInflicter, playerInfos);
+
+            // Inform inflicting players of their kill
+            if (!suicide)
+            {
+                killInformPlayerInfo(playerInfoInflicter, controller, killer, false);
+            }
+
+            // Inform all associated players they've been killed
+            killInformPlayerInfo(playerInfos, controller, killer, true);
+        }
 
         // Raise death event for this entity
         eventHandleDeath(controller, killer);
     }
 
+    private boolean killIsSuicide(PlayerInfo[] playerInfosA, PlayerInfo[] playerInfosB)
+    {
+        for (PlayerInfo playerInfoA : playerInfosA)
+        {
+            for (PlayerInfo playerInfoB : playerInfosB)
+            {
+                if (playerInfoA == playerInfoB)
+                {
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
+
+    private boolean killHasPlayers(PlayerInfo[] playerInfos)
+    {
+        // Check initial array size etc
+        if (playerInfos == null || playerInfos.length == 0)
+        {
+            return false;
+        }
+
+        // Check items
+        for (PlayerInfo playerInfo : playerInfos)
+        {
+            if (playerInfo != null)
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
     private void killInformPlayerInfo(PlayerInfo[] playerInfos, Controller controller, AbstractKiller killer, boolean isVictim)
     {
-        if (playerInfos != null)
+        if (playerInfos != null && playerInfos.length > 0)
         {
             for (PlayerInfo playerInfo : playerInfos)
             {

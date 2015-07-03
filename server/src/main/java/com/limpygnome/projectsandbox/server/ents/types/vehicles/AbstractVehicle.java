@@ -6,6 +6,7 @@ import com.limpygnome.projectsandbox.server.ents.death.CarKiller;
 import com.limpygnome.projectsandbox.server.ents.physics.collisions.CollisionResult;
 import com.limpygnome.projectsandbox.server.Controller;
 import com.limpygnome.projectsandbox.server.ents.Entity;
+import com.limpygnome.projectsandbox.server.ents.physics.collisions.CollisionResultMap;
 import com.limpygnome.projectsandbox.server.ents.types.living.Player;
 import com.limpygnome.projectsandbox.server.ents.physics.Vector2;
 import com.limpygnome.projectsandbox.server.players.PlayerInfo;
@@ -284,9 +285,9 @@ public abstract class AbstractVehicle extends Entity
         {
             if (entOther instanceof Player)
             {
-                float damage = (collisionSpeed - MINIMUM_SPEED_DAMAGE) * COLLISION_SPEED_MULTIPLIER;
-                float equalDamage = (EQUAL_DAMAGE_RATIO * damage) / 2.0f;
-                float remainingDamage = (1.0f - EQUAL_DAMAGE_RATIO) * damage;
+                float damage = (collisionSpeed - MINIMUM_SPEED_DAMAGE) * ENT_COLLISION_SPEED_DAMAGE_MULTIPLIER;
+                float equalDamage = (ENT_EQUAL_DAMAGE_RATIO * damage) / 2.0f;
+                float remainingDamage = (1.0f - ENT_EQUAL_DAMAGE_RATIO) * damage;
 
                 // Apply equal damage
                 this.damage(controller, this, equalDamage, CarDamage.class);
@@ -305,6 +306,22 @@ public abstract class AbstractVehicle extends Entity
         }
 
         super.eventHandleCollision(controller, entCollider, entVictim, entOther, result);
+    }
+
+    @Override
+    public void eventHandleCollisionMap(Controller controller, CollisionResultMap collisionResultMap)
+    {
+        // Apply damage based on speed - similar to ent collisions
+        if (speed > MINIMUM_SPEED_DAMAGE)
+        {
+            float damage = (speed - MINIMUM_SPEED_DAMAGE) * MAP_COLLISION_SPEED_DAMAGE_MULTIPLIER;
+            this.damage(controller, this, damage, CarDamage.class);
+        }
+
+        // Slow down vehicle
+        speed *= MAP_COLLISION_SPEED_MULTIPLIER;
+
+        super.eventHandleCollisionMap(controller, collisionResultMap);
     }
 
     @Override
