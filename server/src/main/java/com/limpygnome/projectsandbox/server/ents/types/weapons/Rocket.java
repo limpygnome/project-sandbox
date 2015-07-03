@@ -28,6 +28,7 @@ public class Rocket extends Entity
     private PlayerInfo playerInfoOwner;
     private long gameTimeCreated;
     private float speedStep;
+    private boolean exploded;
 
     public Rocket(Controller controller, PlayerInfo playerInfoOwner, float initialSpeed)
     {
@@ -36,6 +37,7 @@ public class Rocket extends Entity
         this.playerInfoOwner = playerInfoOwner;
         this.gameTimeCreated = controller.gameTime();
         this.speedStep = initialSpeed;
+        this.exploded = false;
 
         setMaxHealth(10);
     }
@@ -67,23 +69,25 @@ public class Rocket extends Entity
         {
             remove();
         }
-
-        // Check if to increment rocket speed
-        if (this.speedStep < ROCKET_SPEED)
+        else
         {
-            // Increment by speed step, towards reaching max speed
-            this.speedStep += ROCKET_SPEED_STEP;
-
-            // Check step has not exceeded max speed
-            if (this.speedStep > ROCKET_SPEED)
+            // Check if to increment rocket speed
+            if (this.speedStep < ROCKET_SPEED)
             {
-                this.speedStep = ROCKET_SPEED;
-            }
-        }
+                // Increment by speed step, towards reaching max speed
+                this.speedStep += ROCKET_SPEED_STEP;
 
-        // Move rocket
-        Vector2 offset = Vector2.vectorFromAngle(rotation, speedStep);
-        positionOffset(offset);
+                // Check step has not exceeded max speed
+                if (this.speedStep > ROCKET_SPEED)
+                {
+                    this.speedStep = ROCKET_SPEED;
+                }
+            }
+
+            // Move rocket
+            Vector2 offset = Vector2.vectorFromAngle(rotation, speedStep);
+            positionOffset(offset);
+        }
 
         super.logic(controller);
     }
@@ -100,13 +104,19 @@ public class Rocket extends Entity
         performCollisionExplosion(controller);
     }
 
-    private void performCollisionExplosion(Controller controller)
+    private synchronized void performCollisionExplosion(Controller controller)
     {
-        // Apply damage to entities
-        DefaultProximity.applyLinearRadiusDamage(controller, this, ROCKET_BLAST_RADIUS, ROCKET_BLAST_DAMAGE, true, RocketKiller.class);
+        if (!exploded)
+        {
+            // Apply damage to entities
+            DefaultProximity.applyLinearRadiusDamage(controller, this, ROCKET_BLAST_RADIUS, ROCKET_BLAST_DAMAGE, true, RocketKiller.class);
 
-        // Mark this entity for removal
-        remove();
+            // Mark this entity for removal
+            remove();
+
+            // Ensure this call never happens again
+            exploded = true;
+        }
     }
 
 }
