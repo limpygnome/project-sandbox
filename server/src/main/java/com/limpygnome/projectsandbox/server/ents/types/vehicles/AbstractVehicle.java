@@ -1,6 +1,8 @@
 package com.limpygnome.projectsandbox.server.ents.types.vehicles;
 
 import com.limpygnome.projectsandbox.server.ents.death.AbstractKiller;
+import com.limpygnome.projectsandbox.server.ents.death.CarDamage;
+import com.limpygnome.projectsandbox.server.ents.death.CarKiller;
 import com.limpygnome.projectsandbox.server.ents.physics.collisions.CollisionResult;
 import com.limpygnome.projectsandbox.server.Controller;
 import com.limpygnome.projectsandbox.server.ents.Entity;
@@ -8,6 +10,8 @@ import com.limpygnome.projectsandbox.server.ents.types.living.Player;
 import com.limpygnome.projectsandbox.server.ents.physics.Vector2;
 import com.limpygnome.projectsandbox.server.players.PlayerInfo;
 import com.limpygnome.projectsandbox.server.players.enums.PlayerKeys;
+
+import static com.limpygnome.projectsandbox.server.constants.entities.AbstractVehicleConstants.*;
 
 /**
  *
@@ -75,7 +79,7 @@ public abstract class AbstractVehicle extends Entity
             }
             if (playerInfoDriver.isKeyDown(PlayerKeys.MovementDown))
             {
-                // TODO: seperate variable for reverse
+                // TODO: separate variable for reverse
                 acceleration -= accelerationFactor;
             }
             
@@ -219,21 +223,19 @@ public abstract class AbstractVehicle extends Entity
     @Override
     public strictfp void eventHandleCollision(Controller controller, Entity entCollider, Entity entVictim, Entity entOther, CollisionResult result)
     {
-        // Check if another vehicle
-        if (entOther instanceof AbstractVehicle)
-        {
-            /*
-                Check speed of two cars. If above threshold, calculate from threshold to speed as percent. Use percent
-                against max health, e.g. threshold is 10, max speed is 100, current speed is 20...so % is (20-10)/100 = 0.1
-                say max health is 100...100*0.1 = 10...
+        /*
+            OLD IDEA:
+            Check speed of two cars. If above threshold, calculate from threshold to speed as percent. Use percent
+            against max health, e.g. threshold is 10, max speed is 100, current speed is 20...so % is (20-10)/100 = 0.1
+            say max health is 100...100*0.1 = 10...
 
-                thus we cause 10 damage to current vehicle...
+            thus we cause 10 damage to current vehicle...
 
-                idea is that if player's race around and hit something full speed, they instantly blowup/die
-             */
-        }
+            idea is that if player's race around and hit something full speed, they instantly blowup/die
+         */
+
         // Check if player
-        else if (entOther instanceof Player)
+        if (entOther instanceof Player)
         {
             // Check if they're holding down action key to get in vehicle
             Player ply = (Player) entOther;
@@ -268,18 +270,37 @@ public abstract class AbstractVehicle extends Entity
         }
 
         // Compute collision speed
-        Vector2 velocityVictim = Vector2.vectorFromAngle(entVictim.rotation, entVictim.getSpeed());
-        Vector2 velocityCollider = Vector2.vectorFromAngle(entCollider.rotation, entCollider.getSpeed());
+        float speedUs = this.getSpeed();
+        float speedOther = entOther.getSpeed();
 
-        float collisionVelocityX = Math.abs(velocityCollider.x - velocityVictim.x);
-        float collisionVelocityY = Math.abs(velocityCollider.y - velocityVictim.y);
+        Vector2 velocityUs = Vector2.vectorFromAngle(this.rotation, speedUs);
+        Vector2 velocityOther = Vector2.vectorFromAngle(entOther.rotation, speedOther);
+
+        float collisionVelocityX = Math.abs(velocityUs.x - velocityOther.x);
+        float collisionVelocityY = Math.abs(velocityUs.y - velocityOther.y);
         float collisionSpeed = Vector2.length(new Vector2(collisionVelocityX, collisionVelocityY));
 
-        if (collisionSpeed > 3.0f)
+        if (collisionSpeed > MINIMUM_SPEED_DAMAGE)
         {
             if (entOther instanceof Player)
             {
-                entOther.damage(controller, this, damage, );
+                float damage = (collisionSpeed - MINIMUM_SPEED_DAMAGE) * COLLISION_SPEED_MULTIPLIER;
+                float equalDamage = (EQUAL_DAMAGE_RATIO * damage) / 2.0f;
+                float remainingDamage = (1.0f - EQUAL_DAMAGE_RATIO) * damage;
+
+                // Apply equal damage
+                this.damage(controller, this, equalDamage, CarDamage.class);
+                entOther.damage(controller, this, equalDamage, CarKiller.class);
+
+                // Apply rest of damage to fastest
+                if (speedUs > speedOther)
+                {
+                    entOther.damage(controller, this, remainingDamage, CarKiller.class);
+                }
+                else
+                {
+                    this.damage(controller, this, remainingDamage, CarDamage.class);
+                }
             }
         }
 
