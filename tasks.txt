@@ -1,18 +1,17 @@
 high priority:
+- lighting
+- smoke from damaged vehicle
+- pickups (health / armour / weapons etc)
+- map editor
 - split game and engine on serverside apart
    - register types of packets (engine/game) on startup, goes into hashmap of MAIN-SUBTYPE -> packet class (k -> v)
-- vehicle damage
--- player info updates -> consider making update packets generic, foreach stuff or something
+- player info updates -> consider making update packets generic, foreach stuff or something
 - buffer cache has limit and purges items / look at optimizing and disposing buffer cache -> hook verts with an array of prims using them, prim dispose removes from array etc
 - allow ents to have a property where they cannot be moved -> physics properties . static
 - player's showing weapons / muzzle flashes on weapons etc
-- run down players
 - limited spawn protection e.g. cant die for 10s
 - network interpolation
 - sound effects
-- lighting
-- server chat (use html overlaying game)
-- score system
 - website:
    - scoreboard
    - optional registration
