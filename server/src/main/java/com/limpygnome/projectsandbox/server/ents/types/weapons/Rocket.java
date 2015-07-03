@@ -8,12 +8,9 @@ import com.limpygnome.projectsandbox.server.ents.physics.Vector2;
 import com.limpygnome.projectsandbox.server.ents.physics.collisions.CollisionResult;
 import com.limpygnome.projectsandbox.server.ents.physics.collisions.CollisionResultMap;
 import com.limpygnome.projectsandbox.server.ents.physics.proximity.DefaultProximity;
-import com.limpygnome.projectsandbox.server.ents.physics.proximity.ProximityResult;
 import com.limpygnome.projectsandbox.server.players.PlayerInfo;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-
-import java.util.List;
 
 import static com.limpygnome.projectsandbox.server.constants.weapons.RocketConstants.*;
 

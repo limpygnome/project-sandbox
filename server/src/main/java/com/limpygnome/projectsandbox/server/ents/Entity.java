@@ -310,31 +310,37 @@ public strictfp abstract class Entity
             throw new RuntimeException("Incorrectly setup death class - " + killType.getName(), e);
         }
 
-        // Inform killer(s) of their act
-        PlayerInfo[] playerInfoInflicters = inflicter.getPlayers();
-        PlayerInfo[] playerInfoVictims = getPlayers();
-
-        if (killHasPlayers(playerInfoInflicters) && killHasPlayers(playerInfoVictims))
+        // Inform all players of the kill/death
+        if (inflicter != null)
         {
-            boolean suicide = killIsSuicide( playerInfoInflicters, playerInfoVictims);
+            PlayerInfo[] playerInfoInflicters = inflicter.getPlayers();
+            PlayerInfo[] playerInfoVictims = getPlayers();
 
-            // Inform inflicters of their kills
-            if (!suicide)
+            if (killHasPlayers(playerInfoInflicters) && killHasPlayers(playerInfoVictims))
             {
-                for (PlayerInfo playerInfoInflicter : playerInfoInflicters)
+                boolean suicide = killIsSuicide(playerInfoInflicters, playerInfoVictims);
+
+                // Inform inflicters of their kills
+                if (!suicide)
                 {
-                    playerInfoInflicter.eventPlayerKill(controller, death, playerInfoVictims);
+                    for (PlayerInfo playerInfoInflicter : playerInfoInflicters)
+                    {
+                        if (playerInfoInflicter != null)
+                        {
+                            playerInfoInflicter.eventPlayerKill(controller, death, playerInfoVictims);
+                        }
+                    }
                 }
-            }
 
-            // Inform victims of their killers
-            for (PlayerInfo playerInfoVictim : playerInfoVictims)
-            {
-                // Check player is actually in this entity, else it's a transient relationship i.e. an entity owned
-                // by player, such as rocket
-                if (playerInfoVictim.entity == this)
+                // Inform victims of their killers
+                for (PlayerInfo playerInfoVictim : playerInfoVictims)
                 {
-                    playerInfoVictim.eventPlayerKilled(controller, death, playerInfoInflicters);
+                    // Check player is actually in this entity, else it's a transient relationship i.e. an entity owned
+                    // by player, such as rocket
+                    if (playerInfoVictim != null && playerInfoVictim.entity == this)
+                    {
+                        playerInfoVictim.eventPlayerKilled(controller, death, playerInfoInflicters);
+                    }
                 }
             }
         }
