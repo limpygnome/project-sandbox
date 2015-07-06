@@ -20,12 +20,13 @@ function IceCreamVan()
 		32,
 		32,
 		100,
-		1000,
+		2000,
 		true,
 		-2,
 		2,
 		-16,
-		-16
+		-16,
+		true		// Compute lifespan
 	);
 }
 

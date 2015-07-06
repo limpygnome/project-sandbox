@@ -1,6 +1,5 @@
 high priority:
 - lighting
-- smoke from damaged vehicle
 - pickups (health / armour / weapons etc)
 - map editor
 - split game and engine on serverside apart

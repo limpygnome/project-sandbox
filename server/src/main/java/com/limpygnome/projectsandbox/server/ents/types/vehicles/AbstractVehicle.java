@@ -271,8 +271,8 @@ public abstract class AbstractVehicle extends Entity
         }
 
         // Compute collision speed
-        float speedUs = this.getSpeed();
-        float speedOther = entOther.getSpeed();
+        float speedUs = Math.abs(this.getSpeed());
+        float speedOther = Math.abs(entOther.getSpeed());
 
         Vector2 velocityUs = Vector2.vectorFromAngle(this.rotation, speedUs);
         Vector2 velocityOther = Vector2.vectorFromAngle(entOther.rotation, speedOther);

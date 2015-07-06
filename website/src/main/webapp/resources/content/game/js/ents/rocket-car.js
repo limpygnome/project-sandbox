@@ -25,7 +25,8 @@ function RocketCar()
 		-2,
 		2,
 		-16,
-		-16
+		-16,
+		true        // Compute lifespan
 	);
 }
 
