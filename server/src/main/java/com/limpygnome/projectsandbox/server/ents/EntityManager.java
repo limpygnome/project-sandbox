@@ -47,7 +47,7 @@ public class EntityManager implements IdCounterConsumer
     public boolean add(Entity ent)
     {
         // Fetch the next available identifier
-        Short id = idCounterProvider.nextId();
+        Short id = idCounterProvider.nextId(ent.id);
 
         // Check we found an identifier
         if (id == null)

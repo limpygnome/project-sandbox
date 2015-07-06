@@ -1,5 +1,6 @@
 package com.limpygnome.projectsandbox.server.world;
 
+import com.limpygnome.projectsandbox.server.Controller;
 import com.limpygnome.projectsandbox.server.ents.enums.UpdateMasks;
 import com.limpygnome.projectsandbox.server.ents.physics.Vector2;
 import com.limpygnome.projectsandbox.server.ents.physics.Vertices;
@@ -8,7 +9,10 @@ import com.limpygnome.projectsandbox.server.ents.Entity;
 import com.limpygnome.projectsandbox.server.ents.enums.StateChange;
 
 import java.io.IOException;
+import java.lang.reflect.Constructor;
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Set;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -189,29 +193,131 @@ public class Map
 
         // Parse count to spawn / instances to create
         long count = (long) entData.get("count");
-        
-        // Create new instances of type
-        Entity ent;
-        
-        for (long i = 0; i < count ;i++)
+
+        // Parse KV for spawning ent
+        JSONObject rawKV = (JSONObject) entData.get("kv");
+        java.util.Map<String, String> kv;
+
+        if (rawKV != null)
         {
-            // Create instance
+            kv = new HashMap<>();
+
+            Iterator iterator = rawKV.entrySet().iterator();
+            String key;
+            String value;
+            while (iterator.hasNext())
+            {
+                // Parse KV
+                key = (String) iterator.next();
+                value = rawKV.get(key).toString();
+
+                // Add to map
+                kv.put(key, value);
+            }
+
+            JSONObject rawKVJson;
+            for (Object rawKV : rawKVArray)
+            {
+
+                rawKVJson = (JSONObject) rawKV;
+
+                // Parse as KV
+                kv.put(rawKVJson.)
+            }
+        }
+        else
+        {
+            kv = null;
+        }
+
+
+        // Create new instances of type
+        createEnts(mapManager.controller, map, entClass, kv, count, faction, spawn);
+    }
+
+    private static java.util.Map<String, String> createEntKVHashMap(JSONObject rawKV)
+    {
+        java.util.Map<String, String> kv = new HashMap<>();
+
+        // Parse each KV
+        Iterator iterator = rawKV.entrySet().iterator();
+        String key;
+        String value;
+
+        while (iterator.hasNext())
+        {
+            // Read KV
+            key = (String) iterator.next();
+            value = rawKV.get(key).toString();
+
+            // Add to map
+            kv.put(key, value);
+        }
+
+        return kv;
+    }
+
+    private static void createEnts(Controller controller, Map map, Class entClass, java.util.Map<String, String> kv, long count, short faction, Spawn spawn) throws IOException
+    {
+        boolean useKv = (kv != null);
+
+        // Fetch constructor
+        Constructor entConstructor;
+
+        try
+        {
+            if (useKv)
+            {
+                entConstructor = entClass.getConstructor(java.util.Map.class);
+            }
+            else
+            {
+                entConstructor = entClass.getConstructor();
+            }
+        }
+        catch (NoSuchMethodException e)
+        {
+            if (kv != null)
+            {
+                throw new RuntimeException("Entity constructor missing for KV loading from map - class: " + entClass.getName(), e);
+            }
+            else
+            {
+                throw new RuntimeException("Entity class does not contain default constructor - class: " + entClass.getName(), e);
+            }
+        }
+
+        // Create ents
+        Entity entity;
+
+        for (int i = 0; i < count; i++)
+        {
             try
             {
-                ent = (Entity) entClass.newInstance();
-                ent.faction = faction;
-                ent.spawn = spawn;
+                // Create instance
+                if (useKv)
+                {
+                    entity = (Entity) entConstructor.newInstance(kv);
+                }
+                else
+                {
+                    entity = (Entity) entConstructor.newInstance();
+                }
+
+                // Set parameters
+                entity.faction = faction;
+                entity.spawn = spawn;
             }
             catch (Exception e)
             {
-                throw new IOException("Unable to create entity instance", e);
+                throw new IOException("Unable to create entity instance - class: " + entClass.getName(), e);
             }
-            
+
             // Add to world
-            mapManager.controller.entityManager.add(ent);
-            
+            mapManager.controller.entityManager.add(entity);
+
             // Spawn
-            map.spawn(ent);
+            map.spawn(entity);
         }
     }
     
@@ -261,33 +367,38 @@ public class Map
      * @param <T>
      * @param ent 
      */
-    public <T extends Entity> void spawn(T ent)
+    public <T extends Entity> boolean spawn(T ent)
     {
         // Fetch spawn for faction
         Faction faction = factions.get(ent.faction);
 
+        // Check ent for its own custom spawn
         if (ent.spawn != null)
         {
-            spawnEnt(ent, ent.spawn);
+            return spawnEnt(ent, ent.spawn);
         }
+        // Check we have a faction to fetch faction spawns
         else if (faction == null)
         {
             LOG.warn("Cannot find faction for entity - id: {}, faction: {}", ent.id, ent.faction);
             ent.setState(StateChange.PENDING_DELETED);
+            return false;
         }
+        // Use faction spawn
         else if (faction.hasSpawns())
         {   
             Spawn spawn = faction.getNextSpawn();
-            spawnEnt(ent, spawn);
+            return spawnEnt(ent, spawn);
         }
         else
         {
             LOG.warn("No spawns available for faction - id: {}, faction: {}", ent.id, ent.faction);
             ent.setState(StateChange.PENDING_DELETED);
+            return false;
         }
     }
 
-    private void spawnEnt(Entity ent, Spawn spawn)
+    private boolean spawnEnt(Entity ent, Spawn spawn)
     {
         // Setup entity for its new life
         ent.reset();
@@ -306,6 +417,8 @@ public class Map
         ent.eventSpawn();
 
         LOG.debug("Spawned entity - ent: {} - spawn: {}", ent, spawn);
+
+        return true;
     }
 
     @Override

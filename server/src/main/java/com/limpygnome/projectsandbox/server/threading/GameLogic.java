@@ -33,6 +33,9 @@ public class GameLogic implements Runnable
                     // Run logic for entities
                     controller.entityManager.logic();
 
+                    // Run logic for respawn manager
+                    controller.respawnManager.logic();
+
                     // Run logic for effects
                     controller.effectsManager.logic();
 

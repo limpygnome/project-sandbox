@@ -2,6 +2,7 @@ package com.limpygnome.projectsandbox.server;
 
 import com.limpygnome.projectsandbox.server.effects.EffectsManager;
 import com.limpygnome.projectsandbox.server.ents.EntityManager;
+import com.limpygnome.projectsandbox.server.ents.respawn.RespawnManager;
 import com.limpygnome.projectsandbox.server.inventory.InventoryManager;
 import com.limpygnome.projectsandbox.server.packets.PacketManager;
 import com.limpygnome.projectsandbox.server.players.ChatManager;
@@ -22,12 +23,13 @@ public class Controller
 
     public PacketManager packetManager;
     public EntityManager entityManager;
+    public RespawnManager respawnManager;
     public PlayerManager playerManager;
     public ChatManager chatManager;
     public InventoryManager inventoryManager;
     public MapManager mapManager;
     public EffectsManager effectsManager;
-    
+
     public Controller()
     {
     }
@@ -40,6 +42,8 @@ public class Controller
             packetManager = new PacketManager(this);
 
             entityManager = new EntityManager(this);
+
+            respawnManager = new RespawnManager(this);
 
             effectsManager = new EffectsManager(this);
             

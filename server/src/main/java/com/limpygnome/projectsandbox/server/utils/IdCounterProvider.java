@@ -23,31 +23,40 @@ public class IdCounterProvider
         this.consumer = consumer;
     }
 
-    public Short nextId()
+    public Short nextId(short currentId)
     {
         short id;
 
         synchronized (consumer)
         {
-            // Find next available ID
-            boolean foundNewId = false;
-            int attempts = 0;
-
-            do
+            // Check if current id is available
+            if (!consumer.containsId(currentId))
             {
-                id = nextId++;
-                if (!consumer.containsId(id))
-                {
-                    foundNewId = true;
-                }
+                id = currentId;
             }
-            while (!foundNewId && ++attempts < Short.MAX_VALUE);
-
-            // Check we found an identifier
-            if (!foundNewId)
+            else
             {
-                LOG.warn("Available IDs, for consumer {}, has been depleted", consumer.getClass().getName());
-                return null;
+
+                // Find next available ID
+                boolean foundNewId = false;
+                int attempts = 0;
+
+                do
+                {
+                    id = nextId++;
+                    if (!consumer.containsId(id))
+                    {
+                        foundNewId = true;
+                    }
+                }
+                while (!foundNewId && ++attempts < Short.MAX_VALUE);
+
+                // Check we found an identifier
+                if (!foundNewId)
+                {
+                    LOG.warn("Available IDs, for consumer {}, has been depleted", consumer.getClass().getName());
+                    return null;
+                }
             }
         }
 
