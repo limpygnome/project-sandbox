@@ -316,12 +316,12 @@ public strictfp abstract class Entity
             PlayerInfo[] playerInfoInflicters = inflicter.getPlayers();
             PlayerInfo[] playerInfoVictims = getPlayers();
 
-            if (killHasPlayers(playerInfoInflicters) && killHasPlayers(playerInfoVictims))
+            if (killHasPlayers(playerInfoVictims))
             {
                 boolean suicide = killIsSuicide(playerInfoInflicters, playerInfoVictims);
 
                 // Inform inflicters of their kills
-                if (!suicide)
+                if (!suicide && playerInfoInflicters != null)
                 {
                     for (PlayerInfo playerInfoInflicter : playerInfoInflicters)
                     {
@@ -351,6 +351,13 @@ public strictfp abstract class Entity
 
     private boolean killIsSuicide(PlayerInfo[] playerInfosA, PlayerInfo[] playerInfosB)
     {
+        // Check we have two sets of players
+        if (playerInfosA == null || playerInfosB == null)
+        {
+            return false;
+        }
+
+        // See if we can find a match
         for (PlayerInfo playerInfoA : playerInfosA)
         {
             for (PlayerInfo playerInfoB : playerInfosB)
