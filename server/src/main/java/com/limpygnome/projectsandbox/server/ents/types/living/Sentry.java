@@ -21,7 +21,7 @@ import java.util.List;
 /**
  * Created by limpygnome on 12/05/15.
  */
-@EntityType(typeId = 500)
+@EntityType(typeId = 500, typeName = "living/sentry")
 public class Sentry extends Entity
 {
     private final static Logger LOG = LogManager.getLogger(Sentry.class);

@@ -17,7 +17,7 @@ import static com.limpygnome.projectsandbox.server.constants.weapons.RocketConst
 /**
  * An Rocket fired by a rocket weapon.
  */
-@EntityType(typeId = 600)
+@EntityType(typeId = 600, typeName = "weapon/rocket")
 public class Rocket extends Entity
 {
     private final static Logger LOG = LogManager.getLogger(Rocket.class);

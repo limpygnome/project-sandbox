@@ -10,7 +10,7 @@ import com.limpygnome.projectsandbox.server.players.PlayerInfo;
 /**
  * Created by limpygnome on 01/07/15.
  */
-@EntityType(typeId = 21)
+@EntityType(typeId = 21, typeName = "vehicle/rocket-car")
 public class RocketCar extends AbstractVehicle
 {
     public Inventory inventory;

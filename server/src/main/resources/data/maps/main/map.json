@@ -63,22 +63,22 @@
     "ents":
     [
         {
-            "type" : 20,
+            "type" : "vehicle/ice-cream-van",
             "count": 1,
             "faction" : 1000
         },
         {
-            "type" : 21,
+            "type" : "vehicle/rocket-car",
             "count": 1,
             "faction" : 1000
         },
         {
-            "type" : 22,
+            "type" : "vehicle/bus",
             "count": 1,
             "faction" : 1000
         },
         {
-            "type"  :   500,
+            "type"  :   "living/sentry",
             "count" :   1,
             "faction" : 2000,
 
@@ -87,6 +87,24 @@
                 "x" : 240.0,
                 "y" : 70.0,
                 "rotation" : 0.0
+            }
+        },
+        {
+            "type"  :   "pickup/health",
+            "count" :   1,
+            "faction" : 2000,
+
+            "spawn" :
+            {
+                "x" : 320.0,
+                "y" : 70.0,
+                "rotation" : 0.0
+            }
+
+            "kv" :
+            {
+                "pickup.respawn_delay" : "10000",
+                "health_pickup.health" : "500"
             }
         }
     ],

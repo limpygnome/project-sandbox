@@ -196,48 +196,24 @@ public class Map
 
         // Parse KV for spawning ent
         JSONObject rawKV = (JSONObject) entData.get("kv");
-        java.util.Map<String, String> kv;
+        MapEntKV mapEntKV;
 
         if (rawKV != null)
         {
-            kv = new HashMap<>();
-
-            Iterator iterator = rawKV.entrySet().iterator();
-            String key;
-            String value;
-            while (iterator.hasNext())
-            {
-                // Parse KV
-                key = (String) iterator.next();
-                value = rawKV.get(key).toString();
-
-                // Add to map
-                kv.put(key, value);
-            }
-
-            JSONObject rawKVJson;
-            for (Object rawKV : rawKVArray)
-            {
-
-                rawKVJson = (JSONObject) rawKV;
-
-                // Parse as KV
-                kv.put(rawKVJson.)
-            }
+            mapEntKV = createEntKVHashMap(rawKV);
         }
         else
         {
-            kv = null;
+            mapEntKV = null;
         }
 
-
         // Create new instances of type
-        createEnts(mapManager.controller, map, entClass, kv, count, faction, spawn);
+        createEnts(mapManager.controller, map, entClass, mapEntKV, count, faction, spawn);
     }
 
-    private static java.util.Map<String, String> createEntKVHashMap(JSONObject rawKV)
+    private static MapEntKV createEntKVHashMap(JSONObject rawKV)
     {
-        java.util.Map<String, String> kv = new HashMap<>();
+        MapEntKV mapEntKV = new MapEntKV();
 
         // Parse each KV
         Iterator iterator = rawKV.entrySet().iterator();
@@ -251,15 +227,15 @@ public class Map
             value = rawKV.get(key).toString();
 
             // Add to map
-            kv.put(key, value);
+            mapEntKV.put(key, value);
         }
 
-        return kv;
+        return mapEntKV;
     }
 
-    private static void createEnts(Controller controller, Map map, Class entClass, java.util.Map<String, String> kv, long count, short faction, Spawn spawn) throws IOException
+    private static void createEnts(Controller controller, Map map, Class entClass, MapEntKV mapEntKV, long count, short faction, Spawn spawn) throws IOException
     {
-        boolean useKv = (kv != null);
+        boolean useKv = (mapEntKV != null);
 
         // Fetch constructor
         Constructor entConstructor;
@@ -277,7 +253,7 @@ public class Map
         }
         catch (NoSuchMethodException e)
         {
-            if (kv != null)
+            if (mapEntKV != null)
             {
                 throw new RuntimeException("Entity constructor missing for KV loading from map - class: " + entClass.getName(), e);
             }
@@ -297,7 +273,7 @@ public class Map
                 // Create instance
                 if (useKv)
                 {
-                    entity = (Entity) entConstructor.newInstance(kv);
+                    entity = (Entity) entConstructor.newInstance(mapEntKV);
                 }
                 else
                 {
@@ -314,7 +290,7 @@ public class Map
             }
 
             // Add to world
-            mapManager.controller.entityManager.add(entity);
+            controller.entityManager.add(entity);
 
             // Spawn
             map.spawn(entity);

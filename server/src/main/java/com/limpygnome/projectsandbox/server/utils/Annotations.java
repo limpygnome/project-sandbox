@@ -1,11 +1,15 @@
 package com.limpygnome.projectsandbox.server.utils;
 
+import com.limpygnome.projectsandbox.server.utils.counters.AnnotationInfo;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import java.io.IOException;
 import java.lang.annotation.Annotation;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Modifier;
 import java.util.HashMap;
+import java.util.List;
 
 /**
  *
@@ -16,35 +20,42 @@ public final class Annotations
     private final static Logger LOG = LogManager.getLogger(Annotations.class);
 
     /**
-     * Finds all of the classes annotated within a package, including
-     * sub-packages.
+     * Finds all of the classes annotated within a package, including sub-packages.
      * 
      * @param annotationType
      * @param classPath
      * @return
      * @throws Exception 
      */
-    public static HashMap<Short, Class> findAnnotatedClasses(Class annotationType, String classPath) throws Exception
+    public static List<AnnotationInfo> findAnnotatedClasses(Class annotationType, String[] classPath) throws Exception
     {
         HashMap<Short, Class> result = new HashMap<>();
         
-        // Iterate all classes to find Entity classes and create map to type ID
-        // TODO: support for multiple paths
-        Class[] classes = FileSystem.getAllClasses(classPath);
+
         
+        return result;
+    }
+
+    private static void findAnnotatedClasses(Class annotationType, List<AnnotationInfo> result, String classPath)
+            throws IOException, NoSuchMethodException, InvocationTargetException, IllegalAccessException
+    {
+        // Iterate all classes to find Entity classes and create map to type ID
+        Class[] classes = FileSystem.getAllClasses(classPath);
+
         Annotation annotationInstance;
         short typeId;
-        
+
         for (Class clazz : classes)
         {
             if (clazz.isAnnotationPresent(annotationType))
             {
+                result.add();
                 // Read annotation
                 annotationInstance = clazz.getAnnotation(annotationType);
-                
+
                 /// Retrieve typeId
                 typeId = (short) annotationType.getMethod("typeId").invoke(annotationInstance);
-                
+
                 if (result.containsKey(typeId))
                 {
                     throw new IllegalArgumentException("Annotations - " + annotationType.getName() + " - " + clazz.getName() + " - non-unique ID of " + typeId);
@@ -60,7 +71,5 @@ public final class Annotations
                 }
             }
         }
-        
-        return result;
     }
 }

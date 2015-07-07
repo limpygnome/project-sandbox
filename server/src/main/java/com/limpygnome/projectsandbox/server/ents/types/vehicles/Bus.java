@@ -6,7 +6,7 @@ import com.limpygnome.projectsandbox.server.ents.physics.Vector2;
 /**
  * Created by limpygnome on 01/07/15.
  */
-@EntityType(typeId = 22)
+@EntityType(typeId = 22, typeName = "vehicle/bus")
 public class Bus extends AbstractVehicle
 {
     public Bus()

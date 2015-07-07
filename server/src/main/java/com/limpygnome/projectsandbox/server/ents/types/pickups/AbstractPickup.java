@@ -22,13 +22,13 @@ public abstract class AbstractPickup extends Entity
         this.respawnDelay = respawnDelay;
     }
 
-    public abstract boolean applyPickup(Entity entity);
+    public abstract boolean applyPickup(Controller controller, Entity entity);
 
     @Override
     public void eventHandleCollision(Controller controller, Entity entCollider, Entity entVictim, Entity entOther, CollisionResult result)
     {
         // Call implementation to handle pickup
-        if (applyPickup(entOther))
+        if (applyPickup(controller, entOther))
         {
             // Pickup has been redeemed, now to respawn in a period of time
             controller.respawnManager.respawn(new RespawnProperties(controller, this, respawnDelay, true));

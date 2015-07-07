@@ -15,7 +15,7 @@ import static com.limpygnome.projectsandbox.server.constants.PlayerConstants.*;
  * 
  * @author limpygnome
  */
-@EntityType(typeId = 1)
+@EntityType(typeId = 1, typeName = "living/player")
 public class Player extends Entity
 {
     public static final String PLAYERDATA_INVENTORY_KEY = "player_inventory";

@@ -17,4 +17,6 @@ import java.lang.annotation.Target;
 public @interface EntityType
 {
     public short typeId();
+
+    public String typeName();
 }

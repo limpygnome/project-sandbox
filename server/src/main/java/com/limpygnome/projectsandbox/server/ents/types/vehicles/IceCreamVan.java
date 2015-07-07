@@ -8,7 +8,7 @@ import com.limpygnome.projectsandbox.server.players.PlayerInfo;
  *
  * @author limpygnome
  */
-@EntityType(typeId = 20)
+@EntityType(typeId = 20, typeName = "vehicle/ice-cream-van")
 public class IceCreamVan extends AbstractVehicle
 {
     public IceCreamVan()

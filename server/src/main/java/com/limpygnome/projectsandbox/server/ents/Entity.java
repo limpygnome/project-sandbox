@@ -23,7 +23,7 @@ import java.lang.annotation.Annotation;
  *
  * @author limpygnome
  */
-@EntityType(typeId = 0)
+@EntityType(typeId = 0, typeName = "")
 public strictfp abstract class Entity
 {
     private final static Logger LOG = LogManager.getLogger(EntityManager.class);
