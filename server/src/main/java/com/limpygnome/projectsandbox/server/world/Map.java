@@ -61,7 +61,7 @@ public class Map
         this.factions = new HashMap<>();
     }
     
-    public static Map load(MapManager mapManager, JSONObject obj) throws IOException
+    public static Map load(Controller controller, MapManager mapManager, JSONObject obj) throws IOException
     {
         Map map = new Map(mapManager);
         
@@ -166,23 +166,35 @@ public class Map
         JSONArray ents = (JSONArray) obj.get("ents");
         for (Object entData : ents)
         {
-            parseEnts(mapManager, map, (JSONObject) entData);
+            parseEnts(controller, mapManager, map, (JSONObject) entData);
         }
         
         return map;
     }
     
-    private static void parseEnts(MapManager mapManager, Map map, JSONObject entData) throws IOException
+    private static void parseEnts(Controller controller, MapManager mapManager, Map map, JSONObject entData) throws IOException
     {
-        short type = (short) (long) entData.get("type");
-            
-        // Fetch class for ent type
-        Class entClass = mapManager.entTypeMappings.get(type);
+        // Fetch ent type - either by ID or name
+        Class entClass;
+
+        if (entData.containsKey("typeName"))
+        {
+            entClass = controller.entityManager.entTypeMappings.getMappingByTypeName((String) entData.get("typeName"));
+        }
+        else if (entData.containsKey("typeId"))
+        {
+            entClass = controller.entityManager.entTypeMappings.getMappingByTypeId((short) (long) entData.get("typeId"));
+        }
+        else
+        {
+            throw new RuntimeException("No type defined for entity in map file");
+        }
 
         // Check class was found
         if (entClass == null)
         {
-            throw new IOException("Entity type " + type + " not found");
+            throw new IOException("Entity type not found - typeID: " + entData.get("typeId") + ", typeName: " +
+                    entData.get("typeName"));
         }
 
         // Parse faction
@@ -217,14 +229,16 @@ public class Map
 
         // Parse each KV
         Iterator iterator = rawKV.entrySet().iterator();
+        java.util.Map.Entry<Object, Object> kv;
         String key;
         String value;
 
         while (iterator.hasNext())
         {
             // Read KV
-            key = (String) iterator.next();
-            value = rawKV.get(key).toString();
+            kv = (java.util.Map.Entry<Object, Object>) iterator.next();
+            key = (String) kv.getKey();
+            value = kv.getValue().toString();
 
             // Add to map
             mapEntKV.put(key, value);
@@ -244,7 +258,7 @@ public class Map
         {
             if (useKv)
             {
-                entConstructor = entClass.getConstructor(java.util.Map.class);
+                entConstructor = entClass.getConstructor(MapEntKV.class);
             }
             else
             {

@@ -8,7 +8,7 @@ import java.io.IOException;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Modifier;
-import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -23,53 +23,42 @@ public final class Annotations
      * Finds all of the classes annotated within a package, including sub-packages.
      * 
      * @param annotationType
-     * @param classPath
+     * @param classPaths
      * @return
      * @throws Exception 
      */
-    public static List<AnnotationInfo> findAnnotatedClasses(Class annotationType, String[] classPath) throws Exception
+    public static List<AnnotationInfo> findAnnotatedClasses(Class annotationType, String[] classPaths, boolean excludeAbstract) throws Exception
     {
-        HashMap<Short, Class> result = new HashMap<>();
+        List<AnnotationInfo> result = new LinkedList<>();
         
-
+        for (String classPath : classPaths)
+        {
+            findAnnotatedClasses(annotationType, result, classPath, excludeAbstract);
+        }
         
         return result;
     }
 
-    private static void findAnnotatedClasses(Class annotationType, List<AnnotationInfo> result, String classPath)
+    private static void findAnnotatedClasses(Class annotationType, List<AnnotationInfo> result, String classPath,
+                                                boolean excludeAbstract)
             throws IOException, NoSuchMethodException, InvocationTargetException, IllegalAccessException
     {
         // Iterate all classes to find Entity classes and create map to type ID
         Class[] classes = FileSystem.getAllClasses(classPath);
 
         Annotation annotationInstance;
-        short typeId;
 
         for (Class clazz : classes)
         {
-            if (clazz.isAnnotationPresent(annotationType))
+            if ((!excludeAbstract || !Modifier.isAbstract(clazz.getModifiers())) && clazz.isAnnotationPresent(annotationType))
             {
-                result.add();
-                // Read annotation
+                // Fetch annotation instance
                 annotationInstance = clazz.getAnnotation(annotationType);
 
-                /// Retrieve typeId
-                typeId = (short) annotationType.getMethod("typeId").invoke(annotationInstance);
-
-                if (result.containsKey(typeId))
-                {
-                    throw new IllegalArgumentException("Annotations - " + annotationType.getName() + " - " + clazz.getName() + " - non-unique ID of " + typeId);
-                }
-                else if (typeId != 0)
-                {
-                    result.put(typeId, clazz);
-                    LOG.debug("{} - added type: {}", annotationType.getName(), clazz.getName());
-                }
-                else if (!Modifier.isAbstract(clazz.getModifiers()))
-                {
-                    throw new IllegalArgumentException("Annotations - " + annotationType.getName() + " - " + clazz.getName() + " - invalid type identifier");
-                }
+                // Add to result
+                result.add(new AnnotationInfo(annotationInstance, clazz));
             }
         }
     }
+
 }

@@ -7,37 +7,36 @@ import java.lang.annotation.Annotation;
  */
 public class AnnotationInfo
 {
-    private Class classAnnotation;
-    private Class classAnnotated;
+    private Annotation annotation;
+    private Class clazz;
 
-    public AnnotationInfo(Class classAnnotation, Class classAnnotated)
+    public AnnotationInfo(Annotation annotation, Class clazz)
     {
-        this.classAnnotation = classAnnotation;
-        this.classAnnotated = classAnnotated;
+        this.annotation = annotation;
+        this.clazz = clazz;
     }
 
-    public Class getClassAnnotation()
+    public Annotation getAnnotation()
     {
-        return classAnnotation;
+        return annotation;
     }
 
-    public Class getClassAnnotated()
+    public Class getClazz()
     {
-        return classAnnotated;
+        return clazz;
     }
 
     /**
      * Retrieves an annotation value.
      *
+     * @param key The key to retrieve
      * @return The value, or null if it cannot be accessed/does not exist.
      */
-    public Object getAnnotationValue()
+    public Object getAnnotationValue(String key)
     {
-        Annotation annotationInstance = classAnnotated.getAnnotation(classAnnotation);
-
         try
         {
-            return classAnnotation.getMethod("typeId").invoke(annotationInstance);
+            return annotation.annotationType().getMethod(key).invoke(annotation);
         }
         catch (Exception e)
         {

@@ -62,7 +62,7 @@ public class PlayerManager implements IdCounterConsumer
             }
 
             // Generate new identifier
-            Short playerId = idCounterProvider.nextId();
+            Short playerId = idCounterProvider.nextId(null);
 
             // Check we got an identifier
             if (playerId == null)

@@ -24,9 +24,7 @@ public class MapManager
     private final static Logger LOG = LogManager.getLogger(MapManager.class);
 
     public Controller controller;
-    
-    public HashMap<Short, Class> entTypeMappings;
-    
+
     public HashMap<String, Map> maps;
     private short mapIdCounter;
     
@@ -38,23 +36,11 @@ public class MapManager
         this.maps = new HashMap<>();
         this.mapIdCounter = 0;
         this.main = null;
-        this.entTypeMappings = new HashMap<>();
     }
     
-    public void buildEntMappings() throws Exception
-    {
-        // TODO: move into properties file
-        // TODO: refactor and move into entitymanager
-        LOG.debug("Building ent types map...");
-        this.entTypeMappings = Annotations.findAnnotatedClasses(EntityType.class, "/com/limpygnome/projectsandbox/server/ents");
-    }
-    
-    public void load() throws Exception
+    public synchronized void load() throws Exception
     {
         FileSystemFile[] files = FileSystem.getResources(PathConstants.BASE_PACKAGE_MAPS);
-        
-        // Build ent mappings
-        buildEntMappings();
 
         // Iterate and load each map file
         JSONObject obj;
@@ -63,7 +49,7 @@ public class MapManager
         {
             // Load map
             obj = JsonHelper.read(file.getInputStream());
-            map = Map.load(this, obj);
+            map = Map.load(controller, this, obj);
             
             // Assign ID
             map.id = mapIdCounter++;

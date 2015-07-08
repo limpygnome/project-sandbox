@@ -9,6 +9,7 @@ import com.limpygnome.projectsandbox.server.ents.physics.collisions.SAT;
 import com.limpygnome.projectsandbox.server.packets.types.ents.EntityUpdatesOutboundPacket;
 import com.limpygnome.projectsandbox.server.utils.IdCounterProvider;
 import com.limpygnome.projectsandbox.server.utils.counters.IdCounterConsumer;
+import com.limpygnome.projectsandbox.server.world.EntTypeMappings;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -26,6 +27,7 @@ public class EntityManager implements IdCounterConsumer
     private final Controller controller;
     public final HashMap<Short, Entity> entities;
     public final HashMap<Short, Entity> entitiesNew;
+    public EntTypeMappings entTypeMappings;
     private IdCounterProvider idCounterProvider;
 
     public EntityManager(Controller controller)
@@ -33,6 +35,7 @@ public class EntityManager implements IdCounterConsumer
         this.controller = controller;
         this.entities = new HashMap<>();
         this.entitiesNew = new HashMap<>();
+        this.entTypeMappings = new EntTypeMappings();
         this.idCounterProvider = new IdCounterProvider(this);
     }
 

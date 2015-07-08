@@ -9,7 +9,7 @@ import com.limpygnome.projectsandbox.server.world.MapEntKV;
 /**
  * Created by limpygnome on 06/07/15.
  */
-@EntityType(typeId = 1201, typeName = "pickups/health")
+@EntityType(typeId = 1201, typeName = "pickup/health")
 public class HealthPickup extends AbstractPickup
 {
     private float healthAmount;

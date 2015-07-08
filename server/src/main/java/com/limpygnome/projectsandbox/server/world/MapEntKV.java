@@ -40,11 +40,11 @@ public class MapEntKV extends HashMap<String, String>
 
         try
         {
-            return Float.parseFloat(key);
+            return Float.parseFloat(v);
         }
         catch (NumberFormatException e)
         {
-            throw new RuntimeException("Invalid KV value for type float - key: " + key);
+            throw new RuntimeException("Invalid KV value for type float - key: " + key + ", value: " + v);
         }
     }
 }

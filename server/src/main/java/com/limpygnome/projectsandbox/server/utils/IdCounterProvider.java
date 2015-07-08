@@ -23,14 +23,14 @@ public class IdCounterProvider
         this.consumer = consumer;
     }
 
-    public Short nextId(short currentId)
+    public synchronized Short nextId(Short currentId)
     {
         short id;
 
         synchronized (consumer)
         {
             // Check if current id is available
-            if (!consumer.containsId(currentId))
+            if (currentId != null && !consumer.containsId(currentId))
             {
                 id = currentId;
             }
