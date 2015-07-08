@@ -90,6 +90,9 @@ projectSandbox.network.entities =
 			case 22:
 				ent = new Bus();
 				break;
+			case 1201:
+				ent = new HealthPickup();
+				break;
 		}
 
 		if (ent != null)
