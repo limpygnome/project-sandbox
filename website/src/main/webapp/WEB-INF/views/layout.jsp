@@ -63,6 +63,7 @@
 		<script src="/content/game/js/ent/living/sentry.js"></script>
 
 		<!-- Game: Pickups -->
+		<script src="/content/game/js/ent/pickup/abstract_pickup.js"></script>
 		<script src="/content/game/js/ent/pickup/health.js"></script>
 
 		<!-- Game: Vehicles -->

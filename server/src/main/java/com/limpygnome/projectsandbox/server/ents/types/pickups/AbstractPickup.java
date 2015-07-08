@@ -20,6 +20,8 @@ public abstract class AbstractPickup extends Entity
         super(DEFAULT_WIDTH, DEFAULT_HEIGHT);
 
         this.respawnDelay = respawnDelay;
+
+        setGodmode();
     }
 
     public abstract boolean applyPickup(Controller controller, Entity entity);

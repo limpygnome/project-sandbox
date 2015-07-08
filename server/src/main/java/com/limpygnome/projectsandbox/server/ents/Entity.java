@@ -242,6 +242,11 @@ public strictfp abstract class Entity
         this.health = maxHealth;
         updateMask(UpdateMasks.HEALTH);
     }
+
+    public void setGodmode()
+    {
+        setMaxHealth(-1.0f);
+    }
     
     /**
      * Inflicts damage on the entity.
