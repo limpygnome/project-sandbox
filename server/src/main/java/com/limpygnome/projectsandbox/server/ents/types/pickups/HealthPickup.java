@@ -26,16 +26,11 @@ public class HealthPickup extends AbstractPickup
     @Override
     public boolean applyPickup(Controller controller, Entity entity)
     {
-        StateChange entityState = entity.getState();
-
-        // Check entity is player or vehicle
-        if (!(entity instanceof Player || entity instanceof AbstractVehicle))
-        {
-            return false;
-        }
-
         // Check entity can receive pickup
-        if (entity.health > 0 && entityState != StateChange.PENDING_DELETED && entityState != StateChange.DELETED)
+        if  (
+                !(entity instanceof Player || entity instanceof AbstractVehicle) &&
+                entity.health > 0.0f && entity.health < entity.maxHealth
+            )
         {
             // Calculate how much health would be gained from the pickup; if no health, don't bother; this will also
             // limit the applied health within and up to the max health.
@@ -48,7 +43,7 @@ public class HealthPickup extends AbstractPickup
             }
         }
 
-        return true;
+        return false;
     }
 
     @Override

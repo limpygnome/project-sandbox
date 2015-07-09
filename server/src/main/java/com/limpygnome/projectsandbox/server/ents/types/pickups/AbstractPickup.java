@@ -20,6 +20,7 @@ public abstract class AbstractPickup extends Entity
         super(DEFAULT_WIDTH, DEFAULT_HEIGHT);
 
         this.respawnDelay = respawnDelay;
+        this.physicsIntangible = true;
 
         setGodmode();
     }

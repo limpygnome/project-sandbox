@@ -160,7 +160,7 @@ public class EntityManager implements IdCounterConsumer
                             b = kv2.getValue();
 
                             // Check the ents can collide
-                            if (a.id != b.id && !b.physicsStatic && !b.isDeleted())
+                            if (a.id != b.id && !b.isDeleted())
                             {
                                 result = SAT.collision(a, b);
 

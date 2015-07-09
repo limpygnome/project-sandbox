@@ -41,6 +41,7 @@ public class Sentry extends Entity
 
         this.defaultRotation = 0.0f;
         this.lastFired = 0;
+        this.physicsStatic = true;
     }
 
     @Override
@@ -88,7 +89,7 @@ public class Sentry extends Entity
         // Check if we can fire and  we're within the right angle to fire
         if (fireMode && targetAngleOffsetAbs <= ROTATION_DIFF_FIRE)
         {
-            fire(controller);
+            //fire(controller);
         }
     }
 

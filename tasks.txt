@@ -1,4 +1,6 @@
 high priority:
+- move respawn manager into a map -> since respawning should support multiple maps
+- improve physics properties in ents, maybe move to subclass with defaults
 - lighting
 - pickups (health / armour / weapons etc)
 - map editor

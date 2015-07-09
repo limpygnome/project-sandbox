@@ -70,10 +70,13 @@ public class RespawnManager
         {
             entity = respawnProperties.entity;
 
-            // Spawn entity
+            // Set state to created
+            entity.setState(StateChange.CREATED);
+
+            // Attempt to spawn the entity
             if (controller.mapManager.main.spawn(entity))
             {
-                // Add to entity manager to re-add to world
+                // Attempt to add the entity through the entity manager (re-adding it to the world)
                 if (controller.entityManager.add(entity))
                 {
                     // Remove from our spawn manager

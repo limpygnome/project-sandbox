@@ -64,7 +64,15 @@ public strictfp abstract class Entity
     public float maxHealth;
 
     // Physics
+    /**
+     * When true, this entity cannot be moved.
+     */
     public boolean physicsStatic;
+
+    /**
+     * When true, other entities can move through this entity.
+     */
+    public boolean physicsIntangible;
     
     public Entity(short width, short height)
     {
@@ -98,12 +106,12 @@ public strictfp abstract class Entity
         this.physicsStatic = false;
     }
     
-    public void logic(Controller controller)
+    public synchronized void logic(Controller controller)
     {
         // Nothing by default...
     }
     
-    public void rotation(float radians)
+    public synchronized void rotation(float radians)
     {
         // Clamp within valid range
         radians = CustomMath.clamp(
@@ -128,27 +136,27 @@ public strictfp abstract class Entity
         updateMask(UpdateMasks.ROTATION);
     }
     
-    public void rebuildCachedVertices()
+    public synchronized void rebuildCachedVertices()
     {
         cachedVertices = new Vertices(this);
     }
     
-    public void rotationOffset(float radians)
+    public synchronized void rotationOffset(float radians)
     {
         rotation(rotation + radians);
     }
     
-    public void positionOffset(Vector2 offset)
+    public synchronized void positionOffset(Vector2 offset)
     {
         position(positionNew.x + offset.x, positionNew.y + offset.y);
     }
     
-    public void positionOffset(float x, float y)
+    public synchronized void positionOffset(float x, float y)
     {
         position(positionNew.x + x, positionNew.y + y);
     }
     
-    public void position(Vector2 position)
+    public synchronized void position(Vector2 position)
     {
         position(position.x, position.y);
     }
@@ -160,7 +168,7 @@ public strictfp abstract class Entity
      * @param x The new X position.
      * @param y The new Y position.
      */
-    public void position(float x, float y)
+    public synchronized void position(float x, float y)
     {
         boolean changeX = positionNew.x != x;
         boolean changeY = positionNew.y != y;
@@ -199,7 +207,7 @@ public strictfp abstract class Entity
      * @param parent The parent entity
      * @param spacing The spacing between the two ents
      */
-    public void projectInFrontOfEntity(Entity parent, float spacing)
+    public synchronized void projectInFrontOfEntity(Entity parent, float spacing)
     {
         // Clone the rotation of the parent
         rotation(parent.rotation);
@@ -217,7 +225,7 @@ public strictfp abstract class Entity
         return state == StateChange.PENDING_DELETED || state == StateChange.DELETED;
     }
     
-    public StateChange getState()
+    public synchronized StateChange getState()
     {
         return state;
     }
@@ -264,14 +272,14 @@ public strictfp abstract class Entity
         }
     }
     
-    public void setMaxHealth(float maxHealth)
+    public synchronized void setMaxHealth(float maxHealth)
     {
         this.maxHealth = maxHealth;
         this.health = maxHealth;
         updateMask(UpdateMasks.HEALTH);
     }
 
-    public void setGodmode()
+    public synchronized void setGodmode()
     {
         setMaxHealth(-1.0f);
     }
@@ -284,7 +292,7 @@ public strictfp abstract class Entity
      * @param inflicter The entity causing damage, can be null
      * @param killerType The type of death in the event this Entity dies
      */
-    public <T extends Class<? extends AbstractKiller>> void damage(Controller controller, Entity inflicter, float damage, T killerType)
+    public synchronized  <T extends Class<? extends AbstractKiller>> void damage(Controller controller, Entity inflicter, float damage, T killerType)
     {
         // Check entity does not have godmode
         if (maxHealth <= 0.0f)
@@ -324,7 +332,7 @@ public strictfp abstract class Entity
      * @param inflicter The entity killing this entity, can be null
      * @param killType The type of kill, in the event the player dies
      */
-    public <T extends Class<? extends AbstractKiller>> void kill(Controller controller, Entity inflicter, T killType)
+    public synchronized <T extends Class<? extends AbstractKiller>> void kill(Controller controller, Entity inflicter, T killType)
     {
         AbstractKiller death;
 
@@ -428,7 +436,7 @@ public strictfp abstract class Entity
     /**
      * Removes the entity from the world.
      */
-    public void remove()
+    public synchronized void remove()
     {
         setState(StateChange.PENDING_DELETED);
     }
@@ -446,7 +454,7 @@ public strictfp abstract class Entity
         }
     }
     
-    public void resetUpdateMask()
+    public synchronized void resetUpdateMask()
     {
         this.updateMask = 0;
     }
@@ -501,7 +509,16 @@ public strictfp abstract class Entity
 
     public void eventHandleCollision(Controller controller, Entity entCollider, Entity entVictim, Entity entOther, CollisionResult result)
     {
-        if (entCollider != this)
+        // This entity cannot be static and both entities cannot be intangible
+        if  (
+                (
+                    entCollider != this || entOther.physicsStatic
+                )
+                    &&
+                (
+                    !physicsStatic && !(physicsIntangible || entOther.physicsIntangible)
+                )
+            )
         {
             // Push ent out by default
             positionOffset(result.mtv);
@@ -528,7 +545,7 @@ public strictfp abstract class Entity
         // Nothing by default...
     }
 
-    public void reset()
+    public synchronized void reset()
     {
         health = maxHealth;
     }
@@ -554,7 +571,7 @@ public strictfp abstract class Entity
     }
 
     @Override
-    public String toString()
+    public synchronized String toString()
     {
         return "[" + getClass().getName() + " - id: " + id + "]";
     }
