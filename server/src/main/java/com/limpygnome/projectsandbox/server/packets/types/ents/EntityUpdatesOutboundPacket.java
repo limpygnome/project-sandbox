@@ -34,14 +34,14 @@ public class EntityUpdatesOutboundPacket extends OutboundPacket
             
             Iterator<Map.Entry<Short, Entity>> it = entityManager.entities.entrySet().iterator();
             StateChange entState;
-            
-            while(it.hasNext())
+
+            while (it.hasNext())
             {
                 kv = it.next();
                 ent = kv.getValue();
                 entState = ent.getState();
-                
-                if(forceCreate && entState != StateChange.DELETED && entState != StateChange.PENDING_DELETED)
+
+                if(forceCreate && !ent.isDeleted())
                 {
                     writeEntCreated(ent, forceCreate);
                     writeEntUpdated(ent, forceCreate);

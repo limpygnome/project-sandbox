@@ -135,7 +135,7 @@ public class EntityManager implements IdCounterConsumer
                     }
                 }
 
-                // Fetch map boundries
+                // Fetch map boundaries
                 // TODO: update if we have multiple maps
                 float mapMaxX = controller.mapManager.main.maxX;
                 float mapMaxY = controller.mapManager.main.maxY;
@@ -152,15 +152,15 @@ public class EntityManager implements IdCounterConsumer
                     // avoids a situation where an ent might get deleted, but
                     // sets its self to changed i.e. god mode / never deletes
 
-                    if (a.getState() != StateChange.PENDING_DELETED &&
-                            a.getState() != StateChange.DELETED)
+                    if (!a.isDeleted())
                     {
                         // Perform collision detection/handling with other ents
                         for (Map.Entry<Short, Entity> kv2 : entities.entrySet())
                         {
                             b = kv2.getValue();
 
-                            if (a.id != b.id && !b.physicsStatic)
+                            // Check the ents can collide
+                            if (a.id != b.id && !b.physicsStatic && !b.isDeleted())
                             {
                                 result = SAT.collision(a, b);
 
@@ -170,6 +170,12 @@ public class EntityManager implements IdCounterConsumer
                                     a.eventHandleCollision(controller, b, a, b, result);
                                     b.eventHandleCollision(controller, b, a, a, result);
                                 }
+                            }
+
+                            // Check if our original ent is now deleted
+                            if (a.isDeleted())
+                            {
+                                break;
                             }
                         }
 
@@ -195,8 +201,14 @@ public class EntityManager implements IdCounterConsumer
                 }
 
                 // Add pending ents
-                entities.putAll(entitiesNew);
-                entitiesNew.clear();
+                if (!entitiesNew.isEmpty())
+                {
+                    entities.putAll(entitiesNew);
+
+                    LOG.debug("Added {} pending new ent(s)", entitiesNew.size());
+
+                    entitiesNew.clear();
+                }
 
                 // Build update packet
                 EntityUpdatesOutboundPacket packet = new EntityUpdatesOutboundPacket();

@@ -3,6 +3,9 @@ package com.limpygnome.projectsandbox.server.ents.respawn;
 import com.limpygnome.projectsandbox.server.Controller;
 import com.limpygnome.projectsandbox.server.ents.Entity;
 import com.limpygnome.projectsandbox.server.ents.EntityManager;
+import com.limpygnome.projectsandbox.server.ents.enums.StateChange;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -12,6 +15,8 @@ import java.util.LinkedList;
  */
 public class RespawnManager
 {
+    private final static Logger LOG = LogManager.getLogger(RespawnManager.class);
+
     private Controller controller;
     private LinkedList<RespawnProperties> respawnPropertiesList;
 
@@ -50,6 +55,8 @@ public class RespawnManager
         }
 
         respawnPropertiesList.add(index, respawnProperties);
+
+        LOG.debug("Entity added for respawn - ent id: {}, index: {}", respawnProperties.entity.id, index);
     }
 
     public synchronized void logic()
@@ -71,6 +78,10 @@ public class RespawnManager
                 {
                     // Remove from our spawn manager
                     iterator.remove();
+                }
+                else
+                {
+                    LOG.warn("Unable to add entity to entity manager during respawn - ent id: " + entity.id);
                 }
             }
         }

@@ -211,6 +211,11 @@ public strictfp abstract class Entity
 
         position(newPosition);
     }
+
+    public synchronized boolean isDeleted()
+    {
+        return state == StateChange.PENDING_DELETED || state == StateChange.DELETED;
+    }
     
     public StateChange getState()
     {
@@ -219,20 +224,43 @@ public strictfp abstract class Entity
     
     public synchronized void setState(StateChange state)
     {
-        // Only allow delete slotState to progress
-        // TODO: disallow created -> update change
-        if (state == StateChange.UPDATED && this.state == StateChange.CREATED)
+        // Determine if state change is allowed
+        boolean transitionAllowed;
+
+        switch (this.state)
         {
-            return;
+            case CREATED:
+                transitionAllowed = (
+                                        state == StateChange.UPDATED || state == StateChange.PENDING_DELETED ||
+                                        state == StateChange.DELETED || state == StateChange.NONE ||
+                                        state == StateChange.CREATED
+                                    );
+                break;
+            case UPDATED:
+                transitionAllowed = (state == StateChange.UPDATED || state == StateChange.PENDING_DELETED || state == StateChange.NONE);
+                break;
+            case PENDING_DELETED:
+                transitionAllowed = (state == StateChange.DELETED);
+                break;
+            case DELETED:
+                transitionAllowed = (state == StateChange.CREATED);
+                break;
+            case NONE:
+                transitionAllowed = (state == StateChange.UPDATED || state == StateChange.PENDING_DELETED);
+                break;
+            default:
+                transitionAllowed = false;
+                break;
         }
-        
-        if(this.state == StateChange.PENDING_DELETED && state == StateChange.DELETED)
+
+        // Update transition if allowed
+        if (transitionAllowed)
         {
             this.state = state;
         }
-        else if(this.state != StateChange.DELETED && this.state != StateChange.PENDING_DELETED)
+        else
         {
-            this.state = state;
+            throw new RuntimeException("Disallowed state transition - " + this.state + " -> " + state);
         }
     }
     
@@ -405,13 +433,17 @@ public strictfp abstract class Entity
         setState(StateChange.PENDING_DELETED);
     }
     
-    public void updateMask(UpdateMasks... masks)
+    public synchronized void updateMask(UpdateMasks... masks)
     {
         for (UpdateMasks mask : masks)
         {
             this.updateMask |= mask.MASK;
         }
-        setState(StateChange.UPDATED);
+
+        if (this.state != StateChange.CREATED)
+        {
+            setState(StateChange.UPDATED);
+        }
     }
     
     public void resetUpdateMask()

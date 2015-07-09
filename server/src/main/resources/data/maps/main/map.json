@@ -97,13 +97,13 @@
             "spawn" :
             {
                 "x" : 90.0,
-                "y" : 360.0,
+                "y" : 250.0,
                 "rotation" : 0.0
             },
 
             "kv" :
             {
-                "pickup.respawn_delay" : 1000,
+                "pickup.respawn_delay" : 2000,
                 "health_pickup.health" : 500.0
             }
         }
