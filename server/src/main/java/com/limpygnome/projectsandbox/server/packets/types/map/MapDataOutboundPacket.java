@@ -5,7 +5,6 @@ import com.limpygnome.projectsandbox.server.packets.OutboundPacket;
 import com.limpygnome.projectsandbox.server.world.Map;
 
 import java.io.IOException;
-import java.util.LinkedList;
 
 /**
  * An outbound packet containing a snapshot of all the data needed to render the
@@ -25,7 +24,7 @@ public class MapDataOutboundPacket extends OutboundPacket
     public void build(Map map) throws IOException
     {
         // Add number of tiles
-        packetData.add((short) map.tileTypeMappings.size());
+        packetData.add((short) map.tileNameToTypeIndexMappings.size());
         
         // Add tile types
         TileType tileType;
@@ -47,7 +46,7 @@ public class MapDataOutboundPacket extends OutboundPacket
         }
         
         // Add map properties
-        packetData.add(map.id);
+        packetData.add(map.mapId);
         packetData.add(map.tileSize);
         packetData.add(map.width);
         packetData.add(map.height);

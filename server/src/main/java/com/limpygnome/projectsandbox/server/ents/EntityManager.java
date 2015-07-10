@@ -18,7 +18,10 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * @author limpygnome
+ * Handles all of the entities in the world.
+ *
+ * Notes:
+ * - Any modifications to the internal collections should always synchronize on `entities`.
  */
 public class EntityManager implements IdCounterConsumer
 {
@@ -47,31 +50,31 @@ public class EntityManager implements IdCounterConsumer
         }
     }
 
-    public boolean add(Entity ent)
+    public boolean add(Entity entity)
     {
         // Fetch the next available identifier
-        Short id = idCounterProvider.nextId(ent.id);
+        Short entityId = idCounterProvider.nextId(entity.id);
 
         // Check we found an identifier
-        if (id == null)
+        if (entityId == null)
         {
-            LOG.error("Unable to create identifier for entity - {}", ent);
+            LOG.error("Unable to create identifier for entity - {}", entity);
             return false;
         }
 
         // Assign id to entity
-        ent.id = id;
+        entity.id = entityId;
 
         // Add mapping
         synchronized (entities)
         {
             // Add entity to pending map
-            entitiesNew.put(id, ent);
+            entitiesNew.put(entityId, entity);
 
             // Update slotState to created - for update to all players!
-            ent.setState(StateChange.CREATED);
+            entity.setState(StateChange.CREATED);
 
-            LOG.debug("Ent added - {}", ent);
+            LOG.debug("Entity pending addition to the world - {}", entity);
         }
 
         return true;
@@ -80,39 +83,68 @@ public class EntityManager implements IdCounterConsumer
     @Override
     public boolean containsId(short id)
     {
-        return entities.containsKey(id) || entitiesNew.containsKey(id);
-    }
-
-    public boolean remove(short id)
-    {
-        // Remove mapping
         synchronized (entities)
         {
-            Entity ent = entities.get(id);
-            if (ent != null)
-            {
-                ent.setState(StateChange.PENDING_DELETED);
-                ent.eventPendingDeleted(controller);
+            return entities.containsKey(id) || entitiesNew.containsKey(id);
+        }
+    }
 
-                LOG.debug("Ent set for removal - {}", ent);
-            } else
+    public boolean remove(short entityId)
+    {
+        return removeInternal(entityId, null);
+    }
+
+    public boolean remove(Entity entity)
+    {
+        return removeInternal(entity.id, entity);
+    }
+
+    private boolean removeInternal(short entityId, Entity entity)
+    {
+        synchronized (entities)
+        {
+            // Attempt removal of ent from world
+            Entity entityFetchedWorld = entities.remove(entityId);
+
+            if (entityFetchedWorld != null)
             {
-                // Try pending (new) ents
-                ent = entitiesNew.get(id);
-                if (ent != null)
+                if (entityFetchedWorld == entity)
                 {
-                    ent.setState(StateChange.PENDING_DELETED);
-                    LOG.debug("Ent (new) set for removal - {}", ent);
+                    // Update entity and call events
+                    entity.setState(StateChange.PENDING_DELETED);
+                    entity.eventPendingDeleted(controller);
+
+                    LOG.debug("Entity set for removal - {}", entity);
+
+                    return true;
+                }
+                else
+                {
+                    entities.put(entityId, entityFetchedWorld);
+                    LOG.debug("Found entity with duplicate entity ID in world, re-added to world - {}", entityFetchedWorld);
+                }
+            }
+
+            // Attempt removal on ents to be added - unlikely, but still possible
+            Entity entityFetchedNew = entitiesNew.remove(entityId);
+
+            if (entityFetchedNew != null)
+            {
+                if (entityFetchedNew == entity)
+                {
+                    LOG.debug("Removed newly added entity - {}", entity);
+                    return true;
+                }
+                else
+                {
+                    // Wrong entity, add it back - this scenario isn't likely and cheapest solution
+                    entitiesNew.put(entityId, entityFetchedNew);
+                    LOG.debug("Found newly added entity with duplicate entity ID, re-added duplicate - {}", entityFetchedNew);
                 }
             }
         }
 
-        return true;
-    }
-
-    public boolean remove(Entity ent)
-    {
-        return remove(ent.id);
+        return false;
     }
 
     public void logic()
@@ -121,17 +153,18 @@ public class EntityManager implements IdCounterConsumer
         {
             synchronized (entities)
             {
-                Entity a;
-                Entity b;
+                Entity entityA;
+                Entity entityB;
 
                 // Execute logic for each entity
                 for (Map.Entry<Short, Entity> kv : entities.entrySet())
                 {
-                    a = kv.getValue();
+                    entityA = kv.getValue();
 
-                    if (a.getState() != StateChange.PENDING_DELETED && a.getState() != StateChange.DELETED)
+                    // We won't run logic for deleted enities
+                    if (!entityA.isDeleted())
                     {
-                        a.logic(controller);
+                        entityA.logic(controller);
                     }
                 }
 
@@ -141,62 +174,77 @@ public class EntityManager implements IdCounterConsumer
                 float mapMaxY = controller.mapManager.main.maxY;
 
                 // Perform collision check for each entity
-                CollisionResult result;
+                CollisionResult collisionResult;
                 Collection<CollisionResultMap> mapResults;
 
                 for (Map.Entry<Short, Entity> kv : entities.entrySet())
                 {
-                    a = kv.getValue();
+                    entityA = kv.getValue();
 
-                    // Perform ent logic if not in removal process; this
-                    // avoids a situation where an ent might get deleted, but
-                    // sets its self to changed i.e. god mode / never deletes
-
-                    if (!a.isDeleted())
+                    // Check entity is not deleted
+                    if (!entityA.isDeleted())
                     {
+                        // TODO: upgrade with quadtree, N^N - really bad...
+
                         // Perform collision detection/handling with other ents
                         for (Map.Entry<Short, Entity> kv2 : entities.entrySet())
                         {
-                            b = kv2.getValue();
+                            entityB = kv2.getValue();
 
-                            // Check the ents can collide
-                            if (a.id != b.id && !b.isDeleted())
+                            // Check next entity is not dead
+                            if (!entityB.isDeleted())
                             {
-                                result = SAT.collision(a, b);
-
-                                if (result.collision)
+                                // Check the ents can collide
+                                if (entityA.id != entityB.id && !entityB.isDeleted())
                                 {
-                                    // Inform both ents of event
-                                    a.eventHandleCollision(controller, b, a, b, result);
-                                    b.eventHandleCollision(controller, b, a, a, result);
+                                    collisionResult = SAT.collision(entityA, entityB);
+
+                                    // Check if a collision occurred
+                                    if (collisionResult.collision)
+                                    {
+                                        // Inform both ents of event
+                                        entityA.eventHandleCollision(controller, entityB, entityA, entityB, collisionResult);
+                                        entityB.eventHandleCollision(controller, entityB, entityA, entityA, collisionResult);
+
+                                        // Check if our original entity is now deleted
+                                        // -- Only the two above events should be able to kill it
+                                        if (entityA.isDeleted())
+                                        {
+                                            break;
+                                        }
+                                    }
                                 }
                             }
 
-                            // Check if our original ent is now deleted
-                            if (a.isDeleted())
+                            // CHeck entity has still not been deleted
+                            if (!entityA.isDeleted())
                             {
-                                break;
+                                // Perform collision with map
+                                // TODO: add support for multiple maps
+                                mapResults = SAT.collisionMap(controller.mapManager.main, entityA);
+
+                                for (CollisionResultMap mapResult : mapResults)
+                                {
+                                    entityA.eventHandleCollisionMap(controller, mapResult);
+                                }
+
+                                // Update position for ent
+                                entityA.position.copy(entityA.positionNew);
+
+                                // Check ent is not outside map
+                                if  (!entityA.isDeleted() &&
+                                        (
+                                            entityA.positionNew.x < 0.0f || entityA.positionNew.y < 0.0f ||
+                                            entityA.positionNew.x > mapMaxX || entityA.positionNew.y > mapMaxY
+                                        )
+                                    )
+                                {
+                                    // Kill the ent...
+                                    entityA.kill(controller, null, MapBoundsKiller.class);
+                                }
                             }
                         }
 
-                        // Perform collision with map
-                        mapResults = SAT.collisionMap(controller.mapManager.main, a);
-
-                        for (CollisionResultMap mapResult : mapResults)
-                        {
-                            a.eventHandleCollisionMap(controller, mapResult);
-                        }
-
-                        // Update position for ent
-                        a.position.copy(a.positionNew);
-
-                        // Check ent is not outside map
-                        if (a.positionNew.x < 0.0f || a.positionNew.y < 0.0f ||
-                                a.positionNew.x > mapMaxX || a.positionNew.y > mapMaxY)
-                        {
-                            // Kill the ent...
-                            a.kill(controller, null, MapBoundsKiller.class);
-                        }
                     }
                 }
 

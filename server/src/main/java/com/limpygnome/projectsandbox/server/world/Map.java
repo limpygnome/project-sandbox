@@ -1,18 +1,16 @@
 package com.limpygnome.projectsandbox.server.world;
 
 import com.limpygnome.projectsandbox.server.Controller;
-import com.limpygnome.projectsandbox.server.ents.enums.UpdateMasks;
-import com.limpygnome.projectsandbox.server.ents.physics.Vector2;
 import com.limpygnome.projectsandbox.server.ents.physics.Vertices;
+import com.limpygnome.projectsandbox.server.ents.respawn.PendingRespawn;
+import com.limpygnome.projectsandbox.server.ents.respawn.RespawnManager;
 import com.limpygnome.projectsandbox.server.packets.types.map.MapDataOutboundPacket;
 import com.limpygnome.projectsandbox.server.ents.Entity;
-import com.limpygnome.projectsandbox.server.ents.enums.StateChange;
 
 import java.io.IOException;
 import java.lang.reflect.Constructor;
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.Set;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -20,21 +18,21 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
 /**
+ * Holds data regarding a map.
  *
- * @author limpygnome
+ * TODO: cleanup this class, quite old and untouched
  */
 public class Map
 {
     private final static Logger LOG = LogManager.getLogger(Map.class);
 
-    // auto-gen by map manager
-    public short id;
-    
-    // the types of tiles - name <> type
-    public HashMap<String, Short> tileTypeMappings;
-    public TileType[] tileTypes;
+    private final Controller controller;
+    public final short mapId;
+
     private short tileTypeIdCounter;
-    
+    public HashMap<String, Short> tileNameToTypeIndexMappings;
+    public TileType[] tileTypes;
+
     private final MapManager mapManager;
     
     public String name;
@@ -47,26 +45,28 @@ public class Map
     /** Mapped by [y][x] or [row][column]; bottom-left at 0, top-right at n */
     public short tiles[][];
     public Vertices[][] tileVertices;
+
+    public final RespawnManager respawnManager;
     
-    // if this is updated, it needs thread protection
+    // if this is later updated elsewhere, it needs thread protection
     public MapDataOutboundPacket packet;
     
-    private HashMap<Short, Faction> factions;
-    
-    public Map(MapManager mapManager)
+    private Map(Controller controller, MapManager mapManager, short mapId)
     {
+        this.controller = controller;
         this.mapManager = mapManager;
-        this.tileTypeMappings = new HashMap<>();
+        this.mapId = mapId;
+        this.tileNameToTypeIndexMappings = new HashMap<>();
         this.tileTypeIdCounter = 0;
-        this.factions = new HashMap<>();
+        this.respawnManager = new RespawnManager(controller);
     }
     
-    public static Map load(Controller controller, MapManager mapManager, JSONObject obj) throws IOException
+    public static Map load(Controller controller, MapManager mapManager, short mapId, JSONObject rootJsonNode) throws IOException
     {
-        Map map = new Map(mapManager);
+        Map map = new Map(controller, mapManager, mapId);
         
         // Load map tile types
-        JSONArray tileTypes = (JSONArray) obj.get("tile_types");
+        JSONArray tileTypes = (JSONArray) rootJsonNode.get("tile_types");
         
         // Setup array for types
         map.tileTypes = new TileType[tileTypes.size()];
@@ -77,23 +77,23 @@ public class Map
         {
             // Parse tile type
             arrayObj = (JSONObject) rawTileType;
-            tileType = TileType.load(mapManager.controller, arrayObj);
+            tileType = TileType.load(controller, arrayObj);
             
             // Assign ID to type
             tileType.id = map.tileTypeIdCounter++;
             
             // Add mapping
-            map.tileTypeMappings.put(tileType.name, tileType.id);
+            map.tileNameToTypeIndexMappings.put(tileType.name, tileType.id);
             
             // Store type
             map.tileTypes[tileType.id] = tileType;
         }
         
         // Load properties
-        map.name = (String) obj.get("name");
-        map.tileSize = (short) (long) obj.get("tile_size");
-        map.width = (short) (long) obj.get("width");
-        map.height = (short) (long) obj.get("height");
+        map.name = (String) rootJsonNode.get("name");
+        map.tileSize = (short) (long) rootJsonNode.get("tile_size");
+        map.width = (short) (long) rootJsonNode.get("width");
+        map.height = (short) (long) rootJsonNode.get("height");
         
         // Compute max boundries
         map.maxX = (float) map.tileSize * (float) map.width;
@@ -106,7 +106,7 @@ public class Map
         map.tileVertices = new Vertices[map.height][map.width];
         
         // Load tiles
-        JSONArray tiles = (JSONArray) obj.get("tiles");
+        JSONArray tiles = (JSONArray) rootJsonNode.get("tiles");
         
         // Check we have a correct number of tiles
         if(tiles.size() != (map.width * map.height))
@@ -132,7 +132,7 @@ public class Map
                 tile = (String) tiles.get(yoffset++);
                 
                 // Locate actual type
-                typeIndex = map.tileTypeMappings.get(tile);
+                typeIndex = map.tileNameToTypeIndexMappings.get(tile);
                 type = map.tileTypes[typeIndex];
                 
                 if(type == null)
@@ -156,14 +156,14 @@ public class Map
         map.packet.build(map);
         
         // Parse factions
-        JSONArray factions = (JSONArray) obj.get("factions");
+        JSONArray factions = (JSONArray) rootJsonNode.get("factionSpawns");
         for (Object factionData : factions)
         {
-            parseFaction(map, (JSONObject) factionData);
+            parseFactionSpawns(map, (JSONObject) factionData);
         }
         
         // Spawn ents into world
-        JSONArray ents = (JSONArray) obj.get("ents");
+        JSONArray ents = (JSONArray) rootJsonNode.get("ents");
         for (Object entData : ents)
         {
             parseEnts(controller, mapManager, map, (JSONObject) entData);
@@ -220,7 +220,7 @@ public class Map
         }
 
         // Create new instances of type
-        createEnts(mapManager.controller, map, entClass, mapEntKV, count, faction, spawn);
+        createEnts(controller, map, entClass, mapEntKV, count, faction, spawn);
     }
 
     private static MapEntKV createEntKVHashMap(JSONObject rawKV)
@@ -307,15 +307,15 @@ public class Map
             controller.entityManager.add(entity);
 
             // Spawn
-            map.spawn(entity);
+            controller.respawnManager.respawn(new PendingRespawn(entity, 0));
         }
     }
     
-    private static void parseFaction(Map map, JSONObject factionData)
+    private static void parseFactionSpawns(Map map, JSONObject factionData)
     {
         short factionId = (short) (long) factionData.get("id");
         
-        Faction faction = new Faction(factionId);
+        FactionSpawns factionSpawns = new FactionSpawns(factionId);
         
         // Parse spawns
         JSONArray spawnsData = (JSONArray) factionData.get("spawns");
@@ -325,14 +325,14 @@ public class Map
             for (Object spawnData : spawnsData)
             {
                 spawn = parseSpawn((JSONObject) spawnData);
-                faction.addSpawn(spawn);
+                factionSpawns.addSpawn(spawn);
             }
         }
         
         // Add to map
-        map.factions.put(faction.getFactionId(), faction);
+        map.respawnManager.addFactionSpawns(map.mapId, factionSpawns);
 
-        LOG.debug("Added faction - {}", faction);
+        LOG.debug("Added faction spawns - {}", factionSpawns);
     }
     
     private static Spawn parseSpawn(JSONObject spawn)
@@ -349,66 +349,6 @@ public class Map
         {
             return null;
         }
-    }
-    
-    /**
-     * Spawns an entity at the next available spawn for their faction.
-     * 
-     * @param <T>
-     * @param ent 
-     */
-    public <T extends Entity> boolean spawn(T ent)
-    {
-        // Fetch spawn for faction
-        Faction faction = factions.get(ent.faction);
-
-        // Check ent for its own custom spawn
-        if (ent.spawn != null)
-        {
-            return spawnEnt(ent, ent.spawn);
-        }
-        // Check we have a faction to fetch faction spawns
-        else if (faction == null)
-        {
-            LOG.warn("Cannot find faction for entity - id: {}, faction: {}", ent.id, ent.faction);
-            ent.setState(StateChange.PENDING_DELETED);
-            return false;
-        }
-        // Use faction spawn
-        else if (faction.hasSpawns())
-        {   
-            Spawn spawn = faction.getNextSpawn();
-            return spawnEnt(ent, spawn);
-        }
-        else
-        {
-            LOG.warn("No spawns available for faction - id: {}, faction: {}", ent.id, ent.faction);
-            ent.setState(StateChange.PENDING_DELETED);
-            return false;
-        }
-    }
-
-    private boolean spawnEnt(Entity ent, Spawn spawn)
-    {
-        // Setup entity for its new life
-        ent.reset();
-
-        // Set position etc for spawn
-        ent.positionNew.x = spawn.x;
-        ent.positionNew.y = spawn.y;
-        ent.position.copy(ent.positionNew);
-        ent.rotation = spawn.rotation;
-        ent.updateMask(UpdateMasks.ALL_MASKS);
-
-        // Rebuild vertices
-        ent.rebuildCachedVertices();
-
-        // Inform the ent it has been spawned
-        ent.eventSpawn();
-
-        LOG.debug("Spawned entity - ent: {} - spawn: {}", ent, spawn);
-
-        return true;
     }
 
     @Override
@@ -427,7 +367,7 @@ public class Map
         
         // Add tile types
         short typeIndex;
-        for(java.util.Map.Entry<String, Short> kv : tileTypeMappings.entrySet())
+        for(java.util.Map.Entry<String, Short> kv : tileNameToTypeIndexMappings.entrySet())
         {
             typeIndex = kv.getValue();
             sb.append("\t\t").append(tileTypes[typeIndex]).append("\n");

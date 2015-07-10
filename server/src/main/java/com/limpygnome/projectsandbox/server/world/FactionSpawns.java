@@ -4,16 +4,15 @@ import java.util.Iterator;
 import java.util.LinkedList;
 
 /**
- *
- * @author limpygnome
+ * Used to represent the spawns belonging to a faction for a map.
  */
-public class Faction
+public class FactionSpawns
 {
     private short factionId;
     private LinkedList<Spawn> spawns;
     private Iterator<Spawn> spawnIterator;
     
-    public Faction(short factionId)
+    public FactionSpawns(short factionId)
     {
         this.factionId = factionId;
         this.spawns = new LinkedList<>();

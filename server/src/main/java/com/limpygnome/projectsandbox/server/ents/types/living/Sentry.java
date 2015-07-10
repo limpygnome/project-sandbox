@@ -89,7 +89,7 @@ public class Sentry extends Entity
         // Check if we can fire and  we're within the right angle to fire
         if (fireMode && targetAngleOffsetAbs <= ROTATION_DIFF_FIRE)
         {
-            //fire(controller);
+            fire(controller);
         }
     }
 

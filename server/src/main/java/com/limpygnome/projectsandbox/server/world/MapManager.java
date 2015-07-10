@@ -1,8 +1,6 @@
 package com.limpygnome.projectsandbox.server.world;
 
 import com.limpygnome.projectsandbox.server.constants.PathConstants;
-import com.limpygnome.projectsandbox.server.ents.annotations.EntityType;
-import com.limpygnome.projectsandbox.server.utils.Annotations;
 import com.limpygnome.projectsandbox.server.utils.FileSystem;
 import com.limpygnome.projectsandbox.server.utils.FileSystemFile;
 import com.limpygnome.projectsandbox.server.utils.JsonHelper;
@@ -23,7 +21,7 @@ public class MapManager
 {
     private final static Logger LOG = LogManager.getLogger(MapManager.class);
 
-    public Controller controller;
+    private Controller controller;
 
     public HashMap<String, Map> maps;
     private short mapIdCounter;
@@ -52,7 +50,7 @@ public class MapManager
             map = Map.load(controller, this, obj);
             
             // Assign ID
-            map.id = mapIdCounter++;
+            map.mapId = mapIdCounter++;
             
             // Add mapping
             maps.put(map.name, map);

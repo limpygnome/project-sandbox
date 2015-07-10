@@ -1,11 +1,12 @@
 high priority:
 - move respawn manager into a map -> since respawning should support multiple maps
 - improve physics properties in ents, maybe move to subclass with defaults
+- tiles need to apply damage / physics properties
+- split game and engine on serverside apart
+   - register types of packets (engine/game) on startup, goes into hashmap of MAIN-SUBTYPE -> packet class (k -> v)
 - lighting
 - pickups (health / armour / weapons etc)
 - map editor
-- split game and engine on serverside apart
-   - register types of packets (engine/game) on startup, goes into hashmap of MAIN-SUBTYPE -> packet class (k -> v)
 - player info updates -> consider making update packets generic, foreach stuff or something
 - buffer cache has limit and purges items / look at optimizing and disposing buffer cache -> hook verts with an array of prims using them, prim dispose removes from array etc
 - allow ents to have a property where they cannot be moved -> physics properties . static

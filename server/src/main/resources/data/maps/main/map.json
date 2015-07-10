@@ -109,7 +109,7 @@
         }
     ],
     
-    "factions":
+    "factionSpawns":
     [
         {
             "id" : 0,
