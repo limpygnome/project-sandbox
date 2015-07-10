@@ -42,7 +42,7 @@ public class FactionSpawns
         return spawnIterator.next();
     }
 
-    public boolean hasSpawns()
+    public synchronized boolean hasSpawns()
     {
         return !spawns.isEmpty();
     }

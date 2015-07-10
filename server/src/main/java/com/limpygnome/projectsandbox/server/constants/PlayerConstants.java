@@ -37,4 +37,9 @@ public class PlayerConstants
      */
     public static final float DEFAULT_ROTATION_FACTOR = 0.15f;
 
+    /**
+     * The default time to wait before respawning a player.
+     */
+    public static final long DEFAULT_RESPAWN_TIME_MS = 2000;
+
 }

@@ -19,8 +19,6 @@ import org.json.simple.JSONObject;
 
 /**
  * Holds data regarding a map.
- *
- * TODO: cleanup this class, quite old and untouched
  */
 public class Map
 {
@@ -73,6 +71,7 @@ public class Map
         
         JSONObject arrayObj;
         TileType tileType;
+
         for(Object rawTileType : tileTypes)
         {
             // Parse tile type
@@ -109,7 +108,7 @@ public class Map
         JSONArray tiles = (JSONArray) rootJsonNode.get("tiles");
         
         // Check we have a correct number of tiles
-        if(tiles.size() != (map.width * map.height))
+        if (tiles.size() != (map.width * map.height))
         {
             throw new IOException("Invalid tile count for map " + map.name +
                     " - expected " + (map.width * map.height) +
@@ -212,7 +211,7 @@ public class Map
 
         if (rawKV != null)
         {
-            mapEntKV = createEntKVHashMap(rawKV);
+            mapEntKV = parseEntsCreateEntKVHashMap(rawKV);
         }
         else
         {
@@ -220,10 +219,10 @@ public class Map
         }
 
         // Create new instances of type
-        createEnts(controller, map, entClass, mapEntKV, count, faction, spawn);
+        parseEntsCreateEnts(controller, map, entClass, mapEntKV, count, faction, spawn);
     }
 
-    private static MapEntKV createEntKVHashMap(JSONObject rawKV)
+    private static MapEntKV parseEntsCreateEntKVHashMap(JSONObject rawKV)
     {
         MapEntKV mapEntKV = new MapEntKV();
 
@@ -247,7 +246,7 @@ public class Map
         return mapEntKV;
     }
 
-    private static void createEnts(Controller controller, Map map, Class entClass, MapEntKV mapEntKV, long count, short faction, Spawn spawn) throws IOException
+    private static void parseEntsCreateEnts(Controller controller, Map map, Class entClass, MapEntKV mapEntKV, long count, short faction, Spawn spawn) throws IOException
     {
         boolean useKv = (mapEntKV != null);
 
@@ -304,10 +303,7 @@ public class Map
             }
 
             // Add to world
-            controller.entityManager.add(entity);
-
-            // Spawn
-            controller.respawnManager.respawn(new PendingRespawn(entity, 0));
+            controller.respawnManager.respawn(new PendingRespawn(entity));
         }
     }
     

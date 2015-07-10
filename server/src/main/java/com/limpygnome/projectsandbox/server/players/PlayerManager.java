@@ -3,6 +3,7 @@ package com.limpygnome.projectsandbox.server.players;
 
 import com.limpygnome.projectsandbox.server.Controller;
 import com.limpygnome.projectsandbox.server.ents.Entity;
+import com.limpygnome.projectsandbox.server.ents.respawn.PendingRespawn;
 import com.limpygnome.projectsandbox.server.ents.types.living.Player;
 import com.limpygnome.projectsandbox.server.packets.OutboundPacket;
 import com.limpygnome.projectsandbox.server.packets.types.ents.EntityUpdatesOutboundPacket;
@@ -21,8 +22,7 @@ import org.apache.logging.log4j.Logger;
 import org.java_websocket.WebSocket;
 
 /**
- *
- * @author limpygnome
+ * Responsible for holding data representing the actual players, rather than their entities.
  */
 public class PlayerManager implements IdCounterConsumer
 {
@@ -194,15 +194,19 @@ public class PlayerManager implements IdCounterConsumer
     }
 
     @Override
-    public boolean containsId(short id)
+    public synchronized boolean containsId(short id)
     {
         return mappingsById.containsKey(id);
     }
 
     public synchronized Player createAndSpawnNewPlayerEnt(PlayerInfo playerInfo)
     {
+        // Create player entity
         Player ply = createNewPlayerEnt(playerInfo);
-        controller.mapManager.main.spawn(ply);
+
+        // Spawn new entity
+        controller.respawnManager.respawn(new PendingRespawn(ply));
+
         return ply;
     }
     
@@ -210,29 +214,27 @@ public class PlayerManager implements IdCounterConsumer
     {
         // Create new entity
         Player ply = new Player(controller, playerInfo);
-        
-        // Add entity to world
-        if(!controller.entityManager.add(ply))
-        {
-            // TODO; consider removal or better handling...
-            throw new RuntimeException("Failed to spawn player");
-        }
-        
+
         // Set player to use ent
         setPlayerEnt(playerInfo, ply);
-        
+
+        // Spawn entity
+        controller.respawnManager.respawn(new PendingRespawn(ply));
+
         return ply;
     }
     
     public synchronized void setPlayerEnt(PlayerInfo playerInfo, Entity entity)
     {
-        Entity current = playerInfo.entity;
-        if (current != null)
+        Entity currentEntity = playerInfo.entity;
+
+        if (currentEntity != null)
         {
             // Remove entity if instance of player
-            if (current instanceof Player)
+            // TODO: needs decoupling...should not have a special case for Player types
+            if (currentEntity instanceof Player)
             {
-                controller.entityManager.remove(current);
+                controller.entityManager.remove(currentEntity);
             }
         }
         
@@ -252,7 +254,7 @@ public class PlayerManager implements IdCounterConsumer
         }
     }
 
-    public PlayerInfo getPlayerByWebSocket(WebSocket ws)
+    public synchronized PlayerInfo getPlayerByWebSocket(WebSocket ws)
     {
         return mappings.get(ws);
     }

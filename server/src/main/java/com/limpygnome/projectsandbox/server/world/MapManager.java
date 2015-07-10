@@ -14,8 +14,7 @@ import org.apache.logging.log4j.Logger;
 import org.json.simple.JSONObject;
 
 /**
- *
- * @author limpygnome
+ * Responsible for loading maps.
  */
 public class MapManager
 {
@@ -43,14 +42,15 @@ public class MapManager
         // Iterate and load each map file
         JSONObject obj;
         Map map;
+
         for(FileSystemFile file : files)
         {
             // Load map
             obj = JsonHelper.read(file.getInputStream());
-            map = Map.load(controller, this, obj);
+            map = Map.load(controller, this, mapIdCounter, obj);
             
-            // Assign ID
-            map.mapId = mapIdCounter++;
+            // Map has loaded, now increment counter
+            mapIdCounter++;
             
             // Add mapping
             maps.put(map.name, map);
@@ -61,7 +61,7 @@ public class MapManager
         // Set the main map file
         main = maps.get("main");
         
-        if(main == null)
+        if (main == null)
         {
             throw new IOException("Unable to find main map.");
         }

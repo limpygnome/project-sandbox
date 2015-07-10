@@ -7,6 +7,7 @@ import com.limpygnome.projectsandbox.server.ents.physics.collisions.CollisionRes
 import com.limpygnome.projectsandbox.server.ents.physics.Vector2;
 import com.limpygnome.projectsandbox.server.ents.physics.Vertices;
 import com.limpygnome.projectsandbox.server.ents.physics.collisions.CollisionResultMap;
+import com.limpygnome.projectsandbox.server.ents.respawn.PendingRespawn;
 import com.limpygnome.projectsandbox.server.inventory.Inventory;
 import com.limpygnome.projectsandbox.server.packets.PacketData;
 import com.limpygnome.projectsandbox.server.players.PlayerInfo;
@@ -18,6 +19,8 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.lang.annotation.Annotation;
+
+import static com.limpygnome.projectsandbox.server.constants.PlayerConstants.*;
 
 /**
  *
@@ -79,9 +82,6 @@ public strictfp abstract class Entity
         this.id = 0;
         this.faction = DEFAULT_FACTION;
         this.spawn = null;
-        
-        // Fetch entity ID
-        final Class ENTITY_CLASS = getClass();
         
         // Read type from annotation
         Annotation annotationEntityType = getClass().getAnnotation(EntityType.class);
@@ -482,10 +482,10 @@ public strictfp abstract class Entity
      * @param controller
      * @param killer The cause of death.
      */
-    public void eventHandleDeath(Controller controller, AbstractKiller killer)
+    public synchronized void eventHandleDeath(Controller controller, AbstractKiller killer)
     {
         // Default action is to respawn the entity
-        controller.mapManager.main.spawn(this);
+        controller.respawnManager.respawn(new PendingRespawn(this, DEFAULT_RESPAWN_TIME_MS));
     }
     
     public void eventPacketEntCreated(PacketData packetData)
@@ -507,7 +507,7 @@ public strictfp abstract class Entity
         return false;
     }
 
-    public void eventHandleCollision(Controller controller, Entity entCollider, Entity entVictim, Entity entOther, CollisionResult result)
+    public synchronized void eventHandleCollision(Controller controller, Entity entCollider, Entity entVictim, Entity entOther, CollisionResult result)
     {
         // This entity cannot be static and both entities cannot be intangible
         if  (
@@ -525,7 +525,7 @@ public strictfp abstract class Entity
         }
     }
 
-    public void eventHandleCollisionMap(Controller controller, CollisionResultMap collisionResultMap)
+    public synchronized void eventHandleCollisionMap(Controller controller, CollisionResultMap collisionResultMap)
     {
         // Check if solid for collision response
         if (collisionResultMap.tileType.properties.solid)

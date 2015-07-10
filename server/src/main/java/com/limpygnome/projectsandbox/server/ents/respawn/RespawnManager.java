@@ -16,6 +16,8 @@ import java.util.LinkedList;
 
 /**
  * A layer above {@link EntityManager} for respawning an entity with additional params.
+ *
+ * TODO: add support for multiple maps; this should be a single instance for all maps
  */
 public class RespawnManager
 {
@@ -29,11 +31,13 @@ public class RespawnManager
     {
         this.controller = controller;
         this.pendingRespawnList = new LinkedList<>();
+        this.factionSpawnsMap = new HashMap<>();
     }
 
     public synchronized void addFactionSpawns(short mapId, FactionSpawns factionSpawns)
     {
         this.factionSpawnsMap.put(factionSpawns.getFactionId(), factionSpawns);
+        LOG.debug("Added faction spawns - map id: {}, faction id: {}, spawns: {}", mapId, factionSpawns.getFactionId(), factionSpawns);
     }
 
     public synchronized void respawn(PendingRespawn pendingRespawn)
@@ -111,7 +115,9 @@ public class RespawnManager
         // Check we have a factionSpawns to fetch factionSpawns spawns
         else if (factionSpawns == null)
         {
-            LOG.warn("Cannot find factionSpawns for entity - id: {}, factionSpawns: {}", entity.id, entity.faction);
+            LOG.warn("Cannot find factionSpawns for entity - faction id: {}, factions: {}, entity id: {}",
+                    entity.faction, factionSpawns, entity.id);
+
             entity.setState(StateChange.PENDING_DELETED);
             return false;
         }
@@ -130,7 +136,7 @@ public class RespawnManager
         }
     }
 
-    private synchronized void entityRespawnSetup(Entity ent, Spawn spawn)
+    private void entityRespawnSetup(Entity ent, Spawn spawn)
     {
         // Setup entity for its new life
         ent.reset();
