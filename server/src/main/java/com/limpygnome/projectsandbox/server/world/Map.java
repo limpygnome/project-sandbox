@@ -2,8 +2,8 @@ package com.limpygnome.projectsandbox.server.world;
 
 import com.limpygnome.projectsandbox.server.Controller;
 import com.limpygnome.projectsandbox.server.ents.physics.Vertices;
-import com.limpygnome.projectsandbox.server.ents.respawn.PendingRespawn;
-import com.limpygnome.projectsandbox.server.ents.respawn.RespawnManager;
+import com.limpygnome.projectsandbox.server.ents.respawn.pending.EntityPendingRespawn;
+import com.limpygnome.projectsandbox.server.ents.respawn.pending.PendingRespawn;
 import com.limpygnome.projectsandbox.server.packets.types.map.MapDataOutboundPacket;
 import com.limpygnome.projectsandbox.server.ents.Entity;
 
@@ -44,8 +44,6 @@ public class Map
     public short tiles[][];
     public Vertices[][] tileVertices;
 
-    public final RespawnManager respawnManager;
-    
     // if this is later updated elsewhere, it needs thread protection
     public MapDataOutboundPacket packet;
     
@@ -56,7 +54,6 @@ public class Map
         this.mapId = mapId;
         this.tileNameToTypeIndexMappings = new HashMap<>();
         this.tileTypeIdCounter = 0;
-        this.respawnManager = new RespawnManager(controller);
     }
     
     public static Map load(Controller controller, MapManager mapManager, short mapId, JSONObject rootJsonNode) throws IOException
@@ -158,7 +155,7 @@ public class Map
         JSONArray factions = (JSONArray) rootJsonNode.get("factionSpawns");
         for (Object factionData : factions)
         {
-            parseFactionSpawns(map, (JSONObject) factionData);
+            parseFactionSpawns(controller, map, (JSONObject) factionData);
         }
         
         // Spawn ents into world
@@ -303,11 +300,11 @@ public class Map
             }
 
             // Add to world
-            controller.respawnManager.respawn(new PendingRespawn(entity));
+            controller.respawnManager.respawn(new EntityPendingRespawn(entity));
         }
     }
     
-    private static void parseFactionSpawns(Map map, JSONObject factionData)
+    private static void parseFactionSpawns(Controller controller, Map map, JSONObject factionData)
     {
         short factionId = (short) (long) factionData.get("id");
         
@@ -326,9 +323,7 @@ public class Map
         }
         
         // Add to map
-        map.respawnManager.addFactionSpawns(map.mapId, factionSpawns);
-
-        LOG.debug("Added faction spawns - {}", factionSpawns);
+        controller.respawnManager.factionSpawnsAdd(map.mapId, factionSpawns);
     }
     
     private static Spawn parseSpawn(JSONObject spawn)

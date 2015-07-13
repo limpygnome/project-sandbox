@@ -5,6 +5,7 @@ import com.limpygnome.projectsandbox.server.ents.Entity;
 import com.limpygnome.projectsandbox.server.ents.EntityManager;
 import com.limpygnome.projectsandbox.server.ents.enums.StateChange;
 import com.limpygnome.projectsandbox.server.ents.enums.UpdateMasks;
+import com.limpygnome.projectsandbox.server.ents.respawn.pending.PendingRespawn;
 import com.limpygnome.projectsandbox.server.world.FactionSpawns;
 import com.limpygnome.projectsandbox.server.world.Spawn;
 import org.apache.logging.log4j.LogManager;
@@ -34,10 +35,15 @@ public class RespawnManager
         this.factionSpawnsMap = new HashMap<>();
     }
 
-    public synchronized void addFactionSpawns(short mapId, FactionSpawns factionSpawns)
+    public synchronized void factionSpawnsAdd(short mapId, FactionSpawns factionSpawns)
     {
         this.factionSpawnsMap.put(factionSpawns.getFactionId(), factionSpawns);
-        LOG.debug("Added faction spawns - map id: {}, faction id: {}, spawns: {}", mapId, factionSpawns.getFactionId(), factionSpawns);
+        LOG.debug("Added faction spawns - map id: {}, spawns: {}", mapId, factionSpawns);
+    }
+
+    public synchronized FactionSpawns factionSpawnsGet(short mapId, short factionId)
+    {
+        return this.factionSpawnsMap.get(factionId);
     }
 
     public synchronized void respawn(PendingRespawn pendingRespawn)
@@ -75,86 +81,60 @@ public class RespawnManager
         // Check if next entity can respawn yet
         PendingRespawn pendingRespawn;
         Iterator<PendingRespawn> iterator = pendingRespawnList.iterator();
-        Entity entity;
 
         while (iterator.hasNext() && (pendingRespawn = iterator.next()).gameTimeRespawn <= controller.gameTime())
         {
-            entity = pendingRespawn.entity;
-
-            // Set state to created
-            entity.setState(StateChange.CREATED);
-
-            // Attempt to spawn the entity
-            if (findEntitySpawnPosition(entity))
+            // TODO: consider timeouts, we could have blocked spawns and a lot of CPU usage here...
+            if (respawnEntity(pendingRespawn))
             {
-                // Attempt to add the entity through the entity manager (re-adding it to the world)
-                if (controller.entityManager.add(entity))
-                {
-                    // Remove from our spawn manager
-                    iterator.remove();
-                }
-                else
-                {
-                    LOG.warn("Unable to add entity to entity manager during respawn - ent id: " + entity.id);
-                }
+                iterator.remove();
             }
         }
     }
 
-    private boolean findEntitySpawnPosition(Entity entity)
+    private boolean respawnEntity(PendingRespawn pendingRespawn)
     {
-        // Fetch spawn for factionSpawns
-        FactionSpawns factionSpawns = factionSpawnsMap.get(entity.faction);
+        Entity entity = pendingRespawn.entity;
 
-        // Check ent for its own custom spawn
-        if (entity.spawn != null)
-        {
-            entityRespawnSetup(entity, entity.spawn);
-            return true;
-        }
-        // Check we have a factionSpawns to fetch factionSpawns spawns
-        else if (factionSpawns == null)
-        {
-            LOG.warn("Cannot find factionSpawns for entity - faction id: {}, factions: {}, entity id: {}",
-                    entity.faction, factionSpawns, entity.id);
+        // Fetch spawn position
+        Spawn spawn = pendingRespawn.getSpawnPosition(controller);
 
-            entity.setState(StateChange.PENDING_DELETED);
+        if (spawn == null)
+        {
+            LOG.debug("No spawn available - entity id: {}, faction id: {}", entity.id, entity.faction);
             return false;
         }
-        // Use factionSpawns spawn
-        else if (factionSpawns.hasSpawns())
+
+        // Set state to created
+        entity.setState(StateChange.CREATED);
+
+        // Set position etc for spawn
+        entity.positionNew.x = spawn.x;
+        entity.positionNew.y = spawn.y;
+        entity.position.copy(entity.positionNew);
+        entity.rotation = spawn.rotation;
+        entity.updateMask(UpdateMasks.ALL_MASKS);
+
+        // Setup entity for its new life
+        entity.eventReset(controller);
+
+        // Rebuild vertices
+        entity.rebuildCachedVertices();
+
+        // Add to world
+        if (controller.entityManager.add(entity))
         {
-            Spawn spawn = factionSpawns.getNextSpawn();
-            entityRespawnSetup(entity, spawn);
+            // Invoke spawn event
+            entity.eventSpawn(controller);
+
+            LOG.debug("Spawned entity - entity: {} - spawn: {}", entity, spawn);
             return true;
         }
         else
         {
-            LOG.warn("No spawns available for factionSpawns - id: {}, factionSpawns: {}", entity.id, entity.faction);
-            entity.setState(StateChange.PENDING_DELETED);
+            LOG.warn("Could not respawn entity, failed to add to entity manager - entity id: {}, spawn: {}", entity.id, spawn);
             return false;
         }
-    }
-
-    private void entityRespawnSetup(Entity ent, Spawn spawn)
-    {
-        // Setup entity for its new life
-        ent.reset();
-
-        // Set position etc for spawn
-        ent.positionNew.x = spawn.x;
-        ent.positionNew.y = spawn.y;
-        ent.position.copy(ent.positionNew);
-        ent.rotation = spawn.rotation;
-        ent.updateMask(UpdateMasks.ALL_MASKS);
-
-        // Rebuild vertices
-        ent.rebuildCachedVertices();
-
-        // Inform the ent it has been spawned
-        ent.eventSpawn();
-
-        LOG.debug("Spawned entity - entity: {} - spawn: {}", ent, spawn);
     }
 
 }

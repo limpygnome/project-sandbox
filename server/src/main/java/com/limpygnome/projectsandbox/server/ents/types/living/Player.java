@@ -153,4 +153,13 @@ public class Player extends Entity
     {
         return new PlayerInfo[] { playerInfo };
     }
+
+    @Override
+    public synchronized void eventSpawn(Controller controller)
+    {
+        // Set player to use this entity
+        controller.playerManager.setPlayerEnt(playerInfo, this);
+
+        super.eventSpawn(controller);
+    }
 }

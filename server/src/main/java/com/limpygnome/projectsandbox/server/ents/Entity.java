@@ -7,7 +7,8 @@ import com.limpygnome.projectsandbox.server.ents.physics.collisions.CollisionRes
 import com.limpygnome.projectsandbox.server.ents.physics.Vector2;
 import com.limpygnome.projectsandbox.server.ents.physics.Vertices;
 import com.limpygnome.projectsandbox.server.ents.physics.collisions.CollisionResultMap;
-import com.limpygnome.projectsandbox.server.ents.respawn.PendingRespawn;
+import com.limpygnome.projectsandbox.server.ents.respawn.pending.EntityPendingRespawn;
+import com.limpygnome.projectsandbox.server.ents.respawn.pending.PendingRespawn;
 import com.limpygnome.projectsandbox.server.inventory.Inventory;
 import com.limpygnome.projectsandbox.server.packets.PacketData;
 import com.limpygnome.projectsandbox.server.players.PlayerInfo;
@@ -485,7 +486,7 @@ public strictfp abstract class Entity
     public synchronized void eventHandleDeath(Controller controller, AbstractKiller killer)
     {
         // Default action is to respawn the entity
-        controller.respawnManager.respawn(new PendingRespawn(this, DEFAULT_RESPAWN_TIME_MS));
+        controller.respawnManager.respawn(new EntityPendingRespawn(this, DEFAULT_RESPAWN_TIME_MS));
     }
     
     public void eventPacketEntCreated(PacketData packetData)
@@ -540,14 +541,20 @@ public strictfp abstract class Entity
         }
     }
 
-    public void eventSpawn()
-    {
-        // Nothing by default...
-    }
-
-    public synchronized void reset()
+    /**
+     * Invoked before the entity is respawned.
+     */
+    public synchronized void eventReset(Controller controller)
     {
         health = maxHealth;
+    }
+
+    /**
+     * Invoked after the entity has been spawned, and added to the world.
+     */
+    public synchronized void eventSpawn(Controller controller)
+    {
+        // Nothing by default...
     }
 
     public abstract String friendlyName();

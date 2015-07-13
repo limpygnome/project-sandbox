@@ -3,7 +3,8 @@ package com.limpygnome.projectsandbox.server.ents.types.pickups;
 import com.limpygnome.projectsandbox.server.Controller;
 import com.limpygnome.projectsandbox.server.ents.Entity;
 import com.limpygnome.projectsandbox.server.ents.physics.collisions.CollisionResult;
-import com.limpygnome.projectsandbox.server.ents.respawn.PendingRespawn;
+import com.limpygnome.projectsandbox.server.ents.respawn.pending.EntityPendingRespawn;
+import com.limpygnome.projectsandbox.server.ents.respawn.pending.PendingRespawn;
 import com.limpygnome.projectsandbox.server.players.PlayerInfo;
 
 import static com.limpygnome.projectsandbox.server.constants.entities.pickups.AbstractPickupConstants.*;
@@ -34,7 +35,7 @@ public abstract class AbstractPickup extends Entity
         if (applyPickup(controller, entOther))
         {
             // Pickup has been redeemed, now to respawn in a period of time
-            controller.respawnManager.respawn(new PendingRespawn(this, respawnDelay));
+            controller.respawnManager.respawn(new EntityPendingRespawn(this, respawnDelay));
         }
     }
 

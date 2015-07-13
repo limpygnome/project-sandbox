@@ -3,7 +3,8 @@ package com.limpygnome.projectsandbox.server.players;
 
 import com.limpygnome.projectsandbox.server.Controller;
 import com.limpygnome.projectsandbox.server.ents.Entity;
-import com.limpygnome.projectsandbox.server.ents.respawn.PendingRespawn;
+import com.limpygnome.projectsandbox.server.ents.respawn.pending.EntityPendingRespawn;
+import com.limpygnome.projectsandbox.server.ents.respawn.pending.PendingRespawn;
 import com.limpygnome.projectsandbox.server.ents.types.living.Player;
 import com.limpygnome.projectsandbox.server.packets.OutboundPacket;
 import com.limpygnome.projectsandbox.server.packets.types.ents.EntityUpdatesOutboundPacket;
@@ -90,8 +91,11 @@ public class PlayerManager implements IdCounterConsumer
             writePlayerMetrics(playerEventsUpdatesOutboundSnapshotPacket, true);
             playerEventsUpdatesOutboundSnapshotPacket.send(playerInfo);
 
-            // Create and spawn entity for player
-            createAndSpawnNewPlayerEnt(playerInfo);
+            // Create entity for player
+            Entity entityPlayer = playerEntCreate(playerInfo);
+
+            // Spawn the player
+            controller.respawnManager.respawn(new EntityPendingRespawn(entityPlayer));
 
             // Send map data
             controller.mapManager.main.packet.send(playerInfo);
@@ -199,31 +203,18 @@ public class PlayerManager implements IdCounterConsumer
         return mappingsById.containsKey(id);
     }
 
-    public synchronized Player createAndSpawnNewPlayerEnt(PlayerInfo playerInfo)
+    /**
+     * Creates a new instance of a player.
+     *
+     * @param playerInfo The player's info.
+     * @return An instance of an entity.
+     */
+    public synchronized Entity playerEntCreate(PlayerInfo playerInfo)
     {
-        // Create player entity
-        Player ply = createNewPlayerEnt(playerInfo);
-
-        // Spawn new entity
-        controller.respawnManager.respawn(new PendingRespawn(ply));
-
-        return ply;
+        // Create Entity
+        return new Player(controller, playerInfo);
     }
-    
-    public synchronized Player createNewPlayerEnt(PlayerInfo playerInfo)
-    {
-        // Create new entity
-        Player ply = new Player(controller, playerInfo);
 
-        // Set player to use ent
-        setPlayerEnt(playerInfo, ply);
-
-        // Spawn entity
-        controller.respawnManager.respawn(new PendingRespawn(ply));
-
-        return ply;
-    }
-    
     public synchronized void setPlayerEnt(PlayerInfo playerInfo, Entity entity)
     {
         Entity currentEntity = playerInfo.entity;

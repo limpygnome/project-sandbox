@@ -7,10 +7,13 @@ import com.limpygnome.projectsandbox.server.ents.physics.collisions.CollisionRes
 import com.limpygnome.projectsandbox.server.Controller;
 import com.limpygnome.projectsandbox.server.ents.Entity;
 import com.limpygnome.projectsandbox.server.ents.physics.collisions.CollisionResultMap;
+import com.limpygnome.projectsandbox.server.ents.respawn.pending.EntityPendingRespawn;
+import com.limpygnome.projectsandbox.server.ents.respawn.pending.PositionPendingRespawn;
 import com.limpygnome.projectsandbox.server.ents.types.living.Player;
 import com.limpygnome.projectsandbox.server.ents.physics.Vector2;
 import com.limpygnome.projectsandbox.server.players.PlayerInfo;
 import com.limpygnome.projectsandbox.server.players.enums.PlayerKeys;
+import com.limpygnome.projectsandbox.server.world.Spawn;
 
 import static com.limpygnome.projectsandbox.server.constants.entities.AbstractVehicleConstants.*;
 
@@ -187,11 +190,11 @@ public abstract class AbstractVehicle extends Entity
         Vector2 plyPos = ejectPosition.clone();
 
         // Create new player ent in position of vehicle
-        Player ply = controller.playerManager.createNewPlayerEnt(playerInfo);
+        Entity entityPlayer = controller.playerManager.playerEntCreate(playerInfo);
 
         // Add player to pos offset
-        float plyx = playerEjectVectorPos(ejectPosition.x, ply.width / 2.0f);
-        float plyy = playerEjectVectorPos(ejectPosition.y, ply.height / 2.0f);
+        float plyx = playerEjectVectorPos(ejectPosition.x, entityPlayer.width / 2.0f);
+        float plyy = playerEjectVectorPos(ejectPosition.y, entityPlayer.height / 2.0f);
         plyPos = Vector2.add(plyPos, plyx, plyy);
 
         // Rotate pos to align with vehicle
@@ -200,9 +203,11 @@ public abstract class AbstractVehicle extends Entity
         // Add pos of vehicle to pos
         plyPos = Vector2.add(plyPos, positionNew);
 
-        // Set player's rotation and position
-        ply.rotation(rotation);
-        ply.position(plyPos);
+        // Spawn player
+        controller.respawnManager.respawn(new PositionPendingRespawn(
+                entityPlayer,
+                new Spawn(plyPos.x, plyPos.y, rotation)
+        ));
     }
     
     private float playerEjectVectorPos(float coord, float value)
@@ -255,7 +260,7 @@ public abstract class AbstractVehicle extends Entity
                     
                     if (plyInSeat == null || !plyInSeat.isConnected())
                     {
-                        // Set the player to use this entity
+                        // Set the player to use this (vehicle) entity
                         controller.playerManager.setPlayerEnt(playerInfo, this);
                         
                         // Add as passenger
@@ -335,7 +340,11 @@ public abstract class AbstractVehicle extends Entity
             
             if (playerInfo != null)
             {
-                controller.playerManager.createAndSpawnNewPlayerEnt(playerInfo);
+                // Create and respawn player
+                Entity entityPlayer = controller.playerManager.playerEntCreate(playerInfo);
+                controller.respawnManager.respawn(new EntityPendingRespawn(entityPlayer));
+
+                // Set seat to empty
                 players[i] = null;
             }
         }
@@ -344,11 +353,11 @@ public abstract class AbstractVehicle extends Entity
     }
 
     @Override
-    public void reset()
+    public void eventReset(Controller controller)
     {
         this.speed = 0.0f;
 
-        super.reset();
+        super.eventReset(controller);
     }
 
     @Override

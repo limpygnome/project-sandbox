@@ -40,7 +40,7 @@ public class RocketCar extends AbstractVehicle
     }
 
     @Override
-    public void reset()
+    public void eventReset(Controller controller)
     {
         // Load default inventory
         this.inventory = new Inventory(this);
@@ -48,7 +48,7 @@ public class RocketCar extends AbstractVehicle
         RocketLauncher rocketLauncher = new RocketLauncher();
         this.inventory.add(rocketLauncher);
 
-        super.reset();
+        super.eventReset(controller);
     }
 
     @Override
