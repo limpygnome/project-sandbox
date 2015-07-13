@@ -3,7 +3,7 @@ package com.limpygnome.projectsandbox.server.ents.respawn;
 import com.limpygnome.projectsandbox.server.Controller;
 import com.limpygnome.projectsandbox.server.ents.Entity;
 import com.limpygnome.projectsandbox.server.ents.EntityManager;
-import com.limpygnome.projectsandbox.server.ents.enums.StateChange;
+import com.limpygnome.projectsandbox.server.ents.enums.EntityState;
 import com.limpygnome.projectsandbox.server.ents.enums.UpdateMasks;
 import com.limpygnome.projectsandbox.server.ents.respawn.pending.PendingRespawn;
 import com.limpygnome.projectsandbox.server.world.FactionSpawns;
@@ -48,8 +48,22 @@ public class RespawnManager
 
     public synchronized void respawn(PendingRespawn pendingRespawn)
     {
-        // Ensure entity has been removed from world
-        controller.entityManager.remove(pendingRespawn.entity);
+        // Handle entity state transition based on current state
+        Entity entity = pendingRespawn.entity;
+
+        switch (entity.getState())
+        {
+            case CREATED:
+                // Ensure entity does not already exist
+                controller.entityManager.remove(entity);
+                break;
+            case NONE:
+            case UPDATED:
+                // Do nothing, basically just allowed states...
+                break;
+            default:
+                throw new RuntimeException("Invalid state for entity respawn");
+        }
 
         // Add at suitable index based on time to respawn
         Iterator<PendingRespawn> iterator = pendingRespawnList.iterator();
@@ -106,7 +120,7 @@ public class RespawnManager
         }
 
         // Set state to created
-        entity.setState(StateChange.CREATED);
+        entity.setState(EntityState.CREATED);
 
         // Set position etc for spawn
         entity.positionNew.x = spawn.x;

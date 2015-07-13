@@ -3,12 +3,11 @@ package com.limpygnome.projectsandbox.server.packets.types.ents;
 import com.limpygnome.projectsandbox.server.ents.EntityManager;
 import com.limpygnome.projectsandbox.server.packets.OutboundPacket;
 import com.limpygnome.projectsandbox.server.ents.Entity;
-import com.limpygnome.projectsandbox.server.ents.enums.StateChange;
+import com.limpygnome.projectsandbox.server.ents.enums.EntityState;
 import com.limpygnome.projectsandbox.server.ents.enums.UpdateMasks;
 
 import java.io.IOException;
 import java.util.Iterator;
-import java.util.LinkedList;
 import java.util.Map;
 
 /**
@@ -33,7 +32,7 @@ public class EntityUpdatesOutboundPacket extends OutboundPacket
             Entity ent;
             
             Iterator<Map.Entry<Short, Entity>> it = entityManager.entities.entrySet().iterator();
-            StateChange entState;
+            EntityState entState;
 
             while (it.hasNext())
             {
@@ -54,18 +53,18 @@ public class EntityUpdatesOutboundPacket extends OutboundPacket
                         case CREATED:
                             writeEntCreated(ent, forceCreate);
                             writeEntUpdated(ent, forceCreate);
-                            ent.setState(StateChange.NONE);
+                            ent.setState(EntityState.NONE);
                             break;
                         case PENDING_DELETED:
                             writeEntDeleted(ent);
-                            ent.setState(StateChange.DELETED);
+                            ent.setState(EntityState.DELETED);
                             break;
                         case DELETED:
                             it.remove();
                             break;
                         case UPDATED:
                             writeEntUpdated(ent, forceCreate);
-                            ent.setState(StateChange.NONE);
+                            ent.setState(EntityState.NONE);
                             break;
                     }
                 }

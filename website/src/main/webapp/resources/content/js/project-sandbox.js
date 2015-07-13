@@ -265,7 +265,7 @@ var projectSandbox =
 		for(var kv of this.entities)
 		{
 			ent = kv[1];
-			if (projectSandbox.frustrum.intersects(ent))
+			if (!ent.dead && projectSandbox.frustrum.intersects(ent))
 			{
 				ent.render(gl, this.shaderProgram, this.modelView, this.perspective);
 			}

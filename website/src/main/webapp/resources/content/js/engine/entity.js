@@ -5,6 +5,7 @@ function Entity(params)
 	// This default value should be kept in sync with the default on the server
 	this.health = 0.0;
 	this.maxHealth = 0.0;
+	this.dead = true;
 }
 
 Entity.inherits(Primitive);

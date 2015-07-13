@@ -77,6 +77,10 @@ projectSandbox.network.player =
             playerIdKiller = null;
         }
 
+        // Invoke entity hooks for death
+        invokeEntityDeath(entityIdVictim);
+        invokeEntityDeath(entityIdKiller);
+
         // Inform UI via hook
         projectSandbox.game.ui.hookPlayer_entKilled(causeText, entityIdVictim, entityIdKiller, playerIdVictim, playerIdKiller);
     },
@@ -213,6 +217,31 @@ projectSandbox.network.player =
         else
         {
             console.warn("engine/player - received chat message for non-existent player - player id: " + playerId);
+        }
+    },
+
+    invokeEntityDeath: function(entityId)
+    {
+        var entity = projectSandbox.entities.get(entityId);
+
+        if (entity != null)
+        {
+            // Set death flag
+            entity.dead = true;
+
+            // Invoke death event
+            if (entity.eventDeath)
+            {
+                entity.eventDeath();
+            }
+            else
+            {
+                console.debug("engine/network/player - no death event for entity - entity id: " + entityId);
+            }
+        }
+        else
+        {
+            console.warn("engine/network/player - unable to invoke death event, cannot find entity - entity id: " + entityId);
         }
     },
 

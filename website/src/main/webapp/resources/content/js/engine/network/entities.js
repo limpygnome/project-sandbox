@@ -111,7 +111,6 @@ projectSandbox.network.entities =
 		return offset - originalOffset;
 	},
 
-    UPDATEMASK_SPAWNED: 1,
 	UPDATEMASK_X: 2,
 	UPDATEMASK_Y: 4,
 	UPDATEMASK_ROTATION: 8,
@@ -131,10 +130,6 @@ projectSandbox.network.entities =
 			offset += 1;
 
 			// Read updated params
-			if ((mask & this.UPDATEMASK_SPAWNED) == this.UPDATEMASK_SPAWNED)
-            {
-                this.invokeEntityDeath(id, ent);
-            }
 			if ((mask & this.UPDATEMASK_X) == this.UPDATEMASK_X)
 			{
 				ent.x = dataView.getFloat32(offset);
@@ -155,6 +150,9 @@ projectSandbox.network.entities =
 				ent.health = dataView.getFloat32(offset);
 				offset += 4;
 			}
+
+			// Set ent to alive
+			ent.dead = false;
 
 			// Allow ent to parse custom update bytes
 			offset = ent.readBytes_update(data, dataView, id, offset);

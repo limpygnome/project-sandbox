@@ -3,10 +3,10 @@ package com.limpygnome.projectsandbox.server.ents.enums;
 /**
 * State changes in regards to the entity's slotState in the world.
 */
-public enum StateChange
+public enum EntityState
 {
     /**
-    * Indicates no change to ent slotState.
+    * Indicates no change to entity.
     */
    NONE,
    /**

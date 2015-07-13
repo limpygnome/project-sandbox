@@ -3,7 +3,7 @@ package com.limpygnome.projectsandbox.server.ents;
 import com.limpygnome.projectsandbox.server.ents.death.MapBoundsKiller;
 import com.limpygnome.projectsandbox.server.ents.physics.collisions.CollisionResult;
 import com.limpygnome.projectsandbox.server.Controller;
-import com.limpygnome.projectsandbox.server.ents.enums.StateChange;
+import com.limpygnome.projectsandbox.server.ents.enums.EntityState;
 import com.limpygnome.projectsandbox.server.ents.physics.collisions.CollisionResultMap;
 import com.limpygnome.projectsandbox.server.ents.physics.collisions.SAT;
 import com.limpygnome.projectsandbox.server.packets.types.ents.EntityUpdatesOutboundPacket;
@@ -72,7 +72,7 @@ public class EntityManager implements IdCounterConsumer
             entitiesNew.put(entityId, entity);
 
             // Update slotState to created - for update to all players!
-            entity.setState(StateChange.CREATED);
+            entity.setState(EntityState.CREATED);
 
             LOG.debug("Entity pending addition to the world - {}", entity);
         }
@@ -111,7 +111,7 @@ public class EntityManager implements IdCounterConsumer
                 if (entityFetchedWorld == entity)
                 {
                     // Update entity and call events
-                    entity.setState(StateChange.PENDING_DELETED);
+                    entity.setState(EntityState.PENDING_DELETED);
                     entity.eventPendingDeleted(controller);
 
                     LOG.debug("Entity set for removal - {}", entity);

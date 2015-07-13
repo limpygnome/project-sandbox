@@ -8,13 +8,12 @@ import com.limpygnome.projectsandbox.server.ents.physics.Vector2;
 import com.limpygnome.projectsandbox.server.ents.physics.Vertices;
 import com.limpygnome.projectsandbox.server.ents.physics.collisions.CollisionResultMap;
 import com.limpygnome.projectsandbox.server.ents.respawn.pending.EntityPendingRespawn;
-import com.limpygnome.projectsandbox.server.ents.respawn.pending.PendingRespawn;
 import com.limpygnome.projectsandbox.server.inventory.Inventory;
 import com.limpygnome.projectsandbox.server.packets.PacketData;
 import com.limpygnome.projectsandbox.server.players.PlayerInfo;
 import com.limpygnome.projectsandbox.server.utils.CustomMath;
 import com.limpygnome.projectsandbox.server.Controller;
-import com.limpygnome.projectsandbox.server.ents.enums.StateChange;
+import com.limpygnome.projectsandbox.server.ents.enums.EntityState;
 import com.limpygnome.projectsandbox.server.world.Spawn;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -47,7 +46,7 @@ public strictfp abstract class Entity
     public Spawn spawn;
     
     // State flags
-    private StateChange state;
+    private EntityState state;
     /** Refer to {@link UpdateMasks} */
     public char updateMask;
     
@@ -66,6 +65,12 @@ public strictfp abstract class Entity
     // -- -1 for godmode
     public float health;
     public float maxHealth;
+
+    /**
+     * Used as a flag to track if the entity has died and not respawned. Hooks into updateMasks mechanism. When the
+     * entity is next spawned, its flag is unset.
+     */
+    private boolean flagDead;
 
     // Physics
     /**
@@ -90,7 +95,7 @@ public strictfp abstract class Entity
         this.entityType = entType.typeId();
         
         // Set initial slotState
-        this.state = StateChange.CREATED;
+        this.state = EntityState.CREATED;
         
         // Create initial/default slotState data
         this.width = width;
@@ -103,6 +108,7 @@ public strictfp abstract class Entity
         
         this.health = 0.0f;
         this.maxHealth = 0.0f;
+        this.flagDead = true;
 
         this.physicsStatic = false;
     }
@@ -223,15 +229,15 @@ public strictfp abstract class Entity
 
     public synchronized boolean isDeleted()
     {
-        return state == StateChange.PENDING_DELETED || state == StateChange.DELETED;
+        return state == EntityState.PENDING_DELETED || state == EntityState.DELETED;
     }
     
-    public synchronized StateChange getState()
+    public synchronized EntityState getState()
     {
         return state;
     }
     
-    public synchronized void setState(StateChange state)
+    public synchronized void setState(EntityState state)
     {
         // Determine if state change is allowed
         boolean transitionAllowed;
@@ -240,22 +246,22 @@ public strictfp abstract class Entity
         {
             case CREATED:
                 transitionAllowed = (
-                                        state == StateChange.UPDATED || state == StateChange.PENDING_DELETED ||
-                                        state == StateChange.DELETED || state == StateChange.NONE ||
-                                        state == StateChange.CREATED
+                                        state == EntityState.UPDATED || state == EntityState.PENDING_DELETED ||
+                                        state == EntityState.DELETED || state == EntityState.NONE ||
+                                        state == EntityState.CREATED
                                     );
                 break;
             case UPDATED:
-                transitionAllowed = (state == StateChange.UPDATED || state == StateChange.PENDING_DELETED || state == StateChange.NONE);
+                transitionAllowed = (state == EntityState.UPDATED || state == EntityState.PENDING_DELETED || state == EntityState.NONE);
                 break;
             case PENDING_DELETED:
-                transitionAllowed = (state == StateChange.DELETED);
+                transitionAllowed = (state == EntityState.DELETED);
                 break;
             case DELETED:
-                transitionAllowed = (state == StateChange.CREATED);
+                transitionAllowed = (state == EntityState.CREATED);
                 break;
             case NONE:
-                transitionAllowed = (state == StateChange.UPDATED || state == StateChange.PENDING_DELETED);
+                transitionAllowed = (state == EntityState.UPDATED || state == EntityState.PENDING_DELETED);
                 break;
             default:
                 transitionAllowed = false;
@@ -439,19 +445,21 @@ public strictfp abstract class Entity
      */
     public synchronized void remove()
     {
-        setState(StateChange.PENDING_DELETED);
+        setState(EntityState.PENDING_DELETED);
     }
     
     public synchronized void updateMask(UpdateMasks... masks)
     {
         for (UpdateMasks mask : masks)
         {
+            // Add to pending mask data
             this.updateMask |= mask.MASK;
         }
 
-        if (this.state != StateChange.CREATED)
+        // Set state to updated
+        if (this.state != EntityState.CREATED)
         {
-            setState(StateChange.UPDATED);
+            setState(EntityState.UPDATED);
         }
     }
     
@@ -485,6 +493,9 @@ public strictfp abstract class Entity
      */
     public synchronized void eventHandleDeath(Controller controller, AbstractKiller killer)
     {
+        // Set internal flag
+        this.flagDead = true;
+
         // Default action is to respawn the entity
         controller.respawnManager.respawn(new EntityPendingRespawn(this, DEFAULT_RESPAWN_TIME_MS));
     }
@@ -499,13 +510,6 @@ public strictfp abstract class Entity
     
     public void eventPacketEntDeleted(PacketData packetData)
     {
-    }
-    
-    public boolean eventActionKey(Entity cause)
-    {
-        // Does nothing by default...
-        // Return true = handled, false = unhandled
-        return false;
     }
 
     public synchronized void eventHandleCollision(Controller controller, Entity entCollider, Entity entVictim, Entity entOther, CollisionResult result)
@@ -554,7 +558,7 @@ public strictfp abstract class Entity
      */
     public synchronized void eventSpawn(Controller controller)
     {
-        // Nothing by default...
+        this.flagDead = false;
     }
 
     public abstract String friendlyName();
@@ -575,6 +579,16 @@ public strictfp abstract class Entity
     public float getSpeed()
     {
         return 0.0f;
+    }
+
+    /**
+     * Indicates if the current entity is dead.
+     *
+     * @return True = dead, false = not dead.
+     */
+    public boolean isDead()
+    {
+        return flagDead;
     }
 
     @Override
