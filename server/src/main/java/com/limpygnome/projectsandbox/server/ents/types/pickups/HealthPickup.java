@@ -27,19 +27,26 @@ public class HealthPickup extends AbstractPickup
     {
         // Check entity can receive pickup
         if  (
-                !(entity instanceof Player || entity instanceof AbstractVehicle) &&
+                (entity instanceof Player || entity instanceof AbstractVehicle) &&
                 entity.health > 0.0f && entity.health < entity.maxHealth
             )
         {
             // Calculate how much health would be gained from the pickup; if no health, don't bother; this will also
             // limit the applied health within and up to the max health.
-            float healthGained = entity.maxHealth - (entity.health + healthAmount);
+            float maxHealthGain = entity.maxHealth - entity.health;
+            float healthGained;
 
-            if (healthGained > 0.0f)
+            if (healthAmount > maxHealthGain)
             {
-                entity.damage(controller, this, -healthGained, null);
-                return true;
+                healthGained = maxHealthGain;
             }
+            else
+            {
+                healthGained = healthAmount;
+            }
+
+            entity.damage(controller, this, -healthGained, null);
+            return true;
         }
 
         return false;

@@ -448,6 +448,12 @@ game.ui =
         // Check if we were killed
         if (playerIdVictim == projectSandbox.playerId)
         {
+            // Reset inventory
+            projectSandbox.inventory.reset();
+
+            // Invoke UI inventory reset
+            this.hook_inventoryReset();
+
             // Show death screen
             this.deathScreenShow(causeText);
         }

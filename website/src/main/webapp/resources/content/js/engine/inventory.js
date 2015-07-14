@@ -40,7 +40,6 @@ projectSandbox.inventory =
         {
             this.selectNextKeyDown = false;
         }
-
 	},
 
 	reset: function()

@@ -29,7 +29,7 @@ public class EntityManager implements IdCounterConsumer
 
     private final Controller controller;
     public final HashMap<Short, Entity> entities;
-    public final HashMap<Short, Entity> entitiesNew;
+    private final HashMap<Short, Entity> entitiesNew;
     public EntTypeMappings entTypeMappings;
     private IdCounterProvider idCounterProvider;
 
@@ -109,44 +109,28 @@ public class EntityManager implements IdCounterConsumer
     {
         synchronized (entities)
         {
-            // Attempt removal of ent from world
-            Entity entityFetchedWorld = entities.remove(entityId);
+            // Check ents collection
+            Entity entityFetchedWorld = entities.get(entityId);
 
-            if (entityFetchedWorld != null)
+            if (entityFetchedWorld != null && entityFetchedWorld == entity)
             {
-                if (entityFetchedWorld == entity)
-                {
-                    // Update entity and call events
-                    entity.setState(EntityState.PENDING_DELETED);
-                    entity.eventPendingDeleted(controller);
+                // Update entity and call events
+                entity.setState(EntityState.PENDING_DELETED);
+                entity.eventPendingDeleted(controller);
 
-                    LOG.debug("Entity set for removal - {}", entity);
+                LOG.debug("Entity set for removal - {}", entity);
 
-                    return true;
-                }
-                else
-                {
-                    entities.put(entityId, entityFetchedWorld);
-                    LOG.debug("Found entity with duplicate entity ID in world, re-added to world - {}", entityFetchedWorld);
-                }
+                return true;
             }
 
             // Attempt removal on ents to be added - unlikely, but still possible
-            Entity entityFetchedNew = entitiesNew.remove(entityId);
+            Entity entityFetchedNew = entitiesNew.get(entityId);
 
-            if (entityFetchedNew != null)
+            if (entityFetchedNew != null && entityFetchedNew == entity)
             {
-                if (entityFetchedNew == entity)
-                {
-                    LOG.debug("Removed newly added entity - {}", entity);
+
+                    LOG.debug("Newly added entity set for removal- {}", entity);
                     return true;
-                }
-                else
-                {
-                    // Wrong entity, add it back - this scenario isn't likely and cheapest solution
-                    entitiesNew.put(entityId, entityFetchedNew);
-                    LOG.debug("Found newly added entity with duplicate entity ID, re-added duplicate - {}", entityFetchedNew);
-                }
             }
         }
 
@@ -261,10 +245,14 @@ public class EntityManager implements IdCounterConsumer
                     {
                         entity = kv.getValue();
 
-                        // Add to world
-                        entities.put(entity.id, entity);
+                        // Check ent has not been deleted
+                        if (!entity.isDeleted())
+                        {
+                            // Add to world
+                            entities.put(entity.id, entity);
 
-                        LOG.debug("Added entity to world - entity: {}", entity);
+                            LOG.debug("Added entity to world - entity: {}", entity);
+                        }
                     }
 
                     entitiesNew.clear();

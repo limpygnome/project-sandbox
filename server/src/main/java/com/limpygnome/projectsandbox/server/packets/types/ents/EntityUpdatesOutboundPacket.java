@@ -25,7 +25,7 @@ public class EntityUpdatesOutboundPacket extends OutboundPacket
 
     public void build(EntityManager entityManager, boolean forceCreate) throws IOException
     {
-        synchronized(entityManager.entities)
+        synchronized (entityManager.entities)
         {
             // Add each entity with a changed slotState
             Map.Entry<Short, Entity> kv;

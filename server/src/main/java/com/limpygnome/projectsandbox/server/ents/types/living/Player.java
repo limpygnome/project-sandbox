@@ -69,9 +69,6 @@ public class Player extends Entity
 
             // Give player default inventory items
             this.inventory.add(DEFAULT_INVENTORY_ITEMS);
-
-            // Setup owner
-            this.inventory.setOwner(playerInfo);
         }
     }
 
@@ -159,6 +156,9 @@ public class Player extends Entity
     {
         // Set player to use this entity
         controller.playerManager.setPlayerEnt(playerInfo, this);
+
+        // Setup owner
+        this.inventory.setOwner(playerInfo);
 
         super.eventSpawn(controller);
     }
