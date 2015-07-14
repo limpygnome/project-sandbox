@@ -40,6 +40,6 @@ public class PlayerConstants
     /**
      * The default time to wait before respawning a player.
      */
-    public static final long DEFAULT_RESPAWN_TIME_MS = 2000;
+    public static final long DEFAULT_RESPAWN_TIME_MS = 5000;
 
 }

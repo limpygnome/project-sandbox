@@ -50,7 +50,13 @@ public class EntityManager implements IdCounterConsumer
         }
     }
 
-    public boolean add(Entity entity)
+    /**
+     * Entities should not be added this way, only through the respawn manager.
+     *
+     * @param entity
+     * @return
+     */
+    protected boolean add(Entity entity)
     {
         // Fetch the next available identifier
         Short entityId = idCounterProvider.nextId(entity.id);
@@ -71,7 +77,7 @@ public class EntityManager implements IdCounterConsumer
             // Add entity to pending map
             entitiesNew.put(entityId, entity);
 
-            // Update slotState to created - for update to all players!
+            // Update state to created - for update to all players!
             entity.setState(EntityState.CREATED);
 
             LOG.debug("Entity pending addition to the world - {}", entity);
@@ -161,8 +167,8 @@ public class EntityManager implements IdCounterConsumer
                 {
                     entityA = kv.getValue();
 
-                    // We won't run logic for deleted enities
-                    if (!entityA.isDeleted())
+                    // We won't run logic for deleted or dead enities
+                    if (!entityA.isDeleted() && !entityA.isDead())
                     {
                         entityA.logic(controller);
                     }
@@ -181,8 +187,8 @@ public class EntityManager implements IdCounterConsumer
                 {
                     entityA = kv.getValue();
 
-                    // Check entity is not deleted
-                    if (!entityA.isDeleted())
+                    // Check entity is not deleted or dead
+                    if (!entityA.isDeleted() && !entityA.isDead())
                     {
                         // TODO: upgrade with quadtree, N^N - really bad...
 
@@ -191,69 +197,75 @@ public class EntityManager implements IdCounterConsumer
                         {
                             entityB = kv2.getValue();
 
-                            // Check next entity is not dead
-                            if (!entityB.isDeleted())
+                            // Check next entity is not: dead, deleted or the same ent
+                            if (!entityB.isDeleted() && !entityB.isDead() &&  entityA.id != entityB.id)
                             {
-                                // Check the ents can collide
-                                if (entityA.id != entityB.id && !entityB.isDeleted())
-                                {
-                                    collisionResult = SAT.collision(entityA, entityB);
+                                // Perform collision detection
+                                collisionResult = SAT.collision(entityA, entityB);
 
-                                    // Check if a collision occurred
-                                    if (collisionResult.collision)
+                                // Check if a collision occurred
+                                if (collisionResult.collision)
+                                {
+                                    // Inform both ents of event
+                                    entityA.eventHandleCollision(controller, entityB, entityA, entityB, collisionResult);
+                                    entityB.eventHandleCollision(controller, entityB, entityA, entityA, collisionResult);
+
+                                    // Check if our original entity is now deleted
+                                    // -- Only the two above events should be able to kill it
+                                    if (entityA.isDeleted() || entityA.isDead())
                                     {
-                                        // Inform both ents of event
-                                        entityA.eventHandleCollision(controller, entityB, entityA, entityB, collisionResult);
-                                        entityB.eventHandleCollision(controller, entityB, entityA, entityA, collisionResult);
-
-                                        // Check if our original entity is now deleted
-                                        // -- Only the two above events should be able to kill it
-                                        if (entityA.isDeleted())
-                                        {
-                                            break;
-                                        }
+                                        break;
                                     }
-                                }
-                            }
-
-                            // CHeck entity has still not been deleted
-                            if (!entityA.isDeleted())
-                            {
-                                // Perform collision with map
-                                // TODO: add support for multiple maps
-                                mapResults = SAT.collisionMap(controller.mapManager.main, entityA);
-
-                                for (CollisionResultMap mapResult : mapResults)
-                                {
-                                    entityA.eventHandleCollisionMap(controller, mapResult);
-                                }
-
-                                // Update position for ent
-                                entityA.position.copy(entityA.positionNew);
-
-                                // Check ent is not outside map
-                                if  (!entityA.isDeleted() &&
-                                        (
-                                            entityA.positionNew.x < 0.0f || entityA.positionNew.y < 0.0f ||
-                                            entityA.positionNew.x > mapMaxX || entityA.positionNew.y > mapMaxY
-                                        )
-                                    )
-                                {
-                                    // Kill the ent...
-                                    entityA.kill(controller, null, MapBoundsKiller.class);
                                 }
                             }
                         }
 
+                        // Check entity has still not been deleted or dead
+                        if (!entityA.isDeleted() && !entityA.isDead())
+                        {
+                            // Perform collision with map
+                            // TODO: add support for multiple maps
+                            mapResults = SAT.collisionMap(controller.mapManager.main, entityA);
+
+                            for (CollisionResultMap mapResult : mapResults)
+                            {
+                                entityA.eventHandleCollisionMap(controller, mapResult);
+                            }
+
+                            // Update position for ent
+                            entityA.position.copy(entityA.positionNew);
+
+                            // Check ent is not outside map
+                            if  (!entityA.isDeleted() && !entityA.isDead() &&
+                                    (
+                                            entityA.positionNew.x < 0.0f || entityA.positionNew.y < 0.0f ||
+                                                    entityA.positionNew.x > mapMaxX || entityA.positionNew.y > mapMaxY
+                                    )
+                                    )
+                            {
+                                // Kill the ent...
+                                entityA.kill(controller, null, MapBoundsKiller.class);
+                            }
+                        }
                     }
+
                 }
 
                 // Add pending ents
                 if (!entitiesNew.isEmpty())
                 {
-                    entities.putAll(entitiesNew);
+                    // Iterate new ent and add to world
+                    Entity entity;
 
-                    LOG.debug("Added {} pending new ent(s)", entitiesNew.size());
+                    for (Map.Entry<Short, Entity> kv : entitiesNew.entrySet())
+                    {
+                        entity = kv.getValue();
+
+                        // Add to world
+                        entities.put(entity.id, entity);
+
+                        LOG.debug("Added entity to world - entity: {}", entity);
+                    }
 
                     entitiesNew.clear();
                 }

@@ -2,8 +2,7 @@ package com.limpygnome.projectsandbox.server.inventory.items.weapons;
 
 import com.limpygnome.projectsandbox.server.Controller;
 import com.limpygnome.projectsandbox.server.ents.Entity;
-import com.limpygnome.projectsandbox.server.ents.physics.Vector2;
-import com.limpygnome.projectsandbox.server.ents.types.vehicles.AbstractVehicle;
+import com.limpygnome.projectsandbox.server.ents.respawn.CurrentPositionRespawn;
 import com.limpygnome.projectsandbox.server.ents.types.weapons.Rocket;
 import com.limpygnome.projectsandbox.server.inventory.annotations.InventoryItemTypeId;
 import com.limpygnome.projectsandbox.server.inventory.enums.InventoryInvokeType;
@@ -53,7 +52,7 @@ public class RocketLauncher extends AbstractWeapon
             rpg.projectInFrontOfEntity(owner, ROCKET_LAUNCH_SPACING);
 
             // Create rocket entity
-            controller.entityManager.add(rpg);
+            controller.respawnManager.respawn(new CurrentPositionRespawn(controller, rpg));
         }
         else
         {

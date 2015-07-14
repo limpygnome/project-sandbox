@@ -7,8 +7,8 @@ import com.limpygnome.projectsandbox.server.ents.physics.collisions.CollisionRes
 import com.limpygnome.projectsandbox.server.Controller;
 import com.limpygnome.projectsandbox.server.ents.Entity;
 import com.limpygnome.projectsandbox.server.ents.physics.collisions.CollisionResultMap;
-import com.limpygnome.projectsandbox.server.ents.respawn.pending.EntityPendingRespawn;
-import com.limpygnome.projectsandbox.server.ents.respawn.pending.PositionPendingRespawn;
+import com.limpygnome.projectsandbox.server.ents.respawn.EntityPendingRespawn;
+import com.limpygnome.projectsandbox.server.ents.respawn.PositionPendingRespawn;
 import com.limpygnome.projectsandbox.server.ents.types.living.Player;
 import com.limpygnome.projectsandbox.server.ents.physics.Vector2;
 import com.limpygnome.projectsandbox.server.players.PlayerInfo;
@@ -205,6 +205,7 @@ public abstract class AbstractVehicle extends Entity
 
         // Spawn player
         controller.respawnManager.respawn(new PositionPendingRespawn(
+                controller,
                 entityPlayer,
                 new Spawn(plyPos.x, plyPos.y, rotation)
         ));
@@ -342,7 +343,7 @@ public abstract class AbstractVehicle extends Entity
             {
                 // Create and respawn player
                 Entity entityPlayer = controller.playerManager.playerEntCreate(playerInfo);
-                controller.respawnManager.respawn(new EntityPendingRespawn(entityPlayer));
+                controller.respawnManager.respawn(new EntityPendingRespawn(controller, entityPlayer));
 
                 // Set seat to empty
                 players[i] = null;

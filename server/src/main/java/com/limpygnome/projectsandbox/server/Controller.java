@@ -2,7 +2,7 @@ package com.limpygnome.projectsandbox.server;
 
 import com.limpygnome.projectsandbox.server.effects.EffectsManager;
 import com.limpygnome.projectsandbox.server.ents.EntityManager;
-import com.limpygnome.projectsandbox.server.ents.respawn.RespawnManager;
+import com.limpygnome.projectsandbox.server.ents.RespawnManager;
 import com.limpygnome.projectsandbox.server.inventory.InventoryManager;
 import com.limpygnome.projectsandbox.server.packets.PacketManager;
 import com.limpygnome.projectsandbox.server.players.ChatManager;

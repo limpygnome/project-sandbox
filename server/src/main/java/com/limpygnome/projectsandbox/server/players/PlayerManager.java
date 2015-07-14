@@ -3,8 +3,7 @@ package com.limpygnome.projectsandbox.server.players;
 
 import com.limpygnome.projectsandbox.server.Controller;
 import com.limpygnome.projectsandbox.server.ents.Entity;
-import com.limpygnome.projectsandbox.server.ents.respawn.pending.EntityPendingRespawn;
-import com.limpygnome.projectsandbox.server.ents.respawn.pending.PendingRespawn;
+import com.limpygnome.projectsandbox.server.ents.respawn.EntityPendingRespawn;
 import com.limpygnome.projectsandbox.server.ents.types.living.Player;
 import com.limpygnome.projectsandbox.server.packets.OutboundPacket;
 import com.limpygnome.projectsandbox.server.packets.types.ents.EntityUpdatesOutboundPacket;
@@ -24,6 +23,8 @@ import org.java_websocket.WebSocket;
 
 /**
  * Responsible for holding data representing the actual players, rather than their entities.
+ *
+ * TODO: decouple Player class, perhaps config defines player ent or game logic gives us instance.
  */
 public class PlayerManager implements IdCounterConsumer
 {
@@ -95,7 +96,7 @@ public class PlayerManager implements IdCounterConsumer
             Entity entityPlayer = playerEntCreate(playerInfo);
 
             // Spawn the player
-            controller.respawnManager.respawn(new EntityPendingRespawn(entityPlayer));
+            controller.respawnManager.respawn(new EntityPendingRespawn(controller, entityPlayer));
 
             // Send map data
             controller.mapManager.main.packet.send(playerInfo);
@@ -219,14 +220,10 @@ public class PlayerManager implements IdCounterConsumer
     {
         Entity currentEntity = playerInfo.entity;
 
-        if (currentEntity != null)
+        // Remove Player entity for when player gets in cars etc
+        if (currentEntity != null && currentEntity != entity && currentEntity instanceof Player)
         {
-            // Remove entity if instance of player
-            // TODO: needs decoupling...should not have a special case for Player types
-            if (currentEntity instanceof Player)
-            {
-                controller.entityManager.remove(currentEntity);
-            }
+            controller.entityManager.remove(currentEntity);
         }
         
         // Update entity

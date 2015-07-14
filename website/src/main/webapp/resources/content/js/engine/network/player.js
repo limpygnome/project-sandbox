@@ -78,8 +78,8 @@ projectSandbox.network.player =
         }
 
         // Invoke entity hooks for death
-        invokeEntityDeath(entityIdVictim);
-        invokeEntityDeath(entityIdKiller);
+        this.invokeEntityDeath(entityIdVictim);
+        this.invokeEntityDeath(entityIdKiller);
 
         // Inform UI via hook
         projectSandbox.game.ui.hookPlayer_entKilled(causeText, entityIdVictim, entityIdKiller, playerIdVictim, playerIdKiller);
@@ -228,6 +228,7 @@ projectSandbox.network.player =
         {
             // Set death flag
             entity.dead = true;
+            console.debug("engine/network/player - entity dead - entity id: " + entityId);
 
             // Invoke death event
             if (entity.eventDeath)

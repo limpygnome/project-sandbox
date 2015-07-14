@@ -1,4 +1,4 @@
-package com.limpygnome.projectsandbox.server.ents.respawn.pending;
+package com.limpygnome.projectsandbox.server.ents.respawn;
 
 import com.limpygnome.projectsandbox.server.Controller;
 import com.limpygnome.projectsandbox.server.ents.Entity;
@@ -17,14 +17,14 @@ public class EntityPendingRespawn extends PendingRespawn
 {
     private final static Logger LOG = LogManager.getLogger(EntityPendingRespawn.class);
 
-    public EntityPendingRespawn(Entity entity)
+    public EntityPendingRespawn(Controller controller, Entity entity)
     {
-        super(entity, 0);
+        super(controller, entity, 0);
     }
 
-    public EntityPendingRespawn(Entity entity, long gameTimeRespawn)
+    public EntityPendingRespawn(Controller controller, Entity entity, long respawnDelay)
     {
-        super(entity, gameTimeRespawn);
+        super(controller, entity, respawnDelay);
     }
 
     @Override

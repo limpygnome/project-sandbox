@@ -3,6 +3,7 @@ package com.limpygnome.projectsandbox.server.ents.types.weapons;
 import com.limpygnome.projectsandbox.server.Controller;
 import com.limpygnome.projectsandbox.server.ents.Entity;
 import com.limpygnome.projectsandbox.server.ents.annotations.EntityType;
+import com.limpygnome.projectsandbox.server.ents.death.AbstractKiller;
 import com.limpygnome.projectsandbox.server.ents.death.RocketKiller;
 import com.limpygnome.projectsandbox.server.ents.physics.Vector2;
 import com.limpygnome.projectsandbox.server.ents.physics.collisions.CollisionResult;
@@ -99,6 +100,12 @@ public class Rocket extends Entity
     public void eventHandleCollisionMap(Controller controller, CollisionResultMap collisionResultMap)
     {
         performCollisionExplosion(controller);
+    }
+
+    @Override
+    public synchronized void eventHandleDeath(Controller controller, AbstractKiller killer)
+    {
+        // Do nothing...
     }
 
     private synchronized void performCollisionExplosion(Controller controller)

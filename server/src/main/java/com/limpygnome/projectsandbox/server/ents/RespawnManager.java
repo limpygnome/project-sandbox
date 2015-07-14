@@ -1,11 +1,9 @@
-package com.limpygnome.projectsandbox.server.ents.respawn;
+package com.limpygnome.projectsandbox.server.ents;
 
 import com.limpygnome.projectsandbox.server.Controller;
-import com.limpygnome.projectsandbox.server.ents.Entity;
-import com.limpygnome.projectsandbox.server.ents.EntityManager;
 import com.limpygnome.projectsandbox.server.ents.enums.EntityState;
 import com.limpygnome.projectsandbox.server.ents.enums.UpdateMasks;
-import com.limpygnome.projectsandbox.server.ents.respawn.pending.PendingRespawn;
+import com.limpygnome.projectsandbox.server.ents.respawn.PendingRespawn;
 import com.limpygnome.projectsandbox.server.world.FactionSpawns;
 import com.limpygnome.projectsandbox.server.world.Spawn;
 import org.apache.logging.log4j.LogManager;
@@ -87,7 +85,9 @@ public class RespawnManager
 
         pendingRespawnList.add(index, pendingRespawn);
 
-        LOG.debug("Entity added for respawn - ent id: {}, index: {}", pendingRespawn.entity.id, index);
+        LOG.debug("Entity added for respawn - ent id: {}, index: {}, respawn time: {}, current time: {}",
+                pendingRespawn.entity.id, index, pendingRespawn.gameTimeRespawn, controller.gameTime()
+        );
     }
 
     public synchronized void logic()
@@ -119,9 +119,6 @@ public class RespawnManager
             return false;
         }
 
-        // Set state to created
-        entity.setState(EntityState.CREATED);
-
         // Set position etc for spawn
         entity.positionNew.x = spawn.x;
         entity.positionNew.y = spawn.y;
@@ -135,20 +132,19 @@ public class RespawnManager
         // Rebuild vertices
         entity.rebuildCachedVertices();
 
-        // Add to world
-        if (controller.entityManager.add(entity))
-        {
-            // Invoke spawn event
-            entity.eventSpawn(controller);
-
-            LOG.debug("Spawned entity - entity: {} - spawn: {}", entity, spawn);
-            return true;
-        }
-        else
+        // Add to world if new entity
+        if (entity.getState() == EntityState.CREATED && !controller.entityManager.add(entity))
         {
             LOG.warn("Could not respawn entity, failed to add to entity manager - entity id: {}, spawn: {}", entity.id, spawn);
             return false;
         }
+
+        // Invoke spawn event
+        entity.eventSpawn(controller);
+
+        LOG.debug("Spawned entity - entity: {} - spawn: {}", entity, spawn);
+
+        return true;
     }
 
 }

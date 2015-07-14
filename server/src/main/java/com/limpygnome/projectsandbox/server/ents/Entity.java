@@ -7,7 +7,7 @@ import com.limpygnome.projectsandbox.server.ents.physics.collisions.CollisionRes
 import com.limpygnome.projectsandbox.server.ents.physics.Vector2;
 import com.limpygnome.projectsandbox.server.ents.physics.Vertices;
 import com.limpygnome.projectsandbox.server.ents.physics.collisions.CollisionResultMap;
-import com.limpygnome.projectsandbox.server.ents.respawn.pending.EntityPendingRespawn;
+import com.limpygnome.projectsandbox.server.ents.respawn.EntityPendingRespawn;
 import com.limpygnome.projectsandbox.server.inventory.Inventory;
 import com.limpygnome.projectsandbox.server.packets.PacketData;
 import com.limpygnome.projectsandbox.server.players.PlayerInfo;
@@ -497,7 +497,7 @@ public strictfp abstract class Entity
         this.flagDead = true;
 
         // Default action is to respawn the entity
-        controller.respawnManager.respawn(new EntityPendingRespawn(this, DEFAULT_RESPAWN_TIME_MS));
+        controller.respawnManager.respawn(new EntityPendingRespawn(controller, this, DEFAULT_RESPAWN_TIME_MS));
     }
     
     public void eventPacketEntCreated(PacketData packetData)

@@ -44,6 +44,7 @@ public class GameLogic implements Runnable
         try
         {
             long timeStart, timeEnd, timeNext;
+
             while(!Thread.interrupted())
             {
                 timeStart = System.currentTimeMillis();

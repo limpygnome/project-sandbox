@@ -1,4 +1,4 @@
-package com.limpygnome.projectsandbox.server.ents.respawn.pending;
+package com.limpygnome.projectsandbox.server.ents.respawn;
 
 import com.limpygnome.projectsandbox.server.Controller;
 import com.limpygnome.projectsandbox.server.ents.Entity;
@@ -11,16 +11,16 @@ public class PositionPendingRespawn extends PendingRespawn
 {
     private final Spawn spawn;
 
-    public PositionPendingRespawn(Entity entity, Spawn spawn)
+    public PositionPendingRespawn(Controller controller, Entity entity, Spawn spawn)
     {
-        super(entity, 0);
+        super(controller, entity, 0);
 
         this.spawn = spawn;
     }
 
-    public PositionPendingRespawn(Entity entity, Spawn spawn, long gameTimeRespawn)
+    public PositionPendingRespawn(Controller controller, Entity entity, Spawn spawn, long respawnDelay)
     {
-        super(entity, gameTimeRespawn);
+        super(controller, entity, respawnDelay);
 
         this.spawn = spawn;
     }

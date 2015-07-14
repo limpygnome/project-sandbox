@@ -1,4 +1,4 @@
-package com.limpygnome.projectsandbox.server.ents.respawn.pending;
+package com.limpygnome.projectsandbox.server.ents.respawn;
 
 import com.limpygnome.projectsandbox.server.Controller;
 import com.limpygnome.projectsandbox.server.ents.Entity;
@@ -12,15 +12,15 @@ public abstract class PendingRespawn
     public final Entity entity;
     public final long gameTimeRespawn;
 
-    protected PendingRespawn(Entity entity)
+    protected PendingRespawn(Controller controller, Entity entity)
     {
-        this(entity, 0);
+        this(controller, entity, 0);
     }
 
-    protected PendingRespawn(Entity entity, long gameTimeRespawn)
+    protected PendingRespawn(Controller controller, Entity entity, long respawnDelay)
     {
         this.entity = entity;
-        this.gameTimeRespawn = gameTimeRespawn;
+        this.gameTimeRespawn = controller.gameTime() + respawnDelay;
     }
 
     /**
