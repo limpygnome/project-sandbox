@@ -275,7 +275,7 @@ public strictfp abstract class Entity
         }
         else
         {
-            throw new RuntimeException("Disallowed state transition - " + this.state + " -> " + state);
+            LOG.error("Disallowed state transition - old state: {} -> new state: {}, ent: {}", this.state, state, this);
         }
     }
     

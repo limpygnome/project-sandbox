@@ -70,7 +70,7 @@ public class DefaultProximity
             {
                 b = kv.getValue();
 
-                if (a != b)
+                if (a != b && !b.isDead() && !b.isDeleted())
                 {
                     // Get distance to center
                     entDistance = Vector2.distance(a.positionNew, b.positionNew);

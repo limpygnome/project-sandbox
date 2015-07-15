@@ -178,6 +178,7 @@ projectSandbox.network.entities =
 	{
 		// Remove entity from the world
 		var entity = projectSandbox.entities.get(id);
+
 		if (entity != null)
 		{
 			// Remove from world

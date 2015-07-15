@@ -79,7 +79,6 @@ projectSandbox.network.player =
 
         // Invoke entity hooks for death
         this.invokeEntityDeath(entityIdVictim);
-        this.invokeEntityDeath(entityIdKiller);
 
         // Inform UI via hook
         projectSandbox.game.ui.hookPlayer_entKilled(causeText, entityIdVictim, entityIdKiller, playerIdVictim, playerIdKiller);

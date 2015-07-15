@@ -52,10 +52,9 @@ public class Sentry extends Entity
 
         if (!ents.isEmpty())
         {
+            // Rotate towards closest ent and kill it
             ProximityResult result = ents.get(0);
-
             float targetAngleOffset = Vector2.angleToFaceTarget(positionNew, rotation, result.entity.positionNew);
-
             rotateToTarget(controller, targetAngleOffset, true);
         }
         else
@@ -128,6 +127,8 @@ public class Sentry extends Entity
     public void eventSpawn(Controller controller)
     {
         this.defaultRotation = rotation;
+
+        super.eventSpawn(controller);
     }
 
     @Override
