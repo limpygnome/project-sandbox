@@ -8,7 +8,7 @@ public class RocketConstants
     /**
      * The radius of affected entities from the explosion.
      */
-    public static final float ROCKET_BLAST_RADIUS = 150.0f;
+    public static final float ROCKET_BLAST_RADIUS = 120.0f;
 
     /**
      * The linear damage applied from an Rocket blast; ranges from 0 to specified value, based on distance.

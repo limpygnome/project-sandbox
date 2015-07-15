@@ -3,6 +3,8 @@ function HealthPickup()
 	AbstractPickup.call(this);
 
     this.setTexture("world/building");
+
+    alert(AbstractPickup);
 }
 
 HealthPickup.inherits(Primitive);

@@ -13,6 +13,16 @@
             }
         },
         {
+            "name" : "r",
+            "texture" : "world/road",
+
+            "properties" :
+            {
+                "solid" : false,
+                "pedestrian" : true
+            }
+        },
+        {
             "name" : "b",
             "texture" : "world/building",
             
@@ -56,8 +66,8 @@
         "b", "g", "c", "g", "c", "g", "c", "d", "g", "g", "g", "g", "b",
         "b", "g", "g", "g", "g", "g", "g", "g", "g", "g", "g", "g", "b",
         "b", "g", "c", "g", "b", "g", "b", "g", "g", "g", "g", "g", "b",
-        "b", "g", "b", "g", "b", "g", "b", "g", "g", "g", "g", "g", "b",
-        "b", "g", "b", "b", "b", "b", "b", "b", "b", "b", "b", "b", "b"
+        "b", "r", "r", "g", "b", "g", "b", "g", "g", "g", "g", "g", "b",
+        "b", "r", "r", "b", "b", "b", "b", "b", "b", "b", "b", "b", "b"
     ],
     
     "ents":

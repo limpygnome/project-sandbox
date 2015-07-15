@@ -211,9 +211,9 @@ body
     width: 14em;
     height: 0.75em;
     background: #425867;
-    box-shadow: #333 0em 0em 0.5em;
+    box-shadow: #222 0em 0em 1.5em;
     overflow: hidden;
-    border: solid 0.2em #333;
+    border: solid 0.3em #333;
 }
 
 #projectsandbox #ps-ui #ps-ui-top-right #ps-ui-healthbar #ps-ui-healthbar-fill
@@ -257,7 +257,7 @@ body
     border-top-right-radius: 0.5em;
     border-bottom-right-radius: 0.5em;
 
-    box-shadow: #666 0em 0em 0.5em;
+    box-shadow: #222 0em 0em 0.5em;
 
     text-align: right;
     text-shadow: #000 0em 0em 0.2em;
@@ -486,9 +486,3 @@ body
 {
     color: #FFC506;
 }
-
-
-
-
-
-

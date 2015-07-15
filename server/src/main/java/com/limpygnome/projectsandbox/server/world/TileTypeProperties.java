@@ -9,9 +9,27 @@ import org.json.simple.JSONObject;
  */
 public class TileTypeProperties
 {
+    /**
+     * Indicates the tile is solid.
+     */
     public boolean solid;
+
+    /**
+     * The amount of damage caused by the tile.
+     *
+     * TODO: consider refactoring into float to allow negative damage i.e. healing?
+     */
     public short damage;
+
+    /**
+     * The height of the block, for cube tiles.
+     */
     public float height;
+
+    /**
+     * Indicates if the tile is a pedestrian zone, walkable by AI.
+     */
+    public boolean pedestrian;
     
     public TileTypeProperties()
     {
@@ -19,6 +37,7 @@ public class TileTypeProperties
         solid = false;
         damage = 0;
         height = 0.0f;
+        pedestrian = false;
     }
     
     public void parse(JSONObject obj) throws IIOException
@@ -30,21 +49,27 @@ public class TileTypeProperties
         }
         
         // Solid
+
+        // Height
+        if (obj.containsKey("height"))
+        {
+            height = (float) (double) obj.get("height");
+        }
         if (obj.containsKey("solid"))
         {
             solid = (boolean) obj.get("solid");
         }
-        
-        // Height
-        if (obj.containsKey("height"))
+
+        // Pedestrian
+        if (obj.containsKey("pedestrian"))
         {
-           height = (float) (double) obj.get("height");
+            pedestrian = (boolean) obj.get("pedestrian");
         }
     }
 
     @Override
     public String toString()
     {
-        return "[solid: " + solid + ", damage: " + damage + ", height: " + height + "]";
+        return "[solid: " + solid + ", damage: " + damage + ", height: " + height + ", pedestrian: " + pedestrian + "]";
     }
 }
