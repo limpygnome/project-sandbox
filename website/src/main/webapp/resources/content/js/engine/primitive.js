@@ -23,12 +23,6 @@ function Primitive(params)
 	this.z = 0.0;
 	this.rotation = 0.0;
 	
-	// Keep a separate copy for rendering to avoid flickering from updates mid-way
-	this.renderX = null;
-	this.renderY = null;
-	this.renderZ = null;
-	this.renderRotation = null;
-	
 	// Set default colours
 	this.setColour(1.0, 1.0, 1.0, 1.0);
 	
@@ -65,18 +59,15 @@ Primitive.prototype.setAlpha = function(a)
 
 Primitive.prototype.render = function(gl, shaderProgram, modelView, perspective)
 {
-	// Check initial render co-ords have been setup
-	if (this.renderX == null || this.renderY == null || this.renderZ == null || this.renderRotation == null)
-	{
-		this.renderX = this.x;
-		this.renderY = this.y;
-		this.renderZ = this.z;
-		this.renderRotation = this.rotation;
-	}
-	
+	// Take snapshot of render position/rotation to avoid updates mid-way
+	var renderX = this.x;
+	var renderY = this.y;
+	var renderZ = this.z;
+	var renderRotation = this.rotation;
+
 	// Translate modelview to location of primitive
-	mat4.translate(modelView, modelView, [this.renderX, this.renderY, this.renderZ]);
-	mat4.rotateZ(modelView, modelView, -this.renderRotation);
+	mat4.translate(modelView, modelView, [renderX, renderY, renderZ]);
+	mat4.rotateZ(modelView, modelView, -renderRotation);
 
 	// Bind normals data
     gl.bindBuffer(gl.ARRAY_BUFFER, this.bufferNormals);
@@ -121,8 +112,8 @@ Primitive.prototype.render = function(gl, shaderProgram, modelView, perspective)
 	gl.drawElements(gl.TRIANGLES, this.bufferIndexes.numItems, gl.UNSIGNED_SHORT, 0);
 
 	// Undo translation
-	mat4.rotateZ(modelView, modelView, this.renderRotation);
-	mat4.translate(modelView, modelView, [-this.renderX, -this.renderY, -this.renderZ]);
+	mat4.rotateZ(modelView, modelView, renderRotation);
+	mat4.translate(modelView, modelView, [-renderX, -renderY, -renderZ]);
 	
 	// Unbind texture
 	if (texture != null)
@@ -133,12 +124,6 @@ Primitive.prototype.render = function(gl, shaderProgram, modelView, perspective)
 	{
 		projectSandbox.textures.unbindNoTexture(gl, shaderProgram);
 	}
-	
-	// Update render co-ordinates
-	this.renderX = this.x;
-	this.renderY = this.y;
-	this.renderZ = this.z;
-	this.renderRotation = this.rotation;
 };
 
 Primitive.prototype.setTexture = function(name)

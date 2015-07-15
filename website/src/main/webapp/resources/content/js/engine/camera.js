@@ -64,10 +64,10 @@ projectSandbox.camera =
 			
 			if(ent != null)
 			{
-			    if (this.x != ent.renderX || this.y != ent.renderY || this.z != ent.renderZ)
+			    if (this.x != ent.x || this.y != ent.y || this.z != ent.z)
 			    {
                     // Update camera
-                    this.setPosition(ent.renderX, ent.renderY, ent.renderZ);
+                    this.setPosition(ent.x, ent.y, ent.z);
 				}
 			}
 			else
