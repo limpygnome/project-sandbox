@@ -49,6 +49,13 @@ void main(void)
 
     vec3 normal = normalize(vNormals);
     vec3 lightVec = normalize(lightPos - vWorldVertex.xyz);
+
+    vec3 lightTarget = vec3(lightVec.x + sin(lightAngle), lightVec.y + cos(lightAngle), lightVec.z);
+	vec3 lightDir = normalize(lightVec - lightTarget);
+
+    float angle = acos(dot(lightVec, -lightDir));
+
+
     float l = dot(normal, lightVec);
     float distance = distance(vWorldVertex.xyz, lightPos);
 
@@ -56,7 +63,7 @@ void main(void)
     // The colour of the texel from the light - can be used between multiple lights for additive colour
 	vec3 additiveLightColour = vec3(1.0, 1.0, 1.0);
 
-	if (lightOn && l >= 0.0 && distance <= lightDistance)
+	if (lightOn && angle < lightConeAngle && l >= 0.0 && distance <= lightDistance)
 	{
 		float attenuatedLight = 1.0 / (
             constantAttenuation +
