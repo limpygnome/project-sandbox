@@ -24,7 +24,7 @@ void main(void)
 	bool lightOn = true;
 	float lightDistance = 400.0;
 	vec3 lightColour = vec3(1.0, 1.0, 1.0);
-	vec3 lightPos = vec3(90.0, 200.0, 30.0);
+	vec3 lightPos = vec3(200.0, 200.0, 30.0);
 	float lightAngle = radians(0.0);
 	float lightConeAngle = radians(65.0);
 
@@ -33,21 +33,30 @@ void main(void)
 	float linearAttenuation = 0.001;
 	float quadraticAttenuation = 0.000001;
 
-	// Calculate location of light
-	vec3 lightCameraPos = vec3(lightPos.x - vCameraPosition.x, lightPos.y - vCameraPosition.y, vCameraPosition.z - lightPos.z);
-	vec3 lightRelativePosition = normalize(lightCameraPos - vPosition.xyz);
-	vec3 lightTarget = vec3(lightCameraPos.x + sin(lightAngle), lightCameraPos.y + cos(lightAngle), lightCameraPos.z);
-	vec3 lightDir = normalize(lightTarget - lightCameraPos);
 
-	// Calculations for light
-	float angle = acos(dot(-lightRelativePosition, lightDir));
-	float l = dot(vNormals, lightRelativePosition);
-    float distance = distance(vPosition.xyz, lightCameraPos);
+
+//	// Calculate location of light
+//	vec3 lightCameraPos = vec3(lightPos.x - vCameraPosition.x, lightPos.y - vCameraPosition.y, vCameraPosition.z - lightPos.z);
+//	vec3 lightRelativePosition = normalize(lightCameraPos - vPosition.xyz);
+//	vec3 lightTarget = vec3(lightCameraPos.x + sin(lightAngle), lightCameraPos.y + cos(lightAngle), lightCameraPos.z);
+//	vec3 lightDir = normalize(lightTarget - lightCameraPos);
+//
+//	// Calculations for light
+//	float angle = acos(dot(-lightRelativePosition, lightDir));
+//	float l = dot(vNormals, lightRelativePosition);
+//    float distance = distance(vPosition.xyz, lightCameraPos);
+
+
+    vec3 normal = normalize(vNormals);
+    vec3 lightVec = normalize(lightPos - vWorldVertex.xyz);
+    float l = dot(normal, lightVec);
+    float distance = distance(vWorldVertex.xyz, lightPos);
+
 
     // The colour of the texel from the light - can be used between multiple lights for additive colour
 	vec3 additiveLightColour = vec3(1.0, 1.0, 1.0);
 
-	if (lightOn && angle < lightConeAngle && l >= 0.0 && distance <= lightDistance)
+	if (lightOn && l >= 0.0 && distance <= lightDistance)
 	{
 		float attenuatedLight = 1.0 / (
             constantAttenuation +

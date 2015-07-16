@@ -39,10 +39,10 @@ projectSandbox.bufferCache =
         var normals = [
 
             // Top
-			0.0,  0.0,  -1.0,
-			0.0,  0.0,  -1.0,
-			0.0,  0.0,  -1.0,
-			0.0,  0.0,  -1.0
+			0.0,  0.0,  1.0,
+			0.0,  0.0,  1.0,
+			0.0,  0.0,  1.0,
+			0.0,  0.0,  1.0
         ];
 
         var normalsBuffer = gl.createBuffer();
