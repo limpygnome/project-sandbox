@@ -10,10 +10,11 @@ function AbstractPickup()
     );
 
     this.offsetZ = 0.0;
-    this.offsetFactor = 0.1;
-    this.offsetZMin = -10.0;
-    this.offsetZMax = 10.0;
+    this.offsetFactor = 0.5;
+    this.offsetZMin = -5.0;
+    this.offsetZMax = 8.0;
     this.offsetDirectionPositive = true;
+    this.spinFactor = 0.05;
 }
 
 AbstractPickup.inherits(Entity);
@@ -42,4 +43,12 @@ AbstractPickup.prototype.logic = function()
 
     // -- Apply final offset amount to Z by subtracting the difference between the old and new internal offset amounts
     this.z += this.offsetZ - oldOffsetZ;
+
+    // Spin around!
+    this.rotation = projectSandbox.utils.clampCircular(
+        -projectSandbox.utils.PI,
+        +projectSandbox.utils.PI,
+        this.rotation + this.spinFactor
+    );
+
 }

@@ -1,5 +1,7 @@
 projectSandbox.utils =
 {
+	PI:  3.14159254359,
+
 	ajax: function(url, callbackSuccess, callbackFailure)
 	{
 		this.ajaxInternal(
@@ -122,6 +124,29 @@ projectSandbox.utils =
 		{
 			return value;
 		}
+	},
+
+	clampCircular: function(min, max, value)
+	{
+		var diff = max - min;
+		var v = value - min;
+
+		if (v > diff)
+		{
+			while (v > diff)
+			{
+				v -= diff;
+			}
+		}
+		else if (v < 0.0)
+		{
+			while (v < 0.0)
+			{
+				v += diff;
+			}
+		}
+
+		return min + v;
 	},
 
 	parseText: function(data, dataView, offset)

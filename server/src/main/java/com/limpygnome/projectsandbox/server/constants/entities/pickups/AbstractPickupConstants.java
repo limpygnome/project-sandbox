@@ -7,11 +7,15 @@ public final class AbstractPickupConstants
 {
     /**
      * The default width of pickups.
+     *
+     * Note: appears different on client-side, but we want a square due to spinning.
      */
-    public static final short DEFAULT_WIDTH = 16;
+    public static final short DEFAULT_WIDTH = 24;
 
     /**
      * The default height of pickups.
+     *
+     * Note: appears different on client-side, but we want a square due to spinning.
      */
-    public static final short DEFAULT_HEIGHT = 16;
+    public static final short DEFAULT_HEIGHT = 24;
 }
