@@ -1,17 +1,19 @@
-<%@ taglib uri="http://tiles.apache.org/tags-tiles" prefix="tiles"%>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib prefix="c"		uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="tiles"	uri="http://tiles.apache.org/tags-tiles" %>
 
 <!--
-    Copyright © Marcus Craske <c:out value="${copyright_year}"/>
+    Copyright &copy; Marcus Craske <c:out value="${copyright_year}"/>
 -->
 <!DOCTYPE html>
 <html>
 	<head>
-		<title>Project Sandbox - Prototype</title>
+		<title>
+			Project Sandbox - Prototype
+		</title>
 
-		<link rel="stylesheet" href="/content/css/project-sandbox/main.css" />
-		<link rel="stylesheet" href="/content/css/project-sandbox/main-anims.css" />
-		<link rel="stylesheet" href="/content/css/project-sandbox/weapons.css" />
+		<link rel="stylesheet" href="/content/css/game/main.css" />
+		<link rel="stylesheet" href="/content/css/game/main-anims.css" />
+		<link rel="stylesheet" href="/content/css/game/weapons.css" />
 
 		<!-- Third-Party -->
 		<script src="/content/js/third-party/gl-matrix-min.js"></script>

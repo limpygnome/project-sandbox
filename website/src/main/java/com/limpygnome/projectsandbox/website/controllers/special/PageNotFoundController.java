@@ -19,7 +19,7 @@ public class PageNotFoundController extends BaseController
     {
         response.setStatus(404);
 
-        return createMV("page-not-found", "page not found");
+        return createMV("main/page-not-found", "page not found");
     }
 
 }

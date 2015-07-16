@@ -25,7 +25,11 @@ public class BaseController
         ModelAndView mv = new ModelAndView();
 
         mv.setViewName(page);
-        mv.addObject(MODEL_ATTRIB_TITLE, title);
+
+        if (title != null)
+        {
+            mv.addObject(MODEL_ATTRIB_TITLE, title);
+        }
 
         return mv;
     }

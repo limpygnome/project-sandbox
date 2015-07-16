@@ -1,4 +1,4 @@
-package com.limpygnome.projectsandbox.website.scheduledtasks;
+package com.limpygnome.projectsandbox.website.tasks;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;

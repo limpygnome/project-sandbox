@@ -382,16 +382,27 @@ body
     ********************************************************************************************************************
 */
 
+#projectsandbox .ps-sidebar #ps-options
+{
+    padding: 1em;
+}
 #projectsandbox .ps-sidebar #ps-options .button
 {
+    display: block;
     background: #444;
     width: 100%;
-    padding: 1em;
     text-align: center;
     border: solid 0.2em #111;
     border-left: none;
     border-right: none;
     font-weight: bold;
+    text-decoration: none;
+    color: inherit;
+}
+#projectsandbox .ps-sidebar #ps-options .button span
+{
+    display: block;
+    padding: 0.8em 0.5em;
 }
 #projectsandbox .ps-sidebar #ps-options .button:focus,
 #projectsandbox .ps-sidebar #ps-options .button:hover

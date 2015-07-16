@@ -20,7 +20,7 @@ public class ErrorController extends BaseController
     {
         response.setStatus(500);
 
-        return createMV("error");
+        return createMV("main/error");
     }
 
 }

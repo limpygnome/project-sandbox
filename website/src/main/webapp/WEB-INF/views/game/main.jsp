@@ -258,11 +258,16 @@
                 <p>
                     FPS: <span id="ps-options-fps">--</span>
                 </p>
-                <p>
-                    <div class="options button fullscreen">
+                <div class="options button fullscreen">
+                    <span>
                         Toggle Fullscreen
-                    </div>
-                </p>
+                    </span>
+                </div>
+                <a class="options button" href="/">
+                    <span>
+                        Exit
+                    </span>
+                </a>
             </div>
         </div>
 
