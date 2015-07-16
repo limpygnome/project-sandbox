@@ -76,6 +76,9 @@ projectSandbox.shaders =
 		// Normals matrix
 		shaderProgram.nMatrixUniform = gl.getUniformLocation(shaderProgram, "uNMatrix");
 
+		// Camera view matrix
+		shaderProgram.uniformCameraViewMatrix = gl.getUniformLocation(shaderProgram, "uniformCameraViewMatrix");
+
 		// Texture sampling
 		shaderProgram.samplerUniform = gl.getUniformLocation(shaderProgram, "uSampler");
 	},

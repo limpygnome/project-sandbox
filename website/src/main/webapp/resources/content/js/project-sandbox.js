@@ -18,6 +18,7 @@ var projectSandbox =
 	// Matrices
 	modelView: mat4.create(),
 	perspective: mat4.create(),
+	cameraView: mat4.create(),
 	
 	// Entities
 	entities: new Map(),
@@ -237,14 +238,15 @@ var projectSandbox =
             projectSandbox.frustrum.FRUSTRUM_DISTANCE_FAR
         );
 		
-		// Reset identity matrix
+		// Reset matrices
 		mat4.identity(this.modelView);
-		
+		mat4.identity(this.cameraView);
+
 		// Perform camera render logic
 		projectSandbox.camera.renderLogic();
-		
-		// Set camera translation
-		projectSandbox.camera.applyToModelView();
+
+		// Update camera view matrix
+		gl.uniformMatrix4fv(this.shaderProgram.uniformCameraViewMatrix, false, this.cameraView);
         
         // Render map
 		projectSandbox.map.render(gl, this.shaderProgram, this.modelView, this.perspective);

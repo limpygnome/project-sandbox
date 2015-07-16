@@ -40,19 +40,21 @@ projectSandbox.camera =
         // Update position to check it's within limits
         this.setPosition(this.x, this.y, this.z);
 	},
-	
-	applyToModelView: function()
+
+	buildCameraView: function()
 	{
 		// Translate to center of camera
-		mat4.translate(projectSandbox.modelView, projectSandbox.modelView, [-this.x, -this.y, -this.z]);
-		
+		//mat4.translate(projectSandbox.cameraView, projectSandbox.cameraView, [-this.x, -this.y, -this.z]);
+
 		// Apply rotations
-		mat4.rotateX(projectSandbox.modelView, projectSandbox.modelView, this.rotationX);
-		mat4.rotateY(projectSandbox.modelView, projectSandbox.modelView, this.rotationY);
-		mat4.rotateZ(projectSandbox.modelView, projectSandbox.modelView, this.rotationZ);
-		
+		//mat4.rotateX(projectSandbox.cameraView, projectSandbox.cameraView, this.rotationX);
+		//mat4.rotateY(projectSandbox.cameraView, projectSandbox.cameraView, this.rotationY);
+		//mat4.rotateZ(projectSandbox.cameraView, projectSandbox.cameraView, this.rotationZ);
+
 		// Translate by zoom
-		mat4.translate(projectSandbox.modelView, projectSandbox.modelView, [0, 0, -this.zoom]);
+		mat4.translate(projectSandbox.cameraView, projectSandbox.cameraView, [0, 0, -this.zoom]);
+
+		mat4.translate(projectSandbox.cameraView, projectSandbox.cameraView, [-this.x, -this.y, 0.0]);
 	},
 	
 	renderLogic: function()
@@ -79,6 +81,9 @@ projectSandbox.camera =
 		{
 			console.warn("engine/camera - no chase entity");
 		}
+
+		// Build camera view perspective
+		this.buildCameraView();
 	},
 	
 	logic: function()

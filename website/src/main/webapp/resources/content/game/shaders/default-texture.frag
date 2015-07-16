@@ -7,6 +7,8 @@ varying vec4 vPosition;
 uniform sampler2D uSampler;
 varying vec3 vCameraPosition;
 
+varying vec4 vWorldVertex;
+
 void main(void)
 {
 	vec4 texel = texture2D(uSampler, vec2(vTextureCoord.s, vTextureCoord.t));
@@ -34,10 +36,10 @@ void main(void)
 	// Calculate location of light
 	vec3 lightCameraPos = vec3(lightPos.x - vCameraPosition.x, lightPos.y - vCameraPosition.y, vCameraPosition.z - lightPos.z);
 	vec3 lightRelativePosition = normalize(lightCameraPos - vPosition.xyz);
-
-	// Calculations for light
 	vec3 lightTarget = vec3(lightCameraPos.x + sin(lightAngle), lightCameraPos.y + cos(lightAngle), lightCameraPos.z);
 	vec3 lightDir = normalize(lightTarget - lightCameraPos);
+
+	// Calculations for light
 	float angle = acos(dot(-lightRelativePosition, lightDir));
 	float l = dot(vNormals, lightRelativePosition);
     float distance = distance(vPosition.xyz, lightCameraPos);

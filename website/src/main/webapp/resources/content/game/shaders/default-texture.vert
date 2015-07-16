@@ -7,6 +7,7 @@ attribute vec3 aCameraPosition;
 uniform mat4 uMVMatrix;
 uniform mat4 uPMatrix;
 uniform mat4 uNMatrix;
+uniform mat4 uniformCameraViewMatrix;
 
 varying vec2 vTextureCoord;
 varying vec4 vColour;
@@ -15,11 +16,16 @@ varying vec3 vNormals;
 varying vec4 vPosition;
 varying vec3 vCameraPosition;
 
+varying vec4 vWorldVertex;
+
 void main(void)
 {
-	// Transfer attributes for fragment shader
-	gl_Position = uPMatrix * uMVMatrix * vec4(aVertexPosition, 1.0);
+	// Calculate position of vertex
+	vWorldVertex = uMVMatrix * vec4(aVertexPosition, 1.0);
+	vec4 viewVertex = uniformCameraViewMatrix * vWorldVertex;
+	gl_Position = uPMatrix * viewVertex;
 
+	// Transfer properties for fragment shader
 	vTextureCoord = aTextureCoord;
 	vColour = aColour;
 	vNormals = aNormals;
