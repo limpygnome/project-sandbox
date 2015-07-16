@@ -22,7 +22,7 @@ void main(void)
 
 	// Light properties
 	bool lightOn = true;
-	float lightDistance = 400.0;
+	float lightDistance = 200.0;
 	vec3 lightColour = vec3(1.0, 1.0, 1.0);
 	vec3 lightPos = vec3(200.0, 200.0, 30.0);
 	float lightAngle = radians(0.0);
@@ -34,31 +34,21 @@ void main(void)
 	float quadraticAttenuation = 0.000001;
 
 
-
-//	// Calculate location of light
-//	vec3 lightCameraPos = vec3(lightPos.x - vCameraPosition.x, lightPos.y - vCameraPosition.y, vCameraPosition.z - lightPos.z);
-//	vec3 lightRelativePosition = normalize(lightCameraPos - vPosition.xyz);
-//	vec3 lightTarget = vec3(lightCameraPos.x + sin(lightAngle), lightCameraPos.y + cos(lightAngle), lightCameraPos.z);
-//	vec3 lightDir = normalize(lightTarget - lightCameraPos);
-//
-//	// Calculations for light
-//	float angle = acos(dot(-lightRelativePosition, lightDir));
-//	float l = dot(vNormals, lightRelativePosition);
-//    float distance = distance(vPosition.xyz, lightCameraPos);
-
-
-    vec3 normal = normalize(vNormals);
+    // Compute world position of light
     vec3 lightVec = normalize(lightPos - vWorldVertex.xyz);
 
-    vec3 lightTarget = vec3(lightVec.x + sin(lightAngle), lightVec.y + cos(lightAngle), lightVec.z);
-	vec3 lightDir = normalize(lightVec - lightTarget);
+    // Compute direction of light
+	vec3 lightDir = vec3(sin(lightAngle), cos(lightAngle), 0.0);
 
-    float angle = acos(dot(lightVec, -lightDir));
+    // Compute current angle of light from source
+    float angle = acos(dot(-lightVec, lightDir));
 
-
-    float l = dot(normal, lightVec);
+    // Compute distance between this fragment and light source
     float distance = distance(vWorldVertex.xyz, lightPos);
 
+    // Check similarity between light and normal of light
+    vec3 normal = normalize(vNormals);
+    float l = dot(normal, lightVec);
 
     // The colour of the texel from the light - can be used between multiple lights for additive colour
 	vec3 additiveLightColour = vec3(1.0, 1.0, 1.0);
