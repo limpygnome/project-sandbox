@@ -14,24 +14,40 @@ import org.springframework.web.servlet.ModelAndView;
 public class BaseController
 {
     public static final String MODEL_ATTRIB_TITLE = "title";
+    public static final String MODEL_ATTRIB_CONTENT_CLASS = "contentClass";
 
     protected ModelAndView createMV(String page)
     {
         return createMV(page, page);
     }
 
+
+
     protected ModelAndView createMV(String page, String title)
     {
-        ModelAndView mv = new ModelAndView();
+        return createMV(page, title, "content");
+    }
 
-        mv.setViewName(page);
+    protected ModelAndView createMV(String page, String title,
+                                    String contentClass)
+    {
+        ModelAndView modelAndView = new ModelAndView();
 
+        modelAndView.setViewName(page);
+
+        // Add page title
         if (title != null)
         {
-            mv.addObject(MODEL_ATTRIB_TITLE, title);
+            modelAndView.addObject(MODEL_ATTRIB_TITLE, title);
         }
 
-        return mv;
+        // Add CSS classes
+        if (contentClass != null)
+        {
+            modelAndView.addObject(MODEL_ATTRIB_CONTENT_CLASS, contentClass);
+        }
+
+        return modelAndView;
     }
 
     @ModelAttribute("title")

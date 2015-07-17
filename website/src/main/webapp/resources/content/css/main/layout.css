@@ -10,17 +10,28 @@ html, body
     padding: 0em;
 }
 
+/*
+    Not working?
+*/
+::selection,
+::-webkit-selection,
+::-moz-selection
+{
+    color: #4D94DB;
+    background: #4D94DB;
+}
+
 body
 {
-    background: #333;
+    background: #333 url('../../images/main/background.png');
+    background-size: cover;
     color: #FFF;
 }
 
 .wrapper
 {
-    width: 60em;
+    width: 70em;
     margin: 0em auto;
-    background: rgba(30, 30, 30, 0.5);
 }
 
 /*
@@ -32,7 +43,8 @@ body
 {
     background: rgba(0, 0, 0, 0.5);
     padding: 0.2em 0.5em;
-    border-bottom: solid 0.2em #000
+    border-bottom: solid 0.4em rgba(0, 0, 0, 0.5);
+    margin-bottom: 3em;
 }
 
 .header h1
@@ -75,15 +87,78 @@ body
     padding: 0em 1em;
 }
 
+.header .nav ul li a:hover,
+.header .nav ul li a:focus
+{
+    color: #4D94DB;
+}
+
+/*
+    Join (Content)
+    ********************************************************************************************************************
+*/
+.wrapper .join
+{
+    text-align: center;
+}
+
+.wrapper .join .box
+{
+    display: inline-block;
+    width: 20em;
+    margin: 0em auto;
+}
+
+
+.wrapper .join .box table
+{
+    margin: 0em auto;
+}
+
+.wrapper .join form input[type=text],
+.wrapper .join form input[type=password]
+{
+    border-radius: 0.3em;
+    padding: 0.3em 0.5em;
+    color: #333;
+    outline: 0;
+    border: 0em;
+    font-size: 1.3em;
+}
+
+.wrapper .join form input[type=submit]
+{
+    border-radius: 0.3em;
+    border: 0em;
+    padding: 0.3em 0.4em;
+    color: #333;
+    background: #CCC;
+    font-size: 1.2em;
+}
+.wrapper .join form input[type=submit]:hover,
+.wrapper .join form input[type=submit]:focus
+{
+    cursor: pointer;
+}
 
 /*
     Content
     ********************************************************************************************************************
 */
 
+.wrapper .content
+{
+    background: rgba(30, 30, 30, 0.5);
+    border-radius: 0.5em;
+}
+
 .wrapper .content p
 {
     padding: 0.8em 0.5em;
+}
+.wrapper .content p.center
+{
+    text-align: center;
 }
 
 /*
@@ -91,7 +166,13 @@ body
     ********************************************************************************************************************
 */
 
-.wrapper .footer
+.footer
 {
+    position: fixed;
+    width: 100%;
+    bottom: 0;
     text-align: center;
+    text-shadow: 0em 0em 0.5em #000;
+    color: #CCC;
+    padding: 0.5em;
 }

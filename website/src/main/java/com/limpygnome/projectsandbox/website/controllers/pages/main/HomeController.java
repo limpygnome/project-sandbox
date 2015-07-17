@@ -15,7 +15,7 @@ public class HomeController extends BaseController
     @RequestMapping(value = {"/", "/home"})
     public ModelAndView home()
     {
-        ModelAndView modelAndView = createMV("main/home", "welcome");
+        ModelAndView modelAndView = createMV("main/home", "welcome", "join");
 
         return modelAndView;
     }

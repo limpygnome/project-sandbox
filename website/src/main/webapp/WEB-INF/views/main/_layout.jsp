@@ -18,7 +18,7 @@
             <ul>
                 <li>
                     <a href="/">
-                        Join Game
+                        Join
                     </a>
                 </li>
                 <li>
@@ -40,12 +40,12 @@
         </div>
     </div>
     <div class="wrapper">
-        <div class="content">
+        <div class="${contentClass}">
             <tiles:insertAttribute name="content" />
         </div>
-        <div class="footer">
-            Copyright &copy; Marcus Craske <c:out value="${copyright_year}"/>
-        </div>
+    </div>
+    <div class="footer">
+        Copyright &copy; Marcus Craske <c:out value="${copyright_year}"/>
     </div>
 </body>
 </html>

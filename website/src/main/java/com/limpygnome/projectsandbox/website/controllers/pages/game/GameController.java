@@ -12,7 +12,7 @@ import org.springframework.web.servlet.ModelAndView;
 public class GameController extends BaseController
 {
 
-    @RequestMapping(value = {"/", "/game"})
+    @RequestMapping(value = {"/game"})
     public ModelAndView home()
     {
         ModelAndView modelAndView = createMV("game/main", null);
