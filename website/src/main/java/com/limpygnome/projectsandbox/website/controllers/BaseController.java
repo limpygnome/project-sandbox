@@ -16,12 +16,12 @@ public class BaseController
     public static final String MODEL_ATTRIB_TITLE = "title";
     public static final String MODEL_ATTRIB_CONTENT_CLASS = "contentClass";
 
+
+
     protected ModelAndView createMV(String page)
     {
         return createMV(page, page);
     }
-
-
 
     protected ModelAndView createMV(String page, String title)
     {

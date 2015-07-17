@@ -91,7 +91,6 @@ game.ui =
 	        }
 	    }
 	},
-	
 
 	resize: function()
 	{
@@ -103,7 +102,7 @@ game.ui =
         var sidebarRightWidth = $("#ps-sidebar-right").width();
 
         var newWidth = totalWidth - (sidebarLeftWidth + sidebarRightWidth);
-        newWidth *= 0.95;
+        newWidth *= 1.0;
         var newHeight = newWidth / 1.33; $("#projectsandbox").height();
 
         // Update render canvas

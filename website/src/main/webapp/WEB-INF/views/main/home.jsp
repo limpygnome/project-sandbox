@@ -23,12 +23,12 @@
     <table>
         <tr>
             <td>
-                <input type="text" name="username" placeholder="Username..." />
+                <input type="text" name="user" placeholder="Username..." />
             </td>
         </tr>
         <tr>
             <td>
-                <input type="text" name="password" placeholder="Password..." />
+                <input type="text" name="pass" placeholder="Password..." />
             </td>
         </tr>
         <tr>
@@ -46,12 +46,12 @@
     <table>
         <tr>
             <td>
-                <input type="text" name="username" placeholder="Username..." />
+                <input type="text" name="user" placeholder="Username..." />
             </td>
         </tr>
         <tr>
             <td>
-                <input type="text" name="password" placeholder="Password..." />
+                <input type="text" name="pass" placeholder="Password..." />
             </td>
         </tr>
         <tr>

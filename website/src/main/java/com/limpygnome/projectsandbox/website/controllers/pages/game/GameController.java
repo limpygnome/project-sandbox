@@ -11,6 +11,7 @@ import org.springframework.web.servlet.ModelAndView;
 @Controller
 public class GameController extends BaseController
 {
+    public static final String MODEL_ATTRIB_GAME_SESSION_TOKEN = "token";
 
     @RequestMapping(value = {"/game"})
     public ModelAndView home()

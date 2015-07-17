@@ -186,8 +186,8 @@ body
 #projectsandbox #ps-ui #ps-ui-top-right
 {
     position: absolute;
-    top: 0;
-    right: 0;
+    top: 1em;
+    right: 2em;
     height: 100%;
     padding: 0.5em;
 }
