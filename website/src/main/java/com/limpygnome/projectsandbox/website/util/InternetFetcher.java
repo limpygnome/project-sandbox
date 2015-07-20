@@ -1,4 +1,4 @@
-package com.limpygnome.projectsandbox.website.utils;
+package com.limpygnome.projectsandbox.website.util;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;

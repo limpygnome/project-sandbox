@@ -60,6 +60,7 @@ public class PlayerManager implements IdCounterConsumer
             if (session.registeredPlayerId != null && connectedRegisteredPlayers.contains(session.registeredPlayerId))
             {
                 // TODO: this needs to throw an exception, detailing why the user cannot connect
+                LOG.warn("Player attempted to connect whilst in session - player id: {}", session.registeredPlayerId);
                 return null;
             }
 
@@ -69,6 +70,7 @@ public class PlayerManager implements IdCounterConsumer
             // Check we got an identifier
             if (playerId == null)
             {
+                LOG.error("Player ID provider exhausted");
                 return null;
             }
 

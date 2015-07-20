@@ -1,4 +1,4 @@
-package com.limpygnome.projectsandbox.website.utils;
+package com.limpygnome.projectsandbox.website.util;
 
 import java.io.IOException;
 import java.util.Properties;

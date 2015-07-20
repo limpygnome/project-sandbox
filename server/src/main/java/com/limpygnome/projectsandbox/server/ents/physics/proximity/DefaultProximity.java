@@ -61,7 +61,7 @@ public class DefaultProximity
     {
         LinkedList<ProximityResult> result = new LinkedList<>();
 
-        synchronized (controller.entityManager.entities)
+        synchronized (controller.entityManager)
         {
             Entity b;
             float entDistance;

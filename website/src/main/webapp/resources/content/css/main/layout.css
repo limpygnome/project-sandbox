@@ -35,6 +35,29 @@ body
 }
 
 /*
+    Shared
+    ********************************************************************************************************************
+*/
+
+.button
+{
+    border-radius: 0.3em;
+    border: 0em;
+    padding: 0.3em 0.4em;
+    color: #333;
+    background: #CCC;
+    font-size: 1.2em;
+    text-decoration: none;
+    margin: 0.5em;
+}
+.button:hover,
+.button:focus
+{
+    cursor: pointer;
+    background: #999;
+}
+
+/*
     Header
     ********************************************************************************************************************
 */
@@ -98,6 +121,40 @@ body
     color: #4D94DB;
 }
 
+.header .buttons
+{
+    float: right;
+}
+
+.header .buttons .score,
+.header .buttons .user,
+.header .buttons .button
+{
+    vertical-align: middle;
+    margin-right: 0.5em;
+}
+
+.header .buttons .score
+{
+    color: #FFC506;
+    font-size: 1.4em;
+}
+
+.header .buttons .user
+{
+    font-weight: bold;
+    color: inherit;
+    text-decoration: none;
+}
+
+.header .buttons .user img
+{
+    border: 0em;
+    width: 2em;
+    height: 2em;
+    vertical-align: middle;
+}
+
 /*
     Join (Content)
     ********************************************************************************************************************
@@ -136,22 +193,6 @@ body
 .wrapper .join form input[type=password]:hover
 {
     background: #EEE;
-}
-
-.wrapper .join form input[type=submit]
-{
-    border-radius: 0.3em;
-    border: 0em;
-    padding: 0.3em 0.4em;
-    color: #333;
-    background: #CCC;
-    font-size: 1.2em;
-}
-.wrapper .join form input[type=submit]:hover,
-.wrapper .join form input[type=submit]:focus
-{
-    cursor: pointer;
-    background: #999;
 }
 
 /*

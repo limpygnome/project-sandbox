@@ -1,38 +1,50 @@
 package com.limpygnome.projectsandbox.website.interceptor;
 
+import com.limpygnome.projectsandbox.website.service.CsrfService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.util.UUID;
 
 /**
  * Automatically provides CSRF protection on all forms.
  */
 public class CsrfInterceptor implements HandlerInterceptor
 {
+    @Autowired
+    private CsrfService csrfService;
+
     @Override
     public boolean preHandle(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Object o) throws Exception
     {
-        return false;
+        // Check if CSRF present
+        String method = httpServletRequest.getMethod();
+
+        if (method != null)
+        {
+            method = method.toLowerCase();
+
+            if ((method.equals("post") || method.equals("put") || method.equals("delete")) && !csrfService.isValidRequest(httpServletRequest))
+            {
+                httpServletResponse.sendError(HttpServletResponse.SC_FORBIDDEN);
+                return false;
+            }
+        }
+
+        return true;
     }
 
     @Override
     public void postHandle(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Object o, ModelAndView modelAndView) throws Exception
     {
-        // Check if response has form
+        // Do nothing...
     }
 
     @Override
     public void afterCompletion(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Object o, Exception e) throws Exception
     {
-        // Check if request is a postback; if so, check for csrf or redirect to error page
-    }
-
-    private String generateCsrfToken()
-    {
-        // UUID is sufficient; not likely someone can guess this...
-        return UUID.randomUUID().toString();
+        // Do nothing...
     }
 }

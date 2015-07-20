@@ -25,7 +25,7 @@ public class EntityUpdatesOutboundPacket extends OutboundPacket
 
     public void build(EntityManager entityManager, boolean forceCreate) throws IOException
     {
-        synchronized (entityManager.entities)
+        synchronized (entityManager)
         {
             // Add each entity with a changed slotState
             Map.Entry<Short, Entity> kv;
@@ -40,7 +40,7 @@ public class EntityUpdatesOutboundPacket extends OutboundPacket
                 ent = kv.getValue();
                 entState = ent.getState();
 
-                if(forceCreate && !ent.isDeleted())
+                if (forceCreate && !ent.isDeleted())
                 {
                     writeEntCreated(ent, forceCreate);
                     writeEntUpdated(ent, forceCreate);

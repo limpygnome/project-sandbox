@@ -44,8 +44,15 @@ public class RespawnManager
         return this.factionSpawnsMap.get(factionId);
     }
 
-    public synchronized void respawn(PendingRespawn pendingRespawn)
+    public void respawn(PendingRespawn pendingRespawn)
     {
+        /*
+            WARNING: do not put synchronize on this method. It makes a call out to EntityManager,
+            which can cause a deadlock scenario. EntityManager could be in a logic loop and attempt
+            to contact respawn manager. Since it has its own synchronize around the logic loop, this manager attempts
+            to access one of its other synchronize methods, causing a deadlock.
+         */
+
         // Handle entity state transition based on current state
         Entity entity = pendingRespawn.entity;
 
@@ -63,31 +70,34 @@ public class RespawnManager
                 throw new RuntimeException("Invalid state for entity respawn");
         }
 
-        // Add at suitable index based on time to respawn
-        Iterator<PendingRespawn> iterator = pendingRespawnList.iterator();
-        PendingRespawn pendingRespawnItem;
-        int index = 0;
-
-        while (iterator.hasNext())
+        synchronized (this)
         {
-            pendingRespawnItem = iterator.next();
+            // Add at suitable index based on time to respawn
+            Iterator<PendingRespawn> iterator = pendingRespawnList.iterator();
+            PendingRespawn pendingRespawnItem;
+            int index = 0;
 
-            if (pendingRespawnItem.gameTimeRespawn > pendingRespawn.gameTimeRespawn)
+            while (iterator.hasNext())
             {
-                // We have found the index to insert our item
-                break;
+                pendingRespawnItem = iterator.next();
+
+                if (pendingRespawnItem.gameTimeRespawn > pendingRespawn.gameTimeRespawn)
+                {
+                    // We have found the index to insert our item
+                    break;
+                }
+                else
+                {
+                    index++;
+                }
             }
-            else
-            {
-                index++;
-            }
+
+            pendingRespawnList.add(index, pendingRespawn);
+
+            LOG.debug("Entity added for respawn - ent id: {}, index: {}, respawn time: {}, current time: {}",
+                    pendingRespawn.entity.id, index, pendingRespawn.gameTimeRespawn, controller.gameTime()
+            );
         }
-
-        pendingRespawnList.add(index, pendingRespawn);
-
-        LOG.debug("Entity added for respawn - ent id: {}, index: {}, respawn time: {}, current time: {}",
-                pendingRespawn.entity.id, index, pendingRespawn.gameTimeRespawn, controller.gameTime()
-        );
     }
 
     public synchronized void logic()

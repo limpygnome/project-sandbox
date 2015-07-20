@@ -44,7 +44,7 @@ public class EntityManager implements IdCounterConsumer
 
     public Entity fetch(Short key)
     {
-        synchronized (entities)
+        synchronized (this)
         {
             return entities.get(key);
         }
@@ -72,7 +72,7 @@ public class EntityManager implements IdCounterConsumer
         entity.id = entityId;
 
         // Add mapping
-        synchronized (entities)
+        synchronized (this)
         {
             // Add entity to pending map
             entitiesNew.put(entityId, entity);
@@ -89,7 +89,7 @@ public class EntityManager implements IdCounterConsumer
     @Override
     public boolean containsId(short id)
     {
-        synchronized (entities)
+        synchronized (this)
         {
             return entities.containsKey(id) || entitiesNew.containsKey(id);
         }
@@ -107,7 +107,7 @@ public class EntityManager implements IdCounterConsumer
 
     private boolean removeInternal(short entityId, Entity entity)
     {
-        synchronized (entities)
+        synchronized (this)
         {
             // Check ents collection
             Entity entityFetchedWorld = entities.get(entityId);
@@ -141,7 +141,7 @@ public class EntityManager implements IdCounterConsumer
     {
         try
         {
-            synchronized (entities)
+            synchronized (this)
             {
                 Entity entityA;
                 Entity entityB;

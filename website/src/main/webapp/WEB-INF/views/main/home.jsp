@@ -5,12 +5,12 @@
     <table>
         <tr>
             <td>
-                <input type="text" name="nickname" placeholder="Enter an in-game nickname..." />
+                <input type="text" name="nickname" placeholder="Enter an in-game nickname..." value="test" />
             </td>
         </tr>
         <tr>
             <td>
-                <input type="submit" value="Join" />
+                <input type="submit" value="Join" class="button" />
             </td>
         </tr>
     </table>
@@ -33,7 +33,7 @@
         </tr>
         <tr>
             <td>
-                <input type="submit" value="Login" />
+                <input type="submit" value="Login" class="button" />
             </td>
         </tr>
     </table>
@@ -66,7 +66,7 @@
         </tr>
         <tr>
             <td>
-                <input type="submit" value="Login" />
+                <input type="submit" value="Login" class="button" />
             </td>
         </tr>
     </table>
@@ -79,7 +79,7 @@
     <table>
         <tr>
             <td>
-                <input type="submit" value="Join Now" />
+                <input type="submit" value="Join Now" class="button" />
             </td>
         </tr>
     </table>

@@ -14,6 +14,18 @@
         <h1>
             Project Sandbox
         </h1>
+        <div class="buttons">
+            <span class="score">
+                $ 1,000,000,000,000
+            </span>
+            <a class="user" href="/account">
+                test_user
+                <img src="/content/images/annie.png" alt="User avatar" />
+            </a>
+            <a href="/auth/logout" class="button">
+                Logout
+            </a>
+        </div>
         <div class="nav">
             <ul>
                 <li>
