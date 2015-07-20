@@ -88,4 +88,14 @@ public class AuthController extends BaseController
         return modelAndView;
     }
 
+    @RequestMapping(value = "logout", method = RequestMethod.GET)
+    public ModelAndView accountLogout()
+    {
+        ModelAndView modelAndView = new ModelAndView("redirect:/home");
+
+        authenticationService.logout();
+
+        return modelAndView;
+    }
+
 }
