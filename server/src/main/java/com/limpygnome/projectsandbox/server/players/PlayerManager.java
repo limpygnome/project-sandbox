@@ -52,20 +52,25 @@ public class PlayerManager implements IdCounterConsumer
      * @param session The session
      * @return An instance, or null if the player cannot be registered.
      */
-    public synchronized PlayerInfo register(WebSocket ws, Session session)
+    public PlayerInfo register(WebSocket ws, Session session)
     {
         try
         {
-            // Check a registered user is not already connected
-            if (session.registeredPlayerId != null && connectedRegisteredPlayers.contains(session.registeredPlayerId))
-            {
-                // TODO: this needs to throw an exception, detailing why the user cannot connect
-                LOG.warn("Player attempted to connect whilst in session - player id: {}", session.registeredPlayerId);
-                return null;
-            }
+            Short playerId;
 
-            // Generate new identifier
-            Short playerId = idCounterProvider.nextId(null);
+            synchronized (this)
+            {
+                // Check a registered user is not already connected
+                if (session.registeredPlayerId != null && connectedRegisteredPlayers.contains(session.registeredPlayerId))
+                {
+                    // TODO: this needs to throw an exception, detailing why the user cannot connect
+                    LOG.warn("Player attempted to connect whilst in session - player id: {}", session.registeredPlayerId);
+                    return null;
+                }
+
+                // Generate new identifier
+                playerId = idCounterProvider.nextId(null);
+            }
 
             // Check we got an identifier
             if (playerId == null)
@@ -77,11 +82,17 @@ public class PlayerManager implements IdCounterConsumer
             // Create new player
             PlayerInfo playerInfo = new PlayerInfo(ws, session, playerId);
 
-            // Add mapping for sock
-            mappings.put(ws, playerInfo);
+            synchronized (this)
+            {
+                // Add mapping for sock
+                mappings.put(ws, playerInfo);
 
-            // Add mapping for identifier
-            mappingsById.put(playerId, playerInfo);
+                // Add mapping for identifier
+                mappingsById.put(playerId, playerInfo);
+
+                LOG.info("Player joined - ply id: {}, name: {}", playerId, session.displayName);
+            }
+
 
             // Inform server player has joined
             PlayerEventsUpdatesOutboundPacket playerEventsUpdatesOutboundPacket = new PlayerEventsUpdatesOutboundPacket();
