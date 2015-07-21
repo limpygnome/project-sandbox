@@ -6,6 +6,7 @@ import com.limpygnome.projectsandbox.server.ents.physics.Vector2;
 import com.limpygnome.projectsandbox.server.inventory.Inventory;
 import com.limpygnome.projectsandbox.server.inventory.items.weapons.RocketLauncher;
 import com.limpygnome.projectsandbox.server.players.PlayerInfo;
+import com.limpygnome.projectsandbox.server.world.Spawn;
 
 /**
  * Created by limpygnome on 01/07/15.
@@ -40,15 +41,15 @@ public class RocketCar extends AbstractVehicle
     }
 
     @Override
-    public void eventReset(Controller controller)
+    public void eventReset(Controller controller, Spawn spawn)
     {
+        super.eventReset(controller, spawn);
+
         // Load default inventory
         this.inventory = new Inventory(this);
 
         RocketLauncher rocketLauncher = new RocketLauncher();
         this.inventory.add(rocketLauncher);
-
-        super.eventReset(controller);
     }
 
     @Override

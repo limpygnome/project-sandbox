@@ -1,7 +1,8 @@
-package com.limpygnome.projectsandbox.server.ents.respawn;
+package com.limpygnome.projectsandbox.server.ents.respawn.pending;
 
 import com.limpygnome.projectsandbox.server.Controller;
 import com.limpygnome.projectsandbox.server.ents.Entity;
+import com.limpygnome.projectsandbox.server.ents.respawn.PendingRespawn;
 import com.limpygnome.projectsandbox.server.world.Spawn;
 
 /**

@@ -2,7 +2,7 @@ package com.limpygnome.projectsandbox.server.inventory.items.weapons;
 
 import com.limpygnome.projectsandbox.server.Controller;
 import com.limpygnome.projectsandbox.server.ents.Entity;
-import com.limpygnome.projectsandbox.server.ents.respawn.CurrentPositionRespawn;
+import com.limpygnome.projectsandbox.server.ents.respawn.pending.CurrentPositionRespawn;
 import com.limpygnome.projectsandbox.server.ents.types.weapons.Rocket;
 import com.limpygnome.projectsandbox.server.inventory.annotations.InventoryItemTypeId;
 import com.limpygnome.projectsandbox.server.inventory.enums.InventoryInvokeType;

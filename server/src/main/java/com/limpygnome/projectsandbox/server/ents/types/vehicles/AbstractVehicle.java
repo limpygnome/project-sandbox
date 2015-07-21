@@ -7,8 +7,8 @@ import com.limpygnome.projectsandbox.server.ents.physics.collisions.CollisionRes
 import com.limpygnome.projectsandbox.server.Controller;
 import com.limpygnome.projectsandbox.server.ents.Entity;
 import com.limpygnome.projectsandbox.server.ents.physics.collisions.CollisionResultMap;
-import com.limpygnome.projectsandbox.server.ents.respawn.EntityPendingRespawn;
-import com.limpygnome.projectsandbox.server.ents.respawn.PositionPendingRespawn;
+import com.limpygnome.projectsandbox.server.ents.respawn.pending.EntityPendingRespawn;
+import com.limpygnome.projectsandbox.server.ents.respawn.pending.PositionPendingRespawn;
 import com.limpygnome.projectsandbox.server.ents.types.living.Player;
 import com.limpygnome.projectsandbox.server.ents.physics.Vector2;
 import com.limpygnome.projectsandbox.server.players.PlayerInfo;
@@ -354,11 +354,11 @@ public abstract class AbstractVehicle extends Entity
     }
 
     @Override
-    public void eventReset(Controller controller)
+    public void eventReset(Controller controller, Spawn spawn)
     {
-        this.speed = 0.0f;
+        super.eventReset(controller, spawn);
 
-        super.eventReset(controller);
+        this.speed = 0.0f;
     }
 
     @Override

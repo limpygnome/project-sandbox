@@ -7,7 +7,7 @@ import com.limpygnome.projectsandbox.server.ents.physics.collisions.CollisionRes
 import com.limpygnome.projectsandbox.server.ents.physics.Vector2;
 import com.limpygnome.projectsandbox.server.ents.physics.Vertices;
 import com.limpygnome.projectsandbox.server.ents.physics.collisions.CollisionResultMap;
-import com.limpygnome.projectsandbox.server.ents.respawn.EntityPendingRespawn;
+import com.limpygnome.projectsandbox.server.ents.respawn.pending.EntityPendingRespawn;
 import com.limpygnome.projectsandbox.server.inventory.Inventory;
 import com.limpygnome.projectsandbox.server.packets.PacketData;
 import com.limpygnome.projectsandbox.server.players.PlayerInfo;
@@ -548,9 +548,16 @@ public strictfp abstract class Entity
     /**
      * Invoked before the entity is respawned.
      */
-    public synchronized void eventReset(Controller controller)
+    public synchronized void eventReset(Controller controller, Spawn spawn)
     {
         health = maxHealth;
+
+        // Set position etc for spawn
+        positionNew.x = spawn.x;
+        positionNew.y = spawn.y;
+        position.copy(positionNew);
+        rotation = spawn.rotation;
+        updateMask(UpdateMasks.ALL_MASKS);
     }
 
     /**
@@ -558,7 +565,7 @@ public strictfp abstract class Entity
      */
     public synchronized void eventSpawn(Controller controller)
     {
-        this.flagDead = false;
+        flagDead = false;
     }
 
     public abstract String friendlyName();

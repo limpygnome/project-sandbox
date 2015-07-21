@@ -107,6 +107,8 @@ public class EntityManager implements IdCounterConsumer
 
     private boolean removeInternal(short entityId, Entity entity)
     {
+        boolean result = false;
+
         synchronized (this)
         {
             // Check ents collection
@@ -116,31 +118,39 @@ public class EntityManager implements IdCounterConsumer
             {
                 // Update entity and call events
                 entity.setState(EntityState.PENDING_DELETED);
-                entity.eventPendingDeleted(controller);
 
                 LOG.debug("Entity set for removal - {}", entity);
 
-                return true;
+                result = true;
             }
-
-            // Attempt removal on ents to be added - unlikely, but still possible
-            Entity entityFetchedNew = entitiesNew.get(entityId);
-
-            if (entityFetchedNew != null && entityFetchedNew == entity)
+            else
             {
+                // Attempt removal on ents to be added - unlikely, but still possible
+                Entity entityFetchedNew = entitiesNew.get(entityId);
 
+                if (entityFetchedNew != null && entityFetchedNew == entity)
+                {
                     LOG.debug("Newly added entity set for removal- {}", entity);
-                    return true;
+                    result = true;
+                }
             }
         }
 
-        return false;
+        if (result)
+        {
+            // Invoke event for entity
+            entity.eventPendingDeleted(controller);
+        }
+
+        return result;
     }
 
     public void logic()
     {
         try
         {
+            EntityUpdatesOutboundPacket entityUpdatesOutboundPacket;
+
             synchronized (this)
             {
                 Entity entityA;
@@ -259,12 +269,12 @@ public class EntityManager implements IdCounterConsumer
                 }
 
                 // Build update packet
-                EntityUpdatesOutboundPacket packet = new EntityUpdatesOutboundPacket();
-                packet.build(controller.entityManager, false);
-
-                // Send updates to all players
-                controller.playerManager.broadcast(packet);
+                entityUpdatesOutboundPacket = new EntityUpdatesOutboundPacket();
+                entityUpdatesOutboundPacket.build(controller.entityManager, false);
             }
+
+            // Send updates to all players
+            controller.playerManager.broadcast(entityUpdatesOutboundPacket);
         }
         catch (Exception e)
         {

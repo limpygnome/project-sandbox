@@ -3,7 +3,7 @@ package com.limpygnome.projectsandbox.server.players;
 
 import com.limpygnome.projectsandbox.server.Controller;
 import com.limpygnome.projectsandbox.server.ents.Entity;
-import com.limpygnome.projectsandbox.server.ents.respawn.EntityPendingRespawn;
+import com.limpygnome.projectsandbox.server.ents.respawn.pending.EntityPendingRespawn;
 import com.limpygnome.projectsandbox.server.ents.types.living.Player;
 import com.limpygnome.projectsandbox.server.packets.OutboundPacket;
 import com.limpygnome.projectsandbox.server.packets.types.ents.EntityUpdatesOutboundPacket;
@@ -56,21 +56,19 @@ public class PlayerManager implements IdCounterConsumer
     {
         try
         {
-            Short playerId;
-
+            // Check a registered user is not already connected
             synchronized (this)
             {
-                // Check a registered user is not already connected
                 if (session.registeredPlayerId != null && connectedRegisteredPlayers.contains(session.registeredPlayerId))
                 {
                     // TODO: this needs to throw an exception, detailing why the user cannot connect
                     LOG.warn("Player attempted to connect whilst in session - player id: {}", session.registeredPlayerId);
                     return null;
                 }
-
-                // Generate new identifier
-                playerId = idCounterProvider.nextId(null);
             }
+
+            // Generate new identifier
+            Short playerId = idCounterProvider.nextId(null);
 
             // Check we got an identifier
             if (playerId == null)
@@ -137,12 +135,18 @@ public class PlayerManager implements IdCounterConsumer
             return null;
         }
     }
-    public synchronized void unregister(WebSocket ws)
+    public void unregister(WebSocket ws)
     {
         // Fetch associated player, and entity
-        PlayerInfo playerInfo = mappings.get(ws);
+        PlayerInfo playerInfo;
+
+        synchronized (this)
+        {
+            playerInfo = mappings.get(ws);
+        }
+
         Entity ent = playerInfo.entity;
-        
+
         if (playerInfo != null)
         {
             // Remove entity
@@ -152,32 +156,35 @@ public class PlayerManager implements IdCounterConsumer
                 LOG.debug("Removed entity for disconnecting player - ent id: {}", ent.id);
             }
 
-            // Remove socket mapping
-            mappings.remove(ws);
-
-            // Remove ID mapping
-            mappingsById.remove(playerInfo.playerId);
-
-            // Remove from connected registered players (if registered)
-            if (connectedRegisteredPlayers.contains(playerInfo.session.registeredPlayerId != null))
+            synchronized (this)
             {
-                connectedRegisteredPlayers.remove(playerInfo.session.registeredPlayerId);
+                // Remove socket mapping
+                mappings.remove(ws);
+
+                // Remove ID mapping
+                mappingsById.remove(playerInfo.playerId);
+
+                // Remove from connected registered players (if registered)
+                if (connectedRegisteredPlayers.contains(playerInfo.session.registeredPlayerId != null))
+                {
+                    connectedRegisteredPlayers.remove(playerInfo.session.registeredPlayerId);
+                }
+
+                // Persist player data
+                playerInfo.session.playerData.persist();
+
+                // Inform server the player has left
+                PlayerEventsUpdatesOutboundPacket playerEventsUpdatesOutboundPacket = new PlayerEventsUpdatesOutboundPacket();
+                playerEventsUpdatesOutboundPacket.writePlayerLeft(playerInfo);
+                broadcast(playerEventsUpdatesOutboundPacket);
+
+                LOG.info(
+                        "Player left - sid: {}, reg id: {}, ply id: {}",
+                        playerInfo.session.sessionId,
+                        playerInfo.session.registeredPlayerId,
+                        playerInfo.playerId
+                );
             }
-
-            // Persist player data
-            playerInfo.session.playerData.persist();
-
-            // Inform server the player has left
-            PlayerEventsUpdatesOutboundPacket playerEventsUpdatesOutboundPacket = new PlayerEventsUpdatesOutboundPacket();
-            playerEventsUpdatesOutboundPacket.writePlayerLeft(playerInfo);
-            broadcast(playerEventsUpdatesOutboundPacket);
-
-            LOG.info(
-                    "Player left - sid: {}, reg id: {}, ply id: {}",
-                    playerInfo.session.sessionId,
-                    playerInfo.session.registeredPlayerId,
-                    playerInfo.playerId
-            );
         }
         else
         {
@@ -229,7 +236,7 @@ public class PlayerManager implements IdCounterConsumer
         return new Player(controller, playerInfo);
     }
 
-    public synchronized void setPlayerEnt(PlayerInfo playerInfo, Entity entity)
+    public void setPlayerEnt(PlayerInfo playerInfo, Entity entity)
     {
         Entity currentEntity = playerInfo.entity;
 
@@ -238,20 +245,23 @@ public class PlayerManager implements IdCounterConsumer
         {
             controller.entityManager.remove(currentEntity);
         }
-        
-        // Update entity
-        playerInfo.entity = entity;
-        
-        // Create packet to update ID for clientside
-        try
+
+        synchronized (this)
         {
-            PlayerIdentityOutboundPacket packet = new PlayerIdentityOutboundPacket();
-            packet.writeIdentity(playerInfo);
-            packet.send(playerInfo);
-        }
-        catch (IOException e)
-        {
-            LOG.error("Failed to set entity for player", e);
+            // Update entity
+            playerInfo.entity = entity;
+
+            // Create packet to update ID for clientside
+            try
+            {
+                PlayerIdentityOutboundPacket packet = new PlayerIdentityOutboundPacket();
+                packet.writeIdentity(playerInfo);
+                packet.send(playerInfo);
+            }
+            catch (IOException e)
+            {
+                LOG.error("Failed to set entity for player", e);
+            }
         }
     }
 

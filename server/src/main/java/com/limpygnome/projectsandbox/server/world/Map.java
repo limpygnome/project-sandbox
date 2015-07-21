@@ -2,7 +2,7 @@ package com.limpygnome.projectsandbox.server.world;
 
 import com.limpygnome.projectsandbox.server.Controller;
 import com.limpygnome.projectsandbox.server.ents.physics.Vertices;
-import com.limpygnome.projectsandbox.server.ents.respawn.EntityPendingRespawn;
+import com.limpygnome.projectsandbox.server.ents.respawn.pending.EntityPendingRespawn;
 import com.limpygnome.projectsandbox.server.packets.types.map.MapDataOutboundPacket;
 import com.limpygnome.projectsandbox.server.ents.Entity;
 

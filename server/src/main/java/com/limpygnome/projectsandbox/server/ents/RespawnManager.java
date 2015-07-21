@@ -4,6 +4,7 @@ import com.limpygnome.projectsandbox.server.Controller;
 import com.limpygnome.projectsandbox.server.ents.enums.EntityState;
 import com.limpygnome.projectsandbox.server.ents.enums.UpdateMasks;
 import com.limpygnome.projectsandbox.server.ents.respawn.PendingRespawn;
+import com.limpygnome.projectsandbox.server.ents.respawn.RespawnData;
 import com.limpygnome.projectsandbox.server.world.FactionSpawns;
 import com.limpygnome.projectsandbox.server.world.Spawn;
 import org.apache.logging.log4j.LogManager;
@@ -12,6 +13,7 @@ import org.apache.logging.log4j.Logger;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
+import java.util.Map;
 
 /**
  * A layer above {@link EntityManager} for respawning an entity with additional params.
@@ -70,53 +72,78 @@ public class RespawnManager
                 throw new RuntimeException("Invalid state for entity respawn");
         }
 
+        addToInternalPendingRespawnCollectionSynchronized(pendingRespawn);
+
+        LOG.debug("Entity added for respawn - ent id: {}, respawn time: {}, current time: {}",
+                pendingRespawn.entity.id, pendingRespawn.gameTimeRespawn, controller.gameTime()
+        );
+    }
+
+    private synchronized void addToInternalPendingRespawnCollectionSynchronized(PendingRespawn pendingRespawn)
+    {
+        // Add at suitable index based on time to respawn
+        Iterator<PendingRespawn> iterator = pendingRespawnList.iterator();
+        PendingRespawn pendingRespawnItem;
+        int index = 0;
+
+        while (iterator.hasNext())
+        {
+            pendingRespawnItem = iterator.next();
+
+            if (pendingRespawnItem.gameTimeRespawn > pendingRespawn.gameTimeRespawn)
+            {
+                // We have found the index to insert our item
+                break;
+            }
+            else
+            {
+                index++;
+            }
+        }
+
+        pendingRespawnList.add(index, pendingRespawn);
+    }
+
+    public void logic()
+    {
+        LinkedList<RespawnData> entitiesToSpawn = new LinkedList<>();
+
+        // Check if next entity can respawn yet; if it can, add it to a list of ents to be added to ent manager
         synchronized (this)
         {
-            // Add at suitable index based on time to respawn
+            RespawnData respawnData;
+            PendingRespawn pendingRespawn;
             Iterator<PendingRespawn> iterator = pendingRespawnList.iterator();
-            PendingRespawn pendingRespawnItem;
-            int index = 0;
 
             while (iterator.hasNext())
             {
-                pendingRespawnItem = iterator.next();
+                pendingRespawn = iterator.next();
 
-                if (pendingRespawnItem.gameTimeRespawn > pendingRespawn.gameTimeRespawn)
+                // TODO: consider timeouts, we could have blocked spawns and a lot of CPU usage here...
+                if (pendingRespawn.gameTimeRespawn <= controller.gameTime())
                 {
-                    // We have found the index to insert our item
-                    break;
-                }
-                else
-                {
-                    index++;
+                    respawnData = findSpawn(pendingRespawn);
+
+                    if (respawnData != null)
+                    {
+                        iterator.remove();
+                        entitiesToSpawn.add(respawnData);
+                    }
                 }
             }
-
-            pendingRespawnList.add(index, pendingRespawn);
-
-            LOG.debug("Entity added for respawn - ent id: {}, index: {}, respawn time: {}, current time: {}",
-                    pendingRespawn.entity.id, index, pendingRespawn.gameTimeRespawn, controller.gameTime()
-            );
         }
-    }
 
-    public synchronized void logic()
-    {
-        // Check if next entity can respawn yet
-        PendingRespawn pendingRespawn;
-        Iterator<PendingRespawn> iterator = pendingRespawnList.iterator();
-
-        while (iterator.hasNext() && (pendingRespawn = iterator.next()).gameTimeRespawn <= controller.gameTime())
+        // Add entities to world
+        for (RespawnData respawnData : entitiesToSpawn)
         {
-            // TODO: consider timeouts, we could have blocked spawns and a lot of CPU usage here...
-            if (respawnEntity(pendingRespawn))
+            if (!respawnEntity(respawnData))
             {
-                iterator.remove();
+                addToInternalPendingRespawnCollectionSynchronized(respawnData.pendingRespawn);
             }
         }
     }
 
-    private boolean respawnEntity(PendingRespawn pendingRespawn)
+    private RespawnData findSpawn(PendingRespawn pendingRespawn)
     {
         Entity entity = pendingRespawn.entity;
 
@@ -126,18 +153,18 @@ public class RespawnManager
         if (spawn == null)
         {
             LOG.debug("No spawn available - entity id: {}, faction id: {}", entity.id, entity.faction);
-            return false;
+            return null;
         }
 
-        // Set position etc for spawn
-        entity.positionNew.x = spawn.x;
-        entity.positionNew.y = spawn.y;
-        entity.position.copy(entity.positionNew);
-        entity.rotation = spawn.rotation;
-        entity.updateMask(UpdateMasks.ALL_MASKS);
+        return new RespawnData(spawn, pendingRespawn);
+    }
+
+    private boolean respawnEntity(RespawnData respawnData)
+    {
+        Entity entity = respawnData.pendingRespawn.entity;
 
         // Setup entity for its new life
-        entity.eventReset(controller);
+        entity.eventReset(controller, respawnData.spawn);
 
         // Rebuild vertices
         entity.rebuildCachedVertices();
@@ -145,14 +172,14 @@ public class RespawnManager
         // Add to world if new entity
         if (entity.getState() == EntityState.CREATED && !controller.entityManager.add(entity))
         {
-            LOG.warn("Could not respawn entity, failed to add to entity manager - entity id: {}, spawn: {}", entity.id, spawn);
+            LOG.warn("Could not respawn entity, failed to add to entity manager - entity id: {}", entity.id);
             return false;
         }
 
         // Invoke spawn event
         entity.eventSpawn(controller);
 
-        LOG.debug("Spawned entity - entity: {} - spawn: {}", entity, spawn);
+        LOG.debug("Spawned entity - entity: {} - spawn: {}", entity, respawnData.spawn);
 
         return true;
     }

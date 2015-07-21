@@ -3,7 +3,7 @@ package com.limpygnome.projectsandbox.server.ents.types.pickups;
 import com.limpygnome.projectsandbox.server.Controller;
 import com.limpygnome.projectsandbox.server.ents.Entity;
 import com.limpygnome.projectsandbox.server.ents.physics.collisions.CollisionResult;
-import com.limpygnome.projectsandbox.server.ents.respawn.EntityPendingRespawn;
+import com.limpygnome.projectsandbox.server.ents.respawn.pending.EntityPendingRespawn;
 import com.limpygnome.projectsandbox.server.players.PlayerInfo;
 
 import static com.limpygnome.projectsandbox.server.constants.entities.pickups.AbstractPickupConstants.*;

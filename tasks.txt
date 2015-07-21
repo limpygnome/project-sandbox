@@ -1,4 +1,5 @@
 high priority:
+- hunt down deadlocs -> synchronized should only be applied to a set of internal calls! -> look at all synchronized blocks
 - improve physics properties in ents, maybe move to subclass with defaults
 - tiles need to apply damage / physics properties
 - javascript ents etc need namespacing
