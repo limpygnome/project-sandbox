@@ -25,7 +25,7 @@ public class DefaultAuthenticationService implements AuthenticationService
     @Override
     public boolean logout()
     {
-        return false;
+        return true;
     }
 
     @Override

@@ -2,7 +2,7 @@
     "name" : "game",
     "width" : 128,
     "height" : 128,
-    "url" : "/content/images/vehicles.png",
+    "url" : "/content/game/images/vehicles.png",
     "description" : "The source file for vehicle textures.",
 	"textures" :
 	[

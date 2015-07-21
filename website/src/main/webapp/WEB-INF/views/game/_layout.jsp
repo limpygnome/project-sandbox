@@ -11,49 +11,49 @@
 			Project Sandbox - Prototype
 		</title>
 
-		<link rel="stylesheet" href="/content/css/game/main.css" />
-		<link rel="stylesheet" href="/content/css/game/main-anims.css" />
-		<link rel="stylesheet" href="/content/css/game/weapons.css" />
+		<link rel="stylesheet" href="/content/game/css/main.css" />
+		<link rel="stylesheet" href="/content/game/css/main-anims.css" />
+		<link rel="stylesheet" href="/content/game/css/weapons.css" />
 
 		<!-- Third-Party -->
-		<script src="/content/js/third-party/gl-matrix-min.js"></script>
-		<script src="/content/js/third-party/jquery-1.11.3.min.js"></script>
+		<script src="/content/third-party/js/gl-matrix-min.js"></script>
+		<script src="/content/third-party/js/jquery-1.11.3.min.js"></script>
 
 		<!-- Main -->
-		<script src="/content/js/project-sandbox.js"></script>
+		<script src="/content/engine/js/project-sandbox.js"></script>
 
 		<!-- Engine -->
-		<script src="/content/js/engine/_namespace.js"></script>
-		<script src="/content/js/engine/_prototype_inheritence.js"></script>
-		<script src="/content/js/engine/frustrum.js"></script>
-		<script src="/content/js/engine/asset-loader.js"></script>
-		<script src="/content/js/engine/buffer-cache.js"></script>
-		<script src="/content/js/engine/camera.js"></script>
-		<script src="/content/js/engine/shaders.js"></script>
-		<script src="/content/js/engine/primitive.js"></script>
-		<script src="/content/js/engine/primitive-bar.js"></script>
-		<script src="/content/js/engine/entity.js"></script>
-		<script src="/content/js/engine/effect.js"></script>
-		<script src="/content/js/engine/trail.js"></script>
-		<script src="/content/js/engine/texturesrc.js"></script>
-		<script src="/content/js/engine/texture.js"></script>
-		<script src="/content/js/engine/textures.js"></script>
-		<script src="/content/js/engine/map.js"></script>
-		<script src="/content/js/engine/keyboard.js"></script>
-		<script src="/content/js/engine/mouse.js"></script>
-		<script src="/content/js/engine/network.js"></script>
-		<script src="/content/js/engine/utils.js"></script>
-		<script src="/content/js/engine/inventory.js"></script>
-		<script src="/content/js/engine/inventory-item.js"></script>
-		<script src="/content/js/engine/text.js"></script>
-		<script src="/content/js/engine/players.js"></script>
+		<script src="/content/engine/js/_namespace.js"></script>
+		<script src="/content/engine/js/_prototype_inheritence.js"></script>
+		<script src="/content/engine/js/frustrum.js"></script>
+		<script src="/content/engine/js/asset-loader.js"></script>
+		<script src="/content/engine/js/buffer-cache.js"></script>
+		<script src="/content/engine/js/camera.js"></script>
+		<script src="/content/engine/js/shaders.js"></script>
+		<script src="/content/engine/js/primitive.js"></script>
+		<script src="/content/engine/js/primitive-bar.js"></script>
+		<script src="/content/engine/js/entity.js"></script>
+		<script src="/content/engine/js/effect.js"></script>
+		<script src="/content/engine/js/trail.js"></script>
+		<script src="/content/engine/js/texturesrc.js"></script>
+		<script src="/content/engine/js/texture.js"></script>
+		<script src="/content/engine/js/textures.js"></script>
+		<script src="/content/engine/js/map.js"></script>
+		<script src="/content/engine/js/keyboard.js"></script>
+		<script src="/content/engine/js/mouse.js"></script>
+		<script src="/content/engine/js/network.js"></script>
+		<script src="/content/engine/js/utils.js"></script>
+		<script src="/content/engine/js/inventory.js"></script>
+		<script src="/content/engine/js/inventory-item.js"></script>
+		<script src="/content/engine/js/text.js"></script>
+		<script src="/content/engine/js/players.js"></script>
 
-		<script src="/content/js/engine/network/entities.js"></script>
-		<script src="/content/js/engine/network/inventory.js"></script>
-		<script src="/content/js/engine/network/map.js"></script>
-		<script src="/content/js/engine/network/player.js"></script>
+		<script src="/content/engine/js/network/entities.js"></script>
+		<script src="/content/engine/js/network/inventory.js"></script>
+		<script src="/content/engine/js/network/map.js"></script>
+		<script src="/content/engine/js/network/player.js"></script>
 
-		<script src="/content/js/engine/types/player.js"></script>
+		<script src="/content/engine/js/types/player.js"></script>
 
 		<!-- Game -->
 		<script src="/content/game/js/_namespace.js"></script>

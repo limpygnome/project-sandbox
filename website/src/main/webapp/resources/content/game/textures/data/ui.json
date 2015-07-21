@@ -2,7 +2,7 @@
     "name" : "ui",
     "width" : 256,
     "height" : 256,
-    "url" : "/content/images/ui.png",
+    "url" : "/content/game/images/ui.png",
     "description" : "The source file for general UI textures.",
 	"textures" :
 	[

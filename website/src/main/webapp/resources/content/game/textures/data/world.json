@@ -2,7 +2,7 @@
     "name" : "world",
     "width" : 128,
     "height" : 128,
-    "url" : "/content/images/world.png",
+    "url" : "/content/game/images/world.png",
     "description" : "The source file for world textures.",
 	"textures" :
 	[

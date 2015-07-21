@@ -4,7 +4,7 @@ import com.limpygnome.projectsandbox.website.controllers.BaseController;
 import com.limpygnome.projectsandbox.website.controllers.pages.game.GameController;
 import com.limpygnome.projectsandbox.website.jpa.models.User;
 import com.limpygnome.projectsandbox.website.service.AuthenticationService;
-import com.limpygnome.projectsandbox.website.service.SessionService;
+import com.limpygnome.projectsandbox.website.service.GameSessionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -21,7 +21,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 public class AuthController extends BaseController
 {
     @Autowired
-    private SessionService sessionService;
+    private GameSessionService gameSessionService;
     @Autowired
     private AuthenticationService authenticationService;
 
@@ -30,7 +30,7 @@ public class AuthController extends BaseController
     public ModelAndView joinGuest(@RequestParam("nickname") String nickname, RedirectAttributes redirectAttributes)
     {
         // Fetch guest session token
-        String sessionToken = sessionService.generateSessionToken(nickname);
+        String sessionToken = gameSessionService.generateSessionToken(nickname);
 
         return createGameRedirectModelAndView(sessionToken, redirectAttributes);
     }
@@ -48,7 +48,7 @@ public class AuthController extends BaseController
         }
 
         // Fetch account session token
-        String sessionToken = sessionService.generateSessionToken(user);
+        String sessionToken = gameSessionService.generateSessionToken(user);
 
         return createGameRedirectModelAndView(sessionToken, redirectAttributes);
     }

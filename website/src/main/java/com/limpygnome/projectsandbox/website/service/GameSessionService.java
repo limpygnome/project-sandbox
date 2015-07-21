@@ -5,7 +5,7 @@ import com.limpygnome.projectsandbox.website.jpa.models.User;
 /**
  * Created by limpygnome on 17/07/15.
  */
-public interface SessionService
+public interface GameSessionService
 {
     String generateSessionToken(String nickname);
 

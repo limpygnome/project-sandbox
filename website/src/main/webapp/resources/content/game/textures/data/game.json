@@ -2,7 +2,7 @@
     "name" : "game",
     "width" : 64,
     "height" : 64,
-    "url" : "/content/images/game.png",
+    "url" : "/content/game/images/game.png",
     "description" : "The source file for game textures.",
 	"textures" :
 	[

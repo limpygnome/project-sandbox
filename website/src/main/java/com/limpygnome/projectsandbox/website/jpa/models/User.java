@@ -5,4 +5,6 @@ package com.limpygnome.projectsandbox.website.jpa.models;
  */
 public class User
 {
+    private String username;
+    private long score;
 }

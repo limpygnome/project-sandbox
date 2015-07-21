@@ -2,7 +2,7 @@
     "name" : "ui-weapons",
     "width" : 128,
     "height" : 128,
-    "url" : "/content/images/ui-weapons.png",
+    "url" : "/content/game/images/ui-weapons.png",
     "description" : "The source file for weapon icons for UI.",
 	"textures" :
 	[

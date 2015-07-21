@@ -1,5 +1,6 @@
 <%@ taglib prefix="c"		uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="tiles"	uri="http://tiles.apache.org/tags-tiles" %>
+<%@ taglib prefix="ps"      tagdir="/WEB-INF/tags/main" %>
 
 <!DOCTYPE html>
 <html>
@@ -7,25 +8,27 @@
     <title>
         Project Sandbox - ${title}
     </title>
-    <link rel="stylesheet" href="/content/css/main/layout.css" />
+    <link rel="stylesheet" href="/content/main/css/layout.css" />
 </head>
 <body>
     <div class="header">
         <h1>
             Project Sandbox
         </h1>
-        <div class="buttons">
-            <span class="score">
-                $ 1,000,000,000,000
-            </span>
-            <a class="user" href="/account">
-                test_user
-                <img src="/content/images/annie.png" alt="User avatar" />
-            </a>
-            <a href="/auth/logout" class="button">
-                Logout
-            </a>
-        </div>
+        <ps:authenticated auth="true">
+            <div class="buttons">
+                <span class="score">
+                    $ 1,000,000,000,000
+                </span>
+                <a class="user" href="/account">
+                    test_user
+                    <img src="/content/game/images/annie.png" alt="User avatar" />
+                </a>
+                <a href="/auth/logout" class="button">
+                    Logout
+                </a>
+            </div>
+        </ps:authenticated>
         <div class="nav">
             <ul>
                 <li>
