@@ -17,6 +17,7 @@
                 </td>
             </tr>
         </table>
+        <ps:csrf />
     </form>
 
     <form class="box login" method="post" action="/auth/login">
@@ -40,6 +41,7 @@
                 </td>
             </tr>
         </table>
+        <ps:csrf />
     </form>
 
     <form class="box register" method="post" action="/auth/register">
@@ -73,6 +75,7 @@
                 </td>
             </tr>
         </table>
+        <ps:csrf />
     </form>
 </ps:authenticated>
 
@@ -88,5 +91,6 @@
                 </td>
             </tr>
         </table>
+        <ps:csrf />
     </form>
 </ps:authenticated>

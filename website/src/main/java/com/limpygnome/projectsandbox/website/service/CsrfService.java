@@ -1,5 +1,7 @@
 package com.limpygnome.projectsandbox.website.service;
 
+import org.springframework.web.servlet.ModelAndView;
+
 import javax.servlet.http.HttpServletRequest;
 
 /**
@@ -7,7 +9,7 @@ import javax.servlet.http.HttpServletRequest;
  */
 public interface CsrfService
 {
-    String generateToken(HttpServletRequest httpServletRequest);
+    void generateToken(HttpServletRequest httpServletRequest, ModelAndView modelAndView);
 
     boolean isValidRequest(HttpServletRequest httpServletRequest);
 }

@@ -10,4 +10,12 @@ public interface GameSessionService
     String generateSessionToken(String nickname);
 
     String generateSessionToken(User user);
+
+    /**
+     * Validates the game session token exists and consumes it.
+     *
+     * @param gameSessionToken The token
+     * @return True = valid and consumed, false = invalid session token
+     */
+    boolean validateAndConsume(String gameSessionToken);
 }

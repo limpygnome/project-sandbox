@@ -2,6 +2,7 @@ package com.limpygnome.projectsandbox.website.service.imp;
 
 import com.limpygnome.projectsandbox.website.service.CsrfService;
 import org.springframework.stereotype.Service;
+import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -17,33 +18,49 @@ public class DefaultCsrfService implements CsrfService
     private static final String SESSION_ATTRIB_TOKEN = "csrf-token";
 
     @Override
-    public String generateToken(HttpServletRequest httpServletRequest)
+    public void generateToken(HttpServletRequest httpServletRequest, ModelAndView modelAndView)
     {
-        String token = UUID.randomUUID().toString();
+        if (httpServletRequest != null)
+        {
+            String token = UUID.randomUUID().toString();
 
-        // Store token in session
-        HttpSession httpSession = httpServletRequest.getSession(false);
-        httpSession.setAttribute(SESSION_ATTRIB_TOKEN, token);
+            // Store token in session
+            HttpSession httpSession = httpServletRequest.getSession(true);
 
-        return token;
+            if (httpSession != null)
+            {
+                httpSession.setAttribute(SESSION_ATTRIB_TOKEN, token);
+
+                // Append to model
+                if (modelAndView != null && !modelAndView.getViewName().startsWith("redirect:"))
+                {
+                    modelAndView.addObject(PARAMETER_ATTRIB_CSRF, token);
+                }
+            }
+        }
     }
 
     @Override
     public boolean isValidRequest(HttpServletRequest httpServletRequest)
     {
-        // Retrieve request token
-        String requestToken = httpServletRequest.getParameter(PARAMETER_ATTRIB_CSRF);
-
-        if (requestToken == null || requestToken.length() == 0)
+        if (httpServletRequest != null)
         {
-            return false;
+            // Retrieve request token
+            String requestToken = httpServletRequest.getParameter(PARAMETER_ATTRIB_CSRF);
+
+            if (requestToken == null || requestToken.length() == 0)
+            {
+                return false;
+            }
+
+            // Retrieve token and validate
+            HttpSession httpSession = httpServletRequest.getSession(false);
+
+            String sessionToken = (String) httpSession.getAttribute(SESSION_ATTRIB_TOKEN);
+
+            return sessionToken != null && sessionToken.equals(requestToken);
         }
 
-        // Retrieve token and validate
-        HttpSession httpSession = httpServletRequest.getSession(false);
-
-        String sessionToken = (String) httpSession.getAttribute(SESSION_ATTRIB_TOKEN);
-
-        return sessionToken != null && sessionToken.equals(requestToken);
+        return false;
     }
 }

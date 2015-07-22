@@ -2,6 +2,7 @@ package com.limpygnome.projectsandbox.website.interceptor;
 
 import com.limpygnome.projectsandbox.website.service.CsrfService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -13,8 +14,12 @@ import javax.servlet.http.HttpServletResponse;
  */
 public class CsrfInterceptor implements HandlerInterceptor
 {
-    @Autowired
     private CsrfService csrfService;
+
+    public CsrfInterceptor(CsrfService csrfService)
+    {
+        this.csrfService = csrfService;
+    }
 
     @Override
     public boolean preHandle(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Object o) throws Exception
@@ -39,7 +44,7 @@ public class CsrfInterceptor implements HandlerInterceptor
     @Override
     public void postHandle(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Object o, ModelAndView modelAndView) throws Exception
     {
-        // Do nothing...
+        csrfService.generateToken(httpServletRequest, modelAndView);
     }
 
     @Override

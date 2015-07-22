@@ -1,12 +1,11 @@
 package com.limpygnome.projectsandbox.website.config;
 
+import com.limpygnome.projectsandbox.website.interceptor.CsrfInterceptor;
+import com.limpygnome.projectsandbox.website.service.CsrfService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.web.servlet.config.annotation.DefaultServletHandlerConfigurer;
-import org.springframework.web.servlet.config.annotation.EnableWebMvc;
-import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
+import org.springframework.web.servlet.config.annotation.*;
 import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter;
 import org.springframework.web.servlet.view.UrlBasedViewResolver;
 import org.springframework.web.servlet.view.tiles3.TilesConfigurer;
@@ -23,6 +22,9 @@ public class MvcConfig extends WebMvcConfigurerAdapter
 {
     @Autowired
     private RequestMappingHandlerAdapter requestMappingHandlerAdapter;
+
+    @Autowired
+    private CsrfService csrfService;
 
     @PostConstruct
     public void init()
@@ -57,5 +59,12 @@ public class MvcConfig extends WebMvcConfigurerAdapter
         UrlBasedViewResolver viewResolver = new UrlBasedViewResolver();
         viewResolver.setViewClass(TilesView.class);
         return viewResolver;
+    }
+
+    @Override
+    public void addInterceptors(InterceptorRegistry registry)
+    {
+        // Add CSRF protection to every request
+        registry.addInterceptor(new CsrfInterceptor(csrfService));
     }
 }

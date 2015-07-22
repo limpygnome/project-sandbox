@@ -59,7 +59,16 @@ public class PacketManager
             sessPacket.parse(controller, socket, null, message, data);
 
             // Check data / socket valid
-            if (sessPacket.sessionId != null && socket.isOpen())
+            if (socket.isClosed())
+            {
+                LOG.debug("Socket closed prematurely");
+                return;
+            }
+            else if (sessPacket.sessionId == null)
+            {
+                LOG.warn("Client session packet missing or contains malformed session ID");
+            }
+            else
             {
                 // Load session data from database
                 Session session = Session.load(sessPacket.sessionId);

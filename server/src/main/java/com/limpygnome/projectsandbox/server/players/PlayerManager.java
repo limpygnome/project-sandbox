@@ -145,10 +145,10 @@ public class PlayerManager implements IdCounterConsumer
             playerInfo = mappings.get(ws);
         }
 
-        Entity ent = playerInfo.entity;
-
         if (playerInfo != null)
         {
+            Entity ent = playerInfo.entity;
+
             // Remove entity
             if (ent != null && ent instanceof Player)
             {

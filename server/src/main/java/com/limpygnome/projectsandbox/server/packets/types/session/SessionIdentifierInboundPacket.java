@@ -7,6 +7,8 @@ import java.nio.ByteBuffer;
 import java.util.UUID;
 
 import com.limpygnome.projectsandbox.server.players.PlayerInfo;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.java_websocket.WebSocket;
 
 /**
@@ -16,6 +18,8 @@ import org.java_websocket.WebSocket;
  */
 public class SessionIdentifierInboundPacket extends InboundPacket
 {
+    private final static Logger LOG = LogManager.getLogger(SessionIdentifierInboundPacket.class);
+
     public UUID sessionId;
     
     public SessionIdentifierInboundPacket()
@@ -27,7 +31,7 @@ public class SessionIdentifierInboundPacket extends InboundPacket
     public void parse(Controller controller, WebSocket socket, PlayerInfo playerInfo, ByteBuffer bb, byte[] data)
     {
         // TODO: upgrade to 16 bytes; at present, we want this to just be simple, but could be optimised
-        
+
         // We're expecting a GUUID - ignore first two bytes (main/subtype) + 32 bytes
         if (data.length == (36 + 2))
         {
@@ -41,8 +45,7 @@ public class SessionIdentifierInboundPacket extends InboundPacket
             }
             catch (Exception e)
             {
-                // TODO: replace with log4j
-                e.printStackTrace();
+                LOG.error("Error parsing session UUID", e);
             }
         }
     }   

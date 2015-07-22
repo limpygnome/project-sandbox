@@ -1,5 +1,9 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 
+<script>
+    projectSandbox.sessionId = "<c:out value="${game_session_token}" />";
+</script>
+
 <div id="projectsandbox">
 
     <div id="ps-sidebar-left" class="ps-sidebar left">

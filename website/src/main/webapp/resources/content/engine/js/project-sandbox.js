@@ -65,10 +65,17 @@ var projectSandbox =
 	{
 		console.log("Initializing project sandbox...");
 		
-		// Retrieve session ID
-		// TODO: actually retrieve session ID
-		this.sessionId = "6b1091d6-11fa-4ca1-b8cc-f38d1f266011";
-		
+		// Validate session ID
+		if (this.sessionId == null || this.sessionId.length != 36)
+		{
+			console.error("Invalid session identifier - " + this.sessionId);
+			return;
+		}
+		else
+		{
+			console.info("Session ID: " + this.sessionId);
+		}
+
 		// Fetch canvas instance
 		this.canvas = document.getElementById("ps_render");
 		
