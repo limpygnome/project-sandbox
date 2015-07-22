@@ -23,7 +23,7 @@ html, body
 
 body
 {
-    background: #333 url('../../images/main/background.png');
+    background: #333 url('../images/background.png');
     background-size: cover;
     color: #FFF;
 }

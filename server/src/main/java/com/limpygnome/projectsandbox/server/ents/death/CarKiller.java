@@ -11,7 +11,7 @@ public class CarKiller extends AbstractKiller
     {
         "{0} ran down by {1}",
         "{0} mowed down by {1}",
-        "{0} flattened {1}",
+        "{0} flattened by {1}",
         "{0} hit by {1}"
     };
 
