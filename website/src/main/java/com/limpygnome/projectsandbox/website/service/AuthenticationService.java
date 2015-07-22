@@ -1,15 +1,17 @@
 package com.limpygnome.projectsandbox.website.service;
 
-import com.limpygnome.projectsandbox.website.jpa.models.User;
+import com.limpygnome.projectsandbox.website.model.User;
+import com.limpygnome.projectsandbox.website.model.form.LoginForm;
+import com.limpygnome.projectsandbox.website.model.form.RegisterForm;
 
 /**
  * Created by limpygnome on 17/07/15.
  */
 public interface AuthenticationService
 {
-    User register(String username, String password, String email, String nickname);
+    User register(RegisterForm registerForm);
 
-    boolean login(String username, String password);
+    boolean login(LoginForm loginForm);
 
     boolean logout();
 

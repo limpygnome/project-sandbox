@@ -1,6 +1,7 @@
 package com.limpygnome.projectsandbox.website.service.imp;
 
-import com.limpygnome.projectsandbox.website.jpa.models.User;
+import com.limpygnome.projectsandbox.website.model.User;
+import com.limpygnome.projectsandbox.website.model.form.GuestForm;
 import com.limpygnome.projectsandbox.website.service.GameSessionService;
 import org.springframework.stereotype.Service;
 

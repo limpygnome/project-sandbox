@@ -1,6 +1,8 @@
 package com.limpygnome.projectsandbox.website.service.imp;
 
-import com.limpygnome.projectsandbox.website.jpa.models.User;
+import com.limpygnome.projectsandbox.website.model.User;
+import com.limpygnome.projectsandbox.website.model.form.LoginForm;
+import com.limpygnome.projectsandbox.website.model.form.RegisterForm;
 import com.limpygnome.projectsandbox.website.service.AuthenticationService;
 import org.springframework.stereotype.Service;
 
@@ -11,13 +13,13 @@ import org.springframework.stereotype.Service;
 public class DefaultAuthenticationService implements AuthenticationService
 {
     @Override
-    public User register(String username, String password, String email, String nickname)
+    public User register(RegisterForm registerForm)
     {
         return null;
     }
 
     @Override
-    public boolean login(String username, String password)
+    public boolean login(LoginForm loginForm)
     {
         return false;
     }

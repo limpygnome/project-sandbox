@@ -1,4 +1,4 @@
-package com.limpygnome.projectsandbox.website.jpa.models;
+package com.limpygnome.projectsandbox.website.model;
 
 /**
  * Created by limpygnome on 17/07/15.

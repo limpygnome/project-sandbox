@@ -8,7 +8,7 @@
         <table>
             <tr>
                 <td>
-                    <input type="text" name="nickname" placeholder="Enter an in-game nickname..." value="test" />
+                    <input type="text" name="nickname" placeholder="Enter a nickname..." value="test" />
                 </td>
             </tr>
             <tr>
@@ -62,11 +62,6 @@
             <tr>
                 <td>
                     <input type="text" name="email" placeholder="E-mail..." />
-                </td>
-            </tr>
-             <tr>
-                <td>
-                    <input type="text" name="nickname" placeholder="Nickname..." />
                 </td>
             </tr>
             <tr>

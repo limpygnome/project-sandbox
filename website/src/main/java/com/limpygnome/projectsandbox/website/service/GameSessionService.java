@@ -1,6 +1,6 @@
 package com.limpygnome.projectsandbox.website.service;
 
-import com.limpygnome.projectsandbox.website.jpa.models.User;
+import com.limpygnome.projectsandbox.website.model.User;
 
 /**
  * Created by limpygnome on 17/07/15.
