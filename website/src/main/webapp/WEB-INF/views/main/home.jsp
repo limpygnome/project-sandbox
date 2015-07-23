@@ -2,7 +2,7 @@
 <%@ taglib prefix="ps"      tagdir="/WEB-INF/tags/main" %>
 
 <ps:authenticated auth="false">
-    <form:form cssClass="box guest" method="post" action="/auth/guest">
+    <form:form cssClass="box guest" method="post" action="/auth/guest" modelAttribute="guestForm">
         <h3>
             Play as Guest...
         </h3>
@@ -21,7 +21,7 @@
         <ps:csrf />
     </form:form>
 
-    <form class="box login" method="post" action="/auth/login">
+    <form class="box login" method="post" action="/auth/login" modelAttribute="loginForm">
         <h3>
             Login
         </h3>
@@ -45,19 +45,19 @@
         <ps:csrf />
     </form>
 
-    <form:form cssClass="box register" method="post" action="/auth/register" modelAttribute="register">
+    <form:form cssClass="box register" method="post" action="/home/submit" modelAttribute="registerForm">
         <h3>
             Register
         </h3>
         <table>
             <tr>
                 <td>
-                    <input type="text" name="user" placeholder="Username..." />
+                    <form:input path="username" placeholder = "Username..." />
                 </td>
             </tr>
             <tr>
                 <td>
-                    <input type="text" name="pass" placeholder="Password..." />
+                    <input type="text" name="password" placeholder="Password..." />
                 </td>
             </tr>
             <tr>

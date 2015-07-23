@@ -13,6 +13,8 @@ public class LoginForm
     @NotNull
     private String password;
 
+    public LoginForm() { }
+
     public LoginForm(String username, String password)
     {
         this.username = username;

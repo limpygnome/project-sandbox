@@ -7,6 +7,8 @@ public class GuestForm
 {
     private String nickname;
 
+    public GuestForm() { }
+
     public GuestForm(String nickname)
     {
         this.nickname = nickname;

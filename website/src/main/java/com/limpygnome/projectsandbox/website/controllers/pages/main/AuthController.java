@@ -13,9 +13,7 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -36,13 +34,13 @@ public class AuthController extends BaseController
     private AuthenticationService authenticationService;
 
     @RequestMapping(value = "guest", method = RequestMethod.POST)
-    public ModelAndView joinGuest(@Valid GuestForm guestForm, BindingResult bindingResult,
+    public ModelAndView joinGuest(@ModelAttribute("guestForm") @Valid GuestForm guestForm, BindingResult bindingResult,
                                   RedirectAttributes redirectAttributes)
     {
         // Check valid name provided
         if (bindingResult.hasErrors())
         {
-            return createHomeRedirectModelAndView(bindingResult, redirectAttributes, "guest", guestForm);
+            return createHomeRedirectModelAndView(bindingResult, redirectAttributes, "guestForm", guestForm);
         }
         else
         {
@@ -72,13 +70,14 @@ public class AuthController extends BaseController
     }
 
     @RequestMapping(value = "register", method = RequestMethod.POST)
-    public ModelAndView accountRegister(@Valid RegisterForm registerForm, BindingResult bindingResult,
+    public ModelAndView accountRegister(@ModelAttribute("registerForm") @Valid RegisterForm registerForm,
+                                        BindingResult bindingResult,
                                         RedirectAttributes redirectAttributes)
     {
         // Register user; service will attach errors or success to bindingresult
         authenticationService.register(registerForm);
 
-        return createHomeRedirectModelAndView(bindingResult, redirectAttributes, "register", registerForm);
+        return createHomeRedirectModelAndView(bindingResult, redirectAttributes, "registerForm", registerForm);
     }
 
     @RequestMapping(value = "login", method = RequestMethod.POST)
@@ -88,7 +87,7 @@ public class AuthController extends BaseController
         // Attempt to login the user; service attaches error/success to bindingresult
         authenticationService.login(loginForm);
 
-        return createHomeRedirectModelAndView(bindingResult, redirectAttributes, "login", loginForm);
+        return createHomeRedirectModelAndView(bindingResult, redirectAttributes, "loginForm", loginForm);
     }
 
     @RequestMapping(value = "logout", method = RequestMethod.GET)
