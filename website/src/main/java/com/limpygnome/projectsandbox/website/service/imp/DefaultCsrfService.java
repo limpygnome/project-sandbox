@@ -56,11 +56,21 @@ public class DefaultCsrfService implements CsrfService
             // Retrieve token and validate
             HttpSession httpSession = httpServletRequest.getSession(false);
 
-            String sessionToken = (String) httpSession.getAttribute(SESSION_ATTRIB_TOKEN);
+            Object rawSessionToken = httpSession.getAttribute(SESSION_ATTRIB_TOKEN);
 
-            return sessionToken != null && sessionToken.equals(requestToken);
+            if (rawSessionToken == null)
+            {
+                return false;
+            }
+
+            String sessionToken = (String) rawSessionToken;
+
+            return sessionToken.length() != 0 && sessionToken.equals(requestToken);
         }
-
-        return false;
+        else
+        {
+            return false;
+        }
     }
+
 }

@@ -8,6 +8,8 @@ import com.limpygnome.projectsandbox.website.model.form.LoginForm;
 import com.limpygnome.projectsandbox.website.model.form.RegisterForm;
 import com.limpygnome.projectsandbox.website.service.AuthenticationService;
 import com.limpygnome.projectsandbox.website.service.GameSessionService;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
@@ -26,6 +28,8 @@ import javax.validation.Valid;
 @RequestMapping("/auth")
 public class AuthController extends BaseController
 {
+    private final static Logger LOG = LogManager.getLogger(AuthController.class);
+
     @Autowired
     private GameSessionService gameSessionService;
     @Autowired
@@ -38,7 +42,7 @@ public class AuthController extends BaseController
         // Check valid name provided
         if (bindingResult.hasErrors())
         {
-            return createHomeRedirectModelAndView();
+            return createHomeRedirectModelAndView(bindingResult, redirectAttributes, "guest", guestForm);
         }
         else
         {
@@ -58,7 +62,7 @@ public class AuthController extends BaseController
         // Check the request is from an authenticated user
         if (user == null)
         {
-            return createHomeRedirectModelAndView();
+            return createHomeRedirectModelAndView(null, null, null, null);
         }
 
         // Fetch account session token
@@ -68,21 +72,23 @@ public class AuthController extends BaseController
     }
 
     @RequestMapping(value = "register", method = RequestMethod.POST)
-    public ModelAndView accountRegister(@Valid RegisterForm registerForm)
+    public ModelAndView accountRegister(@Valid RegisterForm registerForm, BindingResult bindingResult,
+                                        RedirectAttributes redirectAttributes)
     {
         // Register user; service will attach errors or success to bindingresult
         authenticationService.register(registerForm);
 
-        return createHomeRedirectModelAndView();
+        return createHomeRedirectModelAndView(bindingResult, redirectAttributes, "register", registerForm);
     }
 
     @RequestMapping(value = "login", method = RequestMethod.POST)
-    public ModelAndView accountLogin(@Valid LoginForm loginForm)
+    public ModelAndView accountLogin(@Valid LoginForm loginForm, BindingResult bindingResult,
+                                     RedirectAttributes redirectAttributes)
     {
         // Attempt to login the user; service attaches error/success to bindingresult
         authenticationService.login(loginForm);
 
-        return createHomeRedirectModelAndView();
+        return createHomeRedirectModelAndView(bindingResult, redirectAttributes, "login", loginForm);
     }
 
     @RequestMapping(value = "logout", method = RequestMethod.GET)
@@ -90,7 +96,7 @@ public class AuthController extends BaseController
     {
         authenticationService.logout();
 
-        return createHomeRedirectModelAndView();
+        return createHomeRedirectModelAndView(null, null, null, null);
     }
 
     private ModelAndView createGameRedirectModelAndView(String sessionToken, RedirectAttributes redirectAttributes)
@@ -103,8 +109,21 @@ public class AuthController extends BaseController
         return modelAndView;
     }
 
-    private ModelAndView createHomeRedirectModelAndView() {
+    private ModelAndView createHomeRedirectModelAndView(BindingResult bindingResult,
+                                                        RedirectAttributes redirectAttributes,
+                                                        String formName,
+                                                        Object formData) {
+
         ModelAndView modelAndView = new ModelAndView("redirect:/home");
+
+        // Add binding result to redirect
+        if (bindingResult != null && redirectAttributes != null && formName != null && formData != null)
+        {
+            redirectAttributes.addFlashAttribute("org.springframework.validation.BindingResult." + formName, bindingResult);
+            redirectAttributes.addFlashAttribute(formName, formData);
+
+            LOG.debug("Form validation errors passed back to home");
+        }
 
         return modelAndView;
     }

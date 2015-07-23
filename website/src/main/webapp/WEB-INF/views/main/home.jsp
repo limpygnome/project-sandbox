@@ -1,7 +1,8 @@
+<%@ taglib prefix="form"    uri="http://www.springframework.org/tags/form" %>
 <%@ taglib prefix="ps"      tagdir="/WEB-INF/tags/main" %>
 
 <ps:authenticated auth="false">
-    <form class="box guest" method="post" action="/auth/guest">
+    <form:form cssClass="box guest" method="post" action="/auth/guest">
         <h3>
             Play as Guest...
         </h3>
@@ -18,7 +19,7 @@
             </tr>
         </table>
         <ps:csrf />
-    </form>
+    </form:form>
 
     <form class="box login" method="post" action="/auth/login">
         <h3>
@@ -44,7 +45,7 @@
         <ps:csrf />
     </form>
 
-    <form class="box register" method="post" action="/auth/register">
+    <form:form cssClass="box register" method="post" action="/auth/register" modelAttribute="register">
         <h3>
             Register
         </h3>
@@ -71,7 +72,10 @@
             </tr>
         </table>
         <ps:csrf />
-    </form>
+
+        <form:errors path="*" cssClass="errors" element="div" />
+
+    </form:form>
 </ps:authenticated>
 
 <ps:authenticated auth="true">

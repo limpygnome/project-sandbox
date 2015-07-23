@@ -1,14 +1,29 @@
 package com.limpygnome.projectsandbox.website.model.form;
 
+import com.limpygnome.projectsandbox.website.validation.annotation.Username;
+
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
+
 /**
  * Created by limpygnome on 22/07/15.
  */
 public class RegisterForm
 {
+    @NotNull
+    @Username(message = "register.username.chars")
+    @Size(min = 1, max = 14, message = "register.username.length")
     private String username;
+
+    @NotNull
+    @Size(min = 4, max = 32, message = "register.password.length")
     private String password;
 
+    @NotNull
+    @Size(min = 6, max = 50)
     private String email;
+
+    public RegisterForm() { }
 
     public RegisterForm(String username, String password, String email)
     {

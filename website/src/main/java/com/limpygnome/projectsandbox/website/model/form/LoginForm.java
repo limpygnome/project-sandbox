@@ -1,7 +1,6 @@
 package com.limpygnome.projectsandbox.website.model.form;
 
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
 
 /**
  * Created by limpygnome on 22/07/15.
@@ -9,11 +8,9 @@ import javax.validation.constraints.Size;
 public class LoginForm
 {
     @NotNull
-    @Size(min = 1, max = 14)
     private String username;
 
     @NotNull
-    @Size(min = 4, max = 32)
     private String password;
 
     public LoginForm(String username, String password)

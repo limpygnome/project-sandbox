@@ -3,8 +3,10 @@ package com.limpygnome.projectsandbox.website.config;
 import com.limpygnome.projectsandbox.website.interceptor.CsrfInterceptor;
 import com.limpygnome.projectsandbox.website.service.CsrfService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.support.ResourceBundleMessageSource;
 import org.springframework.web.servlet.config.annotation.*;
 import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter;
 import org.springframework.web.servlet.view.UrlBasedViewResolver;
@@ -66,5 +68,13 @@ public class MvcConfig extends WebMvcConfigurerAdapter
     {
         // Add CSRF protection to every request
         registry.addInterceptor(new CsrfInterceptor(csrfService));
+    }
+
+    @Bean
+    public MessageSource messageSource()
+    {
+        ResourceBundleMessageSource resourceBundleMessageSource = new ResourceBundleMessageSource();
+        resourceBundleMessageSource.setBasename("validation-errors");
+        return resourceBundleMessageSource;
     }
 }
