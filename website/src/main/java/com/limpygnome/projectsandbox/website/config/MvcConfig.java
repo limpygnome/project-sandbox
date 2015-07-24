@@ -7,6 +7,8 @@ import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.support.ResourceBundleMessageSource;
+import org.springframework.validation.Validator;
+import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
 import org.springframework.web.servlet.config.annotation.*;
 import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter;
 import org.springframework.web.servlet.view.UrlBasedViewResolver;
@@ -71,10 +73,25 @@ public class MvcConfig extends WebMvcConfigurerAdapter
     }
 
     @Bean
+    public LocalValidatorFactoryBean validator()
+    {
+        LocalValidatorFactoryBean localValidatorFactoryBean = new LocalValidatorFactoryBean();
+        localValidatorFactoryBean.setValidationMessageSource(messageSource());
+        return localValidatorFactoryBean;
+    }
+
+    @Bean
     public MessageSource messageSource()
     {
         ResourceBundleMessageSource resourceBundleMessageSource = new ResourceBundleMessageSource();
-        resourceBundleMessageSource.setBasename("validation-errors");
+        resourceBundleMessageSource.setBasename("validation_messages");
+        resourceBundleMessageSource.setDefaultEncoding("UTF-8");
         return resourceBundleMessageSource;
+    }
+
+    @Override
+    public Validator getValidator()
+    {
+        return validator();
     }
 }

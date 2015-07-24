@@ -11,16 +11,16 @@ import javax.validation.constraints.Size;
 public class RegisterForm
 {
     @NotNull
-    @Username(message = "register.username.chars")
-    @Size(min = 1, max = 14, message = "register.username.length")
+    @Username(message = "{register.username.chars}")
+    @Size(min = 1, max = 14, message = "{register.username.length}")
     private String username;
 
     @NotNull
-    @Size(min = 4, max = 32, message = "register.password.length")
+    @Size(min = 4, max = 32, message = "{register.password.length}")
     private String password;
 
     @NotNull
-    @Size(min = 6, max = 50)
+    @Size(min = 6, max = 50, message = "{register.email.length}")
     private String email;
 
     public RegisterForm() { }

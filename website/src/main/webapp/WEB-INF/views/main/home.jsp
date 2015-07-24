@@ -45,7 +45,7 @@
         <ps:csrf />
     </form>
 
-    <form:form cssClass="box register" method="post" action="/home/submit" modelAttribute="registerForm">
+    <form:form cssClass="box register" method="post" action="/home/submit" modelAttribute="registerForm" >
         <h3>
             Register
         </h3>
@@ -57,12 +57,12 @@
             </tr>
             <tr>
                 <td>
-                    <input type="text" name="password" placeholder="Password..." />
+                    <form:input path="password" placeholder = "Password..." />
                 </td>
             </tr>
             <tr>
                 <td>
-                    <input type="text" name="email" placeholder="E-mail..." />
+                    <form:input path="email" placeholder = "E-mail..." />
                 </td>
             </tr>
             <tr>

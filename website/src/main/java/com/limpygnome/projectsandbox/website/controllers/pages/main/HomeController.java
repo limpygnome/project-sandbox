@@ -46,8 +46,8 @@ public class HomeController extends BaseController
 
         // Setup model
         modelAndView.addObject("user", authenticationService.retrieveCurrentUser());
-        modelAndView.addObject(BindingResult.MODEL_KEY_PREFIX + "registerForm", bindingResult);
-        modelAndView.addObject("registerForm", registerForm);
+//        modelAndView.addObject(BindingResult.MODEL_KEY_PREFIX + "registerForm", bindingResult);
+//        modelAndView.addObject("registerForm", registerForm);
 
         return modelAndView;
     }

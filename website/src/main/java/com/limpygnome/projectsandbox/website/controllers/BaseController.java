@@ -1,7 +1,10 @@
 package com.limpygnome.projectsandbox.website.controllers;
 
+import com.limpygnome.projectsandbox.website.validation.validator.UsernameValidator;
 import org.joda.time.DateTime;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.WebDataBinder;
+import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -15,8 +18,6 @@ public class BaseController
 {
     public static final String MODEL_ATTRIB_TITLE = "title";
     public static final String MODEL_ATTRIB_CONTENT_CLASS = "contentClass";
-
-
 
     protected ModelAndView createMV(String page)
     {
@@ -50,14 +51,25 @@ public class BaseController
         return modelAndView;
     }
 
+    /**
+     * Defines a default title.
+     *
+     * @return Default title
+     */
     @ModelAttribute("title")
     public String getDefaultTitle() {
         return "Undefined Title";
     }
 
+    /**
+     * The current year, for copyright.
+     *
+     * @return Copyright year
+     */
     @ModelAttribute("copyright_year")
     public String getCopyrightYear() {
         DateTime dt = DateTime.now();
         return String.valueOf(dt.getYear());
     }
+
 }
