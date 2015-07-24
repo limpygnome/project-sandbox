@@ -45,24 +45,24 @@
         <ps:csrf />
     </form>
 
-    <form:form cssClass="box register" method="post" action="/home/submit" modelAttribute="registerForm" >
+    <form:form cssClass="box register" method="post" action="/auth/register" modelAttribute="registerForm" >
         <h3>
             Register
         </h3>
         <table>
             <tr>
                 <td>
-                    <form:input path="username" placeholder = "Username..." />
+                    <ps:inputWithErrors modelAttribute="registerForm" path="username" placeholder="Username..." errorCssClass="error" />
                 </td>
             </tr>
             <tr>
                 <td>
-                    <form:input path="password" placeholder = "Password..." />
+                    <ps:inputWithErrors modelAttribute="registerForm" path="password" placeholder="Password..." errorCssClass="error" type="password" />
                 </td>
             </tr>
             <tr>
                 <td>
-                    <form:input path="email" placeholder = "E-mail..." />
+                    <ps:inputWithErrors modelAttribute="registerForm" path="email" placeholder="E-mail..." errorCssClass="error" />
                 </td>
             </tr>
             <tr>
@@ -73,7 +73,7 @@
         </table>
         <ps:csrf />
 
-        <form:errors path="*" cssClass="errors" element="div" />
+        <ps:errorList modelAttribute="registerForm" cssClass="errors" />
 
     </form:form>
 </ps:authenticated>

@@ -195,6 +195,26 @@ body
 {
     background: #EEE;
 }
+.wrapper .join form .error
+{
+    background: #FFCCE6;
+    color: #F00 !important;
+}
+
+.wrapper .join ul.errors
+{
+    list-style: none;
+    margin: 0em;
+    padding: 0em;
+    border: solid 0.2em #F00;
+    background: #FFCCE6;
+    color: #F00;
+    border-radius: 0.5em;
+}
+.wrapper .join ul.errors li
+{
+    padding: 0.4em 0.2em;
+}
 
 /*
     Content

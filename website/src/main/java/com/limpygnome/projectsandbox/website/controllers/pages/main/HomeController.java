@@ -39,18 +39,4 @@ public class HomeController extends BaseController
         return modelAndView;
     }
 
-    @RequestMapping(value = {"/home/submit"})
-    public ModelAndView homeSubmit(@ModelAttribute("registerForm") @Valid RegisterForm registerForm, BindingResult bindingResult)
-    {
-        ModelAndView modelAndView = createMV("main/home", "welcome", "join");
-
-        // Setup model
-        modelAndView.addObject("user", authenticationService.retrieveCurrentUser());
-//        modelAndView.addObject(BindingResult.MODEL_KEY_PREFIX + "registerForm", bindingResult);
-//        modelAndView.addObject("registerForm", registerForm);
-
-        return modelAndView;
-    }
-
-
 }
