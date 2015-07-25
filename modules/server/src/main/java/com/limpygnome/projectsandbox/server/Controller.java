@@ -1,12 +1,12 @@
 package com.limpygnome.projectsandbox.server;
 
-import com.limpygnome.projectsandbox.server.effects.EffectsManager;
-import com.limpygnome.projectsandbox.server.ents.EntityManager;
-import com.limpygnome.projectsandbox.server.ents.RespawnManager;
+import com.limpygnome.projectsandbox.server.effect.EffectsManager;
+import com.limpygnome.projectsandbox.server.entity.EntityManager;
+import com.limpygnome.projectsandbox.server.entity.RespawnManager;
 import com.limpygnome.projectsandbox.server.inventory.InventoryManager;
-import com.limpygnome.projectsandbox.server.packets.PacketManager;
-import com.limpygnome.projectsandbox.server.players.ChatManager;
-import com.limpygnome.projectsandbox.server.players.PlayerManager;
+import com.limpygnome.projectsandbox.server.packet.PacketManager;
+import com.limpygnome.projectsandbox.server.player.ChatManager;
+import com.limpygnome.projectsandbox.server.player.PlayerManager;
 import com.limpygnome.projectsandbox.server.threading.GameLogic;
 import com.limpygnome.projectsandbox.server.threading.SocketEndpoint;
 import com.limpygnome.projectsandbox.server.world.MapManager;

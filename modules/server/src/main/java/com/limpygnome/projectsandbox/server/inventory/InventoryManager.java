@@ -1,8 +1,8 @@
 package com.limpygnome.projectsandbox.server.inventory;
 
-import com.limpygnome.projectsandbox.server.inventory.annotations.InventoryItemTypeId;
-import com.limpygnome.projectsandbox.server.utils.Annotations;
-import com.limpygnome.projectsandbox.server.utils.counters.AnnotationInfo;
+import com.limpygnome.projectsandbox.server.inventory.annotation.InventoryItemTypeId;
+import com.limpygnome.projectsandbox.server.util.Annotations;
+import com.limpygnome.projectsandbox.server.util.counters.AnnotationInfo;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -34,7 +34,7 @@ public class InventoryManager
     {
         LOG.debug("Building inventory types...");
 
-        // Clear existing types
+        // Clear existing imp
         types.clear();
 
         // Fetch annotated classes
@@ -44,7 +44,7 @@ public class InventoryManager
                 true
         );
 
-        // Build types store
+        // Build imp store
         short typeId;
 
         for (AnnotationInfo annotationInfo : annotationInfoList)

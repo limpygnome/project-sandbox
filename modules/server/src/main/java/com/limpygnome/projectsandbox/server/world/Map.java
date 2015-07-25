@@ -1,10 +1,10 @@
 package com.limpygnome.projectsandbox.server.world;
 
 import com.limpygnome.projectsandbox.server.Controller;
-import com.limpygnome.projectsandbox.server.ents.physics.Vertices;
-import com.limpygnome.projectsandbox.server.ents.respawn.pending.EntityPendingRespawn;
-import com.limpygnome.projectsandbox.server.packets.types.map.MapDataOutboundPacket;
-import com.limpygnome.projectsandbox.server.ents.Entity;
+import com.limpygnome.projectsandbox.server.entity.physics.Vertices;
+import com.limpygnome.projectsandbox.server.entity.respawn.pending.EntityPendingRespawn;
+import com.limpygnome.projectsandbox.server.packet.imp.map.MapDataOutboundPacket;
+import com.limpygnome.projectsandbox.server.entity.Entity;
 
 import java.io.IOException;
 import java.lang.reflect.Constructor;
@@ -59,10 +59,10 @@ public class Map
     {
         Map map = new Map(controller, mapManager, mapId);
         
-        // Load map tile types
+        // Load map tile imp
         JSONArray tileTypes = (JSONArray) rootJsonNode.get("tile_types");
         
-        // Setup array for types
+        // Setup array for imp
         map.tileTypes = new TileType[tileTypes.size()];
         
         JSONObject arrayObj;
@@ -112,7 +112,7 @@ public class Map
             );
         }
         
-        // Parse types of tiles and build vertices
+        // Parse imp of tiles and build vertices
         int yoffset = 0;
         String tile;
         short typeIndex;
@@ -353,9 +353,9 @@ public class Map
         sb.append("\ttile size:\t").append(tileSize).append("\n");
         sb.append("\twidth:\t\t").append(width).append("\n");
         sb.append("\theight:\t\t").append(height).append("\n");
-        sb.append("\ttile types:\n");
+        sb.append("\ttile imp:\n");
         
-        // Add tile types
+        // Add tile imp
         short typeIndex;
         for(java.util.Map.Entry<String, Short> kv : tileNameToTypeIndexMappings.entrySet())
         {

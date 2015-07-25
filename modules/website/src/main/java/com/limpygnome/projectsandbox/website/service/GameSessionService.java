@@ -1,6 +1,6 @@
 package com.limpygnome.projectsandbox.website.service;
 
-import com.limpygnome.projectsandbox.website.model.account.User;
+import com.limpygnome.projectsandbox.shared.model.User;
 
 /**
  * Created by limpygnome on 17/07/15.

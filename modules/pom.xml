@@ -7,8 +7,8 @@
     <groupId>com.limpygnome</groupId>
     <artifactId>project-sandbox</artifactId>
     <packaging>pom</packaging>
-    <version>1.0</version>
-    <name>Project Sandbox Project</name>
+    <version>1.0.0</version>
+    <name>Project Sandbox</name>
 
     <modules>
         <module>shared</module>

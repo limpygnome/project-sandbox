@@ -6,14 +6,21 @@
     <parent>
         <groupId>com.limpygnome</groupId>
         <artifactId>project-sandbox</artifactId>
-        <version>1.0</version>
+        <version>1.0.0</version>
     </parent>
-    <artifactId>project-sandbox-server</artifactId>
+    <artifactId>server</artifactId>
     <packaging>jar</packaging>
 
     <name>Project Sandbox - Server</name>
 
     <dependencies>
+
+        <!-- Local -->
+        <dependency>
+			<groupId>com.limpygnome</groupId>
+			<artifactId>shared</artifactId>
+			<version>${project.version}</version>
+		</dependency>
 	
 		<!-- JSON Serialization -->
 		<dependency>
@@ -75,7 +82,7 @@
 				<artifactId>maven-assembly-plugin</artifactId>
 				<executions>
 					<execution>
-					<phase>package</phase>
+					    <phase>package</phase>
 						<goals>
 							<goal>single</goal>
 						</goals>
@@ -87,6 +94,7 @@
 							<mainClass>com.limpygnome.projectsandbox.server.Program</mainClass>
 						</manifest>
 					</archive>
+                    <finalName>project-sandbox-server-${project.version}</finalName>
 					<descriptorRefs>
 						<descriptorRef>jar-with-dependencies</descriptorRef>
 					</descriptorRefs>

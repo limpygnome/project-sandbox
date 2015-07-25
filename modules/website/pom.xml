@@ -6,14 +6,21 @@
     <parent>
         <groupId>com.limpygnome</groupId>
         <artifactId>project-sandbox</artifactId>
-        <version>1.0</version>
+        <version>1.0.0</version>
     </parent>
-    <artifactId>website-war</artifactId>
+    <artifactId>website</artifactId>
     <packaging>war</packaging>
 
     <name>Project Sandbox - Website</name>
 
     <dependencies>
+
+        <!-- Local -->
+        <dependency>
+			<groupId>com.limpygnome</groupId>
+			<artifactId>shared</artifactId>
+			<version>${project.version}</version>
+		</dependency>
 
         <!-- Core: JEE Web 7 -->
         <dependency>
@@ -168,6 +175,9 @@
             <plugin>
                <groupId>org.apache.maven.plugins</groupId>
                <artifactId>maven-war-plugin</artifactId>
+                <configuration>
+                    <warName>project-sandbox-website-${project.version}</warName>
+                </configuration>
             </plugin>
 
         </plugins>

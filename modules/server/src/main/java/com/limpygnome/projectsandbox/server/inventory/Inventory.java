@@ -1,17 +1,14 @@
 package com.limpygnome.projectsandbox.server.inventory;
 
 import com.limpygnome.projectsandbox.server.Controller;
-import com.limpygnome.projectsandbox.server.ents.Entity;
-import com.limpygnome.projectsandbox.server.inventory.enums.InventoryMergeResult;
-import com.limpygnome.projectsandbox.server.inventory.enums.InventorySlotState;
-import com.limpygnome.projectsandbox.server.inventory.items.AbstractInventoryItem;
-import com.limpygnome.projectsandbox.server.packets.types.inventory.InventoryUpdatesOutboundPacket;
-import com.limpygnome.projectsandbox.server.players.PlayerInfo;
-import com.limpygnome.projectsandbox.server.players.enums.PlayerKeys;
+import com.limpygnome.projectsandbox.server.entity.Entity;
+import com.limpygnome.projectsandbox.server.inventory.item.AbstractInventoryItem;
+import com.limpygnome.projectsandbox.server.packet.imp.inventory.InventoryUpdatesOutboundPacket;
+import com.limpygnome.projectsandbox.server.player.PlayerInfo;
+import com.limpygnome.projectsandbox.server.player.PlayerKeys;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.io.IOException;
 import java.io.Serializable;
 import java.util.Iterator;
 import java.util.LinkedHashMap;

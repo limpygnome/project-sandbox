@@ -1,8 +1,8 @@
 package com.limpygnome.projectsandbox.server.world;
 
-import com.limpygnome.projectsandbox.server.ents.annotations.EntityType;
-import com.limpygnome.projectsandbox.server.utils.Annotations;
-import com.limpygnome.projectsandbox.server.utils.counters.AnnotationInfo;
+import com.limpygnome.projectsandbox.server.entity.annotation.EntityType;
+import com.limpygnome.projectsandbox.server.util.Annotations;
+import com.limpygnome.projectsandbox.server.util.counters.AnnotationInfo;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -18,7 +18,7 @@ public class EntTypeMappings
 
     private static final String[] ENTS_CLASS_PATHS = new String[]
     {
-        "/com/limpygnome/projectsandbox/server/ents"
+            "/com/limpygnome/projectsandbox/server/entity"
     };
 
     private HashMap<Short, Class> typeIdToClass;
@@ -74,7 +74,7 @@ public class EntTypeMappings
             typeNameToClass.put(typeName, clazz);
         }
 
-        LOG.debug("Loaded {} types of entities", typeIdToClass.size());
+        LOG.debug("Loaded {} imp of entities", typeIdToClass.size());
     }
 
     public Class getMappingByTypeId(short typeId)

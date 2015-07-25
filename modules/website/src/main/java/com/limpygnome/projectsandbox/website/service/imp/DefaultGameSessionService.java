@@ -1,6 +1,6 @@
 package com.limpygnome.projectsandbox.website.service.imp;
 
-import com.limpygnome.projectsandbox.website.model.account.User;
+import com.limpygnome.projectsandbox.shared.model.User;
 import com.limpygnome.projectsandbox.website.service.GameSessionService;
 import org.springframework.stereotype.Service;
 

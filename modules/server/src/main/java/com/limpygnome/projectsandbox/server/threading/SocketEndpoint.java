@@ -1,6 +1,5 @@
 package com.limpygnome.projectsandbox.server.threading;
 
-import com.limpygnome.projectsandbox.server.packets.OutboundPacket;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 

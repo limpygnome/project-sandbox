@@ -6,9 +6,9 @@
     <parent>
         <groupId>com.limpygnome</groupId>
         <artifactId>project-sandbox</artifactId>
-        <version>1.0</version>
+        <version>1.0.0</version>
     </parent>
-    <artifactId>project-sandbox-shared</artifactId>
+    <artifactId>shared</artifactId>
     <packaging>jar</packaging>
 
     <name>Project Sandbox - Shared Library</name>
@@ -68,13 +68,14 @@
 				<artifactId>maven-assembly-plugin</artifactId>
 				<executions>
 					<execution>
-					<phase>package</phase>
+					    <phase>package</phase>
 						<goals>
 							<goal>single</goal>
 						</goals>
 					</execution>
 				</executions>
 				<configuration>
+                    <finalName>project-sandbox-shared-${project.version}</finalName>
 					<descriptorRefs>
 						<descriptorRef>jar-with-dependencies</descriptorRef>
 					</descriptorRefs>
