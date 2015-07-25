@@ -1,4 +1,11 @@
 export MAVEN_OPTS=-agentlib:jdwp=transport=dt_socket,address=8081,server=y,suspend=n
-cd modules
-mvn clean install tomcat7:run
+
+cd modules/shared
+mvn clean
+cd ../website
+mvn clean
+
+cd ..
+
+mvn tomcat7:run
 
