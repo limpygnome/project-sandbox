@@ -32,14 +32,8 @@ public class GameSession implements Serializable
     @JoinColumn(name = "user")
     private User user;
 
-    @Column(name = "kills", nullable = false)
-    private short kills;
-
-    @Column(name = "deaths", nullable = false)
-    private short deaths;
-
-    @Column(name = "score", nullable = false)
-    private long score;
+    @Embedded
+    private PlayerMetrics playerMetrics;
 
     public GameSession()
     {
@@ -48,9 +42,7 @@ public class GameSession implements Serializable
         this.created = DateTime.now();
         this.connected = false;
         this.user = null;
-        this.kills = 0;
-        this.deaths = 0;
-        this.score = 0;
+        this.playerMetrics = new PlayerMetrics();
     }
 
     public GameSession(User user)
@@ -104,34 +96,9 @@ public class GameSession implements Serializable
         return user;
     }
 
-    public short getKills()
+    public PlayerMetrics getPlayerMetrics()
     {
-        return kills;
-    }
-
-    public void setKills(short kills)
-    {
-        this.kills = kills;
-    }
-
-    public short getDeaths()
-    {
-        return deaths;
-    }
-
-    public void setDeaths(short deaths)
-    {
-        this.deaths = deaths;
-    }
-
-    public long getScore()
-    {
-        return score;
-    }
-
-    public void setScore(long score)
-    {
-        this.score = score;
+        return playerMetrics;
     }
 
 }

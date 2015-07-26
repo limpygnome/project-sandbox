@@ -62,6 +62,27 @@
 	
 	<build>
 		<plugins>
+
+            <!-- Automatic generation of schema -->
+            <plugin>
+                <groupId>de.juplo</groupId>
+                <artifactId>hibernate4-maven-plugin</artifactId>
+                <version>1.0.4</version>
+                <executions>
+                    <execution>
+                        <phase>compile</phase>
+                        <goals>
+                            <goal>export</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <hibernateDialect>org.hibernate.dialect.MySQLDialect</hibernateDialect>
+                    <target>NONE</target>
+                    <type>CREATE</type>
+                    <outputFile>${project.build.outputDirectory}/schema.sql</outputFile>
+                </configuration>
+            </plugin>
 		
 			<!-- Builds executable JAR with dependencies included -->
 			<plugin>

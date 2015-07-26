@@ -124,7 +124,7 @@ public class GameProvider extends AbstractProvider
 
     public boolean removeInactiveGameSessions()
     {
-        final int TIMEOUT_SECONDS = 30;
+        final int TIMEOUT_SECONDS = 180;
 
         try
         {

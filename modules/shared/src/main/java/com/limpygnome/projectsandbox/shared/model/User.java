@@ -20,7 +20,7 @@ public class User implements Serializable
     @Column(name = "nickname", nullable = false)
     private String nickname;
 
-    @Column(name = "email")
+    @Column(name = "email", nullable = false    )
     private String email;
 
     @Column(name = "password_hash", nullable = false)
@@ -29,6 +29,9 @@ public class User implements Serializable
     @Column(name = "password_salt", nullable = false)
     private String passwordSalt;
 
+    @Embedded
+    private PlayerMetrics playerMetrics;
+
     public User()
     {
         this.userId = null;
@@ -36,6 +39,7 @@ public class User implements Serializable
         this.email = null;
         this.passwordHash = null;
         this.passwordSalt = null;
+        this.playerMetrics = new PlayerMetrics();
     }
 
     public UUID getUserId()
@@ -86,6 +90,11 @@ public class User implements Serializable
     public void setPasswordSalt(String passwordSalt)
     {
         this.passwordSalt = passwordSalt;
+    }
+
+    public PlayerMetrics getPlayerMetrics()
+    {
+        return playerMetrics;
     }
 
 }
