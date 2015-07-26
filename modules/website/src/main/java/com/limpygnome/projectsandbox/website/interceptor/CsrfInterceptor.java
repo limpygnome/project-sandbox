@@ -33,7 +33,7 @@ public class CsrfInterceptor implements HandlerInterceptor
 
             if ((method.equals("post") || method.equals("put") || method.equals("delete")) && !csrfService.isValidRequest(httpServletRequest))
             {
-                httpServletResponse.sendError(HttpServletResponse.SC_FORBIDDEN);
+                httpServletResponse.sendRedirect("/home");
                 return false;
             }
         }
