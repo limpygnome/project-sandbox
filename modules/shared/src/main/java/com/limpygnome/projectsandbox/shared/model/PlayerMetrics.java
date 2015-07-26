@@ -31,6 +31,9 @@ public class PlayerMetrics implements Serializable
     @Transient
     private boolean flagDirty;
 
+    @Transient
+    private boolean flagDirtyDatabase;
+
     public PlayerMetrics()
     {
         this.kills = 0;
@@ -39,6 +42,7 @@ public class PlayerMetrics implements Serializable
         this.lastUpdated = DateTime.now();
 
         this.flagDirty = true;
+        this.flagDirtyDatabase = true;
     }
 
     public long getKills()
@@ -54,6 +58,16 @@ public class PlayerMetrics implements Serializable
     public long getScore()
     {
         return score;
+    }
+
+    public void setLastUpdatedNow()
+    {
+        setLastUpdated(DateTime.now());
+    }
+
+    public void setLastUpdated(DateTime lastUpdated)
+    {
+        this.lastUpdated = lastUpdated;
     }
 
     public DateTime getLastUpdated()
@@ -83,7 +97,7 @@ public class PlayerMetrics implements Serializable
     public synchronized void markDirty()
     {
         this.flagDirty = true;
-        this.lastUpdated = DateTime.now();
+        this.flagDirtyDatabase = true;
     }
 
     /**
@@ -96,6 +110,13 @@ public class PlayerMetrics implements Serializable
     {
         boolean dirty = this.flagDirty;
         this.flagDirty = false;
+        return dirty;
+    }
+
+    public synchronized boolean isDirtyDatabaseFlag()
+    {
+        boolean dirty = this.flagDirtyDatabase;
+        this.flagDirtyDatabase = false;
         return dirty;
     }
 

@@ -62,6 +62,9 @@ public class GameLogic implements Runnable
 
                     // Run logic for players
                     controller.playerManager.logic();
+
+                    // Run logic for session management
+                    controller.sessionManager.logic();
                 }
                 catch(IOException ex)
                 {

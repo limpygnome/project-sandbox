@@ -160,15 +160,32 @@ public class GameProvider extends AbstractProvider
         }
     }
 
-    public boolean removeInactiveGameSessions()
+    public void setAllSessionsToDisconnected()
+    {
+        try
+        {
+            Query query = em.createQuery("UPDATE GameSession SET connected = false WHERE connected = true");
+            int rowsAffected = query.executeUpdate();
+
+            if (rowsAffected > 0)
+            {
+                LOG.info("Previously connected sessions set to disconnected - count: {}", rowsAffected);
+            }
+        }
+        catch (Exception e)
+        {
+            LOG.error("Failed to set all sessions to disconnected", e);
+        }
+    }
+
+    public boolean removeInactiveGuestGameSessions()
     {
         try
         {
             Query query = em.createQuery(
                     "DELETE FROM GameSession WHERE " +
-                            "(connected = false AND created <= :created)" +
-                            " OR " +
-                            "(user = null AND connected = true AND last_updated <= :updated)"
+                            "user = null AND connected = false AND " +
+                            "((created != last_updated AND created <= :created) OR last_updated <= :updated)"
             );
 
             query.setParameter("created", DateTime.now().minusSeconds(TIMEOUT_INITIAL_CONNECTION_SECONDS));

@@ -26,7 +26,7 @@ public class PurgeInactiveSessions
         // Remove inactive sessions
         gameProvider.begin();
 
-        if (!gameProvider.removeInactiveGameSessions())
+        if (!gameProvider.removeInactiveGuestGameSessions())
         {
             LOG.error("Failed to purge inactive sessions");
             gameProvider.rollback();

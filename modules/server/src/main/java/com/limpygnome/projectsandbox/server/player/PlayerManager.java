@@ -175,8 +175,8 @@ public class PlayerManager implements IdCounterConsumer
                     connectedRegisteredPlayers.remove(user.getUserId());
                 }
 
-                // Persist player data
-                controller.sessionManager.persist(playerInfo.session);
+                // Unload game session
+                controller.sessionManager.unload(playerInfo.session);
 
                 // Inform server the player has left
                 PlayerEventsUpdatesOutboundPacket playerEventsUpdatesOutboundPacket = new PlayerEventsUpdatesOutboundPacket();

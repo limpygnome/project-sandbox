@@ -28,8 +28,8 @@ public class PlayerEventsUpdatesOutboundPacket extends OutboundPacket
             packetData.add('U');
             packetData.add(playerInfo.playerId);
 
-            packetData.add(playerInfo.session.getPlayerMetrics().getKills());
-            packetData.add(playerInfo.session.getPlayerMetrics().getDeaths());
+            packetData.add((short) playerInfo.session.getPlayerMetrics().getKills());
+            packetData.add((short) playerInfo.session.getPlayerMetrics().getDeaths());
             packetData.add(playerInfo.session.getPlayerMetrics().getScore());
         }
     }
