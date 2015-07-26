@@ -44,25 +44,32 @@ public class DefaultGameSessionService implements GameSessionService
     @Override
     public String generateSessionToken(GameProvider gameProvider, User user)
     {
-        gameProvider.begin();
-
         // Attempt to find existing session
         GameSession gameSession = gameProvider.fetchGameSessionByUser(user);
 
         if (gameSession == null)
         {
+            gameProvider.begin();
+
             // Create new session
             gameSession = new GameSession(user);
-            gameProvider.createGameSession(gameSession);
-        }
+            CreateGameSessionResult createGameSessionResult = gameProvider.createGameSession(gameSession);
 
-        gameProvider.commit();
+            gameProvider.commit();
+
+            // Check new session could be created
+            if (createGameSessionResult != CreateGameSessionResult.SUCCESS)
+            {
+                return null;
+            }
+
+        }
 
         return gameSession.getToken().toString();
     }
 
     @Override
-    public boolean validateAndConsume(GameProvider gameProvider, String gameSessionToken)
+    public boolean validateExists(GameProvider gameProvider, String gameSessionToken)
     {
         // Validate this token is correct; attacks will probably be made against this code
         if (gameSessionToken == null)
@@ -87,11 +94,7 @@ public class DefaultGameSessionService implements GameSessionService
         }
 
         // Check the session exists in the DB
-        gameProvider.begin();
-
         GameSession gameSession = gameProvider.fetchGameSessionByToken(token);
-
-        gameProvider.commit();
 
         return gameSession != null;
     }

@@ -368,7 +368,7 @@ public abstract class AbstractVehicle extends Entity
 
         if (driver != null)
         {
-            return driver.session.displayName;
+            return driver.session.getNickname();
         }
         else
         {

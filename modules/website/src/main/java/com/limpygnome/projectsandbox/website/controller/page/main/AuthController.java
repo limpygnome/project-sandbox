@@ -51,6 +51,8 @@ public class AuthController extends BaseController
             // Fetch guest session token
             String sessionToken = gameSessionService.generateSessionToken(gameProvider, guestForm.getNickname());
 
+            LOG.debug("Session token retrieved - token: {}", sessionToken);
+
             modelAndView = joinSession(sessionToken, bindingResult, redirectAttributes, guestForm);
         }
 

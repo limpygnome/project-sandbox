@@ -1,8 +1,10 @@
 package com.limpygnome.projectsandbox.shared.model;
 
+import org.hibernate.annotations.Type;
+import org.joda.time.DateTime;
+
 import javax.persistence.*;
 import java.io.Serializable;
-import java.util.UUID;
 
 /**
  * Created by limpygnome on 25/07/15.
@@ -15,12 +17,12 @@ public class User implements Serializable
 
     @Id
     @Column(name = "userid", nullable = false)
-    private UUID userId;
+    private String userId;
 
     @Column(name = "nickname", nullable = false)
     private String nickname;
 
-    @Column(name = "email", nullable = false    )
+    @Column(name = "email", nullable = false)
     private String email;
 
     @Column(name = "password_hash", nullable = false)
@@ -28,6 +30,10 @@ public class User implements Serializable
 
     @Column(name = "password_salt", nullable = false)
     private String passwordSalt;
+
+    @Column(name = "registered", nullable = false)
+    @Type(type="org.jadira.usertype.dateandtime.joda.PersistentDateTime")
+    private DateTime registered;
 
     @Embedded
     private PlayerMetrics playerMetrics;
@@ -42,12 +48,12 @@ public class User implements Serializable
         this.playerMetrics = new PlayerMetrics();
     }
 
-    public UUID getUserId()
+    public String getUserId()
     {
         return userId;
     }
 
-    public void setUserId(UUID userId)
+    public void setUserId(String userId)
     {
         this.userId = userId;
     }

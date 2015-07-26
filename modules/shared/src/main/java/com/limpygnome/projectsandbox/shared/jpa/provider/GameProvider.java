@@ -52,10 +52,27 @@ public class GameProvider extends AbstractProvider
     {
         try
         {
-            TypedQuery<GameSession> typedQuery = em.createQuery("SELECT gs FROM GameSession gs WHERE token = :token", GameSession.class);
-            typedQuery.setParameter("token", token.toString());
+            String rawToken = token.toString();
 
-            return typedQuery.getSingleResult();
+            TypedQuery<GameSession> typedQuery = em.createQuery("SELECT gs FROM GameSession gs WHERE token = :token", GameSession.class);
+            typedQuery.setParameter("token", rawToken);
+
+            List<GameSession> result = typedQuery.getResultList();
+
+            if (result.isEmpty())
+            {
+                LOG.debug("Game session not found - token: {}", rawToken);
+                return null;
+            }
+            else
+            {
+                if (result.size() > 1)
+                {
+                    LOG.warn("Multiple game sessions found - token: {}", rawToken);
+                }
+
+                return result.get(0);
+            }
         }
         catch (Exception e)
         {
@@ -147,10 +164,14 @@ public class GameProvider extends AbstractProvider
     {
         try
         {
-            Query query = em.createQuery("DELETE FROM GameSession WHERE (connected = false AND created <= :created) OR (connected = true AND last_updated <= :updated)");
+            Query query = em.createQuery(
+                    "DELETE FROM GameSession WHERE " +
+                            "(connected = false AND created <= :created)" +
+                            " OR " +
+                            "(user = null AND connected = true AND last_updated <= :updated)"
+            );
 
             query.setParameter("created", DateTime.now().minusSeconds(TIMEOUT_INITIAL_CONNECTION_SECONDS));
-            // TODO: investigate why we have to put toDate for n+1 param, odd...bug?
             query.setParameter("updated", DateTime.now().minusSeconds(TIMEOUT_LAST_UPDATED_SECONDS).toDate());
 
             int affectedRows = query.executeUpdate();

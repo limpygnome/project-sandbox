@@ -6,7 +6,7 @@ import com.limpygnome.projectsandbox.server.packet.imp.player.chat.PlayerChatInb
 import com.limpygnome.projectsandbox.server.packet.imp.player.individual.PlayerMovementInboundPacket;
 import com.limpygnome.projectsandbox.server.packet.imp.session.SessionIdentifierInboundPacket;
 import com.limpygnome.projectsandbox.server.player.PlayerInfo;
-import com.limpygnome.projectsandbox.server.player.Session;
+import com.limpygnome.projectsandbox.shared.model.GameSession;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.java_websocket.WebSocket;
@@ -71,23 +71,27 @@ public class PacketManager
             else
             {
                 // Load session data from database
-                Session session = Session.load(sessPacket.sessionId);
+                GameSession gameSession = controller.sessionManager.load(sessPacket.sessionId);
 
                 // Check we found session
-                if (session == null)
+                if (gameSession == null)
                 {
-                    LOG.warn("Session not found - sid: {}", session.sessionId);
+                    LOG.warn("Game session not found - token: {}", sessPacket.sessionId);
                     socket.close();
                     return;
                 }
 
+                // Set to connected
+                gameSession.setConnected(true);
+                controller.sessionManager.persist(gameSession);
+
                 // Log event
-                LOG.info("Session mapped - {} <> {}", session.sessionId, socket.getRemoteSocketAddress());
+                LOG.info("Session mapped - {} <> {}", gameSession.getToken(), socket.getRemoteSocketAddress());
 
                 // Register player
-                if (controller.playerManager.register(socket, session) == null)
+                if (controller.playerManager.register(socket, gameSession) == null)
                 {
-                    LOG.error("Failed to register player - sid: {}", session.sessionId);
+                    LOG.error("Failed to register player - sid: {}", gameSession.getToken());
                     socket.close();
                 }
                 return;

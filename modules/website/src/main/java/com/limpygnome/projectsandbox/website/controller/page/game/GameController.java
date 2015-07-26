@@ -30,7 +30,7 @@ public class GameController extends BaseController
         GameProvider gameProvider = new GameProvider();
 
         // Check token is valid, else redirect back to home
-        if (!gameSessionService.validateAndConsume(gameProvider, gameSessionToken))
+        if (!gameSessionService.validateExists(gameProvider, gameSessionToken))
         {
             LOG.debug("Failed to validate and consume game session token");
             return new ModelAndView("redirect:/home");

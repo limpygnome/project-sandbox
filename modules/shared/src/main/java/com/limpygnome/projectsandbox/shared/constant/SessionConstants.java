@@ -20,6 +20,6 @@ public final class SessionConstants
      *
      * Protects against the server not correctly disposing sessions.
      */
-    public static final int TIMEOUT_LAST_UPDATED_SECONDS = 3600;
+    public static final int TIMEOUT_LAST_UPDATED_SECONDS = 30;
 
 }

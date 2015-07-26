@@ -19,10 +19,10 @@ public interface GameSessionService
     String generateSessionToken(GameProvider gameProvider, User user);
 
     /**
-     * Validates the game session token exists and consumes it.
+     * Validates the game session token exists.
      *
      * @param gameSessionToken The token
-     * @return True = valid and consumed, false = invalid session token
+     * @return True = valid, false = invalid session token
      */
-    boolean validateAndConsume(GameProvider gameProvider, String gameSessionToken);
+    boolean validateExists(GameProvider gameProvider, String gameSessionToken);
 }

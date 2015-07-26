@@ -23,9 +23,9 @@ public class PurgeInactiveSessions
         // Setup DB connection
         GameProvider gameProvider = new GameProvider();
 
+        // Remove inactive sessions
         gameProvider.begin();
 
-        // Remove inactive sessions
         if (!gameProvider.removeInactiveGameSessions())
         {
             LOG.error("Failed to purge inactive sessions");

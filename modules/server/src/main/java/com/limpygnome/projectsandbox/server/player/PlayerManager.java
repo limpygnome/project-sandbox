@@ -17,6 +17,8 @@ import java.util.UUID;
 
 import com.limpygnome.projectsandbox.server.util.IdCounterProvider;
 import com.limpygnome.projectsandbox.server.util.counters.IdCounterConsumer;
+import com.limpygnome.projectsandbox.shared.model.GameSession;
+import com.limpygnome.projectsandbox.shared.model.User;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.java_websocket.WebSocket;
@@ -49,20 +51,22 @@ public class PlayerManager implements IdCounterConsumer
      * Attempts to register a new player.
      *
      * @param ws The socket
-     * @param session The session
+     * @param session The game session
      * @return An instance, or null if the player cannot be registered.
      */
-    public PlayerInfo register(WebSocket ws, Session session)
+    public PlayerInfo register(WebSocket ws, GameSession session)
     {
         try
         {
             // Check a registered user is not already connected
             synchronized (this)
             {
-                if (session.registeredPlayerId != null && connectedRegisteredPlayers.contains(session.registeredPlayerId))
+                User user = session.getUser();
+
+                if (user != null && connectedRegisteredPlayers.contains(user.getUserId()))
                 {
                     // TODO: this needs to throw an exception, detailing why the user cannot connect
-                    LOG.warn("Player attempted to connect whilst in session - player id: {}", session.registeredPlayerId);
+                    LOG.warn("Player attempted to connect whilst already in session - user id: {}", user.getUserId());
                     return null;
                 }
             }
@@ -88,9 +92,8 @@ public class PlayerManager implements IdCounterConsumer
                 // Add mapping for identifier
                 mappingsById.put(playerId, playerInfo);
 
-                LOG.info("Player joined - ply id: {}, name: {}", playerId, session.displayName);
+                LOG.info("Player joined - ply id: {}, name: {}", playerId, session.getNickname());
             }
-
 
             // Inform server player has joined
             PlayerEventsUpdatesOutboundPacket playerEventsUpdatesOutboundPacket = new PlayerEventsUpdatesOutboundPacket();
@@ -121,9 +124,9 @@ public class PlayerManager implements IdCounterConsumer
             controller.chatManager.sendPreviousMessages(playerInfo);
 
             LOG.info(
-                    "Player joined - sid: {}, reg id: {}, ply id: {}",
-                    session.sessionId,
-                    session.registeredPlayerId,
+                    "Player joined - session token: {}, user id: {}, ply id: {}",
+                    session.getToken(),
+                    session.getUser() != null ? session.getUser().getUserId() : null,
                     playerId
             );
 
@@ -165,13 +168,15 @@ public class PlayerManager implements IdCounterConsumer
                 mappingsById.remove(playerInfo.playerId);
 
                 // Remove from connected registered players (if registered)
-                if (connectedRegisteredPlayers.contains(playerInfo.session.registeredPlayerId != null))
+                User user = playerInfo.session.getUser();
+
+                if (user != null)
                 {
-                    connectedRegisteredPlayers.remove(playerInfo.session.registeredPlayerId);
+                    connectedRegisteredPlayers.remove(user.getUserId());
                 }
 
                 // Persist player data
-                playerInfo.session.playerData.persist();
+                controller.sessionManager.persist(playerInfo.session);
 
                 // Inform server the player has left
                 PlayerEventsUpdatesOutboundPacket playerEventsUpdatesOutboundPacket = new PlayerEventsUpdatesOutboundPacket();
@@ -179,9 +184,9 @@ public class PlayerManager implements IdCounterConsumer
                 broadcast(playerEventsUpdatesOutboundPacket);
 
                 LOG.info(
-                        "Player left - sid: {}, reg id: {}, ply id: {}",
-                        playerInfo.session.sessionId,
-                        playerInfo.session.registeredPlayerId,
+                        "Player left - token: {}, user id: {}, ply id: {}",
+                        playerInfo.session.getToken(),
+                        user != null ? user.getUserId() : null,
                         playerInfo.playerId
                 );
             }

@@ -63,7 +63,7 @@ public class Inventory implements Serializable
 
         if (owner != null)
         {
-            LOG.debug("Owner changed - sid: {}", owner.session.sessionId);
+            LOG.debug("Owner changed - ply id: {}", owner.playerId);
         }
         else
         {

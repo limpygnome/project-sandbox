@@ -1,16 +1,19 @@
 package com.limpygnome.projectsandbox.shared.model;
 
+import org.hibernate.annotations.Type;
 import org.joda.time.DateTime;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.UUID;
 
 /**
  * Created by limpygnome on 25/07/15.
  */
 @Entity
-@Table(name = "game_sessions", uniqueConstraints = @UniqueConstraint(columnNames = {"token", "user", "nickname"}))
+@Table(name = "game_sessions", uniqueConstraints = @UniqueConstraint(columnNames = {"token", "nickname"}))
 public class GameSession implements Serializable
 {
     private static final long serialVersionUID = 1L;
@@ -22,15 +25,20 @@ public class GameSession implements Serializable
     @Column(name = "nickname", nullable = true)
     private String nickname;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "user", nullable = true)
     private User user;
 
     @Column(name = "created", nullable = false)
+    @Type(type="org.jadira.usertype.dateandtime.joda.PersistentDateTime")
     private DateTime created;
 
-    @Column(name = "last_updated", nullable = false)
-    private DateTime lastUpdated;
+    @ElementCollection(fetch = FetchType.EAGER)
+    @CollectionTable(name = "game_sessions_kv", joinColumns = @JoinColumn(name = "token"))
+    @MapKeyClass(String.class)
+    @MapKeyColumn(name = "k")
+    @Column(name = "v")
+    private Map<String, Serializable> gameData;
 
     @Column(name = "connected", nullable = false)
     private boolean connected;
@@ -40,12 +48,13 @@ public class GameSession implements Serializable
 
     public GameSession()
     {
+        // Set default values
         this.token = null;
         this.nickname = null;
-        this.created = DateTime.now();
-        this.lastUpdated = DateTime.now();
-        this.connected = false;
         this.user = null;
+        this.created = DateTime.now();
+        this.gameData = new HashMap<>();
+        this.connected = false;
         this.playerMetrics = new PlayerMetrics();
     }
 
@@ -53,16 +62,16 @@ public class GameSession implements Serializable
     {
         this();
 
-        this.token = UUID.randomUUID().toString();
         this.user = user;
+        this.token = UUID.randomUUID().toString();
     }
 
     public GameSession(String nickname)
     {
         this();
 
-        this.token = UUID.randomUUID().toString();
         this.nickname = nickname;
+        this.token = UUID.randomUUID().toString();
     }
 
     public String getToken()
@@ -75,19 +84,14 @@ public class GameSession implements Serializable
         return nickname;
     }
 
+    public void setNickname(String nickname)
+    {
+        this.nickname = nickname;
+    }
+
     public DateTime getCreated()
     {
         return created;
-    }
-
-    public DateTime getLastUpdated()
-    {
-        return lastUpdated;
-    }
-
-    public void setLastUpdated(DateTime lastUpdated)
-    {
-        this.lastUpdated = lastUpdated;
     }
 
     /**
@@ -113,6 +117,54 @@ public class GameSession implements Serializable
     public PlayerMetrics getPlayerMetrics()
     {
         return playerMetrics;
+    }
+
+    public synchronized void gameDataPut(String key, Serializable value)
+    {
+        this.gameData.put(key, value);
+        playerMetrics.markDirty();
+    }
+
+    public synchronized void gameDataRemove(String key)
+    {
+        this.gameData.remove(key);
+        playerMetrics.markDirty();
+    }
+
+    public synchronized Serializable gameDataGet(String key)
+    {
+        return gameDataGet(key, null);
+    }
+
+    public synchronized long gameDataGetLong(String key)
+    {
+        return (Long) gameDataGet(key, 0L);
+    }
+
+    public synchronized int gameDataGetInt(String key)
+    {
+        return (Integer) gameDataGet(key, 0);
+    }
+
+    public synchronized String gameDataGetStr(String key)
+    {
+        return (String) gameDataGet(key, "");
+    }
+
+    private synchronized Serializable gameDataGet(String key, Serializable defaultValue)
+    {
+        Serializable v = gameData.get(key);
+
+        if (v == null)
+        {
+            v = defaultValue;
+            gameData.put(key, v);
+
+            // Mark this object as dirty
+            playerMetrics.markDirty();
+        }
+
+        return v;
     }
 
 }

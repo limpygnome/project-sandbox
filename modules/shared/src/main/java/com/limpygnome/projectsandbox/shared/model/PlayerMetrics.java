@@ -1,15 +1,19 @@
 package com.limpygnome.projectsandbox.shared.model;
 
-import javax.persistence.Column;
-import javax.persistence.Embeddable;
+import org.hibernate.annotations.Type;
+import org.joda.time.DateTime;
+
+import javax.persistence.*;
+import java.io.Serializable;
 
 /**
  * Represents statistics used to represent either a user throughout all of their game-play history, or for an active
  * session.
  */
 @Embeddable
-public class PlayerMetrics
+public class PlayerMetrics implements Serializable
 {
+    private static final long serialVersionUID = 1L;
 
     @Column(name = "kills", nullable = false)
     private long kills;
@@ -20,11 +24,21 @@ public class PlayerMetrics
     @Column(name = "score", nullable = false)
     private long score;
 
+    @Column(name = "last_updated", nullable = false)
+    @Type(type="org.jadira.usertype.dateandtime.joda.PersistentDateTime")
+    private DateTime lastUpdated;
+
+    @Transient
+    private boolean flagDirty;
+
     public PlayerMetrics()
     {
         this.kills = 0;
         this.deaths = 0;
         this.score = 0;
+        this.lastUpdated = DateTime.now();
+
+        this.flagDirty = true;
     }
 
     public long getKills()
@@ -32,19 +46,9 @@ public class PlayerMetrics
         return kills;
     }
 
-    public void setKills(long kills)
-    {
-        this.kills = kills;
-    }
-
     public long getDeaths()
     {
         return deaths;
-    }
-
-    public void setDeaths(long deaths)
-    {
-        this.deaths = deaths;
     }
 
     public long getScore()
@@ -52,9 +56,47 @@ public class PlayerMetrics
         return score;
     }
 
-    public void setScore(long score)
+    public DateTime getLastUpdated()
     {
-        this.score = score;
+        return lastUpdated;
+    }
+
+    public synchronized void incrementKills()
+    {
+        this.kills++;
+        markDirty();
+    }
+
+    public synchronized void incrementDeaths()
+    {
+        this.deaths++;
+        markDirty();
+    }
+
+    public synchronized void incrementScore(int amount)
+    {
+        // TODO: check this works for negatives and high longs
+        this.score += amount;
+        markDirty();
+    }
+
+    public synchronized void markDirty()
+    {
+        this.flagDirty = true;
+        this.lastUpdated = DateTime.now();
+    }
+
+    /**
+     * Checks if the metrics are dirty, i.e. been updated. This call/check will also reset the dirty flag to false.
+     * May also be used to indicate parent is dirty too.
+     *
+     * @return True = dirty/updated, false = not dirty.
+     */
+    public synchronized boolean isDirtyAndResetDirtyFlag()
+    {
+        boolean dirty = this.flagDirty;
+        this.flagDirty = false;
+        return dirty;
     }
 
 }

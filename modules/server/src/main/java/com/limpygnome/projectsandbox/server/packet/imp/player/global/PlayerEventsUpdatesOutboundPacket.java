@@ -18,19 +18,19 @@ public class PlayerEventsUpdatesOutboundPacket extends OutboundPacket
         packetData.add('J');
         packetData.add(playerInfo.playerId);
 
-        packetData.add(playerInfo.session.displayName);
+        packetData.add(playerInfo.session.getNickname());
     }
 
     public void writePlayerInfoUpdates(PlayerInfo playerInfo, boolean forced)
     {
-        if (forced || playerInfo.session.metrics.isDirtyAndResetDirtyFlag())
+        if (forced || playerInfo.session.getPlayerMetrics().isDirtyAndResetDirtyFlag())
         {
             packetData.add('U');
             packetData.add(playerInfo.playerId);
 
-            packetData.add(playerInfo.session.metrics.kills);
-            packetData.add(playerInfo.session.metrics.deaths);
-            packetData.add(playerInfo.session.metrics.score);
+            packetData.add(playerInfo.session.getPlayerMetrics().getKills());
+            packetData.add(playerInfo.session.getPlayerMetrics().getDeaths());
+            packetData.add(playerInfo.session.getPlayerMetrics().getScore());
         }
     }
 

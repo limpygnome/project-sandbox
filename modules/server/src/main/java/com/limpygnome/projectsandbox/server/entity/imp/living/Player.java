@@ -60,7 +60,7 @@ public class Player extends Entity
         this.playerInfo = playerInfo;
 
         // Load inventory
-        this.inventory = (Inventory) playerInfo.session.playerData.get(PLAYERDATA_INVENTORY_KEY);
+        this.inventory = (Inventory) playerInfo.session.gameDataGet(PLAYERDATA_INVENTORY_KEY);
 
         if (this.inventory == null)
         {
@@ -142,7 +142,7 @@ public class Player extends Entity
     @Override
     public String friendlyName()
     {
-        return playerInfo.session.displayName;
+        return playerInfo.session.getNickname();
     }
 
     @Override

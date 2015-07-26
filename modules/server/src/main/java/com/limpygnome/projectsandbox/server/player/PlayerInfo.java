@@ -4,6 +4,7 @@ import com.limpygnome.projectsandbox.server.Controller;
 import com.limpygnome.projectsandbox.server.entity.death.AbstractKiller;
 import com.limpygnome.projectsandbox.server.packet.imp.player.global.PlayerKilledOutboundPacket;
 import com.limpygnome.projectsandbox.server.entity.Entity;
+import com.limpygnome.projectsandbox.shared.model.GameSession;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.java_websocket.WebSocket;
@@ -23,11 +24,9 @@ public class PlayerInfo
     public final short playerId;
 
     /**
-     * The current session tied to the player; null if no session assigned.
-     * <p>
-     * Note: this should NEVER reach other players, since this is the temp token to identify the player for the duration of the session.
+     * The current session tied to the player.
      */
-    public Session session;
+    public GameSession session;
 
     /**
      * The keys currently held down by the player.
@@ -51,7 +50,7 @@ public class PlayerInfo
      */
     public Entity entity;
 
-    public PlayerInfo(WebSocket socket, Session session, short playerId)
+    public PlayerInfo(WebSocket socket, GameSession session, short playerId)
     {
         this.keys = 0;
         this.socket = socket;
@@ -86,7 +85,7 @@ public class PlayerInfo
         try
         {
             // Update metrics
-            session.metrics.incrementDeaths();
+            session.getPlayerMetrics().incrementDeaths();
 
             // Build death packet
             PlayerKilledOutboundPacket packet = new PlayerKilledOutboundPacket();
@@ -106,13 +105,13 @@ public class PlayerInfo
     public void eventPlayerKill(Controller controller, AbstractKiller death, PlayerInfo[] playerInfoVictims)
     {
         // Update kills
-        session.metrics.incrementKills();
+        session.getPlayerMetrics().incrementKills();
 
         // Update score
         int score = death.computeScore();
         if (score > 0)
         {
-            session.metrics.incrementScore(score);
+            session.getPlayerMetrics().incrementScore(score);
         }
 
         LOG.debug("Player inflicted death - ply id: {}, killer: {}", playerId, death);

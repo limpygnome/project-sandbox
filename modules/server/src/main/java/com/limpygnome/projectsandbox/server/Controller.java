@@ -7,6 +7,7 @@ import com.limpygnome.projectsandbox.server.inventory.InventoryManager;
 import com.limpygnome.projectsandbox.server.packet.PacketManager;
 import com.limpygnome.projectsandbox.server.player.ChatManager;
 import com.limpygnome.projectsandbox.server.player.PlayerManager;
+import com.limpygnome.projectsandbox.server.player.SessionManager;
 import com.limpygnome.projectsandbox.server.threading.GameLogic;
 import com.limpygnome.projectsandbox.server.threading.SocketEndpoint;
 import com.limpygnome.projectsandbox.server.world.MapManager;
@@ -29,6 +30,7 @@ public class Controller
     public InventoryManager inventoryManager;
     public MapManager mapManager;
     public EffectsManager effectsManager;
+    public SessionManager sessionManager;
 
     public Controller()
     {
@@ -56,6 +58,8 @@ public class Controller
 
             mapManager = new MapManager(this);
             mapManager.load();
+
+            sessionManager = new SessionManager();
             
             endpoint = new SocketEndpoint(this, 4857);
             endpoint.start();
