@@ -15,6 +15,9 @@ import javax.persistence.TypedQuery;
 import java.util.List;
 import java.util.UUID;
 
+import static com.limpygnome.projectsandbox.shared.constant.SessionConstants.TIMEOUT_INITIAL_CONNECTION_SECONDS;
+import static com.limpygnome.projectsandbox.shared.constant.SessionConstants.TIMEOUT_LAST_UPDATED_SECONDS;
+
 /**
  * Created by limpygnome on 25/07/15.
  */
@@ -100,6 +103,24 @@ public class GameProvider extends AbstractProvider
         }
     }
 
+    public boolean updateGameSession(GameSession gameSession)
+    {
+        try
+        {
+            em.merge(gameSession);
+
+            LOG.debug("Updated game session - token: {}", gameSession.getToken());
+
+            return true;
+        }
+        catch (Exception e)
+        {
+            LOG.error("Failed to update game session - token: {}", gameSession.getToken(), e);
+
+            return false;
+        }
+    }
+
     public boolean removeGameSession(GameSession gameSession)
     {
         try
@@ -124,16 +145,24 @@ public class GameProvider extends AbstractProvider
 
     public boolean removeInactiveGameSessions()
     {
-        final int TIMEOUT_SECONDS = 180;
-
         try
         {
-            Query query = em.createQuery("DELETE FROM GameSession WHERE connected = false AND created <= :created");
-            query.setParameter("created", DateTime.now().minusSeconds(TIMEOUT_SECONDS));
+            Query query = em.createQuery("DELETE FROM GameSession WHERE (connected = false AND created <= :created) OR (connected = true AND last_updated <= :updated)");
+
+            query.setParameter("created", DateTime.now().minusSeconds(TIMEOUT_INITIAL_CONNECTION_SECONDS));
+            // TODO: investigate why we have to put toDate for n+1 param, odd...bug?
+            query.setParameter("updated", DateTime.now().minusSeconds(TIMEOUT_LAST_UPDATED_SECONDS).toDate());
 
             int affectedRows = query.executeUpdate();
 
-            LOG.info("Removed {} game sessions", affectedRows);
+            if (affectedRows > 0)
+            {
+                LOG.info("Removed inactive game sessions - count: {}", affectedRows);
+            }
+            else
+            {
+                LOG.debug("No inactive game sessions");
+            }
 
             return true;
         }

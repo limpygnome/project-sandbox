@@ -10,7 +10,7 @@ import java.util.UUID;
  * Created by limpygnome on 25/07/15.
  */
 @Entity
-@Table(name = "game_sessions", uniqueConstraints = @UniqueConstraint(columnNames = {"token", "user"}))
+@Table(name = "game_sessions", uniqueConstraints = @UniqueConstraint(columnNames = {"token", "user", "nickname"}))
 public class GameSession implements Serializable
 {
     private static final long serialVersionUID = 1L;
@@ -19,18 +19,21 @@ public class GameSession implements Serializable
     @Column(name = "token", nullable = false, length = 36)
     private String token;
 
-    @Column(name = "nickname")
+    @Column(name = "nickname", nullable = true)
     private String nickname;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user", nullable = true)
+    private User user;
 
     @Column(name = "created", nullable = false)
     private DateTime created;
 
+    @Column(name = "last_updated", nullable = false)
+    private DateTime lastUpdated;
+
     @Column(name = "connected", nullable = false)
     private boolean connected;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user")
-    private User user;
 
     @Embedded
     private PlayerMetrics playerMetrics;
@@ -40,6 +43,7 @@ public class GameSession implements Serializable
         this.token = null;
         this.nickname = null;
         this.created = DateTime.now();
+        this.lastUpdated = DateTime.now();
         this.connected = false;
         this.user = null;
         this.playerMetrics = new PlayerMetrics();
@@ -74,6 +78,16 @@ public class GameSession implements Serializable
     public DateTime getCreated()
     {
         return created;
+    }
+
+    public DateTime getLastUpdated()
+    {
+        return lastUpdated;
+    }
+
+    public void setLastUpdated(DateTime lastUpdated)
+    {
+        this.lastUpdated = lastUpdated;
     }
 
     /**
