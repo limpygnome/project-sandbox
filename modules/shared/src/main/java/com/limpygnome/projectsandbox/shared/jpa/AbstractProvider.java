@@ -1,8 +1,5 @@
 package com.limpygnome.projectsandbox.shared.jpa;
 
-import com.limpygnome.projectsandbox.shared.jpa.ConnectionFactory;
-import com.limpygnome.projectsandbox.shared.jpa.ConnectionType;
-
 import javax.persistence.EntityManager;
 
 /**

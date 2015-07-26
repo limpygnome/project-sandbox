@@ -1,5 +1,6 @@
 package com.limpygnome.projectsandbox.website.controller.page.main;
 
+import com.limpygnome.projectsandbox.shared.jpa.provider.GameProvider;
 import com.limpygnome.projectsandbox.website.controller.BaseController;
 import com.limpygnome.projectsandbox.website.controller.page.game.GameController;
 import com.limpygnome.projectsandbox.shared.model.User;
@@ -37,23 +38,33 @@ public class AuthController extends BaseController
     public ModelAndView joinGuest(@ModelAttribute("guestForm") @Valid GuestForm guestForm, BindingResult bindingResult,
                                   RedirectAttributes redirectAttributes)
     {
+        ModelAndView modelAndView;
+        GameProvider gameProvider = new GameProvider();
+
         // Check valid name provided
         if (bindingResult.hasErrors())
         {
-            return createHomeRedirectModelAndView(bindingResult, redirectAttributes, "guestForm", guestForm);
+            modelAndView = createHomeRedirectModelAndView(bindingResult, redirectAttributes, "guestForm", guestForm);
         }
         else
         {
             // Fetch guest session token
-            String sessionToken = gameSessionService.generateSessionToken(guestForm.getNickname());
+            String sessionToken = gameSessionService.generateSessionToken(gameProvider, guestForm.getNickname());
 
-            return joinSession(sessionToken, bindingResult, redirectAttributes, guestForm);
+            modelAndView = joinSession(sessionToken, bindingResult, redirectAttributes, guestForm);
         }
+
+        gameProvider.close();
+
+        return modelAndView;
     }
 
     @RequestMapping(value = "user")
     public ModelAndView joinUser(BindingResult bindingResult, RedirectAttributes redirectAttributes)
     {
+        ModelAndView modelAndView;
+        GameProvider gameProvider = new GameProvider();
+
         // Fetch current user
         User user = authenticationService.retrieveCurrentUser();
 
@@ -64,9 +75,14 @@ public class AuthController extends BaseController
         }
 
         // Fetch account session token
-        String sessionToken = gameSessionService.generateSessionToken(user);
+        String sessionToken = gameSessionService.generateSessionToken(gameProvider, user);
 
-        return joinSession(sessionToken, null, redirectAttributes, null);
+        // Determine model-view for joining session
+        modelAndView = joinSession(sessionToken, null, redirectAttributes, null);
+
+        gameProvider.close();
+
+        return modelAndView;
     }
 
     private ModelAndView joinSession(String sessionToken, BindingResult bindingResult,

@@ -1,5 +1,6 @@
 package com.limpygnome.projectsandbox.website.service;
 
+import com.limpygnome.projectsandbox.shared.jpa.provider.GameProvider;
 import com.limpygnome.projectsandbox.shared.model.User;
 
 /**
@@ -13,9 +14,9 @@ public interface GameSessionService
      * @param nickname
      * @return A session token, or null if failed.
      */
-    String generateSessionToken(String nickname);
+    String generateSessionToken(GameProvider gameProvider, String nickname);
 
-    String generateSessionToken(User user);
+    String generateSessionToken(GameProvider gameProvider, User user);
 
     /**
      * Validates the game session token exists and consumes it.
@@ -23,5 +24,5 @@ public interface GameSessionService
      * @param gameSessionToken The token
      * @return True = valid and consumed, false = invalid session token
      */
-    boolean validateAndConsume(String gameSessionToken);
+    boolean validateAndConsume(GameProvider gameProvider, String gameSessionToken);
 }

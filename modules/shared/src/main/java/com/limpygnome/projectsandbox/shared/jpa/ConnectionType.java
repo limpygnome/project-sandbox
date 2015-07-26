@@ -5,8 +5,7 @@ package com.limpygnome.projectsandbox.shared.jpa;
  */
 public enum ConnectionType
 {
-    PROJECTSANDBOX_READONLY("projectsandbox_readonly"),
-    PROJECTSANDBOX_FULL("projectsandbox_full")
+    PROJECTSANDBOX("projectsandbox")
     ;
 
     public final String PERSISTENCE_UNIT;
