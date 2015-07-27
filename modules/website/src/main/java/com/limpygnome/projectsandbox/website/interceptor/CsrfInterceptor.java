@@ -1,6 +1,8 @@
 package com.limpygnome.projectsandbox.website.interceptor;
 
 import com.limpygnome.projectsandbox.website.service.CsrfService;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
@@ -14,6 +16,8 @@ import javax.servlet.http.HttpServletResponse;
  */
 public class CsrfInterceptor implements HandlerInterceptor
 {
+    private final static Logger LOG = LogManager.getLogger(CsrfInterceptor.class);
+
     private CsrfService csrfService;
 
     public CsrfInterceptor(CsrfService csrfService)
@@ -33,6 +37,7 @@ public class CsrfInterceptor implements HandlerInterceptor
 
             if ((method.equals("post") || method.equals("put") || method.equals("delete")) && !csrfService.isValidRequest(httpServletRequest))
             {
+                LOG.warn("CSRF attempt - ip: {}", httpServletRequest.getRemoteAddr());
                 httpServletResponse.sendRedirect("/home");
                 return false;
             }

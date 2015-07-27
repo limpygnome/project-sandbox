@@ -47,7 +47,7 @@
         </table>
 
         <ps:csrf />
-        <ps:errorList modelAttribute="loginForm" cssClass="errors" />
+        <ps:errorList modelAttribute="loginForm" cssClass="errors" singleError="true" />
 
     </form:form>
 

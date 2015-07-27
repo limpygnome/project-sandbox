@@ -3,6 +3,7 @@ package com.limpygnome.projectsandbox.website.service.imp;
 import com.limpygnome.projectsandbox.shared.jpa.provider.GameProvider;
 import com.limpygnome.projectsandbox.shared.jpa.provider.result.CreateUserResult;
 import com.limpygnome.projectsandbox.shared.model.User;
+import com.limpygnome.projectsandbox.website.model.form.account.result.LoginResult;
 import com.limpygnome.projectsandbox.website.model.form.home.LoginForm;
 import com.limpygnome.projectsandbox.website.model.form.home.RegisterForm;
 import com.limpygnome.projectsandbox.website.service.AuthenticationService;
@@ -74,9 +75,37 @@ public class DefaultAuthenticationService implements AuthenticationService
     }
 
     @Override
-    public boolean login(HttpSession httpSession, LoginForm loginForm)
+    public LoginResult login(HttpSession httpSession, LoginForm loginForm)
     {
-        return false;
+        GameProvider gameProvider = new GameProvider();
+
+        try
+        {
+            // Fetch user
+            User user = gameProvider.fetchUserByNickname(loginForm.getNickname());
+
+            // Check password is correct
+            if (user.getPassword().isValid(this.globalPasswordSalt, loginForm.getPassword()))
+            {
+                // Push user into session
+                httpSession.setAttribute(SESSION_ATTRIB_KEY, user);
+                return LoginResult.SUCCESS;
+            }
+            else
+            {
+                // TODO: login attempts / timeout etc
+                return LoginResult.INCORRECT;
+            }
+        }
+        catch (Exception e)
+        {
+            LOG.error("Failed to authenticate user - nickname: {}", loginForm.getNickname(), e);
+            return LoginResult.FAILED;
+        }
+        finally
+        {
+            gameProvider.close();
+        }
     }
 
     @Override

@@ -220,7 +220,7 @@ public class GameProvider extends AbstractProvider
         try
         {
             // Check nickname not already used
-            query = em.createQuery("SELECT COUNT(u.userid) FROM User u WHERE u.nickname = :nickname");
+            query = em.createQuery("SELECT COUNT(u.userId) FROM User u WHERE u.nickname = :nickname");
             query.setParameter("nickname", user.getNickname());
             count = (long) query.getSingleResult();
 
@@ -230,7 +230,7 @@ public class GameProvider extends AbstractProvider
             }
 
             // Check email not already used
-            query = em.createQuery("SELECT COUNT(u.userid) FROM User u WHERE u.email = :email");
+            query = em.createQuery("SELECT COUNT(u.userId) FROM User u WHERE u.email = :email");
             query.setParameter("email", user.getEmail());
             count = (long) query.getSingleResult();
 
@@ -248,6 +248,24 @@ public class GameProvider extends AbstractProvider
         {
             LOG.error("Failed to persist new user", e);
             return CreateUserResult.FAILED;
+        }
+    }
+
+    public User fetchUserByNickname(String nickname)
+    {
+        try
+        {
+            TypedQuery<User> typedQuery = em.createQuery("SELECT u FROM User u WHERE u.nickname = :nickname", User.class);
+            typedQuery.setParameter("nickname", nickname);
+
+            List<User> users = typedQuery.getResultList();
+
+            return users.isEmpty() ? null : users.get(0);
+        }
+        catch (Exception e)
+        {
+            LOG.error("Failed to retrieve user by nickname - nickname: {}", nickname, e);
+            return null;
         }
     }
 

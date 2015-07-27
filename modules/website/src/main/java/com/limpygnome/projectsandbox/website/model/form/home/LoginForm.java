@@ -1,11 +1,22 @@
 package com.limpygnome.projectsandbox.website.model.form.home;
 
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
+
+import static com.limpygnome.projectsandbox.website.constant.AccountConstants.NICKNAME_LENGTH_MIN;
+import static com.limpygnome.projectsandbox.website.constant.AccountConstants.PASSWORD_LENGTH_MIN;
+
 /**
  * Created by limpygnome on 22/07/15.
  */
 public class LoginForm
 {
+    @NotNull
+    @Size(min = NICKNAME_LENGTH_MIN, message = "{login.incorrect}")
     private String nickname;
+
+    @NotNull
+    @Size(min = PASSWORD_LENGTH_MIN, message = "{login.incorrect}")
     private String password;
 
     public LoginForm() { }

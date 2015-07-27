@@ -28,10 +28,11 @@ public class Password
     public Password(String globalPasswordSalt, String password)
     {
         // Generate random salt
-        this.passwordSalt = randomSalt(SALT_LENGTH);
+        byte[] rawSalt = randomSalt(SALT_LENGTH);
 
         // Generate hash using password and salt data
-        this.passwordHash = generateHash(globalPasswordSalt, passwordSalt, password);
+        this.passwordHash = generateHash(globalPasswordSalt.getBytes(), rawSalt, password);
+        this.passwordSalt = byte2Hex(rawSalt);
     }
 
     /**
@@ -43,12 +44,12 @@ public class Password
      */
     public boolean isValid(String globalPasswordSalt, String password)
     {
-        String hash = generateHash(globalPasswordSalt, this.passwordSalt, password);
+        String hash = generateHash(globalPasswordSalt.getBytes(), hex2byte(this.passwordSalt), password);
 
         return hash.equals(passwordHash);
     }
 
-    private static String generateHash(String globalPasswordSalt, String passwordSalt, String password)
+    private static String generateHash(byte[] globalPasswordSalt, byte[] passwordSalt, String password)
     {
         byte[] input = generateByteMess(globalPasswordSalt, passwordSalt, password);
 
@@ -65,10 +66,8 @@ public class Password
         }
     }
 
-    private static byte[] generateByteMess(String globalPasswordSalt, String passwordSalt, String password)
+    private static byte[] generateByteMess(byte[] bytesGlobalPasswordSalt, byte[] bytesPasswordSalt, String password)
     {
-        byte[] bytesGlobalPasswordSalt = globalPasswordSalt.getBytes();
-        byte[] bytesPasswordSalt = passwordSalt.getBytes();
         byte[] bytesPassword = password.getBytes();
 
         // Copy salt and password together
@@ -120,22 +119,35 @@ public class Password
 
     private static String byte2Hex(byte[] data)
     {
-        StringBuilder buffer = new StringBuilder();
+        StringBuilder buffer = new StringBuilder(data.length * 2);
 
         for(byte inputByte : data)
         {
             buffer.append(
-                Integer.toHexString(0xFF & inputByte)
+                String.format("%02X", inputByte)
             );
         }
 
         return buffer.toString();
     }
 
-    private static String randomSalt(int length)
+    private static byte[] hex2byte(String data)
     {
-        StringBuilder buffer = new StringBuilder();
+        byte[] buffer = new byte[data.length() / 2];
 
+        for (int i = 0; i < data.length(); i+= 2)
+        {
+            buffer[i / 2] = (byte) (
+                (Character.digit(data.charAt(i), 16) << 4) +
+                (Character.digit(data.charAt(i+1), 16))
+            );
+        }
+
+        return buffer;
+    }
+
+    private static byte[] randomSalt(int length)
+    {
         // Use time and rnd as seed
         ByteBuffer byteBuffer = ByteBuffer.allocate(16);
         byteBuffer.putLong(System.currentTimeMillis());
@@ -143,14 +155,15 @@ public class Password
 
         SecureRandom secureRandom = new SecureRandom(byteBuffer.array());
 
-        int charCode;
+        // Create random array
+        byte[] salt = new byte[length];
+
         for (int i = 0; i < length; i++)
         {
-            charCode = 33 + secureRandom.nextInt(93);
-            buffer.append((char) charCode);
+            salt[i] = (byte) secureRandom.nextInt(256);
         }
 
-        return buffer.toString();
+        return salt;
     }
 
 }

@@ -5,6 +5,7 @@ import com.limpygnome.projectsandbox.shared.jpa.provider.result.CreateUserResult
 import com.limpygnome.projectsandbox.website.controller.BaseController;
 import com.limpygnome.projectsandbox.website.controller.page.game.GameController;
 import com.limpygnome.projectsandbox.shared.model.User;
+import com.limpygnome.projectsandbox.website.model.form.account.result.LoginResult;
 import com.limpygnome.projectsandbox.website.model.form.home.GuestForm;
 import com.limpygnome.projectsandbox.website.model.form.home.LoginForm;
 import com.limpygnome.projectsandbox.website.model.form.home.RegisterForm;
@@ -64,7 +65,7 @@ public class AuthController extends BaseController
     }
 
     @RequestMapping(value = "user")
-    public ModelAndView joinUser(BindingResult bindingResult, RedirectAttributes redirectAttributes,
+    public ModelAndView joinUser(RedirectAttributes redirectAttributes,
                                  HttpSession httpSession)
     {
         ModelAndView modelAndView;
@@ -138,13 +139,23 @@ public class AuthController extends BaseController
     }
 
     @RequestMapping(value = "login", method = RequestMethod.POST)
-    public ModelAndView accountLogin(@ModelAttribute("loginForm") LoginForm loginForm, BindingResult bindingResult,
+    public ModelAndView accountLogin(@ModelAttribute("loginForm") @Valid LoginForm loginForm, BindingResult bindingResult,
                                      RedirectAttributes redirectAttributes, HttpSession httpSession)
     {
         // Attempt to login the user
-        if (!bindingResult.hasErrors() && !authenticationService.login(httpSession, loginForm))
+        if (!bindingResult.hasErrors())
         {
-            bindingResult.reject("login.incorrect");
+            LoginResult loginResult = authenticationService.login(httpSession, loginForm);
+
+            switch (loginResult)
+            {
+                case FAILED:
+                    bindingResult.reject("login.failure");
+                    break;
+                case INCORRECT:
+                    bindingResult.reject("login.incorrect");
+                    break;
+            }
         }
 
         return createHomeRedirectModelAndView(bindingResult, redirectAttributes, "loginForm", loginForm);
