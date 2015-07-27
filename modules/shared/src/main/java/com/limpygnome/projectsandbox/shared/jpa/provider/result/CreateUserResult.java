@@ -6,7 +6,7 @@ package com.limpygnome.projectsandbox.shared.jpa.provider.result;
 public enum CreateUserResult
 {
     SUCCESS,
-    USERNAME_EXISTS,
+    NICKNAME_EXISTS,
     EMAIL_EXISTS,
     FAILED
 }

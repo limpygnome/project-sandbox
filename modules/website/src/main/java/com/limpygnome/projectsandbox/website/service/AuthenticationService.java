@@ -1,19 +1,22 @@
 package com.limpygnome.projectsandbox.website.service;
 
+import com.limpygnome.projectsandbox.shared.jpa.provider.result.CreateUserResult;
 import com.limpygnome.projectsandbox.shared.model.User;
 import com.limpygnome.projectsandbox.website.model.form.home.LoginForm;
 import com.limpygnome.projectsandbox.website.model.form.home.RegisterForm;
+
+import javax.servlet.http.HttpSession;
 
 /**
  * Created by limpygnome on 17/07/15.
  */
 public interface AuthenticationService
 {
-    User register(RegisterForm registerForm);
+    CreateUserResult register(HttpSession httpSession, RegisterForm registerForm);
 
-    boolean login(LoginForm loginForm);
+    boolean login(HttpSession httpSession, LoginForm loginForm);
 
-    boolean logout();
+    void logout(HttpSession httpSession);
 
-    User retrieveCurrentUser();
+    User retrieveCurrentUser(HttpSession httpSession);
 }

@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.servlet.http.HttpSession;
+
 /**
  * The home page for the website, used for registering/logging into an account and joining the game.
  */
@@ -22,12 +24,12 @@ public class HomeController extends BaseController
 
 
     @RequestMapping(value = {"/", "/home"})
-    public ModelAndView home()
+    public ModelAndView home(HttpSession httpSession)
     {
         ModelAndView modelAndView = createMV("main/home", "welcome", "join");
 
         // Setup model
-        modelAndView.addObject("user", authenticationService.retrieveCurrentUser());
+        modelAndView.addObject("user", authenticationService.retrieveCurrentUser(httpSession));
 
         return modelAndView;
     }

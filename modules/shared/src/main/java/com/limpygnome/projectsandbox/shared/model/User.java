@@ -5,6 +5,7 @@ import org.joda.time.DateTime;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.UUID;
 
 /**
  * Created by limpygnome on 25/07/15.
@@ -25,15 +26,12 @@ public class User implements Serializable
     @Column(name = "email", nullable = false)
     private String email;
 
-    @Column(name = "password_hash", nullable = false)
-    private String passwordHash;
-
-    @Column(name = "password_salt", nullable = false)
-    private String passwordSalt;
-
     @Column(name = "registered", nullable = false)
     @Type(type="org.jadira.usertype.dateandtime.joda.PersistentDateTime")
     private DateTime registered;
+
+    @Embedded
+    private Password password;
 
     @Embedded
     private PlayerMetrics playerMetrics;
@@ -43,9 +41,20 @@ public class User implements Serializable
         this.userId = null;
         this.nickname = null;
         this.email = null;
-        this.passwordHash = null;
-        this.passwordSalt = null;
+        this.password = null;
         this.playerMetrics = new PlayerMetrics();
+    }
+
+    public User(String nickname, String email, String globalPasswordSalt, String password)
+    {
+        this.nickname = nickname;
+        this.email = email;
+        this.password = new Password(globalPasswordSalt, password);
+
+        // Default values
+        this.userId = UUID.randomUUID().toString();
+        this.playerMetrics = new PlayerMetrics();
+        this.registered = DateTime.now();
     }
 
     public String getUserId()
@@ -78,24 +87,14 @@ public class User implements Serializable
         this.email = email;
     }
 
-    public String getPasswordHash()
+    public Password getPassword()
     {
-        return passwordHash;
+        return password;
     }
 
-    public void setPasswordHash(String passwordHash)
+    public void setPassword(Password password)
     {
-        this.passwordHash = passwordHash;
-    }
-
-    public String getPasswordSalt()
-    {
-        return passwordSalt;
-    }
-
-    public void setPasswordSalt(String passwordSalt)
-    {
-        this.passwordSalt = passwordSalt;
+        this.password = password;
     }
 
     public PlayerMetrics getPlayerMetrics()

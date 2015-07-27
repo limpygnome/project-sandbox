@@ -3,6 +3,7 @@ package com.limpygnome.projectsandbox.shared.jpa.provider;
 import com.limpygnome.projectsandbox.shared.jpa.AbstractProvider;
 import com.limpygnome.projectsandbox.shared.jpa.ConnectionType;
 import com.limpygnome.projectsandbox.shared.jpa.provider.result.CreateGameSessionResult;
+import com.limpygnome.projectsandbox.shared.jpa.provider.result.CreateUserResult;
 import com.limpygnome.projectsandbox.shared.model.GameSession;
 import com.limpygnome.projectsandbox.shared.model.User;
 import org.apache.logging.log4j.LogManager;
@@ -211,12 +212,43 @@ public class GameProvider extends AbstractProvider
         }
     }
 
-//    public CreateUserResult createUser(User user)
-//    {
-//    }
-//
-//    public void removeUser(User user)
-//    {
-//    }
+    public CreateUserResult createUser(User user)
+    {
+        Query query;
+        long count;
+
+        try
+        {
+            // Check nickname not already used
+            query = em.createQuery("SELECT COUNT(u.userid) FROM User u WHERE u.nickname = :nickname");
+            query.setParameter("nickname", user.getNickname());
+            count = (long) query.getSingleResult();
+
+            if (count != 0)
+            {
+                return CreateUserResult.NICKNAME_EXISTS;
+            }
+
+            // Check email not already used
+            query = em.createQuery("SELECT COUNT(u.userid) FROM User u WHERE u.email = :email");
+            query.setParameter("email", user.getEmail());
+            count = (long) query.getSingleResult();
+
+            if (count != 0)
+            {
+                return CreateUserResult.EMAIL_EXISTS;
+            }
+
+            // Persist the user
+            em.persist(user);
+
+            return CreateUserResult.SUCCESS;
+        }
+        catch (Exception e)
+        {
+            LOG.error("Failed to persist new user", e);
+            return CreateUserResult.FAILED;
+        }
+    }
 
 }

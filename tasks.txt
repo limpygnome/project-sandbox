@@ -1,11 +1,13 @@
 high priority:
-- hunt down deadlocs -> synchronized should only be applied to a set of internal calls! -> look at all synchronized blocks
+0 light manager
+- hunt down deadlocks -> synchronized should only be applied to a set of internal calls! -> look at all synchronized blocks
 - improve physics properties in ents, maybe move to subclass with defaults
+- multiple maps
+- multithreading logic
 - tiles need to apply damage / physics properties
 - javascript ents etc need namespacing
 - split game and engine on serverside apart
    - register types of packets (engine/game) on startup, goes into hashmap of MAIN-SUBTYPE -> packet class (k -> v)
-- lighting
 - pickups (health / armour / generic for weapons etc)
 - map editor
 - player info updates -> consider making update packets generic, foreach stuff or something

@@ -1,6 +1,7 @@
 package com.limpygnome.projectsandbox.website.controller.page.main;
 
 import com.limpygnome.projectsandbox.shared.jpa.provider.GameProvider;
+import com.limpygnome.projectsandbox.shared.jpa.provider.result.CreateUserResult;
 import com.limpygnome.projectsandbox.website.controller.BaseController;
 import com.limpygnome.projectsandbox.website.controller.page.game.GameController;
 import com.limpygnome.projectsandbox.shared.model.User;
@@ -18,6 +19,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
 /**
@@ -62,13 +64,14 @@ public class AuthController extends BaseController
     }
 
     @RequestMapping(value = "user")
-    public ModelAndView joinUser(BindingResult bindingResult, RedirectAttributes redirectAttributes)
+    public ModelAndView joinUser(BindingResult bindingResult, RedirectAttributes redirectAttributes,
+                                 HttpSession httpSession)
     {
         ModelAndView modelAndView;
         GameProvider gameProvider = new GameProvider();
 
         // Fetch current user
-        User user = authenticationService.retrieveCurrentUser();
+        User user = authenticationService.retrieveCurrentUser(httpSession);
 
         // Check the request is from an authenticated user
         if (user == null)
@@ -110,12 +113,25 @@ public class AuthController extends BaseController
     @RequestMapping(value = "register", method = RequestMethod.POST)
     public ModelAndView accountRegister(@ModelAttribute("registerForm") @Valid RegisterForm registerForm,
                                         BindingResult bindingResult,
-                                        RedirectAttributes redirectAttributes)
+                                        RedirectAttributes redirectAttributes, HttpSession httpSession)
     {
         // Register user
-        if (!bindingResult.hasErrors())
+        if (registerForm != null && !bindingResult.hasErrors())
         {
-            authenticationService.register(registerForm);
+            CreateUserResult createUserResult = authenticationService.register(httpSession, registerForm);
+
+            switch (createUserResult)
+            {
+                case FAILED:
+                    bindingResult.reject("register.failure");
+                    break;
+                case EMAIL_EXISTS:
+                    bindingResult.reject("register.email-exists");
+                    break;
+                case NICKNAME_EXISTS:
+                    bindingResult.reject("register.nickname-exists");
+                    break;
+            }
         }
 
         return createHomeRedirectModelAndView(bindingResult, redirectAttributes, "registerForm", registerForm);
@@ -123,10 +139,10 @@ public class AuthController extends BaseController
 
     @RequestMapping(value = "login", method = RequestMethod.POST)
     public ModelAndView accountLogin(@ModelAttribute("loginForm") LoginForm loginForm, BindingResult bindingResult,
-                                     RedirectAttributes redirectAttributes)
+                                     RedirectAttributes redirectAttributes, HttpSession httpSession)
     {
         // Attempt to login the user
-        if (!bindingResult.hasErrors() && !authenticationService.login(loginForm))
+        if (!bindingResult.hasErrors() && !authenticationService.login(httpSession, loginForm))
         {
             bindingResult.reject("login.incorrect");
         }
@@ -135,9 +151,9 @@ public class AuthController extends BaseController
     }
 
     @RequestMapping(value = "logout", method = RequestMethod.GET)
-    public ModelAndView accountLogout()
+    public ModelAndView accountLogout(HttpSession httpSession)
     {
-        authenticationService.logout();
+        authenticationService.logout(httpSession);
 
         return createHomeRedirectModelAndView(null, null, null, null);
     }
