@@ -2,6 +2,8 @@ package com.limpygnome.projectsandbox.server.player;
 
 import com.limpygnome.projectsandbox.shared.jpa.provider.GameProvider;
 import com.limpygnome.projectsandbox.shared.model.GameSession;
+import com.limpygnome.projectsandbox.shared.model.PlayerMetrics;
+import com.limpygnome.projectsandbox.shared.model.User;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -63,8 +65,23 @@ public class SessionManager
         gameSession.getPlayerMetrics().setLastUpdatedNow();
         gameSession.setConnected(false);
 
-        // Persist changes
-        persist(gameSession);
+        // Transfer score/kills/death to user's profile/account
+        User user = gameSession.getUser();
+
+        if (user != null)
+        {
+            PlayerMetrics gameSessionMetrics = gameSession.getPlayerMetrics();
+            PlayerMetrics userMetrics = user.getPlayerMetrics();
+
+            // Transfer metrics
+            userMetrics.transferFromGameSession(gameSessionMetrics);
+
+            persist(gameSession, user);
+        }
+        else
+        {
+            persist(gameSession);
+        }
 
         // Remove from tracked list
         trackedGameSessions.remove(gameSession);
@@ -72,10 +89,31 @@ public class SessionManager
 
     public synchronized void persist(GameSession gameSession)
     {
+        persist(gameSession, null);
+    }
+
+    private synchronized void persist(GameSession gameSession, User user)
+    {
+        // Check valid game session passed
+        if (gameSession == null)
+        {
+            throw new IllegalArgumentException("Invalid/null game session provided");
+        }
+
+        // Check valid game provider available
         if (gameProvider != null)
         {
             gameProvider.begin();
+
+            // Persist session
             gameProvider.updateGameSession(gameSession);
+
+            // Persist user, if specified
+            if (user != null)
+            {
+                gameProvider.updateUser(user);
+            }
+
             gameProvider.commit();
 
             LOG.debug("Persisted game session - token: {}", gameSession.getToken());

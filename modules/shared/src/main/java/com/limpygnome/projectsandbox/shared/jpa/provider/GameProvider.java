@@ -269,4 +269,22 @@ public class GameProvider extends AbstractProvider
         }
     }
 
+    public boolean updateUser(User user)
+    {
+        try
+        {
+            em.merge(user);
+
+            LOG.debug("Updated user - user id: {}", user.getUserId());
+
+            return true;
+        }
+        catch (Exception e)
+        {
+            LOG.error("Failed to update user - user id: {}", user.getUserId(), e);
+
+            return false;
+        }
+    }
+
 }

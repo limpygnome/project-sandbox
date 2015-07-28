@@ -120,4 +120,25 @@ public class PlayerMetrics implements Serializable
         return dirty;
     }
 
+    /**
+     * Intended for transferring over kills/death/score etc from a game session's metrics to this instance.
+     *
+     * @param playerMetrics
+     */
+    public synchronized void transferFromGameSession(PlayerMetrics playerMetrics)
+    {
+        synchronized (playerMetrics)
+        {
+            // Transfer metrics
+            this.kills += playerMetrics.kills;
+            this.deaths += playerMetrics.deaths;
+            this.score += playerMetrics.score;
+
+            // Reset provided metrics
+            playerMetrics.kills = 0;
+            playerMetrics.deaths = 0;
+            playerMetrics.score = 0;
+        }
+    }
+
 }
