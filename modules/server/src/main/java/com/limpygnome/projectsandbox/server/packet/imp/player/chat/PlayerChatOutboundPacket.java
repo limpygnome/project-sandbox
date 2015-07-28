@@ -14,7 +14,6 @@ public class PlayerChatOutboundPacket extends OutboundPacket
         super((byte) 'P', (byte) 'C');
     }
 
-
     public void writeChatMessage(PlayerChatInboundPacket packet)
     {
         writeChatMessage(packet.playerInfo, packet.message);

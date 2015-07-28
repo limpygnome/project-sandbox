@@ -3,6 +3,7 @@ projectSandbox.network =
 	webSocket: null,
 
 	closed: true,
+	disabled: false,
 	
 	setup: function()
 	{
@@ -77,8 +78,11 @@ projectSandbox.network =
 			projectSandbox.game.ui.hookSocket_disconnected();
 		}
 
-		// Attempt to reconnect
-		setTimeout(this.setup, 1000);
+        if (!this.disabled)
+        {
+		    // Attempt to reconnect
+		    setTimeout(this.setup, 1000);
+		}
 	},
 	
 	wsEventMessage: function(event)
@@ -118,8 +122,14 @@ projectSandbox.network =
 			case "Z":
 				projectSandbox.game.effects.packet(data, dataView, subType);
 				return;
+
+			// Sessions
+			case "S":
+				projectSandbox.network.session.packet(data, dataView, subType);
+				return;
 		}
 		
 		console.error("engine/network - unhandled message - type: " + mainType + ", sub-type: " + subType);
 	}
+
 }

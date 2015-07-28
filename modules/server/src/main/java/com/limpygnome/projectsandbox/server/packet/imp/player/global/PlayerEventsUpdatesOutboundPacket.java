@@ -2,6 +2,7 @@ package com.limpygnome.projectsandbox.server.packet.imp.player.global;
 
 import com.limpygnome.projectsandbox.server.packet.OutboundPacket;
 import com.limpygnome.projectsandbox.server.player.PlayerInfo;
+import com.limpygnome.projectsandbox.shared.model.User;
 
 /**
  * Used to update the data regarding all players on the server, which is sent to each player.
@@ -18,7 +19,16 @@ public class PlayerEventsUpdatesOutboundPacket extends OutboundPacket
         packetData.add('J');
         packetData.add(playerInfo.playerId);
 
-        packetData.add(playerInfo.session.getNickname());
+        User user = playerInfo.session.getUser();
+
+        if (user != null)
+        {
+            packetData.add(user.getNickname());
+        }
+        else
+        {
+            packetData.add(playerInfo.session.getNickname());
+        }
     }
 
     public void writePlayerInfoUpdates(PlayerInfo playerInfo, boolean forced)

@@ -4,6 +4,7 @@ import com.limpygnome.projectsandbox.server.Controller;
 import com.limpygnome.projectsandbox.server.packet.imp.inventory.InventoryItemSelectedInboundPacket;
 import com.limpygnome.projectsandbox.server.packet.imp.player.chat.PlayerChatInboundPacket;
 import com.limpygnome.projectsandbox.server.packet.imp.player.individual.PlayerMovementInboundPacket;
+import com.limpygnome.projectsandbox.server.packet.imp.session.SessionErrorCodeOutboundPacket;
 import com.limpygnome.projectsandbox.server.packet.imp.session.SessionIdentifierInboundPacket;
 import com.limpygnome.projectsandbox.server.player.PlayerInfo;
 import com.limpygnome.projectsandbox.shared.model.GameSession;
@@ -61,6 +62,7 @@ public class PacketManager
             // Check data / socket valid
             if (socket.isClosed())
             {
+                // Probably someone probing this port
                 LOG.debug("Socket closed prematurely");
                 return;
             }
@@ -77,6 +79,14 @@ public class PacketManager
                 if (gameSession == null)
                 {
                     LOG.warn("Game session not found - token: {}", sessPacket.sessionId);
+
+                    // Send packet regarding session not found
+                    SessionErrorCodeOutboundPacket sessionErrorCodeOutboundPacket = new SessionErrorCodeOutboundPacket(
+                            SessionErrorCodeOutboundPacket.ErrorCodeType.SESSION_NOT_FOUND
+                    );
+                    socket.send(sessionErrorCodeOutboundPacket.getPacketData().build());
+
+                    // Kill the socket
                     socket.close();
                     return;
                 }

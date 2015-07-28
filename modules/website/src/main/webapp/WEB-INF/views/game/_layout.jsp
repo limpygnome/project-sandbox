@@ -52,6 +52,7 @@
 		<script src="/content/engine/js/network/inventory.js"></script>
 		<script src="/content/engine/js/network/map.js"></script>
 		<script src="/content/engine/js/network/player.js"></script>
+		<script src="/content/engine/js/network/session.js"></script>
 
 		<script src="/content/engine/js/types/player.js"></script>
 

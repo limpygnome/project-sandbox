@@ -28,6 +28,7 @@ game.ui =
 	    this.elementRender = document.getElementById("ps_render");
 	    this.elementDeathScreen = document.getElementById("ps-death-screen");
 	    this.elementConnecting = document.getElementById("ps-connecting");
+	    this.elementError = document.getElementById("ps-error");
 
 	    // -- UI
 	    this.elementUI = document.getElementById("ps-ui");
@@ -411,8 +412,10 @@ game.ui =
         $(this.elementSidebarChatMessages).prepend(html);
     },
 
-    /*
 
+    /*
+        Socket hooks
+        ----------------------------------------------------------------------------------------------------------------
     */
 
     hookSocket_connected: function()
@@ -423,6 +426,31 @@ game.ui =
     hookSocket_disconnected: function()
     {
         $(this.elementConnecting).show();
+    },
+
+    /*
+        Session hooks
+        ----------------------------------------------------------------------------------------------------------------
+    */
+
+    hookSession_errorCode: function(errorCode)
+    {
+        // Set more appropriate error message in UI, if error code is recognized
+        switch (errorCode)
+        {
+            case 1:
+                $(this.elementConnecting).find("div").html("Session not found, try rejoining.<br />Redirecting to home in 5s...");
+                break;
+        }
+
+        // Show error message
+        $(this.elementConnecting).show();
+
+        // Hook redirect for 5s
+        setTimeout(function() {
+            console.info("Redirecting back to home...");
+            window.location = "../home";
+        }, 5000);
     },
 
 	/*
