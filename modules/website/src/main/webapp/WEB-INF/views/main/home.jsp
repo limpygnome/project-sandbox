@@ -1,3 +1,4 @@
+<%@ taglib prefix="c"		uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="form"    uri="http://www.springframework.org/tags/form" %>
 <%@ taglib prefix="ps"      tagdir="/WEB-INF/tags/main" %>
 
@@ -87,7 +88,7 @@
 <ps:authenticated auth="true">
     <form class="box user" method="post" action="/auth/user">
         <h3>
-            Welcome nickname!
+            Welcome <c:out value="${user.nickname}" />!
         </h3>
         <table>
             <tr>

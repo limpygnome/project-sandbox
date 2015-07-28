@@ -1,6 +1,8 @@
 package com.limpygnome.projectsandbox.website.config;
 
 import com.limpygnome.projectsandbox.website.interceptor.CsrfInterceptor;
+import com.limpygnome.projectsandbox.website.interceptor.UserInterceptor;
+import com.limpygnome.projectsandbox.website.service.AuthenticationService;
 import com.limpygnome.projectsandbox.website.service.CsrfService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
@@ -29,6 +31,9 @@ public class MvcConfig extends WebMvcConfigurerAdapter
 
     @Autowired
     private CsrfService csrfService;
+
+    @Autowired
+    private AuthenticationService authenticationService;
 
     @PostConstruct
     public void init()
@@ -65,13 +70,6 @@ public class MvcConfig extends WebMvcConfigurerAdapter
         return viewResolver;
     }
 
-    @Override
-    public void addInterceptors(InterceptorRegistry registry)
-    {
-        // Add CSRF protection to every request
-        registry.addInterceptor(new CsrfInterceptor(csrfService));
-    }
-
     @Bean
     public LocalValidatorFactoryBean validator()
     {
@@ -94,4 +92,13 @@ public class MvcConfig extends WebMvcConfigurerAdapter
     {
         return validator();
     }
+
+    @Override
+    public void addInterceptors(InterceptorRegistry registry)
+    {
+        // Add CSRF protection to every request
+        registry.addInterceptor(new CsrfInterceptor(csrfService));
+        registry.addInterceptor(new UserInterceptor(authenticationService));
+    }
+
 }

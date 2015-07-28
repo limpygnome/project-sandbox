@@ -1,12 +1,13 @@
 <%@ taglib prefix="c"		uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="tiles"	uri="http://tiles.apache.org/tags-tiles" %>
+<%@ taglib prefix="fmt"     uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ taglib prefix="ps"      tagdir="/WEB-INF/tags/main" %>
 
 <!DOCTYPE html>
 <html>
 <head>
     <title>
-        Project Sandbox - ${title}
+        Project Sandbox - <c:out value="${title}" />
     </title>
     <link rel="stylesheet" href="/content/main/css/layout.css" />
 </head>
@@ -18,10 +19,10 @@
         <ps:authenticated auth="true">
             <div class="buttons">
                 <span class="score">
-                    $ 1,000,000,000,000
+                    $ <fmt:formatNumber type="number" value="${user.playerMetrics.score}" />
                 </span>
                 <a class="user" href="/account">
-                    test_user
+                    <c:out value="${user.nickname}" />
                     <img src="/content/game/images/annie.png" alt="User avatar" />
                 </a>
                 <a href="/auth/logout" class="button">

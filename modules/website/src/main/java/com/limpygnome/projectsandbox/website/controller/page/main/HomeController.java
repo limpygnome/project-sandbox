@@ -19,19 +19,11 @@ import javax.servlet.http.HttpSession;
 @Controller
 public class HomeController extends BaseController
 {
-    @Autowired
-    private AuthenticationService authenticationService;
-
 
     @RequestMapping(value = {"/", "/home"})
     public ModelAndView home(HttpSession httpSession)
     {
-        ModelAndView modelAndView = createMV("main/home", "welcome", "join");
-
-        // Setup model
-        modelAndView.addObject("user", authenticationService.retrieveCurrentUser(httpSession));
-
-        return modelAndView;
+        return createMV("main/home", "welcome", "join");
     }
 
     @ModelAttribute("guestForm")
