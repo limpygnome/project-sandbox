@@ -27,7 +27,50 @@ public class UserInterceptor implements HandlerInterceptor
     @Override
     public boolean preHandle(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Object o) throws Exception
     {
-        // Do nothing...
+        // Check user is authorized to visit resource
+        User user = authenticationService.retrieveCurrentUser(httpServletRequest.getSession(false));
+
+        // Get the request path for restricting paths
+        String requestPath = httpServletRequest.getServletPath();
+
+        if (requestPath.startsWith("/"))
+        {
+            if (requestPath.length() == 1)
+            {
+                requestPath = "";
+            }
+            else
+            {
+                requestPath = requestPath.substring(1);
+            }
+        }
+
+        // Restrict certain paths to users only
+        if (user == null)
+        {
+            if  (
+                    requestPath.startsWith("account") ||
+                    requestPath.startsWith("auth/user") ||
+                    requestPath.startsWith("auth/logout")
+                )
+            {
+                httpServletResponse.sendRedirect("/home");
+                return false;
+            }
+        }
+        else
+        {
+            if  (
+                    requestPath.startsWith("auth/guest") ||
+                    requestPath.startsWith("control")
+                )
+            {
+                httpServletResponse.sendRedirect("/home");
+                return false;
+            }
+        }
+
+
         return true;
     }
 

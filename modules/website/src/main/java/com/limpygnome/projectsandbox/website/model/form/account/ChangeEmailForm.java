@@ -1,8 +1,8 @@
 package com.limpygnome.projectsandbox.website.model.form.account;
 
 /**
- * Created by limpygnome on 25/07/15.
+ * Created by limpygnome on 29/07/15.
  */
-public class AccountSettingsForm
+public class ChangeEmailForm
 {
 }

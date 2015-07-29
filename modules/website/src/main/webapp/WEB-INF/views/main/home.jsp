@@ -100,3 +100,7 @@
         <ps:csrf />
     </form>
 </ps:authenticated>
+
+<div class="online">
+    <span><c:out value="${playersOnline}" /></span> players online
+</div>

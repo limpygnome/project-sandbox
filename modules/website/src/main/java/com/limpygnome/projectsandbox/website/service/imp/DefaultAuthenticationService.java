@@ -2,6 +2,7 @@ package com.limpygnome.projectsandbox.website.service.imp;
 
 import com.limpygnome.projectsandbox.shared.jpa.provider.GameProvider;
 import com.limpygnome.projectsandbox.shared.jpa.provider.result.CreateUserResult;
+import com.limpygnome.projectsandbox.shared.model.Role;
 import com.limpygnome.projectsandbox.shared.model.User;
 import com.limpygnome.projectsandbox.website.model.form.account.result.LoginResult;
 import com.limpygnome.projectsandbox.website.model.form.home.LoginForm;
@@ -77,6 +78,12 @@ public class DefaultAuthenticationService implements AuthenticationService
     @Override
     public LoginResult login(HttpSession httpSession, LoginForm loginForm)
     {
+        // Check we have valid inputs
+        if (httpSession == null || loginForm == null)
+        {
+            return LoginResult.FAILED;
+        }
+
         GameProvider gameProvider = new GameProvider();
 
         try
@@ -84,12 +91,24 @@ public class DefaultAuthenticationService implements AuthenticationService
             // Fetch user
             User user = gameProvider.fetchUserByNickname(loginForm.getNickname());
 
-            // Check password is correct
-            if (user.getPassword().isValid(this.globalPasswordSalt, loginForm.getPassword()))
+            if (user == null)
             {
-                // Push user into session
-                httpSession.setAttribute(SESSION_ATTRIB_KEY, user);
-                return LoginResult.SUCCESS;
+                return LoginResult.INCORRECT;
+            }
+            // Check password is correct
+            else if (user.getPassword().isValid(this.globalPasswordSalt, loginForm.getPassword()))
+            {
+                // Check if user is banned
+                if (user.getRoles().contains(Role.BANNED))
+                {
+                    return LoginResult.BANNED;
+                }
+                else
+                {
+                    // Push user into session
+                    httpSession.setAttribute(SESSION_ATTRIB_KEY, user);
+                    return LoginResult.SUCCESS;
+                }
             }
             else
             {
@@ -111,12 +130,23 @@ public class DefaultAuthenticationService implements AuthenticationService
     @Override
     public void logout(HttpSession httpSession)
     {
-        httpSession.removeAttribute(SESSION_ATTRIB_KEY);
+        if (httpSession != null)
+        {
+            httpSession.removeAttribute(SESSION_ATTRIB_KEY);
+        }
     }
 
     @Override
     public User retrieveCurrentUser(HttpSession httpSession)
     {
-        return (User) httpSession.getAttribute(SESSION_ATTRIB_KEY);
+        if (httpSession != null)
+        {
+            return (User) httpSession.getAttribute(SESSION_ATTRIB_KEY);
+        }
+        else
+        {
+            return null;
+        }
     }
+
 }

@@ -1,5 +1,6 @@
 package com.limpygnome.projectsandbox.website.controller.page.main;
 
+import com.limpygnome.projectsandbox.shared.jpa.provider.GameProvider;
 import com.limpygnome.projectsandbox.website.controller.BaseController;
 import com.limpygnome.projectsandbox.website.model.form.home.GuestForm;
 import com.limpygnome.projectsandbox.website.model.form.home.LoginForm;
@@ -23,7 +24,14 @@ public class HomeController extends BaseController
     @RequestMapping(value = {"/", "/home"})
     public ModelAndView home(HttpSession httpSession)
     {
-        return createMV("main/home", "welcome", "join");
+        ModelAndView modelAndView = createMV("main/home", "welcome", "join");
+
+        // Add players online
+        GameProvider gameProvider = new GameProvider();
+        modelAndView.addObject("playersOnline", gameProvider.getUsersOnline());
+        gameProvider.close();
+
+        return modelAndView;
     }
 
     @ModelAttribute("guestForm")

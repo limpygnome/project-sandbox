@@ -155,6 +155,9 @@ public class AuthController extends BaseController
                 case INCORRECT:
                     bindingResult.reject("login.incorrect");
                     break;
+                case BANNED:
+                    bindingResult.reject("login.banned");
+                    break;
             }
         }
 

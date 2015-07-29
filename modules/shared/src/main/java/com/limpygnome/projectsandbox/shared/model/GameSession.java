@@ -79,7 +79,30 @@ public class GameSession implements Serializable
         return token;
     }
 
+    /**
+     * The nickname used for the session. This will be the user's nickname, if this session is tied to an actual user.
+     * Else, this will return the guest nickname.
+     *
+     * @return
+     */
     public String getNickname()
+    {
+        if (user != null)
+        {
+            return user.getNickname();
+        }
+        else
+        {
+            return nickname;
+        }
+    }
+
+    /**
+     * The actual nickname for the game session, only usable with guest sessions.
+     *
+     * @return
+     */
+    public String getSessionNickname()
     {
         return nickname;
     }

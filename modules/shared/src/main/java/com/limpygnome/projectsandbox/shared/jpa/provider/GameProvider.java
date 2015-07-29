@@ -287,4 +287,18 @@ public class GameProvider extends AbstractProvider
         }
     }
 
+    public long getUsersOnline()
+    {
+        try
+        {
+            Query query = em.createQuery("SELECT COUNT(g.token) FROM GameSession g WHERE g.connected = true");
+            return (long) query.getSingleResult();
+        }
+        catch (Exception e)
+        {
+            LOG.error("Failed to retrieve total users online", e);
+            return 0;
+        }
+    }
+
 }

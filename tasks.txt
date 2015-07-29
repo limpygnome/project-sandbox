@@ -4,6 +4,7 @@ high priority:
 - improve physics properties in ents, maybe move to subclass with defaults
 - multiple maps
 - multithreading logic
+- client able to join multiple servers
 - tiles need to apply damage / physics properties
 - javascript ents etc need namespacing
 - split game and engine on serverside apart

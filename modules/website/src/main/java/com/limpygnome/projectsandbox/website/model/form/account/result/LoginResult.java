@@ -7,5 +7,6 @@ public enum LoginResult
 {
     FAILED,
     INCORRECT,
+    BANNED,
     SUCCESS
 }

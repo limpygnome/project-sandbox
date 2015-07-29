@@ -22,7 +22,7 @@
                     $ <fmt:formatNumber type="number" value="${user.playerMetrics.score}" />
                 </span>
                 <a class="user" href="/account">
-                    <c:out value="${user.nickname}" />
+                    <c:out value="${user.nickname}" /> [ROLE]
                     <img src="/content/game/images/annie.png" alt="User avatar" />
                 </a>
                 <a href="/auth/logout" class="button">
@@ -37,11 +37,13 @@
                         Join
                     </a>
                 </li>
-                <li>
-                    <a href="/account">
-                        Account
-                    </a>
-                </li>
+                <ps:authenticated auth="true">
+                    <li>
+                        <a href="/account">
+                            Account
+                        </a>
+                    </li>
+                </ps:authenticated>
                 <li>
                     <a href="/stats">
                         Stats

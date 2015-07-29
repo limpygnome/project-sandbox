@@ -60,12 +60,12 @@ public class PlayerMetrics implements Serializable
         return score;
     }
 
-    public void setLastUpdatedNow()
+    public synchronized void setLastUpdatedNow()
     {
         setLastUpdated(DateTime.now());
     }
 
-    public void setLastUpdated(DateTime lastUpdated)
+    public synchronized void setLastUpdated(DateTime lastUpdated)
     {
         this.lastUpdated = lastUpdated;
     }

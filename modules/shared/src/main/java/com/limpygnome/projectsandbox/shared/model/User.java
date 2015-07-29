@@ -36,6 +36,9 @@ public class User implements Serializable
     @Embedded
     private PlayerMetrics playerMetrics;
 
+    @Embedded
+    private Roles roles;
+
     public User()
     {
         this.userId = null;
@@ -100,6 +103,11 @@ public class User implements Serializable
     public PlayerMetrics getPlayerMetrics()
     {
         return playerMetrics;
+    }
+
+    public Roles getRoles()
+    {
+        return roles;
     }
 
 }

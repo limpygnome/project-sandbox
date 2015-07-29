@@ -21,7 +21,8 @@ public class AccountController extends BaseController
     @RequestMapping(value = "/account", method = RequestMethod.GET)
     public ModelAndView accountView()
     {
-        return createMV("account");
+
+        return createMV("main/account", "account");
     }
 
     @RequestMapping(value = "/account/update")
