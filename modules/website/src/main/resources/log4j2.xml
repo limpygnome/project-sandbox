@@ -6,7 +6,7 @@
         </Console>
     </Appenders>
     <Loggers>
-        <Root level="error">
+        <Root level="debug">
         </Root>
         <Logger name="com.limpygnome.projectsandbox" level="debug">
             <AppenderRef ref="Console"/>

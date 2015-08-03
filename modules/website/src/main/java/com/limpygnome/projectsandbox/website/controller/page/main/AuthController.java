@@ -192,7 +192,7 @@ public class AuthController extends BaseController
         // Add binding result to redirect
         if (bindingResult != null && redirectAttributes != null && formName != null && formData != null)
         {
-            redirectAttributes.addFlashAttribute("org.springframework.validation.BindingResult." + formName, bindingResult);
+            redirectAttributes.addFlashAttribute(BindingResult.MODEL_KEY_PREFIX + formName, bindingResult);
             redirectAttributes.addFlashAttribute(formName, formData);
 
             LOG.debug("Form validation errors passed back to home");

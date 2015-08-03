@@ -20,4 +20,6 @@ public interface AuthenticationService
     void logout(HttpSession httpSession);
 
     User retrieveCurrentUser(HttpSession httpSession);
+
+    String getGlobalPasswordSalt();
 }

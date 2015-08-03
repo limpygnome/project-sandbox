@@ -27,6 +27,12 @@ public class Password
 
     public Password(String globalPasswordSalt, String password)
     {
+        // Check global password salt is working correctly
+        if (globalPasswordSalt == null)
+        {
+            throw new RuntimeException("Global password salt cannot be null");
+        }
+
         // Generate random salt
         byte[] rawSalt = randomSalt(SALT_LENGTH);
 
@@ -44,8 +50,22 @@ public class Password
      */
     public boolean isValid(String globalPasswordSalt, String password)
     {
+        // Check global password salt is working correctly
+        if (globalPasswordSalt == null)
+        {
+            throw new RuntimeException("Global password salt cannot be null");
+        }
+
+        // Check provided password is at least valid
+        if (password == null || password.length() == 0)
+        {
+            return false;
+        }
+
+        // Generate hash for specified password
         String hash = generateHash(globalPasswordSalt.getBytes(), hex2byte(this.passwordSalt), password);
 
+        // Compare generated hash to current hash
         return hash.equals(passwordHash);
     }
 

@@ -8,6 +8,7 @@
 
 <%@ attribute name="type"               required="false" %>
 <%@ attribute name="placeholder"        required="false" %>
+<%@ attribute name="value"              required="false" %>
 
 <spring:bind path="${modelAttribute}.${path}">
 
@@ -24,10 +25,10 @@
 
     <c:choose>
         <c:when test="${empty type || type == 'text'}">
-            <form:input     path="${path}" placeholder = "${placeholder}" cssClass="${cssClass}" />
+            <form:input     path="${path}" placeholder = "${placeholder}" cssClass="${cssClass}" value = "${value}" />
         </c:when>
         <c:when test="${type == 'password'}">
-            <form:password  path="${path}" placeholder = "${placeholder}" cssClass="${cssClass}" />
+            <form:password  path="${path}" placeholder = "${placeholder}" cssClass="${cssClass}" value = "${value}" />
         </c:when>
     </c:choose>
 

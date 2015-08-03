@@ -31,16 +31,8 @@ public class DefaultAuthenticationService implements AuthenticationService
     @Override
     public CreateUserResult register(HttpSession httpSession, RegisterForm registerForm)
     {
-        // Check global salt is valid - important protection against Spring failing or w/e
-        if (globalPasswordSalt == null || globalPasswordSalt.length() == 0 || globalPasswordSalt.startsWith("${"))
-        {
-            LOG.error("Global password salt incorrectly injected, cannot continue user registration");
-            LOG.debug("Invalid global password salt - value: {}", globalPasswordSalt);
-            return CreateUserResult.FAILED;
-        }
-
         // Convert form into user model
-        User user = new User(registerForm.getNickname(), registerForm.getEmail(), globalPasswordSalt,
+        User user = new User(registerForm.getNickname(), registerForm.getEmail(), getGlobalPasswordSalt(),
                 registerForm.getPassword()
         );
 
@@ -96,7 +88,7 @@ public class DefaultAuthenticationService implements AuthenticationService
                 return LoginResult.INCORRECT;
             }
             // Check password is correct
-            else if (user.getPassword().isValid(this.globalPasswordSalt, loginForm.getPassword()))
+            else if (user.getPassword().isValid(getGlobalPasswordSalt(), loginForm.getPassword()))
             {
                 // Check if user is banned
                 if (user.getRoles().contains(Role.BANNED))
@@ -149,4 +141,16 @@ public class DefaultAuthenticationService implements AuthenticationService
         }
     }
 
+    @Override
+    public String getGlobalPasswordSalt()
+    {
+        if (globalPasswordSalt == null || globalPasswordSalt.length() == 0 || globalPasswordSalt.startsWith("${"))
+        {
+            LOG.error("Global password salt incorrectly injected, cannot continue user registration");
+            LOG.debug("Invalid global password salt - value: {}", globalPasswordSalt);
+            return null;
+        }
+
+        return globalPasswordSalt;
+    }
 }

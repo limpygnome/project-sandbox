@@ -35,29 +35,6 @@ body
 }
 
 /*
-    Shared
-    ********************************************************************************************************************
-*/
-
-.button
-{
-    border-radius: 0.3em;
-    border: 0em;
-    padding: 0.3em 0.4em;
-    color: #333;
-    background: #CCC;
-    font-size: 1.2em;
-    text-decoration: none;
-    margin: 0.5em;
-}
-.button:hover,
-.button:focus
-{
-    cursor: pointer;
-    background: #999;
-}
-
-/*
     Header
     ********************************************************************************************************************
 */
@@ -80,6 +57,22 @@ body
     padding: 0em;
     font-size: 2em;
     color: #CCC;
+}
+
+/*
+    Footer
+    ********************************************************************************************************************
+*/
+
+.footer
+{
+    position: fixed;
+    width: 100%;
+    bottom: 0;
+    text-align: center;
+    text-shadow: 0em 0em 0.5em #000;
+    color: #FFF;
+    padding: 0.5em;
 }
 
 /*
@@ -132,6 +125,8 @@ body
 {
     vertical-align: middle;
     margin-right: 0.5em;
+    height: 1em;
+    line-height: 1em;
 }
 
 .header .buttons .score
@@ -153,6 +148,126 @@ body
     width: 2em;
     height: 2em;
     vertical-align: middle;
+}
+
+/*
+    Common Form Content
+    ********************************************************************************************************************
+*/
+
+.button,
+.wrapper form input[type=submit]
+{
+    display: inline-block;
+    border-radius: 0.3em;
+    border: 0em;
+    padding: 0.3em 0.4em;
+    color: #333 !important;
+    background: #CCC;
+    font-size: 1.2em;
+    text-decoration: none;
+    margin: 0.5em;
+}
+.button:hover,
+.button:focus,
+.wrapper form input[type=submit]:hover,
+.wrapper form input[type=submit]:focus
+{
+    cursor: pointer;
+    background: #999;
+}
+
+.wrapper form input[type=text],
+.wrapper form input[type=password]
+{
+    border-radius: 0.3em;
+    padding: 0.3em 0.5em;
+    color: #333;
+    outline: 0;
+    border: 0em;
+    font-size: 1.3em;
+}
+.wrapper form input[type=text]:focus,
+.wrapper form input[type=text]:hover,
+.wrapper form input[type=password]:focus
+.wrapper form input[type=password]:hover
+{
+    background: #EEE;
+}
+.wrapper form .error
+{
+    background: #FFCCE6;
+    color: #F00 !important;
+}
+
+.wrapper ul.errors
+{
+    list-style: none;
+    margin: 0em;
+    padding: 0em;
+    background: #FFCCE6;
+    color: #F00;
+    border-radius: 0.4em;
+}
+.wrapper ul.errors li
+{
+    padding: 0.5em;
+}
+
+.wrapper table tr td.center
+{
+    text-align: center;
+}
+
+.wrapper div.success
+{
+    padding: 0.5em;
+    background: #0C9;
+    color: #060;
+    border-radius: 0.4em;
+}
+
+/*
+    Content
+    ********************************************************************************************************************
+*/
+
+.wrapper .content
+{
+    background: rgba(30, 30, 30, 0.5);
+    border-radius: 0.5em;
+}
+
+.wrapper .content h2
+{
+    padding: 0.6em 0.4em;
+}
+
+.wrapper .content h3
+{
+    padding: 0.4em 0.6em;
+}
+
+.wrapper .content p
+{
+    padding: 0.4em 0.8em;
+}
+.wrapper .content p.center
+{
+    text-align: center;
+}
+
+.wrapper .content a
+{
+    color: #4D94DB;
+}
+
+/* Holds errors and success messages */
+.wrapper .content .messages
+{
+    width: 50%;
+    margin: 0.5em auto;
+    text-align: center;
 }
 
 /*
@@ -178,44 +293,6 @@ body
     margin: 0em auto;
 }
 
-.wrapper .join form input[type=text],
-.wrapper .join form input[type=password]
-{
-    border-radius: 0.3em;
-    padding: 0.3em 0.5em;
-    color: #333;
-    outline: 0;
-    border: 0em;
-    font-size: 1.3em;
-}
-.wrapper .join form input[type=text]:focus,
-.wrapper .join form input[type=text]:hover,
-.wrapper .join form input[type=password]:focus
-.wrapper .join form input[type=password]:hover
-{
-    background: #EEE;
-}
-.wrapper .join form .error
-{
-    background: #FFCCE6;
-    color: #F00 !important;
-}
-
-.wrapper .join ul.errors
-{
-    list-style: none;
-    margin: 0em;
-    padding: 0em;
-    border: solid 0.2em #F00;
-    background: #FFCCE6;
-    color: #F00;
-    border-radius: 0.5em;
-}
-.wrapper .join ul.errors li
-{
-    padding: 0.4em 0.2em;
-}
-
 .wrapper .online
 {
     margin-top: 3em;
@@ -223,47 +300,16 @@ body
 }
 
 /*
-    Content
+    Account (Content)
     ********************************************************************************************************************
 */
 
-.wrapper .content
+.wrapper .account-update-details table
 {
-    background: rgba(30, 30, 30, 0.5);
-    border-radius: 0.5em;
+    margin: 0em auto;
 }
-
-.wrapper .content h2
+.wrapper .account-update-details table tr th
 {
-    padding: 0.6em 0.4em;
-}
-
-.wrapper .content p
-{
-    padding: 0.4em 0.8em;
-}
-.wrapper .content p.center
-{
-    text-align: center;
-}
-
-.wrapper .content a
-{
-    color: #4D94DB;
-}
-
-/*
-    Footer
-    ********************************************************************************************************************
-*/
-
-.footer
-{
-    position: fixed;
-    width: 100%;
-    bottom: 0;
-    text-align: center;
-    text-shadow: 0em 0em 0.5em #000;
-    color: #FFF;
-    padding: 0.5em;
+    text-align: right;
+    padding-right: 1em;
 }

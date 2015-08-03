@@ -13,16 +13,24 @@
 </p>
 
 <h3>
-    Change Password
+    Update Details
 </h3>
-<form:form action="/account/update-password" method="post" modelAttribute="changePasswordForm">
+<form:form cssClass="account-update-details" action="/account/update" method="post" modelAttribute="updateDetailsForm">
     <table>
         <tr>
             <th>
-                Password:
+                Current Password:
             </th>
             <td>
-                <ps:inputWithErrors modelAttribute="changePasswordForm" path="password" placeholder="New password..." type="password" />
+                <ps:inputWithErrors modelAttribute="updateDetailsForm" path="currentPassword" placeholder="Current password..." type="password" />
+            </td>
+        </tr>
+        <tr>
+            <th>
+                New Password:
+            </th>
+            <td>
+                <ps:inputWithErrors modelAttribute="updateDetailsForm" path="newPassword" placeholder="New password..." type="password" />
             </td>
         </tr>
         <tr>
@@ -30,7 +38,15 @@
                 Confirm Password:
             </th>
             <td>
-                <ps:inputWithErrors modelAttribute="changePasswordForm" path="confirmPassword" placeholder="Confirm password..." type="password" />
+                <ps:inputWithErrors modelAttribute="updateDetailsForm" path="confirmNewPassword" placeholder="Confirm password..." type="password" />
+            </td>
+        </tr>
+        <tr>
+            <th>
+                E-mail:
+            </th>
+            <td>
+                <ps:inputWithErrors modelAttribute="updateDetailsForm" path="email" placeholder="E-mail..." value="${user.email}" />
             </td>
         </tr>
         <tr>
@@ -41,13 +57,18 @@
     </table>
 
     <ps:csrf />
-    <ps:errorList modelAttribute="loginForm" cssClass="errors" singleError="true" />
+
+    <div class="messages">
+        <ps:errorList modelAttribute="updateDetailsForm" cssClass="errors" singleError="true" />
+
+        <c:if test="${not empty account_update_success}">
+            <div class="success">
+                Updated account details.
+            </div>
+        </c:if>
+    </div>
 
 </form:form>
-
-<h3>
-    Change E-mail
-</h3>
 
 <h3>
     Options
