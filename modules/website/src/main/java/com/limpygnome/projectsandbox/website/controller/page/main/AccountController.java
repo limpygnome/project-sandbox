@@ -1,16 +1,21 @@
 package com.limpygnome.projectsandbox.website.controller.page.main;
 
+import com.limpygnome.projectsandbox.shared.jpa.provider.GameProvider;
+import com.limpygnome.projectsandbox.shared.model.GameSession;
 import com.limpygnome.projectsandbox.shared.model.Password;
 import com.limpygnome.projectsandbox.shared.model.User;
 import com.limpygnome.projectsandbox.website.controller.BaseController;
 import com.limpygnome.projectsandbox.website.model.form.account.UpdateDetailsForm;
 import com.limpygnome.projectsandbox.website.service.AuthenticationService;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -24,8 +29,16 @@ import javax.validation.Valid;
 @RequestMapping("/account")
 public class AccountController extends BaseController
 {
+    private final static Logger LOG = LogManager.getLogger(AccountController.class);
+
     @Autowired
     private AuthenticationService authenticationService;
+
+    @ModelAttribute("updateDetailsForm")
+    public UpdateDetailsForm beanUpdateDetailsForm()
+    {
+        return new UpdateDetailsForm();
+    }
 
     @RequestMapping(value = "", method = RequestMethod.GET)
     public ModelAndView accountView()
@@ -83,18 +96,128 @@ public class AccountController extends BaseController
         return redirectToAccountView(redirectAttributes, bindingResult, "updateDetailsForm", updateDetailsForm);
     }
 
-    @RequestMapping(value = "delete")
-    public ModelAndView accountProcessDelete()
+    @RequestMapping(value = "delete", method = {RequestMethod.GET, RequestMethod.POST})
+    public ModelAndView accountProcessDelete(@RequestParam(value = "confirm", defaultValue = "false", required = false) boolean confirm,
+                                             HttpSession httpSession)
     {
-        // Set account for deletion
+        if (!confirm)
+        {
+            return redirectConfirmView("delete", "confirm account deletion");
+        }
+        else
+        {
+            User user = authenticationService.retrieveCurrentUser(httpSession);
 
-        return redirectToAccountView(null, null, null, null);
+            // Destroy session
+            authenticationService.logout(httpSession);
+
+            // Delete account
+            GameProvider gameProvider = new GameProvider();
+
+            try
+            {
+                gameProvider.begin();
+                gameProvider.removeUser(user);
+                gameProvider.commit();
+
+                LOG.info("Deleted user - user id: {}, nickname: {}", user.getUserId(), user.getNickname());
+            }
+            catch (Exception e)
+            {
+                LOG.error("Failed to remove user - user id: {}", user.getUserId(), e);
+            }
+            finally
+            {
+                gameProvider.close();
+            }
+
+            // Redirect to home
+            return new ModelAndView("redirect:/home");
+        }
     }
 
-    @ModelAttribute("updateDetailsForm")
-    public UpdateDetailsForm beanUpdateDetailsForm()
+    @RequestMapping(value = "reset/game-session", method = {RequestMethod.GET, RequestMethod.POST})
+    public ModelAndView accountProcessResetGameSession(@RequestParam(value = "confirm", defaultValue = "false", required = false) boolean confirm,
+                                                       HttpSession httpSession)
     {
-        return new UpdateDetailsForm();
+        if (!confirm)
+        {
+            return redirectConfirmView("reset-game-session", "confirm reset game session");
+        }
+        else
+        {
+            User user = authenticationService.retrieveCurrentUser(httpSession);
+            GameProvider gameProvider = new GameProvider();
+
+            try
+            {
+                // Delete game session
+                GameSession gameSession = gameProvider.fetchGameSessionByUser(user);
+
+                if (gameSession == null)
+                {
+                    LOG.warn("Attempted to delete game session for user, but no game session found - user id: {}", user.getUserId());
+                }
+                else
+                {
+                    gameProvider.removeGameSession(gameSession);
+
+                    LOG.info("Deleted game session - token: {}, user id: {}", gameSession.getToken(), user.getUserId());
+                }
+            }
+            catch (Exception e)
+            {
+                LOG.error("Failed to reset game session - user id: {}", user.getUserId());
+            }
+            finally
+            {
+                gameProvider.close();
+            }
+
+            return redirectToAccountView(null, null, null, null);
+        }
+    }
+
+    @RequestMapping(value = "reset/stats", method = {RequestMethod.GET, RequestMethod.POST})
+    public ModelAndView accountProcessResetStats(@RequestParam(value = "confirm", defaultValue = "false", required = false) boolean confirm,
+                                                 HttpSession httpSession)
+    {
+        if (!confirm)
+        {
+            return redirectConfirmView("reset-stats", "confirm reset stats");
+        }
+        else
+        {
+            // Reset stats for user
+            User user = authenticationService.retrieveCurrentUser(httpSession);
+            user.getPlayerMetrics().reset();
+
+            // Persist changes
+            GameProvider gameProvider = new GameProvider();
+
+            try
+            {
+                gameProvider.updateUser(user);
+                LOG.info("Reset player stats - user id: {}", user.getUserId());
+            }
+            catch (Exception e)
+            {
+                LOG.error("Failed to reset stats for user - user id: {}", user.getUserId(), e);
+            }
+            finally
+            {
+                gameProvider.close();
+            }
+
+            return redirectToAccountView(null, null, null, null);
+        }
+    }
+
+    public ModelAndView redirectConfirmView(String subpage, String title)
+    {
+        ModelAndView modelAndView = createMV("main/account-confirm", title);
+        modelAndView.addObject("subpage", subpage);
+        return modelAndView;
     }
 
     public ModelAndView redirectToAccountView(RedirectAttributes redirectAttributes, BindingResult bindingResult,

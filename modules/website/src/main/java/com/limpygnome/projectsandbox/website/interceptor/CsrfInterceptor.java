@@ -38,7 +38,7 @@ public class CsrfInterceptor implements HandlerInterceptor
             if ((method.equals("post") || method.equals("put") || method.equals("delete")) && !csrfService.isValidRequest(httpServletRequest))
             {
                 LOG.warn("CSRF attempt - ip: {}", httpServletRequest.getRemoteAddr());
-                httpServletResponse.sendRedirect("/home");
+                httpServletResponse.sendRedirect("/home?csrf=1");
                 return false;
             }
         }

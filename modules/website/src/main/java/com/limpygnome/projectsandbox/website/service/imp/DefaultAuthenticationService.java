@@ -133,6 +133,7 @@ public class DefaultAuthenticationService implements AuthenticationService
     {
         if (httpSession != null)
         {
+            // TODO: store userid and retrieve each time! use request to store user for current request once
             return (User) httpSession.getAttribute(SESSION_ATTRIB_KEY);
         }
         else

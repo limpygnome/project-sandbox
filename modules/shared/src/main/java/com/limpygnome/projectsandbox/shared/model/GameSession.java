@@ -25,7 +25,7 @@ public class GameSession implements Serializable
     @Column(name = "nickname", nullable = true)
     private String nickname;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinColumn(name = "user", nullable = true)
     private User user;
 

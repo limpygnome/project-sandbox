@@ -177,6 +177,13 @@ body
     background: #999;
 }
 
+.button.confirm,
+.wrapper form input[type=submit].confirm
+{
+    background: #C00;
+    color: #FFF !important;
+}
+
 .wrapper form input[type=text],
 .wrapper form input[type=password]
 {

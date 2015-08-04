@@ -21,6 +21,8 @@ import static com.limpygnome.projectsandbox.shared.constant.SessionConstants.TIM
 
 /**
  * Created by limpygnome on 25/07/15.
+ *
+ * TODO: add more checking / safety
  */
 public class GameProvider extends AbstractProvider
 {
@@ -33,6 +35,12 @@ public class GameProvider extends AbstractProvider
 
     public GameSession fetchGameSessionByUser(User user)
     {
+        if (user == null)
+        {
+            LOG.error("Attempted to fetch game session by null user");
+            return null;
+        }
+
         try
         {
             TypedQuery<GameSession> typedQuery = em.createQuery("SELECT gs FROM GameSession gs WHERE user = :user", GameSession.class);
@@ -51,6 +59,12 @@ public class GameProvider extends AbstractProvider
 
     public GameSession fetchGameSessionByToken(UUID token)
     {
+        if (token == null)
+        {
+            LOG.error("Attempted to fetch game session by null token");
+            return null;
+        }
+
         try
         {
             String rawToken = token.toString();
@@ -84,6 +98,11 @@ public class GameProvider extends AbstractProvider
 
     public CreateGameSessionResult createGameSession(GameSession gameSession)
     {
+        if (gameSession == null)
+        {
+            LOG.error("Attempted to create null game session");
+            return CreateGameSessionResult.FAILED;
+        }
 
         try
         {
@@ -123,6 +142,12 @@ public class GameProvider extends AbstractProvider
 
     public boolean updateGameSession(GameSession gameSession)
     {
+        if (gameSession == null)
+        {
+            LOG.error("Attempted to update null game session");
+            return false;
+        }
+
         try
         {
             em.merge(gameSession);
@@ -141,6 +166,12 @@ public class GameProvider extends AbstractProvider
 
     public boolean removeGameSession(GameSession gameSession)
     {
+        if (gameSession == null)
+        {
+            LOG.error("Attempted to remove null game session");
+            return false;
+        }
+
         try
         {
             // Make sure model is within context
@@ -214,6 +245,12 @@ public class GameProvider extends AbstractProvider
 
     public CreateUserResult createUser(User user)
     {
+        if (user == null)
+        {
+            LOG.error("Attempted to create null user");
+            return CreateUserResult.FAILED;
+        }
+
         Query query;
         long count;
 
@@ -253,6 +290,12 @@ public class GameProvider extends AbstractProvider
 
     public User fetchUserByNickname(String nickname)
     {
+        if (nickname == null)
+        {
+            LOG.error("Attempted to fetch user by null nickname");
+            return null;
+        }
+
         try
         {
             TypedQuery<User> typedQuery = em.createQuery("SELECT u FROM User u WHERE u.nickname = :nickname", User.class);
@@ -271,18 +314,45 @@ public class GameProvider extends AbstractProvider
 
     public boolean updateUser(User user)
     {
+        if (user == null)
+        {
+            LOG.error("Attempted to update null user");
+            return false;
+        }
+
         try
         {
             em.merge(user);
 
             LOG.debug("Updated user - user id: {}", user.getUserId());
-
             return true;
         }
         catch (Exception e)
         {
             LOG.error("Failed to update user - user id: {}", user.getUserId(), e);
+            return false;
+        }
+    }
 
+    public boolean removeUser(User user)
+    {
+        if (user == null)
+        {
+            LOG.error("Attempted to remove null user");
+            return false;
+        }
+
+        try
+        {
+            Query query = em.createQuery("DELETE FROM User WHERE userId = :userid");
+            query.setParameter("userid", user.getUserId());
+
+            LOG.debug("Removed user - user id: {}", user.getUserId());
+            return query.executeUpdate() > 0;
+        }
+        catch (Exception e)
+        {
+            LOG.error("Failed to remove user - user id: {}", user.getUserId(), e);
             return false;
         }
     }

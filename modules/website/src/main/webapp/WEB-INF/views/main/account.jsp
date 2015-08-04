@@ -79,6 +79,7 @@
         <td>
             <form method="post" action="/account/delete">
                 <input type="submit" value="Delete Account" />
+                <ps:csrf />
             </form>
         </td>
         <td>
@@ -87,8 +88,9 @@
     </tr>
     <tr>
         <td>
-            <form method="post" action="/account/reset_game_session">
+            <form method="post" action="/account/reset/game-session">
                 <input type="submit" value="Reset Game Session" />
+                <ps:csrf />
             </form>
         </td>
         <td>
@@ -97,8 +99,9 @@
     </tr>
     <tr>
         <td>
-            <form method="post" action="/account/reset_stats">
+            <form method="post" action="/account/reset/stats">
                 <input type="submit" value="Reset Stats" />
+                <ps:csrf />
             </form>
         </td>
         <td>

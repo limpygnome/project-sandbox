@@ -141,4 +141,13 @@ public class PlayerMetrics implements Serializable
         }
     }
 
+    public synchronized void reset()
+    {
+        this.kills = 0;
+        this.deaths = 0;
+        this.score = 0;
+
+        markDirty();
+    }
+
 }

@@ -11,6 +11,7 @@
     <definition name="main/*" extends="main/layout">
         <put-attribute name="content" value="/WEB-INF/views/main/{1}.jsp" />
     </definition>
+    <definition name="main/account_subpages/*" template="/WEB-INF/views/main/account_subpages/{1}.jsp" />
 
     <!-- Game -->
     <definition name="game/layout" template="/WEB-INF/views/game/_layout.jsp">
