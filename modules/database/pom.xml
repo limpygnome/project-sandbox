@@ -1,0 +1,63 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
+                             http://maven.apache.org/maven-v4_0_0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>com.limpygnome</groupId>
+        <artifactId>project-sandbox</artifactId>
+        <version>1.0.0</version>
+    </parent>
+    <artifactId>database</artifactId>
+    <packaging>jar</packaging>
+
+    <name>Project Sandbox - Database</name>
+
+    <dependencies>
+
+        <!-- Database driver -->
+		<dependency>
+			<groupId>mysql</groupId>
+			<artifactId>mysql-connector-java</artifactId>
+			<version>5.1.34</version>
+		</dependency>
+
+    </dependencies>
+	
+	<build>
+		<plugins>
+		
+            <plugin>
+                <groupId>org.liquibase</groupId>
+                <artifactId>liquibase-maven-plugin</artifactId>
+                <version>3.0.5</version>
+                <configuration>
+                    <changeLogFile>src/main/resources/changelog/parent.xml</changeLogFile>
+                    <diffChangeLogFile>src/main/resources/changelog/diff.xml</diffChangeLogFile>
+
+                    <driver>com.mysql.jdbc.Driver</driver>
+                    <username>projectsandbox</username>
+                    <password></password>
+                    <url>jdbc:mysql://localhost:3306/projectsandbox?allowMultiQueries=true</url>
+
+                    <referenceDriver>com.mysql.jdbc.Driver</referenceDriver>
+                    <referenceUsername>projectsandbox</referenceUsername>
+                    <referencePassword></referencePassword>
+                    <referenceUrl>jdbc:mysql://localhost:3306/projectsandbox</referenceUrl>
+
+                    <promptOnNonLocalDatabase>true</promptOnNonLocalDatabase>
+                </configuration>                
+                <executions>
+                    <execution>
+                        <phase>process-resources</phase>                                                                  
+                        <goals>
+                            <goal>update</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+			
+		</plugins>
+	</build>
+	
+</project>

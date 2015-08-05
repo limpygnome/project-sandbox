@@ -121,7 +121,9 @@ public class GameProvider extends AbstractProvider
             // Persist session
             try
             {
+                // Persist and immediately ensure the DB receives the changes
                 em.persist(gameSession);
+                em.flush();
 
                 LOG.info("Created new game session - uuid: {}", gameSession.getToken());
 
@@ -136,6 +138,8 @@ public class GameProvider extends AbstractProvider
         }
         catch (Exception e)
         {
+            LOG.error("Failed to setup game session", e);
+
             return CreateGameSessionResult.FAILED;
         }
     }
@@ -278,6 +282,7 @@ public class GameProvider extends AbstractProvider
 
             // Persist the user
             em.persist(user);
+            em.flush();
 
             return CreateUserResult.SUCCESS;
         }
@@ -344,11 +349,12 @@ public class GameProvider extends AbstractProvider
 
         try
         {
-            Query query = em.createQuery("DELETE FROM User WHERE userId = :userid");
-            query.setParameter("userid", user.getUserId());
+            // Fetch proxy/reference instance for removal to be in an attached state
+            User attachedUser = em.getReference(User.class, user.getUserId());
+            em.remove(attachedUser);
 
             LOG.debug("Removed user - user id: {}", user.getUserId());
-            return query.executeUpdate() > 0;
+            return true;
         }
         catch (Exception e)
         {

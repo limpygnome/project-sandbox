@@ -12,7 +12,7 @@ public class Roles
 {
 
     @ElementCollection(fetch = FetchType.EAGER)
-    @CollectionTable(name = "user_roles", joinColumns = @JoinColumn(name = "userid"))
+    @CollectionTable(name = "users_roles", joinColumns = @JoinColumn(name = "userid"))
     @Column(name = "role", nullable = false)
     private Set<Role> roles;
 
