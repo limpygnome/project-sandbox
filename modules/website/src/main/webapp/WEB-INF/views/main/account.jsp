@@ -108,14 +108,18 @@
             This will reset the stats for your account.
         </td>
     </tr>
-    <tr>
-        <td>
-            <a href="/control" class="button">
-                Control Centre
-            </a>
-        </td>
-        <td>
-            The administration/moderator control centre.
-        </td>
-    </tr>
+
+    <ps:authenticated auth="true" roles="administrator,moderator">
+        <tr>
+            <td>
+                <a href="/control" class="button">
+                    Control Centre
+                </a>
+            </td>
+            <td>
+                The administration/moderator control centre.
+            </td>
+        </tr>
+    </ps:authenticated>
+
 </table>

@@ -160,13 +160,17 @@ public class AccountController extends BaseController
                 }
                 else
                 {
+                    gameProvider.begin();
                     gameProvider.removeGameSession(gameSession);
+                    gameProvider.commit();
 
                     LOG.info("Deleted game session - token: {}, user id: {}", gameSession.getToken(), user.getUserId());
                 }
             }
             catch (Exception e)
             {
+                gameProvider.rollback();
+
                 LOG.error("Failed to reset game session - user id: {}", user.getUserId());
             }
             finally
@@ -197,11 +201,16 @@ public class AccountController extends BaseController
 
             try
             {
+                gameProvider.begin();
                 gameProvider.updateUser(user);
+                gameProvider.commit();
+
                 LOG.info("Reset player stats - user id: {}", user.getUserId());
             }
             catch (Exception e)
             {
+                gameProvider.rollback();
+
                 LOG.error("Failed to reset stats for user - user id: {}", user.getUserId(), e);
             }
             finally

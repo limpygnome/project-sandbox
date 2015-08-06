@@ -47,4 +47,24 @@ public class Roles
         }
     }
 
+    public synchronized boolean containsTag(String roles)
+    {
+        String[] rawRolesArr = roles.split(",");
+
+        Role parsedRole;
+        for (String rawRole : rawRolesArr)
+        {
+            // Parse into enum
+            parsedRole = Role.valueOf(rawRole.trim().toUpperCase());
+
+            // Check if it exists
+            if (this.roles.contains(parsedRole))
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
 }

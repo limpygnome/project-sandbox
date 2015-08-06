@@ -23,6 +23,7 @@ import static com.limpygnome.projectsandbox.shared.constant.SessionConstants.TIM
  * Created by limpygnome on 25/07/15.
  *
  * TODO: add more checking / safety
+ * TODO: move user/account stuff into another provider
  */
 public class GameProvider extends AbstractProvider
 {
@@ -178,12 +179,15 @@ public class GameProvider extends AbstractProvider
 
         try
         {
-            // Make sure model is within context
-            em.merge(gameSession);
+            // Fetch proxy of object, instead of merging
+            GameSession gameSessionReference = em.getReference(GameSession.class, gameSession.getToken());
 
-            // Finally remove
-            em.remove(gameSession);
-            em.flush();
+            if (gameSessionReference != null)
+            {
+                // Finally remove
+                em.remove(gameSessionReference);
+                em.flush();
+            }
 
             LOG.info("Removed game session - uuid: {}", gameSession.getToken());
 

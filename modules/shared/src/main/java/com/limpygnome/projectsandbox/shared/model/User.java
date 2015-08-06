@@ -46,6 +46,7 @@ public class User implements Serializable
         this.email = null;
         this.password = null;
         this.playerMetrics = new PlayerMetrics();
+        this.roles = new Roles();
     }
 
     public User(String nickname, String email, String globalPasswordSalt, String password)
@@ -58,6 +59,7 @@ public class User implements Serializable
         this.userId = UUID.randomUUID().toString();
         this.playerMetrics = new PlayerMetrics();
         this.registered = DateTime.now();
+        this.roles = new Roles();
     }
 
     public String getUserId()
