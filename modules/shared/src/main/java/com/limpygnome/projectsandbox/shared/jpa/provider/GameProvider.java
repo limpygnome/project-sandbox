@@ -183,6 +183,7 @@ public class GameProvider extends AbstractProvider
 
             // Finally remove
             em.remove(gameSession);
+            em.flush();
 
             LOG.info("Removed game session - uuid: {}", gameSession.getToken());
 
@@ -284,6 +285,8 @@ public class GameProvider extends AbstractProvider
             em.persist(user);
             em.flush();
 
+            LOG.info("Created new user - user id: {}, nickname: {}", user.getUserId(), user.getNickname());
+
             return CreateUserResult.SUCCESS;
         }
         catch (Exception e)
@@ -352,6 +355,7 @@ public class GameProvider extends AbstractProvider
             // Fetch proxy/reference instance for removal to be in an attached state
             User attachedUser = em.getReference(User.class, user.getUserId());
             em.remove(attachedUser);
+            em.flush();
 
             LOG.debug("Removed user - user id: {}", user.getUserId());
             return true;
