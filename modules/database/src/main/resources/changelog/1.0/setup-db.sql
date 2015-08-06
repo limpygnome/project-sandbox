@@ -1,3 +1,6 @@
+--liquibase formatted sql
+--changeset limpygnome:initial db setup
+
 create table users
 (
     userid varchar(36) not null,
@@ -54,3 +57,8 @@ create table game_sessions_kv
     foreign key(token) references game_sessions(token) on update cascade on delete cascade,
     primary key (token, k)
 );
+
+--rollback drop table game_sessions_kv;
+--rollback drop table users_roles;
+--rollback drop table game_sessions;
+--rollback drop table users;
