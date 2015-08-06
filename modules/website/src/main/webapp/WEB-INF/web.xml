@@ -20,6 +20,10 @@
             <param-name>contextConfigLocation</param-name>
             <param-value>com.limpygnome.projectsandbox.website.config.AppConfig</param-value>
         </init-param>
+        <init-param>
+            <param-name>trimSpaces</param-name>
+            <param-value>true</param-value>
+        </init-param>
         <load-on-startup>1</load-on-startup>
     </servlet>
     <servlet-mapping>
@@ -42,5 +46,13 @@
         <error-code>403</error-code>
         <location>/forbidden</location>
     </error-page>
+
+    <!-- Trim white space -->
+    <jsp-config>
+        <jsp-property-group>
+            <url-pattern>*.jsp</url-pattern>
+            <trim-directive-whitespaces>true</trim-directive-whitespaces>
+        </jsp-property-group>
+    </jsp-config>
 
 </web-app>

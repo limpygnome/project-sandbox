@@ -17,8 +17,8 @@ html, body
 ::-webkit-selection,
 ::-moz-selection
 {
-    color: #4D94DB;
-    background: #4D94DB;
+    color: #71A9E2;
+    background: #71A9E2;
 }
 
 body
@@ -243,11 +243,12 @@ body
 {
     background: rgba(30, 30, 30, 0.5);
     border-radius: 0.5em;
+    padding-bottom: 0.2em;
 }
 
 .wrapper .content h2
 {
-    padding: 0.6em 0.4em;
+    padding: 0.6em 0.4em 0.1em 0.4em;
 }
 
 .wrapper .content h3
@@ -267,6 +268,11 @@ body
 .wrapper .content a
 {
     color: #4D94DB;
+}
+.wrapper .content a:hover,
+.wrapper .content a:focus
+{
+    color: #71A9E2;
 }
 
 /* Holds errors and success messages */

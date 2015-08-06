@@ -3,6 +3,11 @@
     Stats
 </h2>
 
+<p>
+    Check back here soon, not quite ready!
+</p>
+
+<%--
 <h3>
     Leaderboard (score)
 </h3>
@@ -91,3 +96,4 @@
         </td>
     </tr>
 </table>
+--%>
