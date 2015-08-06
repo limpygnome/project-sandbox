@@ -1,5 +1,6 @@
 package com.limpygnome.projectsandbox.website.model.form.home;
 
+import com.limpygnome.projectsandbox.website.validation.annotation.Email;
 import com.limpygnome.projectsandbox.website.validation.annotation.NicknameChars;
 
 import javax.validation.constraints.NotNull;
@@ -28,6 +29,7 @@ public class RegisterForm
 
     @NotNull(message = "{email.length}")
     @Size(min = EMAIL_LENGTH_MIN, max = EMAIL_LENGTH_MAX, message = "{email.length}")
+    @Email(message = "{email.format}")
     private String email;
 
     public RegisterForm() { }

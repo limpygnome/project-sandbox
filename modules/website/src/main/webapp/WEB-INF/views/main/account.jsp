@@ -16,6 +16,17 @@
     Update Details
 </h3>
 <form:form cssClass="account-update-details" action="/account/update" method="post" modelAttribute="updateDetailsForm">
+
+    <%-- Check if form data provided i.e. invalid value --%>
+    <c:choose>
+        <c:when test="${updateDetailsForm != null && updateDetailsForm.email != null}">
+            <c:set var="account_update_email" value="${updateDetailsForm.email}" />
+        </c:when>
+        <c:otherwise>
+            <c:set var="account_update_email" value="${user.email}" />
+        </c:otherwise>
+    </c:choose>
+
     <table>
         <tr>
             <th>
@@ -46,7 +57,7 @@
                 E-mail:
             </th>
             <td>
-                <ps:inputWithErrors modelAttribute="updateDetailsForm" path="email" placeholder="E-mail..." value="${user.email}" />
+                <ps:inputWithErrors modelAttribute="updateDetailsForm" path="email" placeholder="E-mail..." value="${account_update_email}" />
             </td>
         </tr>
         <tr>

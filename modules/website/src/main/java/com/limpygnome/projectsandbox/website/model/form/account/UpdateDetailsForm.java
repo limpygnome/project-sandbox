@@ -1,5 +1,6 @@
 package com.limpygnome.projectsandbox.website.model.form.account;
 
+import com.limpygnome.projectsandbox.website.validation.annotation.Email;
 import com.limpygnome.projectsandbox.website.validation.annotation.SizeWhenSpecified;
 
 import javax.validation.constraints.NotNull;
@@ -24,6 +25,7 @@ public class UpdateDetailsForm
 
     @NotNull(message = "{email.length}")
     @Size(min = EMAIL_LENGTH_MIN, max = EMAIL_LENGTH_MAX, message = "{email.length}")
+    @Email(message = "{email.format}")
     private String email;
 
     public UpdateDetailsForm() { }
