@@ -11,7 +11,8 @@ import java.util.regex.Pattern;
  */
 public class NicknameCharsValidator implements ConstraintValidator<NicknameChars, String>
 {
-    private static final Pattern NICKNAME_REGEX_PATTERN = Pattern.compile("^([a-zA-Z0-9\\_\\-\\$]+)$");
+    private static final Pattern NICKNAME_REGEX_PATTERN = Pattern.compile("^(?!guest\\_)([a-zA-Z0-9\\_\\-\\$]+)$");
+    private static final Pattern UUID_REGEX_PATTERN = Pattern.compile("^([a-fA-F0-9]{8})\\-(([a-fA-F0-9]{4})\\-){3}([a-fA-F0-9]{12})$");
 
     @Override
     public void initialize(NicknameChars username) { }
@@ -19,8 +20,13 @@ public class NicknameCharsValidator implements ConstraintValidator<NicknameChars
     @Override
     public boolean isValid(String value, ConstraintValidatorContext constraintValidatorContext)
     {
-        // Check chars
+        // Check chars and does not start with `guest_`
         if (value == null || !NICKNAME_REGEX_PATTERN.matcher(value).matches())
+        {
+            return false;
+        }
+        // Check does not match UUID, since this will mess with profile system
+        else if (UUID_REGEX_PATTERN.matcher(value).matches())
         {
             return false;
         }

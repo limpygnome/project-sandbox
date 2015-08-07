@@ -2,6 +2,12 @@
 <%@ taglib prefix="form"    uri="http://www.springframework.org/tags/form" %>
 <%@ taglib prefix="ps"      tagdir="/WEB-INF/tags/main" %>
 
+<c:if test="not empty csrf">
+    <p class="error">
+        An error occurred, most likely from session timeout or duplicate tabs, please try again...
+    </p>
+</c:if>
+
 <ps:authenticated auth="false">
     <form:form cssClass="box guest" method="post" action="/auth/guest" modelAttribute="guestForm">
         <h3>
@@ -21,7 +27,7 @@
         </table>
 
         <ps:csrf />
-        <ps:errorList modelAttribute="guestForm" cssClass="errors" />
+        <ps:errorList modelAttribute="guestForm" cssClass="error" />
 
     </form:form>
 
@@ -48,7 +54,7 @@
         </table>
 
         <ps:csrf />
-        <ps:errorList modelAttribute="loginForm" cssClass="errors" singleError="true" />
+        <ps:errorList modelAttribute="loginForm" cssClass="error" singleError="true" />
 
     </form:form>
 
@@ -80,7 +86,7 @@
         </table>
 
         <ps:csrf />
-        <ps:errorList modelAttribute="registerForm" cssClass="errors" />
+        <ps:errorList modelAttribute="registerForm" cssClass="error" />
 
     </form:form>
 </ps:authenticated>

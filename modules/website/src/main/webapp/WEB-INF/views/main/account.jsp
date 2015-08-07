@@ -70,7 +70,7 @@
     <ps:csrf />
 
     <div class="messages">
-        <ps:errorList modelAttribute="updateDetailsForm" cssClass="errors" singleError="true" />
+        <ps:errorList modelAttribute="updateDetailsForm" cssClass="error" />
 
         <c:if test="${not empty account_update_success}">
             <div class="success">
