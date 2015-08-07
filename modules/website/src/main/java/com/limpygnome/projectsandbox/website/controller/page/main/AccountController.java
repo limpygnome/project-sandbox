@@ -1,6 +1,7 @@
 package com.limpygnome.projectsandbox.website.controller.page.main;
 
 import com.limpygnome.projectsandbox.shared.jpa.provider.GameProvider;
+import com.limpygnome.projectsandbox.shared.jpa.provider.UserProvider;
 import com.limpygnome.projectsandbox.shared.model.GameSession;
 import com.limpygnome.projectsandbox.shared.model.Password;
 import com.limpygnome.projectsandbox.shared.model.User;
@@ -112,13 +113,13 @@ public class AccountController extends BaseController
             authenticationService.logout(httpSession);
 
             // Delete account
-            GameProvider gameProvider = new GameProvider();
+            UserProvider userProvider = new UserProvider();
 
             try
             {
-                gameProvider.begin();
-                gameProvider.removeUser(user);
-                gameProvider.commit();
+                userProvider.begin();
+                userProvider.removeUser(user);
+                userProvider.commit();
 
                 LOG.info("Deleted user - user id: {}, nickname: {}", user.getUserId(), user.getNickname());
             }
@@ -128,7 +129,7 @@ public class AccountController extends BaseController
             }
             finally
             {
-                gameProvider.close();
+                userProvider.close();
             }
 
             // Redirect to home
@@ -197,25 +198,25 @@ public class AccountController extends BaseController
             user.getPlayerMetrics().reset();
 
             // Persist changes
-            GameProvider gameProvider = new GameProvider();
+            UserProvider userProvider = new UserProvider();
 
             try
             {
-                gameProvider.begin();
-                gameProvider.updateUser(user);
-                gameProvider.commit();
+                userProvider.begin();
+                userProvider.updateUser(user);
+                userProvider.commit();
 
                 LOG.info("Reset player stats - user id: {}", user.getUserId());
             }
             catch (Exception e)
             {
-                gameProvider.rollback();
+                userProvider.rollback();
 
                 LOG.error("Failed to reset stats for user - user id: {}", user.getUserId(), e);
             }
             finally
             {
-                gameProvider.close();
+                userProvider.close();
             }
 
             return redirectToAccountView(null, null, null, null);

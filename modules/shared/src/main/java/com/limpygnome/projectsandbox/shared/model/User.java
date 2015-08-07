@@ -1,10 +1,12 @@
 package com.limpygnome.projectsandbox.shared.model;
 
+import com.limpygnome.projectsandbox.shared.util.DateTimeUtil;
 import org.hibernate.annotations.Type;
-import org.joda.time.DateTime;
+import org.joda.time.*;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.time.Period;
 import java.util.UUID;
 
 /**
@@ -110,6 +112,16 @@ public class User implements Serializable
     public Roles getRoles()
     {
         return roles;
+    }
+
+    public DateTime getRegistered()
+    {
+        return registered;
+    }
+
+    public String getRegisteredHuman()
+    {
+        return DateTimeUtil.humanTimeSince(registered, DateTime.now());
     }
 
 }

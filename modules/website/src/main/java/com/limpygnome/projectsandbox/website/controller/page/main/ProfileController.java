@@ -1,12 +1,19 @@
 package com.limpygnome.projectsandbox.website.controller.page.main;
 
+import com.limpygnome.projectsandbox.shared.jpa.provider.GameProvider;
+import com.limpygnome.projectsandbox.shared.jpa.provider.UserProvider;
+import com.limpygnome.projectsandbox.shared.model.GameSession;
 import com.limpygnome.projectsandbox.shared.model.User;
 import com.limpygnome.projectsandbox.website.controller.BaseController;
 import com.limpygnome.projectsandbox.website.service.AuthenticationService;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import org.joda.time.DateTime;
+import org.joda.time.Seconds;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpSession;
@@ -19,46 +26,97 @@ import java.util.regex.Pattern;
 @RequestMapping(value = "/profile")
 public class ProfileController extends BaseController
 {
+    private final static Logger LOG = LogManager.getLogger(ProfileController.class);
 
     private static final Pattern UUID_REGEX_PATTERN = Pattern.compile("^([a-fA-F0-9]{8})\\-(([a-fA-F0-9]{4})\\-){3}([a-fA-F0-9]{12})$");
+
+    private static final int SECONDS_LAST_UPDATED_METRICS_DISPLAY_ONLINE = 60;
 
     @Autowired
     private AuthenticationService authenticationService;
 
     @RequestMapping(value = "")
-    public void viewCurrentUser(HttpSession httpSession)
+    public ModelAndView viewCurrentUser(HttpSession httpSession)
     {
         // Fetch and render profile for current user
         User currentUser = authenticationService.retrieveCurrentUser(httpSession);
 
-        viewProfile(currentUser);
+        return viewProfile(currentUser);
     }
 
-    @RequestMapping(value = "{1}")
-    public void viewUser(@RequestParam(required = true) String userId)
+    @RequestMapping(value = "{userPath}")
+    public ModelAndView viewUser(@PathVariable("userPath") String userPath)
     {
         User profileUser;
 
         // Fetch user and render their profile
-        if (UUID_REGEX_PATTERN.matcher(userId).matches())
+        UserProvider userProvider = new UserProvider();
+
+        try
         {
-            // Load by UUID
+            if (UUID_REGEX_PATTERN.matcher(userPath).matches())
+            {
+                // Load by UUID
+                profileUser = userProvider.fetchUserByUserId(userPath);
+            }
+            else
+            {
+                // Load by nickname
+                profileUser = userProvider.fetchUserByNickname(userPath);
+            }
+        }
+        finally
+        {
+            userProvider.close();
+        }
+
+        return viewProfile(profileUser);
+    }
+
+    private ModelAndView viewProfile(User profileUser)
+    {
+        // Check a user has been found
+        if (profileUser == null)
+        {
+            return createMvPage404();
+        }
+
+        // Fetch the user's game session (may not exist)
+        GameProvider gameProvider = new GameProvider();
+        GameSession gameSession = null;
+
+        try
+        {
+            gameSession = gameProvider.fetchGameSessionByUser(profileUser);
+        }
+        catch (Exception e)
+        {
+            LOG.error("Failed to retrieve game session for profile - user id: {}", profileUser.getUserId());
+        }
+        finally
+        {
+            gameProvider.close();
+        }
+
+        // Setup mv
+        ModelAndView modelAndView = createMV("main/profile", "profile - " + profileUser.getNickname());
+
+        // Check if the user is online
+        boolean online;
+
+        if (gameSession != null && Seconds.secondsBetween(DateTime.now(), gameSession.getPlayerMetrics().getLastUpdated()).getSeconds() < SECONDS_LAST_UPDATED_METRICS_DISPLAY_ONLINE)
+        {
+            online = true;
         }
         else
         {
-            // Load by nickname
+            online = false;
         }
 
-        viewProfile(profileUser);
-    }
-
-    public ModelAndView viewProfile(User user)
-    {
-        // Setup mv
-        ModelAndView modelAndView = createMV("main/profile", "profile - " + user.getNickname());
-
         // Attach objects
-        modelAndView.addObject("profile_user", user);
+        modelAndView.addObject("profile_user", profileUser);
+        modelAndView.addObject("game_session", gameSession);
+        modelAndView.addObject("online", online);
 
         return modelAndView;
     }

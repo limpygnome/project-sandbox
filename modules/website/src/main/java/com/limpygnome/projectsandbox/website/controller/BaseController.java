@@ -48,6 +48,11 @@ public class BaseController
         return modelAndView;
     }
 
+    protected ModelAndView createMvPage404()
+    {
+        return new ModelAndView("forward:/404");
+    }
+
     /**
      * Defines a default title.
      *

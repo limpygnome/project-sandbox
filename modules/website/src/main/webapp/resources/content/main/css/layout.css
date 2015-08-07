@@ -316,7 +316,7 @@ body
     margin: 0em auto;
 }
 
-.wrapper .online
+.wrapper .join .online
 {
     margin-top: 3em;
     font-size: 1.5em;
@@ -335,4 +335,62 @@ body
 {
     text-align: right;
     padding-right: 1em;
+}
+
+/*
+    Profile
+    ********************************************************************************************************************
+*/
+
+.wrapper .profile
+{
+
+}
+
+.wrapper .profile .info
+{
+    width: 50%;
+    margin: 2em auto;
+    text-align: left;
+    border: none;
+    border-collapse: collapse;
+}
+.wrapper .profile .info th,
+.wrapper .profile .info td
+{
+    padding: 0.8em;
+    width: 50%;
+}
+.wrapper .profile .info .section
+{
+    width: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    text-align: center;
+}
+.wrapper .profile .info .picture
+{
+    width: 100%;
+    text-align: center;
+}
+.wrapper .profile .info .picture img
+{
+    width: 12em;
+    height: 12em;
+}
+.wrapper .profile .info .status .online,
+.wrapper .profile .info .status .offline
+{
+    border-radius: 0.5em;
+    padding: 0.5em;
+    font-weight: bold;
+}
+.wrapper .profile .info .status .online
+{
+    background: green;
+    color: #FFF;
+}
+.wrapper .profile .info .status .offline
+{
+    background: #CCC;
+    color: #333;
 }

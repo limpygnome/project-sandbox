@@ -3,7 +3,6 @@ package com.limpygnome.projectsandbox.shared.jpa.provider;
 import com.limpygnome.projectsandbox.shared.jpa.AbstractProvider;
 import com.limpygnome.projectsandbox.shared.jpa.ConnectionType;
 import com.limpygnome.projectsandbox.shared.jpa.provider.result.CreateGameSessionResult;
-import com.limpygnome.projectsandbox.shared.jpa.provider.result.CreateUserResult;
 import com.limpygnome.projectsandbox.shared.model.GameSession;
 import com.limpygnome.projectsandbox.shared.model.User;
 import org.apache.logging.log4j.LogManager;
@@ -23,7 +22,6 @@ import static com.limpygnome.projectsandbox.shared.constant.SessionConstants.TIM
  * Created by limpygnome on 25/07/15.
  *
  * TODO: add more checking / safety
- * TODO: move user/account stuff into another provider
  */
 public class GameProvider extends AbstractProvider
 {
@@ -249,139 +247,6 @@ public class GameProvider extends AbstractProvider
         {
             LOG.error("Failed to remove all game sessions", e);
             return false;
-        }
-    }
-
-    public CreateUserResult createUser(User user)
-    {
-        if (user == null)
-        {
-            LOG.error("Attempted to create null user");
-            return CreateUserResult.FAILED;
-        }
-
-        Query query;
-        long count;
-
-        try
-        {
-            // Check nickname not already used
-            query = em.createQuery("SELECT COUNT(u.userId) FROM User u WHERE u.nickname = :nickname");
-            query.setParameter("nickname", user.getNickname());
-            count = (long) query.getSingleResult();
-
-            if (count != 0)
-            {
-                return CreateUserResult.NICKNAME_EXISTS;
-            }
-
-            // Check email not already used
-            query = em.createQuery("SELECT COUNT(u.userId) FROM User u WHERE u.email = :email");
-            query.setParameter("email", user.getEmail());
-            count = (long) query.getSingleResult();
-
-            if (count != 0)
-            {
-                return CreateUserResult.EMAIL_EXISTS;
-            }
-
-            // Persist the user
-            em.persist(user);
-            em.flush();
-
-            LOG.info("Created new user - user id: {}, nickname: {}", user.getUserId(), user.getNickname());
-
-            return CreateUserResult.SUCCESS;
-        }
-        catch (Exception e)
-        {
-            LOG.error("Failed to persist new user", e);
-            return CreateUserResult.FAILED;
-        }
-    }
-
-    public User fetchUserByNickname(String nickname)
-    {
-        if (nickname == null)
-        {
-            LOG.error("Attempted to fetch user by null nickname");
-            return null;
-        }
-
-        try
-        {
-            TypedQuery<User> typedQuery = em.createQuery("SELECT u FROM User u WHERE u.nickname = :nickname", User.class);
-            typedQuery.setParameter("nickname", nickname);
-
-            List<User> users = typedQuery.getResultList();
-
-            return users.isEmpty() ? null : users.get(0);
-        }
-        catch (Exception e)
-        {
-            LOG.error("Failed to retrieve user by nickname - nickname: {}", nickname, e);
-            return null;
-        }
-    }
-
-    public boolean updateUser(User user)
-    {
-        if (user == null)
-        {
-            LOG.error("Attempted to update null user");
-            return false;
-        }
-
-        try
-        {
-            em.merge(user);
-
-            LOG.debug("Updated user - user id: {}", user.getUserId());
-            return true;
-        }
-        catch (Exception e)
-        {
-            LOG.error("Failed to update user - user id: {}", user.getUserId(), e);
-            return false;
-        }
-    }
-
-    public boolean removeUser(User user)
-    {
-        if (user == null)
-        {
-            LOG.error("Attempted to remove null user");
-            return false;
-        }
-
-        try
-        {
-            // Fetch proxy/reference instance for removal to be in an attached state
-            User attachedUser = em.getReference(User.class, user.getUserId());
-            em.remove(attachedUser);
-            em.flush();
-
-            LOG.debug("Removed user - user id: {}", user.getUserId());
-            return true;
-        }
-        catch (Exception e)
-        {
-            LOG.error("Failed to remove user - user id: {}", user.getUserId(), e);
-            return false;
-        }
-    }
-
-    public long getUsersOnline()
-    {
-        try
-        {
-            Query query = em.createQuery("SELECT COUNT(g.token) FROM GameSession g WHERE g.connected = true");
-            return (long) query.getSingleResult();
-        }
-        catch (Exception e)
-        {
-            LOG.error("Failed to retrieve total users online", e);
-            return 0;
         }
     }
 

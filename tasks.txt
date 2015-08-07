@@ -30,6 +30,7 @@ bugs:
 - #wrekt in big, wben player dies
 
 future ideas / consider:
+- display bans on user's profile - allow temporary bans
 - change clientside logic from 60ms to 100ms to reduce computation
 - moving tile types into json, which client can cache for a long time?
 - update exact tiles/segments of map

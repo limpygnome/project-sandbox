@@ -1,6 +1,7 @@
 package com.limpygnome.projectsandbox.website.service.imp;
 
 import com.limpygnome.projectsandbox.shared.jpa.provider.GameProvider;
+import com.limpygnome.projectsandbox.shared.jpa.provider.UserProvider;
 import com.limpygnome.projectsandbox.shared.jpa.provider.result.CreateUserResult;
 import com.limpygnome.projectsandbox.shared.model.Role;
 import com.limpygnome.projectsandbox.shared.model.User;
@@ -37,25 +38,26 @@ public class DefaultAuthenticationService implements AuthenticationService
         );
 
         // Store model in DB
-        GameProvider gameProvider = new GameProvider();
+        UserProvider userProvider = new UserProvider();
 
         CreateUserResult createUserResult;
+
         try
         {
-            gameProvider.begin();
-            createUserResult = gameProvider.createUser(user);
-            gameProvider.commit();
+            userProvider.begin();
+            createUserResult = userProvider.createUser(user);
+            userProvider.commit();
         }
         catch (Exception e)
         {
-            gameProvider.rollback();
+            userProvider.rollback();
 
             LOG.error("Failed to persist user for registration", e);
             return CreateUserResult.FAILED;
         }
         finally
         {
-            gameProvider.close();
+            userProvider.close();
         }
 
         if (createUserResult == CreateUserResult.SUCCESS)
@@ -76,12 +78,12 @@ public class DefaultAuthenticationService implements AuthenticationService
             return LoginResult.FAILED;
         }
 
-        GameProvider gameProvider = new GameProvider();
+        UserProvider userProvider = new UserProvider();
 
         try
         {
             // Fetch user
-            User user = gameProvider.fetchUserByNickname(loginForm.getNickname());
+            User user = userProvider.fetchUserByNickname(loginForm.getNickname());
 
             if (user == null)
             {
@@ -115,7 +117,7 @@ public class DefaultAuthenticationService implements AuthenticationService
         }
         finally
         {
-            gameProvider.close();
+            userProvider.close();
         }
     }
 

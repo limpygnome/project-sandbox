@@ -67,4 +67,19 @@ public class Roles
         return false;
     }
 
+    public synchronized Role getPrimaryRole()
+    {
+        Role highestRole = Role.UNKNOWN;
+
+        for (Role role : roles)
+        {
+            if (highestRole.PRIORITY <= role.PRIORITY)
+            {
+                highestRole = role;
+            }
+        }
+
+        return highestRole;
+    }
+
 }

@@ -1,5 +1,6 @@
 package com.limpygnome.projectsandbox.shared.model;
 
+import com.limpygnome.projectsandbox.shared.util.DateTimeUtil;
 import org.hibernate.annotations.Type;
 import org.joda.time.DateTime;
 
@@ -148,6 +149,11 @@ public class PlayerMetrics implements Serializable
         this.score = 0;
 
         markDirty();
+    }
+
+    public synchronized String getLastUpdatedHuman()
+    {
+        return DateTimeUtil.humanTimeSince(lastUpdated, DateTime.now());
     }
 
 }
