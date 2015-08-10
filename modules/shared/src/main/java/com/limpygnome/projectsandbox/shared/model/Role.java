@@ -9,7 +9,6 @@ package com.limpygnome.projectsandbox.shared.model;
  */
 public enum Role
 {
-    UNKNOWN(0, "Unknown"),
     USER(1, "User"),
     MODERATOR(100, "Moderator"),
     ADMINISTRATOR(500, "Administrator"),

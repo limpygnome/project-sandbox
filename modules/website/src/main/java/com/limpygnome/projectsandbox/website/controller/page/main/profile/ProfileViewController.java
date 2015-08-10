@@ -1,4 +1,4 @@
-package com.limpygnome.projectsandbox.website.controller.page.main;
+package com.limpygnome.projectsandbox.website.controller.page.main.profile;
 
 import com.limpygnome.projectsandbox.shared.jpa.provider.GameProvider;
 import com.limpygnome.projectsandbox.shared.jpa.provider.UserProvider;
@@ -24,9 +24,9 @@ import java.util.regex.Pattern;
  */
 @Controller
 @RequestMapping(value = "/profile")
-public class ProfileController extends BaseController
+public class ProfileViewController extends BaseController
 {
-    private final static Logger LOG = LogManager.getLogger(ProfileController.class);
+    private final static Logger LOG = LogManager.getLogger(ProfileViewController.class);
 
     private static final Pattern UUID_REGEX_PATTERN = Pattern.compile("^([a-fA-F0-9]{8})\\-(([a-fA-F0-9]{4})\\-){3}([a-fA-F0-9]{12})$");
 
@@ -103,8 +103,9 @@ public class ProfileController extends BaseController
 
         // Check if the user is online
         boolean online;
+        int secondsSinceOnline = Seconds.secondsBetween(gameSession.getPlayerMetrics().getLastUpdated(), DateTime.now()).getSeconds();
 
-        if (gameSession != null && Seconds.secondsBetween(DateTime.now(), gameSession.getPlayerMetrics().getLastUpdated()).getSeconds() < SECONDS_LAST_UPDATED_METRICS_DISPLAY_ONLINE)
+        if (gameSession != null && secondsSinceOnline < SECONDS_LAST_UPDATED_METRICS_DISPLAY_ONLINE)
         {
             online = true;
         }

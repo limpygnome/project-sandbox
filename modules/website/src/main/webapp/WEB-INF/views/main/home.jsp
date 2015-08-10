@@ -2,12 +2,6 @@
 <%@ taglib prefix="form"    uri="http://www.springframework.org/tags/form" %>
 <%@ taglib prefix="ps"      tagdir="/WEB-INF/tags/main" %>
 
-<c:if test="not empty csrf">
-    <p class="error">
-        An error occurred, most likely from session timeout or duplicate tabs, please try again...
-    </p>
-</c:if>
-
 <ps:authenticated auth="false">
     <form:form cssClass="box guest" method="post" action="/auth/guest" modelAttribute="guestForm">
         <h3>

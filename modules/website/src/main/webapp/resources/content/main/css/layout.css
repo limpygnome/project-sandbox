@@ -372,7 +372,8 @@ body
     width: 100%;
     text-align: center;
 }
-.wrapper .profile .info .picture img
+.wrapper .profile .info .picture img,
+.wrapper .profile .picture img
 {
     width: 12em;
     height: 12em;
@@ -393,4 +394,16 @@ body
 {
     background: #CCC;
     color: #333;
+}
+
+/*
+    Credits
+    ********************************************************************************************************************
+*/
+
+.wrapper .credits table
+{
+    width: 50%;
+    margin: 0em auto;
+    text-align: left;
 }

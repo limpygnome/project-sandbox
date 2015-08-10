@@ -69,7 +69,7 @@ public class Roles
 
     public synchronized Role getPrimaryRole()
     {
-        Role highestRole = Role.UNKNOWN;
+        Role highestRole = Role.USER;
 
         for (Role role : roles)
         {

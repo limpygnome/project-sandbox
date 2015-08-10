@@ -11,7 +11,7 @@
     <table class="info">
         <tr>
             <td colspan="2" class="picture">
-                <img src="/images/" alt="Profile picture" />
+                <img src="<ps:profilePictureUrl userId='${profile_user.userId}' />" alt="Profile picture" />
 
                 <c:if test="${user != null && profile_user != null && profile_user == user}">
                     <div>
