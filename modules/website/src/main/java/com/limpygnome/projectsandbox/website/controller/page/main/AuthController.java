@@ -5,7 +5,7 @@ import com.limpygnome.projectsandbox.shared.jpa.provider.result.CreateUserResult
 import com.limpygnome.projectsandbox.website.controller.BaseController;
 import com.limpygnome.projectsandbox.website.controller.page.game.GameController;
 import com.limpygnome.projectsandbox.shared.model.User;
-import com.limpygnome.projectsandbox.website.model.form.account.result.LoginResult;
+import com.limpygnome.projectsandbox.website.model.result.LoginResult;
 import com.limpygnome.projectsandbox.website.model.form.home.GuestForm;
 import com.limpygnome.projectsandbox.website.model.form.home.LoginForm;
 import com.limpygnome.projectsandbox.website.model.form.home.RegisterForm;

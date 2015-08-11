@@ -4,4 +4,4 @@
 
 <%@ attribute name="userId"     required="true" %>
 
-/content/profile/<c:out value="${userId}" />.png
+/content/user/profile/<c:out value="${userId}" />.png

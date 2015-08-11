@@ -1,6 +1,7 @@
 package com.limpygnome.projectsandbox.server.player;
 
 import com.limpygnome.projectsandbox.shared.jpa.provider.GameProvider;
+import com.limpygnome.projectsandbox.shared.jpa.provider.UserProvider;
 import com.limpygnome.projectsandbox.shared.model.GameSession;
 import com.limpygnome.projectsandbox.shared.model.PlayerMetrics;
 import com.limpygnome.projectsandbox.shared.model.User;
@@ -17,11 +18,15 @@ import java.util.UUID;
 public class SessionManager
 {
     private final static Logger LOG = LogManager.getLogger(SessionManager.class);
+
+    private UserProvider userProvider;
     private GameProvider gameProvider;
+
     private List<GameSession> trackedGameSessions;
 
     public SessionManager()
     {
+        this.userProvider = new UserProvider();
         this.gameProvider = new GameProvider();
         this.trackedGameSessions = new LinkedList<>();
 
@@ -34,6 +39,8 @@ public class SessionManager
         catch (Exception e)
         {
             LOG.error("Failed to set all pre-existing connected sessions to disconnected", e);
+
+            gameProvider.rollback();
         }
     }
 
@@ -100,27 +107,47 @@ public class SessionManager
             throw new IllegalArgumentException("Invalid/null game session provided");
         }
 
-        // Check valid game provider available
-        if (gameProvider != null)
+        // Check valid providers available
+        if (gameProvider != null && (user == null || userProvider != null))
         {
-            gameProvider.begin();
-
             // Persist session
-            gameProvider.updateGameSession(gameSession);
-
-            // Persist user, if specified
-            if (user != null)
+            try
             {
-                gameProvider.updateUser(user);
+                gameProvider.begin();
+                gameProvider.updateGameSession(gameSession);
+                gameProvider.commit();
+            }
+            catch (Exception e)
+            {
+                LOG.error("Failed to persist game session", e);
+
+                gameProvider.rollback();
+                return;
             }
 
-            gameProvider.commit();
+            // Persist user, if specified
+            try
+            {
+                if (user != null)
+                {
+                    userProvider.begin();
+                    userProvider.updateUser(user);
+                    userProvider.commit();
+                }
+            }
+            catch (Exception e)
+            {
+                LOG.error("Failed to persist user", e);
+
+                userProvider.rollback();
+                return;
+            }
 
             LOG.debug("Persisted game session - token: {}", gameSession.getToken());
         }
         else
         {
-            LOG.error("Unable to persist game session, provider not set - token: {}", gameSession.getToken());
+            LOG.error("Unable to persist game session, provider(s) not setup - token: {}", gameSession.getToken());
         }
     }
 
@@ -145,6 +172,8 @@ public class SessionManager
         catch (Exception e)
         {
             LOG.error("Failed to perform periodic game session sync", e);
+
+            gameProvider.rollback();
         }
     }
 
@@ -156,7 +185,15 @@ public class SessionManager
             gameProvider.close();
             gameProvider = null;
 
-            LOG.info("Disposed database provider");
+            LOG.info("Disposed game provider");
+        }
+
+        if (userProvider != null)
+        {
+            userProvider.close();
+            userProvider = null;
+
+            LOG.info("Disposed user provider");
         }
     }
 

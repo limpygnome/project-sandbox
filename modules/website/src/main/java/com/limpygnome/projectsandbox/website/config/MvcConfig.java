@@ -11,6 +11,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.support.ResourceBundleMessageSource;
 import org.springframework.validation.Validator;
 import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
+import org.springframework.web.multipart.commons.CommonsMultipartResolver;
 import org.springframework.web.servlet.config.annotation.*;
 import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter;
 import org.springframework.web.servlet.view.UrlBasedViewResolver;
@@ -26,6 +27,9 @@ import javax.annotation.PostConstruct;
 @EnableWebMvc
 public class MvcConfig extends WebMvcConfigurerAdapter
 {
+    // 512 KB
+    private static final long MAX_FILE_UPLOAD_SIZE = 512000;
+
     @Autowired
     private RequestMappingHandlerAdapter requestMappingHandlerAdapter;
 
@@ -85,6 +89,14 @@ public class MvcConfig extends WebMvcConfigurerAdapter
         resourceBundleMessageSource.setBasename("validation_messages");
         resourceBundleMessageSource.setDefaultEncoding("UTF-8");
         return resourceBundleMessageSource;
+    }
+
+    @Bean(name = "multipartResolver")
+    public CommonsMultipartResolver mutlipartResolver()
+    {
+        CommonsMultipartResolver resolver = new CommonsMultipartResolver();
+        resolver.setMaxUploadSize(MAX_FILE_UPLOAD_SIZE);
+        return resolver;
     }
 
     @Override

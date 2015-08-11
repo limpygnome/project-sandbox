@@ -28,18 +28,5 @@
                 </ul>
             </td>
         </tr>
-        <tr>
-            <th>
-                Open source
-            </th>
-            <td>
-                <ul>
-                    <li>
-                        TBC
-
-                    </li>
-                </ul>
-            </td>
-        </tr>
     </table>
 </div>

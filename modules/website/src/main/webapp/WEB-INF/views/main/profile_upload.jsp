@@ -15,14 +15,18 @@
     </p>
     <form:form method="post" commandName="profilePictureUploadForm" enctype="multipart/form-data">
         <p class="center">
-            <input type="file" name="fileUpload" />
+            <form:input type="file" path="fileUpload" />
         </p>
         <p class="center">
             <input type="submit" value="Upload" />
         </p>
 
+
         <ps:csrf />
-        <ps:errorList modelAttribute="guestForm" cssClass="error" />
+
+        <div class="messages">
+            <ps:errorList modelAttribute="profilePictureUploadForm" cssClass="error" />
+        </div>
 
     </form:form>
 </div>
