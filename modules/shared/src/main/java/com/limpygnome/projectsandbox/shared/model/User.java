@@ -13,6 +13,7 @@ import java.util.UUID;
  * Created by limpygnome on 25/07/15.
  */
 @Entity
+@Cacheable(false)
 @Table(name = "users", uniqueConstraints = @UniqueConstraint(columnNames = {"userid", "nickname", "email"}))
 public class User implements Serializable
 {

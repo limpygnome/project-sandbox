@@ -1,5 +1,7 @@
 package com.limpygnome.projectsandbox.shared.model;
 
+import java.io.Serializable;
+
 /**
  * Represents a role of a user.
  *
@@ -7,12 +9,14 @@ package com.limpygnome.projectsandbox.shared.model;
  *
  * Note: a user can belong to multiple roles.
  */
-public enum Role
+public enum Role implements Serializable
 {
     USER(1, "User"),
     MODERATOR(100, "Moderator"),
     ADMINISTRATOR(500, "Administrator"),
     BANNED(9999, "Banned");
+
+    private static final long serialVersionUID = 1L;
 
     public final int PRIORITY;
     public final String DISPLAY_NAME;
@@ -21,6 +25,11 @@ public enum Role
     {
         this.PRIORITY = PRIORITY;
         this.DISPLAY_NAME = DISPLAY_NAME;
+    }
+
+    public String getDisplayName()
+    {
+        return DISPLAY_NAME;
     }
 
 }

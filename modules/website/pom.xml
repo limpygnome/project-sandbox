@@ -131,6 +131,13 @@
             <version>2.4</version>
         </dependency>
 
+        <!-- Apache Tika for MIME validation of file uploads -->
+        <dependency>
+            <groupId>org.apache.tika</groupId>
+            <artifactId>tika-core</artifactId>
+            <version>1.10</version>
+        </dependency>
+
         <!-- Logging -->
         <dependency>
             <groupId>org.apache.logging.log4j</groupId>

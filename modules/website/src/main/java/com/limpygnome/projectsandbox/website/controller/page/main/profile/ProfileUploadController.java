@@ -55,19 +55,21 @@ public class ProfileUploadController extends BaseController
         // Create MV ready for result, in case of upload
         ModelAndView modelAndView = createMV("main/profile_upload", "profile - upload");;
 
-        if (profilePictureUploadForm != null && !bindingResult.hasErrors())
+        if (profilePictureUploadForm != null && profilePictureUploadForm.getFileUpload() != null && !bindingResult.hasErrors())
         {
             // Handle uploaded file
             ProfilePictureProcessFileResult result = profilePictureService.processUploadedFile(
-                    user,profilePictureUploadForm.getFileUpload()
+                    user, profilePictureUploadForm.getFileUpload()
             );
 
             // Attach result
             switch (result)
             {
                 case FAILURE:
+                    bindingResult.rejectValue("fileUpload", "profile.picture.upload_fail");
                     break;
                 case SUCCESS:
+                    modelAndView.addObject("profile_picture_success", true);
                     break;
             }
         }

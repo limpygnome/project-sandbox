@@ -18,7 +18,7 @@ public class DateTimeUtil
         }
         else if (seconds < 60)
         {
-            return seconds + " ago";
+            return seconds + " seconds ago";
         }
         else
         {

@@ -1,15 +1,18 @@
 package com.limpygnome.projectsandbox.website.model.form.profile;
 
+import com.limpygnome.projectsandbox.website.validation.annotation.MultipartImage;
+import com.limpygnome.projectsandbox.website.validation.annotation.MultipartMimeType;
+import com.limpygnome.projectsandbox.website.validation.annotation.MultipartSizeLimit;
 import org.springframework.web.multipart.MultipartFile;
-
-import javax.validation.constraints.NotNull;
 
 /**
  * Created by limpygnome on 10/08/15.
  */
 public class ProfilePictureUploadForm
 {
-    @NotNull(message = "{profile.picture.upload_invalid}")
+    @MultipartMimeType(allowedMimeTypes = { "image/png", "image/gif", "image/jpg", "image/jpeg" }, message = "{profile.picture.upload_invalid}" )
+    @MultipartSizeLimit(bytesLimit = 819200, message = "{profile.picture.upload_size}")
+    @MultipartImage(message = "{profile.picture.upload_invalid}")
     private MultipartFile fileUpload;
 
     public ProfilePictureUploadForm()

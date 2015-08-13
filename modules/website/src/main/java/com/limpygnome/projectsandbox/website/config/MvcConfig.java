@@ -27,8 +27,11 @@ import javax.annotation.PostConstruct;
 @EnableWebMvc
 public class MvcConfig extends WebMvcConfigurerAdapter
 {
-    // 512 KB
-    private static final long MAX_FILE_UPLOAD_SIZE = 512000;
+    /*
+        800 KB; keep in sync with limit in:
+        - ProfilePictureUploadForm
+     */
+    private static final long MAX_FILE_UPLOAD_SIZE = 819200;
 
     @Autowired
     private RequestMappingHandlerAdapter requestMappingHandlerAdapter;

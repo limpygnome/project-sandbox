@@ -72,7 +72,7 @@
                 Group:
             </th>
             <td>
-                <c:out value="${profile_user.roles.primaryRole}" />
+                <c:out value="${profile_user.roles.primaryRole.displayName}" />
             </td>
         </tr>
     </table>

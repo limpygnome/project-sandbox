@@ -18,6 +18,9 @@
             <form:input type="file" path="fileUpload" />
         </p>
         <p class="center">
+            <a href="/profile" class="button">
+                Cancel
+            </a>
             <input type="submit" value="Upload" />
         </p>
 
@@ -26,6 +29,12 @@
 
         <div class="messages">
             <ps:errorList modelAttribute="profilePictureUploadForm" cssClass="error" />
+
+            <c:if test="${not empty profile_picture_success}">
+                <div class="success">
+                    Uploaded successfully
+                </div>
+            </c:if>
         </div>
 
     </form:form>

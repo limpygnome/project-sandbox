@@ -7,6 +7,8 @@ import com.limpygnome.projectsandbox.shared.model.PlayerMetrics;
 import com.limpygnome.projectsandbox.shared.model.User;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.joda.time.DateTime;
+import org.joda.time.Seconds;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -18,6 +20,8 @@ import java.util.UUID;
 public class SessionManager
 {
     private final static Logger LOG = LogManager.getLogger(SessionManager.class);
+
+    private static final int INTERVAL_UPDATE_SESSION = 30;
 
     private UserProvider userProvider;
     private GameProvider gameProvider;
@@ -158,9 +162,13 @@ public class SessionManager
             gameProvider.begin();
 
             // Persist all tracked sessions
+            int secondsSinceUpdated;
             for (GameSession gameSession : trackedGameSessions)
             {
-                if (gameSession.getPlayerMetrics().isDirtyDatabaseFlag())
+                secondsSinceUpdated = Seconds.secondsBetween(
+                        gameSession.getPlayerMetrics().getLastUpdated(), DateTime.now()).getSeconds();
+
+                if (gameSession.getPlayerMetrics().isDirtyDatabaseFlag() || secondsSinceUpdated >= INTERVAL_UPDATE_SESSION)
                 {
                     gameSession.getPlayerMetrics().setLastUpdatedNow();
                     gameProvider.updateGameSession(gameSession);

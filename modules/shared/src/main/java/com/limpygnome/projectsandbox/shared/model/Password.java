@@ -2,6 +2,7 @@ package com.limpygnome.projectsandbox.shared.model;
 
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
+import java.io.Serializable;
 import java.nio.ByteBuffer;
 import java.security.MessageDigest;
 import java.security.SecureRandom;
@@ -13,8 +14,10 @@ import java.security.SecureRandom;
  * they cannot be accessed.
  */
 @Embeddable
-public class Password
+public class Password implements Serializable
 {
+    private static final long serialVersionUID = 1L;
+
     private static final int SALT_LENGTH = 64;
 
     @Column(name = "password_salt", nullable = false)

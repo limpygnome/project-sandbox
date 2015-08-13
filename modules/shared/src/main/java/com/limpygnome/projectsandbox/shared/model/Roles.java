@@ -1,6 +1,7 @@
 package com.limpygnome.projectsandbox.shared.model;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -8,8 +9,9 @@ import java.util.Set;
  * Created by limpygnome on 29/07/15.
  */
 @Embeddable
-public class Roles
+public class Roles implements Serializable
 {
+    private static final long serialVersionUID = 1L;
 
     @ElementCollection(fetch = FetchType.EAGER)
     @CollectionTable(name = "users_roles", joinColumns = @JoinColumn(name = "userid"))

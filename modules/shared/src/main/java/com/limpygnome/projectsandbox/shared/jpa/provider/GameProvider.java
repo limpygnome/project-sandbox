@@ -154,6 +154,7 @@ public class GameProvider extends AbstractProvider
         try
         {
             em.merge(gameSession);
+            em.flush();
 
             LOG.debug("Updated game session - token: {}", gameSession.getToken());
 
