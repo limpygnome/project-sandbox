@@ -59,17 +59,17 @@ public class PlayerInfo
         this.playerId = playerId;
     }
 
-    public boolean isConnected()
+    public synchronized boolean isConnected()
     {
         return socket != null && socket.isOpen();
     }
 
-    public boolean isKeyDown(PlayerKeys key)
+    public synchronized boolean isKeyDown(PlayerKeys key)
     {
         return (keys & key.FLAG) == key.FLAG;
     }
 
-    public void setKey(PlayerKeys key, boolean down)
+    public synchronized void setKey(PlayerKeys key, boolean down)
     {
         if (down)
         {
@@ -80,10 +80,13 @@ public class PlayerInfo
         }
     }
 
-    public void eventPlayerKilled(Controller controller, AbstractKiller death, PlayerInfo[] playerInfoKillers)
+    public synchronized void eventPlayerKilled(Controller controller, AbstractKiller death, PlayerInfo[] playerInfoKillers)
     {
         try
         {
+            // Reset keys
+            this.keys = 0;
+
             // Update metrics
             session.getPlayerMetrics().incrementDeaths();
 
@@ -102,7 +105,7 @@ public class PlayerInfo
         }
     }
 
-    public void eventPlayerKill(Controller controller, AbstractKiller death, PlayerInfo[] playerInfoVictims)
+    public synchronized void eventPlayerKill(Controller controller, AbstractKiller death, PlayerInfo[] playerInfoVictims)
     {
         // Update kills
         session.getPlayerMetrics().incrementKills();

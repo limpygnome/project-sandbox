@@ -78,35 +78,6 @@
             <version>3.0.5</version>
         </dependency>
 
-        <!-- Frameworks: JPA -->
-        <dependency>
-            <groupId>org.hibernate</groupId>
-            <artifactId>hibernate-core</artifactId>
-            <version>4.3.11.Final</version>
-        </dependency>
-        <dependency>
-            <groupId>org.hibernate</groupId>
-            <artifactId>hibernate-entitymanager</artifactId>
-            <version>4.3.11.Final</version>
-        </dependency>
-        <dependency>
-            <groupId>mysql</groupId>
-            <artifactId>mysql-connector-java</artifactId>
-            <version>5.1.35</version>
-        </dependency>
-
-        <!-- Joda Time -->
-        <dependency>
-            <groupId>joda-time</groupId>
-            <artifactId>joda-time</artifactId>
-            <version>2.7</version>
-        </dependency>
-        <dependency>
-            <groupId>org.jadira.usertype</groupId>
-            <artifactId>usertype.extended</artifactId>
-            <version>3.2.0.GA</version>
-        </dependency>
-
         <!-- Validation API and library -->
         <dependency>
             <groupId>javax.validation</groupId>
@@ -138,17 +109,13 @@
             <version>1.10</version>
         </dependency>
 
-        <!-- Logging -->
+        <!-- Dependency for log4j with Hibernate -->
         <dependency>
-            <groupId>org.apache.logging.log4j</groupId>
-            <artifactId>log4j-api</artifactId>
-            <version>2.2</version>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-core</artifactId>
+            <version>2.6.1</version>
         </dependency>
-        <dependency>
-            <groupId>org.apache.logging.log4j</groupId>
-            <artifactId>log4j-core</artifactId>
-            <version>2.2</version>
-        </dependency>
+
 
     </dependencies>
 
@@ -158,7 +125,7 @@
             <!-- Embedded Tomcat server -->
             <plugin>
                 <groupId>org.apache.tomcat.maven</groupId>
-                <artifactId>tomcat6-maven-plugin</artifactId>
+                <artifactId>tomcat7-maven-plugin</artifactId>
                 <version>2.2</version>
                 <configuration>
                      <port>8080</port>
@@ -167,9 +134,6 @@
                      <contextReloadable>true</contextReloadable>
                      <warDirectory>${basedir}/src/main/webapp</warDirectory>
                      <warSourceDirectory>${basedir}/src/main/webapp</warSourceDirectory>
-
-                    <staticContextDocbase>/tmp/user</staticContextDocbase>
-                    <staticContextPath>/content/user</staticContextPath>
                 </configuration>
             </plugin>
 

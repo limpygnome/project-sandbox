@@ -1,4 +1,16 @@
 precision mediump float;
+
+struct Light
+{
+    float on;
+    float distance;
+    vec3 colour;
+    vec3 position;
+    float rotation;
+    float coneAngle;
+};
+
+
 varying vec2 vTextureCoord;
 varying vec4 vColour;
 varying vec3 vAmbientLighting;
@@ -6,8 +18,9 @@ varying vec3 vNormals;
 varying vec4 vPosition;
 uniform sampler2D uSampler;
 varying vec3 vCameraPosition;
-
 varying vec4 vWorldVertex;
+
+uniform Light uLights[512];
 
 void main(void)
 {
@@ -25,7 +38,7 @@ void main(void)
 	float lightDistance = 200.0;
 	vec3 lightColour = vec3(1.0, 1.0, 1.0);
 	vec3 lightPos = vec3(200.0, 200.0, 30.0);
-	float lightAngle = radians(0.0);
+	float lightRotation = radians(0.0);
 	float lightConeAngle = radians(65.0);
 
 	// Light properties - attenuation
@@ -38,7 +51,7 @@ void main(void)
     vec3 lightVec = normalize(lightPos - vWorldVertex.xyz);
 
     // Compute direction of light
-	vec3 lightDir = vec3(sin(lightAngle), cos(lightAngle), 0.0);
+	vec3 lightDir = vec3(sin(lightRotation), cos(lightRotation), 0.0);
 
     // Compute current angle of light from source
     float angle = acos(dot(-lightVec, lightDir));
