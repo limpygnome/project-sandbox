@@ -63,6 +63,9 @@ projectSandbox.shaders =
         gl.bindBuffer(gl.ARRAY_BUFFER, cameraPositionInitialBuffer);
         gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([ 0.0, 0.0, 0.0 ]), gl.STATIC_DRAW);
         gl.bindBuffer(gl.ARRAY_BUFFER, null);
+
+        // Lights
+        shaderProgram.lights = gl.getUniformLocation(shaderProgram, "uLights");
 	},
 
 	createProgram_mapUniforms: function(gl, shaderProgram)

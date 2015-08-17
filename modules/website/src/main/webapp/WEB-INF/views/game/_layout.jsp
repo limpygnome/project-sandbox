@@ -46,6 +46,9 @@
 		<script src="/content/engine/js/inventory.js"></script>
 		<script src="/content/engine/js/inventory-item.js"></script>
 		<script src="/content/engine/js/text.js"></script>
+		<script src="/content/engine/js/lighting/lights.js"></script>
+		<script src="/content/engine/js/lighting/light.js"></script>
+
 		<script src="/content/engine/js/players.js"></script>
 
 		<script src="/content/engine/js/network/entities.js"></script>

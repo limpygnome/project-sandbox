@@ -42,6 +42,9 @@ var projectSandbox =
 	
 	reset: function()
 	{
+		// Lights
+		this.lights.reset();
+
 		// Reset UI
 		if (this.game.ui != null)
 		{
