@@ -5,16 +5,39 @@ projectSandbox.lights =
 
     lights: null,
 
-    reset: function(gl, shaderProgram)
+    init: function()
     {
+        var gl = projectSandbox.gl;
+        var shaderProgram = projectSandbox.shaderProgram;
+
+        console.debug("engine/lights - initializing...");
+
+        // Setup lights array
         this.lights = new Array();
+
+        shaderProgram.lights = { };
+
+        // Create each light
+        var light;
+        for (var i = 0; i < this.LIGHTS_LIMIT; i++)
+        {
+            light = new Light(gl, shaderProgram, i);
+            this.lights.push(light);
+        }
+
+        console.debug("engine/lights - setup complete - " + this.LIGHTS_LIMIT + " lights");
+    },
+
+    reset: function()
+    {
+        console.debug("engine/lights - resetting...");
 
         // Setup new lights
         var light;
-        for (var i = 0; i < LIGHTS_LIMIT; i++)
+        for (var i = 0; i < this.LIGHTS_LIMIT; i++)
         {
-            light = new Light(gl, shaderProgram, i);
-            lights.push(light);
+            light = this.lights[i];
+            light.reset();
         }
 
         console.debug("engine/lights - lights reset");

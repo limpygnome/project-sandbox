@@ -64,8 +64,7 @@ projectSandbox.shaders =
         gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([ 0.0, 0.0, 0.0 ]), gl.STATIC_DRAW);
         gl.bindBuffer(gl.ARRAY_BUFFER, null);
 
-        // Lights
-        shaderProgram.lights = gl.getUniformLocation(shaderProgram, "uLights");
+        // -- Note: lights within shader are mapped by light.js in engine
 	},
 
 	createProgram_mapUniforms: function(gl, shaderProgram)

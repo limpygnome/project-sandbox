@@ -136,6 +136,9 @@ var projectSandbox =
 		
 		// Setup texture manager
 		this.textures.setup();
+
+		// Setup lights
+		this.lights.init();
 		
 		// Start the game
 		this.gameStart();

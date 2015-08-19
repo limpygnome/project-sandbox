@@ -8,6 +8,9 @@ struct Light
     vec3 position;
     float rotation;
     float coneAngle;
+    float constantAttenuation;
+    float linearAttenuation;
+    float quadraticAttenuation;
 };
 
 
@@ -34,9 +37,9 @@ void main(void)
 	}
 
 	// Light properties
-	bool lightOn = true;
-	float lightDistance = 200.0;
-	vec3 lightColour = vec3(1.0, 1.0, 1.0);
+	bool lightOn = (uLights[0].on > 0.5);
+	float lightDistance = uLights[0].distance;
+	vec3 lightColour = uLights[0].colour;
 	vec3 lightPos = vec3(200.0, 200.0, 30.0);
 	float lightRotation = radians(0.0);
 	float lightConeAngle = radians(65.0);
