@@ -40,14 +40,14 @@ void main(void)
 	bool lightOn = (uLights[0].on > 0.5);
 	float lightDistance = uLights[0].distance;
 	vec3 lightColour = uLights[0].colour;
-	vec3 lightPos = vec3(200.0, 200.0, 30.0);
-	float lightRotation = radians(0.0);
-	float lightConeAngle = radians(65.0);
+	vec3 lightPos = uLights[0].position;
+	float lightRotation = uLights[0].rotation;
+	float lightConeAngle = radians(uLights[0].coneAngle);
 
 	// Light properties - attenuation
-	float constantAttenuation = 0.2;
-	float linearAttenuation = 0.001;
-	float quadraticAttenuation = 0.000001;
+	float constantAttenuation = uLights[0].constantAttenuation;
+	float linearAttenuation = uLights[0].linearAttenuation;
+	float quadraticAttenuation = uLights[0].quadraticAttenuation;
 
 
     // Compute world position of light

@@ -21,32 +21,52 @@ Light.prototype.init = function()
         shaderProgram,
         "uLights[" + index + "].on"
     );
-
     this.shaderProgram.lights[index].distance = gl.getUniformLocation(
             shaderProgram,
             "uLights[" + index + "].distance"
     );
-
     this.shaderProgram.lights[index].colour = gl.getUniformLocation(
             shaderProgram,
             "uLights[" + index + "].colour"
     );
-
+    this.shaderProgram.lights[index].position = gl.getUniformLocation(
+            shaderProgram,
+            "uLights[" + index + "].position"
+    );
+    this.shaderProgram.lights[index].rotation = gl.getUniformLocation(
+            shaderProgram,
+            "uLights[" + index + "].rotation"
+    );
+    this.shaderProgram.lights[index].coneAngle = gl.getUniformLocation(
+            shaderProgram,
+            "uLights[" + index + "].coneAngle"
+    );
+    this.shaderProgram.lights[index].constantAttenuation = gl.getUniformLocation(
+            shaderProgram,
+            "uLights[" + index + "].constantAttenuation"
+    );
+    this.shaderProgram.lights[index].linearAttenuation = gl.getUniformLocation(
+            shaderProgram,
+            "uLights[" + index + "].linearAttenuation"
+    );
+    this.shaderProgram.lights[index].quadraticAttenuation = gl.getUniformLocation(
+            shaderProgram,
+            "uLights[" + index + "].quadraticAttenuation"
+    );
 }
 
 Light.prototype.reset = function()
 {
     // Setup default values
-//    this.setOn(false);
     this.setOn(true);
     this.setDistance(200.0);
     this.setColour( [1.0, 1.0, 1.0] );
-//    this.setPosition( [0.0, 0.0, 0.0] );
-//    this.setRotation(0.0);
-//    this.setConeAngle(65.0);
-//    this.setConstantAttenuation(0.2);
-//    this.setLinearAttenuation(0.001);
-//    this.setQuadraticAttenuation(0.000001);
+    this.setPosition( [50.0 * this.index, 200.0, 0.0] );
+    this.setRotation(0.0);
+    this.setConeAngle(65.0);
+    this.setConstantAttenuation(0.2);
+    this.setLinearAttenuation(0.001);
+    this.setQuadraticAttenuation(0.000001);
 }
 
 Light.prototype.setOn = function (value)
@@ -96,7 +116,7 @@ Light.prototype.setRotation = function (value)
 
 Light.prototype.setConeAngle = function (value)
 {
-    this.coneAngle = coneAngle;
+    this.coneAngle = value;
     this.gl.uniform1f(
         this.shaderProgram.lights[this.index].coneAngle,
         this.coneAngle
