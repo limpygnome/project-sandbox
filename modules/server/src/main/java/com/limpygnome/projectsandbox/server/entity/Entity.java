@@ -455,7 +455,7 @@ public strictfp abstract class Entity
         }
 
         // Set state to updated
-        if (this.state != EntityState.CREATED)
+        if (this.state != EntityState.CREATED && !isDeleted())
         {
             setState(EntityState.UPDATED);
         }

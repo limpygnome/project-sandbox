@@ -101,13 +101,15 @@ public class EntityUpdatesOutboundPacket extends OutboundPacket
         {
             mask = ent.updateMask;
         }
-        packetData.add((byte) mask);
 
-        // Add mask to indicate if entity is alive
+        // Add to mask to indicate if entity is alive
         if (!ent.isDead())
         {
             mask |= (char) UpdateMasks.ALIVE.MASK;
         }
+
+        // Finally add the mask its self
+        packetData.add((byte) mask);
 
         // Add updated fields specified by bitfield
         if ((mask & UpdateMasks.X.MASK) == UpdateMasks.X.MASK)
