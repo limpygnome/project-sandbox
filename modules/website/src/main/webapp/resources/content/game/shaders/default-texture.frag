@@ -23,7 +23,7 @@ uniform sampler2D uSampler;
 varying vec3 vCameraPosition;
 varying vec4 vWorldVertex;
 
-uniform Light uLights[512];
+uniform Light uLights[16];
 
 void main(void)
 {
@@ -36,48 +36,58 @@ void main(void)
 		discard;
 	}
 
-	// Light properties
-	bool lightOn = (uLights[0].on > 0.5);
-	float lightDistance = uLights[0].distance;
-	vec3 lightColour = uLights[0].colour;
-	vec3 lightPos = uLights[0].position;
-	float lightRotation = uLights[0].rotation;
-	float lightConeAngle = radians(uLights[0].coneAngle);
+	// The colour of the texel from the light - can be used between multiple lights for additive colour
+    vec3 additiveLightColour = vec3(1.0, 1.0, 1.0);
 
-	// Light properties - attenuation
-	float constantAttenuation = uLights[0].constantAttenuation;
-	float linearAttenuation = uLights[0].linearAttenuation;
-	float quadraticAttenuation = uLights[0].quadraticAttenuation;
+    Light light;
+    for (int index = 0; index < 16; index++)
+    {
+        light = uLights[index];
+
+        if (light.on > 0.5)
+        {
+            // Light properties
+            float lightDistance = light.distance;
+            vec3 lightColour = light.colour;
+            vec3 lightPos = light.position;
+            float lightRotation = light.rotation;
+            float lightConeAngle = radians(light.coneAngle);
+
+            // Light properties - attenuation
+            float constantAttenuation = light.constantAttenuation;
+            float linearAttenuation = light.linearAttenuation;
+            float quadraticAttenuation = light.quadraticAttenuation;
 
 
-    // Compute world position of light
-    vec3 lightVec = normalize(lightPos - vWorldVertex.xyz);
+            // Compute world position of light
+            vec3 lightVec = normalize(lightPos - vWorldVertex.xyz);
 
-    // Compute direction of light
-	vec3 lightDir = vec3(sin(lightRotation), cos(lightRotation), 0.0);
+            // Compute direction of light
+            /////////////////////precompute
+            vec3 lightDir = vec3(sin(lightRotation), cos(lightRotation), 0.0);
 
-    // Compute current angle of light from source
-    float angle = acos(dot(-lightVec, lightDir));
+            // Compute current angle of light from source
+            float angle = acos(dot(-lightVec, lightDir));
 
-    // Compute distance between this fragment and light source
-    float distance = distance(vWorldVertex.xyz, lightPos);
+            // Compute distance between this fragment and light source
+            float distance = distance(vWorldVertex.xyz, lightPos);
 
-    // Check similarity between light and normal of light
-    vec3 normal = normalize(vNormals);
-    float l = dot(normal, lightVec);
+            // Check similarity between light and normal of light
+            //////////////////Might not help but could do these inside if block
+            vec3 normal = normalize(vNormals);
+            float l = dot(normal, lightVec);
 
-    // The colour of the texel from the light - can be used between multiple lights for additive colour
-	vec3 additiveLightColour = vec3(1.0, 1.0, 1.0);
-
-	if (lightOn && angle < lightConeAngle && l >= 0.0 && distance <= lightDistance)
-	{
-		float attenuatedLight = 1.0 / (
-            constantAttenuation +
-            linearAttenuation*distance +
-            quadraticAttenuation*distance*distance
-		);
-        additiveLightColour += l * lightColour * attenuatedLight;
-	}
+            if (angle < lightConeAngle && l >= 0.0 && distance <= lightDistance)
+            {
+                float attenuatedLight = 1.0 / (
+                    constantAttenuation +
+                    linearAttenuation*distance +
+                    quadraticAttenuation*distance*distance
+                );
+                additiveLightColour += l * lightColour * attenuatedLight;
+            }
+        }
+    }
 
 	gl_FragColor = clamp(vec4(texel.rgb * vAmbientLighting * additiveLightColour, texel.a), 0.0, 1.0);
 }

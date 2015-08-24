@@ -1,7 +1,7 @@
 projectSandbox.lights =
 {
     // This constant must also be set in the shader
-    LIGHTS_LIMIT: 512,
+    LIGHTS_LIMIT: 16,
 
     lights: null,
 
