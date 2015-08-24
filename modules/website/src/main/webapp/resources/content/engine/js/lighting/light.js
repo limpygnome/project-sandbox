@@ -58,7 +58,7 @@ Light.prototype.init = function()
 Light.prototype.reset = function()
 {
     // Setup default values
-    this.setOn(true);
+    this.setOn(false);
     this.setDistance(200.0);
     this.setColour( [1.0, 1.0, 1.0] );
     this.setPosition( [50.0 * this.index, 200.0, 0.0] );

@@ -32,9 +32,9 @@ public enum UpdateMasks
    HEALTH(16),
 
    /**
-    * All of the masks combined.
+    * All of the masks combined, excluding ALIVE.
     */
-   ALL_MASKS(1+2+4+8+16)
+   ALL_MASKS(2+4+8+16)
    ;
 
    public final int MASK;

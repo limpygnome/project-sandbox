@@ -2,7 +2,7 @@ projectSandbox.lights =
 {
     // This constant must also be set in the shader, in
     // two places: size of uniform array, limit in for-loop
-    LIGHTS_LIMIT: 1,
+    LIGHTS_LIMIT: 16,
 
     lights: null,
 

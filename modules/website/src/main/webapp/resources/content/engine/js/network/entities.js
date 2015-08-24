@@ -143,6 +143,19 @@ projectSandbox.network.entities =
                     console.debug("engine/network/entities - entity alive - entity id: " + id);
                 }
 			}
+			else
+			{
+			    // Set ent to dead
+			    if (!ent.dead)
+			    {
+			        ent.dead = true;
+			        console.debug("engine/network/entities - entity dead - entity id: " + id);
+
+			        // Raise death event
+			        this.invokeEntityDeath(id, ent);
+			    }
+			}
+
 			if ((mask & this.UPDATEMASK_X) == this.UPDATEMASK_X)
 			{
 				ent.x = dataView.getFloat32(offset);

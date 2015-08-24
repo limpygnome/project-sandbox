@@ -91,7 +91,8 @@ public class EntityUpdatesOutboundPacket extends OutboundPacket
         packetData.add(ent.id);
         
         char mask;
-        
+
+        // Determine bit-fields we'll be updating
         if (forced)
         {
             mask = (char) UpdateMasks.ALL_MASKS.MASK;
@@ -102,6 +103,13 @@ public class EntityUpdatesOutboundPacket extends OutboundPacket
         }
         packetData.add((byte) mask);
 
+        // Add mask to indicate if entity is alive
+        if (!ent.isDead())
+        {
+            mask |= (char) UpdateMasks.ALIVE.MASK;
+        }
+
+        // Add updated fields specified by bitfield
         if ((mask & UpdateMasks.X.MASK) == UpdateMasks.X.MASK)
         {
             packetData.add(ent.positionNew.x);
