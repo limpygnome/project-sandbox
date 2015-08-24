@@ -67,6 +67,7 @@
 		<!-- Game: Living -->
 		<script src="/content/game/js/ent/living/player.js"></script>
 		<script src="/content/game/js/ent/living/sentry.js"></script>
+		<script src="/content/game/js/ent/living/pedestrian.js"></script>
 
 		<!-- Game: Pickups -->
 		<script src="/content/game/js/ent/pickup/abstract_pickup.js"></script>

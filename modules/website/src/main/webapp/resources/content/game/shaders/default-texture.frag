@@ -23,7 +23,7 @@ uniform sampler2D uSampler;
 varying vec3 vCameraPosition;
 varying vec4 vWorldVertex;
 
-uniform Light uLights[16];
+uniform Light uLights[1];
 
 void main(void)
 {
@@ -40,7 +40,7 @@ void main(void)
     vec3 additiveLightColour = vec3(1.0, 1.0, 1.0);
 
     Light light;
-    for (int index = 0; index < 16; index++)
+    for (int index = 0; index < 1; index++)
     {
         light = uLights[index];
 

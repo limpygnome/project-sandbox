@@ -98,7 +98,7 @@
 
             "spawn" :
             {
-                "x" : 240.0,
+                "x" : 440.0,
                 "y" : 70.0,
                 "rotation" : 0.0
             }
@@ -120,6 +120,11 @@
                 "pickup.respawn_delay" : 2000,
                 "health_pickup.health" : 500.0
             }
+        },
+        {
+            "typeName" : "living/pedestrian",
+            "count" : 10,
+            "faction" : 3000
         }
     ],
     
@@ -160,6 +165,27 @@
         },
         {
             "id" : 2000
+        },
+        {
+            "id" : 3000,
+            "spawns" :
+            [
+                {
+                    "x" : 200.0,
+                    "y" : 140.0,
+                    "rotation" : 0.0
+                },
+                {
+                    "x" : 230.0,
+                    "y" : 140.0,
+                    "rotation" : 0.0
+                },
+                {
+                    "x" : 260.0,
+                    "y" : 140.0,
+                    "rotation" : 0.0
+                }
+            ]
         }
     ]
 }
