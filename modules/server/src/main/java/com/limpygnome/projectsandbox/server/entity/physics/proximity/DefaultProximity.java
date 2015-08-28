@@ -4,6 +4,7 @@ import com.limpygnome.projectsandbox.server.Controller;
 import com.limpygnome.projectsandbox.server.entity.Entity;
 import com.limpygnome.projectsandbox.server.entity.death.AbstractKiller;
 import com.limpygnome.projectsandbox.server.entity.physics.Vector2;
+import com.limpygnome.projectsandbox.server.util.CustomMath;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -14,7 +15,7 @@ import java.util.Map;
 
 /**
  * TODO: refactor this class to use a quadtree.
- *
+ * <p>
  * Created by limpygnome on 13/05/15.
  */
 public class DefaultProximity
@@ -25,13 +26,13 @@ public class DefaultProximity
     /**
      * Finds nearby entities and applies damage based on distance from center point.
      *
-     * @param radius The radius of affected entities
-     * @param maximumDamage The maximum damage, linearly applied, relative to distance
-     * @param entityCenter Finds entities near this entity
+     * @param radius          The radius of affected entities
+     * @param maximumDamage   The maximum damage, linearly applied, relative to distance
+     * @param entityCenter    Finds entities near this entity
      * @param testAllVertices
      */
     public static <T extends Class<? extends AbstractKiller>> void applyLinearRadiusDamage(Controller controller, Entity entityCenter, float radius,
-                                               float maximumDamage, boolean testAllVertices, T killerType)
+                                                                                           float maximumDamage, boolean testAllVertices, T killerType)
     {
         List<ProximityResult> proximityResults = nearbyEnts(controller, entityCenter, radius, testAllVertices, false);
 
@@ -133,4 +134,92 @@ public class DefaultProximity
 
         return result;
     }
+
+    public RotateResult rotateTowardsTarget(Entity entity, Entity target, float rotateRate, float defaultRotation)
+    {
+        return rotateTowardsTarget(entity, target.positionNew, rotateRate, defaultRotation);
+    }
+
+    /**
+     * Computes angle offset between entity and target vector.
+     *
+     * @param entity source entity
+     * @param target the target vector
+     * @return the rotation between entity's rotation and target vector
+     */
+    public static float computeTargetAngleOffset(Entity entity, Vector2 target)
+    {
+        return Vector2.angleToFaceTarget(
+                entity.positionNew, entity.rotation, target
+        );
+    }
+
+    /**
+     * Rotates towards a given target.
+     *
+     * @param entity the entity to manipulate
+     * @param target The target to rotate towards; can be null to rotate towards default rotation
+     * @param rotateRate the maximum rotation step per cycle/call to this method
+     * @param defaultRotation the default rotation for when target is null
+     * @return
+     */
+    public static RotateResult rotateTowardsTarget(Entity entity, Vector2 target, float rotateRate, float defaultRotation)
+    {
+        // Lock entity since we need changes to be atomic
+        synchronized (entity)
+        {
+            RotateResult rotateResult = new RotateResult();
+
+            // Compute rotation offset needed to point towards target or default rotation
+            float targetAngleOffset;
+
+            if (target != null)
+            {
+                targetAngleOffset = computeTargetAngleOffset(entity, target);
+            }
+            else
+            {
+                targetAngleOffset = CustomMath.clampAngle(defaultRotation - entity.rotation);
+            }
+
+            rotateResult.setAngleOffset(targetAngleOffset);
+
+            // Check if to not rotate towards target
+            if (rotateRate == 0.0f)
+            {
+                rotateResult.setAngleOffsetPostMovement(targetAngleOffset);
+            }
+            else
+            {
+                float targetAngleOffsetAbs = Math.abs(targetAngleOffset);
+
+                // If offset less than rate, just rotate to align...
+                float rotateOffset;
+
+                if (targetAngleOffsetAbs < rotateRate)
+                {
+                    rotateOffset = targetAngleOffset;
+                }
+                else if (targetAngleOffset < 0.0f)
+                {
+                    rotateOffset = -rotateRate;
+                }
+                else if (targetAngleOffset > 0.0f)
+                {
+                    rotateOffset = rotateRate;
+                }
+                else
+                {
+                    rotateOffset = 0.0f;
+                }
+
+                // Apply offset for current step
+                entity.rotationOffset(rotateOffset);
+                rotateResult.setAngleOffsetPostMovement(targetAngleOffset - rotateOffset);
+            }
+
+            return rotateResult;
+        }
+    }
+
 }

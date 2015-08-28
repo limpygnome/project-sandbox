@@ -12,6 +12,7 @@ import com.limpygnome.projectsandbox.server.entity.physics.casting.CastingResult
 import com.limpygnome.projectsandbox.server.entity.physics.casting.victims.EntityCastVictim;
 import com.limpygnome.projectsandbox.server.entity.physics.proximity.DefaultProximity;
 import com.limpygnome.projectsandbox.server.entity.physics.proximity.ProximityResult;
+import com.limpygnome.projectsandbox.server.entity.physics.proximity.RotateResult;
 import com.limpygnome.projectsandbox.server.player.PlayerInfo;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -50,46 +51,32 @@ public class Sentry extends Entity
         // Find nearest ent
         List<ProximityResult> ents = DefaultProximity.nearbyEnts(controller, this, RANGE, true, true);
 
+        // Decide on target vector
+        Vector2 targetVector;
+
         if (!ents.isEmpty())
         {
-            // Rotate towards closest ent and kill it
-            ProximityResult result = ents.get(0);
-            float targetAngleOffset = Vector2.angleToFaceTarget(positionNew, rotation, result.entity.positionNew);
-            rotateToTarget(controller, targetAngleOffset, true);
+            targetVector = ents.get(0).entity.positionNew;
         }
         else
         {
-            // Rotate towards default rotation
-            rotateToTarget(controller, defaultRotation - rotation, false);
+            // Will cause rotation towards default rotation
+            targetVector = null;
+        }
+
+        // Move towards target
+        RotateResult rotateResult = DefaultProximity.rotateTowardsTarget(
+                this, targetVector, ROTATION_RATE, defaultRotation
+        );
+
+        // Decide if to fire on target
+        if (targetVector != null && Math.abs(rotateResult.getAngleOffsetPostMovement()) < ROTATION_DIFF_FIRE)
+        {
+            fire(controller);
         }
 
         // Perform ent logic
         super.logic(controller);
-    }
-
-    private void rotateToTarget(Controller controller, float targetAngleOffset, boolean fireMode)
-    {
-        float targetAngleOffsetAbs = Math.abs(targetAngleOffset);
-
-        // Rotate towards target
-        if (targetAngleOffsetAbs < ROTATION_RATE)
-        {
-            rotationOffset(targetAngleOffset);
-        }
-        else if (targetAngleOffset < 0.0f)
-        {
-            rotationOffset(-ROTATION_RATE);
-        }
-        else if (targetAngleOffset > 0.0f)
-        {
-            rotationOffset(ROTATION_RATE);
-        }
-
-        // Check if we can fire and  we're within the right angle to fire
-        if (fireMode && targetAngleOffsetAbs <= ROTATION_DIFF_FIRE)
-        {
-            fire(controller);
-        }
     }
 
     private void fire(Controller controller)

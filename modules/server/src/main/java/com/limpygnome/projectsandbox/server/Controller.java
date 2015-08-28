@@ -1,6 +1,7 @@
 package com.limpygnome.projectsandbox.server;
 
 import com.limpygnome.projectsandbox.server.effect.EffectsManager;
+import com.limpygnome.projectsandbox.server.entity.ArtificialIntelligenceManager;
 import com.limpygnome.projectsandbox.server.entity.EntityManager;
 import com.limpygnome.projectsandbox.server.entity.RespawnManager;
 import com.limpygnome.projectsandbox.server.inventory.InventoryManager;
@@ -30,6 +31,7 @@ public class Controller
     public InventoryManager inventoryManager;
     public MapManager mapManager;
     public EffectsManager effectsManager;
+    public ArtificialIntelligenceManager artificialIntelligenceManager;
     public SessionManager sessionManager;
 
     public Controller()
@@ -58,6 +60,8 @@ public class Controller
 
             mapManager = new MapManager(this);
             mapManager.load();
+
+            artificialIntelligenceManager = new ArtificialIntelligenceManager(this);
 
             sessionManager = new SessionManager();
             
