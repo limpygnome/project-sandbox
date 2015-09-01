@@ -7,6 +7,7 @@ import com.limpygnome.projectsandbox.server.entity.annotation.EntityType;
 import com.limpygnome.projectsandbox.server.entity.physics.Vector2;
 import com.limpygnome.projectsandbox.server.entity.physics.casting.Casting;
 import com.limpygnome.projectsandbox.server.entity.physics.casting.CastingResult;
+import com.limpygnome.projectsandbox.server.entity.physics.pathfinding.Path;
 import com.limpygnome.projectsandbox.server.entity.physics.proximity.DefaultProximity;
 import com.limpygnome.projectsandbox.server.entity.physics.proximity.ProximityResult;
 import com.limpygnome.projectsandbox.server.entity.physics.proximity.RotateResult;
@@ -61,13 +62,11 @@ public class Pedestrian extends Entity
         if (targetEntity != null)
         {
             // Re-compute path towards entity
-            ComputedPath computedPath = controller.artificialIntelligenceManager.computedPathToTarget(
-                    this, targetEntity
-            );
+            Path computedPath = controller.artificialIntelligenceManager.findPath(this, targetEntity);
 
             // Move towards target tile/node
 
-            // Rotate towards target tile/node
+            // Rotate towards target tile/node, or entity
             RotateResult rotateResult;
 
             // Check distance between us and player, decide if to attack...
