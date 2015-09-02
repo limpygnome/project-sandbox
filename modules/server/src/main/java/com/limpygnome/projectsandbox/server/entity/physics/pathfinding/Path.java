@@ -67,7 +67,7 @@ public class Path
         else
         {
             finalPath = new Node[0];
-            LOG.debug("Built path with no nodes");
+//            LOG.debug("Built path with no nodes");
         }
 
         // Destroy data structures used during search

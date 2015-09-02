@@ -5,7 +5,7 @@ import com.limpygnome.projectsandbox.server.world.Map;
 /**
  * Created by limpygnome on 01/09/15.
  */
-public class Node implements Comparable
+public class Node implements Comparable<Node>
 {
     public Node parent;
 
@@ -51,33 +51,40 @@ public class Node implements Comparable
 
         if (tileX != node.tileX) return false;
         return tileY == node.tileY;
-
     }
 
     @Override
     public int hashCode()
     {
-        int result = tileX;
+        int result = 23;
+        result = 31 * result + tileX;
         result = 31 * result + tileY;
         return result;
     }
 
     @Override
-    public int compareTo(Object o)
+    public int compareTo(Node o)
     {
-        if (o == null || !(o instanceof Node))
+        float totalCost = heuristicCost + pathCost;
+        float oTotalCost = o.heuristicCost + o.pathCost;
+
+        if (totalCost > oTotalCost)
         {
-            throw new RuntimeException("Invalid object for comparison - " + o);
+            return 1;
         }
-
-        Node node = (Node) o;
-
-        return (int) (heuristicCost - node.heuristicCost);
+//        else if (totalCost == oTotalCost)
+//        {
+//            return 0;
+//        }
+        else
+        {
+            return -1;
+        }
     }
 
     @Override
     public String toString()
     {
-        return "[tx: " + tileX + ", ty: " + tileY + ", x: " + cachedX + ", y: " + cachedY + "]";
+        return "[tx: " + tileX + ", ty: " + tileY + ", x: " + cachedX + ", y: " + cachedY + ", h cost: " + heuristicCost + "]";
     }
 }

@@ -68,14 +68,14 @@ public class Pedestrian extends Entity
 
         if (targetEntity != null)
         {
-            // Re-compute path towards entity
-            Path computedPath = controller.artificialIntelligenceManager.findPath(this, targetEntity);
-
             // Switch current path to the new path
-            if (computedPath.getTotalNodes() > 0)
+            if (lastPathFound == null)
             {
-                lastPathFound = computedPath;
+                // Re-compute path towards entity
+                lastPathFound = controller.artificialIntelligenceManager.findPath(this, targetEntity);
                 lastPathOffset = 0;
+
+                LOG.debug("Computed new path - {} nodes", lastPathFound.getTotalNodes());
             }
 
             // Move along path
@@ -90,11 +90,13 @@ public class Pedestrian extends Entity
                 if (Vector2.distance(positionNew, nextNodeVector) < 32.0f)
                 {
                     lastPathOffset++;
+                    LOG.info("Node {} / {} reached", lastPathOffset, lastPathFound.getTotalNodes());
                 }
             }
             else
             {
-
+                lastPathFound = null;
+                LOG.debug("Path complete");
                 // Move towards target
                 //  moveToTarget(targetEntity.positionNew);
             }
@@ -162,7 +164,7 @@ public class Pedestrian extends Entity
                     if (entity instanceof Player)
                     {
                         targetEntity = entity;
-                        LOG.debug("New target entity - entity: {}", targetEntity);
+//                        LOG.debug("New target entity - entity: {}", targetEntity);
                         break;
                     }
                 }

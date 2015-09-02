@@ -55,6 +55,9 @@ public class AStarPathFinder implements PathFinder
 
             path.nodes.put(new TilePosition(startTileX, startTileY), startNode);
             path.openNodes.add(startNode);
+
+            LOG.debug("start: {}", startNode);
+            LOG.debug("target: {}, {}", endTileX, endTileY);
         }
 
         int depth = 0;
@@ -67,7 +70,17 @@ public class AStarPathFinder implements PathFinder
 
         while ((depth <= MAX_DEPTH) && !path.openNodes.isEmpty())
         {
+            Node smallest = null;
+            for (Node n : path.openNodes)
+            {
+                if (smallest == null || n.heuristicCost < smallest.heuristicCost)
+                    smallest = n;
+                LOG.debug(" -- {}", n);
+            }
+
             currentNode = path.openNodes.pollFirst();
+
+            LOG.debug("polled {} / smallest: {}", currentNode, smallest);
 
             // Check if we reached the target node
             if (currentNode.tileX == endTileX && currentNode.tileY == endTileY)
@@ -168,6 +181,8 @@ public class AStarPathFinder implements PathFinder
             {
                 path.openNodes.remove(neighborNode);
                 path.closedNodes.remove(neighborNode);
+
+                LOG.debug("REMOVED {}", neighborNode);
             }
         }
 
@@ -179,6 +194,8 @@ public class AStarPathFinder implements PathFinder
             neighborNode.parent = currentNode;
             neighborNode.searchDepth = neighborNode.parent.searchDepth + 1;
             path.openNodes.add(neighborNode);
+
+            LOG.debug("Node added - {}", neighborNode);
         }
 
         return neighborNode;
