@@ -45,6 +45,7 @@ public class AStarPathFinder implements PathFinder
         // Check start tile is usable
         if (!isTileUsable(map, entity, startTileX, startTileY))
         {
+            path.finalizePath(map, endTileX, endTileY);
             return path;
         }
 
@@ -84,7 +85,13 @@ public class AStarPathFinder implements PathFinder
                 for (offsetY = -1; offsetY <= 1; offsetY++)
                 {
                     // Don't check if not a neighbor i.e. current node - 0,0
-                    if ((offsetX == 0) && (offsetY == 0))
+                    if (offsetX == 0 && offsetY == 0)
+                    {
+                        continue;
+                    }
+
+                    // Don't check diagonals
+                    if (!(offsetX == 0 || offsetY == 0))
                     {
                         continue;
                     }
@@ -94,7 +101,7 @@ public class AStarPathFinder implements PathFinder
                     neighborY = currentNode.tileY + offsetY;
 
                     // Check within bounds of map
-                    if (neighborX < 0 || neighborY < 0 || neighborX > map.width || neighborY > map.height)
+                    if (neighborX < 0 || neighborY < 0 || neighborX >= map.width || neighborY >= map.height)
                     {
                         continue;
                     }
@@ -127,7 +134,7 @@ public class AStarPathFinder implements PathFinder
         }
 
         // Finalize path of nodes for entity to travel
-        path.finalizePath(endTileX, endTileY);
+        path.finalizePath(map, endTileX, endTileY);
 
         return path;
     }
@@ -147,8 +154,6 @@ public class AStarPathFinder implements PathFinder
         {
             // Add new node for processing
             neighborNode = new Node(neighborX, neighborY);
-            neighborNode.parent = currentNode;
-            neighborNode.searchDepth = neighborNode.parent.searchDepth + 1;
 
             path.nodes.put(tilePosition, neighborNode);
 
@@ -171,6 +176,9 @@ public class AStarPathFinder implements PathFinder
         {
             neighborNode.pathCost = neighborCost;
             neighborNode.heuristicCost = heuristic.getCost(map, entity, neighborX, neighborY, targetTileX, targetTileY);
+            neighborNode.parent = currentNode;
+            neighborNode.searchDepth = neighborNode.parent.searchDepth + 1;
+            path.openNodes.add(neighborNode);
         }
 
         return neighborNode;

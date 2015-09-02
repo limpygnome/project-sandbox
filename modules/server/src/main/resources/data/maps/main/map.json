@@ -98,7 +98,7 @@
 
             "spawn" :
             {
-                "x" : 440.0,
+                "x" : 740.0,
                 "y" : 70.0,
                 "rotation" : 0.0
             }
@@ -123,7 +123,7 @@
         },
         {
             "typeName" : "living/pedestrian",
-            "count" : 10,
+            "count" : 1,
             "faction" : 3000
         }
     ],

@@ -5,7 +5,7 @@ import com.limpygnome.projectsandbox.server.world.Map;
 /**
  * Created by limpygnome on 01/09/15.
  */
-public class Node
+public class Node implements Comparable
 {
     public Node parent;
 
@@ -34,8 +34,11 @@ public class Node
 
     void buildAndCacheXY(Map map)
     {
-        this.cachedX = (float) tileX * (float) map.tileSize;
-        this.cachedY = (float) tileY * (float) map.tileSize;
+        float tileSize = (float) map.tileSize;
+        float tileSizeHalf = (float) map.tileSize / 2.0f;
+
+        this.cachedX = ((float) tileX * tileSize) + tileSizeHalf;
+        this.cachedY = ((float) tileY * tileSize) + tileSizeHalf;
     }
 
     @Override
@@ -57,5 +60,24 @@ public class Node
         int result = tileX;
         result = 31 * result + tileY;
         return result;
+    }
+
+    @Override
+    public int compareTo(Object o)
+    {
+        if (o == null || !(o instanceof Node))
+        {
+            throw new RuntimeException("Invalid object for comparison - " + o);
+        }
+
+        Node node = (Node) o;
+
+        return (int) (heuristicCost - node.heuristicCost);
+    }
+
+    @Override
+    public String toString()
+    {
+        return "[tx: " + tileX + ", ty: " + tileY + ", x: " + cachedX + ", y: " + cachedY + "]";
     }
 }

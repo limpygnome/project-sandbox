@@ -1,5 +1,9 @@
 package com.limpygnome.projectsandbox.server.entity.physics.pathfinding;
 
+import com.limpygnome.projectsandbox.server.world.Map;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.TreeSet;
@@ -9,6 +13,8 @@ import java.util.TreeSet;
  */
 public class Path
 {
+    private final static Logger LOG = LogManager.getLogger(Path.class);
+
     public HashSet<Node> closedNodes;
     public TreeSet<Node> openNodes;
     public HashMap<TilePosition, Node> nodes;
@@ -32,12 +38,12 @@ public class Path
         return finalPath.length;
     }
 
-    public void finalizePath(int targetX, int targetY)
+    public void finalizePath(Map map, int targetX, int targetY)
     {
         // Build final path
         Node nodeTarget = nodes.get(new TilePosition(targetX, targetY));
 
-        if (nodeTarget != null && nodeTarget.parent != null)
+        if (nodeTarget != null)
         {
             // Exclude start node
             finalPath = new Node[nodeTarget.searchDepth];
@@ -47,12 +53,21 @@ public class Path
             while (--i >= 0 && nodeTarget != null)
             {
                 finalPath[i] = nodeTarget;
+                nodeTarget.buildAndCacheXY(map);
                 nodeTarget = nodeTarget.parent;
             }
+
+            for (Node node : finalPath)
+            {
+                LOG.debug(" - node: " + node);
+            }
+
+            LOG.debug("Built path with {} nodes", finalPath.length);
         }
         else
         {
             finalPath = new Node[0];
+            LOG.debug("Built path with no nodes");
         }
 
         // Destroy data structures used during search

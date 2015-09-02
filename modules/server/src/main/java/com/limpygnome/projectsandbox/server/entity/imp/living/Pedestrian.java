@@ -2,21 +2,21 @@ package com.limpygnome.projectsandbox.server.entity.imp.living;
 
 import com.limpygnome.projectsandbox.server.Controller;
 import com.limpygnome.projectsandbox.server.entity.Entity;
-import com.limpygnome.projectsandbox.server.entity.ai.ComputedPath;
 import com.limpygnome.projectsandbox.server.entity.annotation.EntityType;
 import com.limpygnome.projectsandbox.server.entity.physics.Vector2;
-import com.limpygnome.projectsandbox.server.entity.physics.casting.Casting;
-import com.limpygnome.projectsandbox.server.entity.physics.casting.CastingResult;
+import com.limpygnome.projectsandbox.server.entity.physics.pathfinding.Node;
 import com.limpygnome.projectsandbox.server.entity.physics.pathfinding.Path;
 import com.limpygnome.projectsandbox.server.entity.physics.proximity.DefaultProximity;
 import com.limpygnome.projectsandbox.server.entity.physics.proximity.ProximityResult;
-import com.limpygnome.projectsandbox.server.entity.physics.proximity.RotateResult;
 import com.limpygnome.projectsandbox.server.inventory.Inventory;
 import com.limpygnome.projectsandbox.server.inventory.item.weapon.Smg;
 import com.limpygnome.projectsandbox.server.player.PlayerInfo;
-import com.limpygnome.projectsandbox.server.util.CustomMath;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.util.List;
+
+import static com.limpygnome.projectsandbox.server.constant.PlayerConstants.DEFAULT_MOVEMENT_SPEED_FACTOR;
 
 /**
  * Looks and acts as a player, but using AI.
@@ -24,6 +24,8 @@ import java.util.List;
 @EntityType(typeId = 510, typeName = "living/pedestrian")
 public class Pedestrian extends Entity
 {
+    private final static Logger LOG = LogManager.getLogger(Pedestrian.class);
+
     private Entity targetEntity;
     private Inventory inventory;
 
@@ -31,20 +33,25 @@ public class Pedestrian extends Entity
     private float attackDistance;
     private float attackRotationOffset;
 
+    private Path lastPathFound;
+    private int lastPathOffset;
+
     public Pedestrian()
     {
         super((short) 16, (short) 9);
 
         setMaxHealth(80.0f);
 
-        this.followDistance = 450.0f;
-        this.attackDistance = 100.0f;
-        this.attackRotationOffset = 0.26f;
+        this.targetEntity = null;
 
         this.inventory = new Inventory(this);
         this.inventory.add(new Class[]{
                 Smg.class
         });
+
+        this.followDistance = 450.0f;
+        this.attackDistance = 100.0f;
+        this.attackRotationOffset = 0.26f;
     }
 
     @Override
@@ -64,10 +71,33 @@ public class Pedestrian extends Entity
             // Re-compute path towards entity
             Path computedPath = controller.artificialIntelligenceManager.findPath(this, targetEntity);
 
-            // Move towards target tile/node
+            // Switch current path to the new path
+            if (computedPath.getTotalNodes() > 0)
+            {
+                lastPathFound = computedPath;
+                lastPathOffset = 0;
+            }
 
-            // Rotate towards target tile/node, or entity
-            RotateResult rotateResult;
+            // Move along path
+            if (lastPathFound != null && lastPathOffset < lastPathFound.getTotalNodes())
+            {
+                Node nextNode = lastPathFound.getNode(lastPathOffset);
+                Vector2 nextNodeVector = new Vector2(nextNode.cachedX, nextNode.cachedY);
+                moveToTarget(nextNodeVector);
+
+                // Determine if we've met the node
+                // TODO: magic value, replace!
+                if (Vector2.distance(positionNew, nextNodeVector) < 32.0f)
+                {
+                    lastPathOffset++;
+                }
+            }
+            else
+            {
+
+                // Move towards target
+                //  moveToTarget(targetEntity.positionNew);
+            }
 
             // Check distance between us and player, decide if to attack...
             float distance = Vector2.distance(this.positionNew, targetEntity.positionNew);
@@ -82,6 +112,22 @@ public class Pedestrian extends Entity
         super.logic(controller);
     }
 
+    private synchronized void moveToTarget(Vector2 target)
+    {
+        // Get angle between current position and target
+        float angleOffset = DefaultProximity.computeTargetAngleOffset(this, target);
+
+        // Move towards target
+        positionOffset(
+                Vector2.vectorFromAngle(rotation + angleOffset, DEFAULT_MOVEMENT_SPEED_FACTOR / 2.0f)//DEFAULT_MOVEMENT_SPEED_FACTOR)
+        );
+
+        // Rotate towards target
+        rotationOffset(angleOffset);
+
+        LOG.debug("Moving to target - vector: {}, angle offset: {}", target, angleOffset);
+    }
+
     private synchronized void updateTargetEntity(Controller controller)
     {
         if (targetEntity != null)
@@ -92,6 +138,8 @@ public class Pedestrian extends Entity
             if (distance > followDistance)
             {
                 targetEntity = null;
+                lastPathFound = null;
+                LOG.debug("Target entity too far, reset");
             }
         }
 
@@ -105,7 +153,19 @@ public class Pedestrian extends Entity
 
             if (!nearbyEnts.isEmpty())
             {
-                targetEntity = nearbyEnts.get(0).entity;
+                // Find nearest player
+                Entity entity;
+                for (ProximityResult proximityResult : nearbyEnts)
+                {
+                    entity = proximityResult.entity;
+
+                    if (entity instanceof Player)
+                    {
+                        targetEntity = entity;
+                        LOG.debug("New target entity - entity: {}", targetEntity);
+                        break;
+                    }
+                }
             }
         }
     }
