@@ -68,8 +68,20 @@ public class Pedestrian extends Entity
 
         if (targetEntity != null)
         {
+            boolean rebuildPath;
+
+            if (lastPathFound != null)
+            {
+                // Check if to recompute path if target entity has moved too far from end node
+                rebuildPath = (lastPathFound.getTargetNodeDistance(targetEntity.positionNew) > lastPathFound.nodeSeparation);
+            }
+            else
+            {
+                rebuildPath = true;
+            }
+
             // Switch current path to the new path
-            if (lastPathFound == null)
+            if (rebuildPath)
             {
                 // Re-compute path towards entity
                 lastPathFound = controller.artificialIntelligenceManager.findPath(this, targetEntity);
@@ -82,12 +94,11 @@ public class Pedestrian extends Entity
             if (lastPathFound != null && lastPathOffset < lastPathFound.getTotalNodes())
             {
                 Node nextNode = lastPathFound.getNode(lastPathOffset);
-                Vector2 nextNodeVector = new Vector2(nextNode.cachedX, nextNode.cachedY);
+                Vector2 nextNodeVector = nextNode.cachedVector;
                 moveToTarget(nextNodeVector);
 
                 // Determine if we've met the node
-                // TODO: magic value, replace!
-                if (Vector2.distance(positionNew, nextNodeVector) < 32.0f)
+                if (Vector2.distance(positionNew, nextNodeVector) < lastPathFound.nodeSeparation / 2.0f)
                 {
                     lastPathOffset++;
                     LOG.info("Node {} / {} reached", lastPathOffset, lastPathFound.getTotalNodes());
@@ -95,10 +106,11 @@ public class Pedestrian extends Entity
             }
             else
             {
+                // Reset path, since it's now complete; rotate towards target
                 lastPathFound = null;
+
+                rotateToTarget(targetEntity.positionNew);
                 LOG.debug("Path complete");
-                // Move towards target
-                //  moveToTarget(targetEntity.positionNew);
             }
 
             // Check distance between us and player, decide if to attack...
@@ -114,18 +126,25 @@ public class Pedestrian extends Entity
         super.logic(controller);
     }
 
-    private synchronized void moveToTarget(Vector2 target)
+    private synchronized float rotateToTarget(Vector2 target)
     {
         // Get angle between current position and target
         float angleOffset = DefaultProximity.computeTargetAngleOffset(this, target);
+
+        // Rotate towards target
+        rotationOffset(angleOffset);
+
+        return angleOffset;
+    }
+
+    private synchronized void moveToTarget(Vector2 target)
+    {
+        float angleOffset = rotateToTarget(target);
 
         // Move towards target
         positionOffset(
                 Vector2.vectorFromAngle(rotation + angleOffset, DEFAULT_MOVEMENT_SPEED_FACTOR / 2.0f)//DEFAULT_MOVEMENT_SPEED_FACTOR)
         );
-
-        // Rotate towards target
-        rotationOffset(angleOffset);
 
         LOG.debug("Moving to target - vector: {}, angle offset: {}", target, angleOffset);
     }
@@ -202,4 +221,5 @@ public class Pedestrian extends Entity
     {
         return null;
     }
+
 }

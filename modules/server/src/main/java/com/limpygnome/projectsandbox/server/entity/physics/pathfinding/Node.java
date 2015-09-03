@@ -1,5 +1,6 @@
 package com.limpygnome.projectsandbox.server.entity.physics.pathfinding;
 
+import com.limpygnome.projectsandbox.server.entity.physics.Vector2;
 import com.limpygnome.projectsandbox.server.world.Map;
 
 /**
@@ -15,8 +16,7 @@ public class Node implements Comparable<Node>
     public float heuristicCost;
     public int searchDepth;
 
-    public float cachedX;
-    public float cachedY;
+    public Vector2 cachedVector;
 
     public Node(int tileX, int tileY)
     {
@@ -37,8 +37,10 @@ public class Node implements Comparable<Node>
         float tileSize = (float) map.tileSize;
         float tileSizeHalf = (float) map.tileSize / 2.0f;
 
-        this.cachedX = ((float) tileX * tileSize) + tileSizeHalf;
-        this.cachedY = ((float) tileY * tileSize) + tileSizeHalf;
+        float x = ((float) tileX * tileSize) + tileSizeHalf;
+        float y = ((float) tileY * tileSize) + tileSizeHalf;
+
+        this.cachedVector = new Vector2(x, y);
     }
 
     @Override
@@ -72,10 +74,6 @@ public class Node implements Comparable<Node>
         {
             return 1;
         }
-//        else if (totalCost == oTotalCost)
-//        {
-//            return 0;
-//        }
         else
         {
             return -1;
@@ -85,6 +83,6 @@ public class Node implements Comparable<Node>
     @Override
     public String toString()
     {
-        return "[tx: " + tileX + ", ty: " + tileY + ", x: " + cachedX + ", y: " + cachedY + ", h cost: " + heuristicCost + "]";
+        return "[tx: " + tileX + ", ty: " + tileY + ", xy: " + cachedVector + ", h cost: " + heuristicCost + "]";
     }
 }
