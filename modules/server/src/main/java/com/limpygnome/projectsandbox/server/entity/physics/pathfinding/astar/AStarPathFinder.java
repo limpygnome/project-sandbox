@@ -7,8 +7,6 @@ import com.limpygnome.projectsandbox.server.entity.physics.pathfinding.PathFinde
 import com.limpygnome.projectsandbox.server.entity.physics.pathfinding.TilePosition;
 import com.limpygnome.projectsandbox.server.world.Map;
 import com.limpygnome.projectsandbox.server.world.TileType;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
 /**
  * Path finder implementation using A* algorithm.
@@ -17,8 +15,6 @@ import org.apache.logging.log4j.Logger;
  */
 public class AStarPathFinder implements PathFinder
 {
-    private final static Logger LOG = LogManager.getLogger(AStarPathFinder.class);
-
     public static final int MAX_DEPTH = 200;
 
     private AStarHeuristic heuristic;
@@ -55,37 +51,22 @@ public class AStarPathFinder implements PathFinder
 
             path.nodes.put(new TilePosition(startTileX, startTileY), startNode);
             path.openNodes.add(startNode);
-
-            LOG.debug("start: {}", startNode);
-            LOG.debug("target: {}, {}", endTileX, endTileY);
         }
 
         int depth = 0;
         Node currentNode;
         Node neighborNode;
         int offsetX, offsetY;
-        boolean found = false;
         int neighborX;
         int neighborY;
 
         while ((depth <= MAX_DEPTH) && !path.openNodes.isEmpty())
         {
-            Node smallest = null;
-            for (Node n : path.openNodes)
-            {
-                if (smallest == null || n.heuristicCost < smallest.heuristicCost)
-                    smallest = n;
-                LOG.debug(" -- {}", n);
-            }
-
             currentNode = path.openNodes.pollFirst();
-
-            LOG.debug("polled {} / smallest: {}", currentNode, smallest);
 
             // Check if we reached the target node
             if (currentNode.tileX == endTileX && currentNode.tileY == endTileY)
             {
-                found = true;
                 break;
             }
 
@@ -129,23 +110,6 @@ public class AStarPathFinder implements PathFinder
             }
         }
 
-        // Output dev message
-        if (LOG.isDebugEnabled())
-        {
-            if (found)
-            {
-                LOG.debug("Path found");
-            }
-            else if (depth > MAX_DEPTH)
-            {
-                LOG.debug("Max depth exceeded whilst finding path");
-            }
-            else if (path.openNodes.isEmpty())
-            {
-                LOG.debug("No open nodes left whilst finding path");
-            }
-        }
-
         // Finalize path of nodes for entity to travel
         path.finalizePath(map, endTileX, endTileY);
 
@@ -181,8 +145,6 @@ public class AStarPathFinder implements PathFinder
             {
                 path.openNodes.remove(neighborNode);
                 path.closedNodes.remove(neighborNode);
-
-                LOG.debug("REMOVED {}", neighborNode);
             }
         }
 
@@ -194,8 +156,6 @@ public class AStarPathFinder implements PathFinder
             neighborNode.parent = currentNode;
             neighborNode.searchDepth = neighborNode.parent.searchDepth + 1;
             path.openNodes.add(neighborNode);
-
-            LOG.debug("Node added - {}", neighborNode);
         }
 
         return neighborNode;

@@ -68,6 +68,10 @@ public class Pedestrian extends Entity
 
         if (targetEntity != null)
         {
+            float distance = Vector2.distance(this.positionNew, targetEntity.positionNew);
+            boolean withinAttackDistance = distance < attackDistance;
+
+            // Determine if to rebuild path
             boolean rebuildPath;
 
             if (lastPathFound != null)
@@ -86,8 +90,6 @@ public class Pedestrian extends Entity
                 // Re-compute path towards entity
                 lastPathFound = controller.artificialIntelligenceManager.findPath(this, targetEntity);
                 lastPathOffset = 0;
-
-                LOG.debug("Computed new path - {} nodes", lastPathFound.getTotalNodes());
             }
 
             // Move along path
@@ -95,13 +97,12 @@ public class Pedestrian extends Entity
             {
                 Node nextNode = lastPathFound.getNode(lastPathOffset);
                 Vector2 nextNodeVector = nextNode.cachedVector;
-                moveToTarget(nextNodeVector);
+                moveToTarget(nextNodeVector, withinAttackDistance);
 
-                // Determine if we've met the node
+                // Determine if we've met the current targeted node
                 if (Vector2.distance(positionNew, nextNodeVector) < lastPathFound.nodeSeparation / 2.0f)
                 {
                     lastPathOffset++;
-                    LOG.info("Node {} / {} reached", lastPathOffset, lastPathFound.getTotalNodes());
                 }
             }
             else
@@ -109,14 +110,12 @@ public class Pedestrian extends Entity
                 // Reset path, since it's now complete; rotate towards target
                 lastPathFound = null;
 
+                // Rotate towards target
                 rotateToTarget(targetEntity.positionNew);
-                LOG.debug("Path complete");
             }
 
             // Check distance between us and player, decide if to attack...
-            float distance = Vector2.distance(this.positionNew, targetEntity.positionNew);
-
-            if (distance < attackDistance)
+            if (withinAttackDistance)
             {
                 // Fire selected weapon in inventory
                 fireInventoryWeapon(controller);
@@ -126,41 +125,62 @@ public class Pedestrian extends Entity
         super.logic(controller);
     }
 
-    private synchronized float rotateToTarget(Vector2 target)
+    private synchronized void rotateToTarget(Vector2 target)
     {
         // Get angle between current position and target
         float angleOffset = DefaultProximity.computeTargetAngleOffset(this, target);
 
         // Rotate towards target
         rotationOffset(angleOffset);
-
-        return angleOffset;
     }
 
-    private synchronized void moveToTarget(Vector2 target)
+    private synchronized void moveToTarget(Vector2 target, boolean rotateTowardsTarget)
     {
-        float angleOffset = rotateToTarget(target);
+        // Get angle between current position and target
+        float angleOffset = DefaultProximity.computeTargetAngleOffset(this, target);
+
+        // Rotate towards target - either node or target
+        if (rotateTowardsTarget)
+        {
+            // Rotate towards target
+            rotateToTarget(targetEntity.positionNew);
+        }
+        else
+        {
+            // Rotate towards node or target
+            rotationOffset(angleOffset);
+        }
 
         // Move towards target
         positionOffset(
-                Vector2.vectorFromAngle(rotation + angleOffset, DEFAULT_MOVEMENT_SPEED_FACTOR / 2.0f)//DEFAULT_MOVEMENT_SPEED_FACTOR)
+                Vector2.vectorFromAngle(rotation + angleOffset, DEFAULT_MOVEMENT_SPEED_FACTOR)
         );
+    }
 
-        LOG.debug("Moving to target - vector: {}, angle offset: {}", target, angleOffset);
+    private synchronized void resetTargetEntity()
+    {
+        targetEntity = null;
+        lastPathFound = null;
     }
 
     private synchronized void updateTargetEntity(Controller controller)
     {
         if (targetEntity != null)
         {
-            // Check target is not too far away; we want to stay locked onto a target
-            float distance = Vector2.distance(this.positionNew, targetEntity.positionNew);
-
-            if (distance > followDistance)
+            // Check target is still alive and not deleted
+            if (targetEntity.isDead() || targetEntity.isDeleted())
             {
-                targetEntity = null;
-                lastPathFound = null;
-                LOG.debug("Target entity too far, reset");
+                resetTargetEntity();
+            }
+            else
+            {
+                // Check target is not too far away; we want to stay locked onto a target
+                float distance = Vector2.distance(this.positionNew, targetEntity.positionNew);
+
+                if (distance > followDistance)
+                {
+                    resetTargetEntity();
+                }
             }
         }
 
@@ -183,7 +203,6 @@ public class Pedestrian extends Entity
                     if (entity instanceof Player)
                     {
                         targetEntity = entity;
-//                        LOG.debug("New target entity - entity: {}", targetEntity);
                         break;
                     }
                 }

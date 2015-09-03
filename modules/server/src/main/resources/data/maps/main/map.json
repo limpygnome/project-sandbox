@@ -133,7 +133,7 @@
         },
         {
             "typeName" : "living/pedestrian",
-            "count" : 1,
+            "count" : 20,
             "faction" : 3000
         }
     ],

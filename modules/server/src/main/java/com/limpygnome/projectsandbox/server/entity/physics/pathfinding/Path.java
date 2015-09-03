@@ -2,20 +2,16 @@ package com.limpygnome.projectsandbox.server.entity.physics.pathfinding;
 
 import com.limpygnome.projectsandbox.server.entity.physics.Vector2;
 import com.limpygnome.projectsandbox.server.world.Map;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.TreeSet;
 
 /**
- * Created by limpygnome on 01/09/15.
+ * Used to hold the result of nodes to traverse and follow from a path-finding computation.
  */
 public class Path
 {
-    private final static Logger LOG = LogManager.getLogger(Path.class);
-
     public HashSet<Node> closedNodes;
     public TreeSet<Node> openNodes;
     public HashMap<TilePosition, Node> nodes;
@@ -62,25 +58,17 @@ public class Path
             finalPath = new Node[nodeTarget.searchDepth + 1];
             int i = nodeTarget.searchDepth + 1;
 
-            // TODO: consider more checking in this region
+            // TODO: consider more checking in this region; may impact performance though
             while (--i >= 0 && nodeTarget != null)
             {
                 finalPath[i] = nodeTarget;
                 nodeTarget.buildAndCacheXY(map);
                 nodeTarget = nodeTarget.parent;
             }
-
-            for (Node node : finalPath)
-            {
-                LOG.debug(" - node: " + node);
-            }
-
-            LOG.debug("Built path with {} nodes", finalPath.length);
         }
         else
         {
             finalPath = new Node[0];
-//            LOG.debug("Built path with no nodes");
         }
 
         // Node separation is tile size
