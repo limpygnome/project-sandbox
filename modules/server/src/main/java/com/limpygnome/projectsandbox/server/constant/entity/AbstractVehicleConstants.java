@@ -3,8 +3,10 @@ package com.limpygnome.projectsandbox.server.constant.entity;
 /**
  * Created by limpygnome on 03/07/15.
  */
-public class AbstractVehicleConstants
+public final class AbstractVehicleConstants
 {
+
+    private AbstractVehicleConstants() { }
 
     /**
      * The minimum speed to apply damage in a collision.

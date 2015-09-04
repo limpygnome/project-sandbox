@@ -35,10 +35,7 @@ public class Player extends Entity
 
     public Player()
     {
-        super(
-                (short) 16,
-                (short) 9
-        );
+        super(PLAYER_WIDTH, PLAYER_HEIGHT);
 
         // Set default values
         this.movementSpeedFactor = DEFAULT_MOVEMENT_SPEED_FACTOR;

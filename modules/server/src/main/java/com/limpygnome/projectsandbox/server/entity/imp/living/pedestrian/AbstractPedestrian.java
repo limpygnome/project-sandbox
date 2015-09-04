@@ -1,8 +1,9 @@
-package com.limpygnome.projectsandbox.server.entity.imp.living;
+package com.limpygnome.projectsandbox.server.entity.imp.living.pedestrian;
 
 import com.limpygnome.projectsandbox.server.Controller;
 import com.limpygnome.projectsandbox.server.entity.Entity;
-import com.limpygnome.projectsandbox.server.entity.annotation.EntityType;
+import com.limpygnome.projectsandbox.server.entity.imp.living.Player;
+import com.limpygnome.projectsandbox.server.entity.imp.vehicle.AbstractVehicle;
 import com.limpygnome.projectsandbox.server.entity.physics.Vector2;
 import com.limpygnome.projectsandbox.server.entity.physics.casting.Casting;
 import com.limpygnome.projectsandbox.server.entity.physics.casting.CastingResult;
@@ -13,52 +14,54 @@ import com.limpygnome.projectsandbox.server.entity.physics.proximity.DefaultProx
 import com.limpygnome.projectsandbox.server.entity.physics.proximity.ProximityResult;
 import com.limpygnome.projectsandbox.server.inventory.Inventory;
 import com.limpygnome.projectsandbox.server.inventory.InventoryInvokeState;
-import com.limpygnome.projectsandbox.server.inventory.item.weapon.RocketLauncher;
-import com.limpygnome.projectsandbox.server.inventory.item.weapon.Smg;
 import com.limpygnome.projectsandbox.server.player.PlayerInfo;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
 import java.util.List;
 
-import static com.limpygnome.projectsandbox.server.constant.PlayerConstants.DEFAULT_MOVEMENT_SPEED_FACTOR;
+import static com.limpygnome.projectsandbox.server.constant.entity.PedestrianConstants.*;
 
 /**
- * Looks and acts as a player, but using AI.
+ * Used as a base class for implementing pedestrians, which behave similar to players.
  */
-@EntityType(typeId = 510, typeName = "living/pedestrian")
-public class Pedestrian extends Entity
+public abstract class AbstractPedestrian extends Entity
 {
-    private final static Logger LOG = LogManager.getLogger(Pedestrian.class);
-
     private Entity targetEntity;
     private Inventory inventory;
 
+    private float engageDistance;
+    private float followSpeed;
     private float followDistance;
     private float attackDistance;
-    private float attackRotationOffset;
     private float attackRotationNoise;
 
     private Path lastPathFound;
     private int lastPathOffset;
 
-    public Pedestrian()
+    public AbstractPedestrian(short width, short height, float health, Class[] inventoryItems, float engageDistance,
+                              float followSpeed, float followDistance, float attackDistance, float attackRotationNoise)
     {
-        super((short) 16, (short) 9);
+        super(width, height);
 
-        setMaxHealth(80.0f);
+        setMaxHealth(health);
 
         this.targetEntity = null;
 
-        this.inventory = new Inventory(this);
-        this.inventory.add(new Class[]{
-                RocketLauncher.class
-        });
+        // Setup inventory
+        if (inventoryItems != null && inventoryItems.length > 0)
+        {
+            this.inventory = new Inventory(this);
+            this.inventory.add(inventoryItems);
+        }
+        else
+        {
+            this.inventory = null;
+        }
 
-        this.followDistance = 450.0f;
-        this.attackDistance = 200.0f;
-        this.attackRotationOffset = 0.26f;
-        this.attackRotationNoise = 0.4f;
+        this.engageDistance = engageDistance;
+        this.followSpeed = followSpeed;
+        this.followDistance = followDistance;
+        this.attackDistance = attackDistance;
+        this.attackRotationNoise = attackRotationNoise;
     }
 
     @Override
@@ -160,7 +163,7 @@ public class Pedestrian extends Entity
 
         // Move towards target
         positionOffset(
-                Vector2.vectorFromAngle(rotation + angleOffset, DEFAULT_MOVEMENT_SPEED_FACTOR)
+                Vector2.vectorFromAngle(rotation + angleOffset, attackDistance)
         );
     }
 
@@ -196,7 +199,7 @@ public class Pedestrian extends Entity
             // Find nearest entity...
             // TODO: consider if we should test all vertices, expensive...
             List<ProximityResult> nearbyEnts = DefaultProximity.nearbyEnts(
-                    controller, this, followDistance, true, true
+                    controller, this, engageDistance, true, true
             );
 
             if (!nearbyEnts.isEmpty())
@@ -207,7 +210,13 @@ public class Pedestrian extends Entity
                 {
                     entity = proximityResult.entity;
 
-                    if (entity instanceof Player)
+                    if  (
+                            entity.faction != this.faction &&
+                            (
+                                (entity instanceof Player) || (entity instanceof AbstractVehicle) ||
+                                (entity instanceof AbstractPedestrian)
+                            )
+                        )
                     {
                         targetEntity = entity;
                         break;
@@ -228,7 +237,7 @@ public class Pedestrian extends Entity
         // Compute offset to target
         float targetAngleOffsetToTarget = DefaultProximity.computeTargetAngleOffset(this, targetEntity.positionNew);
 
-        if (inventory != null && Math.abs(targetAngleOffsetToTarget) <= attackRotationOffset)
+        if (inventory != null && Math.abs(targetAngleOffsetToTarget) <= ROTATIONAL_OFFSET_TO_ATTACK)
         {
             // Check we have line of sight
             CastingResult castingResult = Casting.cast(controller, this, rotation, attackDistance);
@@ -249,12 +258,6 @@ public class Pedestrian extends Entity
     }
 
     @Override
-    public String friendlyName()
-    {
-        return "Pedestrian";
-    }
-
-    @Override
     public PlayerInfo[] getPlayers()
     {
         return null;
@@ -265,4 +268,5 @@ public class Pedestrian extends Entity
     {
         return true;
     }
+
 }

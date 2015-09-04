@@ -42,4 +42,14 @@ public class PlayerConstants
      */
     public static final long DEFAULT_RESPAWN_TIME_MS = 5000;
 
+    /**
+     * The width of the player.
+     */
+    public static final short PLAYER_WIDTH = 16;
+
+    /**
+     * The height of the player.
+     */
+    public static final short PLAYER_HEIGHT = 9;
+
 }
