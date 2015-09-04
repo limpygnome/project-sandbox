@@ -79,6 +79,7 @@ public abstract class AbstractWeapon extends AbstractInventoryItem
         // Check we have an owner
         if (owner == null)
         {
+            LOG.debug("Owner not set on weapon, cannot fire");
             return;
         }
         
@@ -99,7 +100,12 @@ public abstract class AbstractWeapon extends AbstractInventoryItem
             // Check if we need to use up a mag
             if (bullets == 0 && mags > 0)
             {
-                mags--;
+                // AI receives unlimited mags...
+                if (!owner.isAi())
+                {
+                    mags--;
+                }
+
                 bullets += bulletsPerMag;
                 
                 // Add reload delay

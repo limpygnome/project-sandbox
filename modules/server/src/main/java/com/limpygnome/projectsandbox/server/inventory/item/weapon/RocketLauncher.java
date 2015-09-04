@@ -31,7 +31,7 @@ public class RocketLauncher extends AbstractWeapon
                 500         // reload delay
         );
 
-        this.invokeType = InventoryInvokeType.TOGGLE;
+        this.invokeType = InventoryInvokeType.FIRE_ONCE;
     }
 
     @Override
@@ -39,14 +39,15 @@ public class RocketLauncher extends AbstractWeapon
     {
         Entity owner = this.slot.inventory.parent;
         PlayerInfo[] playerInfoOwners = owner.getPlayers();
+        PlayerInfo playerInfoOwner = (playerInfoOwners != null && playerInfoOwners.length > 0 ? playerInfoOwners[0] : null);
 
-        if (owner != null && playerInfoOwners != null && playerInfoOwners.length > 0)
+        if (owner != null)
         {
             // Get current speed of owner, so that they don't go into their own rocket
             float plySpeed = owner.width > owner.height ? owner.width : owner.height;
 
             // Create Rocket
-            Entity rpg = new Rocket(controller, playerInfoOwners[0], plySpeed);
+            Entity rpg = new Rocket(controller, playerInfoOwner, plySpeed);
 
             // Project in front of player
             rpg.projectInFrontOfEntity(owner, ROCKET_LAUNCH_SPACING);

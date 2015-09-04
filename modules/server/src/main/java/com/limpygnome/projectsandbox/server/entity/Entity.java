@@ -576,6 +576,16 @@ public strictfp abstract class Entity
     public abstract PlayerInfo[] getPlayers();
 
     /**
+     * Used to indicate if the entity is AI.
+     *
+     * @return
+     */
+    public boolean isAi()
+    {
+        return false;
+    }
+
+    /**
      * Used to indicate the speed of the entity, since different entities may have different mechanics for handling
      * physics.
      *

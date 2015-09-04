@@ -9,10 +9,10 @@ public class RocketKiller extends AbstractKiller
 {
     private static final String[] CAUSES =
     {
-            "{0} wiped out {1}",
-            "{0} blew up {1}",
-            "{0} blasted {1}",
-            "{0} toasted {1}"
+            "{0} wiped out by {1}",
+            "{1} blew up {0}",
+            "{1} blasted {0}",
+            "{1} toasted {0}"
     };
 
     @Override

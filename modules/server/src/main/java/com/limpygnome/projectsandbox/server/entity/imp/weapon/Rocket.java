@@ -23,11 +23,18 @@ public class Rocket extends Entity
 {
     private final static Logger LOG = LogManager.getLogger(Rocket.class);
 
-    private PlayerInfo playerInfoOwner;
     private long gameTimeCreated;
     private float speedStep;
     private boolean exploded;
 
+    private PlayerInfo playerInfoOwner;
+
+    /**
+     *
+     * @param controller
+     * @param playerInfoOwner Can be null
+     * @param initialSpeed
+     */
     public Rocket(Controller controller, PlayerInfo playerInfoOwner, float initialSpeed)
     {
         super((short) 9, (short) 12);
@@ -40,6 +47,11 @@ public class Rocket extends Entity
         setMaxHealth(10);
     }
 
+    /**
+     *
+     * @param controller
+     * @param playerInfo Can be null
+     */
     public Rocket(Controller controller, PlayerInfo playerInfo)
     {
         this(controller, playerInfo, ROCKET_SPEED_STEP);
@@ -54,7 +66,14 @@ public class Rocket extends Entity
     @Override
     public PlayerInfo[] getPlayers()
     {
-        return new PlayerInfo[]{ playerInfoOwner };
+        if (playerInfoOwner == null)
+        {
+            return new PlayerInfo[0];
+        }
+        else
+        {
+            return new PlayerInfo[]{playerInfoOwner};
+        }
     }
 
     @Override

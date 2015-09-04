@@ -4,11 +4,16 @@ import com.limpygnome.projectsandbox.server.Controller;
 import com.limpygnome.projectsandbox.server.entity.Entity;
 import com.limpygnome.projectsandbox.server.entity.annotation.EntityType;
 import com.limpygnome.projectsandbox.server.entity.physics.Vector2;
+import com.limpygnome.projectsandbox.server.entity.physics.casting.Casting;
+import com.limpygnome.projectsandbox.server.entity.physics.casting.CastingResult;
+import com.limpygnome.projectsandbox.server.entity.physics.casting.victims.EntityCastVictim;
 import com.limpygnome.projectsandbox.server.entity.physics.pathfinding.Node;
 import com.limpygnome.projectsandbox.server.entity.physics.pathfinding.Path;
 import com.limpygnome.projectsandbox.server.entity.physics.proximity.DefaultProximity;
 import com.limpygnome.projectsandbox.server.entity.physics.proximity.ProximityResult;
 import com.limpygnome.projectsandbox.server.inventory.Inventory;
+import com.limpygnome.projectsandbox.server.inventory.InventoryInvokeState;
+import com.limpygnome.projectsandbox.server.inventory.item.weapon.RocketLauncher;
 import com.limpygnome.projectsandbox.server.inventory.item.weapon.Smg;
 import com.limpygnome.projectsandbox.server.player.PlayerInfo;
 import org.apache.logging.log4j.LogManager;
@@ -32,6 +37,7 @@ public class Pedestrian extends Entity
     private float followDistance;
     private float attackDistance;
     private float attackRotationOffset;
+    private float attackRotationNoise;
 
     private Path lastPathFound;
     private int lastPathOffset;
@@ -46,12 +52,13 @@ public class Pedestrian extends Entity
 
         this.inventory = new Inventory(this);
         this.inventory.add(new Class[]{
-                Smg.class
+                RocketLauncher.class
         });
 
         this.followDistance = 450.0f;
-        this.attackDistance = 100.0f;
+        this.attackDistance = 200.0f;
         this.attackRotationOffset = 0.26f;
+        this.attackRotationNoise = 0.4f;
     }
 
     @Override
@@ -213,7 +220,7 @@ public class Pedestrian extends Entity
     private synchronized void fireInventoryWeapon(Controller controller)
     {
         // Don't continue without an inventory...
-        if (this.inventory == null)
+        if (inventory == null)
         {
             return;
         }
@@ -221,11 +228,23 @@ public class Pedestrian extends Entity
         // Compute offset to target
         float targetAngleOffsetToTarget = DefaultProximity.computeTargetAngleOffset(this, targetEntity.positionNew);
 
-        if (this.inventory != null && Math.abs(targetAngleOffsetToTarget) <= attackRotationOffset)
+        if (inventory != null && Math.abs(targetAngleOffsetToTarget) <= attackRotationOffset)
         {
-            // Check selected item has ammo / usable, else remove it
+            // Check we have line of sight
+            CastingResult castingResult = Casting.cast(controller, this, rotation, attackDistance);
 
-            // Fire/use selected item
+            if (castingResult.collision && (castingResult.victim instanceof EntityCastVictim))
+            {
+                // Add rotation noise, so player is less accurate
+                if (attackRotationNoise > 0)
+                {
+                    float rotationNoise = ((float) Math.random() * (attackRotationNoise * 2.0f)) - attackRotationNoise;
+                    rotationOffset(rotationNoise);
+                }
+
+                // Fire/use selected item
+                inventory.selected.eventInvoke(controller, InventoryInvokeState.INVOKE_ONCE);
+            }
         }
     }
 
@@ -241,4 +260,9 @@ public class Pedestrian extends Entity
         return null;
     }
 
+    @Override
+    public boolean isAi()
+    {
+        return true;
+    }
 }
