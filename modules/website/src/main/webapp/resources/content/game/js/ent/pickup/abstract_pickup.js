@@ -12,9 +12,9 @@ function AbstractPickup()
     this.offsetZ = 0.0;
     this.offsetFactor = 0.5;
     this.offsetZMin = -5.0;
-    this.offsetZMax = 8.0;
+    this.offsetZMax = 12.0;
     this.offsetDirectionPositive = true;
-    this.spinFactor = 0.05;
+    this.spinFactor = 0.08;
 }
 
 AbstractPickup.inherits(Entity);

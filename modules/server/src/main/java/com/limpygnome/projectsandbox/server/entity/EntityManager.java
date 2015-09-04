@@ -236,8 +236,11 @@ public class EntityManager implements IdCounterConsumer
                                     )
                                     )
                             {
+                                LOG.warn("Entity went outside the map - ent: {}, pos: {}", entityA, entityA.positionNew);
+
                                 // Kill the ent...
                                 entityA.kill(controller, null, MapBoundsKiller.class);
+
                             }
                         }
                     }

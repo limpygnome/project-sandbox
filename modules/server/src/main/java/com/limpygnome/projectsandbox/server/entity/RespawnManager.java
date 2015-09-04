@@ -117,7 +117,9 @@ public class RespawnManager
                 pendingRespawn = iterator.next();
 
                 // TODO: consider timeouts, we could have blocked spawns and a lot of CPU usage here...
-                if (pendingRespawn.gameTimeRespawn <= controller.gameTime())
+                long gameTime = controller.gameTime();
+
+                if (gameTime >= pendingRespawn.gameTimeRespawn)
                 {
                     respawnData = findSpawn(pendingRespawn);
 

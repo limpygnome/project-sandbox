@@ -133,7 +133,7 @@
         },
         {
             "typeName" : "living/pedestrian/attacking",
-            "count" : 1,
+            "count" :100,
             "faction" : 3000
         }
     ],
@@ -181,17 +181,17 @@
             "spawns" :
             [
                 {
-                    "x" : 200.0,
+                    "x" : 300.0,
                     "y" : 140.0,
                     "rotation" : 0.0
                 },
                 {
-                    "x" : 230.0,
+                    "x" : 330.0,
                     "y" : 140.0,
                     "rotation" : 0.0
                 },
                 {
-                    "x" : 260.0,
+                    "x" : 360.0,
                     "y" : 140.0,
                     "rotation" : 0.0
                 }

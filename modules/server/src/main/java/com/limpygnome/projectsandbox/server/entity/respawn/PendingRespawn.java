@@ -20,7 +20,8 @@ public abstract class PendingRespawn
     protected PendingRespawn(Controller controller, Entity entity, long respawnDelay)
     {
         this.entity = entity;
-        this.gameTimeRespawn = controller.gameTime() + respawnDelay;
+        long gameTime = controller.gameTime();
+        this.gameTimeRespawn = gameTime + respawnDelay;
     }
 
     /**

@@ -163,7 +163,7 @@ public abstract class AbstractPedestrian extends Entity
 
         // Move towards target
         positionOffset(
-                Vector2.vectorFromAngle(rotation + angleOffset, attackDistance)
+                Vector2.vectorFromAngle(rotation + angleOffset, followSpeed)
         );
     }
 

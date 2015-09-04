@@ -1,6 +1,8 @@
 package com.limpygnome.projectsandbox.server.threading;
 
 import com.limpygnome.projectsandbox.server.Controller;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.io.IOException;
 
@@ -10,6 +12,8 @@ import java.io.IOException;
  */
 public class GameLogic implements Runnable
 {
+    private final static Logger LOG = LogManager.getLogger(GameLogic.class);
+
     /**
      * The time between logic cycles, which dictates the speed at which the world executes.
      */
@@ -81,13 +85,13 @@ public class GameLogic implements Runnable
                 }
                 else
                 {
-                    System.err.println("Warning: game logic cycle took " + (timeEnd - timeStart) + " ms or longer.");
+                    LOG.warn("Game logic cycle slow - {} ms", (timeEnd - timeStart));
                 }
             }
         }
         catch(InterruptedException ex)
         {
-            ex.printStackTrace(System.err);
+            LOG.error("Logic cycle failure, thread interrupted", ex);
         }
     }
 }

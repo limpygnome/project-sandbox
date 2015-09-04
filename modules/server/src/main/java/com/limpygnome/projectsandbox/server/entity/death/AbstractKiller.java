@@ -61,6 +61,7 @@ public abstract class AbstractKiller
         boolean foundPlayers = false;
         boolean compareNull;
         boolean compareSame;
+
         for (int i = 0; i < victims.length; i++)
         {
             for (int j = 0; j < killers.length; j++)

@@ -12,7 +12,7 @@ public class SuicideVestKiller extends AbstractKiller
         "{0} blown up by {1}",
         "{0} delivered 72 virgins by {1}",
         "{0} is a casualty of freedom fighting by {1}",
-        "{0} charred and flipped by {1}"
+        "{0} charred and wrekt by {1}"
     };
 
     private static final String[] CAUSES_SUICIDE =

@@ -6,7 +6,7 @@ import com.limpygnome.projectsandbox.server.entity.physics.Vector2;
 /**
  * Created by limpygnome on 13/05/15.
  */
-public class ProximityResult implements Comparable
+public class ProximityResult implements Comparable<ProximityResult>
 {
     public Entity entity;
     public float distance;
@@ -38,12 +38,15 @@ public class ProximityResult implements Comparable
     }
 
     @Override
-    public int compareTo(Object o)
+    public int compareTo(ProximityResult o)
     {
-        if (o instanceof ProximityResult)
+        if (distance > o.distance)
         {
-            ProximityResult b = (ProximityResult) o;
-            return (int) (distance - b.distance);
+            return 1;
+        }
+        else if (distance < o.distance)
+        {
+            return -1;
         }
         else
         {

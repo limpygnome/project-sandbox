@@ -11,8 +11,8 @@ public class GunshotKiller extends AbstractKiller
     {
         "{0} wrekt by {1}",
         "{0} got owned by {1}",
-        "{0} killed {1}",
-        "{0} skool''d {1}"
+        "{0} killed by {1}",
+        "{0} skool''d by {1}"
     };
 
     @Override
