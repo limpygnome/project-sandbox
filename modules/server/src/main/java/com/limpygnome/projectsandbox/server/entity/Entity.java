@@ -289,6 +289,15 @@ public strictfp abstract class Entity
     {
         setMaxHealth(-1.0f);
     }
+
+    protected synchronized void setDead(boolean dead)
+    {
+        // Set dead flag
+        this.flagDead = dead;
+
+        // Set that we've updated the flag
+        updateMask(UpdateMasks.ALIVE);
+    }
     
     /**
      * Inflicts damage on the entity.

@@ -112,12 +112,13 @@ public class RespawnManager
             PendingRespawn pendingRespawn;
             Iterator<PendingRespawn> iterator = pendingRespawnList.iterator();
 
+            long gameTime = controller.gameTime();
+
             while (iterator.hasNext())
             {
                 pendingRespawn = iterator.next();
 
                 // TODO: consider timeouts, we could have blocked spawns and a lot of CPU usage here...
-                long gameTime = controller.gameTime();
 
                 if (gameTime >= pendingRespawn.gameTimeRespawn)
                 {

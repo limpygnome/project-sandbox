@@ -127,13 +127,13 @@
 
             "kv" :
             {
-                "pickup.respawn_delay" : 2000,
+                "pickup.respawn_delay" : 30000,
                 "health_pickup.health" : 500.0
             }
         },
         {
             "typeName" : "living/pedestrian/attacking",
-            "count" :100,
+            "count" : 0,
             "faction" : 3000
         }
     ],

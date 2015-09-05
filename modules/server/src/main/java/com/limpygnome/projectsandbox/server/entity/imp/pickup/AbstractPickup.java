@@ -33,6 +33,9 @@ public abstract class AbstractPickup extends Entity
         // Call implementation to handle pickup
         if (applyPickup(controller, entOther))
         {
+            // Set entity to dead
+            setDead(true);
+
             // Pickup has been redeemed, now to respawn in a period of time
             controller.respawnManager.respawn(new EntityPendingRespawn(controller, this, respawnDelay));
         }

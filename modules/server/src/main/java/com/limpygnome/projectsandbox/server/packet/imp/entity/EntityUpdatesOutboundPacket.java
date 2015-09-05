@@ -103,7 +103,11 @@ public class EntityUpdatesOutboundPacket extends OutboundPacket
         }
 
         // Add to mask to indicate if entity is alive
-        if (!ent.isDead())
+        if (ent.isDead())
+        {
+            mask &= ~((char) UpdateMasks.ALIVE.MASK);
+        }
+        else
         {
             mask |= (char) UpdateMasks.ALIVE.MASK;
         }
