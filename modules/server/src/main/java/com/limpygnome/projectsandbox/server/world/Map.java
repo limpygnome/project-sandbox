@@ -1,6 +1,7 @@
 package com.limpygnome.projectsandbox.server.world;
 
 import com.limpygnome.projectsandbox.server.Controller;
+import com.limpygnome.projectsandbox.server.entity.physics.Vector2;
 import com.limpygnome.projectsandbox.server.entity.physics.Vertices;
 import com.limpygnome.projectsandbox.server.entity.respawn.pending.EntityPendingRespawn;
 import com.limpygnome.projectsandbox.server.packet.imp.map.MapDataOutboundPacket;
@@ -53,6 +54,25 @@ public class Map
         this.mapId = mapId;
         this.tileNameToTypeIndexMappings = new HashMap<>();
         this.tileTypeIdCounter = 0;
+    }
+
+    public MapPosition positionFromReal(Vector2 vector)
+    {
+        return positionFromReal(vector.x, vector.y);
+    }
+
+    public MapPosition positionFromReal(float x, float y)
+    {
+        int tileX = (int) (x / tileSize);
+        int tileY = (int) (y / tileSize);
+
+        return new MapPosition(
+                this,
+                x,
+                y,
+                tileX,
+                tileY
+        );
     }
     
     public static Map load(Controller controller, MapManager mapManager, short mapId, JSONObject rootJsonNode) throws IOException

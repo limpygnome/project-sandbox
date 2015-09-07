@@ -45,4 +45,14 @@ public class Path
         return 0.0f;
     }
 
+    public Vector2 getTargetVector()
+    {
+        if (finalPath != null && finalPath.length > 0)
+        {
+            return finalPath[finalPath.length - 1].cachedVector;
+        }
+
+        return null;
+    }
+
 }

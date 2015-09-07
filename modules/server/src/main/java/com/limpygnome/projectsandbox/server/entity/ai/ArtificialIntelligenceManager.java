@@ -2,6 +2,8 @@ package com.limpygnome.projectsandbox.server.entity.ai;
 
 import com.limpygnome.projectsandbox.server.Controller;
 import com.limpygnome.projectsandbox.server.entity.Entity;
+import com.limpygnome.projectsandbox.server.entity.ai.pathfinding.IdleWalkPathBuilder;
+import com.limpygnome.projectsandbox.server.entity.ai.pathfinding.idle.DefaultIdleWalkPathBuilder;
 import com.limpygnome.projectsandbox.server.entity.physics.Vector2;
 import com.limpygnome.projectsandbox.server.entity.ai.pathfinding.Path;
 import com.limpygnome.projectsandbox.server.entity.ai.pathfinding.PathFinder;
@@ -16,12 +18,15 @@ public class ArtificialIntelligenceManager
     private Controller controller;
 
     private PathFinder pathFinder;
+    private IdleWalkPathBuilder idleWalkPathBuilder;
 
     public ArtificialIntelligenceManager(Controller controller)
     {
         this.controller = controller;
 
+        // TODO: consider testing manhattan against absolute heuristic for performance
         this.pathFinder = new AStarPathFinder(new ClosestAbsoluteHeuristic());
+        this.idleWalkPathBuilder = new DefaultIdleWalkPathBuilder();
     }
 
     public Path findPath(Entity entity, Entity target)
@@ -39,9 +44,8 @@ public class ArtificialIntelligenceManager
         );
     }
 
-    private void rebuildRoutesNetwork()
+    public Path findIdlePath(Entity entity, int maxDepth)
     {
-        // Construct tree of walkable routes
-        // TODO: consider existing techniques
+        return idleWalkPathBuilder.build(controller, controller.mapManager.main, entity, maxDepth);
     }
 }

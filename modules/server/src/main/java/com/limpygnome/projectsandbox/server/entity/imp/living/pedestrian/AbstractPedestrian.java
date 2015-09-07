@@ -350,8 +350,19 @@ public abstract class AbstractPedestrian extends Entity
                     state = PedestrianState.IdleReturnToSpawn;
                     break;
                 case WALK:
+                    // Rebuild idle path
+                    // TODO: replace magic value...
+                    lastPathFound = controller.artificialIntelligenceManager.findIdlePath(this, 32);
 
-                    state = PedestrianState.IdleWalk;
+                    if (lastPathFound != null && lastPathFound.getTotalNodes() > 0)
+                    {
+                        targetVector = lastPathFound.getTargetVector();
+
+                        if (targetVector != null)
+                        {
+                            state = PedestrianState.IdleWalk;
+                        }
+                    }
                     break;
             }
         }

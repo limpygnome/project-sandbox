@@ -23,7 +23,7 @@ public class AttackingPedestrian extends AbstractPedestrian
                 ATTACKING_PED_FOLLOW_DISTANCE,
                 ATTACKING_PED_ATTACK_DISTANCE,
                 ATTACKING_PED_ATTACK_ROTATION_NOISE,
-                IdleMode.RETURN_TO_SPAWN
+                IdleMode.WALK
         );
     }
 

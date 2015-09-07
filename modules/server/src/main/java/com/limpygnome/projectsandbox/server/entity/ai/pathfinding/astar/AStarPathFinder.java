@@ -30,6 +30,7 @@ public class AStarPathFinder implements PathFinder
         // Convert positions into tiles
         int tileSize = (int) map.tileSize;
 
+        // TODO: use map position method
         int startTileX = (int) (startX / tileSize);
         int startTileY = (int) (startY / tileSize);
         int endTileX = (int) (endX / tileSize);
