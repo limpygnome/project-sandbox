@@ -1,6 +1,8 @@
-package com.limpygnome.projectsandbox.server.entity.physics.pathfinding;
+package com.limpygnome.projectsandbox.server.entity.ai.pathfinding.astar;
 
-import com.limpygnome.projectsandbox.server.entity.physics.Vector2;
+import com.limpygnome.projectsandbox.server.entity.ai.pathfinding.Node;
+import com.limpygnome.projectsandbox.server.entity.ai.pathfinding.Path;
+import com.limpygnome.projectsandbox.server.entity.ai.pathfinding.TilePosition;
 import com.limpygnome.projectsandbox.server.world.Map;
 
 import java.util.HashMap;
@@ -8,43 +10,19 @@ import java.util.HashSet;
 import java.util.TreeSet;
 
 /**
- * Used to hold the result of nodes to traverse and follow from a path-finding computation.
+ * Created by limpygnome on 07/09/15.
  */
-public class Path
+public class AStarPath extends Path
 {
     public HashSet<Node> closedNodes;
     public TreeSet<Node> openNodes;
     public HashMap<TilePosition, Node> nodes;
 
-    public Node[] finalPath;
-    public float nodeSeparation;
-
-    public Path()
+    public AStarPath()
     {
         this.closedNodes = new HashSet<>();
         this.openNodes = new TreeSet<>();
         this.nodes = new HashMap<>();
-    }
-
-    public Node getNode(int index)
-    {
-        return finalPath[index];
-    }
-
-    public int getTotalNodes()
-    {
-        return finalPath.length;
-    }
-
-    public float getTargetNodeDistance(Vector2 vector)
-    {
-        if (finalPath.length > 0)
-        {
-            Node targetNode = finalPath[finalPath.length - 1];
-            return Vector2.distance(vector, targetNode.cachedVector);
-        }
-
-        return 0.0f;
     }
 
     public void finalizePath(Map map, int targetX, int targetY)

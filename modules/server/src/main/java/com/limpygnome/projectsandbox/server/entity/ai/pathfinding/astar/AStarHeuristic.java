@@ -1,4 +1,4 @@
-package com.limpygnome.projectsandbox.server.entity.physics.pathfinding.astar;
+package com.limpygnome.projectsandbox.server.entity.ai.pathfinding.astar;
 
 import com.limpygnome.projectsandbox.server.entity.Entity;
 import com.limpygnome.projectsandbox.server.world.Map;

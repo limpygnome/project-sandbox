@@ -1,7 +1,7 @@
-package com.limpygnome.projectsandbox.server.entity.physics.pathfinding.astar.heuristic;
+package com.limpygnome.projectsandbox.server.entity.ai.pathfinding.astar.heuristic;
 
 import com.limpygnome.projectsandbox.server.entity.Entity;
-import com.limpygnome.projectsandbox.server.entity.physics.pathfinding.astar.AStarHeuristic;
+import com.limpygnome.projectsandbox.server.entity.ai.pathfinding.astar.AStarHeuristic;
 import com.limpygnome.projectsandbox.server.world.Map;
 
 /**

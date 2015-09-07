@@ -1,10 +1,10 @@
-package com.limpygnome.projectsandbox.server.entity.physics.pathfinding.astar;
+package com.limpygnome.projectsandbox.server.entity.ai.pathfinding.astar;
 
 import com.limpygnome.projectsandbox.server.entity.Entity;
-import com.limpygnome.projectsandbox.server.entity.physics.pathfinding.Node;
-import com.limpygnome.projectsandbox.server.entity.physics.pathfinding.Path;
-import com.limpygnome.projectsandbox.server.entity.physics.pathfinding.PathFinder;
-import com.limpygnome.projectsandbox.server.entity.physics.pathfinding.TilePosition;
+import com.limpygnome.projectsandbox.server.entity.ai.pathfinding.Node;
+import com.limpygnome.projectsandbox.server.entity.ai.pathfinding.Path;
+import com.limpygnome.projectsandbox.server.entity.ai.pathfinding.PathFinder;
+import com.limpygnome.projectsandbox.server.entity.ai.pathfinding.TilePosition;
 import com.limpygnome.projectsandbox.server.world.Map;
 import com.limpygnome.projectsandbox.server.world.TileType;
 
@@ -36,7 +36,7 @@ public class AStarPathFinder implements PathFinder
         int endTileY = (int) (endY / tileSize);
 
         // The path instance holds our progress and end result
-        Path path = new Path();
+        AStarPath path = new AStarPath();
 
         // Check start tile is usable
         if (!isTileUsable(map, entity, startTileX, startTileY))
@@ -117,7 +117,7 @@ public class AStarPathFinder implements PathFinder
     }
 
     // Returns max depth
-    private Node processNeighbor(Map map, Entity entity, Path path, Node currentNode, int neighborX, int neighborY, int targetTileX, int targetTileY)
+    private Node processNeighbor(Map map, Entity entity, AStarPath path, Node currentNode, int neighborX, int neighborY, int targetTileX, int targetTileY)
     {
         float neighborCost = currentNode.pathCost + 1;
         TilePosition tilePosition = new TilePosition(neighborX, neighborY);

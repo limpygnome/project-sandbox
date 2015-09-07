@@ -1,4 +1,4 @@
-package com.limpygnome.projectsandbox.server.entity.physics.pathfinding;
+package com.limpygnome.projectsandbox.server.entity.ai.pathfinding;
 
 /**
  * Created by limpygnome on 01/09/15.

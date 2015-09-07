@@ -1,4 +1,4 @@
-package com.limpygnome.projectsandbox.server.entity.physics.pathfinding;
+package com.limpygnome.projectsandbox.server.entity.ai.pathfinding;
 
 import com.limpygnome.projectsandbox.server.entity.physics.Vector2;
 import com.limpygnome.projectsandbox.server.world.Map;
@@ -32,7 +32,7 @@ public class Node implements Comparable<Node>
         this.searchDepth = searchDepth;
     }
 
-    void buildAndCacheXY(Map map)
+    public void buildAndCacheXY(Map map)
     {
         float tileSize = (float) map.tileSize;
         float tileSizeHalf = (float) map.tileSize / 2.0f;

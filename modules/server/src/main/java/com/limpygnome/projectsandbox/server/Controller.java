@@ -1,7 +1,7 @@
 package com.limpygnome.projectsandbox.server;
 
 import com.limpygnome.projectsandbox.server.effect.EffectsManager;
-import com.limpygnome.projectsandbox.server.entity.ArtificialIntelligenceManager;
+import com.limpygnome.projectsandbox.server.entity.ai.ArtificialIntelligenceManager;
 import com.limpygnome.projectsandbox.server.entity.EntityManager;
 import com.limpygnome.projectsandbox.server.entity.RespawnManager;
 import com.limpygnome.projectsandbox.server.inventory.InventoryManager;
