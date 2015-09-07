@@ -8,6 +8,7 @@ import com.limpygnome.projectsandbox.server.entity.physics.Vector2;
 import com.limpygnome.projectsandbox.server.inventory.Inventory;
 import com.limpygnome.projectsandbox.server.player.PlayerInfo;
 import com.limpygnome.projectsandbox.server.player.PlayerKeys;
+import com.limpygnome.projectsandbox.server.world.Spawn;
 
 import static com.limpygnome.projectsandbox.server.constant.PlayerConstants.*;
 
@@ -150,7 +151,7 @@ public class Player extends Entity
     }
 
     @Override
-    public synchronized void eventSpawn(Controller controller)
+    public synchronized void eventSpawn(Controller controller, Spawn spawn)
     {
         // Set player to use this entity
         controller.playerManager.setPlayerEnt(playerInfo, this);
@@ -158,6 +159,6 @@ public class Player extends Entity
         // Setup owner
         this.inventory.setOwner(playerInfo);
 
-        super.eventSpawn(controller);
+        super.eventSpawn(controller, spawn);
     }
 }

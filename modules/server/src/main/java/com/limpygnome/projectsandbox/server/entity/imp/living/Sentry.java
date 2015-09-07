@@ -14,6 +14,7 @@ import com.limpygnome.projectsandbox.server.entity.physics.proximity.DefaultProx
 import com.limpygnome.projectsandbox.server.entity.physics.proximity.ProximityResult;
 import com.limpygnome.projectsandbox.server.entity.physics.proximity.RotateResult;
 import com.limpygnome.projectsandbox.server.player.PlayerInfo;
+import com.limpygnome.projectsandbox.server.world.Spawn;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -111,11 +112,11 @@ public class Sentry extends Entity
     }
 
     @Override
-    public void eventSpawn(Controller controller)
+    public void eventSpawn(Controller controller, Spawn spawn)
     {
         this.defaultRotation = rotation;
 
-        super.eventSpawn(controller);
+        super.eventSpawn(controller, spawn);
     }
 
     @Override

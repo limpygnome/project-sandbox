@@ -1,6 +1,7 @@
 package com.limpygnome.projectsandbox.server.entity;
 
 import com.limpygnome.projectsandbox.server.Controller;
+import com.limpygnome.projectsandbox.server.entity.physics.Vector2;
 import com.limpygnome.projectsandbox.server.entity.physics.pathfinding.Path;
 import com.limpygnome.projectsandbox.server.entity.physics.pathfinding.PathFinder;
 import com.limpygnome.projectsandbox.server.entity.physics.pathfinding.astar.AStarPathFinder;
@@ -24,11 +25,16 @@ public class ArtificialIntelligenceManager
 
     public Path findPath(Entity entity, Entity target)
     {
+        return findPath(entity, target.positionNew);
+    }
+
+    public Path findPath(Entity entity, Vector2 target)
+    {
         return pathFinder.findPath(
                 controller.mapManager.main,
                 entity,
                 entity.positionNew.x, entity.positionNew.y,
-                target.positionNew.x, target.positionNew.y
+                target.x, target.y
         );
     }
 

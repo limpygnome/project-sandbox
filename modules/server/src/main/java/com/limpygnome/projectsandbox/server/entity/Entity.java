@@ -571,7 +571,7 @@ public strictfp abstract class Entity
     /**
      * Invoked after the entity has been spawned, and added to the world.
      */
-    public synchronized void eventSpawn(Controller controller)
+    public synchronized void eventSpawn(Controller controller, Spawn spawn)
     {
         flagDead = false;
     }

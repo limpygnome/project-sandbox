@@ -177,7 +177,7 @@ public class RespawnManager
         }
 
         // Invoke spawn event
-        entity.eventSpawn(controller);
+        entity.eventSpawn(controller, respawnData.spawn);
 
         LOG.debug("Spawned entity - entity: {} - spawn: {}", entity, respawnData.spawn);
 

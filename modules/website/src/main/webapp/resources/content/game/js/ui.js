@@ -425,6 +425,10 @@ game.ui =
 
     hookSocket_disconnected: function()
     {
+        // Ensure inventory is not visible
+        this.hook_inventoryReset();
+
+        // Show connecting screen
         $(this.elementConnecting).show();
     },
 
@@ -442,6 +446,9 @@ game.ui =
                 $(this.elementConnecting).find("div").html("Session not found, try rejoining.<br />Redirecting to home in 5s...");
                 break;
         }
+
+        // Ensure inventory is not visible
+        this.hook_inventoryReset();
 
         // Show error message
         $(this.elementConnecting).show();
