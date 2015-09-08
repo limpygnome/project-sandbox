@@ -127,6 +127,9 @@ public abstract class AbstractPedestrian extends Entity
             this.lastSpawn = spawn;
         }
 
+        // Reset state/target etc
+        resetTarget();
+
         super.eventSpawn(controller, spawn);
     }
 
@@ -185,10 +188,12 @@ public abstract class AbstractPedestrian extends Entity
             {
                 Node nextNode = lastPathFound.getNode(lastPathOffset);
                 Vector2 nextNodeVector = nextNode.cachedVector;
-                moveToTarget(nextNodeVector, distance, withinAttackDistance);
+                moveToTarget(nextNodeVector, withinAttackDistance);
 
                 // Determine if we've met the current targeted node, before we move onto the next...
-                if (Vector2.distance(positionNew, nextNodeVector) < lastPathFound.nodeSeparation / 2.0f)
+                float distanceToTarget = Vector2.distance(positionNew, nextNodeVector);
+
+                if (distanceToTarget < lastPathFound.nodeSeparation / 2.0f)
                 {
                     // Move onto the next node...
                     lastPathOffset++;
@@ -205,7 +210,7 @@ public abstract class AbstractPedestrian extends Entity
                         break;
                     case IdleReturnToSpawn:
                         // Continue moving towards spawn until position is exact...
-                        moveToTarget(targetVector, distance, true);
+                        moveToTarget(targetVector, true);
 
                         if (positionNew.x == lastSpawn.x && positionNew.y == lastSpawn.y)
                         {
@@ -215,8 +220,8 @@ public abstract class AbstractPedestrian extends Entity
                         }
                         break;
                     case IdleWalk:
-                        // Update path to walk elsewhere...
-
+                        // Set state to idle, this will trigger idle walk when updating target...
+                        state = PedestrianState.Idle;
                         break;
                     default:
                         state = PedestrianState.Idle;
@@ -242,16 +247,19 @@ public abstract class AbstractPedestrian extends Entity
         rotationOffset(angleOffset);
     }
 
-    private synchronized void moveToTarget(Vector2 target, float distance, boolean rotateTowardsTarget)
+    private synchronized void moveToTarget(Vector2 target, boolean rotateTowardsTarget)
     {
         // Get angle between current position and target
         float angleOffset = DefaultProximity.computeTargetAngleOffset(this, target);
+
+        // Measure distance to target
+        float distance = Vector2.distance(positionNew, target);
 
         // If distance is less than speed we can move, we'll round it down to just the required distance, else
         // we might indefinitely overshoot the target
         if (distance < followSpeed)
         {
-            position(targetVector);
+            position(target);
         }
         else
         {
@@ -265,7 +273,7 @@ public abstract class AbstractPedestrian extends Entity
         if (rotateTowardsTarget)
         {
             // Rotate towards target
-            rotateToTarget(targetVector);
+            rotateToTarget(target);
         }
         else
         {
@@ -346,6 +354,7 @@ public abstract class AbstractPedestrian extends Entity
 
                     // Rebuild path
                     lastPathFound = controller.artificialIntelligenceManager.findPath(this, targetVector);
+                    lastPathOffset = 0;
 
                     state = PedestrianState.IdleReturnToSpawn;
                     break;
@@ -356,12 +365,9 @@ public abstract class AbstractPedestrian extends Entity
 
                     if (lastPathFound != null && lastPathFound.getTotalNodes() > 0)
                     {
+                        lastPathOffset = 0;
                         targetVector = lastPathFound.getTargetVector();
-
-                        if (targetVector != null)
-                        {
-                            state = PedestrianState.IdleWalk;
-                        }
+                        state = PedestrianState.IdleWalk;
                     }
                     break;
             }
@@ -373,6 +379,7 @@ public abstract class AbstractPedestrian extends Entity
         targetEntity = null;
         targetVector = null;
         lastPathFound = null;
+        lastPathOffset = 0;
 
         state = PedestrianState.Idle;
     }

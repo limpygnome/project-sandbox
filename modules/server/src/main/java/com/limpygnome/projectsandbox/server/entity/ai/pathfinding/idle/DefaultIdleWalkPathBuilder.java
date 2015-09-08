@@ -161,7 +161,7 @@ public class DefaultIdleWalkPathBuilder implements IdleWalkPathBuilder
                 }
 
                 // Build node
-                node = new Node(tileY, tileX);
+                node = new Node(tileX, tileY);
 
                 // Check if present
                 if (pathNodesPresent.contains(node))
