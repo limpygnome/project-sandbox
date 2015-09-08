@@ -33,6 +33,8 @@ public class DefaultIdleWalkPathBuilder implements IdleWalkPathBuilder
         Node lastNode = findStartNode(map, pathNodes, entityPosition, maxDepth);
         pathNodes.add(lastNode);
 
+        int nodesToStart = pathNodes.size();
+
         // Build next nodes to walk...
         Random random = new Random(System.currentTimeMillis());
         HashSet<Node> pathNodesPresent = new HashSet<>();
@@ -63,6 +65,10 @@ public class DefaultIdleWalkPathBuilder implements IdleWalkPathBuilder
         {
             path.finalPath[i].buildAndCacheXY(map);
         }
+
+        // Offset nodes so that two ents walking towards each other have less chance of colliding
+        // TODO: improve this calculation for half tilesize, we do it above too...perhaps cache in map...
+        offsetPedestrianNodes(path, nodesToStart, (float) map.tileSize / 2.0f);
 
         return path;
     }
@@ -205,6 +211,58 @@ public class DefaultIdleWalkPathBuilder implements IdleWalkPathBuilder
         }
 
         return node;
+    }
+
+    private void offsetPedestrianNodes(Path path, int offsetStart, float tileSizeHalf)
+    {
+        int totalNodes = path.finalPath.length;
+
+        Node previousNode = null;
+        Node currentNode;
+
+        float differenceX, differenceY;
+
+        for (int i = offsetStart; i < totalNodes; i++)
+        {
+            currentNode = path.finalPath[i];
+
+            if (previousNode != null)
+            {
+                // Compute the multipliers for the offset
+                differenceX = offsetPedestrianNodes_convertToOne(
+                        currentNode.cachedVector.x - previousNode.cachedVector.x
+                );
+                differenceY = offsetPedestrianNodes_convertToOne(
+                        currentNode.cachedVector.y - previousNode.cachedVector.y
+                );
+
+                // Multiply by offset
+                differenceX *= tileSizeHalf;
+                differenceY *= tileSizeHalf;
+
+                // Apply to node
+                currentNode.cachedVector.x += differenceX;
+                currentNode.cachedVector.y += differenceY;
+            }
+
+            previousNode = currentNode;
+        }
+    }
+
+    private float offsetPedestrianNodes_convertToOne(float value)
+    {
+        if (value == 0)
+        {
+            return 0.0f;
+        }
+        else if (value < 0)
+        {
+            return -1.0f;
+        }
+        else
+        {
+            return 1.0f;
+        }
     }
 
 }
