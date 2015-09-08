@@ -74,6 +74,27 @@ public class Map
                 tileY
         );
     }
+
+    /**
+     * Safely retrieves the tile-type for the specified position.
+     *
+     * This will perform checks on the position.
+     *
+     * @param tileX The tile X position
+     * @param tileY The tile Y position
+     * @return Instance, or null if invalid position
+     */
+    public TileType tileTypeFromPosition(int tileX, int tileY)
+    {
+        // Check within bounds of map
+        if (tileX < 0 || tileY < 0 || tileX >= width || tileY >= height)
+        {
+            return null;
+        }
+
+        // Retrieve type
+        return tileTypes[tiles[tileY][tileX]];
+    }
     
     public static Map load(Controller controller, MapManager mapManager, short mapId, JSONObject rootJsonNode) throws IOException
     {

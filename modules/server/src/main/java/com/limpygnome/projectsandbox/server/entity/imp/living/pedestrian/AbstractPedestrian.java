@@ -50,22 +50,30 @@ public abstract class AbstractPedestrian extends Entity
         /**
          * Indicates the pedestrian is idle and returning to its spawn position.
          */
-        IdleReturnToSpawn,
+        IdleReturnToSpawn(true),
 
         /**
          * Indicates the pedestrian is idle and just aimlessly walking around the world.
          */
-        IdleWalk,
+        IdleWalk(true),
 
         /**
          * Indicates the pedestrian is idle.
          */
-        Idle,
+        Idle(true),
 
         /**
          * Indicates the pedestrian is in pursuit and attacking an entity.
          */
-        TrackingEntity
+        TrackingEntity(false)
+        ;
+
+        public final boolean IDLE;
+
+        PedestrianState(boolean IDLE)
+        {
+            this.IDLE = IDLE;
+        }
     }
 
     private Inventory inventory;
@@ -310,7 +318,7 @@ public abstract class AbstractPedestrian extends Entity
         }
 
         // See if we can find a new target...
-        if (state == PedestrianState.Idle)
+        if (state.IDLE)
         {
             // Find nearest entity...
             // TODO: consider if we should test all vertices, expensive...
@@ -334,6 +342,10 @@ public abstract class AbstractPedestrian extends Entity
                             )
                         )
                     {
+                        // Reset pre-existing target
+                        resetTarget();
+
+                        // Set found entity as the target
                         targetEntity = entity;
                         targetVector = targetEntity.positionNew;
                         state = PedestrianState.TrackingEntity;

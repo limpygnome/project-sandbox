@@ -40,7 +40,7 @@ public class DefaultIdleWalkPathBuilder implements IdleWalkPathBuilder
 
         while (lastNode != null && ++depth <= maxDepth)
         {
-            lastNode = buildNextStep(map, random, pathNodesPresent, lastNode);
+            lastNode = buildNextStep(map, random, pathNodesPresent, pathNodes, lastNode);
 
             // Add the newly found node...
             if (lastNode != null)
@@ -53,6 +53,7 @@ public class DefaultIdleWalkPathBuilder implements IdleWalkPathBuilder
         Node[] finalPath = pathNodes.toArray(new Node[pathNodes.size()]);
 
         // TODO: this feels a little hacky, improve...
+        // TODO: node separation should be constant...
         Path path = new Path();
         path.finalPath = finalPath;
         path.nodeSeparation = map.tileSize / 2.0f;
@@ -120,12 +121,26 @@ public class DefaultIdleWalkPathBuilder implements IdleWalkPathBuilder
         return null;
     }
 
-    private Node buildNextStep(Map map, Random random, Set<Node> pathNodesPresent, Node lastNode)
+    private Node buildNextStep(Map map, Random random, Set<Node> pathNodesPresent, List<Node> pathNodes, Node lastNode)
     {
-        // TODO: favour moving in a certain direction...else random...
+        // Check node before last node for direction; looks more natural than chaotic picking
+        if (pathNodes.size() > 2)
+        {
+            Node lastLastNode = pathNodes.get(pathNodes.size()-2);
 
-        // TODO: return null if not found...
-        // Fetch all available neighbouring pedestrian nodes
+            // Compute next tile based on direction travelled between the last two nodes
+            int nextTileX = lastNode.tileX + (lastNode.tileX - lastLastNode.tileX);
+            int nextTileY = lastNode.tileY + (lastNode.tileY - lastLastNode.tileY);
+
+            TileType tileType = map.tileTypeFromPosition(nextTileX, nextTileY);
+
+            if (tileType != null && tileType.properties.pedestrian)
+            {
+                return new Node(nextTileX, nextTileY);
+            }
+        }
+
+        // We'll need to randomly pick a neighbour - fetch all available neighbouring pedestrian nodes
         List<Node> neighboursNew = new LinkedList<>();
         List<Node> neighboursUsed = new LinkedList<>();
 
