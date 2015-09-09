@@ -34,7 +34,8 @@ public class Map
     private final MapManager mapManager;
     
     public String name;
-    public short tileSize;
+    /* Stored and sent as a short. */
+    public float tileSize;
     public short width;
     public short height;
     public float maxX;
@@ -131,13 +132,15 @@ public class Map
         
         // Load properties
         map.name = (String) rootJsonNode.get("name");
-        map.tileSize = (short) (long) rootJsonNode.get("tile_size");
+        map.tileSize = (float) (long) rootJsonNode.get("tile_size");
+        map.tileSizeHalf = map.tileSize / 2.0f;
+        map.tileSizeQuarter = map.tileSize / 4.0f;
         map.width = (short) (long) rootJsonNode.get("width");
         map.height = (short) (long) rootJsonNode.get("height");
         
         // Compute max boundries
-        map.maxX = (float) map.tileSize * (float) map.width;
-        map.maxY = (float) map.tileSize * (float) map.height;
+        map.maxX = map.tileSize * (float) map.width;
+        map.maxY = map.tileSize * (float) map.height;
         
         // Setup tiles array
         map.tiles = new short[map.height][map.width];

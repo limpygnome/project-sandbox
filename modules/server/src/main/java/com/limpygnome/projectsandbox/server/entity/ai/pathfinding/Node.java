@@ -34,11 +34,8 @@ public class Node implements Comparable<Node>
 
     public void buildAndCacheXY(Map map)
     {
-        float tileSize = (float) map.tileSize;
-        float tileSizeHalf = (float) map.tileSize / 2.0f;
-
-        float x = ((float) tileX * tileSize) + tileSizeHalf;
-        float y = ((float) tileY * tileSize) + tileSizeHalf;
+        float x = ((float) tileX * map.tileSize) + map.tileSizeHalf;
+        float y = ((float) tileY * map.tileSize) + map.tileSizeHalf;
 
         this.cachedVector = new Vector2(x, y);
     }

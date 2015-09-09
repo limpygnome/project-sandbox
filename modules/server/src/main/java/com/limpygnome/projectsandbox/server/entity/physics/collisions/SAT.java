@@ -44,12 +44,10 @@ public class SAT
         float maxY = ent.positionNew.y + ent.cachedVertices.collisionRadius;
         
         // Divide by tilesize for tile array indices
-        float ts = (float) map.tileSize;
-        
-        int indexMinX = (int) Math.floor(minX / ts);
-        int indexMaxX = (int) Math.ceil(maxX / ts) - 1;
-        int indexMinY = (int) Math.floor(minY / ts);
-        int indexMaxY = (int) Math.ceil(maxY / ts) - 1;
+        int indexMinX = (int) Math.floor(minX / map.tileSize);
+        int indexMaxX = (int) Math.ceil(maxX / map.tileSize) - 1;
+        int indexMinY = (int) Math.floor(minY / map.tileSize);
+        int indexMaxY = (int) Math.ceil(maxY / map.tileSize) - 1;
         
         // Clamp within bounds of array
         indexMinX = CustomMath.limit(0, map.width - 1, indexMinX);

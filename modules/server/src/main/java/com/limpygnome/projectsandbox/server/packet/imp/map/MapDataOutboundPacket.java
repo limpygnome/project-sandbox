@@ -47,7 +47,7 @@ public class MapDataOutboundPacket extends OutboundPacket
         
         // Add map properties
         packetData.add(map.mapId);
-        packetData.add(map.tileSize);
+        packetData.add((short) map.tileSize);
         packetData.add(map.width);
         packetData.add(map.height);
         

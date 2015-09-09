@@ -55,10 +55,9 @@ public class DefaultIdleWalkPathBuilder implements IdleWalkPathBuilder
         Node[] finalPath = pathNodes.toArray(new Node[pathNodes.size()]);
 
         // TODO: this feels a little hacky, improve...
-        // TODO: node separation should be constant...
         Path path = new Path();
         path.finalPath = finalPath;
-        path.nodeSeparation = map.tileSize / 2.0f;
+        path.nodeSeparation = map.tileSizeHalf;
 
         // Ensure every node has vector built
         for (int i = 0; i < path.finalPath.length; i++)
@@ -68,7 +67,7 @@ public class DefaultIdleWalkPathBuilder implements IdleWalkPathBuilder
 
         // Offset nodes so that two ents walking towards each other have less chance of colliding
         // TODO: improve this calculation for half tilesize, we do it above too...perhaps cache in map...
-        offsetPedestrianNodes(path, nodesToStart, (float) map.tileSize / 4.0f);
+        offsetPedestrianNodes(path, nodesToStart, map);
 
         return path;
     }
@@ -213,7 +212,7 @@ public class DefaultIdleWalkPathBuilder implements IdleWalkPathBuilder
         return node;
     }
 
-    private void offsetPedestrianNodes(Path path, int offsetStart, float tileSizeQuarter)
+    private void offsetPedestrianNodes(Path path, int offsetStart, Map map)
     {
         int totalNodes = path.finalPath.length;
 
@@ -237,8 +236,8 @@ public class DefaultIdleWalkPathBuilder implements IdleWalkPathBuilder
                 );
 
                 // Multiply by offset
-                differenceX *= -tileSizeQuarter;
-                differenceY *= -tileSizeQuarter;
+                differenceX *= -map.tileSizeQuarter;
+                differenceY *= -map.tileSizeQuarter;
 
                 // Apply to node
                 currentNode.cachedVector.x += differenceY;
