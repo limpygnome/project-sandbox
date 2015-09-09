@@ -6,8 +6,6 @@ import com.limpygnome.projectsandbox.server.entity.physics.collisions.CollisionR
 import com.limpygnome.projectsandbox.server.entity.respawn.pending.EntityPendingRespawn;
 import com.limpygnome.projectsandbox.server.player.PlayerInfo;
 
-import static com.limpygnome.projectsandbox.server.constant.entity.pickup.AbstractPickupConstants.*;
-
 /**
  * Created by limpygnome on 06/07/15.
  */
@@ -15,9 +13,9 @@ public abstract class AbstractPickup extends Entity
 {
     private long respawnDelay;
 
-    public AbstractPickup(long respawnDelay)
+    public AbstractPickup(short width, short height, long respawnDelay)
     {
-        super(DEFAULT_WIDTH, DEFAULT_HEIGHT);
+        super(width, height);
 
         this.respawnDelay = respawnDelay;
         this.physicsIntangible = true;
