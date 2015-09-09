@@ -17,7 +17,7 @@ import com.limpygnome.projectsandbox.server.entity.physics.proximity.ProximityRe
 import com.limpygnome.projectsandbox.server.inventory.Inventory;
 import com.limpygnome.projectsandbox.server.inventory.InventoryInvokeState;
 import com.limpygnome.projectsandbox.server.player.PlayerInfo;
-import com.limpygnome.projectsandbox.server.world.Spawn;
+import com.limpygnome.projectsandbox.server.world.spawn.Spawn;
 
 import java.util.List;
 

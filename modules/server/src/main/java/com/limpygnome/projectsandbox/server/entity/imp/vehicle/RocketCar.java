@@ -6,7 +6,7 @@ import com.limpygnome.projectsandbox.server.entity.physics.Vector2;
 import com.limpygnome.projectsandbox.server.inventory.Inventory;
 import com.limpygnome.projectsandbox.server.inventory.item.weapon.RocketLauncher;
 import com.limpygnome.projectsandbox.server.player.PlayerInfo;
-import com.limpygnome.projectsandbox.server.world.Spawn;
+import com.limpygnome.projectsandbox.server.world.spawn.Spawn;
 
 /**
  * Created by limpygnome on 01/07/15.

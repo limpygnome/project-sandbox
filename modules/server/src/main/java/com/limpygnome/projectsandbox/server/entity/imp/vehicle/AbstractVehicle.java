@@ -14,7 +14,7 @@ import com.limpygnome.projectsandbox.server.entity.imp.living.Player;
 import com.limpygnome.projectsandbox.server.entity.physics.Vector2;
 import com.limpygnome.projectsandbox.server.player.PlayerInfo;
 import com.limpygnome.projectsandbox.server.player.PlayerKeys;
-import com.limpygnome.projectsandbox.server.world.Spawn;
+import com.limpygnome.projectsandbox.server.world.spawn.Spawn;
 
 import static com.limpygnome.projectsandbox.server.constant.entity.AbstractVehicleConstants.*;
 

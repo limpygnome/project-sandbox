@@ -9,8 +9,8 @@ import com.limpygnome.projectsandbox.server.entity.physics.casting.victims.MapCa
 import com.limpygnome.projectsandbox.server.entity.physics.proximity.DefaultProximity;
 import com.limpygnome.projectsandbox.server.entity.physics.proximity.ProximityResult;
 import com.limpygnome.projectsandbox.server.util.CustomMath;
-import com.limpygnome.projectsandbox.server.world.Map;
-import com.limpygnome.projectsandbox.server.world.TileType;
+import com.limpygnome.projectsandbox.server.world.map.Map;
+import com.limpygnome.projectsandbox.server.world.tile.TileType;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 

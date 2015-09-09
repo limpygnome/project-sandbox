@@ -5,7 +5,7 @@ import com.limpygnome.projectsandbox.server.entity.Entity;
 import com.limpygnome.projectsandbox.server.entity.annotation.EntityType;
 import com.limpygnome.projectsandbox.server.entity.imp.living.Player;
 import com.limpygnome.projectsandbox.server.entity.imp.vehicle.AbstractVehicle;
-import com.limpygnome.projectsandbox.server.world.MapEntKV;
+import com.limpygnome.projectsandbox.server.world.map.MapEntKV;
 
 import static com.limpygnome.projectsandbox.server.constant.entity.pickup.PickupConstants.*;
 

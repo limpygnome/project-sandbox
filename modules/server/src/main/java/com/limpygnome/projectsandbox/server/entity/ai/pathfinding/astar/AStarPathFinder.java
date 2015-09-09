@@ -5,8 +5,8 @@ import com.limpygnome.projectsandbox.server.entity.ai.pathfinding.Node;
 import com.limpygnome.projectsandbox.server.entity.ai.pathfinding.Path;
 import com.limpygnome.projectsandbox.server.entity.ai.pathfinding.PathFinder;
 import com.limpygnome.projectsandbox.server.entity.ai.pathfinding.TilePosition;
-import com.limpygnome.projectsandbox.server.world.Map;
-import com.limpygnome.projectsandbox.server.world.TileType;
+import com.limpygnome.projectsandbox.server.world.map.Map;
+import com.limpygnome.projectsandbox.server.world.tile.TileType;
 
 /**
  * Path finder implementation using A* algorithm.

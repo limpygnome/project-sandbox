@@ -11,7 +11,7 @@ import com.limpygnome.projectsandbox.server.player.PlayerManager;
 import com.limpygnome.projectsandbox.server.player.SessionManager;
 import com.limpygnome.projectsandbox.server.threading.GameLogic;
 import com.limpygnome.projectsandbox.server.threading.SocketEndpoint;
-import com.limpygnome.projectsandbox.server.world.MapManager;
+import com.limpygnome.projectsandbox.server.world.map.MapManager;
 
 /**
  *

@@ -2,7 +2,7 @@ package com.limpygnome.projectsandbox.server.entity.ai.pathfinding;
 
 import com.limpygnome.projectsandbox.server.Controller;
 import com.limpygnome.projectsandbox.server.entity.Entity;
-import com.limpygnome.projectsandbox.server.world.Map;
+import com.limpygnome.projectsandbox.server.world.map.Map;
 
 /**
  * Created by limpygnome on 07/09/15.

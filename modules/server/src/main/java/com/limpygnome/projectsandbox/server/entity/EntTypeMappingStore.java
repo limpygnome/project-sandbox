@@ -1,4 +1,4 @@
-package com.limpygnome.projectsandbox.server.world;
+package com.limpygnome.projectsandbox.server.entity;
 
 import com.limpygnome.projectsandbox.server.entity.annotation.EntityType;
 import com.limpygnome.projectsandbox.server.util.Annotations;
@@ -12,9 +12,9 @@ import java.util.List;
 /**
  * Created by limpygnome on 07/07/15.
  */
-public class EntTypeMappings
+public class EntTypeMappingStore
 {
-    private final static Logger LOG = LogManager.getLogger(EntTypeMappings.class);
+    private final static Logger LOG = LogManager.getLogger(EntTypeMappingStore.class);
 
     private static final String[] ENTS_CLASS_PATHS = new String[]
     {
@@ -24,7 +24,7 @@ public class EntTypeMappings
     private HashMap<Short, Class> typeIdToClass;
     private HashMap<String, Class> typeNameToClass;
 
-    public EntTypeMappings()
+    public EntTypeMappingStore()
     {
         this.typeIdToClass = new HashMap<>();
         this.typeNameToClass = new HashMap<>();
@@ -77,12 +77,12 @@ public class EntTypeMappings
         LOG.debug("Loaded {} imp of entities", typeIdToClass.size());
     }
 
-    public Class getMappingByTypeId(short typeId)
+    public Class getEntityClassByTypeId(short typeId)
     {
         return typeIdToClass.get(typeId);
     }
 
-    public Class getMappingByTypeName(String typeName)
+    public Class getEntityClassByTypeName(String typeName)
     {
         return typeNameToClass.get(typeName);
     }

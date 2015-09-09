@@ -1,4 +1,4 @@
-package com.limpygnome.projectsandbox.server.world;
+package com.limpygnome.projectsandbox.server.world.map;
 
 import java.util.HashMap;
 

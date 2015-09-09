@@ -1,6 +1,6 @@
 package com.limpygnome.projectsandbox.server.entity.respawn;
 
-import com.limpygnome.projectsandbox.server.world.Spawn;
+import com.limpygnome.projectsandbox.server.world.spawn.Spawn;
 
 /**
  * Created by limpygnome on 21/07/15.

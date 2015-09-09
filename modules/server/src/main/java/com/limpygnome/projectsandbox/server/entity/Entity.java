@@ -12,12 +12,11 @@ import com.limpygnome.projectsandbox.server.packet.PacketData;
 import com.limpygnome.projectsandbox.server.player.PlayerInfo;
 import com.limpygnome.projectsandbox.server.util.CustomMath;
 import com.limpygnome.projectsandbox.server.Controller;
-import com.limpygnome.projectsandbox.server.world.Spawn;
+import com.limpygnome.projectsandbox.server.world.spawn.Spawn;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.lang.annotation.Annotation;
-import java.util.HashMap;
 
 import static com.limpygnome.projectsandbox.server.constant.PlayerConstants.*;
 

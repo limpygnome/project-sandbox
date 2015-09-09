@@ -3,7 +3,7 @@ package com.limpygnome.projectsandbox.server.entity.ai.pathfinding.astar;
 import com.limpygnome.projectsandbox.server.entity.ai.pathfinding.Node;
 import com.limpygnome.projectsandbox.server.entity.ai.pathfinding.Path;
 import com.limpygnome.projectsandbox.server.entity.ai.pathfinding.TilePosition;
-import com.limpygnome.projectsandbox.server.world.Map;
+import com.limpygnome.projectsandbox.server.world.map.Map;
 
 import java.util.HashMap;
 import java.util.HashSet;

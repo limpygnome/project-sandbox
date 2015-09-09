@@ -1,7 +1,7 @@
 package com.limpygnome.projectsandbox.server.entity.ai.pathfinding;
 
 import com.limpygnome.projectsandbox.server.entity.physics.Vector2;
-import com.limpygnome.projectsandbox.server.world.Map;
+import com.limpygnome.projectsandbox.server.world.map.Map;
 
 /**
  * Created by limpygnome on 01/09/15.

@@ -1,4 +1,4 @@
-package com.limpygnome.projectsandbox.server.world;
+package com.limpygnome.projectsandbox.server.world.map;
 
 import com.limpygnome.projectsandbox.server.constant.PathConstants;
 import com.limpygnome.projectsandbox.server.util.FileSystem;
@@ -22,17 +22,21 @@ public class MapManager
 
     private Controller controller;
 
-    public HashMap<String, Map> maps;
-    private short mapIdCounter;
-    
+    /* A cache for storing active maps. */
+    private HashMap<Short, Map> mapCache;
+
     public Map main;
     
     public MapManager(Controller controller)
     {
         this.controller = controller;
-        this.maps = new HashMap<>();
-        this.mapIdCounter = 0;
+        this.mapCache = new HashMap<>();
         this.main = null;
+    }
+
+    public synchronized void put(Map map)
+    {
+        mapCache.put(map.mapId, map);
     }
     
     public synchronized void load() throws Exception
@@ -53,13 +57,13 @@ public class MapManager
             mapIdCounter++;
             
             // Add mapping
-            maps.put(map.name, map);
+            mapCache.put(map.name, map);
 
             LOG.debug("Loaded map - {}", map);
         }
         
         // Set the main map file
-        main = maps.get("main");
+        main = mapCache.get("main");
         
         if (main == null)
         {

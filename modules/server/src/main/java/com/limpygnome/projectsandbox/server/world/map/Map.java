@@ -1,4 +1,4 @@
-package com.limpygnome.projectsandbox.server.world;
+package com.limpygnome.projectsandbox.server.world.map;
 
 import com.limpygnome.projectsandbox.server.Controller;
 import com.limpygnome.projectsandbox.server.entity.physics.Vector2;
@@ -12,6 +12,9 @@ import java.lang.reflect.Constructor;
 import java.util.HashMap;
 import java.util.Iterator;
 
+import com.limpygnome.projectsandbox.server.world.spawn.FactionSpawns;
+import com.limpygnome.projectsandbox.server.world.spawn.Spawn;
+import com.limpygnome.projectsandbox.server.world.tile.TileType;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.json.simple.JSONArray;
@@ -222,11 +225,11 @@ public class Map
 
         if (entData.containsKey("typeName"))
         {
-            entClass = controller.entityManager.entTypeMappings.getMappingByTypeName((String) entData.get("typeName"));
+            entClass = controller.entityManager.entTypeMappingStore.getEntityClassByTypeName((String) entData.get("typeName"));
         }
         else if (entData.containsKey("typeId"))
         {
-            entClass = controller.entityManager.entTypeMappings.getMappingByTypeId((short) (long) entData.get("typeId"));
+            entClass = controller.entityManager.entTypeMappingStore.getEntityClassByTypeId((short) (long) entData.get("typeId"));
         }
         else
         {

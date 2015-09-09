@@ -5,10 +5,10 @@ import com.limpygnome.projectsandbox.server.entity.Entity;
 import com.limpygnome.projectsandbox.server.entity.ai.pathfinding.IdleWalkPathBuilder;
 import com.limpygnome.projectsandbox.server.entity.ai.pathfinding.Node;
 import com.limpygnome.projectsandbox.server.entity.ai.pathfinding.Path;
-import com.limpygnome.projectsandbox.server.world.Map;
-import com.limpygnome.projectsandbox.server.world.MapPosition;
+import com.limpygnome.projectsandbox.server.world.map.Map;
+import com.limpygnome.projectsandbox.server.world.map.MapPosition;
 
-import com.limpygnome.projectsandbox.server.world.TileType;
+import com.limpygnome.projectsandbox.server.world.tile.TileType;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;

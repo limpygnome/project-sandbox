@@ -2,7 +2,7 @@ package com.limpygnome.projectsandbox.server.entity.respawn;
 
 import com.limpygnome.projectsandbox.server.Controller;
 import com.limpygnome.projectsandbox.server.entity.Entity;
-import com.limpygnome.projectsandbox.server.world.Spawn;
+import com.limpygnome.projectsandbox.server.world.spawn.Spawn;
 
 /**
  * Holds the required data for spawning an entity.

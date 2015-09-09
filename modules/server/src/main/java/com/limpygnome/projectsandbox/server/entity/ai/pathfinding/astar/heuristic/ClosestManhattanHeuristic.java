@@ -2,7 +2,7 @@ package com.limpygnome.projectsandbox.server.entity.ai.pathfinding.astar.heurist
 
 import com.limpygnome.projectsandbox.server.entity.Entity;
 import com.limpygnome.projectsandbox.server.entity.ai.pathfinding.astar.AStarHeuristic;
-import com.limpygnome.projectsandbox.server.world.Map;
+import com.limpygnome.projectsandbox.server.world.map.Map;
 
 /**
  * Not as accurate as an absolute heuristic, but much cheaper.

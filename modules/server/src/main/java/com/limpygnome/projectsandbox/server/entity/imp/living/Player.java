@@ -2,13 +2,12 @@ package com.limpygnome.projectsandbox.server.entity.imp.living;
 
 import com.limpygnome.projectsandbox.server.Controller;
 import com.limpygnome.projectsandbox.server.entity.Entity;
-import com.limpygnome.projectsandbox.server.entity.UpdateMasks;
 import com.limpygnome.projectsandbox.server.entity.annotation.EntityType;
 import com.limpygnome.projectsandbox.server.entity.physics.Vector2;
 import com.limpygnome.projectsandbox.server.inventory.Inventory;
 import com.limpygnome.projectsandbox.server.player.PlayerInfo;
 import com.limpygnome.projectsandbox.server.player.PlayerKeys;
-import com.limpygnome.projectsandbox.server.world.Spawn;
+import com.limpygnome.projectsandbox.server.world.spawn.Spawn;
 
 import static com.limpygnome.projectsandbox.server.constant.PlayerConstants.*;
 

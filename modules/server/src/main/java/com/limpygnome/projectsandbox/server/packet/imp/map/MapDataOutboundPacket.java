@@ -1,8 +1,8 @@
 package com.limpygnome.projectsandbox.server.packet.imp.map;
 
-import com.limpygnome.projectsandbox.server.world.TileType;
+import com.limpygnome.projectsandbox.server.world.tile.TileType;
 import com.limpygnome.projectsandbox.server.packet.OutboundPacket;
-import com.limpygnome.projectsandbox.server.world.Map;
+import com.limpygnome.projectsandbox.server.world.map.Map;
 
 import java.io.IOException;
 

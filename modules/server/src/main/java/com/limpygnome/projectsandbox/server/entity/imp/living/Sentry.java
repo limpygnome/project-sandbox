@@ -14,7 +14,7 @@ import com.limpygnome.projectsandbox.server.entity.physics.proximity.DefaultProx
 import com.limpygnome.projectsandbox.server.entity.physics.proximity.ProximityResult;
 import com.limpygnome.projectsandbox.server.entity.physics.proximity.RotateResult;
 import com.limpygnome.projectsandbox.server.player.PlayerInfo;
-import com.limpygnome.projectsandbox.server.world.Spawn;
+import com.limpygnome.projectsandbox.server.world.spawn.Spawn;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 

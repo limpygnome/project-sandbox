@@ -1,7 +1,7 @@
 package com.limpygnome.projectsandbox.server.entity.ai.pathfinding.astar;
 
 import com.limpygnome.projectsandbox.server.entity.Entity;
-import com.limpygnome.projectsandbox.server.world.Map;
+import com.limpygnome.projectsandbox.server.world.map.Map;
 
 /**
  * Major credit to the following resources:

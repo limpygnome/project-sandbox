@@ -5,8 +5,8 @@ import com.limpygnome.projectsandbox.server.entity.physics.Projection;
 import com.limpygnome.projectsandbox.server.entity.physics.Vector2;
 import com.limpygnome.projectsandbox.server.entity.physics.Vertices;
 import com.limpygnome.projectsandbox.server.util.CustomMath;
-import com.limpygnome.projectsandbox.server.world.Map;
-import com.limpygnome.projectsandbox.server.world.TileType;
+import com.limpygnome.projectsandbox.server.world.map.Map;
+import com.limpygnome.projectsandbox.server.world.tile.TileType;
 
 import java.util.ArrayList;
 import java.util.Collection;

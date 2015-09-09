@@ -1,4 +1,4 @@
-package com.limpygnome.projectsandbox.server.world;
+package com.limpygnome.projectsandbox.server.world.spawn;
 
 import java.util.Iterator;
 import java.util.LinkedList;

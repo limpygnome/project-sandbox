@@ -1,4 +1,4 @@
-package com.limpygnome.projectsandbox.server.world;
+package com.limpygnome.projectsandbox.server.world.map;
 
 /**
  * An immutable object used to represent a position in a map.

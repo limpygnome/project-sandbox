@@ -1,11 +1,6 @@
 package com.limpygnome.projectsandbox.server.entity.ai.pathfinding;
 
 import com.limpygnome.projectsandbox.server.entity.physics.Vector2;
-import com.limpygnome.projectsandbox.server.world.Map;
-
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.TreeSet;
 
 /**
  * Used to hold the result of nodes to traverse and follow from a path-finding computation.
