@@ -2,6 +2,8 @@ package com.limpygnome.projectsandbox.server.entity.imp.living.pedestrian;
 
 import com.limpygnome.projectsandbox.server.Controller;
 import com.limpygnome.projectsandbox.server.entity.Entity;
+import com.limpygnome.projectsandbox.server.entity.ai.IdleMode;
+import com.limpygnome.projectsandbox.server.entity.ai.PedestrianState;
 import com.limpygnome.projectsandbox.server.entity.imp.living.Player;
 import com.limpygnome.projectsandbox.server.entity.imp.vehicle.AbstractVehicle;
 import com.limpygnome.projectsandbox.server.entity.physics.Vector2;
@@ -27,54 +29,11 @@ import static com.limpygnome.projectsandbox.server.constant.entity.PedestrianCon
 public abstract class AbstractPedestrian extends Entity
 {
     /**
-     * Specifies what the pedestrian should do when idle.
+     * Maximum steps to compute for every idle walk path.
+     *
+     * The higher this value, the less chaotic, due to a decreased chance of re-walking the same nodes.
      */
-    public enum IdleMode
-    {
-        /**
-         * Causes the pedestrian to walk around the world.
-         */
-        WALK,
-
-        /**
-         * Causes the pedestrian to return to their spawn position.
-         */
-        RETURN_TO_SPAWN
-    }
-
-    /**
-     * Used to track the current state of the pedestrian.
-     */
-    public enum PedestrianState
-    {
-        /**
-         * Indicates the pedestrian is idle and returning to its spawn position.
-         */
-        IdleReturnToSpawn(true),
-
-        /**
-         * Indicates the pedestrian is idle and just aimlessly walking around the world.
-         */
-        IdleWalk(true),
-
-        /**
-         * Indicates the pedestrian is idle.
-         */
-        Idle(true),
-
-        /**
-         * Indicates the pedestrian is in pursuit and attacking an entity.
-         */
-        TrackingEntity(false)
-        ;
-
-        public final boolean IDLE;
-
-        PedestrianState(boolean IDLE)
-        {
-            this.IDLE = IDLE;
-        }
-    }
+    public static final int IDLE_WALK_MAX_STEPS = 32;
 
     private Inventory inventory;
     private float engageDistance;
@@ -92,6 +51,9 @@ public abstract class AbstractPedestrian extends Entity
     private Path lastPathFound;
     private int lastPathOffset;
     private PedestrianState state;
+
+    /* Cached calculation to indicate if this pedestrian can even attack. */
+    private boolean flagCanAttack;
 
     public AbstractPedestrian(short width, short height, float health, Class[] inventoryItems, float engageDistance,
                               float followSpeed, float followDistance, float attackDistance, float attackRotationNoise,
@@ -122,6 +84,8 @@ public abstract class AbstractPedestrian extends Entity
         this.targetEntity = null;
         this.targetVector = null;
         this.lastSpawn = null;
+
+        this.flagCanAttack = (attackDistance > 0.0f);
 
         this.state = PedestrianState.Idle;
     }
@@ -164,7 +128,7 @@ public abstract class AbstractPedestrian extends Entity
         if (state != PedestrianState.Idle)
         {
             float distance = Vector2.distance(this.positionNew, targetVector);
-            boolean withinAttackDistance = (distance < attackDistance);
+            boolean withinAttackDistance = (flagCanAttack && distance < attackDistance);
 
             // Determine if to rebuild path due to target moving too far away from pre-computed destination
             // -- Only applies when tracking an entity
@@ -238,7 +202,7 @@ public abstract class AbstractPedestrian extends Entity
             }
 
             // Check distance between us and player, decide if to attack...
-            if (state == PedestrianState.TrackingEntity && withinAttackDistance)
+            if (withinAttackDistance && state == PedestrianState.TrackingEntity)
             {
                 // Fire selected weapon in inventory
                 fireInventoryWeapon(controller);
@@ -318,10 +282,10 @@ public abstract class AbstractPedestrian extends Entity
         }
 
         // See if we can find a new target...
-        if (state.IDLE)
+        if (flagCanAttack && state.IDLE)
         {
             // Find nearest entity...
-            // TODO: consider if we should test all vertices, expensive...
+            // NOTE: uses high accuracy; computation can be saved by turning testing all vertices off
             List<ProximityResult> nearbyEnts = DefaultProximity.nearbyEnts(
                     controller, this, engageDistance, true, true
             );
@@ -372,8 +336,7 @@ public abstract class AbstractPedestrian extends Entity
                     break;
                 case WALK:
                     // Rebuild idle path
-                    // TODO: replace magic value...
-                    lastPathFound = controller.artificialIntelligenceManager.findIdlePath(this, 32);
+                    lastPathFound = controller.artificialIntelligenceManager.findIdlePath(this, IDLE_WALK_MAX_STEPS);
 
                     if (lastPathFound != null && lastPathFound.getTotalNodes() > 0)
                     {

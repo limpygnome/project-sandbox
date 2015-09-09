@@ -3,6 +3,7 @@ package com.limpygnome.projectsandbox.server.entity.imp.vehicle;
 import com.limpygnome.projectsandbox.server.entity.death.AbstractKiller;
 import com.limpygnome.projectsandbox.server.entity.death.CarDamage;
 import com.limpygnome.projectsandbox.server.entity.death.CarKiller;
+import com.limpygnome.projectsandbox.server.entity.imp.living.pedestrian.AbstractPedestrian;
 import com.limpygnome.projectsandbox.server.entity.physics.collisions.CollisionResult;
 import com.limpygnome.projectsandbox.server.Controller;
 import com.limpygnome.projectsandbox.server.entity.Entity;
@@ -289,7 +290,7 @@ public abstract class AbstractVehicle extends Entity
 
         if (collisionSpeed > MINIMUM_SPEED_DAMAGE)
         {
-            if (entOther instanceof Player)
+            if (entOther instanceof Player || entOther instanceof AbstractPedestrian || entOther instanceof AbstractVehicle)
             {
                 float damage = (collisionSpeed - MINIMUM_SPEED_DAMAGE) * ENT_COLLISION_SPEED_DAMAGE_MULTIPLIER;
                 float equalDamage = (ENT_EQUAL_DAMAGE_RATIO * damage) / 2.0f;

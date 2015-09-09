@@ -68,7 +68,7 @@ public class DefaultIdleWalkPathBuilder implements IdleWalkPathBuilder
 
         // Offset nodes so that two ents walking towards each other have less chance of colliding
         // TODO: improve this calculation for half tilesize, we do it above too...perhaps cache in map...
-        offsetPedestrianNodes(path, nodesToStart, (float) map.tileSize / 2.0f);
+        offsetPedestrianNodes(path, nodesToStart, (float) map.tileSize / 4.0f);
 
         return path;
     }
@@ -213,7 +213,7 @@ public class DefaultIdleWalkPathBuilder implements IdleWalkPathBuilder
         return node;
     }
 
-    private void offsetPedestrianNodes(Path path, int offsetStart, float tileSizeHalf)
+    private void offsetPedestrianNodes(Path path, int offsetStart, float tileSizeQuarter)
     {
         int totalNodes = path.finalPath.length;
 
@@ -237,12 +237,12 @@ public class DefaultIdleWalkPathBuilder implements IdleWalkPathBuilder
                 );
 
                 // Multiply by offset
-                differenceX *= tileSizeHalf;
-                differenceY *= tileSizeHalf;
+                differenceX *= -tileSizeQuarter;
+                differenceY *= -tileSizeQuarter;
 
                 // Apply to node
-                currentNode.cachedVector.x += differenceX;
-                currentNode.cachedVector.y += differenceY;
+                currentNode.cachedVector.x += differenceY;
+                currentNode.cachedVector.y += differenceX;
             }
 
             previousNode = currentNode;
@@ -251,11 +251,11 @@ public class DefaultIdleWalkPathBuilder implements IdleWalkPathBuilder
 
     private float offsetPedestrianNodes_convertToOne(float value)
     {
-        if (value == 0)
+        if (value == 0.0f)
         {
             return 0.0f;
         }
-        else if (value < 0)
+        else if (value < 0.0f)
         {
             return -1.0f;
         }

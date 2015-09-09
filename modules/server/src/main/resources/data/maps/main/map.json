@@ -133,7 +133,7 @@
         },
         {
             "typeName" : "living/pedestrian/attacking",
-            "count" : 1,
+            "count" : 10,
             "faction" : 3000
         }
     ],

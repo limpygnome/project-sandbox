@@ -1,5 +1,6 @@
 package com.limpygnome.projectsandbox.server.entity.imp.living.pedestrian;
 
+import com.limpygnome.projectsandbox.server.entity.ai.IdleMode;
 import com.limpygnome.projectsandbox.server.entity.annotation.EntityType;
 
 import static com.limpygnome.projectsandbox.server.constant.entity.PedestrianConstants.*;
@@ -21,9 +22,9 @@ public class AttackingPedestrian extends AbstractPedestrian
                 ATTACKING_PED_ENGAGE_DISTANCE,
                 ATTACKING_PED_FOLLOW_SPEED,
                 ATTACKING_PED_FOLLOW_DISTANCE,
-                ATTACKING_PED_ATTACK_DISTANCE,
+                0.0f,//ATTACKING_PED_ATTACK_DISTANCE,
                 ATTACKING_PED_ATTACK_ROTATION_NOISE,
-                IdleMode.WALK
+                IdleMode.WALK// IdleMode.RETURN_TO_SPAWN
         );
     }
 

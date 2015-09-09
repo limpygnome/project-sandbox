@@ -44,6 +44,10 @@ public class Map
     public short tiles[][];
     public Vertices[][] tileVertices;
 
+    /* Pre-computed/cached values */
+    public float tileSizeHalf;
+    public float tileSizeQuarter;
+
     // if this is later updated elsewhere, it needs thread protection
     public MapDataOutboundPacket packet;
     
