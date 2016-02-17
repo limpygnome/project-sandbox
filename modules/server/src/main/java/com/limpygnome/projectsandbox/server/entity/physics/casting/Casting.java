@@ -9,7 +9,7 @@ import com.limpygnome.projectsandbox.server.entity.physics.casting.victims.MapCa
 import com.limpygnome.projectsandbox.server.entity.physics.proximity.DefaultProximity;
 import com.limpygnome.projectsandbox.server.entity.physics.proximity.ProximityResult;
 import com.limpygnome.projectsandbox.server.util.CustomMath;
-import com.limpygnome.projectsandbox.server.world.map.Map;
+import com.limpygnome.projectsandbox.server.world.map.WorldMap;
 import com.limpygnome.projectsandbox.server.world.tile.TileType;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -161,7 +161,7 @@ public class Casting
         }
 
         // Now find the start/end indexes for tiles to consider
-        Map map = controller.mapManager.main;
+        WorldMap map = controller.mapManager.main;
 
         int tileStartX = (int) Math.floor(startX / map.tileSize);
         int tileStartY = (int) Math.floor(startY / map.tileSize);

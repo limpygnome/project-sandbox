@@ -5,13 +5,13 @@ package com.limpygnome.projectsandbox.server.world.map;
  */
 public class MapPosition
 {
-    public final Map map;
+    public final WorldMap map;
     public final float x;
     public final float y;
     public final int tileX;
     public final int tileY;
 
-    public MapPosition(Map map, float x, float y, int tileX, int tileY)
+    public MapPosition(WorldMap map, float x, float y, int tileX, int tileY)
     {
         this.map = map;
         this.x = x;

@@ -1,8 +1,8 @@
 package com.limpygnome.projectsandbox.server.packet.imp.map;
 
+import com.limpygnome.projectsandbox.server.world.map.WorldMap;
 import com.limpygnome.projectsandbox.server.world.tile.TileType;
 import com.limpygnome.projectsandbox.server.packet.OutboundPacket;
-import com.limpygnome.projectsandbox.server.world.map.Map;
 
 import java.io.IOException;
 
@@ -21,7 +21,7 @@ public class MapDataOutboundPacket extends OutboundPacket
         super((byte)'M', (byte)'D');
     }
     
-    public void build(Map map) throws IOException
+    public void build(WorldMap map) throws IOException
     {
         // Add number of tiles
         packetData.add((short) map.tileNameToTypeIndexMappings.size());

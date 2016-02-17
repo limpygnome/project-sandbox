@@ -11,6 +11,7 @@ import java.io.IOException;
 import java.lang.reflect.Constructor;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.UUID;
 
 import com.limpygnome.projectsandbox.server.world.spawn.FactionSpawns;
 import com.limpygnome.projectsandbox.server.world.spawn.Spawn;
@@ -21,14 +22,16 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
 /**
- * Holds data regarding a map.
+ * Represents a (world) map, an environment/area in which a player interacts.
  */
-public class Map
+public class WorldMap
 {
-    private final static Logger LOG = LogManager.getLogger(Map.class);
+    private final static Logger LOG = LogManager.getLogger(WorldMap.class);
 
     private final Controller controller;
-    public final short mapId;
+
+    /* The unique identifier for the map. */
+    public final UUID mapId;
 
     private short tileTypeIdCounter;
     public HashMap<String, Short> tileNameToTypeIndexMappings;
@@ -54,8 +57,15 @@ public class Map
 
     // if this is later updated elsewhere, it needs thread protection
     public MapDataOutboundPacket packet;
-    
-    private Map(Controller controller, MapManager mapManager, short mapId)
+
+    /**
+     * Creates a new instance and sets up internal state ready for tile data.
+     *
+     * @param controller
+     * @param mapManager The map manager to which this instance belongs
+     * @param mapId The unique identifier for this map
+     */
+    public WorldMap(Controller controller, MapManager mapManager, UUID mapId)
     {
         this.controller = controller;
         this.mapManager = mapManager;
@@ -104,9 +114,9 @@ public class Map
         return tileTypes[tiles[tileY][tileX]];
     }
     
-    public static Map load(Controller controller, MapManager mapManager, short mapId, JSONObject rootJsonNode) throws IOException
+    public static WorldMap load(Controller controller, MapManager mapManager, short mapId, JSONObject rootJsonNode) throws IOException
     {
-        Map map = new Map(controller, mapManager, mapId);
+        WorldMap map = new WorldMap(controller, mapManager, mapId);
         
         // Load map tile imp
         JSONArray tileTypes = (JSONArray) rootJsonNode.get("tile_types");
@@ -218,7 +228,7 @@ public class Map
         return map;
     }
     
-    private static void parseEnts(Controller controller, MapManager mapManager, Map map, JSONObject entData) throws IOException
+    private static void parseEnts(Controller controller, MapManager mapManager, WorldMap map, JSONObject entData) throws IOException
     {
         // Fetch ent type - either by ID or name
         Class entClass;
@@ -293,7 +303,7 @@ public class Map
         return mapEntKV;
     }
 
-    private static void parseEntsCreateEnts(Controller controller, Map map, Class entClass, MapEntKV mapEntKV, long count, short faction, Spawn spawn) throws IOException
+    private static void parseEntsCreateEnts(Controller controller, WorldMap map, Class entClass, MapEntKV mapEntKV, long count, short faction, Spawn spawn) throws IOException
     {
         boolean useKv = (mapEntKV != null);
 
@@ -354,7 +364,7 @@ public class Map
         }
     }
     
-    private static void parseFactionSpawns(Controller controller, Map map, JSONObject factionData)
+    private static void parseFactionSpawns(Controller controller, WorldMap map, JSONObject factionData)
     {
         short factionId = (short) (long) factionData.get("id");
         

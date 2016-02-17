@@ -5,7 +5,7 @@ import com.limpygnome.projectsandbox.server.entity.ai.pathfinding.Node;
 import com.limpygnome.projectsandbox.server.entity.ai.pathfinding.Path;
 import com.limpygnome.projectsandbox.server.entity.ai.pathfinding.PathFinder;
 import com.limpygnome.projectsandbox.server.entity.ai.pathfinding.TilePosition;
-import com.limpygnome.projectsandbox.server.world.map.Map;
+import com.limpygnome.projectsandbox.server.world.map.WorldMap;
 import com.limpygnome.projectsandbox.server.world.tile.TileType;
 
 /**
@@ -25,7 +25,7 @@ public class AStarPathFinder implements PathFinder
     }
 
     @Override
-    public Path findPath(Map map, Entity entity, float startX, float startY, float endX, float endY)
+    public Path findPath(WorldMap map, Entity entity, float startX, float startY, float endX, float endY)
     {
         // Convert positions into tiles
         int tileSize = (int) map.tileSize;
@@ -118,7 +118,7 @@ public class AStarPathFinder implements PathFinder
     }
 
     // Returns max depth
-    private Node processNeighbor(Map map, Entity entity, AStarPath path, Node currentNode, int neighborX, int neighborY, int targetTileX, int targetTileY)
+    private Node processNeighbor(WorldMap map, Entity entity, AStarPath path, Node currentNode, int neighborX, int neighborY, int targetTileX, int targetTileY)
     {
         float neighborCost = currentNode.pathCost + 1;
         TilePosition tilePosition = new TilePosition(neighborX, neighborY);
@@ -162,7 +162,7 @@ public class AStarPathFinder implements PathFinder
         return neighborNode;
     }
 
-    private boolean isTileUsable(Map map, Entity entity, int tileX, int tileY)
+    private boolean isTileUsable(WorldMap map, Entity entity, int tileX, int tileY)
     {
         TileType tileType = map.tileTypes[map.tiles[tileY][tileX]];
 

@@ -5,7 +5,7 @@ import com.limpygnome.projectsandbox.server.entity.Entity;
 import com.limpygnome.projectsandbox.server.entity.ai.pathfinding.IdleWalkPathBuilder;
 import com.limpygnome.projectsandbox.server.entity.ai.pathfinding.Node;
 import com.limpygnome.projectsandbox.server.entity.ai.pathfinding.Path;
-import com.limpygnome.projectsandbox.server.world.map.Map;
+import com.limpygnome.projectsandbox.server.world.map.WorldMap;
 import com.limpygnome.projectsandbox.server.world.map.MapPosition;
 
 import com.limpygnome.projectsandbox.server.world.tile.TileType;
@@ -23,7 +23,7 @@ public class DefaultIdleWalkPathBuilder implements IdleWalkPathBuilder
 {
 
     @Override
-    public Path build(Controller controller, Map map, Entity entity, int maxDepth)
+    public Path build(Controller controller, WorldMap map, Entity entity, int maxDepth)
     {
         MapPosition entityPosition = controller.mapManager.main.positionFromReal(entity.positionNew);
 
@@ -72,7 +72,7 @@ public class DefaultIdleWalkPathBuilder implements IdleWalkPathBuilder
         return path;
     }
 
-    private Node findStartNode(Map map, List<Node> pathNodes, MapPosition entityPosition, int maxDepth)
+    private Node findStartNode(WorldMap map, List<Node> pathNodes, MapPosition entityPosition, int maxDepth)
     {
         // NOTE: this is very similar to the A* path-finding code in some ways...
 
@@ -126,7 +126,7 @@ public class DefaultIdleWalkPathBuilder implements IdleWalkPathBuilder
         return null;
     }
 
-    private Node buildNextStep(Map map, Random random, Set<Node> pathNodesPresent, List<Node> pathNodes, Node lastNode)
+    private Node buildNextStep(WorldMap map, Random random, Set<Node> pathNodesPresent, List<Node> pathNodes, Node lastNode)
     {
         // Check node before last node for direction; looks more natural than chaotic picking
         if (pathNodes.size() > 2)
@@ -212,7 +212,7 @@ public class DefaultIdleWalkPathBuilder implements IdleWalkPathBuilder
         return node;
     }
 
-    private void offsetPedestrianNodes(Path path, int offsetStart, Map map)
+    private void offsetPedestrianNodes(Path path, int offsetStart, WorldMap map)
     {
         int totalNodes = path.finalPath.length;
 

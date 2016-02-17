@@ -1,7 +1,7 @@
 package com.limpygnome.projectsandbox.server.entity.ai.pathfinding.astar;
 
 import com.limpygnome.projectsandbox.server.entity.Entity;
-import com.limpygnome.projectsandbox.server.world.map.Map;
+import com.limpygnome.projectsandbox.server.world.map.WorldMap;
 
 /**
  * Major credit to the following resources:
@@ -10,6 +10,6 @@ import com.limpygnome.projectsandbox.server.world.map.Map;
 public interface AStarHeuristic
 {
 
-    float getCost(Map map, Entity entity, int tileX, int tileY, int targetTileX, int targetTileY);
+    float getCost(WorldMap map, Entity entity, int tileX, int tileY, int targetTileX, int targetTileY);
 
 }

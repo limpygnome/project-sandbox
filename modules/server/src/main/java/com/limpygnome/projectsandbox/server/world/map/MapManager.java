@@ -8,7 +8,12 @@ import com.limpygnome.projectsandbox.server.Controller;
 
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.Map;
+import java.util.UUID;
 
+import com.limpygnome.projectsandbox.server.world.map.data.MapBuilder;
+import com.limpygnome.projectsandbox.server.world.map.repository.FileSystemMapRepository;
+import com.limpygnome.projectsandbox.server.world.map.repository.MapRepository;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.json.simple.JSONObject;
@@ -22,10 +27,17 @@ public class MapManager
 
     private Controller controller;
 
-    /* A cache for storing active maps. */
-    private HashMap<Short, Map> mapCache;
+    /* The repository used for fetching maps. */
+    private MapRepository mapRepository;
 
-    public Map main;
+    /* The implementation used for building maps.  */
+    private MapBuilder mapBuilder;
+
+    /* A cache for storing either common or active maps. */
+    private Map<UUID, WorldMap> mapCache;
+
+    /* The main/lobby map. */
+    public WorldMap main;
     
     public MapManager(Controller controller)
     {
@@ -34,41 +46,20 @@ public class MapManager
         this.main = null;
     }
 
-    public synchronized void put(Map map)
+    public synchronized void put(WorldMap map)
     {
         mapCache.put(map.mapId, map);
     }
     
     public synchronized void load() throws Exception
     {
-        FileSystemFile[] files = FileSystem.getResources(PathConstants.BASE_PACKAGE_MAPS);
+        MapRepository mapRepository = new FileSystemMapRepository();
+        mapCache = new HashMap<>(mapRepository.fetchPublicMaps(mapBuilder));
+    }
 
-        // Iterate and load each map file
-        JSONObject obj;
-        Map map;
+    public synchronized void loadOld() throws Exception
+    {
 
-        for(FileSystemFile file : files)
-        {
-            // Load map
-            obj = JsonHelper.read(file.getInputStream());
-            map = Map.load(controller, this, mapIdCounter, obj);
-            
-            // Map has loaded, now increment counter
-            mapIdCounter++;
-            
-            // Add mapping
-            mapCache.put(map.name, map);
-
-            LOG.debug("Loaded map - {}", map);
-        }
-        
-        // Set the main map file
-        main = mapCache.get("main");
-        
-        if (main == null)
-        {
-            throw new IOException("Unable to find main map.");
-        }
     }
     
 }

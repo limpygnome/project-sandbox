@@ -3,7 +3,7 @@ package com.limpygnome.projectsandbox.server.entity.ai.pathfinding.astar;
 import com.limpygnome.projectsandbox.server.entity.ai.pathfinding.Node;
 import com.limpygnome.projectsandbox.server.entity.ai.pathfinding.Path;
 import com.limpygnome.projectsandbox.server.entity.ai.pathfinding.TilePosition;
-import com.limpygnome.projectsandbox.server.world.map.Map;
+import com.limpygnome.projectsandbox.server.world.map.WorldMap;
 
 import java.util.HashMap;
 import java.util.HashSet;
@@ -25,7 +25,7 @@ public class AStarPath extends Path
         this.nodes = new HashMap<>();
     }
 
-    public void finalizePath(Map map, int targetX, int targetY)
+    public void finalizePath(WorldMap map, int targetX, int targetY)
     {
         // Build final path
         Node nodeTarget = nodes.get(new TilePosition(targetX, targetY));

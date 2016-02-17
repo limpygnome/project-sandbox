@@ -5,7 +5,7 @@ import com.limpygnome.projectsandbox.server.entity.physics.Projection;
 import com.limpygnome.projectsandbox.server.entity.physics.Vector2;
 import com.limpygnome.projectsandbox.server.entity.physics.Vertices;
 import com.limpygnome.projectsandbox.server.util.CustomMath;
-import com.limpygnome.projectsandbox.server.world.map.Map;
+import com.limpygnome.projectsandbox.server.world.map.WorldMap;
 import com.limpygnome.projectsandbox.server.world.tile.TileType;
 
 import java.util.ArrayList;
@@ -34,7 +34,7 @@ public class SAT
         return collision(a.cachedVertices, b.cachedVertices);
     }
     
-    public static Collection<CollisionResultMap> collisionMap(Map map, Entity ent)
+    public static Collection<CollisionResultMap> collisionMap(WorldMap map, Entity ent)
     {
         // Perform collision test for each possible solid tile within range of
         // ent
