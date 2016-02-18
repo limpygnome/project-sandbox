@@ -4,7 +4,11 @@
     "properties" :
     {
         "name" : "main",
-        "lobby" : true,
+        "lobby" : true
+    },
+
+    "tile_properties" :
+    {
         "tile_size" : 64,
         "tiles_width" : 13,
         "tiles_height" : 12

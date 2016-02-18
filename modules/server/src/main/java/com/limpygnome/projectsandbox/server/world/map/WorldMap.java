@@ -9,7 +9,6 @@ import com.limpygnome.projectsandbox.server.entity.Entity;
 
 import java.io.IOException;
 import java.lang.reflect.Constructor;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.UUID;
 
@@ -99,30 +98,8 @@ public class WorldMap
         );
     }
 
-    /**
-     * Safely retrieves the tile-type for the specified position.
-     *
-     * This will perform checks on the position.
-     *
-     * @param tileX The tile X position
-     * @param tileY The tile Y position
-     * @return Instance, or null if invalid position
-     */
-    public TileType tileTypeFromPosition(int tileX, int tileY)
-    {
-        // Check within bounds of map
-        if (tileX < 0 || tileY < 0 || tileX >= properties.tilesWidth || tileY >= properties.tilesHeight)
-        {
-            return null;
-        }
 
-        // Retrieve tile-type at co-ordinate
-        short tileTypeId = tileData.tiles[tileY][tileX];
 
-        // Return the type, since tile ID is the same as array index
-        return tileData.tileTypes[tileTypeId];
-    }
-    
     public static WorldMap load(Controller controller, MapManager mapManager, short mapId, JSONObject rootJsonNode) throws IOException
     {
         WorldMap map = new WorldMap(controller, mapManager, mapId);

@@ -3,12 +3,14 @@ package com.limpygnome.projectsandbox.server.world.map.repository;
 import com.limpygnome.projectsandbox.server.Controller;
 import com.limpygnome.projectsandbox.server.constant.PathConstants;
 import com.limpygnome.projectsandbox.server.entity.physics.Vertices;
+import com.limpygnome.projectsandbox.server.packet.imp.map.MapDataOutboundPacket;
 import com.limpygnome.projectsandbox.server.util.FileSystem;
 import com.limpygnome.projectsandbox.server.util.FileSystemFile;
 import com.limpygnome.projectsandbox.server.util.JsonHelper;
 import com.limpygnome.projectsandbox.server.world.map.MapManager;
 import com.limpygnome.projectsandbox.server.world.map.WorldMap;
 import com.limpygnome.projectsandbox.server.world.map.WorldMapProperties;
+import com.limpygnome.projectsandbox.server.world.map.WorldMapTileData;
 import com.limpygnome.projectsandbox.server.world.map.data.MapBuilder;
 import com.limpygnome.projectsandbox.server.world.tile.TileType;
 import org.apache.logging.log4j.LogManager;
@@ -39,8 +41,6 @@ public class FileSystemMapRepository implements MapRepository
 
             // Iterate and load each map file
             JSONObject mapData;
-            String rawMapId;
-            UUID mapId;
             WorldMap map;
 
             for (FileSystemFile file : files)
@@ -48,19 +48,11 @@ public class FileSystemMapRepository implements MapRepository
                 // Load map data
                 mapData = JsonHelper.read(file.getInputStream());
 
-                // Create new map
-                rawMapId = (String) mapData.get("id");
-                mapId = UUID.fromString(rawMapId);
-                map = new WorldMap(controller, mapManager, mapId);
-
-                // Build parts of map from JSON data
-                buildMapProperties(map, mapData);
-                buildTileTypesAndTiles(controller, mapData, mapBuilder, map);
-                buildEntities(mapData, mapBuilder, map);
-                buildSpawns(mapData, mapBuilder, map);
+                // Build map using data
+                map = buildMap(controller, mapManager, mapData);
 
                 // Add to result
-                maps.put(mapId, map);
+                maps.put(map.mapId, map);
 
                 LOG.debug("loaded public map - {}", map);
             }
@@ -79,6 +71,29 @@ public class FileSystemMapRepository implements MapRepository
         throw new RuntimeException("no support for loading individual maps");
     }
 
+    private WorldMap buildMap(Controller controller, MapManager mapManager, JSONObject mapData) throws IOException
+    {
+        // Parse unique identifier...
+        String rawMapId = (String) mapData.get("id");
+        UUID mapId = UUID.fromString(rawMapId);
+
+        // Create new instance
+        WorldMap map = new WorldMap(controller, mapManager, mapId);
+
+        // Build parts of map from JSON data
+        buildMapProperties(map, mapData);
+        buildTileTypesAndTiles(controller, mapData, map);
+        buildFactionSpawns(mapData, map);
+        buildEntities(mapData, map);
+
+        // Build map packet
+        // TODO: reconsider why we do this, or how it could be better / automatic, perhaps move into tileData? Or it triggers it?
+        map.packet = new MapDataOutboundPacket();
+        map.packet.build(map);
+
+        return map;
+    }
+
     private void buildMapProperties(WorldMap map, JSONObject mapData)
     {
         WorldMapProperties properties = new WorldMapProperties();
@@ -87,32 +102,47 @@ public class FileSystemMapRepository implements MapRepository
         JSONObject rawProperties = (JSONObject) mapData.get("properties");
 
         properties.name = (String) rawProperties.get("name");
-        properties.tileSize = (float) (long) rawProperties.get("tile_size");
-        properties.tileSizeHalf = properties.tileSize / 2.0f;
-        properties.tileSizeQuarter = properties.tileSize / 4.0f;
-        properties.tilesWidth = (short) (long) rawProperties.get("tiles_width");
-        properties.tilesHeight = (short) (long) rawProperties.get("tiles_height");
-
-        // Compute max boundaries
-        properties.maxX = map.tileSize * (float) map.width;
-        properties.maxY = map.tileSize * (float) map.height;
+        properties.lobby = (boolean) rawProperties.get("lobby");
 
         // Set map with properties loaded
         map.properties = properties;
     }
 
-    private void buildTileTypesAndTiles(Controller controller, JSONObject mapData, MapBuilder mapBuilder, WorldMap map)
+    private void buildTileTypesAndTiles(Controller controller, JSONObject mapData, WorldMap map)
             throws IOException
     {
+        WorldMapTileData tileData = new WorldMapTileData();
+
+        // Load tile properties
+        buildTileProperties(tileData, mapData);
+
         // Load tile-type data
         TileType[] tileTypes = buildTileTypes(controller, mapData);
 
-        // Create map to speed-up tile-name -> ID translation
+        // Create map to speed-up 'tile-name -> ID' translation
         Map<String, TileType> tileTypeByNameMappings = buildTileTypeMap(tileTypes);
 
         // Load tiles
         buildTiles(map, tileTypeByNameMappings, mapData);
 
+        // Set map tile data
+        map.tileData = tileData;
+    }
+
+    private void buildTileProperties(WorldMapTileData tileData, JSONObject mapData)
+    {
+        JSONObject rawTileProperties = (JSONObject) mapData.get("tile_properties");
+
+        // Parse tile properties
+        tileData.tileSize = (float) (long) rawTileProperties.get("tile_size");
+        tileData.tileSizeHalf = tileData.tileSize / 2.0f;
+        tileData.tileSizeQuarter = tileData.tileSize / 4.0f;
+        tileData.widthTiles = (short) (long) rawTileProperties.get("tiles_width");
+        tileData.heightTiles = (short) (long) rawTileProperties.get("tiles_height");
+
+        // Compute max boundaries
+        tileData.maxX = tileData.tileSize * (float) tileData.widthTiles;
+        tileData.maxY = tileData.tileSize * (float) tileData.heightTiles;
     }
 
     private TileType[] buildTileTypes(Controller controller, JSONObject mapData) throws IOException
@@ -161,10 +191,10 @@ public class FileSystemMapRepository implements MapRepository
         JSONArray tiles = (JSONArray) mapData.get("tiles");
 
         // Setup tiles array
-        map.tiles = new short[map.height][map.width];
+        map.tileData.tiles = new short[map.tileData.heightTiles][map.tileData.widthTiles];
 
         // Setup vertices array
-        map.tileVertices = new Vertices[map.height][map.width];
+        map.tileData.tileVertices = new Vertices[map.tileData.heightTiles][map.tileData.widthTiles];
 
         // Parse tiles
         int yOffset = 0;
@@ -173,16 +203,16 @@ public class FileSystemMapRepository implements MapRepository
         TileType type;
 
         // -- Note: y is inverted since 0 is bottom and x is top!
-        for(int y = map.height - 1; y >= 0; y--)
+        for(int y = map.tileData.heightTiles - 1; y >= 0; y--)
         {
-            for(int x = 0; x < map.width; x++)
+            for(int x = 0; x < map.tileData.widthTiles; x++)
             {
                 // Fetch tile
                 tile = (String) tiles.get(yOffset++);
 
                 // Locate actual type
                 typeIndex = tileTypeMap.get(tile).id;
-                type = map.tileTypes[typeIndex];
+                type = map.tileData.tileTypes[typeIndex];
 
                 if(type == null)
                 {
@@ -193,19 +223,27 @@ public class FileSystemMapRepository implements MapRepository
                 }
 
                 // Assign type
-                map.tiles[y][x] = type.id;
+                map.tileData.tiles[y][x] = type.id;
 
                 // Build vertices
-                map.tileVertices[y][x] = Vertices.buildTileVertices(map, x, y);
+                map.tileData.tileVertices[y][x] = Vertices.buildTileVertices(map, x, y);
             }
         }
     }
 
-    private void buildEntities(JSONObject mapData, MapBuilder mapBuilder, WorldMap map)
+    private void buildFactionSpawns(Controller controller, JSONObject mapData, WorldMap map)
     {
+        JSONArray rawSpawnData = (JSONArray) mapData.get("factionSpawns");
+        JSONObject rawFactionSpawns;
+
+        for (Object factionData : factions)
+        {
+            rawFactionSpawns = (JSONObject) factionData;
+            parseFactionSpawn(controller, map, rawFactionSpawns);
+        }
     }
 
-    private void buildSpawns(JSONObject mapData, MapBuilder mapBuilder, WorldMap map)
+    private void buildEntities(JSONObject mapData, WorldMap map)
     {
     }
 
