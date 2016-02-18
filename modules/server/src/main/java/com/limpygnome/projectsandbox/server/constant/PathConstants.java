@@ -13,7 +13,7 @@ public class PathConstants
     public static final String BASE_PACKAGE_DATA = "data";
 
     /**
-     * Base path for the main map.
+     * Base path for the mapMain map.
      */
     public static final String BASE_PACKAGE_MAPS = BASE_PACKAGE_DATA + "/maps";
 

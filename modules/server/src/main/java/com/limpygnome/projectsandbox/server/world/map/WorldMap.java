@@ -29,33 +29,28 @@ public class WorldMap
     private final static Logger LOG = LogManager.getLogger(WorldMap.class);
 
     private final Controller controller;
-
-    /* The unique identifier for the map. */
-    public final UUID mapId;
-
-    private short tileTypeIdCounter;
-    public HashMap<String, Short> tileNameToTypeIndexMappings;
-    public TileType[] tileTypes;
-
     private final MapManager mapManager;
-    
-    public String name;
-    /* Stored and sent as a short. */
-    public float tileSize;
-    public short width;
-    public short height;
-    public float maxX;
-    public float maxY;
-    
-    /** Mapped by [y][x] or [row][column]; bottom-left at 0, top-right at n */
-    public short tiles[][];
-    public Vertices[][] tileVertices;
 
-    /* Pre-computed/cached values */
-    public float tileSizeHalf;
-    public float tileSizeQuarter;
+    /**
+     * Unique identifier for this map.
+     */
+    public UUID mapId;
 
-    // if this is later updated elsewhere, it needs thread protection
+    /**
+     * Properties and cached values for this map.
+     */
+    public WorldMapProperties properties;
+
+    /**
+     * Tile data for this map.
+     */
+    public WorldMapTileData tileData;
+
+    /**
+     * Cached packet of data sent to client for map.
+     *
+     * WARNING: if this is used elsewhere, it needs thread protection.
+     */
     public MapDataOutboundPacket packet;
 
     /**
@@ -70,19 +65,30 @@ public class WorldMap
         this.controller = controller;
         this.mapManager = mapManager;
         this.mapId = mapId;
-        this.tileNameToTypeIndexMappings = new HashMap<>();
-        this.tileTypeIdCounter = 0;
     }
 
+    /**
+     * Determines the tile position from a vector.
+     *
+     * @param vector the vector of x,y
+     * @return the result
+     */
     public MapPosition positionFromReal(Vector2 vector)
     {
         return positionFromReal(vector.x, vector.y);
     }
 
+    /**
+     * Determines the position from 2D co-ordinates.
+     *
+     * @param x the x position
+     * @param y the y position
+     * @return the result
+     */
     public MapPosition positionFromReal(float x, float y)
     {
-        int tileX = (int) (x / tileSize);
-        int tileY = (int) (y / tileSize);
+        int tileX = (int) (x / properties.tileSize);
+        int tileY = (int) (y / properties.tileSize);
 
         return new MapPosition(
                 this,
@@ -105,13 +111,16 @@ public class WorldMap
     public TileType tileTypeFromPosition(int tileX, int tileY)
     {
         // Check within bounds of map
-        if (tileX < 0 || tileY < 0 || tileX >= width || tileY >= height)
+        if (tileX < 0 || tileY < 0 || tileX >= properties.tilesWidth || tileY >= properties.tilesHeight)
         {
             return null;
         }
 
-        // Retrieve type
-        return tileTypes[tiles[tileY][tileX]];
+        // Retrieve tile-type at co-ordinate
+        short tileTypeId = tileData.tiles[tileY][tileX];
+
+        // Return the type, since tile ID is the same as array index
+        return tileData.tileTypes[tileTypeId];
     }
     
     public static WorldMap load(Controller controller, MapManager mapManager, short mapId, JSONObject rootJsonNode) throws IOException
@@ -409,7 +418,7 @@ public class WorldMap
         
         sb.append("[\n");
         
-        // Add main attributes
+        // Add mapMain attributes
         sb.append("\tname:\t\t").append(name).append("\n");
         sb.append("\ttile size:\t").append(tileSize).append("\n");
         sb.append("\twidth:\t\t").append(width).append("\n");

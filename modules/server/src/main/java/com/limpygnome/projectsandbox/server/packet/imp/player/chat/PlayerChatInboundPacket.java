@@ -22,7 +22,7 @@ public class PlayerChatInboundPacket extends InboundPacket
     public void parse(Controller controller, WebSocket socket, PlayerInfo playerInfo, ByteBuffer bb, byte[] data) throws PacketParseException
     {
         // All messgaes should be at least 6 bytes:
-        // - main type (1 byte)
+        // - mapMain type (1 byte)
         // - subtype (1 byte)
         // - length of message (2 bytes)
         // - at least one character (1 bytes)

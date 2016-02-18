@@ -1,6 +1,15 @@
 {
     "id" : "e6e8ff11-ec75-4afd-8922-26d30f06a2c4",
-    "name" : "main",
+
+    "properties" :
+    {
+        "name" : "main",
+        "lobby" : true,
+        "tile_size" : 64,
+        "tiles_width" : 13,
+        "tiles_height" : 12
+    },
+
     "tile_types" :
     [
         {
@@ -64,10 +73,6 @@
             }
         }
     ],
-    
-    "tile_size" : 64,
-    "width" : 13,
-    "height" : 12,
     
     "tiles":
     [
@@ -199,4 +204,5 @@
             ]
         }
     ]
+
 }

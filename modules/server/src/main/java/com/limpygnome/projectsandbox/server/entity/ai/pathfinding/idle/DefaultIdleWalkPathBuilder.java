@@ -25,7 +25,7 @@ public class DefaultIdleWalkPathBuilder implements IdleWalkPathBuilder
     @Override
     public Path build(Controller controller, WorldMap map, Entity entity, int maxDepth)
     {
-        MapPosition entityPosition = controller.mapManager.main.positionFromReal(entity.positionNew);
+        MapPosition entityPosition = controller.mapManager.mainMap.positionFromReal(entity.positionNew);
 
         // Build path to first pedestrian node; this will be our starting place
         List<Node> pathNodes = new LinkedList<>();

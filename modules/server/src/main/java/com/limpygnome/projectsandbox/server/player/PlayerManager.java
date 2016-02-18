@@ -113,7 +113,7 @@ public class PlayerManager implements IdCounterConsumer
             controller.respawnManager.respawn(new EntityPendingRespawn(controller, entityPlayer));
 
             // Send map data
-            controller.mapManager.main.packet.send(playerInfo);
+            controller.mapManager.mainMap.packet.send(playerInfo);
 
             // Send update of entire world to the player
             EntityUpdatesOutboundPacket packetUpdates = new EntityUpdatesOutboundPacket();

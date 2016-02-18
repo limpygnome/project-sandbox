@@ -32,7 +32,7 @@ public class SessionIdentifierInboundPacket extends InboundPacket
     {
         // TODO: upgrade to 16 bytes; at present, we want this to just be simple, but could be optimised
 
-        // We're expecting a GUUID - ignore first two bytes (main/subtype) + 32 bytes
+        // We're expecting a GUUID - ignore first two bytes (mapMain/subtype) + 32 bytes
         if (data.length == (36 + 2))
         {
             try

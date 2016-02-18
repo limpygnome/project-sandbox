@@ -168,8 +168,8 @@ public class EntityManager implements IdCounterConsumer
 
                 // Fetch map boundaries
                 // TODO: update if we have multiple maps
-                float mapMaxX = controller.mapManager.main.maxX;
-                float mapMaxY = controller.mapManager.main.maxY;
+                float mapMaxX = controller.mapManager.mainMap.maxX;
+                float mapMaxY = controller.mapManager.mainMap.maxY;
 
                 // Perform collision check for each entity
                 CollisionResult collisionResult;
@@ -217,7 +217,7 @@ public class EntityManager implements IdCounterConsumer
                         {
                             // Perform collision with map
                             // TODO: add support for multiple maps
-                            mapResults = SAT.collisionMap(controller.mapManager.main, entityA);
+                            mapResults = SAT.collisionMap(controller.mapManager.mainMap, entityA);
 
                             for (CollisionResultMap mapResult : mapResults)
                             {

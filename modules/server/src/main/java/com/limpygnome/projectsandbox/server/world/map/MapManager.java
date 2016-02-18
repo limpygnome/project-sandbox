@@ -1,12 +1,7 @@
 package com.limpygnome.projectsandbox.server.world.map;
 
-import com.limpygnome.projectsandbox.server.constant.PathConstants;
-import com.limpygnome.projectsandbox.server.util.FileSystem;
-import com.limpygnome.projectsandbox.server.util.FileSystemFile;
-import com.limpygnome.projectsandbox.server.util.JsonHelper;
 import com.limpygnome.projectsandbox.server.Controller;
 
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
@@ -16,10 +11,9 @@ import com.limpygnome.projectsandbox.server.world.map.repository.FileSystemMapRe
 import com.limpygnome.projectsandbox.server.world.map.repository.MapRepository;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.json.simple.JSONObject;
 
 /**
- * Responsible for loading maps.
+ * Responsible for managing/handling maps.
  */
 public class MapManager
 {
@@ -36,14 +30,14 @@ public class MapManager
     /* A cache for storing either common or active maps. */
     private Map<UUID, WorldMap> mapCache;
 
-    /* The main/lobby map. */
-    public WorldMap main;
+    /* The mapMain/lobby map. */
+    public WorldMap mainMap;
     
     public MapManager(Controller controller)
     {
         this.controller = controller;
         this.mapCache = new HashMap<>();
-        this.main = null;
+        this.mainMap = null;
     }
 
     public synchronized void put(WorldMap map)
@@ -51,15 +45,39 @@ public class MapManager
         mapCache.put(map.mapId, map);
     }
     
-    public synchronized void load() throws Exception
+    public synchronized void load(Controller controller) throws Exception
     {
+        // Load public maps into cache
         MapRepository mapRepository = new FileSystemMapRepository();
-        mapCache = new HashMap<>(mapRepository.fetchPublicMaps(mapBuilder));
-    }
+        mapCache = new HashMap<>(mapRepository.fetchPublicMaps(controller, this, mapBuilder));
 
-    public synchronized void loadOld() throws Exception
-    {
+        // Set the mapMain/lobby map
+        this.mainMap = null;
 
+        WorldMap map;
+        for (Map.Entry<UUID, WorldMap> kv : mapCache.entrySet())
+        {
+            map = kv.getValue();
+
+            if (map.isLobby())
+            {
+                // Check lobby not already found; can only be one...
+                if (this.mainMap != null)
+                {
+                    throw new RuntimeException("Only one lobby can be present");
+                }
+
+                this.mainMap = map;
+            }
+        }
+
+        // Check we found main/lobby map
+        if (this.mainMap == null)
+        {
+            throw new RuntimeException("Main/lobby map not found");
+        }
+
+        LOG.info("Loaded {} maps, lobby: {} [uuid: {}]", mapCache.size(), mainMap.name, mainMap.mapId);
     }
     
 }
