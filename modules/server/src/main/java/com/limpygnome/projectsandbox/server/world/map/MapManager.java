@@ -59,7 +59,7 @@ public class MapManager
         {
             map = kv.getValue();
 
-            if (map.isLobby())
+            if (map.properties.lobby)
             {
                 // Check lobby not already found; can only be one...
                 if (this.mainMap != null)
@@ -77,7 +77,7 @@ public class MapManager
             throw new RuntimeException("Main/lobby map not found");
         }
 
-        LOG.info("Loaded {} maps, lobby: {} [uuid: {}]", mapCache.size(), mainMap.name, mainMap.mapId);
+        LOG.info("Loaded {} maps, lobby: {} [uuid: {}]", mapCache.size(), mainMap.properties.name, mainMap.mapId);
     }
     
 }

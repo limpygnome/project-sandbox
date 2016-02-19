@@ -28,7 +28,7 @@ public class AStarPathFinder implements PathFinder
     public Path findPath(WorldMap map, Entity entity, float startX, float startY, float endX, float endY)
     {
         // Convert positions into tiles
-        int tileSize = (int) map.tileSize;
+        int tileSize = (int) map.tileData.tileSize;
 
         // TODO: use map position method
         int startTileX = (int) (startX / tileSize);
@@ -96,7 +96,7 @@ public class AStarPathFinder implements PathFinder
                     neighborY = currentNode.tileY + offsetY;
 
                     // Check within bounds of map
-                    if (neighborX < 0 || neighborY < 0 || neighborX >= map.width || neighborY >= map.height)
+                    if (neighborX < 0 || neighborY < 0 || neighborX >= map.tileData.widthTiles || neighborY >= map.tileData.heightTiles)
                     {
                         continue;
                     }
@@ -164,7 +164,7 @@ public class AStarPathFinder implements PathFinder
 
     private boolean isTileUsable(WorldMap map, Entity entity, int tileX, int tileY)
     {
-        TileType tileType = map.tileTypes[map.tiles[tileY][tileX]];
+        TileType tileType = map.tileData.tileTypes[map.tileData.tiles[tileY][tileX]];
 
         // TODO: improve by looking at size of entity and neighbors being solid
         return !tileType.properties.solid;

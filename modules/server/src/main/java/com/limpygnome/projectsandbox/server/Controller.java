@@ -59,7 +59,7 @@ public class Controller
             chatManager = new ChatManager();
 
             mapManager = new MapManager(this);
-            mapManager.load();
+            mapManager.load(this);
 
             artificialIntelligenceManager = new ArtificialIntelligenceManager(this);
 

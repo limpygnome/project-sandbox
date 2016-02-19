@@ -94,7 +94,7 @@
         "b", "g", "r", "b", "b", "b", "b", "b", "b", "b", "b", "b", "b"
     ],
     
-    "ents":
+    "entities":
     [
         {
             "typeName" :    "vehicle/ice-cream-van",
@@ -135,7 +135,7 @@
                 "rotation" : 0.0
             },
 
-            "kv" :
+            "properties" :
             {
                 "pickup.respawn_delay" : 30000,
                 "health_pickup.health" : 500.0

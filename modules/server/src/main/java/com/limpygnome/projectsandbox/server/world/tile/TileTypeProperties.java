@@ -70,6 +70,6 @@ public class TileTypeProperties
     @Override
     public String toString()
     {
-        return "[solid: " + solid + ", damage: " + damage + ", height: " + height + ", pedestrian: " + pedestrian + "]";
+        return "tileTypeProperties{ solid: " + solid + ", damage: " + damage + ", height: " + height + ", pedestrian: " + pedestrian + "}";
     }
 }

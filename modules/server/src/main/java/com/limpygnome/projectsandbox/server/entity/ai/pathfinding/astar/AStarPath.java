@@ -50,7 +50,7 @@ public class AStarPath extends Path
         }
 
         // Node separation is tile size
-        nodeSeparation = map.tileSize;
+        nodeSeparation = map.tileData.tileSize;
 
         // Destroy data structures used during search
         closedNodes.clear();

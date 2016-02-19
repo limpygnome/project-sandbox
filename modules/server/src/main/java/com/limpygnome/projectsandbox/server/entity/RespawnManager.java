@@ -11,6 +11,7 @@ import org.apache.logging.log4j.Logger;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
+import java.util.UUID;
 
 /**
  * A layer above {@link EntityManager} for respawning an entity with additional params.
@@ -32,7 +33,7 @@ public class RespawnManager
         this.factionSpawnsMap = new HashMap<>();
     }
 
-    public synchronized void factionSpawnsAdd(short mapId, FactionSpawns factionSpawns)
+    public synchronized void factionSpawnsAdd(UUID mapId, FactionSpawns factionSpawns)
     {
         this.factionSpawnsMap.put(factionSpawns.getFactionId(), factionSpawns);
         LOG.debug("Added faction spawns - map id: {}, spawns: {}", mapId, factionSpawns);

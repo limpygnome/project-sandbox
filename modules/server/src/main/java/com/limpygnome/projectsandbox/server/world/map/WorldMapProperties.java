@@ -9,4 +9,11 @@ public final class WorldMapProperties
     public String name;
     public boolean lobby;
 
+
+    @Override
+    public String toString()
+    {
+        return "properties{ name: " + name + ", lobby: " + lobby + "}";
+    }
+
 }

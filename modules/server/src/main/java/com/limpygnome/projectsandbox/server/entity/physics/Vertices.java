@@ -221,12 +221,12 @@ public class Vertices
     public static Vertices buildTileVertices(WorldMap map, int tileX, int tileY)
     {
         // Calculate x and y - y must be inverted!
-        float x = (tileX * map.tileSize) + map.tileSizeHalf;
-        float y = (tileY * map.tileSize) + map.tileSizeHalf;
+        float x = (tileX * map.tileData.tileSize) + map.tileData.tileSizeHalf;
+        float y = (tileY * map.tileData.tileSize) + map.tileData.tileSizeHalf;
         
         Vector2 position = new Vector2(x, y);
         
-        return new Vertices(position, 0.0f, map.tileSize, map.tileSize);
+        return new Vertices(position, 0.0f, map.tileData.tileSize, map.tileData.tileSize);
     }
     
 }

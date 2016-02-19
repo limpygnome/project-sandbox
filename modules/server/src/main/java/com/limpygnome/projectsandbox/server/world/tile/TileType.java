@@ -43,7 +43,16 @@ public class TileType
     @Override
     public String toString()
     {
-        return "[id: " + id + ", name: " + name + ", texture: " +
-                texture + ", properties: " + properties + "]";
+        StringBuilder sb = new StringBuilder();
+
+        sb.append("{");
+        sb.append("id: ").append(id).append(",");
+        sb.append("name: ").append(name).append(",");
+        sb.append("texture: ").append(texture).append(",");
+        sb.append(properties);
+        sb.append("}");
+
+        return sb.toString();
     }
+
 }

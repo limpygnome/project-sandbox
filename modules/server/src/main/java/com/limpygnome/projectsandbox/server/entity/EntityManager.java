@@ -168,8 +168,8 @@ public class EntityManager implements IdCounterConsumer
 
                 // Fetch map boundaries
                 // TODO: update if we have multiple maps
-                float mapMaxX = controller.mapManager.mainMap.maxX;
-                float mapMaxY = controller.mapManager.mainMap.maxY;
+                float mapMaxX = controller.mapManager.mainMap.tileData.maxX;
+                float mapMaxY = controller.mapManager.mainMap.tileData.maxY;
 
                 // Perform collision check for each entity
                 CollisionResult collisionResult;
