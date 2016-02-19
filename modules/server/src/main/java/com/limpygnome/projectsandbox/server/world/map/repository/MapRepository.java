@@ -20,7 +20,7 @@ public interface MapRepository
      * @param mapBuilder The reader used to
      * @return
      */
-    Map<UUID, WorldMap> fetchPublicMaps(Controller controller, MapManager mapManager, MapBuilder mapBuilder);
+    Map<Short, WorldMap> fetchPublicMaps(Controller controller, MapManager mapManager, MapBuilder mapBuilder);
 
     /**
      * Used to fetch a map, using its identifier.

@@ -28,7 +28,7 @@ public class MapManager
     private MapBuilder mapBuilder;
 
     /* A cache for storing either common or active maps. */
-    private Map<UUID, WorldMap> mapCache;
+    private Map<Short, WorldMap> mapCache;
 
     /* The mapMain/lobby map. */
     public WorldMap mainMap;
@@ -49,13 +49,14 @@ public class MapManager
     {
         // Load public maps into cache
         MapRepository mapRepository = new FileSystemMapRepository();
-        mapCache = new HashMap<>(mapRepository.fetchPublicMaps(controller, this, mapBuilder));
+        Map<Short, WorldMap> publicMaps = mapRepository.fetchPublicMaps(controller, this, mapBuilder);
+        mapCache = new HashMap<>(publicMaps);
 
         // Set the mapMain/lobby map
         this.mainMap = null;
 
         WorldMap map;
-        for (Map.Entry<UUID, WorldMap> kv : mapCache.entrySet())
+        for (Map.Entry<Short, WorldMap> kv : mapCache.entrySet())
         {
             map = kv.getValue();
 

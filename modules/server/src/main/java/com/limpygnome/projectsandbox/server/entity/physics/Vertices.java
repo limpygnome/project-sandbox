@@ -2,6 +2,7 @@ package com.limpygnome.projectsandbox.server.entity.physics;
 
 import com.limpygnome.projectsandbox.server.entity.Entity;
 import com.limpygnome.projectsandbox.server.world.map.WorldMap;
+import com.limpygnome.projectsandbox.server.world.map.WorldMapTileData;
 
 /**
  * A data-structure for vertices.
@@ -218,15 +219,15 @@ public class Vertices
      * @param tileY
      * @return 
      */
-    public static Vertices buildTileVertices(WorldMap map, int tileX, int tileY)
+    public static Vertices buildTileVertices(WorldMapTileData tileData, int tileX, int tileY)
     {
         // Calculate x and y - y must be inverted!
-        float x = (tileX * map.tileData.tileSize) + map.tileData.tileSizeHalf;
-        float y = (tileY * map.tileData.tileSize) + map.tileData.tileSizeHalf;
+        float x = (tileX * tileData.tileSize) + tileData.tileSizeHalf;
+        float y = (tileY * tileData.tileSize) + tileData.tileSizeHalf;
         
         Vector2 position = new Vector2(x, y);
         
-        return new Vertices(position, 0.0f, map.tileData.tileSize, map.tileData.tileSize);
+        return new Vertices(position, 0.0f, tileData.tileSize, tileData.tileSize);
     }
     
 }

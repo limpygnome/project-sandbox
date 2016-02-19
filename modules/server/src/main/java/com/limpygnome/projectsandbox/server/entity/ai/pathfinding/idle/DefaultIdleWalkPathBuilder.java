@@ -25,7 +25,9 @@ public class DefaultIdleWalkPathBuilder implements IdleWalkPathBuilder
     @Override
     public Path build(Controller controller, WorldMap map, Entity entity, int maxDepth)
     {
-        MapPosition entityPosition = controller.mapManager.mainMap.positionFromReal(entity.positionNew);
+        // TODO: refactor to use current map
+        // TODO: critical, needs fix
+        MapPosition entityPosition = controller.mapManager.mainMap.tileData.positionFromReal(entity.positionNew);
 
         // Build path to first pedestrian node; this will be our starting place
         List<Node> pathNodes = new LinkedList<>();
@@ -57,7 +59,7 @@ public class DefaultIdleWalkPathBuilder implements IdleWalkPathBuilder
         // TODO: this feels a little hacky, improve...
         Path path = new Path();
         path.finalPath = finalPath;
-        path.nodeSeparation = map.tileSizeHalf;
+        path.nodeSeparation = map.tileData.tileSizeHalf;
 
         // Ensure every node has vector built
         for (int i = 0; i < path.finalPath.length; i++)
@@ -98,7 +100,7 @@ public class DefaultIdleWalkPathBuilder implements IdleWalkPathBuilder
             depth = Math.max(depth, currentNode.searchDepth);
 
             // Check if current node is suitable as candidate
-            tileType = map.tileTypes[map.tiles[currentNode.tileY][currentNode.tileX]];
+            tileType = map.tileData.tileTypes[map.tileData.tiles[currentNode.tileY][currentNode.tileX]];
 
             if (tileType.properties.pedestrian)
             {
@@ -137,7 +139,7 @@ public class DefaultIdleWalkPathBuilder implements IdleWalkPathBuilder
             int nextTileX = lastNode.tileX + (lastNode.tileX - lastLastNode.tileX);
             int nextTileY = lastNode.tileY + (lastNode.tileY - lastLastNode.tileY);
 
-            TileType tileType = map.tileTypeFromPosition(nextTileX, nextTileY);
+            TileType tileType = map.tileData.tileTypeFromPosition(nextTileX, nextTileY);
 
             if (tileType != null && tileType.properties.pedestrian)
             {
@@ -168,12 +170,12 @@ public class DefaultIdleWalkPathBuilder implements IdleWalkPathBuilder
                 tileX = lastNode.tileX + x;
 
                 // Check if node is within map and pedestrian
-                if (tileX < 0 || tileY < 0 || tileX >= map.width || tileY >= map.height)
+                if (tileX < 0 || tileY < 0 || tileX >= map.tileData.widthTiles || tileY >= map.tileData.heightTiles)
                 {
                     continue;
                 }
 
-                tileType = map.tileTypes[map.tiles[tileY][tileX]];
+                tileType = map.tileData.tileTypes[map.tileData.tiles[tileY][tileX]];
 
                 if (!tileType.properties.pedestrian)
                 {
@@ -236,8 +238,8 @@ public class DefaultIdleWalkPathBuilder implements IdleWalkPathBuilder
                 );
 
                 // Multiply by offset
-                differenceX *= -map.tileSizeQuarter;
-                differenceY *= -map.tileSizeQuarter;
+                differenceX *= -map.tileData.tileSizeQuarter;
+                differenceY *= -map.tileData.tileSizeQuarter;
 
                 // Apply to node
                 currentNode.cachedVector.x += differenceY;

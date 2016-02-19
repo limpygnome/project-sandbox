@@ -44,16 +44,16 @@ public class SAT
         float maxY = ent.positionNew.y + ent.cachedVertices.collisionRadius;
         
         // Divide by tilesize for tile array indices
-        int indexMinX = (int) Math.floor(minX / map.tileSize);
-        int indexMaxX = (int) Math.ceil(maxX / map.tileSize) - 1;
-        int indexMinY = (int) Math.floor(minY / map.tileSize);
-        int indexMaxY = (int) Math.ceil(maxY / map.tileSize) - 1;
+        int indexMinX = (int) Math.floor(minX / map.tileData.tileSize);
+        int indexMaxX = (int) Math.ceil(maxX / map.tileData.tileSize) - 1;
+        int indexMinY = (int) Math.floor(minY / map.tileData.tileSize);
+        int indexMaxY = (int) Math.ceil(maxY / map.tileData.tileSize) - 1;
         
         // Clamp within bounds of array
-        indexMinX = CustomMath.limit(0, map.width - 1, indexMinX);
-        indexMaxX = CustomMath.limit(0, map.width - 1, indexMaxX);
-        indexMinY = CustomMath.limit(0, map.height - 1, indexMinY);
-        indexMaxY = CustomMath.limit(0, map.height - 1, indexMaxY);
+        indexMinX = CustomMath.limit(0, map.tileData.widthTiles - 1, indexMinX);
+        indexMaxX = CustomMath.limit(0, map.tileData.widthTiles - 1, indexMaxX);
+        indexMinY = CustomMath.limit(0, map.tileData.heightTiles - 1, indexMinY);
+        indexMaxY = CustomMath.limit(0, map.tileData.heightTiles - 1, indexMaxY);
 
         // Fetch tiles within range and test for collision with solid tiles
         short tileTypeIndex;
@@ -70,8 +70,8 @@ public class SAT
             for (int x = indexMinX; x <= indexMaxX; x++)
             {
                 // Fetch tile
-                tileTypeIndex = map.tiles[y][x];
-                tileType = map.tileTypes[tileTypeIndex];
+                tileTypeIndex = map.tileData.tiles[y][x];
+                tileType = map.tileData.tileTypes[tileTypeIndex];
 
                 // Check if tile is eligible for collision
                 if (
@@ -80,7 +80,7 @@ public class SAT
                 )
                 {
                     // Perform collision check between tile and ent
-                    result = SAT.collision(ent.cachedVertices, map.tileVertices[y][x]);
+                    result = SAT.collision(ent.cachedVertices, map.tileData.tileVertices[y][x]);
                     
                     // Check if a collision occurred
                     if (result.collision)

@@ -33,7 +33,7 @@ public class RespawnManager
         this.factionSpawnsMap = new HashMap<>();
     }
 
-    public synchronized void factionSpawnsAdd(UUID mapId, FactionSpawns factionSpawns)
+    public synchronized void factionSpawnsAdd(Short mapId, FactionSpawns factionSpawns)
     {
         this.factionSpawnsMap.put(factionSpawns.getFactionId(), factionSpawns);
         LOG.debug("Added faction spawns - map id: {}, spawns: {}", mapId, factionSpawns);

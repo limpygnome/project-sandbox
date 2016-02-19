@@ -34,9 +34,9 @@ public class FileSystemMapRepository implements MapRepository
     private final static Logger LOG = LogManager.getLogger(FileSystemMapRepository.class);
 
     @Override
-    public Map<UUID, WorldMap> fetchPublicMaps(Controller controller, MapManager mapManager, MapBuilder mapBuilder)
+    public Map<Short, WorldMap> fetchPublicMaps(Controller controller, MapManager mapManager, MapBuilder mapBuilder)
     {
-        Map<UUID, WorldMap> maps = new HashMap<>();
+        Map<Short, WorldMap> maps = new HashMap<>();
 
         try
         {
@@ -77,8 +77,7 @@ public class FileSystemMapRepository implements MapRepository
     private WorldMap buildMap(Controller controller, MapManager mapManager, JSONObject mapData) throws IOException
     {
         // Parse unique identifier...
-        String rawMapId = (String) mapData.get("id");
-        UUID mapId = UUID.fromString(rawMapId);
+        short mapId = (short) (long) mapData.get("id");
 
         // Create new instance
         WorldMap map = new WorldMap(controller, mapManager, mapId);
@@ -121,12 +120,13 @@ public class FileSystemMapRepository implements MapRepository
 
         // Load tile-type data
         TileType[] tileTypes = buildTileTypes(controller, mapData);
+        tileData.tileTypes = tileTypes;
 
         // Create map to speed-up 'tile-name -> ID' translation
         Map<String, TileType> tileTypeByNameMappings = buildTileTypeMap(tileTypes);
 
         // Load tiles
-        buildTiles(map, tileTypeByNameMappings, mapData);
+        buildTiles(map, tileTypeByNameMappings, mapData, tileData);
 
         // Set map tile data
         map.tileData = tileData;
@@ -161,7 +161,7 @@ public class FileSystemMapRepository implements MapRepository
 
         short tileTypeIdCounter = 0;
 
-        for(Object rawTileType : tileTypes)
+        for (Object rawTileType : rawTileTypes)
         {
             // Parse tile type
             arrayObj = (JSONObject) rawTileType;
@@ -189,15 +189,15 @@ public class FileSystemMapRepository implements MapRepository
         return tileTypeMap;
     }
 
-    private void buildTiles(WorldMap map, Map<String, TileType> tileTypeMap, JSONObject mapData) throws IOException
+    private void buildTiles(WorldMap map, Map<String, TileType> tileTypeMap, JSONObject mapData, WorldMapTileData tileData) throws IOException
     {
         JSONArray tiles = (JSONArray) mapData.get("tiles");
 
         // Setup tiles array
-        map.tileData.tiles = new short[map.tileData.heightTiles][map.tileData.widthTiles];
+        tileData.tiles = new short[tileData.heightTiles][tileData.widthTiles];
 
         // Setup vertices array
-        map.tileData.tileVertices = new Vertices[map.tileData.heightTiles][map.tileData.widthTiles];
+        tileData.tileVertices = new Vertices[tileData.heightTiles][tileData.widthTiles];
 
         // Parse tiles
         int yOffset = 0;
@@ -206,16 +206,16 @@ public class FileSystemMapRepository implements MapRepository
         TileType type;
 
         // -- Note: y is inverted since 0 is bottom and x is top!
-        for(int y = map.tileData.heightTiles - 1; y >= 0; y--)
+        for(int y = tileData.heightTiles - 1; y >= 0; y--)
         {
-            for(int x = 0; x < map.tileData.widthTiles; x++)
+            for(int x = 0; x < tileData.widthTiles; x++)
             {
                 // Fetch tile
                 tile = (String) tiles.get(yOffset++);
 
                 // Locate actual type
                 typeIndex = tileTypeMap.get(tile).id;
-                type = map.tileData.tileTypes[typeIndex];
+                type = tileData.tileTypes[typeIndex];
 
                 if(type == null)
                 {
@@ -226,10 +226,10 @@ public class FileSystemMapRepository implements MapRepository
                 }
 
                 // Assign type
-                map.tileData.tiles[y][x] = type.id;
+                tileData.tiles[y][x] = type.id;
 
                 // Build vertices
-                map.tileData.tileVertices[y][x] = Vertices.buildTileVertices(map, x, y);
+                tileData.tileVertices[y][x] = Vertices.buildTileVertices(tileData, x, y);
             }
         }
     }
