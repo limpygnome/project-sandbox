@@ -6,6 +6,7 @@ projectSandbox.keyboard =
 	{
 		var self = this;
 
+        // TODO: dont hook window...
 		// Hook canvas for keydown event
 		$(window).keydown(function (event) {
 		    self.handlerDown(event);

@@ -14,7 +14,8 @@ projectSandbox.mouse =
 	hook: function()
 	{
 		var self = this;
-		
+
+		// TODO: fix hook events not being invoked
 		// Hook mouse down/up/movement
 		projectSandbox.canvas.onmousedown = function(event)
 		{
