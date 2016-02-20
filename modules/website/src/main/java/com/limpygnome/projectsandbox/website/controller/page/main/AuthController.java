@@ -42,6 +42,7 @@ public class AuthController extends BaseController
                                   RedirectAttributes redirectAttributes)
     {
         ModelAndView modelAndView;
+        // should handle exception and close provider...bad...
         GameProvider gameProvider = new GameProvider();
 
         // Check valid name provided

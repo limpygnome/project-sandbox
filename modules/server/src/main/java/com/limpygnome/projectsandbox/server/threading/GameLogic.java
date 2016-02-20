@@ -55,6 +55,9 @@ public class GameLogic implements Runnable
                 
                 try
                 {
+                    // Run logic for packet stats
+                    controller.packetStatsManager.logic();
+
                     // Run logic for entities
                     controller.entityManager.logic();
 

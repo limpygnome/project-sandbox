@@ -204,7 +204,7 @@ public class Inventory implements Serializable
         if (owner != null && !packet.isEmpty())
         {
             // Send to player / owner of inventory
-            packet.send(owner);
+            controller.packetManager.send(owner, packet);
         }
     }
 
@@ -399,4 +399,5 @@ public class Inventory implements Serializable
             LOG.debug("Selected item invoke change - key down: {}", FIRE);
         }
     }
+
 }

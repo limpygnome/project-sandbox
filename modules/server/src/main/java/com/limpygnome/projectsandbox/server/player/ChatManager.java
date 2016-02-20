@@ -1,21 +1,25 @@
 package com.limpygnome.projectsandbox.server.player;
 
+import com.limpygnome.projectsandbox.server.Controller;
 import com.limpygnome.projectsandbox.server.packet.imp.player.chat.PlayerChatOutboundPacket;
 
 import java.util.LinkedList;
+import javax.naming.ldap.Control;
 
 /**
- * Created by limpygnome on 20/06/15.
+ * Handles chat messages.
  */
 public class ChatManager
 {
-    private static final int CHAT_BUFFER_SIZE = 10;
+    private static final int CHAT_BUFFER_SIZE = 20;
 
+    private Controller controller;
     private LinkedList<PlayerChatOutboundPacket> chatMessageBuffer;
 
-    public ChatManager()
+    public ChatManager(Controller controller)
     {
         this.chatMessageBuffer = new LinkedList<>();
+        this.controller = controller;
     }
 
     public synchronized void add(PlayerChatOutboundPacket packet)
@@ -33,7 +37,8 @@ public class ChatManager
     {
         for (PlayerChatOutboundPacket packet : chatMessageBuffer)
         {
-            packet.send(playerInfo);
+            controller.packetManager.send(playerInfo, packet);
         }
     }
+
 }

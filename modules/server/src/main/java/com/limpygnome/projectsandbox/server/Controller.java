@@ -6,6 +6,7 @@ import com.limpygnome.projectsandbox.server.entity.EntityManager;
 import com.limpygnome.projectsandbox.server.entity.RespawnManager;
 import com.limpygnome.projectsandbox.server.inventory.InventoryManager;
 import com.limpygnome.projectsandbox.server.packet.PacketManager;
+import com.limpygnome.projectsandbox.server.packet.PacketStatsManager;
 import com.limpygnome.projectsandbox.server.player.ChatManager;
 import com.limpygnome.projectsandbox.server.player.PlayerManager;
 import com.limpygnome.projectsandbox.server.player.SessionManager;
@@ -24,6 +25,7 @@ public class Controller
     public Thread threadLogic;
 
     public PacketManager packetManager;
+    public PacketStatsManager packetStatsManager;
     public EntityManager entityManager;
     public RespawnManager respawnManager;
     public PlayerManager playerManager;
@@ -43,6 +45,8 @@ public class Controller
         try
         {
             // Setup managers
+            packetStatsManager = new PacketStatsManager();
+
             packetManager = new PacketManager(this);
 
             entityManager = new EntityManager(this);
@@ -56,7 +60,7 @@ public class Controller
             
             playerManager = new PlayerManager(this);
 
-            chatManager = new ChatManager();
+            chatManager = new ChatManager(this);
 
             mapManager = new MapManager(this);
             mapManager.load(this);

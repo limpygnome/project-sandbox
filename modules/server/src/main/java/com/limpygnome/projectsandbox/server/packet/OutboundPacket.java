@@ -1,20 +1,12 @@
 package com.limpygnome.projectsandbox.server.packet;
 
-import com.limpygnome.projectsandbox.server.player.PlayerInfo;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-import org.java_websocket.exceptions.WebsocketNotConnectedException;
-
 /**
- *
- * @author limpygnome
+ * Used to build and hold cached packet data to be sent to a player.
  */
 public abstract class OutboundPacket extends Packet
 {
-    private final static Logger LOG = LogManager.getLogger(OutboundPacket.class);
-
     protected PacketData packetData;
-    byte[] dataCached;
+    private byte[] dataCached;
 
     public OutboundPacket()
     {
@@ -43,26 +35,22 @@ public abstract class OutboundPacket extends Packet
         return packetData;
     }
 
-    public void send(PlayerInfo player)
+    /**
+     * Builds and returns the packet data.
+     *
+     * On first invocation, the data is cached, so that subsequent calls do not rebuild the packet.
+     *
+     * @return the packet data
+     */
+    public byte[] build()
     {
-        // Build data and cache it, if not already cached
+        // Only build if not cached already...
         if (dataCached == null)
         {
             dataCached = packetData.build();
         }
 
-        // Check socket not closed
-        if (!player.socket.isClosed())
-        {
-            try
-            {
-                player.socket.send(dataCached);
-            }
-            catch (WebsocketNotConnectedException e)
-            {
-                LOG.error("Failed to send data to player", e);
-            }
-        }
+        return dataCached;
     }
 
 }

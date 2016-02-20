@@ -13,6 +13,7 @@ import org.apache.logging.log4j.Logger;
 import org.java_websocket.WebSocket;
 
 import java.nio.ByteBuffer;
+import org.java_websocket.exceptions.WebsocketNotConnectedException;
 
 /**
  * Responsible for parsing inbound packets.
@@ -22,31 +23,43 @@ public class PacketManager
     private final static Logger LOG = LogManager.getLogger(PacketManager.class);
 
     private Controller controller;
+    private PacketStatsManager packetStatsManager;
 
     public PacketManager(Controller controller)
     {
         this.controller = controller;
+        this.packetStatsManager = controller.packetStatsManager;
     }
 
     public void handleInbound(WebSocket socket, ByteBuffer message)
     {
         byte[] data = message.array();
-        byte mainType = data[0];
-        byte subType = data[1];
 
-        // Fetch the player's info
-        PlayerInfo playerInfo = controller.playerManager.getPlayerByWebSocket(socket);
-
-        // Check if we're expecting a session packet - always first packet to system!
-        if (playerInfo == null)
+        if (data != null && data.length > 0)
         {
-            // Handle packet outside of session - newly joined user
-            handleInboundPacketNonSession(socket, mainType, subType, message, data);
+            byte mainType = data[0];
+            byte subType = data[1];
+
+            // Increment bytes in
+            packetStatsManager.incrementIn(data.length);
+
+            // Fetch the player's info
+            PlayerInfo playerInfo = controller.playerManager.getPlayerByWebSocket(socket);
+
+            // Check if we're expecting a session packet - always first packet to system!
+            if (playerInfo == null)
+            {
+                // Handle packet outside of session - newly joined user
+                handleInboundPacketNonSession(socket, mainType, subType, message, data);
+            } else
+            {
+                // Handle packet within a session
+                handleInboundPacketSession(socket, mainType, subType, message, data, playerInfo);
+            }
         }
         else
         {
-            // Handle packet within a session
-            handleInboundPacketSession(socket, mainType, subType, message, data, playerInfo);
+            LOG.debug("received empty packet");
         }
     }
 
@@ -163,6 +176,29 @@ public class PacketManager
         catch (PacketParseException e)
         {
             LOG.warn("Failed to parse inbound packet", e);
+        }
+    }
+
+    public void send(PlayerInfo player, OutboundPacket packet)
+    {
+        // Check socket not closed
+        if (!player.socket.isClosed())
+        {
+            try
+            {
+                // Build/fetch packet data
+                byte[] packetData = packet.build();
+
+                // Send data
+                player.socket.send(packetData);
+
+                // Increment outbound data
+                packetStatsManager.incrementOut(packetData.length);
+            }
+            catch (WebsocketNotConnectedException e)
+            {
+                LOG.error("Failed to send data to player", e);
+            }
         }
     }
 

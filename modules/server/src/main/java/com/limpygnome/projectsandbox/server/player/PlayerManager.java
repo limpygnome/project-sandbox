@@ -104,7 +104,7 @@ public class PlayerManager implements IdCounterConsumer
             PlayerEventsUpdatesOutboundPacket playerEventsUpdatesOutboundSnapshotPacket = new PlayerEventsUpdatesOutboundPacket();
             writePlayersJoined(playerEventsUpdatesOutboundSnapshotPacket);
             writePlayerMetrics(playerEventsUpdatesOutboundSnapshotPacket, true);
-            playerEventsUpdatesOutboundSnapshotPacket.send(playerInfo);
+            controller.packetManager.send(playerInfo, playerEventsUpdatesOutboundSnapshotPacket);
 
             // Create entity for player
             Entity entityPlayer = playerEntCreate(playerInfo);
@@ -113,12 +113,13 @@ public class PlayerManager implements IdCounterConsumer
             controller.respawnManager.respawn(new EntityPendingRespawn(controller, entityPlayer));
 
             // Send map data
-            controller.mapManager.mainMap.packet.send(playerInfo);
+            // TODO: uses main map, need to refactor to support multiple maps...
+            controller.packetManager.send(playerInfo, controller.mapManager.mainMap.packet);
 
             // Send update of entire world to the player
             EntityUpdatesOutboundPacket packetUpdates = new EntityUpdatesOutboundPacket();
             packetUpdates.build(controller.entityManager, true);
-            packetUpdates.send(playerInfo);
+            controller.packetManager.send(playerInfo, packetUpdates);
 
             // Send previous chat messages
             controller.chatManager.sendPreviousMessages(playerInfo);
@@ -261,7 +262,7 @@ public class PlayerManager implements IdCounterConsumer
             {
                 PlayerIdentityOutboundPacket packet = new PlayerIdentityOutboundPacket();
                 packet.writeIdentity(playerInfo);
-                packet.send(playerInfo);
+                controller.packetManager.send(playerInfo, packet);
             }
             catch (IOException e)
             {
@@ -277,9 +278,11 @@ public class PlayerManager implements IdCounterConsumer
 
     public synchronized void broadcast(OutboundPacket outboundPacket)
     {
+        PlayerInfo playerInfo;
         for (Map.Entry<WebSocket, PlayerInfo> kv : mappings.entrySet())
         {
-            outboundPacket.send(kv.getValue());
+            playerInfo = kv.getValue();
+            controller.packetManager.send(playerInfo, outboundPacket);
         }
     }
     
