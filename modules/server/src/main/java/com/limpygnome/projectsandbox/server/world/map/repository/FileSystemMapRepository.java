@@ -10,7 +10,6 @@ import com.limpygnome.projectsandbox.server.util.FileSystem;
 import com.limpygnome.projectsandbox.server.util.FileSystemFile;
 import com.limpygnome.projectsandbox.server.util.JsonHelper;
 import com.limpygnome.projectsandbox.server.world.map.*;
-import com.limpygnome.projectsandbox.server.world.map.data.MapBuilder;
 import com.limpygnome.projectsandbox.server.world.spawn.FactionSpawns;
 import com.limpygnome.projectsandbox.server.world.spawn.Spawn;
 import com.limpygnome.projectsandbox.server.world.tile.TileType;
@@ -25,16 +24,18 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.UUID;
+import org.springframework.stereotype.Repository;
 
 /**
  * Used to load maps from a file-system or the class-path.
  */
+@Repository
 public class FileSystemMapRepository implements MapRepository
 {
     private final static Logger LOG = LogManager.getLogger(FileSystemMapRepository.class);
 
     @Override
-    public Map<Short, WorldMap> fetchPublicMaps(Controller controller, MapManager mapManager, MapBuilder mapBuilder)
+    public Map<Short, WorldMap> fetchPublicMaps(Controller controller, MapManager mapManager)
     {
         Map<Short, WorldMap> maps = new HashMap<>();
 
@@ -69,7 +70,7 @@ public class FileSystemMapRepository implements MapRepository
     }
 
     @Override
-    public WorldMap fetchMap(Controller controller, MapManager mapManager, MapBuilder mapBuilder, UUID uuid)
+    public WorldMap fetchMap(Controller controller, MapManager mapManager, UUID uuid)
     {
         throw new RuntimeException("no support for loading individual maps");
     }

@@ -2,11 +2,10 @@ package com.limpygnome.projectsandbox.server.world.map;
 
 import com.limpygnome.projectsandbox.server.Controller;
 
+import com.limpygnome.projectsandbox.server.service.LoadService;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.limpygnome.projectsandbox.server.world.map.data.MapBuilder;
-import com.limpygnome.projectsandbox.server.world.map.repository.FileSystemMapRepository;
 import com.limpygnome.projectsandbox.server.world.map.repository.MapRepository;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -17,7 +16,7 @@ import org.springframework.stereotype.Service;
  * Responsible for managing/handling maps.
  */
 @Service
-public class MapManager
+public class MapManager implements LoadService
 {
     private final static Logger LOG = LogManager.getLogger(MapManager.class);
 
@@ -25,10 +24,8 @@ public class MapManager
     private Controller controller;
 
     /* The repository used for fetching maps. */
+    @Autowired
     private MapRepository mapRepository;
-
-    /* The implementation used for building maps.  */
-    private MapBuilder mapBuilder;
 
     /* A cache for storing either common or active maps. */
     private Map<Short, WorldMap> mapCache;
@@ -46,12 +43,12 @@ public class MapManager
     {
         mapCache.put(map.mapId, map);
     }
-    
-    public synchronized void load() throws Exception
+
+    @Override
+    public synchronized void load()
     {
         // Load public maps into cache
-        MapRepository mapRepository = new FileSystemMapRepository();
-        Map<Short, WorldMap> publicMaps = mapRepository.fetchPublicMaps(controller, this, mapBuilder);
+        Map<Short, WorldMap> publicMaps = mapRepository.fetchPublicMaps(controller, this);
         mapCache = new HashMap<>(publicMaps);
 
         // Set the mapMain/lobby map

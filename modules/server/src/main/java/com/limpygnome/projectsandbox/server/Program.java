@@ -11,8 +11,7 @@ import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
 /**
- *
- * @author limpygnome
+ * The entry point for starting the game server.
  */
 public class Program
 {

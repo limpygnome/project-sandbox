@@ -1,18 +1,19 @@
 package com.limpygnome.projectsandbox.server;
 
 import com.limpygnome.projectsandbox.server.effect.EffectsManager;
-import com.limpygnome.projectsandbox.server.entity.ai.ArtificialIntelligenceManager;
 import com.limpygnome.projectsandbox.server.entity.EntityManager;
 import com.limpygnome.projectsandbox.server.entity.RespawnManager;
+import com.limpygnome.projectsandbox.server.entity.ai.ArtificialIntelligenceManager;
 import com.limpygnome.projectsandbox.server.inventory.InventoryManager;
 import com.limpygnome.projectsandbox.server.packet.PacketManager;
-import com.limpygnome.projectsandbox.server.packet.PacketStatsManager;
 import com.limpygnome.projectsandbox.server.player.ChatManager;
 import com.limpygnome.projectsandbox.server.player.PlayerManager;
 import com.limpygnome.projectsandbox.server.player.SessionManager;
-import com.limpygnome.projectsandbox.server.threading.GameLogic;
+import com.limpygnome.projectsandbox.server.service.LoadService;
+import com.limpygnome.projectsandbox.server.threading.GameLogicThreadedService;
 import com.limpygnome.projectsandbox.server.threading.SocketEndpoint;
 import com.limpygnome.projectsandbox.server.world.map.MapManager;
+import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -22,14 +23,21 @@ import org.springframework.stereotype.Component;
 @Component
 public class Controller
 {
+    /**
+     * The endpoint used to accept and transfer data between clients.
+     */
     public SocketEndpoint endpoint;
-    public GameLogic logic;
+
+    /**
+     * Thread used to execute periodic game logic cycles.
+     */
     public Thread threadLogic;
 
     @Autowired
-    public PacketManager packetManager;
+    private GameLogicThreadedService gameLogicService;
+
     @Autowired
-    public PacketStatsManager packetStatsManager;
+    public PacketManager packetManager;
     @Autowired
     public EntityManager entityManager;
     @Autowired
@@ -39,8 +47,6 @@ public class Controller
     @Autowired
     public ChatManager chatManager;
     @Autowired
-    public InventoryManager inventoryManager;
-    @Autowired
     public MapManager mapManager;
     @Autowired
     public EffectsManager effectsManager;
@@ -48,6 +54,9 @@ public class Controller
     public ArtificialIntelligenceManager artificialIntelligenceManager;
     @Autowired
     public SessionManager sessionManager;
+
+    @Autowired
+    private List<LoadService> loadServices;
 
     public Controller()
     {
@@ -57,13 +66,14 @@ public class Controller
     {
         try
         {
-            // Invoke load methods on services
-            inventoryManager.load();
-            mapManager.load();
+            // Invoke load methods on services requiring pre-logic loading...
+            for (LoadService loadService : loadServices)
+            {
+                loadService.load();
+            }
 
             // Setup logic thread
-            logic = new GameLogic(this);
-            threadLogic = new Thread(logic);
+            threadLogic = new Thread(gameLogicService);
             threadLogic.start();
 
             // Start endpoint to receive clients...
@@ -87,4 +97,5 @@ public class Controller
         // TODO: we should change this to be pausable etc?
         return System.currentTimeMillis();
     }
+
 }

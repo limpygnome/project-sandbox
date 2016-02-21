@@ -1,7 +1,7 @@
 package com.limpygnome.projectsandbox.server.service;
 
 /**
- * Created by limpygnome on 21/02/16.
+ * Implemented by services requiring custom logic to be executed each game logic cycle.
  */
 public interface LogicService
 {
