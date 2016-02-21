@@ -13,27 +13,40 @@ import com.limpygnome.projectsandbox.server.player.SessionManager;
 import com.limpygnome.projectsandbox.server.threading.GameLogic;
 import com.limpygnome.projectsandbox.server.threading.SocketEndpoint;
 import com.limpygnome.projectsandbox.server.world.map.MapManager;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 /**
- *
- * @author limpygnome
+ * The main facade for the game, used to setup services and
  */
+@Component
 public class Controller
 {
     public SocketEndpoint endpoint;
     public GameLogic logic;
     public Thread threadLogic;
 
+    @Autowired
     public PacketManager packetManager;
+    @Autowired
     public PacketStatsManager packetStatsManager;
+    @Autowired
     public EntityManager entityManager;
+    @Autowired
     public RespawnManager respawnManager;
+    @Autowired
     public PlayerManager playerManager;
+    @Autowired
     public ChatManager chatManager;
+    @Autowired
     public InventoryManager inventoryManager;
+    @Autowired
     public MapManager mapManager;
+    @Autowired
     public EffectsManager effectsManager;
+    @Autowired
     public ArtificialIntelligenceManager artificialIntelligenceManager;
+    @Autowired
     public SessionManager sessionManager;
 
     public Controller()
@@ -44,38 +57,18 @@ public class Controller
     {
         try
         {
-            // Setup managers
-            packetStatsManager = new PacketStatsManager();
-
-            packetManager = new PacketManager(this);
-
-            entityManager = new EntityManager(this);
-
-            respawnManager = new RespawnManager(this);
-
-            effectsManager = new EffectsManager(this);
-            
-            inventoryManager = new InventoryManager();
+            // Invoke load methods on services
             inventoryManager.load();
-            
-            playerManager = new PlayerManager(this);
+            mapManager.load();
 
-            chatManager = new ChatManager(this);
-
-            mapManager = new MapManager(this);
-            mapManager.load(this);
-
-            artificialIntelligenceManager = new ArtificialIntelligenceManager(this);
-
-            sessionManager = new SessionManager();
-            
-            endpoint = new SocketEndpoint(this, 4857);
-            endpoint.start();
-            
             // Setup logic thread
             logic = new GameLogic(this);
             threadLogic = new Thread(logic);
             threadLogic.start();
+
+            // Start endpoint to receive clients...
+            endpoint = new SocketEndpoint(this, 4857);
+            endpoint.start();
         }
         catch(Exception ex)
         {

@@ -8,11 +8,13 @@ import org.apache.logging.log4j.Logger;
 
 import java.util.HashMap;
 import java.util.List;
+import org.springframework.stereotype.Service;
 
 /**
  *
  * @author limpygnome
  */
+@Service
 public class InventoryManager
 {
     private final static Logger LOG = LogManager.getLogger(Annotations.class);
@@ -20,7 +22,7 @@ public class InventoryManager
     // TODO: move string constant to properties file
     private static final String[] CLASSPATHS_INVENTORY_ITEMS =
     {
-            "/com/limpygnome/projectsandbox/server/inventory/"
+        "/com/limpygnome/projectsandbox/server/inventory/"
     };
 
     public HashMap<Short, Class> types;
@@ -75,4 +77,5 @@ public class InventoryManager
     {
         buildInventoryTypes();
     }
+
 }

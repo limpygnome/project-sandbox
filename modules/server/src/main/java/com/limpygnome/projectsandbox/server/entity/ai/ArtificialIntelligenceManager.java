@@ -9,21 +9,23 @@ import com.limpygnome.projectsandbox.server.entity.ai.pathfinding.Path;
 import com.limpygnome.projectsandbox.server.entity.ai.pathfinding.PathFinder;
 import com.limpygnome.projectsandbox.server.entity.ai.pathfinding.astar.AStarPathFinder;
 import com.limpygnome.projectsandbox.server.entity.ai.pathfinding.astar.heuristic.ClosestAbsoluteHeuristic;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 /**
  * Created by limpygnome on 15/07/15.
  */
+@Service
 public class ArtificialIntelligenceManager
 {
+    @Autowired
     private Controller controller;
 
     private PathFinder pathFinder;
     private IdleWalkPathBuilder idleWalkPathBuilder;
 
-    public ArtificialIntelligenceManager(Controller controller)
+    public ArtificialIntelligenceManager()
     {
-        this.controller = controller;
-
         // TODO: consider testing manhattan against absolute heuristic for performance
         this.pathFinder = new AStarPathFinder(new ClosestAbsoluteHeuristic());
         this.idleWalkPathBuilder = new DefaultIdleWalkPathBuilder();

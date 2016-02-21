@@ -1,5 +1,6 @@
 package com.limpygnome.projectsandbox.server.player;
 
+import com.limpygnome.projectsandbox.server.service.LogicService;
 import com.limpygnome.projectsandbox.shared.jpa.provider.GameProvider;
 import com.limpygnome.projectsandbox.shared.jpa.provider.UserProvider;
 import com.limpygnome.projectsandbox.shared.model.GameSession;
@@ -13,11 +14,13 @@ import org.joda.time.Seconds;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.UUID;
+import org.springframework.stereotype.Service;
 
 /**
  * Created by limpygnome on 26/07/15.
  */
-public class SessionManager
+@Service
+public class SessionManager implements LogicService
 {
     private final static Logger LOG = LogManager.getLogger(SessionManager.class);
 
@@ -155,6 +158,7 @@ public class SessionManager
         }
     }
 
+    @Override
     public synchronized void logic()
     {
         try

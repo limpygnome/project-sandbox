@@ -1,12 +1,15 @@
 package com.limpygnome.projectsandbox.server.packet;
 
+import com.limpygnome.projectsandbox.server.service.LogicService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.springframework.stereotype.Service;
 
 /**
  * Simple manager used to collect total bytes going in and out of the server.
  */
-public class PacketStatsManager
+@Service
+public class PacketStatsManager implements LogicService
 {
     private final static Logger LOG = LogManager.getLogger(PacketStatsManager.class);
 
@@ -19,6 +22,7 @@ public class PacketStatsManager
     private long totalBytesIn;
     private long totalBytesOut;
 
+    @Override
     public void logic()
     {
         // Check logging enabled

@@ -4,28 +4,45 @@ import com.limpygnome.projectsandbox.server.Controller;
 import com.limpygnome.projectsandbox.server.effect.types.AbstractEffect;
 import com.limpygnome.projectsandbox.server.packet.imp.effect.EffectUpdatesOutboundPacket;
 
+import com.limpygnome.projectsandbox.server.service.LogicService;
 import java.io.IOException;
 import java.util.LinkedList;
 import java.util.List;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 /**
  * Created by limpygnome on 06/05/15.
  */
-public class EffectsManager
+@Service
+public class EffectsManager implements LogicService
 {
+    private final static Logger LOG = LogManager.getLogger(EffectsManager.class);
+
+    @Autowired
     public Controller controller;
+
     private List<AbstractEffect> pendingSend;
 
-    public EffectsManager(Controller controller)
+    public EffectsManager()
     {
-        this.controller = controller;
         this.pendingSend = new LinkedList<>();
     }
 
-    public void logic() throws IOException
+    @Override
+    public void logic()
     {
         // Send updates / pending effects
-        sendUpdates();
+        try
+        {
+            sendUpdates();
+        }
+        catch (IOException e)
+        {
+            LOG.error("failed to send effect updates", e);
+        }
     }
 
     private void sendUpdates() throws IOException
@@ -48,4 +65,5 @@ public class EffectsManager
     {
         pendingSend.add(effect);
     }
+
 }

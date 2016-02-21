@@ -3,6 +3,7 @@ package com.limpygnome.projectsandbox.server.entity;
 import com.limpygnome.projectsandbox.server.Controller;
 import com.limpygnome.projectsandbox.server.entity.respawn.PendingRespawn;
 import com.limpygnome.projectsandbox.server.entity.respawn.RespawnData;
+import com.limpygnome.projectsandbox.server.service.LogicService;
 import com.limpygnome.projectsandbox.server.world.spawn.FactionSpawns;
 import com.limpygnome.projectsandbox.server.world.spawn.Spawn;
 import org.apache.logging.log4j.LogManager;
@@ -11,24 +12,27 @@ import org.apache.logging.log4j.Logger;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
-import java.util.UUID;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 /**
  * A layer above {@link EntityManager} for respawning an entity with additional params.
  *
  * TODO: add support for multiple maps; this should be a single instance for all maps
  */
-public class RespawnManager
+@Service
+public class RespawnManager implements LogicService
 {
     private final static Logger LOG = LogManager.getLogger(RespawnManager.class);
 
+    @Autowired
     private Controller controller;
+
     private LinkedList<PendingRespawn> pendingRespawnList;
     private HashMap<Short, FactionSpawns> factionSpawnsMap;
 
-    public RespawnManager(Controller controller)
+    public RespawnManager()
     {
-        this.controller = controller;
         this.pendingRespawnList = new LinkedList<>();
         this.factionSpawnsMap = new HashMap<>();
     }
@@ -102,6 +106,7 @@ public class RespawnManager
         pendingRespawnList.add(index, pendingRespawn);
     }
 
+    @Override
     public void logic()
     {
         LinkedList<RespawnData> entitiesToSpawn = new LinkedList<>();

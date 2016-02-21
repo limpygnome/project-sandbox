@@ -1,10 +1,14 @@
 
 package com.limpygnome.projectsandbox.server;
 
+import com.limpygnome.projectsandbox.server.config.AppConfig;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.lang.management.ManagementFactory;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.ConfigurableApplicationContext;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
 /**
  *
@@ -16,13 +20,22 @@ public class Program
 
     public static void main(String[] args) throws Exception
     {
+        // Setup Spring context...
+        ApplicationContext applicationContext = new AnnotationConfigApplicationContext(AppConfig.class);
+
+        // Output process ID (PID) if debug mode...
         if (LOG.isDebugEnabled())
         {
             String pid = ManagementFactory.getRuntimeMXBean().getName();
             LOG.debug("Launching Project Sandbox server - pid: {}", pid);
         }
 
-        Controller controller = new Controller();
+        // Fetch controller instance using Spring and start server
+        Controller controller = applicationContext.getBean(Controller.class);
         controller.start();
+
+        // Dispose Spring context...
+        ((ConfigurableApplicationContext) applicationContext).close();
     }
+
 }

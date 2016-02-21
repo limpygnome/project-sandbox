@@ -9,6 +9,7 @@ import com.limpygnome.projectsandbox.server.packet.OutboundPacket;
 import com.limpygnome.projectsandbox.server.packet.imp.entity.EntityUpdatesOutboundPacket;
 import com.limpygnome.projectsandbox.server.packet.imp.player.global.PlayerEventsUpdatesOutboundPacket;
 import com.limpygnome.projectsandbox.server.packet.imp.player.individual.PlayerIdentityOutboundPacket;
+import com.limpygnome.projectsandbox.server.service.LogicService;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -22,25 +23,29 @@ import com.limpygnome.projectsandbox.shared.model.User;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.java_websocket.WebSocket;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 /**
  * Responsible for holding data representing the actual players, rather than their entities.
  *
  * TODO: decouple Player class, perhaps config defines player ent or game logic gives us instance.
  */
-public class PlayerManager implements IdCounterConsumer
+@Service
+public class PlayerManager implements LogicService, IdCounterConsumer
 {
     private final static Logger LOG = LogManager.getLogger(PlayerManager.class);
 
-    private final Controller controller;
+    @Autowired
+    private Controller controller;
+
     private final HashMap<WebSocket, PlayerInfo> mappings;
     private final HashMap<Short, PlayerInfo> mappingsById;
     private final HashSet<UUID> connectedRegisteredPlayers;
     private final IdCounterProvider idCounterProvider;
 
-    public PlayerManager(Controller controller)
+    public PlayerManager()
     {
-        this.controller = controller;
         this.mappings = new HashMap<>();
         this.mappingsById = new HashMap<>();
         this.connectedRegisteredPlayers = new HashSet<>();
@@ -198,6 +203,7 @@ public class PlayerManager implements IdCounterConsumer
         }
     }
 
+    @Override
     public synchronized void logic()
     {
         // Build updates of players

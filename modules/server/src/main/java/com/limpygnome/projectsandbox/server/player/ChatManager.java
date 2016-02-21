@@ -4,22 +4,25 @@ import com.limpygnome.projectsandbox.server.Controller;
 import com.limpygnome.projectsandbox.server.packet.imp.player.chat.PlayerChatOutboundPacket;
 
 import java.util.LinkedList;
-import javax.naming.ldap.Control;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 /**
  * Handles chat messages.
  */
+@Service
 public class ChatManager
 {
     private static final int CHAT_BUFFER_SIZE = 20;
 
+    @Autowired
     private Controller controller;
+
     private LinkedList<PlayerChatOutboundPacket> chatMessageBuffer;
 
-    public ChatManager(Controller controller)
+    public ChatManager()
     {
         this.chatMessageBuffer = new LinkedList<>();
-        this.controller = controller;
     }
 
     public synchronized void add(PlayerChatOutboundPacket packet)

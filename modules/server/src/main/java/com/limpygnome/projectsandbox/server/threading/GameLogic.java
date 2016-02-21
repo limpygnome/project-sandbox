@@ -5,6 +5,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.io.IOException;
+import org.springframework.stereotype.Service;
 
 /**
  *
@@ -52,31 +53,24 @@ public class GameLogic implements Runnable
             while(!Thread.interrupted())
             {
                 timeStart = System.currentTimeMillis();
-                
-                try
-                {
-                    // Run logic for packet stats
-                    controller.packetStatsManager.logic();
 
-                    // Run logic for entities
-                    controller.entityManager.logic();
+                // Run logic for packet stats
+                controller.packetStatsManager.logic();
 
-                    // Run logic for respawn manager
-                    controller.respawnManager.logic();
+                // Run logic for entities
+                controller.entityManager.logic();
 
-                    // Run logic for effects
-                    controller.effectsManager.logic();
+                // Run logic for respawn manager
+                controller.respawnManager.logic();
 
-                    // Run logic for players
-                    controller.playerManager.logic();
+                // Run logic for effects
+                controller.effectsManager.logic();
 
-                    // Run logic for session management
-                    controller.sessionManager.logic();
-                }
-                catch(IOException ex)
-                {
-                    ex.printStackTrace(System.err);
-                }
+                // Run logic for players
+                controller.playerManager.logic();
+
+                // Run logic for session management
+                controller.sessionManager.logic();
                 
                 // Sleep for another cycle
                 timeEnd = System.currentTimeMillis();

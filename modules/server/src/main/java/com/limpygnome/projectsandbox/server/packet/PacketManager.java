@@ -14,22 +14,21 @@ import org.java_websocket.WebSocket;
 
 import java.nio.ByteBuffer;
 import org.java_websocket.exceptions.WebsocketNotConnectedException;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 /**
  * Responsible for parsing inbound packets.
  */
+@Service
 public class PacketManager
 {
     private final static Logger LOG = LogManager.getLogger(PacketManager.class);
 
+    @Autowired
     private Controller controller;
+    @Autowired
     private PacketStatsManager packetStatsManager;
-
-    public PacketManager(Controller controller)
-    {
-        this.controller = controller;
-        this.packetStatsManager = controller.packetStatsManager;
-    }
 
     public void handleInbound(WebSocket socket, ByteBuffer message)
     {

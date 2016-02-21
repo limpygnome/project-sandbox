@@ -6,6 +6,7 @@ import com.limpygnome.projectsandbox.server.Controller;
 import com.limpygnome.projectsandbox.server.entity.physics.collisions.CollisionResultMap;
 import com.limpygnome.projectsandbox.server.entity.physics.collisions.SAT;
 import com.limpygnome.projectsandbox.server.packet.imp.entity.EntityUpdatesOutboundPacket;
+import com.limpygnome.projectsandbox.server.service.LogicService;
 import com.limpygnome.projectsandbox.server.util.IdCounterProvider;
 import com.limpygnome.projectsandbox.server.util.counters.IdCounterConsumer;
 import org.apache.logging.log4j.LogManager;
@@ -14,6 +15,8 @@ import org.apache.logging.log4j.Logger;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 /**
  * Handles all of the entities in the world.
@@ -21,19 +24,21 @@ import java.util.Map;
  * Notes:
  * - Any modifications to the internal collections should always synchronize on `entities`.
  */
-public class EntityManager implements IdCounterConsumer
+@Service
+public class EntityManager implements LogicService, IdCounterConsumer
 {
     private final static Logger LOG = LogManager.getLogger(EntityManager.class);
 
-    private final Controller controller;
+    @Autowired
+    private Controller controller;
+
     public final HashMap<Short, Entity> entities;
     private final HashMap<Short, Entity> entitiesNew;
     public EntTypeMappingStore entTypeMappingStore;
     private IdCounterProvider idCounterProvider;
 
-    public EntityManager(Controller controller)
+    public EntityManager()
     {
-        this.controller = controller;
         this.entities = new HashMap<>();
         this.entitiesNew = new HashMap<>();
         this.entTypeMappingStore = new EntTypeMappingStore();
@@ -143,6 +148,7 @@ public class EntityManager implements IdCounterConsumer
         return result;
     }
 
+    @Override
     public void logic()
     {
         try

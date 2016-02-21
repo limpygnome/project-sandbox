@@ -4,21 +4,24 @@ import com.limpygnome.projectsandbox.server.Controller;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.UUID;
 
 import com.limpygnome.projectsandbox.server.world.map.data.MapBuilder;
 import com.limpygnome.projectsandbox.server.world.map.repository.FileSystemMapRepository;
 import com.limpygnome.projectsandbox.server.world.map.repository.MapRepository;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 /**
  * Responsible for managing/handling maps.
  */
+@Service
 public class MapManager
 {
     private final static Logger LOG = LogManager.getLogger(MapManager.class);
 
+    @Autowired
     private Controller controller;
 
     /* The repository used for fetching maps. */
@@ -33,9 +36,8 @@ public class MapManager
     /* The mapMain/lobby map. */
     public WorldMap mainMap;
     
-    public MapManager(Controller controller)
+    public MapManager()
     {
-        this.controller = controller;
         this.mapCache = new HashMap<>();
         this.mainMap = null;
     }
@@ -45,7 +47,7 @@ public class MapManager
         mapCache.put(map.mapId, map);
     }
     
-    public synchronized void load(Controller controller) throws Exception
+    public synchronized void load() throws Exception
     {
         // Load public maps into cache
         MapRepository mapRepository = new FileSystemMapRepository();
