@@ -40,7 +40,7 @@ public class ChatService
     {
         for (PlayerChatOutboundPacket packet : chatMessageBuffer)
         {
-            controller.packetManager.send(playerInfo, packet);
+            controller.packetService.send(playerInfo, packet);
         }
     }
 

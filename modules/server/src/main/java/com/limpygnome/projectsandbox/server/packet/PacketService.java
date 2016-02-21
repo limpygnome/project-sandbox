@@ -23,9 +23,9 @@ import org.springframework.stereotype.Service;
  * Responsible for parsing inbound packets.
  */
 @Service
-public class PacketManager
+public class PacketService
 {
-    private final static Logger LOG = LogManager.getLogger(PacketManager.class);
+    private final static Logger LOG = LogManager.getLogger(PacketService.class);
 
     @Autowired
     private Controller controller;

@@ -1,13 +1,12 @@
 package com.limpygnome.projectsandbox.server;
 
-import com.limpygnome.projectsandbox.server.packet.PacketManager;
+import com.limpygnome.projectsandbox.server.packet.PacketService;
 import com.limpygnome.projectsandbox.server.player.ChatService;
 import com.limpygnome.projectsandbox.server.player.PlayerService;
 import com.limpygnome.projectsandbox.server.player.SessionService;
 import com.limpygnome.projectsandbox.server.service.LoadService;
 import com.limpygnome.projectsandbox.server.threading.GameLogicThreadedService;
 import com.limpygnome.projectsandbox.server.threading.SocketEndpoint;
-import com.limpygnome.projectsandbox.server.world.map.MapService;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.AutowireCapableBeanFactory;
@@ -37,13 +36,11 @@ public class Controller
     private GameLogicThreadedService gameLogicService;
 
     @Autowired
-    public PacketManager packetManager;
+    public PacketService packetService;
     @Autowired
     public PlayerService playerService;
     @Autowired
     public ChatService chatService;
-    @Autowired
-    public MapService mapService;
     @Autowired
     public SessionService sessionService;
 

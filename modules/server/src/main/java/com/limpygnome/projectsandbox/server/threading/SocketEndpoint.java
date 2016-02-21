@@ -45,7 +45,7 @@ public class SocketEndpoint extends WebSocketServer
     {
         if (socket != null && message != null)
         {
-            controller.packetManager.handleInbound(socket, message);
+            controller.packetService.handleInbound(socket, message);
         }
     }
 

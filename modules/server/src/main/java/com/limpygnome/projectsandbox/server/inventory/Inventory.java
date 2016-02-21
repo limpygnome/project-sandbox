@@ -204,7 +204,7 @@ public class Inventory implements Serializable
         if (owner != null && !packet.isEmpty())
         {
             // Send to player / owner of inventory
-            controller.packetManager.send(owner, packet);
+            controller.packetService.send(owner, packet);
         }
     }
 

@@ -4,7 +4,7 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 
 /**
- * Created by limpygnome on 21/02/16.
+ * Primary context configuration class for Spring.
  */
 @Configuration
 @ComponentScan({

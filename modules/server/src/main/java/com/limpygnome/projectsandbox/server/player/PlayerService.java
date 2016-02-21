@@ -6,7 +6,7 @@ import com.limpygnome.projectsandbox.server.entity.Entity;
 import com.limpygnome.projectsandbox.server.entity.respawn.pending.EntityPendingRespawn;
 import com.limpygnome.projectsandbox.server.entity.imp.living.Player;
 import com.limpygnome.projectsandbox.server.packet.OutboundPacket;
-import com.limpygnome.projectsandbox.server.packet.PacketManager;
+import com.limpygnome.projectsandbox.server.packet.PacketService;
 import com.limpygnome.projectsandbox.server.packet.imp.entity.EntityUpdatesOutboundPacket;
 import com.limpygnome.projectsandbox.server.packet.imp.player.global.PlayerEventsUpdatesOutboundPacket;
 import com.limpygnome.projectsandbox.server.packet.imp.player.individual.PlayerIdentityOutboundPacket;
@@ -44,7 +44,7 @@ public class PlayerService implements LogicService, IdCounterConsumer
     @Autowired
     private MapService mapService;
     @Autowired
-    private PacketManager packetManager;
+    private PacketService packetService;
 
     private final HashMap<WebSocket, PlayerInfo> mappings;
     private final HashMap<Short, PlayerInfo> mappingsById;
@@ -116,7 +116,7 @@ public class PlayerService implements LogicService, IdCounterConsumer
             PlayerEventsUpdatesOutboundPacket playerEventsUpdatesOutboundSnapshotPacket = new PlayerEventsUpdatesOutboundPacket();
             writePlayersJoined(playerEventsUpdatesOutboundSnapshotPacket);
             writePlayerMetrics(playerEventsUpdatesOutboundSnapshotPacket, true);
-            controller.packetManager.send(playerInfo, playerEventsUpdatesOutboundSnapshotPacket);
+            controller.packetService.send(playerInfo, playerEventsUpdatesOutboundSnapshotPacket);
 
             // Create, spawn and send data for player
             playerSpawnAndSendData(playerInfo);
@@ -243,12 +243,12 @@ public class PlayerService implements LogicService, IdCounterConsumer
         map.respawnManager.respawn(new EntityPendingRespawn(controller, entityPlayer));
 
         // Send map data
-        packetManager.send(playerInfo, map.packet);
+        packetService.send(playerInfo, map.packet);
 
         // Send update of entire world to the player
         EntityUpdatesOutboundPacket packetUpdates = new EntityUpdatesOutboundPacket();
         packetUpdates.build(map.entityManager, true);
-        controller.packetManager.send(playerInfo, packetUpdates);
+        controller.packetService.send(playerInfo, packetUpdates);
     }
 
     /**
@@ -284,7 +284,7 @@ public class PlayerService implements LogicService, IdCounterConsumer
             {
                 PlayerIdentityOutboundPacket packet = new PlayerIdentityOutboundPacket();
                 packet.writeIdentity(playerInfo);
-                controller.packetManager.send(playerInfo, packet);
+                controller.packetService.send(playerInfo, packet);
             }
             catch (IOException e)
             {
@@ -304,7 +304,7 @@ public class PlayerService implements LogicService, IdCounterConsumer
         for (Map.Entry<WebSocket, PlayerInfo> kv : mappings.entrySet())
         {
             playerInfo = kv.getValue();
-            controller.packetManager.send(playerInfo, outboundPacket);
+            controller.packetService.send(playerInfo, outboundPacket);
         }
     }
     
