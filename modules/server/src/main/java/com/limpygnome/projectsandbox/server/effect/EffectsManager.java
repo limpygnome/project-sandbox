@@ -57,7 +57,7 @@ public class EffectsManager implements LogicService
             pendingSend.clear();
 
             // Broadcast to all players
-            controller.playerManager.broadcast(packet);
+            controller.playerService.broadcast(packet);
         }
     }
 

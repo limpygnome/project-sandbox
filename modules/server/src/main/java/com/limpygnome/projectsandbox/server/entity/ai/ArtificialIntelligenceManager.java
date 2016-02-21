@@ -39,7 +39,7 @@ public class ArtificialIntelligenceManager
     public Path findPath(Entity entity, Vector2 target)
     {
         return pathFinder.findPath(
-                controller.mapManager.mainMap,
+                controller.mapService.mainMap,
                 entity,
                 entity.positionNew.x, entity.positionNew.y,
                 target.x, target.y
@@ -48,6 +48,7 @@ public class ArtificialIntelligenceManager
 
     public Path findIdlePath(Entity entity, int maxDepth)
     {
-        return idleWalkPathBuilder.build(controller, controller.mapManager.mainMap, entity, maxDepth);
+        return idleWalkPathBuilder.build(controller, controller.mapService.mainMap, entity, maxDepth);
     }
+
 }

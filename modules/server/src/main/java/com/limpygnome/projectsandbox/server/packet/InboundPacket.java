@@ -26,7 +26,7 @@ public abstract class InboundPacket extends Packet
 
     public PlayerInfo fetchPlayer(Controller controller, WebSocket socket)
     {
-        PlayerInfo playerInfo = controller.playerManager.getPlayerByWebSocket(socket);
+        PlayerInfo playerInfo = controller.playerService.getPlayerByWebSocket(socket);
 
         if (playerInfo == null)
         {

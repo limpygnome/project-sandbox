@@ -20,9 +20,9 @@ import org.springframework.stereotype.Service;
  * Created by limpygnome on 26/07/15.
  */
 @Service
-public class SessionManager implements LogicService
+public class SessionService implements LogicService
 {
-    private final static Logger LOG = LogManager.getLogger(SessionManager.class);
+    private final static Logger LOG = LogManager.getLogger(SessionService.class);
 
     private static final int INTERVAL_UPDATE_SESSION = 30;
 
@@ -31,7 +31,7 @@ public class SessionManager implements LogicService
 
     private List<GameSession> trackedGameSessions;
 
-    public SessionManager()
+    public SessionService()
     {
         this.userProvider = new UserProvider();
         this.gameProvider = new GameProvider();

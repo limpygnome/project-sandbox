@@ -4,15 +4,14 @@ import com.limpygnome.projectsandbox.server.effect.EffectsManager;
 import com.limpygnome.projectsandbox.server.entity.EntityManager;
 import com.limpygnome.projectsandbox.server.entity.RespawnManager;
 import com.limpygnome.projectsandbox.server.entity.ai.ArtificialIntelligenceManager;
-import com.limpygnome.projectsandbox.server.inventory.InventoryManager;
 import com.limpygnome.projectsandbox.server.packet.PacketManager;
-import com.limpygnome.projectsandbox.server.player.ChatManager;
-import com.limpygnome.projectsandbox.server.player.PlayerManager;
-import com.limpygnome.projectsandbox.server.player.SessionManager;
+import com.limpygnome.projectsandbox.server.player.ChatService;
+import com.limpygnome.projectsandbox.server.player.PlayerService;
+import com.limpygnome.projectsandbox.server.player.SessionService;
 import com.limpygnome.projectsandbox.server.service.LoadService;
 import com.limpygnome.projectsandbox.server.threading.GameLogicThreadedService;
 import com.limpygnome.projectsandbox.server.threading.SocketEndpoint;
-import com.limpygnome.projectsandbox.server.world.map.MapManager;
+import com.limpygnome.projectsandbox.server.world.map.MapService;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -38,22 +37,24 @@ public class Controller
 
     @Autowired
     public PacketManager packetManager;
+
     @Autowired
     public EntityManager entityManager;
     @Autowired
     public RespawnManager respawnManager;
     @Autowired
-    public PlayerManager playerManager;
-    @Autowired
-    public ChatManager chatManager;
-    @Autowired
-    public MapManager mapManager;
-    @Autowired
     public EffectsManager effectsManager;
     @Autowired
     public ArtificialIntelligenceManager artificialIntelligenceManager;
+
     @Autowired
-    public SessionManager sessionManager;
+    public PlayerService playerService;
+    @Autowired
+    public ChatService chatService;
+    @Autowired
+    public MapService mapService;
+    @Autowired
+    public SessionService sessionService;
 
     @Autowired
     private List<LoadService> loadServices;

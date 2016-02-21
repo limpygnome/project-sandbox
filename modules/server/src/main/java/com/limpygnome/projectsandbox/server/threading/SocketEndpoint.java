@@ -74,7 +74,7 @@ public class SocketEndpoint extends WebSocketServer
         if (ws != null)
         {
             LOG.info("Client disconnected - ip: {}", ws.getRemoteSocketAddress());
-            controller.playerManager.unregister(ws);
+            controller.playerService.unregister(ws);
         }
     }
 

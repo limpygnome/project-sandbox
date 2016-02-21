@@ -11,7 +11,7 @@ import org.springframework.stereotype.Service;
  * Handles chat messages.
  */
 @Service
-public class ChatManager
+public class ChatService
 {
     private static final int CHAT_BUFFER_SIZE = 20;
 
@@ -20,7 +20,7 @@ public class ChatManager
 
     private LinkedList<PlayerChatOutboundPacket> chatMessageBuffer;
 
-    public ChatManager()
+    public ChatService()
     {
         this.chatMessageBuffer = new LinkedList<>();
     }

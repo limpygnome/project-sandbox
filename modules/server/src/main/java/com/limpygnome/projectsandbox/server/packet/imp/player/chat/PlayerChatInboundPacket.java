@@ -65,10 +65,10 @@ public class PlayerChatInboundPacket extends InboundPacket
         PlayerChatOutboundPacket playerChatOutboundPacket = new PlayerChatOutboundPacket();
         playerChatOutboundPacket.writeChatMessage(this);
 
-        controller.playerManager.broadcast(playerChatOutboundPacket);
+        controller.playerService.broadcast(playerChatOutboundPacket);
 
         // Add to chat buffer
-        controller.chatManager.add(playerChatOutboundPacket);
+        controller.chatService.add(playerChatOutboundPacket);
     }
 
 }

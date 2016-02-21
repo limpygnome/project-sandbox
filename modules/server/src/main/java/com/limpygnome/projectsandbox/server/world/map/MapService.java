@@ -16,9 +16,9 @@ import org.springframework.stereotype.Service;
  * Responsible for managing/handling maps.
  */
 @Service
-public class MapManager implements LoadService
+public class MapService implements LoadService
 {
-    private final static Logger LOG = LogManager.getLogger(MapManager.class);
+    private final static Logger LOG = LogManager.getLogger(MapService.class);
 
     @Autowired
     private Controller controller;
@@ -33,7 +33,7 @@ public class MapManager implements LoadService
     /* The mapMain/lobby map. */
     public WorldMap mainMap;
     
-    public MapManager()
+    public MapService()
     {
         this.mapCache = new HashMap<>();
         this.mainMap = null;

@@ -161,7 +161,7 @@ public class Casting
         }
 
         // Now find the start/end indexes for tiles to consider
-        WorldMap map = controller.mapManager.mainMap;
+        WorldMap map = controller.mapService.mainMap;
 
         int tileStartX = (int) Math.floor(startX / map.tileData.tileSize);
         int tileStartY = (int) Math.floor(startY / map.tileData.tileSize);

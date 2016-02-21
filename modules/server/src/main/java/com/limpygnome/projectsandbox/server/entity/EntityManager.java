@@ -174,8 +174,8 @@ public class EntityManager implements LogicService, IdCounterConsumer
 
                 // Fetch map boundaries
                 // TODO: update if we have multiple maps
-                float mapMaxX = controller.mapManager.mainMap.tileData.maxX;
-                float mapMaxY = controller.mapManager.mainMap.tileData.maxY;
+                float mapMaxX = controller.mapService.mainMap.tileData.maxX;
+                float mapMaxY = controller.mapService.mainMap.tileData.maxY;
 
                 // Perform collision check for each entity
                 CollisionResult collisionResult;
@@ -223,7 +223,7 @@ public class EntityManager implements LogicService, IdCounterConsumer
                         {
                             // Perform collision with map
                             // TODO: add support for multiple maps
-                            mapResults = SAT.collisionMap(controller.mapManager.mainMap, entityA);
+                            mapResults = SAT.collisionMap(controller.mapService.mainMap, entityA);
 
                             for (CollisionResultMap mapResult : mapResults)
                             {
@@ -281,7 +281,7 @@ public class EntityManager implements LogicService, IdCounterConsumer
             }
 
             // Send updates to all players
-            controller.playerManager.broadcast(entityUpdatesOutboundPacket);
+            controller.playerService.broadcast(entityUpdatesOutboundPacket);
         }
         catch (Exception e)
         {

@@ -35,7 +35,7 @@ public class FileSystemMapRepository implements MapRepository
     private final static Logger LOG = LogManager.getLogger(FileSystemMapRepository.class);
 
     @Override
-    public Map<Short, WorldMap> fetchPublicMaps(Controller controller, MapManager mapManager)
+    public Map<Short, WorldMap> fetchPublicMaps(Controller controller, MapService mapService)
     {
         Map<Short, WorldMap> maps = new HashMap<>();
 
@@ -53,7 +53,7 @@ public class FileSystemMapRepository implements MapRepository
                 mapData = JsonHelper.read(file.getInputStream());
 
                 // Build map using data
-                map = buildMap(controller, mapManager, mapData);
+                map = buildMap(controller, mapService, mapData);
 
                 // Add to result
                 maps.put(map.mapId, map);
@@ -70,18 +70,18 @@ public class FileSystemMapRepository implements MapRepository
     }
 
     @Override
-    public WorldMap fetchMap(Controller controller, MapManager mapManager, UUID uuid)
+    public WorldMap fetchMap(Controller controller, MapService mapService, UUID uuid)
     {
         throw new RuntimeException("no support for loading individual maps");
     }
 
-    private WorldMap buildMap(Controller controller, MapManager mapManager, JSONObject mapData) throws IOException
+    private WorldMap buildMap(Controller controller, MapService mapService, JSONObject mapData) throws IOException
     {
         // Parse unique identifier...
         short mapId = (short) (long) mapData.get("id");
 
         // Create new instance
-        WorldMap map = new WorldMap(controller, mapManager, mapId);
+        WorldMap map = new WorldMap(controller, mapService, mapId);
 
         // Build parts of map from JSON data
         buildMapProperties(map, mapData);

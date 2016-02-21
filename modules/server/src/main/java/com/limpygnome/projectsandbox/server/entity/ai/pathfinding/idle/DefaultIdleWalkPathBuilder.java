@@ -27,7 +27,7 @@ public class DefaultIdleWalkPathBuilder implements IdleWalkPathBuilder
     {
         // TODO: refactor to use current map
         // TODO: critical, needs fix
-        MapPosition entityPosition = controller.mapManager.mainMap.tileData.positionFromReal(entity.positionNew);
+        MapPosition entityPosition = controller.mapService.mainMap.tileData.positionFromReal(entity.positionNew);
 
         // Build path to first pedestrian node; this will be our starting place
         List<Node> pathNodes = new LinkedList<>();

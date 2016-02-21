@@ -7,8 +7,8 @@ import com.limpygnome.projectsandbox.server.packet.imp.player.individual.PlayerM
 import com.limpygnome.projectsandbox.server.packet.imp.session.SessionErrorCodeOutboundPacket;
 import com.limpygnome.projectsandbox.server.packet.imp.session.SessionIdentifierInboundPacket;
 import com.limpygnome.projectsandbox.server.player.PlayerInfo;
-import com.limpygnome.projectsandbox.server.player.PlayerManager;
-import com.limpygnome.projectsandbox.server.player.SessionManager;
+import com.limpygnome.projectsandbox.server.player.PlayerService;
+import com.limpygnome.projectsandbox.server.player.SessionService;
 import com.limpygnome.projectsandbox.shared.model.GameSession;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -32,9 +32,9 @@ public class PacketManager
     @Autowired
     private PacketStatsManager packetStatsManager;
     @Autowired
-    private SessionManager sessionManager;
+    private SessionService sessionService;
     @Autowired
-    private PlayerManager playerManager;
+    private PlayerService playerService;
 
     public void handleInbound(WebSocket socket, ByteBuffer message)
     {
@@ -49,7 +49,7 @@ public class PacketManager
             packetStatsManager.incrementIn(data.length);
 
             // Fetch the player's info
-            PlayerInfo playerInfo = playerManager.getPlayerByWebSocket(socket);
+            PlayerInfo playerInfo = playerService.getPlayerByWebSocket(socket);
 
             // Check if we're expecting a session packet - always first packet to system!
             if (playerInfo == null)
@@ -91,7 +91,7 @@ public class PacketManager
             else
             {
                 // Load session data from database
-                GameSession gameSession = sessionManager.load(sessPacket.sessionId);
+                GameSession gameSession = sessionService.load(sessPacket.sessionId);
 
                 // Check we found session
                 if (gameSession == null)
@@ -111,13 +111,13 @@ public class PacketManager
 
                 // Set to connected
                 gameSession.setConnected(true);
-                sessionManager.persist(gameSession);
+                sessionService.persist(gameSession);
 
                 // Log event
                 LOG.info("Session mapped - {} <> {}", gameSession.getToken(), socket.getRemoteSocketAddress());
 
                 // Register player
-                if (playerManager.register(socket, gameSession) == null)
+                if (playerService.register(socket, gameSession) == null)
                 {
                     LOG.error("Failed to register player - sid: {}", gameSession.getToken());
                     socket.close();

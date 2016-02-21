@@ -32,9 +32,9 @@ import org.springframework.stereotype.Service;
  * TODO: decouple Player class, perhaps config defines player ent or game logic gives us instance.
  */
 @Service
-public class PlayerManager implements LogicService, IdCounterConsumer
+public class PlayerService implements LogicService, IdCounterConsumer
 {
-    private final static Logger LOG = LogManager.getLogger(PlayerManager.class);
+    private final static Logger LOG = LogManager.getLogger(PlayerService.class);
 
     @Autowired
     private Controller controller;
@@ -44,7 +44,7 @@ public class PlayerManager implements LogicService, IdCounterConsumer
     private final HashSet<UUID> connectedRegisteredPlayers;
     private final IdCounterProvider idCounterProvider;
 
-    public PlayerManager()
+    public PlayerService()
     {
         this.mappings = new HashMap<>();
         this.mappingsById = new HashMap<>();
@@ -119,7 +119,7 @@ public class PlayerManager implements LogicService, IdCounterConsumer
 
             // Send map data
             // TODO: uses main map, need to refactor to support multiple maps...
-            controller.packetManager.send(playerInfo, controller.mapManager.mainMap.packet);
+            controller.packetManager.send(playerInfo, controller.mapService.mainMap.packet);
 
             // Send update of entire world to the player
             EntityUpdatesOutboundPacket packetUpdates = new EntityUpdatesOutboundPacket();
@@ -127,7 +127,7 @@ public class PlayerManager implements LogicService, IdCounterConsumer
             controller.packetManager.send(playerInfo, packetUpdates);
 
             // Send previous chat messages
-            controller.chatManager.sendPreviousMessages(playerInfo);
+            controller.chatService.sendPreviousMessages(playerInfo);
 
             LOG.info(
                     "Player joined - session token: {}, user id: {}, ply id: {}",
@@ -182,7 +182,7 @@ public class PlayerManager implements LogicService, IdCounterConsumer
                 }
 
                 // Unload game session
-                controller.sessionManager.unload(playerInfo.session);
+                controller.sessionService.unload(playerInfo.session);
 
                 // Inform server the player has left
                 PlayerEventsUpdatesOutboundPacket playerEventsUpdatesOutboundPacket = new PlayerEventsUpdatesOutboundPacket();

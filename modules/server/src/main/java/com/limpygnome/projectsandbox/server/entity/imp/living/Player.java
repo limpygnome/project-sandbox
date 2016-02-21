@@ -153,7 +153,7 @@ public class Player extends Entity
     public synchronized void eventSpawn(Controller controller, Spawn spawn)
     {
         // Set player to use this entity
-        controller.playerManager.setPlayerEnt(playerInfo, this);
+        controller.playerService.setPlayerEnt(playerInfo, this);
 
         // Setup owner
         this.inventory.setOwner(playerInfo);

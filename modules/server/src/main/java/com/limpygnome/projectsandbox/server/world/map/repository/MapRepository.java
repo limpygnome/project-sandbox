@@ -1,7 +1,7 @@
 package com.limpygnome.projectsandbox.server.world.map.repository;
 
 import com.limpygnome.projectsandbox.server.Controller;
-import com.limpygnome.projectsandbox.server.world.map.MapManager;
+import com.limpygnome.projectsandbox.server.world.map.MapService;
 import com.limpygnome.projectsandbox.server.world.map.WorldMap;
 
 import java.util.Map;
@@ -18,7 +18,7 @@ public interface MapRepository
      *
      * @return
      */
-    Map<Short, WorldMap> fetchPublicMaps(Controller controller, MapManager mapManager);
+    Map<Short, WorldMap> fetchPublicMaps(Controller controller, MapService mapService);
 
     /**
      * Used to fetch a map, using its identifier.
@@ -26,6 +26,6 @@ public interface MapRepository
      * @param uuid
      * @return
      */
-    WorldMap fetchMap(Controller controller, MapManager mapManager, UUID uuid);
+    WorldMap fetchMap(Controller controller, MapService mapService, UUID uuid);
 
 }

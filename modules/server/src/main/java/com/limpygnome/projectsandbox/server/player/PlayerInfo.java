@@ -95,7 +95,7 @@ public class PlayerInfo
             packet.writePlayerKilled(death, this);
 
             // Broadcast to all players
-            controller.playerManager.broadcast(packet);
+            controller.playerService.broadcast(packet);
 
             LOG.info("Player killed - ply id: {}, killer: {}", playerId, death);
         }
