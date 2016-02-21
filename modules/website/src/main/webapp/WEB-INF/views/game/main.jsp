@@ -277,7 +277,7 @@
 
     </div>
 
-    <div id="ps-render-container">
+    <div id="ps-render-container" tabindex="1">
 
         <div id="ps-connecting">
             <div class="message">

@@ -6,14 +6,21 @@ projectSandbox.keyboard =
 	{
 		var self = this;
 
-        // TODO: dont hook window...
-		// Hook canvas for keydown event
-		$(window).keydown(function (event) {
+        // Fetch render container
+        var renderContainer = $("#ps-render-container");
+
+		// Hook key down...
+		$(renderContainer).keydown(function (event) {
 		    self.handlerDown(event);
 		});
-		$(window).keyup(function (event) {
+
+		// Hook key up...
+		$(renderContainer).keyup(function (event) {
             self.handlerUp(event);
         });
+
+        // Put focus on render container
+        $(renderContainer).focus();
 	},
 	
 	handlerDown: function(event)

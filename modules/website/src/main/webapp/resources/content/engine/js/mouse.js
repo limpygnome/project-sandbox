@@ -15,30 +15,27 @@ projectSandbox.mouse =
 	{
 		var self = this;
 
-		// TODO: fix hook events not being invoked
-		// Hook mouse down/up/movement
-		projectSandbox.canvas.onmousedown = function(event)
-		{
-			self.handleMouseDown(event);
-			return false;
-		};
-		projectSandbox.canvas.onmouseup = function(event)
-		{
-			self.handleMouseUp(event);
-			return false;
-		};
-		projectSandbox.canvas.onmousemove = function(event)
-		{
-			self.handleMouseMove(event);
-			return false;
-		};
-		
-		// Hook scroll wheel
-		projectSandbox.canvas.onmousewheel = function(event)
-		{
-			self.handleMouseWheelEvent(event);
-			return false;
-		};
+		// Fetch render container
+		var renderContainer = $("#ps-render-container");
+
+        // Hook mouse-down
+        $(renderContainer).bind("mousedown", function(e) {
+            $(renderContainer).focus();
+            self.handleMouseDown(e.originalEvent);
+            return false;
+        });
+
+        // Hook mouse-up
+        $(renderContainer).bind("mouseup", function(e) {
+            self.handleMouseMove(e.originalEvent);
+            return false;
+        });
+
+        // Hook mouse scroll wheel
+		$(renderContainer).bind("mousewheel", function(e) {
+		    self.handleMouseWheelEvent(e.originalEvent);
+            return false;
+		});
 	},
 	
 	handleMouseDown: function(event)
