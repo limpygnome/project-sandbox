@@ -2,6 +2,7 @@ package com.limpygnome.projectsandbox.server.entity.imp.vehicle;
 
 import com.limpygnome.projectsandbox.server.entity.annotation.EntityType;
 import com.limpygnome.projectsandbox.server.entity.physics.Vector2;
+import com.limpygnome.projectsandbox.server.world.map.WorldMap;
 
 /**
  * Created by limpygnome on 01/07/15.
@@ -9,9 +10,10 @@ import com.limpygnome.projectsandbox.server.entity.physics.Vector2;
 @EntityType(typeId = 22, typeName = "vehicle/bus")
 public class Bus extends AbstractVehicle
 {
-    public Bus()
+    public Bus(WorldMap map)
     {
         super(
+                map,
                 (short) 28,
                 (short) 96,
                 new Vector2[]

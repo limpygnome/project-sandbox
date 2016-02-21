@@ -14,6 +14,7 @@ import com.limpygnome.projectsandbox.server.entity.physics.proximity.DefaultProx
 import com.limpygnome.projectsandbox.server.entity.physics.proximity.ProximityResult;
 import com.limpygnome.projectsandbox.server.entity.physics.proximity.RotateResult;
 import com.limpygnome.projectsandbox.server.player.PlayerInfo;
+import com.limpygnome.projectsandbox.server.world.map.WorldMap;
 import com.limpygnome.projectsandbox.server.world.spawn.Spawn;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -37,9 +38,9 @@ public class Sentry extends Entity
     public float defaultRotation;
     private long lastFired;
 
-    public Sentry()
+    public Sentry(WorldMap map)
     {
-        super((short) 32, (short) 32);
+        super(map, (short) 32, (short) 32);
 
         this.defaultRotation = 0.0f;
         this.lastFired = 0;
@@ -104,11 +105,11 @@ public class Sentry extends Entity
             castVictim.entity.damage(controller, this, BULLET_DAMAGE, SentryKiller.class);
 
             // Create bullet effect
-            controller.effectsManager.add(new BulletEffect(x, y));
+            map.effectsManager.add(new BulletEffect(x, y));
         }
 
         // Show red target tracer
-        controller.effectsManager.add(new TracerEffect(positionNew, new Vector2(x, y)));
+        map.effectsManager.add(new TracerEffect(positionNew, new Vector2(x, y)));
     }
 
     @Override

@@ -6,10 +6,13 @@ import com.limpygnome.projectsandbox.server.entity.Entity;
 import com.limpygnome.projectsandbox.server.entity.respawn.pending.EntityPendingRespawn;
 import com.limpygnome.projectsandbox.server.entity.imp.living.Player;
 import com.limpygnome.projectsandbox.server.packet.OutboundPacket;
+import com.limpygnome.projectsandbox.server.packet.PacketManager;
 import com.limpygnome.projectsandbox.server.packet.imp.entity.EntityUpdatesOutboundPacket;
 import com.limpygnome.projectsandbox.server.packet.imp.player.global.PlayerEventsUpdatesOutboundPacket;
 import com.limpygnome.projectsandbox.server.packet.imp.player.individual.PlayerIdentityOutboundPacket;
 import com.limpygnome.projectsandbox.server.service.LogicService;
+import com.limpygnome.projectsandbox.server.world.map.MapService;
+import com.limpygnome.projectsandbox.server.world.map.WorldMap;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -38,6 +41,10 @@ public class PlayerService implements LogicService, IdCounterConsumer
 
     @Autowired
     private Controller controller;
+    @Autowired
+    private MapService mapService;
+    @Autowired
+    private PacketManager packetManager;
 
     private final HashMap<WebSocket, PlayerInfo> mappings;
     private final HashMap<Short, PlayerInfo> mappingsById;
@@ -111,20 +118,8 @@ public class PlayerService implements LogicService, IdCounterConsumer
             writePlayerMetrics(playerEventsUpdatesOutboundSnapshotPacket, true);
             controller.packetManager.send(playerInfo, playerEventsUpdatesOutboundSnapshotPacket);
 
-            // Create entity for player
-            Entity entityPlayer = playerEntCreate(playerInfo);
-
-            // Spawn the player
-            controller.respawnManager.respawn(new EntityPendingRespawn(controller, entityPlayer));
-
-            // Send map data
-            // TODO: uses main map, need to refactor to support multiple maps...
-            controller.packetManager.send(playerInfo, controller.mapService.mainMap.packet);
-
-            // Send update of entire world to the player
-            EntityUpdatesOutboundPacket packetUpdates = new EntityUpdatesOutboundPacket();
-            packetUpdates.build(controller.entityManager, true);
-            controller.packetManager.send(playerInfo, packetUpdates);
+            // Create, spawn and send data for player
+            playerSpawnAndSendData(playerInfo);
 
             // Send previous chat messages
             controller.chatService.sendPreviousMessages(playerInfo);
@@ -161,7 +156,7 @@ public class PlayerService implements LogicService, IdCounterConsumer
             // Remove entity
             if (ent != null && ent instanceof Player)
             {
-                controller.entityManager.remove(ent);
+                ent.map.entityManager.remove(ent);
                 LOG.debug("Removed entity for disconnecting player - ent id: {}", ent.id);
             }
 
@@ -236,16 +231,37 @@ public class PlayerService implements LogicService, IdCounterConsumer
         return mappingsById.containsKey(id);
     }
 
+    public synchronized void playerSpawnAndSendData(PlayerInfo playerInfo) throws IOException
+    {
+        // Determine lobby/default map for player
+        WorldMap map = mapService.mainMap;
+
+        // Create entity for player
+        Entity entityPlayer = playerEntCreate(map, playerInfo);
+
+        // Spawn the player
+        map.respawnManager.respawn(new EntityPendingRespawn(controller, entityPlayer));
+
+        // Send map data
+        packetManager.send(playerInfo, map.packet);
+
+        // Send update of entire world to the player
+        EntityUpdatesOutboundPacket packetUpdates = new EntityUpdatesOutboundPacket();
+        packetUpdates.build(map.entityManager, true);
+        controller.packetManager.send(playerInfo, packetUpdates);
+    }
+
     /**
      * Creates a new instance of a player.
      *
+     * @param map the map in which the player entity will be spawned
      * @param playerInfo The player's info.
      * @return An instance of an entity.
      */
-    public synchronized Entity playerEntCreate(PlayerInfo playerInfo)
+    public synchronized Entity playerEntCreate(WorldMap map, PlayerInfo playerInfo)
     {
         // Create Entity
-        return new Player(controller, playerInfo);
+        return new Player(map, controller, playerInfo);
     }
 
     public void setPlayerEnt(PlayerInfo playerInfo, Entity entity)
@@ -255,7 +271,7 @@ public class PlayerService implements LogicService, IdCounterConsumer
         // Remove Player entity for when player gets in cars etc
         if (currentEntity != null && currentEntity != entity && currentEntity instanceof Player)
         {
-            controller.entityManager.remove(currentEntity);
+            entity.map.entityManager.remove(currentEntity);
         }
 
         synchronized (this)

@@ -1,6 +1,10 @@
 package com.limpygnome.projectsandbox.server.world.map;
 
 import com.limpygnome.projectsandbox.server.Controller;
+import com.limpygnome.projectsandbox.server.effect.EffectsManager;
+import com.limpygnome.projectsandbox.server.entity.EntityManager;
+import com.limpygnome.projectsandbox.server.entity.RespawnManager;
+import com.limpygnome.projectsandbox.server.entity.ai.ArtificialIntelligenceManager;
 import com.limpygnome.projectsandbox.server.packet.imp.map.MapDataOutboundPacket;
 
 import org.apache.logging.log4j.LogManager;
@@ -15,6 +19,11 @@ public class WorldMap
 
     private final Controller controller;
     private final MapService mapService;
+
+    public EntityManager entityManager;
+    public RespawnManager respawnManager;
+    public EffectsManager effectsManager;
+    public ArtificialIntelligenceManager artificialIntelligenceManager;
 
     /**
      * Unique identifier for this map.
@@ -52,6 +61,21 @@ public class WorldMap
         this.controller = controller;
         this.mapService = mapService;
         this.mapId = mapId;
+
+        // Setup managers
+        // TODO: either pass or remove references to controller for managers
+        this.entityManager = new EntityManager(controller, this);
+        this.respawnManager = new RespawnManager(controller, this);
+        this.effectsManager = new EffectsManager(controller);
+        this.artificialIntelligenceManager = new ArtificialIntelligenceManager(controller, this);
+    }
+
+    public void logic()
+    {
+        // Execute manager logic...
+        entityManager.logic();
+        respawnManager.logic();
+        effectsManager.logic();
     }
 
     @Override

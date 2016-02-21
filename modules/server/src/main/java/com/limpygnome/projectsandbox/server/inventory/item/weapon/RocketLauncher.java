@@ -47,17 +47,17 @@ public class RocketLauncher extends AbstractWeapon
             float plySpeed = owner.width > owner.height ? owner.width : owner.height;
 
             // Create Rocket
-            Entity rpg = new Rocket(controller, playerInfoOwner, plySpeed);
+            Entity rpg = new Rocket(owner.map, controller, playerInfoOwner, plySpeed);
 
             // Project in front of player
             rpg.projectInFrontOfEntity(owner, ROCKET_LAUNCH_SPACING);
 
             // Create rocket entity
-            controller.respawnManager.respawn(new CurrentPositionRespawn(controller, rpg));
+            owner.map.respawnManager.respawn(new CurrentPositionRespawn(controller, rpg));
         }
         else
         {
-            LOG.debug("Unable to create rocket, owner not correctly set");
+            LOG.debug("unable to create rocket, owner not correctly set");
         }
     }
 

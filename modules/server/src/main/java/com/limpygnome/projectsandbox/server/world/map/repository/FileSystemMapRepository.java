@@ -268,7 +268,7 @@ public class FileSystemMapRepository implements MapRepository
 
         // Add to map
         // TODO: should add to "spawnData" in this map...
-        controller.respawnManager.factionSpawnsAdd(map.mapId, factionSpawns);
+        map.respawnManager.factionSpawnsAdd(map.mapId, factionSpawns);
     }
 
     private void buildEntities(Controller controller, JSONObject mapData, WorldMap map) throws IOException
@@ -290,11 +290,11 @@ public class FileSystemMapRepository implements MapRepository
 
         if (entData.containsKey("typeName"))
         {
-            entClass = controller.entityManager.entTypeMappingStore.getEntityClassByTypeName((String) entData.get("typeName"));
+            entClass = map.entityManager.entTypeMappingStoreService.getEntityClassByTypeName((String) entData.get("typeName"));
         }
         else if (entData.containsKey("typeId"))
         {
-            entClass = controller.entityManager.entTypeMappingStore.getEntityClassByTypeId((short) (long) entData.get("typeId"));
+            entClass = map.entityManager.entTypeMappingStoreService.getEntityClassByTypeId((short) (long) entData.get("typeId"));
         }
         else
         {
@@ -370,11 +370,11 @@ public class FileSystemMapRepository implements MapRepository
         {
             if (useKv)
             {
-                entConstructor = entClass.getConstructor(MapEntKV.class);
+                entConstructor = entClass.getConstructor(WorldMap.class, MapEntKV.class);
             }
             else
             {
-                entConstructor = entClass.getConstructor();
+                entConstructor = entClass.getConstructor(WorldMap.class);
             }
         }
         catch (NoSuchMethodException e)
@@ -399,11 +399,11 @@ public class FileSystemMapRepository implements MapRepository
                 // Create instance
                 if (useKv)
                 {
-                    entity = (Entity) entConstructor.newInstance(mapEntKV);
+                    entity = (Entity) entConstructor.newInstance(map, mapEntKV);
                 }
                 else
                 {
-                    entity = (Entity) entConstructor.newInstance();
+                    entity = (Entity) entConstructor.newInstance(map);
                 }
 
                 // Set parameters
@@ -416,7 +416,7 @@ public class FileSystemMapRepository implements MapRepository
             }
 
             // Add to world
-            controller.respawnManager.respawn(new EntityPendingRespawn(controller, entity));
+            map.respawnManager.respawn(new EntityPendingRespawn(controller, entity));
         }
     }
 

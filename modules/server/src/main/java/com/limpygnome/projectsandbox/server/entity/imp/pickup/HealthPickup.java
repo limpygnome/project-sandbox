@@ -6,6 +6,7 @@ import com.limpygnome.projectsandbox.server.entity.annotation.EntityType;
 import com.limpygnome.projectsandbox.server.entity.imp.living.Player;
 import com.limpygnome.projectsandbox.server.entity.imp.vehicle.AbstractVehicle;
 import com.limpygnome.projectsandbox.server.world.map.MapEntKV;
+import com.limpygnome.projectsandbox.server.world.map.WorldMap;
 
 import static com.limpygnome.projectsandbox.server.constant.entity.pickup.PickupConstants.*;
 
@@ -17,9 +18,10 @@ public class HealthPickup extends AbstractPickup
 {
     private float healthAmount;
 
-    public HealthPickup(MapEntKV mapEntKV)
+    public HealthPickup(WorldMap map, MapEntKV mapEntKV)
     {
         super(
+                map,
                 HEALTH_WIDTH,
                 HEALTH_HEIGHT,
                 mapEntKV.getLong("pickup.respawn_delay")

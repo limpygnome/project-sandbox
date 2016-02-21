@@ -17,6 +17,7 @@ import com.limpygnome.projectsandbox.server.entity.physics.proximity.ProximityRe
 import com.limpygnome.projectsandbox.server.inventory.Inventory;
 import com.limpygnome.projectsandbox.server.inventory.InventoryInvokeState;
 import com.limpygnome.projectsandbox.server.player.PlayerInfo;
+import com.limpygnome.projectsandbox.server.world.map.WorldMap;
 import com.limpygnome.projectsandbox.server.world.spawn.Spawn;
 
 import java.util.List;
@@ -55,11 +56,11 @@ public abstract class AbstractPedestrian extends Entity
     /* Cached calculation to indicate if this pedestrian can even attack. */
     private boolean flagCanAttack;
 
-    public AbstractPedestrian(short width, short height, float health, Class[] inventoryItems, float engageDistance,
-                              float followSpeed, float followDistance, float attackDistance, float attackRotationNoise,
-                              IdleMode idleMode)
+    public AbstractPedestrian(WorldMap map, short width, short height, float health, Class[] inventoryItems,
+                              float engageDistance,  float followSpeed, float followDistance, float attackDistance,
+                              float attackRotationNoise, IdleMode idleMode)
     {
-        super(width, height);
+        super(map, width, height);
 
         setMaxHealth(health);
 
@@ -150,7 +151,7 @@ public abstract class AbstractPedestrian extends Entity
                 if (rebuildPath)
                 {
                     // Re-compute path towards entity
-                    lastPathFound = controller.artificialIntelligenceManager.findPath(this, targetEntity);
+                    lastPathFound = map.artificialIntelligenceManager.findPath(this, targetEntity);
                     lastPathOffset = 0;
                 }
             }
@@ -329,14 +330,14 @@ public abstract class AbstractPedestrian extends Entity
                     targetVector = new Vector2(lastSpawn.x, lastSpawn.y);
 
                     // Rebuild path
-                    lastPathFound = controller.artificialIntelligenceManager.findPath(this, targetVector);
+                    lastPathFound = map.artificialIntelligenceManager.findPath(this, targetVector);
                     lastPathOffset = 0;
 
                     state = PedestrianState.IdleReturnToSpawn;
                     break;
                 case WALK:
                     // Rebuild idle path
-                    lastPathFound = controller.artificialIntelligenceManager.findIdlePath(this, IDLE_WALK_MAX_STEPS);
+                    lastPathFound = map.artificialIntelligenceManager.findIdlePath(this, IDLE_WALK_MAX_STEPS);
 
                     if (lastPathFound != null && lastPathFound.getTotalNodes() > 0)
                     {

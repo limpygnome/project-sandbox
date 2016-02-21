@@ -4,6 +4,7 @@ import com.limpygnome.projectsandbox.server.Controller;
 import com.limpygnome.projectsandbox.server.entity.respawn.PendingRespawn;
 import com.limpygnome.projectsandbox.server.entity.respawn.RespawnData;
 import com.limpygnome.projectsandbox.server.service.LogicService;
+import com.limpygnome.projectsandbox.server.world.map.WorldMap;
 import com.limpygnome.projectsandbox.server.world.spawn.FactionSpawns;
 import com.limpygnome.projectsandbox.server.world.spawn.Spawn;
 import org.apache.logging.log4j.LogManager;
@@ -12,27 +13,28 @@ import org.apache.logging.log4j.Logger;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 
 /**
  * A layer above {@link EntityManager} for respawning an entity with additional params.
  *
  * TODO: add support for multiple maps; this should be a single instance for all maps
  */
-@Service
 public class RespawnManager implements LogicService
 {
     private final static Logger LOG = LogManager.getLogger(RespawnManager.class);
 
-    @Autowired
     private Controller controller;
 
+    private WorldMap map;
     private LinkedList<PendingRespawn> pendingRespawnList;
+
+    /* Faction ID -> FactionSpawns */
     private HashMap<Short, FactionSpawns> factionSpawnsMap;
 
-    public RespawnManager()
+    public RespawnManager(Controller controller, WorldMap map)
     {
+        this.controller = controller;
+        this.map = map;
         this.pendingRespawnList = new LinkedList<>();
         this.factionSpawnsMap = new HashMap<>();
     }
@@ -43,7 +45,7 @@ public class RespawnManager implements LogicService
         LOG.debug("Added faction spawns - map id: {}, spawns: {}", mapId, factionSpawns);
     }
 
-    public synchronized FactionSpawns factionSpawnsGet(short mapId, short factionId)
+    public synchronized FactionSpawns factionSpawnsGet(short factionId)
     {
         return this.factionSpawnsMap.get(factionId);
     }
@@ -64,7 +66,7 @@ public class RespawnManager implements LogicService
         {
             case CREATED:
                 // Ensure entity does not already exist
-                controller.entityManager.remove(entity);
+                map.entityManager.remove(entity);
                 break;
             case NONE:
             case UPDATED:
@@ -176,7 +178,7 @@ public class RespawnManager implements LogicService
         entity.rebuildCachedVertices();
 
         // Add to world if new entity
-        if (entity.getState() == EntityState.CREATED && !controller.entityManager.add(entity))
+        if (entity.getState() == EntityState.CREATED && !map.entityManager.add(entity))
         {
             LOG.warn("Could not respawn entity, failed to add to entity manager - entity id: {}", entity.id);
             return false;

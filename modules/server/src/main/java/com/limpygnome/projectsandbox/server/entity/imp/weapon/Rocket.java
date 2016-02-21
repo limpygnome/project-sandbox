@@ -10,6 +10,7 @@ import com.limpygnome.projectsandbox.server.entity.physics.collisions.CollisionR
 import com.limpygnome.projectsandbox.server.entity.physics.collisions.CollisionResultMap;
 import com.limpygnome.projectsandbox.server.entity.physics.proximity.DefaultProximity;
 import com.limpygnome.projectsandbox.server.player.PlayerInfo;
+import com.limpygnome.projectsandbox.server.world.map.WorldMap;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -29,15 +30,9 @@ public class Rocket extends Entity
 
     private PlayerInfo playerInfoOwner;
 
-    /**
-     *
-     * @param controller
-     * @param playerInfoOwner Can be null
-     * @param initialSpeed
-     */
-    public Rocket(Controller controller, PlayerInfo playerInfoOwner, float initialSpeed)
+    public Rocket(WorldMap map, Controller controller, PlayerInfo playerInfoOwner, float initialSpeed)
     {
-        super((short) 9, (short) 12);
+        super(map, (short) 9, (short) 12);
 
         this.playerInfoOwner = playerInfoOwner;
         this.gameTimeCreated = controller.gameTime();
@@ -52,9 +47,9 @@ public class Rocket extends Entity
      * @param controller
      * @param playerInfo Can be null
      */
-    public Rocket(Controller controller, PlayerInfo playerInfo)
+    public Rocket(WorldMap map, Controller controller, PlayerInfo playerInfo)
     {
-        this(controller, playerInfo, ROCKET_SPEED_STEP);
+        this(map, controller, playerInfo, ROCKET_SPEED_STEP);
     }
 
     @Override

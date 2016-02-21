@@ -14,6 +14,7 @@ import com.limpygnome.projectsandbox.server.entity.imp.living.Player;
 import com.limpygnome.projectsandbox.server.entity.physics.Vector2;
 import com.limpygnome.projectsandbox.server.player.PlayerInfo;
 import com.limpygnome.projectsandbox.server.player.PlayerKeys;
+import com.limpygnome.projectsandbox.server.world.map.WorldMap;
 import com.limpygnome.projectsandbox.server.world.spawn.Spawn;
 
 import static com.limpygnome.projectsandbox.server.constant.entity.AbstractVehicleConstants.*;
@@ -51,9 +52,9 @@ public abstract class AbstractVehicle extends Entity
     protected Vector2[] playerEjectPositions;
     protected PlayerInfo[] players;
     
-    public AbstractVehicle(short width, short height, Vector2[] playerEjectPositions)
+    public AbstractVehicle(WorldMap map, short width, short height, Vector2[] playerEjectPositions)
     {
-        super(width, height);
+        super(map, width, height);
         
         if (playerEjectPositions.length < 1)
         {
@@ -191,7 +192,7 @@ public abstract class AbstractVehicle extends Entity
         Vector2 plyPos = ejectPosition.clone();
 
         // Create new player ent in position of vehicle
-        Entity entityPlayer = controller.playerService.playerEntCreate(playerInfo);
+        Entity entityPlayer = controller.playerService.playerEntCreate(map, playerInfo);
 
         // Add player to pos offset
         float plyx = playerEjectVectorPos(ejectPosition.x, entityPlayer.width / 2.0f);
@@ -205,7 +206,7 @@ public abstract class AbstractVehicle extends Entity
         plyPos = Vector2.add(plyPos, positionNew);
 
         // Spawn player
-        controller.respawnManager.respawn(new PositionPendingRespawn(
+        map.respawnManager.respawn(new PositionPendingRespawn(
                 controller,
                 entityPlayer,
                 new Spawn(plyPos.x, plyPos.y, rotation)
@@ -343,8 +344,8 @@ public abstract class AbstractVehicle extends Entity
             if (playerInfo != null)
             {
                 // Create and respawn player
-                Entity entityPlayer = controller.playerService.playerEntCreate(playerInfo);
-                controller.respawnManager.respawn(new EntityPendingRespawn(controller, entityPlayer));
+                Entity entityPlayer = controller.playerService.playerEntCreate(map, playerInfo);
+                map.respawnManager.respawn(new EntityPendingRespawn(controller, entityPlayer));
 
                 // Set seat to empty
                 players[i] = null;

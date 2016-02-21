@@ -38,7 +38,7 @@ public class EntityPendingRespawn extends PendingRespawn
         }
 
         // Attempt to spawn using spawns for faction
-        FactionSpawns factionSpawns = controller.respawnManager.factionSpawnsGet(controller.mapService.mainMap.mapId, entity.faction);
+        FactionSpawns factionSpawns = entity.map.respawnManager.factionSpawnsGet(entity.faction);
 
         if (factionSpawns == null)
         {

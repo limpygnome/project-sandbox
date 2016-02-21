@@ -8,13 +8,15 @@ import org.apache.logging.log4j.Logger;
 
 import java.util.HashMap;
 import java.util.List;
+import org.springframework.stereotype.Service;
 
 /**
- * Created by limpygnome on 07/07/15.
+ * Finds all of the annotated entities and builds a map for dynamically creating instances by name or identifier.
  */
-public class EntTypeMappingStore
+@Service
+public class EntTypeMappingStoreService
 {
-    private final static Logger LOG = LogManager.getLogger(EntTypeMappingStore.class);
+    private final static Logger LOG = LogManager.getLogger(EntTypeMappingStoreService.class);
 
     private static final String[] ENTS_CLASS_PATHS = new String[]
     {
@@ -24,12 +26,12 @@ public class EntTypeMappingStore
     private HashMap<Short, Class> typeIdToClass;
     private HashMap<String, Class> typeNameToClass;
 
-    public EntTypeMappingStore()
+    public EntTypeMappingStoreService()
     {
         this.typeIdToClass = new HashMap<>();
         this.typeNameToClass = new HashMap<>();
 
-        LOG.debug("Loading entity types...");
+        LOG.debug("loading entity types...");
 
         // Fetch annotations
         List<AnnotationInfo> annotationInfoList;
@@ -74,7 +76,7 @@ public class EntTypeMappingStore
             typeNameToClass.put(typeName, clazz);
         }
 
-        LOG.debug("Loaded {} imp of entities", typeIdToClass.size());
+        LOG.debug("loaded {} imp of entities", typeIdToClass.size());
     }
 
     public Class getEntityClassByTypeId(short typeId)
@@ -86,4 +88,5 @@ public class EntTypeMappingStore
     {
         return typeNameToClass.get(typeName);
     }
+
 }

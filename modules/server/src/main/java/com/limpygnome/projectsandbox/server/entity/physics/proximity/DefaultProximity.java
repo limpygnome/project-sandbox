@@ -15,6 +15,9 @@ import java.util.Map;
 
 /**
  * TODO: refactor this class to use a quadtree.
+ *
+ * TOOD: refactor for spring to inject this for a map/entity manager, rather than static methods, ew...
+ *
  * <p>
  * Created by limpygnome on 13/05/15.
  */
@@ -58,12 +61,12 @@ public class DefaultProximity
     {
         LinkedList<ProximityResult> result = new LinkedList<>();
 
-        synchronized (controller.entityManager)
+        synchronized (a.map.entityManager)
         {
             Entity b;
             float entDistance;
 
-            for (Map.Entry<Short, Entity> kv : controller.entityManager.entities.entrySet())
+            for (Map.Entry<Short, Entity> kv : a.map.entityManager.entities.entrySet())
             {
                 b = kv.getValue();
 

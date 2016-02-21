@@ -6,6 +6,7 @@ import com.limpygnome.projectsandbox.server.entity.physics.Vector2;
 import com.limpygnome.projectsandbox.server.inventory.Inventory;
 import com.limpygnome.projectsandbox.server.inventory.item.weapon.RocketLauncher;
 import com.limpygnome.projectsandbox.server.player.PlayerInfo;
+import com.limpygnome.projectsandbox.server.world.map.WorldMap;
 import com.limpygnome.projectsandbox.server.world.spawn.Spawn;
 
 /**
@@ -16,9 +17,10 @@ public class RocketCar extends AbstractVehicle
 {
     public Inventory inventory;
 
-    public RocketCar()
+    public RocketCar(WorldMap map)
     {
         super(
+                map,
                 (short) 24,
                 (short) 36,
                 new Vector2[]

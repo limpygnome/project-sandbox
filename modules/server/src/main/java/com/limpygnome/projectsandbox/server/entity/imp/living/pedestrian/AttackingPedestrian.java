@@ -2,6 +2,7 @@ package com.limpygnome.projectsandbox.server.entity.imp.living.pedestrian;
 
 import com.limpygnome.projectsandbox.server.entity.ai.IdleMode;
 import com.limpygnome.projectsandbox.server.entity.annotation.EntityType;
+import com.limpygnome.projectsandbox.server.world.map.WorldMap;
 
 import static com.limpygnome.projectsandbox.server.constant.entity.PedestrianConstants.*;
 
@@ -12,9 +13,10 @@ import static com.limpygnome.projectsandbox.server.constant.entity.PedestrianCon
 public class AttackingPedestrian extends AbstractPedestrian
 {
 
-    public AttackingPedestrian()
+    public AttackingPedestrian(WorldMap map)
     {
         super(
+                map,
                 ENT_WIDTH,
                 ENT_HEIGHT,
                 ATTACKING_PED_HEALTH,

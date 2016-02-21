@@ -9,6 +9,7 @@ import com.limpygnome.projectsandbox.server.packet.imp.entity.EntityUpdatesOutbo
 import com.limpygnome.projectsandbox.server.service.LogicService;
 import com.limpygnome.projectsandbox.server.util.IdCounterProvider;
 import com.limpygnome.projectsandbox.server.util.counters.IdCounterConsumer;
+import com.limpygnome.projectsandbox.server.world.map.WorldMap;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -16,7 +17,6 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 
 /**
  * Handles all of the entities in the world.
@@ -24,25 +24,33 @@ import org.springframework.stereotype.Service;
  * Notes:
  * - Any modifications to the internal collections should always synchronize on `entities`.
  */
-@Service
 public class EntityManager implements LogicService, IdCounterConsumer
 {
     private final static Logger LOG = LogManager.getLogger(EntityManager.class);
 
-    @Autowired
     private Controller controller;
+    private WorldMap map;
+
+    @Autowired
+    public EntTypeMappingStoreService entTypeMappingStoreService;
 
     public final HashMap<Short, Entity> entities;
     private final HashMap<Short, Entity> entitiesNew;
-    public EntTypeMappingStore entTypeMappingStore;
     private IdCounterProvider idCounterProvider;
 
-    public EntityManager()
+    public EntityManager(Controller controller, WorldMap map)
     {
+        this.controller = controller;
+        this.map = map;
+
+        // Setup collections...
         this.entities = new HashMap<>();
         this.entitiesNew = new HashMap<>();
-        this.entTypeMappingStore = new EntTypeMappingStore();
+        this.entTypeMappingStoreService = new EntTypeMappingStoreService();
         this.idCounterProvider = new IdCounterProvider(this);
+
+        // Inject dependencies...
+        controller.inject(this);
     }
 
     public Entity fetch(Short key)
@@ -174,8 +182,8 @@ public class EntityManager implements LogicService, IdCounterConsumer
 
                 // Fetch map boundaries
                 // TODO: update if we have multiple maps
-                float mapMaxX = controller.mapService.mainMap.tileData.maxX;
-                float mapMaxY = controller.mapService.mainMap.tileData.maxY;
+                float mapMaxX = map.tileData.maxX;
+                float mapMaxY = map.tileData.maxY;
 
                 // Perform collision check for each entity
                 CollisionResult collisionResult;
@@ -223,7 +231,7 @@ public class EntityManager implements LogicService, IdCounterConsumer
                         {
                             // Perform collision with map
                             // TODO: add support for multiple maps
-                            mapResults = SAT.collisionMap(controller.mapService.mainMap, entityA);
+                            mapResults = SAT.collisionMap(map, entityA);
 
                             for (CollisionResultMap mapResult : mapResults)
                             {
@@ -277,7 +285,7 @@ public class EntityManager implements LogicService, IdCounterConsumer
 
                 // Build update packet
                 entityUpdatesOutboundPacket = new EntityUpdatesOutboundPacket();
-                entityUpdatesOutboundPacket.build(controller.entityManager, false);
+                entityUpdatesOutboundPacket.build(this, false);
             }
 
             // Send updates to all players

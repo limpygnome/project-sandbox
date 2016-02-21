@@ -7,6 +7,7 @@ import com.limpygnome.projectsandbox.server.entity.physics.Vector2;
 import com.limpygnome.projectsandbox.server.inventory.Inventory;
 import com.limpygnome.projectsandbox.server.player.PlayerInfo;
 import com.limpygnome.projectsandbox.server.player.PlayerKeys;
+import com.limpygnome.projectsandbox.server.world.map.WorldMap;
 import com.limpygnome.projectsandbox.server.world.spawn.Spawn;
 
 import static com.limpygnome.projectsandbox.server.constant.PlayerConstants.*;
@@ -34,18 +35,18 @@ public class Player extends Entity
     public PlayerInfo playerInfo;
     public Inventory inventory;
 
-    public Player()
+    public Player(WorldMap map)
     {
-        super(PLAYER_WIDTH, PLAYER_HEIGHT);
+        super(map, PLAYER_WIDTH, PLAYER_HEIGHT);
 
         // Set default values
         this.movementSpeedFactor = DEFAULT_MOVEMENT_SPEED_FACTOR;
         this.rotationFactor = DEFAULT_ROTATION_FACTOR;
     }
     
-    public Player(Controller controller, PlayerInfo playerInfo)
+    public Player(WorldMap map, Controller controller, PlayerInfo playerInfo)
     {
-        this();
+        this(map);
         
         // Check player info is valid
         if (playerInfo == null)

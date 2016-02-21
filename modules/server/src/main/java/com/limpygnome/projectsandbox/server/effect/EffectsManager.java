@@ -10,24 +10,21 @@ import java.util.LinkedList;
 import java.util.List;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 
 /**
- * Created by limpygnome on 06/05/15.
+ * Manages and executes logic for effects.
  */
-@Service
 public class EffectsManager implements LogicService
 {
     private final static Logger LOG = LogManager.getLogger(EffectsManager.class);
 
-    @Autowired
     public Controller controller;
 
     private List<AbstractEffect> pendingSend;
 
-    public EffectsManager()
+    public EffectsManager(Controller controller)
     {
+        this.controller = controller;
         this.pendingSend = new LinkedList<>();
     }
 

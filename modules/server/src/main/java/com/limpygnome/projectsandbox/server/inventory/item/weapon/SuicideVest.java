@@ -73,7 +73,7 @@ public class SuicideVest extends AbstractWeapon
                     parent.positionNew.y,
                     ExplosionEffect.SubType.SUICIDE_VEST
             );
-            controller.effectsManager.add(explosionEffect);
+            parent.map.effectsManager.add(explosionEffect);
 
             // Kill the current player
             parent.kill(controller, parent, SuicideVestKiller.class);

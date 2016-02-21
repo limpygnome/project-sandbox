@@ -151,8 +151,13 @@ public abstract class AbstractWeapon extends AbstractInventoryItem
 
     protected void createBulletShotEffects(Controller controller, Vector2 source, float destX, float destY)
     {
-        controller.effectsManager.add(new BulletEffect(destX, destY));
-        controller.effectsManager.add(new TracerEffect(source, new Vector2(destX, destY)));
+        Entity entity = slot.inventory.parent;
+
+        if (entity != null)
+        {
+            entity.map.effectsManager.add(new BulletEffect(destX, destY));
+            entity.map.effectsManager.add(new TracerEffect(source, new Vector2(destX, destY)));
+        }
     }
 
     protected void fireDamageEntity(Controller controller, CastingResult castingResult, EntityCastVictim victim)

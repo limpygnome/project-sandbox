@@ -1,9 +1,5 @@
 package com.limpygnome.projectsandbox.server;
 
-import com.limpygnome.projectsandbox.server.effect.EffectsManager;
-import com.limpygnome.projectsandbox.server.entity.EntityManager;
-import com.limpygnome.projectsandbox.server.entity.RespawnManager;
-import com.limpygnome.projectsandbox.server.entity.ai.ArtificialIntelligenceManager;
 import com.limpygnome.projectsandbox.server.packet.PacketManager;
 import com.limpygnome.projectsandbox.server.player.ChatService;
 import com.limpygnome.projectsandbox.server.player.PlayerService;
@@ -14,6 +10,8 @@ import com.limpygnome.projectsandbox.server.threading.SocketEndpoint;
 import com.limpygnome.projectsandbox.server.world.map.MapService;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.config.AutowireCapableBeanFactory;
+import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Component;
 
 /**
@@ -22,6 +20,9 @@ import org.springframework.stereotype.Component;
 @Component
 public class Controller
 {
+    @Autowired
+    private ApplicationContext applicationContext;
+
     /**
      * The endpoint used to accept and transfer data between clients.
      */
@@ -37,16 +38,6 @@ public class Controller
 
     @Autowired
     public PacketManager packetManager;
-
-    @Autowired
-    public EntityManager entityManager;
-    @Autowired
-    public RespawnManager respawnManager;
-    @Autowired
-    public EffectsManager effectsManager;
-    @Autowired
-    public ArtificialIntelligenceManager artificialIntelligenceManager;
-
     @Autowired
     public PlayerService playerService;
     @Autowired
@@ -59,9 +50,6 @@ public class Controller
     @Autowired
     private List<LoadService> loadServices;
 
-    public Controller()
-    {
-    }
     
     public void start()
     {
@@ -97,6 +85,18 @@ public class Controller
     {
         // TODO: we should change this to be pausable etc?
         return System.currentTimeMillis();
+    }
+
+    /**
+     * Manually injects any dependencies into the provided object.
+     *
+     * @param o the object to receive dependency injection
+     */
+    public void inject(Object o)
+    {
+        AutowireCapableBeanFactory factory = applicationContext.getAutowireCapableBeanFactory();
+        factory.autowireBean(o);
+        factory.initializeBean(o, "bean");
     }
 
 }

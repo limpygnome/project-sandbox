@@ -3,6 +3,7 @@ package com.limpygnome.projectsandbox.server.world.map;
 import com.limpygnome.projectsandbox.server.Controller;
 
 import com.limpygnome.projectsandbox.server.service.LoadService;
+import com.limpygnome.projectsandbox.server.service.LogicService;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -16,7 +17,7 @@ import org.springframework.stereotype.Service;
  * Responsible for managing/handling maps.
  */
 @Service
-public class MapService implements LoadService
+public class MapService implements LoadService, LogicService
 {
     private final static Logger LOG = LogManager.getLogger(MapService.class);
 
@@ -32,7 +33,7 @@ public class MapService implements LoadService
 
     /* The mapMain/lobby map. */
     public WorldMap mainMap;
-    
+
     public MapService()
     {
         this.mapCache = new HashMap<>();
@@ -79,5 +80,18 @@ public class MapService implements LoadService
 
         LOG.info("Loaded {} maps, lobby: {} [uuid: {}]", mapCache.size(), mainMap.properties.name, mainMap.mapId);
     }
-    
+
+    @Override
+    public void logic()
+    {
+        // Execute logic for each map...
+        WorldMap map;
+
+        for (Map.Entry<Short, WorldMap> kv : mapCache.entrySet())
+        {
+            map = kv.getValue();
+            map.logic();
+        }
+    }
+
 }

@@ -12,6 +12,7 @@ import com.limpygnome.projectsandbox.server.packet.PacketData;
 import com.limpygnome.projectsandbox.server.player.PlayerInfo;
 import com.limpygnome.projectsandbox.server.util.CustomMath;
 import com.limpygnome.projectsandbox.server.Controller;
+import com.limpygnome.projectsandbox.server.world.map.WorldMap;
 import com.limpygnome.projectsandbox.server.world.spawn.Spawn;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -30,6 +31,11 @@ public strictfp abstract class Entity
     private final static Logger LOG = LogManager.getLogger(EntityManager.class);
 
     public static final short DEFAULT_FACTION = 0;
+
+    /**
+     * The map to which this entity belongs.
+     */
+    public WorldMap map;
     
     // The unique ID for the entity
     public short id;
@@ -81,8 +87,9 @@ public strictfp abstract class Entity
      */
     public boolean physicsIntangible;
     
-    public Entity(short width, short height)
+    public Entity(WorldMap map, short width, short height)
     {
+        this.map = map;
         this.id = 0;
         this.faction = DEFAULT_FACTION;
         this.spawn = null;
@@ -504,7 +511,7 @@ public strictfp abstract class Entity
         this.flagDead = true;
 
         // Default action is to respawn the entity
-        controller.respawnManager.respawn(new EntityPendingRespawn(controller, this, DEFAULT_RESPAWN_TIME_MS));
+        map.respawnManager.respawn(new EntityPendingRespawn(controller, this, DEFAULT_RESPAWN_TIME_MS));
     }
     
     public void eventPacketEntCreated(PacketData packetData)

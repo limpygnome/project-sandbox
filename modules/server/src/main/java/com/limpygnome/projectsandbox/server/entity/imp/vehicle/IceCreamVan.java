@@ -2,6 +2,7 @@ package com.limpygnome.projectsandbox.server.entity.imp.vehicle;
 
 import com.limpygnome.projectsandbox.server.entity.annotation.EntityType;
 import com.limpygnome.projectsandbox.server.entity.physics.Vector2;
+import com.limpygnome.projectsandbox.server.world.map.WorldMap;
 
 /**
  *
@@ -10,9 +11,10 @@ import com.limpygnome.projectsandbox.server.entity.physics.Vector2;
 @EntityType(typeId = 20, typeName = "vehicle/ice-cream-van")
 public class IceCreamVan extends AbstractVehicle
 {
-    public IceCreamVan()
+    public IceCreamVan(WorldMap map)
     {
         super(
+                map,
                 (short) 32,
                 (short) 64,
                 new Vector2[]
