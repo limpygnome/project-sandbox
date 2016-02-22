@@ -4,13 +4,14 @@
     "height" : 128,
     "url" : "/content/game/images/players2.png",
     "description" : "The source file for main character textures.",
-	"textures" :
-	[
-		{
-			"name" : "players/annie",
-			"speed" : 1000,
-			"frames" :
-			[
+    "textures" :
+    [
+        {
+            "name" : "players/annie",
+            "speed" : 1000,
+            "type" : "generic",
+            "frames" :
+            [
                 [
                     0   ,   0   ,
                     64  ,   0   ,
@@ -35,12 +36,13 @@
                     128 ,   128 ,
                     64  ,   128
                 ]
-			]
-		},
+            ]
+        },
         {
             "name" : "players/default",
-			"speed" : 0,
-			"frames" :
+            "speed" : 0,
+            "type" : "generic",
+            "frames" :
             [
                 [
                     0   ,   64  ,
@@ -52,8 +54,9 @@
         },
         {
             "name" : "players/default_running",
-			"speed" : 120,
-			"frames" :
+            "speed" : 120,
+            "type" : "generic",
+            "frames" :
             [
                 [
                     0   ,   128 ,
@@ -69,5 +72,5 @@
                 ]
             ]
         }
-	]
+    ]
 }

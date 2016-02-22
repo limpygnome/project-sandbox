@@ -4,20 +4,21 @@
     "height" : 128,
     "url" : "/content/game/images/vehicles.png",
     "description" : "The source file for vehicle textures.",
-	"textures" :
-	[
-		{
-			"name" : "vehicles/ice-cream-van",
-			"speed" : 0,
-			"frames" :
-			[
-				[
-					0	,	128	,
-					64	,	128	,
-					64	,	0	,
-					0	,	0
-				]
-			]
-		}
-	]
+    "textures" :
+    [
+        {
+            "name" : "vehicles/ice-cream-van",
+            "speed" : 0,
+            "type" : "generic",
+            "frames" :
+            [
+                [
+                    0    ,    128    ,
+                    64    ,    128    ,
+                    64    ,    0    ,
+                    0    ,    0
+                ]
+            ]
+        }
+    ]
 }
