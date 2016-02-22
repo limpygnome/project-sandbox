@@ -124,10 +124,8 @@ projectSandbox.textures =
                 framesResult = self.parseFrameType2D(frames, src);
                 break;
             case "3d":
-                //framesResult = self.parseFrameType3D(frames, src);
-                //break;
-                console.error("engine / textures - 3d not implemented");
-                return;
+                framesResult = self.parseFrameType3D(frames, src);
+                break;
             default:
                 console.error("engine / textures - cannot build texture - no type specified");
                 return;
@@ -149,6 +147,7 @@ projectSandbox.textures =
         // -- Check number of vertices per frame from first item
         // -- -- Note: this is actually not verts, but total co-ordinates - divide by 2 for total verts
         var expectedVertsPerFrame = frames[0].length;
+
         if (expectedVertsPerFrame == 0)
         {
             console.error("Textures - cannot build texture - no vertex data - name: " + name);
@@ -232,11 +231,77 @@ projectSandbox.textures =
 
     parseFrameType3D : function(frames, src)
     {
-        var coordinatesPerFrame = 8 * 6; // 8 per face, 6 faces
-        var frameData = new Float32Array(frames.length * coordinatesPerFrame);
+        var self = projectSandbox.textures;
+
+        var coordinatesPerFace = 8;
+        var faces = 5;
+
+        var frameData = new Float32Array(frames.length * coordinatesPerFace * faces);
+        var frameDataOffset = 0;
+
+        for (var f = 0; f < frames.length; f++)
+        {
+            frame = frames[f];
+
+            // Compute frame data
+            // -- Top
+            self.buildFrameDataFourVerts(
+                frameData,
+                frameDataOffset,
+                src,
+                frame["top"]["x"], frame["top"]["y"], frame["top"]["width"], frame["top"]["height"]
+            );
+            frameDataOffset += coordinatesPerFace;
+
+            // NOT IMPLEMENTED IN BUFFER CACHE AT PRESENT:
+            // -- Bottom
+//            self.buildFrameDataFourVerts(
+//                frameData,
+//                frameDataOffset,
+//                src,
+//                frame["bottom"]["x"], frame["bottom"]["y"], frame["bottom"]["width"], frame["bottom"]["height"]
+//            );
+//            frameDataOffset += coordinatesPerFace;
+
+            // -- North
+            self.buildFrameDataFourVerts(
+                frameData,
+                frameDataOffset,
+                src,
+                frame["north"]["x"], frame["north"]["y"], frame["north"]["width"], frame["north"]["height"]
+            );
+            frameDataOffset += coordinatesPerFace;
+
+            // -- East
+            self.buildFrameDataFourVerts(
+                frameData,
+                frameDataOffset,
+                src,
+                frame["east"]["x"], frame["east"]["y"], frame["east"]["width"], frame["east"]["height"]
+            );
+            frameDataOffset += coordinatesPerFace;
+
+            // -- South
+            self.buildFrameDataFourVerts(
+                frameData,
+                frameDataOffset,
+                src,
+                frame["south"]["x"], frame["south"]["y"], frame["south"]["width"], frame["south"]["height"]
+            );
+            frameDataOffset += coordinatesPerFace;
+
+            // -- West
+            self.buildFrameDataFourVerts(
+                frameData,
+                frameDataOffset,
+                src,
+                frame["west"]["x"], frame["west"]["y"], frame["west"]["width"], frame["west"]["height"]
+            );
+            frameDataOffset += coordinatesPerFace;
+        }
 
         return {
-                    "vertices" : coordinatesPerFrame / 2,
+                    "vertices" : (coordinatesPerFace * faces) / 2,
                     "frameData" : frameData
                };
     },
@@ -247,28 +312,28 @@ projectSandbox.textures =
         frameDataArray[frameDataOffset + 0] = x;
         frameDataArray[frameDataOffset + 1] = y;
 
-        // -- Top,left
-        frameDataArray[frameDataOffset + 2] = x;
-        frameDataArray[frameDataOffset + 3] = y + (height - 1);
+        // -- Bottom,right
+        frameDataArray[frameDataOffset + 2] = x + (width - 1);
+        frameDataArray[frameDataOffset + 3] = y;
 
         // -- Top,right
-        frameDataArray[frameDataOffset + 4] = x + (height - 1);
+        frameDataArray[frameDataOffset + 4] = x + (width - 1);
         frameDataArray[frameDataOffset + 5] = y + (height - 1);
 
-        // -- Top,bottom
-        frameDataArray[frameDataOffset + 4] = x + (height - 1);
-        frameDataArray[frameDataOffset + 5] = y;
+        // -- Top,left
+        frameDataArray[frameDataOffset + 6] = x;
+        frameDataArray[frameDataOffset + 7] = y + (height - 1);
 
         // Now convert co-ordinates into unit vector
         for (var i = 0; i < 8; i++)
         {
             if (i % 2 == 0)
             {
-                frameDataArray[frameDataOffset + i] / src.width;
+                frameDataArray[frameDataOffset + i] /= src.width;
             }
             else
             {
-                frameDataArray[frameDataOffset + i] / src.height;
+                frameDataArray[frameDataOffset + i] /= src.height;
             }
         }
     },
