@@ -7,18 +7,18 @@
         "lobby" : true
     },
 
-    "tile_properties" :
+    "tileProperties" :
     {
-        "tile_size" : 64,
-        "tiles_width" : 18,
-        "tiles_height" : 12
+        "tileSize" : 64,
+        "tilesWidth" : 18,
+        "tilesHeight" : 12
     },
 
-    "tile_types" :
+    "tileTypes" :
     [
         {
             "name" : "g",
-            "texture" : "world/grass2",
+            "texture" : "world/grass",
             
             "properties" :
             {
@@ -38,7 +38,7 @@
         },
         {
             "name" : "b",
-            "texture" : "world/building2",
+            "texture" : "world/building",
             
             "properties" :
             {
@@ -143,7 +143,7 @@
         },
         {
             "typeName" : "living/pedestrian/attacking",
-            "count" : 10,
+            "count" : 50,
             "faction" : 3000
         }
     ],
