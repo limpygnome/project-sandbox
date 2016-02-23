@@ -60,12 +60,23 @@ public class PacketData
         add(new Long32DataType(value));
     }
 
-    public void add(String value)
+    public void addAscii(String value)
     {
-        add(value, StringDataType.LengthSize.LENGTH_8);
+        add(new StringDataType(value, StringCharSize.LENGTH_8_BITS));
     }
 
-    public void add(String value, StringDataType.LengthSize lengthSize)
+    public void addUtf8(String value)
+    {
+        add(new StringDataType(value, StringCharSize.LENGTH_16_BITS));
+    }
+
+    /**
+     * Used to add string data.
+     *
+     * @param value the value to add
+     * @param lengthSize the number of bytes per a character
+     */
+    public void add(String value, StringCharSize lengthSize)
     {
         add(new StringDataType(value, lengthSize));
     }

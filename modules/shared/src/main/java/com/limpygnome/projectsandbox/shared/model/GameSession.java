@@ -98,16 +98,6 @@ public class GameSession implements Serializable
         }
     }
 
-    /**
-     * The actual nickname for the game session, only usable with guest sessions.
-     *
-     * @return
-     */
-    public String getSessionNickname()
-    {
-        return nickname;
-    }
-
     public void setNickname(String nickname)
     {
         this.nickname = nickname;

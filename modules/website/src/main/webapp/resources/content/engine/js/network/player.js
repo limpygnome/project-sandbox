@@ -116,7 +116,7 @@ projectSandbox.network.player =
         var playerId = dataView.getInt16(offset);
         offset += 2;
 
-        var displayName = projectSandbox.utils.parseText(data, dataView, offset);
+        var displayName = projectSandbox.utils.parseText16(data, dataView, offset);
         offset += displayName.length + 1;
 
         // Check player does not already exist
@@ -198,7 +198,9 @@ projectSandbox.network.player =
     packetPlayerChatMessage: function(data, dataView)
     {
         var playerId = dataView.getInt16(2);
-        var message = projectSandbox.utils.parseText16(data, dataView, 4);
+        var nickname = projectSandbox.utils.parseText16(data, dataView, 4);
+        // TODO: major issue; not all chars use two bytes, need better way of parsing raw data
+        var message = projectSandbox.utils.parseText16(data, dataView, 6 + nickname.length);
 
         // Fetch player
         var player = projectSandbox.players.get(playerId);
@@ -206,9 +208,9 @@ projectSandbox.network.player =
         if (player != null)
         {
             // Invoke UI to handle message
-            projectSandbox.game.ui.hook_playerChatMessage(player, message);
+            projectSandbox.game.ui.hook_playerChatMessage(player, nickname, message);
 
-            console.info("engine/player - chat message - player id: " + playerId, ", msg: " + message);
+            console.info("engine/player - chat message - player id: " + playerId, ", nickname: " + nickname + ", msg: " + message);
         }
         else
         {

@@ -3,6 +3,7 @@ package com.limpygnome.projectsandbox.server.packet.imp.inventory;
 import com.limpygnome.projectsandbox.server.Controller;
 import com.limpygnome.projectsandbox.server.inventory.item.AbstractInventoryItem;
 import com.limpygnome.projectsandbox.server.packet.OutboundPacket;
+import com.limpygnome.projectsandbox.server.packet.datatype.StringCharSize;
 
 /**
  * Created by limpygnome on 28/04/15.
@@ -44,7 +45,7 @@ public class InventoryUpdatesOutboundPacket extends OutboundPacket
         packetData.add((byte)'C');
         packetData.add(item.slot.idByte);
         packetData.add(item.typeId);
-        packetData.add(item.eventFetchItemText(controller));
+        packetData.addAscii(item.eventFetchItemText(controller));
     }
 
     /**
@@ -63,7 +64,7 @@ public class InventoryUpdatesOutboundPacket extends OutboundPacket
     {
         packetData.add((byte)'M');
         packetData.add(item.slot.idByte);
-        packetData.add(item.eventFetchItemText(controller));
+        packetData.addAscii(item.eventFetchItemText(controller));
     }
 
     public boolean isEmpty()

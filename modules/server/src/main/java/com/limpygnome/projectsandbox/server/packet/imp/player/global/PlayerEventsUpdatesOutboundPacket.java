@@ -18,7 +18,7 @@ public class PlayerEventsUpdatesOutboundPacket extends OutboundPacket
     {
         packetData.add('J');
         packetData.add(playerInfo.playerId);
-        packetData.add(playerInfo.session.getNickname());
+        packetData.addUtf8(playerInfo.session.getNickname());
     }
 
     public void writePlayerInfoUpdates(PlayerInfo playerInfo, boolean forced)
