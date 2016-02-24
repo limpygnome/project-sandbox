@@ -37,7 +37,7 @@ public class PacketData
 
     public void add(float value)
     {
-        add(new FloatDataType(value));
+        add(new Float32DataType(value));
     }
 
     public void add(int value)

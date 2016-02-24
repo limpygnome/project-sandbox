@@ -197,10 +197,12 @@ projectSandbox.network.player =
 
     packetPlayerChatMessage: function(data, dataView)
     {
-        var playerId = dataView.getInt16(2);
-        var nickname = projectSandbox.utils.parseText16(data, dataView, 4);
-        // TODO: major issue; not all chars use two bytes, need better way of parsing raw data
-        var message = projectSandbox.utils.parseText16(data, dataView, 6 + nickname.length);
+        // TODO: remove/refactor, only a test...
+        var packet = new projectSandbox.network.Packet(data, 2);
+
+        var playerId = packet.readShort();
+        var nickname = packet.readUtf8();
+        var message = packet.readUtf8();
 
         // Fetch player
         var player = projectSandbox.players.get(playerId);

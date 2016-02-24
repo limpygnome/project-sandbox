@@ -149,6 +149,7 @@ projectSandbox.utils =
         return min + v;
     },
 
+    // DEPRECATED
     parseText: function(data, dataView, offset)
     {
         var length = dataView.getInt8(offset);
@@ -157,6 +158,7 @@ projectSandbox.utils =
         return text;
     },
 
+    // DEPRECATED
     parseText16: function(data, dataView, offset)
     {
         var length = dataView.getInt16(offset);
