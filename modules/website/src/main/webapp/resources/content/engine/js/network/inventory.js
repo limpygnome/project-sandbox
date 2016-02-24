@@ -1,12 +1,14 @@
 projectSandbox.network.inventory =
 {
-    packet: function(subType, data)
+    handlePacket: function(packet)
     {
+        var subType = packet.readChar();
+
         switch (subType)
         {
             // Updates
             case 'U':
-                this.packetInventoryUpdates(data);
+                this.packetInventoryUpdates(packet);
                 return;
 
             default:
@@ -15,40 +17,35 @@ projectSandbox.network.inventory =
         }
     },
 
-    packetInventoryUpdates: function(data)
+    packetInventoryUpdates: function(packet)
     {
-        var dataView = new DataView(data.buffer);
-
-        var offset = 2; // maintype/subtype
-
         var updateType;
 
-        while (offset < data.length)
+        while (packet.hasMoreData())
         {
             // Read the type of update
-            updateType = String.fromCharCode(dataView.getInt8(offset));
-            offset += 1;
+            updateType = packet.readChar();
 
             // Handle the rest of the data based on the type
             switch (updateType)
             {
                 case "R":
-                    offset = this.packetInventoryReset(data, dataView, offset);
+                    offset = this.packetInventoryReset(packet);
                     break;
                 case "S":
-                    offset = this.packetInventoryItemSelected(data, dataView, offset);
+                    offset = this.packetInventoryItemSelected(packet);
                     break;
                 case "N":
-                    offset = this.packetInventoryItemNonSelected(data, dataView, offset);
+                    offset = this.packetInventoryItemNonSelected(packet);
                     break;
                 case "C":
-                    offset = this.packetInventoryItemCreated(data, dataView, offset);
+                    offset = this.packetInventoryItemCreated(packet);
                     break;
                 case "D":
-                    offset = this.packetInventoryItemRemoved(data, dataView, offset);
+                    offset = this.packetInventoryItemRemoved(packet);
                     break;
                 case "M":
-                    offset = this.packetInventoryItemChanged(data, dataView, offset);
+                    offset = this.packetInventoryItemChanged(packet);
                     break;
                 default:
                     console.error("Inventory - unhandled update type - " + updateType);
@@ -57,7 +54,7 @@ projectSandbox.network.inventory =
         }
     },
 
-    packetInventoryReset: function(data, dataView, offset)
+    packetInventoryReset: function(packet)
     {
         // Reset internal inventory
         var inventory = projectSandbox.inventory;
@@ -66,14 +63,12 @@ projectSandbox.network.inventory =
         // Inform UI to reset
         var gameUI = projectSandbox.game.ui;
         gameUI.hook_inventoryReset();
-
-        return offset;
     },
 
-    packetInventoryItemSelected: function(data, dataView, offset)
+    packetInventoryItemSelected: function(packet)
     {
         // Read data
-        var slotId = dataView.getInt8(offset);
+        var slotId = packet.readByte();
 
         // Update internal selected slot
         var inventory = projectSandbox.inventory;
@@ -87,11 +82,9 @@ projectSandbox.network.inventory =
         gameUI.hook_inventorySlotSelected(inventoryItem);
 
         console.debug("engine/network/inventory - item selected - " + slotId);
-
-        return offset + 1;
     },
 
-    packetInventoryItemNonSelected: function(data, dataView, offset)
+    packetInventoryItemNonSelected: function(packet)
     {
         // Update internal inventory
         var inventory = projectSandbox.inventory;
@@ -106,18 +99,12 @@ projectSandbox.network.inventory =
         return offset;
     },
 
-    packetInventoryItemCreated: function(data, dataView, offset)
+    packetInventoryItemCreated: function(packet)
     {
         // Read data
-        var slotId = dataView.getInt8(offset);
-        offset += 1;
-
-        var typeId = dataView.getInt16(offset);
-        offset += 2;
-
-        var textLen = dataView.getInt8(offset);
-        var text = String.fromCharCode.apply(String, data.subarray(offset + 1, offset + 1 + textLen));
-        offset += 1 + textLen;
+        var slotId = packet.readByte();
+        var typeId = packet.readShort();
+        var text = packet.readAscii();
 
         // Check it doesn't already exist
         var inventory = projectSandbox.inventory;
@@ -138,15 +125,12 @@ projectSandbox.network.inventory =
         // Inform UI
         var gameUI = projectSandbox.game.ui;
         gameUI.hook_inventorySlotCreate(inventoryItem);
-
-        return offset;
     },
 
-    packetInventoryItemRemoved: function(data, dataView, offset)
+    packetInventoryItemRemoved: function(packet)
     {
         // Read data
-        var slotId = dataView.getInt8(offset);
-        offset += 1;
+        var slotId = packet.readByte();
 
         // Fetch item
         var inventory = projectSandbox.inventory;
@@ -177,19 +161,13 @@ projectSandbox.network.inventory =
         {
             console.error("engine/network/inventory - attempted to remove missing item: " + slotId);
         }
-
-        return offset;
     },
 
-    packetInventoryItemChanged: function(data, dataView, offset)
+    packetInventoryItemChanged: function(packet)
     {
         // Read data
-        var slotId = dataView.getInt8(offset);
-        offset += 1;
-
-        var textLen = dataView.getInt8(offset);
-        var text = String.fromCharCode.apply(String, data.subarray(offset + 1, offset + 1 + textLen));
-        offset += 1 + textLen;
+        var slotId = packet.readByte();
+        var text = packet.readAscii();
 
         // Fetch item
         var inventory = projectSandbox.inventory;
@@ -210,7 +188,6 @@ projectSandbox.network.inventory =
         {
             console.error("engine/network/inventory - change occurred for missing item: " + slotId);
         }
-
-        return offset;
     }
+
 }

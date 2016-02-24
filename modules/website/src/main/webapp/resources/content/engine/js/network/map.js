@@ -1,42 +1,42 @@
 projectSandbox.network.map =
 {
-    packet: function(data, dataView, subType)
+    handlePacket: function(packet)
     {
+        var subType = packet.readChar();
+
         switch (subType)
         {
+            // Read map data
             case "D":
-                this.packetMapData(data);
+                this.packetMapData(packet);
                 return;
+
             default:
                 console.error("engine/network/map - unknown sub-type - " + subType);
                 return;
         }
     },
 
-    packetMapData: function(data)
+    packetMapData: function(packet)
     {
-        var dataView = new DataView(data.buffer);
-        var offset = 2;
-
         // Reset map
         projectSandbox.map.reset();
 
         // Parse number of tile types
-        var numTileTypes = dataView.getInt16(offset);
-        offset += 2;
+        var numTileTypes = packet.readShort();
 
         // Parse tile types
         for(i = 0; i < numTileTypes; i++)
         {
-            offset += this.packetMapDataTileType(data, dataView, offset);
+            offset += this.packetMapDataTileType(packet);
         }
 
         // Parse attributes
-        var mapId = dataView.getInt16(offset);
-        var tileSize = dataView.getInt16(offset + 2);
-        var width = dataView.getInt16(offset + 4);
-        var height = dataView.getInt16(offset + 6);
-        offset += 8;
+        // TODO: change to UUID...
+        var mapId = packet.readShort();
+        var tileSize = packet.readShort();
+        var width = packet.readShort();
+        var height = packet.readShort();
 
         // Setup map
         projectSandbox.map.tileSize = tileSize;
@@ -45,14 +45,15 @@ projectSandbox.network.map =
 
         // Parse tiles
         var type;
+
         for(y = height - 1; y >=0 ; y--)
         {
             projectSandbox.map.tiles[y] = [];
+
             for(x = 0; x < width; x++)
             {
-                type = dataView.getInt16(offset);
+                type = packet.readShort();
                 projectSandbox.map.tiles[y][x] = type;
-                offset += 2;
             }
         }
 
@@ -60,24 +61,16 @@ projectSandbox.network.map =
         projectSandbox.map.setup();
     },
 
-    packetMapDataTileType: function(data, dataView, offset)
+    packetMapDataTileType: function(packet)
     {
-        var originalOffset = offset;
-
-        var id = dataView.getInt16(offset);
-        offset += 2;
-
-        var height = dataView.getInt16(offset);
-        offset += 2;
-
-        var textureNameLen = dataView.getInt8(offset);
-        var textureName = String.fromCharCode.apply(String, data.subarray(offset + 1, offset + 1 + textureNameLen));
-        offset += 1 + textureNameLen;
+        var id = packet.readShort();
+        var height = packet.readShort();
+        var textureName = packet.readAscii();
 
         // Fetch texture
         var texture = projectSandbox.textures.get(textureName);
 
-        if (texture == undefined || texture == null)
+        if (texture == null)
         {
             texture = projectSandbox.textures.get("error");
             console.error("engine/network/map - failed to load tile type texture - id : " + id + ", texture name: '" + textureName + "'");
@@ -85,7 +78,6 @@ projectSandbox.network.map =
 
         // Set tile type
         projectSandbox.map.types[id] = [texture, height];
-
-        return offset - originalOffset;
     }
+
 }

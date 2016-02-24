@@ -13,9 +13,21 @@ projectSandbox.network.Packet = function(data, bytesRead)
     this.dataView = new DataView(data.buffer);
 }
 
+projectSandbox.network.Packet.prototype.hasMoreData = function()
+{
+    return this.bytesRead < this.data.length;
+}
+
 projectSandbox.network.Packet.prototype.readByte = function()
 {
     var value = this.dataView.getInt8(this.bytesRead);
+    this.bytesRead += 1;
+    return value;
+}
+
+projectSandbox.network.Packet.prototype.readChar = function()
+{
+    var value = String.fromCharCode(this.data[this.bytesRead]);
     this.bytesRead += 1;
     return value;
 }
@@ -81,7 +93,7 @@ projectSandbox.network.Packet.prototype.readUtf8 = function()
     );
 
     // Increment bytes read
-    this.bytesRead += 1 + length;
+    this.bytesRead += 2 + length;
 
     return text;
 }

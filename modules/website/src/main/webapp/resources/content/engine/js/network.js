@@ -88,44 +88,42 @@ projectSandbox.network =
     wsEventMessage: function(event)
     {
         var data = new Uint8Array(event.data);
-        var dataView = new DataView(data.buffer);
-        
-        var mainType = String.fromCharCode(data[0]);
-        var subType = String.fromCharCode(data[1]);
 
-        //console.debug("Received packet - mt: " + mainType + ", st: " + subType);
-        //console.debug(data);
+        // Create packet
+        var packet = new projectSandbox.network.Packet(data, 0);
+
+        var mainType = packet.readChar();
 
         switch (mainType)
         {
             // Entities
             case "E":
-                projectSandbox.network.entities.packet(data, dataView, subType);
+                projectSandbox.network.entities.handlePacket(packet);
                 return;
 
             // Maps
             case "M":
-                projectSandbox.network.map.packet(data, dataView, subType);
+                projectSandbox.network.map.handlePacket(packet);
                 return;
 
             // Players
             case "P":
-                projectSandbox.network.player.packet(data, dataView, subType);
+                projectSandbox.network.player.handlePacket(packet);
                 return;
 
             // Inventory
             case "I":
-                projectSandbox.network.inventory.packet(subType, data);
+                projectSandbox.network.inventory.handlePacket(packet);
                 return;
 
             // Effects
             case "Z":
-                projectSandbox.game.effects.packet(data, dataView, subType);
+                projectSandbox.game.effects.handlePacket(packet);
                 return;
 
             // Sessions
             case "S":
-                projectSandbox.network.session.packet(data, dataView, subType);
+                projectSandbox.network.session.handlePacket(packet);
                 return;
         }
         

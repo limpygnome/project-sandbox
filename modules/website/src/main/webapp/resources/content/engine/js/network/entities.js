@@ -1,69 +1,62 @@
 projectSandbox.network.entities =
 {
-    packet: function(data, dataView, subType)
+    handlePacket: function(packet)
     {
+        var subType = packet.readChar();
+
         switch (subType)
         {
             case "U":
-                this.packetUpdates(data, dataView);
+                this.packetUpdates(packet);
                 break;
+
             default:
                 console.error("engine/network/entities - unknown sub-type - " + subType);
                 break;
         }
     },
 
-    packetUpdates: function(data, dataView)
+    packetUpdates: function(packet)
     {
-        var offset = 2; // maintype / subtype = 2 bytes
-
         var updateType;
         var id;
-        var bytesRead;
 
-        while (offset < data.length)
+        while (packet.hasMoreData())
         {
             // Retrieve update type and entity id
-            updateType = String.fromCharCode(dataView.getInt8(offset));
-            id = dataView.getInt16(offset + 1);
-
-            // Increment offset
-            offset += 3; // 1 byte for update type, 2 bytes for id
+            updateType = packet.readChar();
+            id = packet.readShort();
 
             // Handle update based on type
             switch(updateType)
             {
                 case "C":
-                    bytesRead = this.packetUpdatesEntCreated(data, dataView, id, offset);
+                    this.packetUpdatesEntCreated(packet, id);
                     break;
                 case "U":
-                    bytesRead = this.packetUpdatesEntUpdated(data, dataView, id, offset);
+                    this.packetUpdatesEntUpdated(packet, id);
                     break;
                 case "D":
-                    bytesRead = this.packetUpdatesEntDeleted(data, dataView, id, offset);
+                    this.packetUpdatesEntDeleted(packet, id);
                     break;
                 default:
                     console.log("engine/network/entities - unknown entity update type '" + updateType + "'");
                     break;
             }
-
-            // Increment offset
-            offset += bytesRead; // 1 byte for update type, 2 bytes for ent id
         }
     },
 
-    packetUpdatesEntCreated: function(data, dataView, id, offset)
+    packetUpdatesEntCreated: function(packet, id)
     {
         var originalOffset = offset;
 
         // Parse data
-        var entityType = dataView.getInt16(offset);
-        offset += 2;
-        var maxHealth = dataView.getFloat32(offset);
-        offset += 4;
+        var entityType = packet.readShort();
+        var maxHealth = packet.readFloat();
 
         // Create entity based on type
         var ent = null;
+
         switch(entityType)
         {
             default:
@@ -100,6 +93,9 @@ projectSandbox.network.entities =
 
         if (ent != null)
         {
+            // Set ID
+            ent.id = id;
+
             // Set max health
             ent.maxHealth = maxHealth;
 
@@ -108,10 +104,8 @@ projectSandbox.network.entities =
             // Add to world
             projectSandbox.entities.set(id, ent);
 
-            console.log("engine/network/entities - entity " + id + " created");
+            console.debug("engine/network/entities - entity " + id + " created");
         }
-
-        return offset - originalOffset;
     },
 
     UPDATEMASK_ALIVE: 1,
@@ -120,18 +114,15 @@ projectSandbox.network.entities =
     UPDATEMASK_ROTATION: 8,
     UPDATEMASK_HEALTH: 16,
 
-    packetUpdatesEntUpdated: function(data, dataView, id, offset)
+    packetUpdatesEntUpdated: function(packet, id)
     {
-        var originalOffset = offset;
-
         // Find entity
         ent = projectSandbox.entities.get(id);
 
         if (ent)
         {
             // Read mask
-            var mask = dataView.getInt8(offset);
-            offset += 1;
+            var mask = packet.readByte();
 
             // Read updated params
             if ((mask & this.UPDATEMASK_ALIVE) == this.UPDATEMASK_ALIVE)
@@ -152,45 +143,39 @@ projectSandbox.network.entities =
                     console.debug("engine/network/entities - entity dead - entity id: " + id);
 
                     // Raise death event
-                    this.invokeEntityDeath(id, ent);
+                    this.invokeEntityDeath(ent);
                 }
             }
 
             if ((mask & this.UPDATEMASK_X) == this.UPDATEMASK_X)
             {
-                ent.x = dataView.getFloat32(offset);
-                offset += 4;
+                ent.x = packet.readFloat();
             }
             if ((mask & this.UPDATEMASK_Y) == this.UPDATEMASK_Y)
             {
-                ent.y = dataView.getFloat32(offset);
-                offset += 4;
+                ent.y = packet.readFloat();
             }
             if ((mask & this.UPDATEMASK_ROTATION) == this.UPDATEMASK_ROTATION)
             {
-                ent.rotation = dataView.getFloat32(offset);
-                offset += 4;
+                ent.rotation = packet.readFloat();
             }
             if ((mask & this.UPDATEMASK_HEALTH) == this.UPDATEMASK_HEALTH)
             {
-                ent.health = dataView.getFloat32(offset);
-                offset += 4;
+                ent.health = packet.readFloat();
             }
 
             // Allow ent to parse custom update bytes
-            offset = ent.readBytes_update(data, dataView, id, offset);
+            offset = ent.readBytesUpdate(packet);
 
-            console.log("engine/network/entities - entity " + id + " updated");
+            console.debug("engine/network/entities - entity " + id + " updated");
         }
         else
         {
             console.warn("engine/network/entities - entity with id " + id + " not found for update");
         }
-
-        return offset - originalOffset;
     },
 
-    packetUpdatesEntDeleted: function(data, dataView, id, offset)
+    packetUpdatesEntDeleted: function(packet, id)
     {
         // Remove entity from the world
         var entity = projectSandbox.entities.get(id);
@@ -201,18 +186,17 @@ projectSandbox.network.entities =
             projectSandbox.entities.delete(id);
 
             // Raise death event
-            this.invokeEntityDeath(id, entity);
+            this.invokeEntityDeath(entity);
 
-            console.log("engine/network/entities - entity " + id + " deleted");
+            console.debug("engine/network/entities - entity " + id + " deleted");
         }
         else
         {
             console.warn("engine/network/entities - entity " + id + " not found for deletion");
         }
-        return 0;
     },
 
-    invokeEntityDeath: function(id, entity)
+    invokeEntityDeath: function(entity)
     {
         // Invoke death event
         if (entity.eventDeath)
