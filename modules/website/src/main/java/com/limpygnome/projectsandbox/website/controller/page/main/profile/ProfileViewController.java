@@ -102,16 +102,16 @@ public class ProfileViewController extends BaseController
         ModelAndView modelAndView = createMV("main/profile", "profile - " + profileUser.getNickname());
 
         // Check if the user is online
-        boolean online;
-        int secondsSinceOnline = Seconds.secondsBetween(gameSession.getPlayerMetrics().getLastUpdated(), DateTime.now()).getSeconds();
+        boolean online = false;
 
-        if (gameSession != null && secondsSinceOnline < SECONDS_LAST_UPDATED_METRICS_DISPLAY_ONLINE)
+        if (gameSession != null)
         {
-            online = true;
-        }
-        else
-        {
-            online = false;
+            int secondsSinceOnline = Seconds.secondsBetween(gameSession.getPlayerMetrics().getLastUpdated(), DateTime.now()).getSeconds();
+
+            if (secondsSinceOnline < SECONDS_LAST_UPDATED_METRICS_DISPLAY_ONLINE)
+            {
+                online = true;
+            }
         }
 
         // Attach objects
