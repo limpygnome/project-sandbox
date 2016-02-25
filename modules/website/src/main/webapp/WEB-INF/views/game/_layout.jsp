@@ -2,7 +2,7 @@
 <%@ taglib prefix="tiles"    uri="http://tiles.apache.org/tags-tiles" %>
 
 <!--
-    Copyright &copy; Marcus Craske <c:out value="${copyright_year}"/>
+    Copyright &copy; limpygnome <c:out value="${copyright_year}"/>
 -->
 <!DOCTYPE html>
 <html>

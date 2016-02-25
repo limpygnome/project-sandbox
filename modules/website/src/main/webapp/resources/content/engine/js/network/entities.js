@@ -48,8 +48,6 @@ projectSandbox.network.entities =
 
     packetUpdatesEntCreated: function(packet, id)
     {
-        var originalOffset = offset;
-
         // Parse data
         var entityType = packet.readShort();
         var maxHealth = packet.readFloat();
@@ -166,8 +164,6 @@ projectSandbox.network.entities =
 
             // Allow ent to parse custom update bytes
             offset = ent.readBytesUpdate(packet);
-
-            console.debug("engine/network/entities - entity " + id + " updated");
         }
         else
         {

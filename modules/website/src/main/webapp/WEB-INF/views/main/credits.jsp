@@ -11,7 +11,7 @@
             <td>
                 <ul>
                     <li>
-                        Marcus Craske (<a href="/profile/limpygnome">limpygnome</a>)
+                        limpygnome (<a href="/profile/limpygnome">limpygnome</a>)
                     </li>
                 </ul>
             </td>

@@ -1,5 +1,8 @@
 game.ui =
 {
+    // Render container
+    renderContainer: null,
+
     // Elements - main
     elementRender: null,
     elementDeathScreen: null,
@@ -24,6 +27,9 @@ game.ui =
     setup: function()
     {
         // Fetch elements
+        // -- Render container
+        this.renderContainer = document.getElementById("ps-render-container");
+
         // -- Main
         this.elementRender = document.getElementById("ps_render");
         this.elementDeathScreen = document.getElementById("ps-death-screen");
@@ -241,6 +247,9 @@ game.ui =
     {
         $(this.elementDeathScreen).hide();
         $(this.elementDeathScreen).removeClass("visible");
+
+        // Focus on canvas...
+        $(this.renderContainer).focus();
     },
 
     toggleFullScreen: function()
@@ -402,9 +411,13 @@ game.ui =
     chatMessageAdd: function(player, nickname, message)
     {
         // Determine name to use
-        var playerName = player.name;
+        var playerName;
 
-        if (playerName == null)
+        if (player != null)
+        {
+            playerName = player.name;
+        }
+        else if (playerName == null)
         {
             playerName = nickname;
         }
@@ -412,7 +425,7 @@ game.ui =
         // Build chat message HTML
         var html = "<p>";
 
-        html += "<span class='player'><img src='thumbnail' />" + player.name + "</span><span class='text'>" + message + "</span>";
+        html += "<span class='player'><img src='thumbnail' />" + playerName + "</span><span class='text'>" + message + "</span>";
 
         html += "</p>";
 

@@ -52,8 +52,6 @@ game.effects =
         var effect = new Effect("error", this.BULLET_WIDTH, this.BULLET_HEIGHT, effectX, effectY, this.BULLET_Z, this.BULLET_LIFESPAN, this.BULLET_FADE);
         effect.rotation = projectSandbox.utils.randRotation();
         projectSandbox.effects.push(effect);
-
-        console.debug("game/effects - created bullet at " + effect.x + " , " + effect.y);
     },
 
     packetCreateTracer: function(packet)

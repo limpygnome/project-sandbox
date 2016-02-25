@@ -183,19 +183,11 @@ projectSandbox.network.player =
         var message = packet.readUtf8();
 
         // Fetch player
+        // -- THey may have left game and this may not be found, but it's not critical...
         var player = projectSandbox.players.get(playerId);
 
-        if (player != null)
-        {
-            // Invoke UI to handle message
-            projectSandbox.game.ui.hook_playerChatMessage(player, nickname, message);
-
-            console.debug("engine/player - chat message - player id: " + playerId, ", nickname: " + nickname + ", msg: " + message);
-        }
-        else
-        {
-            console.warn("engine/player - received chat message for non-existent player - player id: " + playerId);
-        }
+        // Invoke UI to handle message
+        projectSandbox.game.ui.hook_playerChatMessage(player, nickname, message);
     },
 
     /*
