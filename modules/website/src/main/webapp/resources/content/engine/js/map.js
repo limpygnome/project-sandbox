@@ -130,7 +130,7 @@ projectSandbox.map =
 
                 // Render tile
                 gl.drawElements(gl.TRIANGLES, this.bufferIndexes.numItems, gl.UNSIGNED_SHORT, 0);
-                
+
                 // Translate for next tile
                 mat4.translate(modelView, modelView, [this.scaledTileSize, 0, 0]);
             }
