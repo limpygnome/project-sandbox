@@ -205,7 +205,7 @@ projectSandbox.bufferCache =
                 -halfWidth, +halfHeight,  depth,
                 +halfWidth, +halfHeight,  depth,
                 +halfWidth, -halfHeight,  depth,
-                -halfWidth,    -halfHeight,  depth,
+                -halfWidth, -halfHeight,  depth,
                 
                 // North
                 +halfWidth, +halfHeight, depth,

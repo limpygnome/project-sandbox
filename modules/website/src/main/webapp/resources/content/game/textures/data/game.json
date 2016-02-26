@@ -21,18 +21,36 @@
             ]
         },
         {
-            "name" : "white",
+            "name" : "white/2d",
             "speed" : 0,
-            "type" : "generic",
+            "type" : "2d",
             "frames" :
             [
-                [
-                    64    ,    0    ,
-                    65    ,    0    ,
-                    65    ,    1    ,
-                    64    ,    1
-                ]
+                {
+                    "x" : 0,
+                    "y" : 0,
+                    "width" : 64,
+                    "height" : 64
+                }
+            ]
+        },
+        {
+            "name" : "white/3d",
+            "speed" : 0,
+            "type" : "3d",
+            "frames" :
+            [
+                {
+                    "all" :
+                    {
+                        "x": 32,
+                        "y": 32,
+                        "width": 32,
+                        "height": 32
+                    }
+                }
             ]
         }
+
     ]
 }

@@ -245,57 +245,69 @@ projectSandbox.textures =
 
             // Compute frame data
             // -- Top
+            var topSpecified = frame["top"] != null;
             self.buildFrameDataFourVerts(
                 frameData,
                 frameDataOffset,
                 src,
-                frame["top"]["x"], frame["top"]["y"], frame["top"]["width"], frame["top"]["height"]
+                topSpecified ? frame["top"]["x"] : frame["all"]["x"],
+                topSpecified ? frame["top"]["x"] : frame["all"]["y"],
+                topSpecified ? frame["top"]["x"] : frame["all"]["width"],
+                topSpecified ? frame["top"]["x"] : frame["all"]["height"]
             );
             frameDataOffset += coordinatesPerFace;
 
-            // NOT IMPLEMENTED IN BUFFER CACHE AT PRESENT:
-            // -- Bottom
-//            self.buildFrameDataFourVerts(
-//                frameData,
-//                frameDataOffset,
-//                src,
-//                frame["bottom"]["x"], frame["bottom"]["y"], frame["bottom"]["width"], frame["bottom"]["height"]
-//            );
-//            frameDataOffset += coordinatesPerFace;
+            // TODO: BOTTOM NOT IMPLEMENTED IN BUFFER CACHE, CONSIDER DOING...
 
             // -- North
+            var northSpecified = frame["north"] != null;
             self.buildFrameDataFourVerts(
                 frameData,
                 frameDataOffset,
                 src,
-                frame["north"]["x"], frame["north"]["y"], frame["north"]["width"], frame["north"]["height"]
+                northSpecified ? frame["north"]["x"]        : frame["all"]["x"],
+                northSpecified ? frame["north"]["y"]        : frame["all"]["y"],
+                northSpecified ? frame["north"]["width"]    : frame["all"]["width"],
+                northSpecified ? frame["north"]["height"]   : frame["all"]["height"]
             );
             frameDataOffset += coordinatesPerFace;
 
             // -- East
+            var eastSpecified = frame["east"] != null;
             self.buildFrameDataFourVerts(
                 frameData,
                 frameDataOffset,
                 src,
-                frame["east"]["x"], frame["east"]["y"], frame["east"]["width"], frame["east"]["height"]
+                eastSpecified ? frame["east"]["x"]          : frame["all"]["x"],
+                eastSpecified ? frame["east"]["y"]          : frame["all"]["y"],
+                eastSpecified ? frame["east"]["width"]      : frame["all"]["width"],
+                eastSpecified ? frame["east"]["height"]     : frame["all"]["height"]
             );
             frameDataOffset += coordinatesPerFace;
 
             // -- South
+            var southSpecified = frame["south"] != null;
             self.buildFrameDataFourVerts(
                 frameData,
                 frameDataOffset,
                 src,
-                frame["south"]["x"], frame["south"]["y"], frame["south"]["width"], frame["south"]["height"]
+                southSpecified ? frame["south"]["x"]        : frame["all"]["x"],
+                southSpecified ? frame["south"]["y"]        : frame["all"]["y"],
+                southSpecified ? frame["south"]["width"]    : frame["all"]["width"],
+                southSpecified ? frame["south"]["height"]   : frame["all"]["height"]
             );
             frameDataOffset += coordinatesPerFace;
 
             // -- West
+            var westSpecified = frame["west"] != null;
             self.buildFrameDataFourVerts(
                 frameData,
                 frameDataOffset,
                 src,
-                frame["west"]["x"], frame["west"]["y"], frame["west"]["width"], frame["west"]["height"]
+                westSpecified ? frame["west"]["x"]          : frame["all"]["x"],
+                westSpecified ? frame["west"]["y"]          : frame["all"]["y"],
+                westSpecified ? frame["west"]["width"]      : frame["all"]["width"],
+                westSpecified ? frame["west"]["height"]     : frame["all"]["height"]
             );
             frameDataOffset += coordinatesPerFace;
         }

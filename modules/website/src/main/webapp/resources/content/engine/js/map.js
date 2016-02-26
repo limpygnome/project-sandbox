@@ -57,7 +57,7 @@ projectSandbox.map =
     render: function(gl, shaderProgram, modelView, perspective)
     {
         // Check map is setup
-        if(!this.isSetup)
+        if (!this.isSetup)
         {
             return;
         }
@@ -137,8 +137,6 @@ projectSandbox.map =
 
             // Undo x translation and move to next row
             mat4.translate(modelView, modelView, [-this.scaledTileSize * (renderEndX + 1), this.scaledTileSize, 0]);
-
-            //mat4.translate(modelView, modelView, [-this.scaledTileSize * (this.width), this.scaledTileSize, 0]);
         }
         
         // Undo translation for Y
@@ -170,19 +168,20 @@ projectSandbox.map =
         };
 
         // Fetch buffers
-        this.bufferIndexes = projectSandbox.bufferCache.fetchIndexBuffer(params);
-        this.bufferPosition = projectSandbox.bufferCache.fetchVertexBuffer(params);
         this.bufferNormals = projectSandbox.bufferCache.fetchNormalsBuffer(params);
-        
-        // Bind vertices
-        gl.bindBuffer(gl.ARRAY_BUFFER, this.bufferPosition);
-        gl.vertexAttribPointer(shaderProgram.vertexPositionAttribute, this.bufferPosition.itemSize, gl.FLOAT, false, 0, 0);
+        this.bufferPosition = projectSandbox.bufferCache.fetchVertexBuffer(params);
+        this.bufferIndexes = projectSandbox.bufferCache.fetchIndexBuffer(params);
 
         // Bind normals data
         gl.bindBuffer(gl.ARRAY_BUFFER, this.bufferNormals);
         gl.vertexAttribPointer(shaderProgram.normalsAttribute, this.bufferNormals.itemSize, gl.FLOAT, false, 0, 0);
 
+        // Bind vertices
+        gl.bindBuffer(gl.ARRAY_BUFFER, this.bufferPosition);
+        gl.vertexAttribPointer(shaderProgram.vertexPositionAttribute, this.bufferPosition.itemSize, gl.FLOAT, false, 0, 0);
+
         // Bind index data
         gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this.bufferIndexes);
     }
+
 }

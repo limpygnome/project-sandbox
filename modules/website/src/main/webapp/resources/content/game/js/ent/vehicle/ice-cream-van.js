@@ -1,44 +1,44 @@
 function IceCreamVan()
 {
     Entity.call(this,
-    	{
-    		model: "3d-cube",
-    		width: 32.0,
-    		height: 64.0,
-    		depth: 10.0
-    	}
+        {
+            model: "3d-cube",
+            width: 32.0,
+            height: 64.0,
+            depth: 10.0
+        }
     );
 
     // Set custom params for this ent
     //this.setTexture("vehicles/ice-cream-van");
     this.setTexture("world/building");
 
-	// Setup trail
-	this.trail = new Trail(
-		this,
-		"error",
-		32,
-		32,
-		100,
-		2000,
-		true,
-		-2,
-		2,
-		-16,
-		-16,
-		true		// Compute lifespan
-	);
+    // Setup trail
+    this.trail = new Trail(
+        this,
+        "error",
+        32,
+        32,
+        100,
+        2000,
+        true,
+        -2,
+        2,
+        -16,
+        -16,
+        true        // Compute lifespan
+    );
 }
 
 IceCreamVan.inherits(Entity);
 
 IceCreamVan.prototype.logic = function()
 {
-	// Update trail
-	this.trail.logic();
+    // Update trail
+    this.trail.logic();
 }
 
 IceCreamVan.prototype.eventDeath = function()
 {
-	game.effects.createExplosion(this.x, this.y, 128, 4000, -2, 2);
+    game.effects.createExplosion(this.x, this.y, 128, 4000, -2, 2);
 }

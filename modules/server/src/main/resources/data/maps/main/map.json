@@ -17,8 +17,8 @@
     "tileTypes" :
     [
         {
-            "name" : "g",
-            "texture" : "world/grass",
+            "name" : "w",
+            "texture" : "white",
             
             "properties" :
             {
@@ -38,7 +38,7 @@
         },
         {
             "name" : "b",
-            "texture" : "world/building",
+            "texture" : "white/3d",
             
             "properties" :
             {
@@ -48,7 +48,7 @@
         },
         {
             "name" : "c",
-            "texture" : "world/building",
+            "texture" : "white/3d",
             
             "properties" :
             {
@@ -58,7 +58,7 @@
         },
         {
             "name" : "d",
-            "texture" : "world/building",
+            "texture" : "white/3d",
 
             "properties" :
             {
@@ -68,7 +68,7 @@
         },
         {
             "name" : "e",
-            "texture" : "world/building",
+            "texture" : "white/3d",
 
             "properties" :
             {
@@ -80,18 +80,18 @@
     
     "tiles":
     [
-        "b", "g", "b", "b", "b", "b", "b", "b", "b", "b", "b", "b", "b", "b", "b", "b", "b", "b"
-        "b", "g", "g", "g", "g", "g", "b", "b", "b", "b", "b", "g", "g", "g", "g", "g", "g", "b",
-        "b", "g", "r", "r", "r", "r", "r", "r", "r", "r", "r", "g", "g", "g", "g", "g", "g", "b",
-        "b", "g", "r", "r", "r", "r", "r", "r", "r", "r", "r", "g", "g", "g", "g", "g", "g", "b",
-        "b", "g", "r", "r", "b", "c", "b", "b", "b", "r", "r", "g", "g", "g", "g", "g", "g", "b",
-        "b", "g", "r", "r", "b", "g", "g", "g", "b", "r", "r", "g", "g", "g", "g", "g", "g", "b",
-        "b", "g", "r", "r", "c", "c", "c", "g", "c", "r", "r", "g", "g", "g", "g", "g", "g", "b",
-        "b", "g", "r", "r", "c", "g", "c", "g", "d", "r", "r", "g", "g", "g", "g", "g", "g", "b",
-        "b", "g", "r", "r", "r", "r", "r", "r", "r", "r", "r", "g", "g", "g", "g", "g", "g", "b",
-        "b", "g", "e", "r", "r", "r", "r", "r", "r", "r", "r", "g", "g", "g", "g", "g", "g", "b",
-        "b", "g", "r", "r", "g", "g", "g", "g", "g", "g", "g", "g", "g", "g", "g", "g", "g", "b",
-        "b", "g", "r", "b", "b", "b", "b", "b", "b", "b", "b", "b", "b", "b", "b", "b", "b", "b"
+        "b", "w", "b", "b", "b", "b", "b", "b", "b", "b", "b", "b", "b", "b", "b", "b", "b", "b"
+        "b", "w", "w", "w", "w", "w", "b", "b", "b", "b", "b", "w", "w", "w", "w", "w", "w", "b",
+        "b", "w", "r", "r", "r", "r", "r", "r", "r", "r", "r", "w", "w", "w", "w", "w", "w", "b",
+        "b", "w", "r", "r", "r", "r", "r", "r", "r", "r", "r", "w", "w", "w", "w", "w", "w", "b",
+        "b", "w", "r", "r", "b", "c", "b", "b", "b", "r", "r", "w", "w", "w", "w", "w", "w", "b",
+        "b", "w", "r", "r", "b", "w", "w", "w", "b", "r", "r", "w", "w", "w", "w", "w", "w", "b",
+        "b", "w", "r", "r", "c", "c", "c", "w", "c", "r", "r", "w", "w", "w", "w", "w", "w", "b",
+        "b", "w", "r", "r", "c", "w", "c", "w", "d", "r", "r", "w", "w", "w", "w", "w", "w", "b",
+        "b", "w", "r", "r", "r", "r", "r", "r", "r", "r", "r", "w", "w", "w", "w", "w", "w", "b",
+        "b", "w", "e", "r", "r", "r", "r", "r", "r", "r", "r", "w", "w", "w", "w", "w", "w", "b",
+        "b", "w", "r", "r", "w", "w", "w", "w", "w", "w", "w", "w", "w", "w", "w", "w", "w", "b",
+        "b", "w", "r", "b", "b", "b", "b", "b", "b", "b", "b", "b", "b", "b", "b", "b", "b", "b"
     ],
     
     "entities":

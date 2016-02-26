@@ -27,16 +27,16 @@ uniform Light uLights[1];
 
 void main(void)
 {
-	vec4 texel = texture2D(uSampler, vec2(vTextureCoord.s, vTextureCoord.t));
-	texel *= vColour;
+    vec4 texel = texture2D(uSampler, vec2(vTextureCoord.s, vTextureCoord.t));
+    texel *= vColour;
 
-	// Check if to discard texel due to alpha
-	if (texel.a < 0.05)
-	{
-		discard;
-	}
+    // Check if to discard texel due to alpha
+    if (texel.a < 0.05)
+    {
+        discard;
+    }
 
-	// The colour of the texel from the light - can be used between multiple lights for additive colour
+    // The colour of the texel from the light - can be used between multiple lights for additive colour
     vec3 additiveLightColour = vec3(1.0, 1.0, 1.0);
 
     Light light;
@@ -89,5 +89,5 @@ void main(void)
         }
     }
 
-	gl_FragColor = clamp(vec4(texel.rgb * vAmbientLighting * additiveLightColour, texel.a), 0.0, 1.0);
+    gl_FragColor = clamp(vec4(texel.rgb * vAmbientLighting * additiveLightColour, texel.a), 0.0, 1.0);
 }

@@ -14,10 +14,10 @@
     <name>Project Sandbox - Database</name>
 
     <dependencies />
-	
-	<build>
-		<plugins>
-		
+    
+    <build>
+        <plugins>
+        
             <plugin>
                 <groupId>org.liquibase</groupId>
                 <artifactId>liquibase-maven-plugin</artifactId>
@@ -47,8 +47,8 @@
                     </execution>
                 </executions>
             </plugin>
-			
-		</plugins>
-	</build>
-	
+            
+        </plugins>
+    </build>
+    
 </project>
