@@ -1,13 +1,15 @@
 projectSandbox.network.session =
 {
 
-    packet: function(data, dataView, subType)
+    handlePacket: function(packet, subType)
     {
+        var subType = packet.readChar();
+
         switch (subType)
         {
             // Error code
             case "E":
-                this.packetErrorCode(data, dataView);
+                this.packetErrorCode(packet);
                 return;
 
             default:
@@ -16,10 +18,10 @@ projectSandbox.network.session =
         }
     },
 
-    packetErrorCode: function(data, dataView)
+    packetErrorCode: function(packet)
     {
         // Parse the error code
-        var errorCode = dataView.getInt32(2);
+        var errorCode = packet.readInt();
 
         // Handle error code
         switch (errorCode)

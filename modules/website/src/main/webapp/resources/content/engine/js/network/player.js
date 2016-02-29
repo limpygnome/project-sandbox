@@ -4,28 +4,30 @@ projectSandbox.network.player =
         Inbound
         ----------------------------------------------------------------------------------------------------------------
     */
-    packet: function(data, dataView, subType)
+    handlePacket: function(packet)
     {
+        var subType = packet.readChar();
+
         switch (subType)
         {
             // Identity
             case "I":
-                this.packetPlayerIdentity(dataView);
+                this.packetPlayerIdentity(packet);
                 return;
 
             // Killed
             case "K":
-                this.packetPlayerKilled(data, dataView);
+                this.packetPlayerKilled(packet);
                 return;
 
             // Events/Updates
             case "E":
-                this.packetPlayerEvents(data, dataView);
+                this.packetPlayerEvents(packet);
                 return;
 
             // Chat message
             case "C":
-                this.packetPlayerChatMessage(data, dataView);
+                this.packetPlayerChatMessage(packet);
                 return;
 
             default:
@@ -34,10 +36,10 @@ projectSandbox.network.player =
         }
     },
 
-    packetPlayerIdentity: function(dataView)
+    packetPlayerIdentity: function(packet)
     {
-        var playerId = dataView.getInt16(2);
-        var entityId = dataView.getInt16(4);
+        var playerId = packet.readShort();
+        var entityId = packet.readShort();
 
         // Update our player ID
         projectSandbox.playerId = playerId;
@@ -51,26 +53,23 @@ projectSandbox.network.player =
         // Reset UI
         projectSandbox.game.ui.hookPlayer_entChanged();
 
-        console.log("engine/network/player - updated player - player ID: " + playerId + ", entity ID: " + entityId);
+        console.debug("engine/network/player - updated player - player ID: " + playerId + ", entity ID: " + entityId);
     },
 
     PLAYER_KILLED_MASK_PLAYERID_KILLER: 1,
 
-    packetPlayerKilled: function(data, dataView)
+    packetPlayerKilled: function(packet)
     {
-        var flags = dataView.getInt8(2);
-
-        var causeText = projectSandbox.utils.parseText(data, dataView, 3);
-        var causeTextLenOffset = 4 + causeText.length;
-
-        var entityIdVictim = dataView.getInt16(causeTextLenOffset);
-        var entityIdKiller = dataView.getInt16(causeTextLenOffset + 2);
-        var playerIdVictim = dataView.getInt16(causeTextLenOffset + 4);
+        var flags = packet.readByte();
+        var causeText = packet.readAscii();
+        var entityIdVictim = packet.readShort();
+        var entityIdKiller = packet.readShort();
+        var playerIdVictim = packet.readShort();
         var playerIdKiller;
 
         if ((flags & this.PLAYER_KILLED_MASK_PLAYERID_KILLER) == this.PLAYER_KILLED_MASK_PLAYERID_KILLER)
         {
-            playerIdKiller = dataView.getInt16(2 + causeText.length + 6);
+            playerIdKiller = packet.readShort();
         }
         else
         {
@@ -81,43 +80,37 @@ projectSandbox.network.player =
         projectSandbox.game.ui.hookPlayer_entKilled(causeText, entityIdVictim, entityIdKiller, playerIdVictim, playerIdKiller);
     },
 
-    packetPlayerEvents: function(data, dataView)
+    packetPlayerEvents: function(packet)
     {
-        var offset = 2; // main/sub type bytes
-
         var eventType;
-        while (offset < data.length)
+
+        while (packet.hasMoreData())
         {
-            eventType = String.fromCharCode(dataView.getInt8(offset));
-            offset++;
+            eventType = packet.readChar();
 
             switch (eventType)
             {
                 case "J":
-                    offset = this.packetPlayerEvents_joined(data, dataView, offset);
+                    offset = this.packetPlayerEvents_joined(packet);
                     break;
                 case "U":
-                    offset = this.packetPlayerEvents_updates(data, dataView, offset);
+                    offset = this.packetPlayerEvents_updates(packet);
                     break;
                 case "L":
-                    offset = this.packetPlayerEvents_left(data, dataView, offset);
+                    offset = this.packetPlayerEvents_left(packet);
                     break;
                 default:
                     console.error("engine/network/player - unhandled event type: " + eventType);
-                    console.error(data);
                     break;
             }
         }
     },
 
-    packetPlayerEvents_joined: function(data, dataView, offset)
+    packetPlayerEvents_joined: function(packet)
     {
         // Parse data
-        var playerId = dataView.getInt16(offset);
-        offset += 2;
-
-        var displayName = projectSandbox.utils.parseText(data, dataView, offset);
-        offset += displayName.length + 1;
+        var playerId = packet.readShort();
+        var displayName = packet.readUtf8();
 
         // Check player does not already exist
         if (!projectSandbox.players.contains(playerId))
@@ -135,24 +128,15 @@ projectSandbox.network.player =
         {
             console.debug("engine/network/player - ignoring duplicate player join event - ply id: " + playerId);
         }
-
-        return offset;
     },
 
-    packetPlayerEvents_updates: function(data, dataView, offset)
+    packetPlayerEvents_updates: function(packet)
     {
         // Parse data
-        var playerId = dataView.getInt16(offset);
-        offset += 2;
-
-        var kills = dataView.getInt16(offset);
-        offset += 2;
-
-        var deaths = dataView.getInt16(offset);
-        offset += 2;
-
-        var score = dataView.getUint32(offset);
-        offset += 4;
+        var playerId = packet.readShort();
+        var kills = packet.readShort();
+        var deaths = packet.readShort();
+        var score = packet.readLong();
 
         // Update player's metrics
         var player = projectSandbox.players.get(playerId);
@@ -168,11 +152,10 @@ projectSandbox.network.player =
         return offset;
     },
 
-    packetPlayerEvents_left: function(data, dataView, offset)
+    packetPlayerEvents_left: function(packet)
     {
         // Parse data
-        var playerId = dataView.getInt16(offset);
-        offset += 2;
+        var playerId = packet.readShort();
 
         // Fetch player
         var player = projectSandbox.players.get(playerId);
@@ -191,29 +174,20 @@ projectSandbox.network.player =
         }
 
         console.debug("engine/network/player - player left game - ply id: " + playerId);
-
-        return offset;
     },
 
-    packetPlayerChatMessage: function(data, dataView)
+    packetPlayerChatMessage: function(packet)
     {
-        var playerId = dataView.getInt16(2);
-        var message = projectSandbox.utils.parseText16(data, dataView, 4);
+        var playerId = packet.readShort();
+        var nickname = packet.readUtf8();
+        var message = packet.readUtf8();
 
         // Fetch player
+        // -- THey may have left game and this may not be found, but it's not critical...
         var player = projectSandbox.players.get(playerId);
 
-        if (player != null)
-        {
-            // Invoke UI to handle message
-            projectSandbox.game.ui.hook_playerChatMessage(player, message);
-
-            console.info("engine/player - chat message - player id: " + playerId, ", msg: " + message);
-        }
-        else
-        {
-            console.warn("engine/player - received chat message for non-existent player - player id: " + playerId);
-        }
+        // Invoke UI to handle message
+        projectSandbox.game.ui.hook_playerChatMessage(player, nickname, message);
     },
 
     /*

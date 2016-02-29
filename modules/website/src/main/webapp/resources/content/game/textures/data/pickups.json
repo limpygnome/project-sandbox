@@ -1,0 +1,35 @@
+{
+    "name" : "pickups",
+    "width" : 512,
+    "height" : 512,
+    "url" : "/content/game/images/pickups.png",
+    "description" : "The source file for pickups.",
+    "textures" :
+    [
+        {
+            "name" : "pickups/health",
+            "speed" : 0,
+            "type" : "3d",
+            "frames" :
+            [
+                {
+                    "all" :
+                    {
+                        "x" : 0,
+                        "y":  0,
+                        "width" : 64,
+                        "height" : 64
+                    },
+                    "top" :
+                    {
+                        "x" : 64,
+                        "y" : 0,
+                        "width" : 64,
+                        "height" : 64
+                    }
+                }
+            ]
+        }
+
+    ]
+}

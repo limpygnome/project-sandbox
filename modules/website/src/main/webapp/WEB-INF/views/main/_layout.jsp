@@ -66,7 +66,7 @@
             </div>
         </div>
         <div class="footer">
-            Copyright &copy; Marcus Craske <c:out value="${copyright_year}"/>
+            Copyright &copy; limpygnome <c:out value="${copyright_year}"/>
         </div>
     </div>
 </body>

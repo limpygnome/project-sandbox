@@ -44,7 +44,7 @@ public class PlayerKilledOutboundPacket extends OutboundPacket
 
         // Add items
         packetData.add(flag);
-        packetData.add(killer.causeText());
+        packetData.addAscii(killer.causeText());
 
         packetData.add(killer.victim.id);
         if (killer.killer != null)

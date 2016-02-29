@@ -1,7 +1,7 @@
 package com.limpygnome.projectsandbox.server.packet.imp.player.chat;
 
 import com.limpygnome.projectsandbox.server.packet.OutboundPacket;
-import com.limpygnome.projectsandbox.server.packet.datatype.StringDataType;
+import com.limpygnome.projectsandbox.server.packet.datatype.StringCharSize;
 import com.limpygnome.projectsandbox.server.player.PlayerInfo;
 
 /**
@@ -22,6 +22,7 @@ public class PlayerChatOutboundPacket extends OutboundPacket
     public void writeChatMessage(PlayerInfo playerInfo, String message)
     {
         packetData.add(playerInfo.playerId);
-        packetData.add(message, StringDataType.LengthSize.LENGTH_16);
+        packetData.addUtf8(playerInfo.session.getNickname());
+        packetData.addUtf8(message);
     }
 }

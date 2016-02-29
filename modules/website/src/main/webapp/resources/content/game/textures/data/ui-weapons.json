@@ -4,20 +4,21 @@
     "height" : 128,
     "url" : "/content/game/images/ui-weapons.png",
     "description" : "The source file for weapon icons for UI.",
-	"textures" :
-	[
+    "textures" :
+    [
         {
-			"name" : "ui-weapons/fist",
-			"speed" : 0,
-			"frames" :
-			[
+            "name" : "ui-weapons/fist",
+            "speed" : 0,
+            "type" : "generic",
+            "frames" :
+            [
                 [
-                    0   ,   128	,
-                    128 ,   128	,
-                    128 ,   0 	,
+                    0   ,   128    ,
+                    128 ,   128    ,
+                    128 ,   0     ,
                     0   ,   0
                 ]
-			]
-		}
-	]
+            ]
+        }
+    ]
 }

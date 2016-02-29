@@ -5,11 +5,11 @@ import java.nio.ByteBuffer;
 /**
  * Created by limpygnome on 28/05/15.
  */
-public class FloatDataType implements AbstractDataType
+public class Float32DataType implements AbstractDataType
 {
     private float value;
 
-    public FloatDataType(float value)
+    public Float32DataType(float value)
     {
         this.value = value;
     }

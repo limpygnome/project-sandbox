@@ -1,63 +1,60 @@
 projectSandbox.network.inventory =
 {
-    packet: function(subType, data)
-	{
-		switch (subType)
-		{
-		    // Updates
-			case 'U':
-				this.packetInventoryUpdates(data);
-				return;
+    handlePacket: function(packet)
+    {
+        var subType = packet.readChar();
 
-			default:
-				console.error("engine/network/inventory - unknown sub-type - " + subType);
-				break;
-		}
-	},
+        switch (subType)
+        {
+            // Updates
+            case 'U':
+                this.packetInventoryUpdates(packet);
+                return;
 
-	packetInventoryUpdates: function(data)
-	{
-		var dataView = new DataView(data.buffer);
+            default:
+                console.error("engine/network/inventory - unknown sub-type - " + subType);
+                break;
+        }
+    },
 
-		var offset = 2; // maintype/subtype
+    packetInventoryUpdates: function(packet)
+    {
+        var updateType;
 
-		var updateType;
+        while (packet.hasMoreData())
+        {
+            // Read the type of update
+            updateType = packet.readChar();
 
-		while (offset < data.length)
-		{
-			// Read the type of update
-			updateType = String.fromCharCode(dataView.getInt8(offset));
-			offset += 1;
-
-			// Handle the rest of the data based on the type
-			switch (updateType)
-			{
-				case "R":
-					offset = this.packetInventoryReset(data, dataView, offset);
-					break;
-				case "S":
-					offset = this.packetInventoryItemSelected(data, dataView, offset);
-					break;
-				case "N":
-					offset = this.packetInventoryItemNonSelected(data, dataView, offset);
-					break;
-				case "C":
-					offset = this.packetInventoryItemCreated(data, dataView, offset);
-					break;
-				case "D":
-					offset = this.packetInventoryItemRemoved(data, dataView, offset);
-					break;
-				case "M":
-					offset = this.packetInventoryItemChanged(data, dataView, offset);
-					break;
+            // Handle the rest of the data based on the type
+            switch (updateType)
+            {
+                case "R":
+                    offset = this.packetInventoryReset(packet);
+                    break;
+                case "S":
+                    offset = this.packetInventoryItemSelected(packet);
+                    break;
+                case "N":
+                    offset = this.packetInventoryItemNonSelected(packet);
+                    break;
+                case "C":
+                    offset = this.packetInventoryItemCreated(packet);
+                    break;
+                case "D":
+                    offset = this.packetInventoryItemRemoved(packet);
+                    break;
+                case "M":
+                    offset = this.packetInventoryItemChanged(packet);
+                    break;
                 default:
                     console.error("Inventory - unhandled update type - " + updateType);
                     break;
-			}
-		}
-	},
+            }
+        }
+    },
 
-    packetInventoryReset: function(data, dataView, offset)
+    packetInventoryReset: function(packet)
     {
         // Reset internal inventory
         var inventory = projectSandbox.inventory;
@@ -66,18 +63,16 @@ projectSandbox.network.inventory =
         // Inform UI to reset
         var gameUI = projectSandbox.game.ui;
         gameUI.hook_inventoryReset();
-
-        return offset;
     },
 
-	packetInventoryItemSelected: function(data, dataView, offset)
-	{
-	    // Read data
-	    var slotId = dataView.getInt8(offset);
+    packetInventoryItemSelected: function(packet)
+    {
+        // Read data
+        var slotId = packet.readByte();
 
-	    // Update internal selected slot
-	    var inventory = projectSandbox.inventory;
-		inventory.selectedSlotId = slotId;
+        // Update internal selected slot
+        var inventory = projectSandbox.inventory;
+        inventory.selectedSlotId = slotId;
 
         // Fetch inventory item
         var inventoryItem = inventory.items.get(slotId);
@@ -87,37 +82,29 @@ projectSandbox.network.inventory =
         gameUI.hook_inventorySlotSelected(inventoryItem);
 
         console.debug("engine/network/inventory - item selected - " + slotId);
+    },
 
-		return offset + 1;
-	},
+    packetInventoryItemNonSelected: function(packet)
+    {
+        // Update internal inventory
+        var inventory = projectSandbox.inventory;
+        inventory.selected = -1;
 
-	packetInventoryItemNonSelected: function(data, dataView, offset)
-	{
-	    // Update internal inventory
-	    var inventory = projectSandbox.inventory;
-		inventory.selected = -1;
-
-		// Inform UI
-		var gameUI = projectSandbox.game.ui;
+        // Inform UI
+        var gameUI = projectSandbox.game.ui;
         gameUI.hook_inventorySlotSelected(null);
 
-		console.debug("engine/network/inventory - no item selected");
+        console.debug("engine/network/inventory - no item selected");
 
-		return offset;
-	},
+        return offset;
+    },
 
-	packetInventoryItemCreated: function(data, dataView, offset)
-	{
-	    // Read data
-	    var slotId = dataView.getInt8(offset);
-        offset += 1;
-
-        var typeId = dataView.getInt16(offset);
-        offset += 2;
-
-        var textLen = dataView.getInt8(offset);
-		var text = String.fromCharCode.apply(String, data.subarray(offset + 1, offset + 1 + textLen));
-		offset += 1 + textLen;
+    packetInventoryItemCreated: function(packet)
+    {
+        // Read data
+        var slotId = packet.readByte();
+        var typeId = packet.readShort();
+        var text = packet.readAscii();
 
         // Check it doesn't already exist
         var inventory = projectSandbox.inventory;
@@ -131,26 +118,23 @@ projectSandbox.network.inventory =
         // Create inventory item
         var inventoryItem = new InventoryItem(slotId, typeId, text);
 
-		// Add to inventory
-		inventory.items.set(slotId, inventoryItem);
-		inventory.renderOrder.push(slotId);
+        // Add to inventory
+        inventory.items.set(slotId, inventoryItem);
+        inventory.renderOrder.push(slotId);
 
-		// Inform UI
-		var gameUI = projectSandbox.game.ui;
-		gameUI.hook_inventorySlotCreate(inventoryItem);
+        // Inform UI
+        var gameUI = projectSandbox.game.ui;
+        gameUI.hook_inventorySlotCreate(inventoryItem);
+    },
 
-		return offset;
-	},
+    packetInventoryItemRemoved: function(packet)
+    {
+        // Read data
+        var slotId = packet.readByte();
 
-	packetInventoryItemRemoved: function(data, dataView, offset)
-	{
-	    // Read data
-	    var slotId = dataView.getInt8(offset);
-        offset += 1;
-
-		// Fetch item
-		var inventory = projectSandbox.inventory;
-		var inventoryItem = inventory.items.get(slotId);
+        // Fetch item
+        var inventory = projectSandbox.inventory;
+        var inventoryItem = inventory.items.get(slotId);
 
         if (inventoryItem != null)
         {
@@ -160,11 +144,11 @@ projectSandbox.network.inventory =
             var renderOrderIndex = inventory.findItemIndex(slotId);
             if (renderOrderIndex != null)
             {
-            	inventory.renderOrder.splice(renderOrderIndex, 1);
+                inventory.renderOrder.splice(renderOrderIndex, 1);
             }
             else
             {
-            	console.warn("engine/network/inventory - no render order inventory item present - slot id: " + slotId);
+                console.warn("engine/network/inventory - no render order inventory item present - slot id: " + slotId);
             }
 
             // Inform UI
@@ -172,28 +156,22 @@ projectSandbox.network.inventory =
             gameUI.hook_inventorySlotRemove(inventoryItem);
 
             console.debug("engine/network/inventory - removed item - " + slotId);
-		}
-		else
-		{
-		    console.error("engine/network/inventory - attempted to remove missing item: " + slotId);
-		}
+        }
+        else
+        {
+            console.error("engine/network/inventory - attempted to remove missing item: " + slotId);
+        }
+    },
 
-		return offset;
-	},
+    packetInventoryItemChanged: function(packet)
+    {
+        // Read data
+        var slotId = packet.readByte();
+        var text = packet.readAscii();
 
-	packetInventoryItemChanged: function(data, dataView, offset)
-	{
-	    // Read data
-	    var slotId = dataView.getInt8(offset);
-        offset += 1;
-
-        var textLen = dataView.getInt8(offset);
-		var text = String.fromCharCode.apply(String, data.subarray(offset + 1, offset + 1 + textLen));
-		offset += 1 + textLen;
-
-	    // Fetch item
-	    var inventory = projectSandbox.inventory;
-		var inventoryItem = inventory.items.get(slotId);
+        // Fetch item
+        var inventory = projectSandbox.inventory;
+        var inventoryItem = inventory.items.get(slotId);
 
         if (inventoryItem != null)
         {
@@ -205,12 +183,11 @@ projectSandbox.network.inventory =
             gameUI.hook_inventorySlotUpdate(inventoryItem);
 
             console.debug("engine/network/inventory - item changed - " + slotId);
-		}
-		else
-		{
-		    console.error("engine/network/inventory - change occurred for missing item: " + slotId);
-		}
+        }
+        else
+        {
+            console.error("engine/network/inventory - change occurred for missing item: " + slotId);
+        }
+    }
 
-		return offset;
-	}
 }

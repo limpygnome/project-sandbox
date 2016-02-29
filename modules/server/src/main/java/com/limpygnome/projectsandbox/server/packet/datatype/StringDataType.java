@@ -8,16 +8,11 @@ import java.nio.ByteBuffer;
  */
 public class StringDataType implements AbstractDataType
 {
-    public enum LengthSize
-    {
-        LENGTH_8,
-        LENGTH_16
-    }
 
-    private LengthSize lengthSize;
+    private StringCharSize lengthSize;
     private byte[] data;
 
-    public StringDataType(String value, LengthSize lengthSize)
+    public StringDataType(String value, StringCharSize lengthSize)
     {
         try
         {
@@ -35,9 +30,9 @@ public class StringDataType implements AbstractDataType
     {
         switch (lengthSize)
         {
-            case LENGTH_8:
+            case LENGTH_8_BITS:
                 return 1 + data.length;
-            case LENGTH_16:
+            case LENGTH_16_BITS:
                 return 2 + data.length;
             default:
                 throw new RuntimeException("Unhandled string length size");
@@ -51,10 +46,10 @@ public class StringDataType implements AbstractDataType
         // Write length of data - varies for length size
         switch (lengthSize)
         {
-            case LENGTH_8:
+            case LENGTH_8_BITS:
                 buffer.put((byte) data.length);
                 break;
-            case LENGTH_16:
+            case LENGTH_16_BITS:
                 buffer.putShort((short) data.length);
                 break;
             default:

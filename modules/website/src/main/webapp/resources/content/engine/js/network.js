@@ -1,135 +1,133 @@
 projectSandbox.network =
 {
-	webSocket: null,
+    webSocket: null,
 
-	closed: true,
-	disabled: false,
-	
-	setup: function()
-	{
-	    var host = projectSandbox.assetLoader.get("/content/game/settings.json")["host"];
-	    console.debug("engine/network - host: '" + host + "'");
+    closed: true,
+    disabled: false,
+    
+    setup: function()
+    {
+        var host = projectSandbox.assetLoader.get("/content/game/settings.json")["host"];
+        console.debug("engine/network - host: '" + host + "', connecting...");
 
-		// Create socket
-		webSocket = new WebSocket("ws://" + host);
-		webSocket.binaryType = 'arraybuffer';
+        // Create socket
+        webSocket = new WebSocket("ws://" + host);
+        webSocket.binaryType = 'arraybuffer';
 
-		// Hook events
-		var self = projectSandbox.network;
+        // Hook events
+        var self = projectSandbox.network;
 
-		webSocket.onopen = function(event)
-		{
-			self.wsEventOpen(event);
-		};
-		webSocket.onclose = function(event)
-		{
-			self.wsEventClose(event);
-		};
-		webSocket.onmessage = function(event)
-		{
-			self.wsEventMessage(event);
-		};
-		webSocket.onerror = function(event)
-		{
-			self.wsEventError(event);
-		};
-	},
-	
-	send: function(data)
-	{
-		if(webSocket != null)
-		{
-			webSocket.send(data);
-		}
-	},
-	
-	wsEventOpen: function(event)
-	{
-		console.log("engine/network - connection established");
+        webSocket.onopen = function(event)
+        {
+            self.wsEventOpen(event);
+        };
+        webSocket.onclose = function(event)
+        {
+            self.wsEventClose(event);
+        };
+        webSocket.onmessage = function(event)
+        {
+            self.wsEventMessage(event);
+        };
+        webSocket.onerror = function(event)
+        {
+            self.wsEventError(event);
+        };
+    },
+    
+    send: function(data)
+    {
+        if(webSocket != null)
+        {
+            webSocket.send(data);
+        }
+    },
+    
+    wsEventOpen: function(event)
+    {
+        console.log("engine/network - connection established");
 
-		this.closed = false;
+        this.closed = false;
 
-		// Invoke UI hook
-		projectSandbox.game.ui.hookSocket_connected();
+        // Invoke UI hook
+        projectSandbox.game.ui.hookSocket_connected();
 
-		// Send session ID - must always be done first
-		this.player.sendSessionIdPacket();
-	},
+        // Send session ID - must always be done first
+        this.player.sendSessionIdPacket();
+    },
 
-	wsEventError: function(event)
-	{
-		if (!this.closed)
-		{
-			console.error("engine/network - error - " + event);
-		}
-	},
-	
-	wsEventClose: function(event)
-	{
-		if (!this.closed)
-		{
-			console.log("engine/network - socket closed");
-			this.closed = true;
+    wsEventError: function(event)
+    {
+        if (!this.closed)
+        {
+            console.error("engine/network - error - " + event);
+        }
+    },
+    
+    wsEventClose: function(event)
+    {
+        if (!this.closed)
+        {
+            console.log("engine/network - socket closed");
+            this.closed = true;
 
-			// Reset world
-			projectSandbox.reset();
+            // Reset world
+            projectSandbox.reset();
 
-			// Invoke UI hook
-			projectSandbox.game.ui.hookSocket_disconnected();
-		}
+            // Invoke UI hook
+            projectSandbox.game.ui.hookSocket_disconnected();
+        }
 
         if (!this.disabled)
         {
-		    // Attempt to reconnect
-		    setTimeout(this.setup, 1000);
-		}
-	},
-	
-	wsEventMessage: function(event)
-	{
-		var data = new Uint8Array(event.data);
-		var dataView = new DataView(data.buffer);
-		
-		var mainType = String.fromCharCode(data[0]);
-		var subType = String.fromCharCode(data[1]);
+            // Attempt to reconnect
+            setTimeout(this.setup, 1000);
+        }
+    },
+    
+    wsEventMessage: function(event)
+    {
+        var data = new Uint8Array(event.data);
 
-		//console.debug("Received packet - mt: " + mainType + ", st: " + subType);
-		//console.debug(data);
+        // Create packet
+        var packet = new projectSandbox.network.Packet(data, 0);
 
-		switch (mainType)
-		{
-			// Entities
-			case "E":
-				projectSandbox.network.entities.packet(data, dataView, subType);
-				return;
+        var mainType = packet.readChar();
+
+        switch (mainType)
+        {
+            // Entities
+            case "E":
+                projectSandbox.network.entities.handlePacket(packet);
+                return;
 
             // Maps
-			case "M":
-				projectSandbox.network.map.packet(data, dataView, subType);
-				return;
+            case "M":
+                projectSandbox.network.map.handlePacket(packet);
+                return;
 
             // Players
-			case "P":
-				projectSandbox.network.player.packet(data, dataView, subType);
-				return;
+            case "P":
+                projectSandbox.network.player.handlePacket(packet);
+                return;
 
             // Inventory
-			case "I":
-				projectSandbox.network.inventory.packet(subType, data);
-				return;
+            case "I":
+                projectSandbox.network.inventory.handlePacket(packet);
+                return;
 
             // Effects
-			case "Z":
-				projectSandbox.game.effects.packet(data, dataView, subType);
-				return;
+            case "Z":
+                projectSandbox.game.effects.handlePacket(packet);
+                return;
 
-			// Sessions
-			case "S":
-				projectSandbox.network.session.packet(data, dataView, subType);
-				return;
-		}
-		
-		console.error("engine/network - unhandled message - type: " + mainType + ", sub-type: " + subType);
-	}
+            // Sessions
+            case "S":
+                projectSandbox.network.session.handlePacket(packet);
+                return;
+        }
+        
+        console.error("engine/network - unhandled message - type: " + mainType + ", sub-type: " + subType);
+    }
 
 }

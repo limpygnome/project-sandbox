@@ -4,33 +4,53 @@
     "height" : 64,
     "url" : "/content/game/images/game.png",
     "description" : "The source file for game textures.",
-	"textures" :
-	[
-		{
-			"name" : "error",
-			"speed" : 0,
-			"frames" :
-			[
-				[
-					0	,	0	,
-					63	,	0	,
-					63	,	63	,
-					0	,	63
-				]
-			]
-		},
-		{
-			"name" : "white",
-			"speed" : 0,
-			"frames" :
-			[
-				[
-					64	,	0	,
-					65	,	0	,
-					65	,	1	,
-					64	,	1
-				]
-			]
-		}
-	]
+    "textures" :
+    [
+        {
+            "name" : "error",
+            "speed" : 0,
+            "type" : "generic",
+            "frames" :
+            [
+                [
+                    0    ,    0    ,
+                    63    ,    0    ,
+                    63    ,    63    ,
+                    0    ,    63
+                ]
+            ]
+        },
+        {
+            "name" : "white/2d",
+            "speed" : 0,
+            "type" : "2d",
+            "frames" :
+            [
+                {
+                    "x" : 0,
+                    "y" : 0,
+                    "width" : 64,
+                    "height" : 64
+                }
+            ]
+        },
+        {
+            "name" : "white/3d",
+            "speed" : 0,
+            "type" : "3d",
+            "frames" :
+            [
+                {
+                    "all" :
+                    {
+                        "x": 32,
+                        "y": 32,
+                        "width": 32,
+                        "height": 32
+                    }
+                }
+            ]
+        }
+
+    ]
 }

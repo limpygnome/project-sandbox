@@ -14,18 +14,18 @@
     <name>Project Sandbox - Shared Library</name>
 
     <dependencies>
-	
-		<!-- JSON Serialization -->
-		<dependency>
-			<groupId>com.googlecode.json-simple</groupId>
-			<artifactId>json-simple</artifactId>
-			<version>1.1.1</version>
-		</dependency>
+
+        <!-- JSON Serialization -->
+        <dependency>
+            <groupId>com.googlecode.json-simple</groupId>
+            <artifactId>json-simple</artifactId>
+            <version>1.1.1</version>
+        </dependency>
 
     </dependencies>
-	
-	<build>
-		<plugins>
+    
+    <build>
+        <plugins>
 
             <!-- Automatic generation of schema -->
             <plugin>
@@ -47,28 +47,28 @@
                     <outputFile>${project.build.outputDirectory}/schema.sql</outputFile>
                 </configuration>
             </plugin>
-		
-			<!-- Builds executable JAR with dependencies included -->
-			<plugin>
-				<artifactId>maven-assembly-plugin</artifactId>
-				<executions>
-					<execution>
-					    <phase>package</phase>
-						<goals>
-							<goal>single</goal>
-						</goals>
-					</execution>
-				</executions>
-				<configuration>
+        
+            <!-- Builds executable JAR with dependencies included -->
+            <plugin>
+                <artifactId>maven-assembly-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>single</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
                     <finalName>project-sandbox-shared-${project.version}</finalName>
-					<descriptorRefs>
-						<descriptorRef>jar-with-dependencies</descriptorRef>
-					</descriptorRefs>
+                    <descriptorRefs>
+                        <descriptorRef>jar-with-dependencies</descriptorRef>
+                    </descriptorRefs>
                     <appendAssemblyId>false</appendAssemblyId>
-				</configuration>
-			</plugin>
-			
-		</plugins>
-	</build>
-	
+                </configuration>
+            </plugin>
+            
+        </plugins>
+    </build>
+    
 </project>

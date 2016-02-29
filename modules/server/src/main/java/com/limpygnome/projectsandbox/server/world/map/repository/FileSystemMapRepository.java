@@ -135,14 +135,14 @@ public class FileSystemMapRepository implements MapRepository
 
     private void buildTileProperties(WorldMapTileData tileData, JSONObject mapData)
     {
-        JSONObject rawTileProperties = (JSONObject) mapData.get("tile_properties");
+        JSONObject rawTileProperties = (JSONObject) mapData.get("tileProperties");
 
         // Parse tile properties
-        tileData.tileSize = (float) (long) rawTileProperties.get("tile_size");
+        tileData.tileSize = (float) (long) rawTileProperties.get("tileSize");
         tileData.tileSizeHalf = tileData.tileSize / 2.0f;
         tileData.tileSizeQuarter = tileData.tileSize / 4.0f;
-        tileData.widthTiles = (short) (long) rawTileProperties.get("tiles_width");
-        tileData.heightTiles = (short) (long) rawTileProperties.get("tiles_height");
+        tileData.widthTiles = (short) (long) rawTileProperties.get("tilesWidth");
+        tileData.heightTiles = (short) (long) rawTileProperties.get("tilesHeight");
 
         // Compute max boundaries
         tileData.maxX = tileData.tileSize * (float) tileData.widthTiles;
@@ -152,7 +152,7 @@ public class FileSystemMapRepository implements MapRepository
     private TileType[] buildTileTypes(Controller controller, JSONObject mapData) throws IOException
     {
         // Fetch tile types
-        JSONArray rawTileTypes = (JSONArray) mapData.get("tile_types");
+        JSONArray rawTileTypes = (JSONArray) mapData.get("tileTypes");
 
         // Parse tile types into efficient array, whereby tile ID is the index in the array
         TileType[] tileTypes = new TileType[rawTileTypes.size()];
