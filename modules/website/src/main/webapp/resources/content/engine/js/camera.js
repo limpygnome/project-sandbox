@@ -11,9 +11,9 @@ projectSandbox.camera =
     z: 0,
     
     // Rotation of the camera
-    rotationX: 0,
-    rotationY: 0,
-    rotationZ: 0,
+    rotationX: 0.0,
+    rotationY: 0.0,
+    rotationZ: 0.0,
     
     // Zoom of the camera from the co-ordinates
     zoom: 400,
@@ -47,9 +47,9 @@ projectSandbox.camera =
         //mat4.translate(projectSandbox.cameraView, projectSandbox.cameraView, [-this.x, -this.y, -this.z]);
 
         // Apply rotations
-        //mat4.rotateX(projectSandbox.cameraView, projectSandbox.cameraView, this.rotationX);
-        //mat4.rotateY(projectSandbox.cameraView, projectSandbox.cameraView, this.rotationY);
-        //mat4.rotateZ(projectSandbox.cameraView, projectSandbox.cameraView, this.rotationZ);
+//        mat4.rotateX(projectSandbox.cameraView, projectSandbox.cameraView, this.rotationX);
+//        mat4.rotateY(projectSandbox.cameraView, projectSandbox.cameraView, this.rotationY);
+//        mat4.rotateZ(projectSandbox.cameraView, projectSandbox.cameraView, this.rotationZ);
 
         // Translate by zoom
         mat4.translate(projectSandbox.cameraView, projectSandbox.cameraView, [0, 0, -this.zoom]);

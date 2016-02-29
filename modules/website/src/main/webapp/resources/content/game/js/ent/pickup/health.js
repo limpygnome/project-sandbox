@@ -1,9 +1,8 @@
 function HealthPickup()
 {
-    AbstractPickup.call(this, 16.0, 16.0, 32.0);
+    AbstractPickup.call(this, 16.0, 16.0, 16.0);
 
-    this.setTexture("world/building");
-    this.setColour(0.3, 1.0, 0.3, 1.0);
+    this.setTexture("pickups/health");
 }
 
 HealthPickup.inherits(AbstractPickup);
