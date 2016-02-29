@@ -251,9 +251,9 @@ projectSandbox.textures =
                 frameDataOffset,
                 src,
                 topSpecified ? frame["top"]["x"] : frame["all"]["x"],
-                topSpecified ? frame["top"]["x"] : frame["all"]["y"],
-                topSpecified ? frame["top"]["x"] : frame["all"]["width"],
-                topSpecified ? frame["top"]["x"] : frame["all"]["height"]
+                topSpecified ? frame["top"]["y"] : frame["all"]["y"],
+                topSpecified ? frame["top"]["width"] : frame["all"]["width"],
+                topSpecified ? frame["top"]["height"] : frame["all"]["height"]
             );
             frameDataOffset += coordinatesPerFace;
 

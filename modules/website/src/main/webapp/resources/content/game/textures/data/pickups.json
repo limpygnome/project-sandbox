@@ -8,7 +8,7 @@
     [
         {
             "name" : "pickups/health",
-            "speed" : 0,
+            "speed" : 500,
             "type" : "3d",
             "frames" :
             [
@@ -24,6 +24,22 @@
                     {
                         "x" : 64,
                         "y" : 0,
+                        "width" : 64,
+                        "height" : 64
+                    }
+                },
+                {
+                    "all" :
+                    {
+                        "x" : 0,
+                        "y":  64,
+                        "width" : 64,
+                        "height" : 64
+                    },
+                    "top" :
+                    {
+                        "x" : 64,
+                        "y" : 64,
                         "width" : 64,
                         "height" : 64
                     }
