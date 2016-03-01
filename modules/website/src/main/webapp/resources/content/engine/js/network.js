@@ -90,7 +90,7 @@ projectSandbox.network =
         var data = new Uint8Array(event.data);
 
         // Create packet
-        var packet = new projectSandbox.network.Packet(data, 0);
+        var packet = new projectSandbox.network.InboundPacket(data, 0);
 
         var mainType = packet.readChar();
 

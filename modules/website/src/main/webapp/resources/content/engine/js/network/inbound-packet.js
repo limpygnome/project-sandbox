@@ -6,40 +6,40 @@
     - replace all of network classes/functions to use this
 */
 
-projectSandbox.network.Packet = function(data, bytesRead)
+projectSandbox.network.InboundPacket = function(data, bytesRead)
 {
     this.bytesRead = bytesRead;
     this.data = data;
     this.dataView = new DataView(data.buffer);
 }
 
-projectSandbox.network.Packet.prototype.hasMoreData = function()
+projectSandbox.network.InboundPacket.prototype.hasMoreData = function()
 {
     return this.bytesRead < this.data.length;
 }
 
-projectSandbox.network.Packet.prototype.readByte = function()
+projectSandbox.network.InboundPacket.prototype.readByte = function()
 {
     var value = this.dataView.getInt8(this.bytesRead);
     this.bytesRead += 1;
     return value;
 }
 
-projectSandbox.network.Packet.prototype.readChar = function()
+projectSandbox.network.InboundPacket.prototype.readChar = function()
 {
     var value = String.fromCharCode(this.data[this.bytesRead]);
     this.bytesRead += 1;
     return value;
 }
 
-projectSandbox.network.Packet.prototype.readShort = function()
+projectSandbox.network.InboundPacket.prototype.readShort = function()
 {
     var value = this.dataView.getInt16(this.bytesRead);
     this.bytesRead += 2;
     return value;
 }
 
-projectSandbox.network.Packet.prototype.readInt = function()
+projectSandbox.network.InboundPacket.prototype.readInt = function()
 {
     var value = this.dataView.getInt32(this.bytesRead);
     this.bytesRead += 4;
@@ -49,14 +49,14 @@ projectSandbox.network.Packet.prototype.readInt = function()
 /*
     Note: a long is considered 32-bits, despite Java using 64-bits, since this is the typical standard/expectation.
 */
-projectSandbox.network.Packet.prototype.readLong = function()
+projectSandbox.network.InboundPacket.prototype.readLong = function()
 {
     var value = this.dataView.getUint32(this.bytesRead);
     this.bytesRead += 4;
     return value;
 }
 
-projectSandbox.network.Packet.prototype.readFloat = function()
+projectSandbox.network.InboundPacket.prototype.readFloat = function()
 {
     var value = this.dataView.getFloat32(this.bytesRead);
     this.bytesRead += 4;
@@ -64,7 +64,7 @@ projectSandbox.network.Packet.prototype.readFloat = function()
 }
 
 
-projectSandbox.network.Packet.prototype.readAscii = function()
+projectSandbox.network.InboundPacket.prototype.readAscii = function()
 {
     // Fetch length/total bytes for text
     var length = this.dataView.getInt8(this.bytesRead);
@@ -81,7 +81,7 @@ projectSandbox.network.Packet.prototype.readAscii = function()
     return text;
 }
 
-projectSandbox.network.Packet.prototype.readUtf8 = function()
+projectSandbox.network.InboundPacket.prototype.readUtf8 = function()
 {
     // Fetch length/total bytes for text
     var length = this.dataView.getInt16(this.bytesRead);

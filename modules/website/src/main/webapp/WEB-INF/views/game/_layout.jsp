@@ -51,7 +51,7 @@
 
         <script src="/content/engine/js/players.js"></script>
 
-        <script src="/content/engine/js/network/packet.js"></script>
+        <script src="/content/engine/js/network/inbound-packet.js"></script>
         <script src="/content/engine/js/network/entities.js"></script>
         <script src="/content/engine/js/network/inventory.js"></script>
         <script src="/content/engine/js/network/map.js"></script>
