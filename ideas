@@ -20,6 +20,13 @@
 >>>> carrier ship, capable of hyperjumping very far, ships can dock on carrier - same as AI, but can be piloted by player; very slow, high defence etc
 >>>> medical ship; points for repairing other ships, not much defence, needs other players to help defend
 
+
+> objective is to capture points in world
+>> generate points for taking point (not many) or killing players
+>> spawn randomly in world -> should have minimap of rough position, perhaps have radar abilities blah blah in future...
+>>> shows points to take / in progress of capture / captured etc
+>> points could be platforms of some kind...
+
 > dogs as AIs in packs -> sitting around asteroid areas, follow and attack...
 
 > catswithships.com
