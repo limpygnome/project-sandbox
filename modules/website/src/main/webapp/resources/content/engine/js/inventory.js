@@ -1,36 +1,36 @@
 projectSandbox.inventory =
 {
-	// Array of slot IDs to retain order in which to render items
-	renderOrder: new Array(),
+    // Array of slot IDs to retain order in which to render items
+    renderOrder: new Array(),
 
-	// K (slotid), V (item)
-	items: new Map(),
+    // K (slotid), V (item)
+    items: new Map(),
 
-	// Slot ID selected
-	selectedSlotId: -1,
+    // Slot ID selected
+    selectedSlotId: -1,
 
-	selectPrevKeyDown: false,
-	selectNextKeyDown: false,
+    selectPrevKeyDown: false,
+    selectNextKeyDown: false,
 
 
-	logic: function()
-	{
-	    // Check if to switch items
-	    var q = projectSandbox.keyboard.isKeyDown("Q");
-	    var e = projectSandbox.keyboard.isKeyDown("E");
+    logic: function()
+    {
+        // Check if to switch items
+        var q = projectSandbox.keyboard.isKeyDown("Q");
+        var e = projectSandbox.keyboard.isKeyDown("E");
 
-	    // -- Previous
-	    if (!this.selectPrevKeyDown && q)
-	    {
-	        this.selectPrevKeyDown = true;
-	        this.selectItemPrevious();
-	    }
-	    else if (this.selectPrevKeyDown && !q)
-	    {
-	        this.selectPrevKeyDown = false;
-	    }
+        // -- Previous
+        if (!this.selectPrevKeyDown && q)
+        {
+            this.selectPrevKeyDown = true;
+            this.selectItemPrevious();
+        }
+        else if (this.selectPrevKeyDown && !q)
+        {
+            this.selectPrevKeyDown = false;
+        }
 
-	    // -- Next
+        // -- Next
         if (!this.selectNextKeyDown && e)
         {
             this.selectNextKeyDown = true;
@@ -40,15 +40,15 @@ projectSandbox.inventory =
         {
             this.selectNextKeyDown = false;
         }
-	},
+    },
 
-	reset: function()
-	{
-		this.items = new Map();
-		this.renderOrder = new Array();
+    reset: function()
+    {
+        this.items = new Map();
+        this.renderOrder = new Array();
 
-		console.debug("engine/inventory - reset");
-	},
+        console.debug("engine/inventory - reset");
+    },
 
     findItemIndex: function(slotId)
     {
@@ -63,19 +63,19 @@ projectSandbox.inventory =
         return null;
     },
 
-	selectItemPrevious: function()
-	{
+    selectItemPrevious: function()
+    {
         this.selectItem(-1);
-	},
+    },
 
-	selectItemNext: function()
-	{
-	    this.selectItem(1);
-	},
+    selectItemNext: function()
+    {
+        this.selectItem(1);
+    },
 
-	selectItem: function(indexOffset)
-	{
-	    var index = this.findItemIndex(this.selectedSlotId);
+    selectItem: function(indexOffset)
+    {
+        var index = this.findItemIndex(this.selectedSlotId);
 
         if (index != null)
         {
@@ -94,17 +94,15 @@ projectSandbox.inventory =
             var newSlotId = this.renderOrder[newIndex];
 
             // Build packet to send to server
-            var buff = new Uint8Array(3);
-            var dv = new DataView(buff.buffer);
-
-            buff[0] = "I".charCodeAt(0);
-            buff[1] = "S".charCodeAt(0);
-            dv.setInt8(2, newSlotId);
+            var packet = new projectSandbox.network.OutboundPacket();
+            packet.addChar("I");
+            packet.addChar("S");
+            packet.addByte(newSlotId);
 
             // Send packet to server
-            projectSandbox.network.send(buff.buffer);
+            projectSandbox.network.send(packet.build());
 
             console.debug("engine/inventory - packet sent to select slot ID: " + newSlotId);
         }
-	}
+    }
 }

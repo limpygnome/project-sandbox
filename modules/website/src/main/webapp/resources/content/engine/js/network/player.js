@@ -210,20 +210,13 @@ projectSandbox.network.player =
 
     sendSessionIdPacket: function()
     {
-        var buff = new Uint8Array(38);
-
-        // Header data
-        buff[0] = "P".charCodeAt(0); // U
-        buff[1] = "S".charCodeAt(0); // S
-
-        // Session ID / UUID
-        for(var i = 0; i < 36; i++)
-        {
-            buff[2+i] = projectSandbox.sessionId.charCodeAt(i);
-        }
+        var packet = new projectSandbox.network.OutboundPacket();
+        packet.addChar("P");
+        packet.addChar("S");
+        packet.addUuid(projectSandbox.sessionId);
 
         // Send packet
-        projectSandbox.network.send(buff.buffer);
+        projectSandbox.network.send(packet.build());
     },
 
     sendUpdateMovementPacket: function()
