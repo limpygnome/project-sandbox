@@ -68,7 +68,7 @@ game.ui =
         $(this.elementSidebarChatBox).keyup(this.chatboxKeyUp);
 
         // Bind options / fullscreen
-        $(".options.button.fullscreen").click(function () {
+        $("#button-fullscreen").click(function () {
             game.ui.toggleFullScreen();
         });
 
@@ -103,30 +103,45 @@ game.ui =
     {
         var gl = projectSandbox.gl;
 
-        // Calculate size of render area
-        var totalWidth = $("#projectsandbox").width();
-        var sidebarLeftWidth = $("#ps-sidebar-left").width();
-        var sidebarRightWidth = $("#ps-sidebar-right").width();
+        // Set canvas to fill page
+        var width = $("body").width();
+        var height = $("body").height();
 
-        var newWidth = totalWidth - (sidebarLeftWidth + sidebarRightWidth);
-        newWidth *= 1.0;
-        var newHeight = newWidth / 1.33; $("#projectsandbox").height();
+//        if (width > height)
+//        {
+//            height = width / 1.33;
+//        }
+//        else
+//        {
+//            width = height / 1.33;
+//        }
 
-        // Update render canvas
-        $(this.elementRender).width(newWidth).height(newHeight);
+        $(this.elementRender).width(width).height(height);
 
-        // Update layers
-        this.updateRenderOverlayElement(this.elementDeathScreen, newWidth, newHeight);
-        this.updateRenderOverlayElement(this.elementUI, newWidth, newHeight);
-        this.updateRenderOverlayElement(this.elementConnecting, newWidth, newHeight);
-
-        console.debug("engine/ui - render size changed - " + newWidth + "x" + newHeight);
-
-        // Recompute size of UI
-        this.uiWidth = gl.viewportWidth;
-        this.uiHeight = gl.viewportHeight;
-
-        console.debug("engine/ui - size set to viewport - " + this.uiWidth + "x" + this.uiHeight);
+//        // Calculate size of render area
+//        var totalWidth = $("#projectsandbox").width();
+//        var sidebarLeftWidth = $("#ps-sidebar-left").width();
+//        var sidebarRightWidth = $("#ps-sidebar-right").width();
+//
+//        var newWidth = totalWidth - (sidebarLeftWidth + sidebarRightWidth);
+//        newWidth *= 1.0;
+//        var newHeight = newWidth / 1.33; $("#projectsandbox").height();
+//
+//        // Update render canvas
+//        $(this.elementRender).width(totalWidth).height(totalHeight);
+//
+//        // Update layers
+//        this.updateRenderOverlayElement(this.elementDeathScreen, newWidth, newHeight);
+//        this.updateRenderOverlayElement(this.elementUI, newWidth, newHeight);
+//        this.updateRenderOverlayElement(this.elementConnecting, newWidth, newHeight);
+//
+//        console.debug("engine/ui - render size changed - " + newWidth + "x" + newHeight);
+//
+//        // Recompute size of UI
+//        this.uiWidth = gl.viewportWidth;
+//        this.uiHeight = gl.viewportHeight;
+//
+//        console.debug("engine/ui - size set to viewport - " + this.uiWidth + "x" + this.uiHeight);
     },
 
     updateRenderOverlayElement: function(element, width, height)

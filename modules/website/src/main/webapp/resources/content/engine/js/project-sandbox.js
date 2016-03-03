@@ -234,19 +234,23 @@ var projectSandbox =
         var gl = this.gl;
     
         // Reset scene
-        gl.viewport(0, 0, gl.viewportWidth, gl.viewportHeight);
+        gl.viewport(0, 0, gl.drawingBufferWidth, gl.drawingBufferHeight);
         gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+
+        console.warn(" - " + gl.drawingBufferWidth + " x " + gl.drawingBufferHeight + " -> " + this.canvas.width + " x " + this.canvas.height);
         
         // Reset perspective matrix
         // -- fovy (vertical field of view)
         // -- aspect ratio
         // -- near bound of frustrum
         // -- far bound of frustrum
+        var aspectRatio = this.canvas.clientWidth / this.canvas.clientHeight;
+
         mat4.perspective(
             this.perspective,
 
             projectSandbox.frustrum.FRUSTRUM_VERTICAL_FOV,
-            gl.viewportWidth / gl.viewportHeight,
+            aspectRatio,
             projectSandbox.frustrum.FRUSTRUM_DISTANCE_NEAR,
             projectSandbox.frustrum.FRUSTRUM_DISTANCE_FAR
         );

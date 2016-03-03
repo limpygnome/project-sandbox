@@ -1,1 +1,4 @@
 - remove playerid from commands, server should know - reduces commonly wasted bytes
+
+- move canvas to fullscreen / page
+- change server to allow non-auth users to observe game
