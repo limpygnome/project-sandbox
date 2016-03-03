@@ -150,34 +150,6 @@ body
     z-index: 1;
 }
 
-/*
-    Stars
-    --------------------------------------------------------------------------------------------------------------------
-*/
-#projectsandbox #ps-ui #ps-ui-stars
-{
-    position: absolute;
-    width: inherit;
-    bottom: 1em;
-}
-#projectsandbox #ps-ui #ps-ui-stars img
-{
-    width: 4em;
-    height: 4em;
-    margin: 0.5em;
-
-    -webkit-animation: flash 1s linear;
-    -webkit-animation-iteration-count: infinite;
-
-    -moz-animation: flash 1s linear;
-    -moz-animation-iteration-count: infinite;
-
-    -o-animation: flash 1s linear;
-    -o-animation-iteration-count: infinite;
-
-    animation: flash 1s linear;
-    animation-iteration-count: infinite;
-}
 
 /*
     Top right box

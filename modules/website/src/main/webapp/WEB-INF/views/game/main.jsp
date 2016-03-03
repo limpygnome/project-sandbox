@@ -303,14 +303,6 @@
 
         <div id="ps-ui">
 
-            <div id="ps-ui-stars">
-                <img id="ps-ui-star1" src="/content/game/images/ui.png" alt="Wanted Star" />
-                <img id="ps-ui-star2" src="/content/game/images/ui.png" alt="Wanted Star" />
-                <img id="ps-ui-star3" src="/content/game/images/ui.png" alt="Wanted Star" />
-                <img id="ps-ui-star4" src="/content/game/images/ui.png" alt="Wanted Star" />
-                <img id="ps-ui-star5" src="/content/game/images/ui.png" alt="Wanted Star" />
-            </div>
-
             <div id="ps-ui-top-right">
 
                 <div id="ps-ui-score">

@@ -152,31 +152,6 @@ projectSandbox.utils =
     formatNumberCommas: function(value)
     {
         return value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")
-    },
-
-    // DEPRECATED
-    str2bytes: function(value)
-    {
-        var bytes = [];
-        var charCode;
-
-        for (var i = 0; i < value.length; i++)
-        {
-            charCode = value.charCodeAt(i);
-            bytes.push(charCode);
-        }
-
-        return bytes;
-    },
-
-    // DEPRECATED
-    copy2array: function(dest, offset, data)
-    {
-        for (var i = 0; i < data.length; i++)
-        {
-            dest[offset + i] = data[i];
-        }
-
-        return dest;
     }
+
 }
