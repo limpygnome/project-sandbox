@@ -154,6 +154,7 @@ projectSandbox.utils =
         return value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")
     },
 
+    // DEPRECATED
     str2bytes: function(value)
     {
         var bytes = [];
@@ -168,7 +169,7 @@ projectSandbox.utils =
         return bytes;
     },
 
-
+    // DEPRECATED
     copy2array: function(dest, offset, data)
     {
         for (var i = 0; i < data.length; i++)

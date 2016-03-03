@@ -49,6 +49,34 @@ projectSandbox.network.OutboundPacket.prototype.addByte = function(data)
     this.totalBytes += 1;
 }
 
+projectSandbox.network.OutboundPacket.prototype.addShort = function(data)
+{
+    // Convert to bytes
+    var bytes = new Uint8Array(2);
+    var dataView = new DataView(bytes.buffer);
+    dataView.setInt16(0, data);
+
+    // Add bytes
+    this.items.push(bytes);
+    this.totalBytes += 2;
+}
+
+projectSandbox.network.OutboundPacket.prototype.addUtf8 = function(data)
+{
+    // Add single byte for length of text
+    this.addShort(data.length);
+
+    // Add bytes for data
+    var bytes = new Uint8Array(data.length);
+    for (var i = 0; i < data.length; i++)
+    {
+        bytes[i] = data.charCodeAt(i);
+    }
+
+    this.items.push(bytes);
+    this.totalBytes += data.length;
+}
+
 projectSandbox.network.OutboundPacket.prototype.build = function()
 {
     // Build final array

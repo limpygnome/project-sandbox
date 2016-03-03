@@ -258,38 +258,26 @@ projectSandbox.network.player =
             this.previousMovement = movement;
 
             // Build packet
-            var buff = new Uint8Array(6);
-            var dv = new DataView(buff.buffer);
-            // -- Header data
-            buff[0] = "P".charCodeAt(0);
-            buff[1] = "M".charCodeAt(0);
-            // -- Entity ID
-            dv.setInt16(2, projectSandbox.playerEntityId);
-            // -- Movement flags
-            dv.setInt16(4, movement);
+            var packet = new projectSandbox.network.OutboundPacket();
+            packet.addChar("P");
+            packet.addChar("M");
+            packet.addShort(projectSandbox.playerEntityId);
+            packet.addShort(movement);
 
             // Send packet
-            projectSandbox.network.send(buff.buffer);
+            projectSandbox.network.send(packet.build());
         }
     },
 
     sendChatMessage: function(message)
     {
-        // Convert message to bytes
-        var messageBytes = projectSandbox.utils.str2bytes(message);
-
-        // Build packet
-        var packet = new Uint8Array(4 + messageBytes.length);
-        var packetDataView = new DataView(packet.buffer);
-
-        packet[0] = "P".charCodeAt(0);
-        packet[1] = "C".charCodeAt(0);
-
-        packetDataView.setInt16(2, messageBytes.length);
-        projectSandbox.utils.copy2array(packet, 4, messageBytes);
+        var packet = new projectSandbox.network.OutboundPacket();
+        packet.addChar("P");
+        packet.addChar("C");
+        packet.addUtf8(message);
 
         // Send packet
-        projectSandbox.network.send(packet.buffer);
+        projectSandbox.network.send(packet.build());
 
         console.debug("engine/network/players - sending chat message: " + message);
     }
