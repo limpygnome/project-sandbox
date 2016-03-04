@@ -116,7 +116,12 @@ game.ui =
 //            width = height / 1.33;
 //        }
 
-        $(this.elementRender).width(width).height(height);
+        //$(this.elementRender).width(width).height(height);
+
+        // By setting the actual width/height attributes, the canvas renders at a much higher quality,
+        // rather than scaling between the initial width/height and CSS styles
+        $(this.elementRender).attr("width", width);
+        $(this.elementRender).attr("height", height);
 
 //        // Calculate size of render area
 //        var totalWidth = $("#projectsandbox").width();

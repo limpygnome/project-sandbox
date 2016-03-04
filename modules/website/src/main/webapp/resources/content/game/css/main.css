@@ -38,7 +38,8 @@ body
 
 #projectsandbox #ps_render
 {
-    box-shadow: #111 0em 0em 4.5em;
+    width: 100%;
+    height: 100%;
 }
 
 #projectsandbox #ps_render_text
@@ -161,7 +162,6 @@ body
 #projectsandbox #ps-ui
 {
     position: fixed;
-    display: table;
     z-index: 1;
 }
 
@@ -179,11 +179,9 @@ body
     padding: 0.5em;
 }
 
-#projectsandbox #ps-ui #ps-ui-top-right #ps-ui-score,
-#projectsandbox #ps-ui #ps-ui-top-right #ps-ui-healthbar
+#projectsandbox #ps-ui #ps-ui-score,
+#projectsandbox #ps-ui #ps-ui-healthbar
 {
-    float: right;
-    clear: both;
 }
 #projectsandbox #ps-ui #ps-ui-top-right #ps-ui-score
 {
@@ -192,18 +190,16 @@ body
     color: #FFF;
 }
 
-#projectsandbox #ps-ui #ps-ui-top-right #ps-ui-healthbar
+#projectsandbox #ps-ui #ps-ui-healthbar
 {
-    margin-top: 0.5em;
-    width: 14em;
-    height: 0.75em;
+    height: 1em;
     background: #425867;
     box-shadow: #222 0em 0em 1.5em;
     overflow: hidden;
-    border: solid 0.3em #333;
+    border-bottom: solid 0.3em #333;
 }
 
-#projectsandbox #ps-ui #ps-ui-top-right #ps-ui-healthbar #ps-ui-healthbar-fill
+#projectsandbox #ps-ui #ps-ui-healthbar #ps-ui-healthbar-fill
 {
     width: 50%;
     background: #33aeff;
@@ -214,21 +210,23 @@ body
     Inventory
     --------------------------------------------------------------------------------------------------------------------
 */
+
 #projectsandbox #ps-ui .inventory-container
 {
-    display: table;
-    height: 100%;
-    text-align: center;
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    padding: 1em;
 }
-
 #projectsandbox #ps-ui #ps-ui-inventory
 {
-    display: table-cell;
-    vertical-align: middle;
+    margin: auto;
 }
 #projectsandbox #ps-ui #ps-ui-inventory .slot
 {
     display: inline-block;
+    vertical-align: bottom;
+
     width: 4.5em;
     height: 4.5em;
     line-height: 8em;
@@ -237,17 +235,16 @@ body
     margin: 0.5em;
     margin-left: 0em;
 
-    background: rgba(0, 0, 0, 0.4);
+    background: rgba(0, 0, 0, 0.8);
     background-size: 100%;
     background-repeat: no-repeat;
 
     border: solid 0.1em #333;
-    border-top-right-radius: 0.5em;
-    border-bottom-right-radius: 0.5em;
+    border-radius: 0.5em;
 
     box-shadow: #222 0em 0em 0.5em;
 
-    text-align: right;
+    text-align: center;
     text-shadow: #000 0em 0em 0.2em;
 }
 #projectsandbox #ps-ui #ps-ui-inventory .slot.depleted

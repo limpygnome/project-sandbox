@@ -259,9 +259,6 @@
                 Options
             </h3>
             <div id="ps-options">
-                <p>
-                    FPS: <span id="ps-options-fps">--</span>
-                </p>
                 <div id="button-fullscreen" class="options button fullscreen">
                     <span>
                         Toggle Fullscreen
@@ -303,19 +300,25 @@
 
         <div id="ps-ui">
 
+            <div i="ps-ui-top">
+                <div id="ps-ui-healthbar">
+                    <div id="ps-ui-healthbar-fill">&nbsp;</div>
+                    50%
+                </div>
+            </div>
+
             <div id="ps-ui-top-right">
 
                 <div id="ps-ui-score">
                     --
                 </div>
 
-                <div id="ps-ui-healthbar">
-                    <div id="ps-ui-healthbar-fill">&nbsp;</div>
-                </div>
-
             </div>
 
             <div class="inventory-container">
+                <div class="ps-ui-fps">
+                    FPS: <span id="ps-options-fps">--</span>
+                </div>
                 <div id="ps-ui-inventory">
                 </div>
             </div>

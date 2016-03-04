@@ -1,4 +1,19 @@
 - remove playerid from commands, server should know - reduces commonly wasted bytes
 
 - move canvas to fullscreen / page
+- add font icons for full screen / exit -> custom font set to reduce asset sizes
+- improve text of selected inventory slot item
+- move scoreboard to a partially/transparent top-right box
+- move chat to top-left partially/transparent box
+-- perhaps combine with activity? we do need ways to state areas captured
+- consider bottom-right for mini-map
+- change background of canvas to generic stars / space
+- fix culling
+-- make custom image
 - change server to allow non-auth users to observe game
+- fix inventory slot depleted not being set, since styling
+- add inventory blocking style, so item changes colour during recharge -> perhaps like old game with vertical progress colour transition
+- change maps to allow for tile and non-tile maps
+- add map property for gravity / physics settings
+-- physics engines for diff maps? diff props for diff maps?
+
