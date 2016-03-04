@@ -237,8 +237,6 @@ var projectSandbox =
         gl.viewport(0, 0, gl.drawingBufferWidth, gl.drawingBufferHeight);
         gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
-        console.warn(" - " + gl.drawingBufferWidth + " x " + gl.drawingBufferHeight + " -> " + this.canvas.width + " x " + this.canvas.height);
-        
         // Reset perspective matrix
         // -- fovy (vertical field of view)
         // -- aspect ratio

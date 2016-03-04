@@ -15,7 +15,7 @@ projectSandbox.frustrum =
 	update: function()
 	{
 	    // Compute ratio
-	    this.ratio = projectSandbox.gl.viewportWidth / projectSandbox.gl.viewportHeight;
+	    this.ratio = projectSandbox.gl.drawingBufferWidth / projectSandbox.gl.drawingBufferHeight;
 
 	    // Camera variables
 	    var camearaPos =
