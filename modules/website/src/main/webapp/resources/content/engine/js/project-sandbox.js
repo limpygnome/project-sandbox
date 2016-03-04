@@ -234,6 +234,7 @@ var projectSandbox =
         var gl = this.gl;
     
         // Reset scene
+        // -- If width/height changes, update frustrum culling since it uses it for calculating aspect ratio
         gl.viewport(0, 0, gl.drawingBufferWidth, gl.drawingBufferHeight);
         gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
