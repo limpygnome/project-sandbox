@@ -25,6 +25,9 @@ var projectSandbox =
     
     // Effects
     effects: new Array(),
+
+    // Identifier of current player; set by: network / player
+    playerId: null,
     
     // Identifier of current ent
     playerEntityId: null,

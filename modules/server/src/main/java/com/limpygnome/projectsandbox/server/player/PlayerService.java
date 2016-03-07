@@ -71,6 +71,7 @@ public class PlayerService implements LogicService, IdCounterConsumer
         try
         {
             // Check a registered user is not already connected
+            // TODO: probably remove this...
             synchronized (this)
             {
                 User user = session.getUser();
@@ -107,19 +108,14 @@ public class PlayerService implements LogicService, IdCounterConsumer
                 LOG.info("Player joined - ply id: {}, name: {}", playerId, session.getNickname());
             }
 
-            // Inform server player has joined
-            PlayerEventsUpdatesOutboundPacket playerEventsUpdatesOutboundPacket = new PlayerEventsUpdatesOutboundPacket();
-            playerEventsUpdatesOutboundPacket.writePlayerJoined(playerInfo);
-            broadcast(playerEventsUpdatesOutboundPacket);
+            // Create, spawn and send data for player
+            playerSpawnAndSendData(playerInfo);
 
             // Give the user all of the users and metrics/stats thus far
             PlayerEventsUpdatesOutboundPacket playerEventsUpdatesOutboundSnapshotPacket = new PlayerEventsUpdatesOutboundPacket();
             writePlayersJoined(playerEventsUpdatesOutboundSnapshotPacket);
             writePlayerMetrics(playerEventsUpdatesOutboundSnapshotPacket, true);
             controller.packetService.send(playerInfo, playerEventsUpdatesOutboundSnapshotPacket);
-
-            // Create, spawn and send data for player
-            playerSpawnAndSendData(playerInfo);
 
             // Send previous chat messages
             controller.chatService.sendPreviousMessages(playerInfo);
@@ -249,6 +245,11 @@ public class PlayerService implements LogicService, IdCounterConsumer
         EntityUpdatesOutboundPacket packetUpdates = new EntityUpdatesOutboundPacket();
         packetUpdates.build(map.entityManager, true);
         controller.packetService.send(playerInfo, packetUpdates);
+
+        // Inform server player has joined
+        PlayerEventsUpdatesOutboundPacket playerEventsUpdatesOutboundPacket = new PlayerEventsUpdatesOutboundPacket();
+        playerEventsUpdatesOutboundPacket.writePlayerJoined(playerInfo);
+        broadcast(playerEventsUpdatesOutboundPacket);
     }
 
     /**

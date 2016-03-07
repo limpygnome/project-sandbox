@@ -1,7 +1,9 @@
 - remove playerid from commands, server should know - reduces commonly wasted bytes
 
 - move canvas to fullscreen / page
-- add font icons for full screen / exit -> custom font set to reduce asset sizes
+- move score top left
+- move chat bottom right
+- add trigger for when player id received, so that UI can set current player on scoreboard
 - improve text of selected inventory slot item
 - move scoreboard to a partially/transparent top-right box
 - move chat to top-left partially/transparent box

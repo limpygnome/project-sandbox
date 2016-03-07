@@ -192,16 +192,16 @@ body
 
 #projectsandbox #ps-ui #ps-ui-healthbar
 {
-    height: 1em;
+    height: 1.5em;
     background: #425867;
-    box-shadow: #222 0em 0em 1.5em;
+    box-shadow: #333 0em 0em 1.5em;
     overflow: hidden;
-    border-bottom: solid 0.3em #333;
 }
 
 #projectsandbox #ps-ui #ps-ui-healthbar #ps-ui-healthbar-fill
 {
     width: 50%;
+    height: inherit;
     background: #33aeff;
     border-right: solid 0.2em #333;
 }
@@ -365,39 +365,40 @@ body
 {
 }
 
+/*
+    Generic - (topmost) overlay elements
+    ********************************************************************************************************************
+*/
+#projectsandbox .overlay
+{
+    z-index: 999;
+}
 
 /*
-    Sidebar - Options
+    Options
     ********************************************************************************************************************
 */
 
-#projectsandbox .ps-sidebar #ps-options
+#projectsandbox #ps-options
 {
-    padding: 1em;
+    position: fixed;
+    bottom: 1em;
+    right: 1em;
+    font-size: 2em;
 }
-#projectsandbox .ps-sidebar #ps-options .button
+#projectsandbox #ps-options .button
 {
-    display: block;
-    background: #444;
-    width: 100%;
-    text-align: center;
-    border: solid 0.2em #111;
-    border-left: none;
-    border-right: none;
-    font-weight: bold;
+    display: inline-block;
+    color: #FFF;
     text-decoration: none;
-    color: inherit;
-}
-#projectsandbox .ps-sidebar #ps-options .button span
-{
-    display: block;
-    padding: 0.8em 0.5em;
-}
-#projectsandbox .ps-sidebar #ps-options .button:focus,
-#projectsandbox .ps-sidebar #ps-options .button:hover
-{
-    background: #666;
+    text-shadow: 0em 0em 0.4em #333;
+    margin: 0em 0.2em;
     cursor: pointer;
+}
+#projectsandbox #ps-options .button:focus,
+#projectsandbox #ps-options .button:hover
+{
+    color: #DDD;
 }
 
 /*
@@ -449,40 +450,50 @@ body
 }
 
 /*
-    Sidebar - Scoreboard
+    Scoreboard
     ********************************************************************************************************************
 */
 
-#projectsandbox .ps-sidebar #ps-scoreboard
+#projectsandbox #ps-scoreboard
 {
-    height: calc(100% - 3em);
-    overflow-x: hidden;
-    overflow-y: scroll;
+    position: fixed;
+    top: 2.5em;
+    right: 1em;
+    width: 20em;
+    overflow: hidden;
+    background: rgba(30, 30, 30, 0.5);
+    border-radius: 0.5em;
+    padding: 0.5em;
 }
-#projectsandbox .ps-sidebar #ps-scoreboard ol
+#projectsandbox #ps-scoreboard h1
+{
+    text-align: center;
+    font-size: 1.2em;
+    margin: 0;
+    padding: 0;
+}
+#projectsandbox #ps-scoreboard ol
 {
     margin: 0em;
     padding: 0em;
     padding-left: 3em;
 }
-#projectsandbox .ps-sidebar #ps-scoreboard ol li
+#projectsandbox #ps-scoreboard ol li
 {
     padding: 0.5em;
-    border-bottom: solid 0.1em #111;
 }
-#projectsandbox .ps-sidebar #ps-scoreboard ol li span
+#projectsandbox #ps-scoreboard ol li span
 {
-    display: inline-block;
-    min-width: 5em;
+    float: right;
     color: #999;
     font-size: larger;
     font-weight: bold;
 }
-#projectsandbox .ps-sidebar #ps-scoreboard ol li span.current-player
+#projectsandbox #ps-scoreboard ol li.current-player span
 {
     color: #33AEFF;
 }
-#projectsandbox .ps-sidebar #ps-scoreboard ol li:nth-child(1) span
+#projectsandbox #ps-scoreboard ol li:nth-child(1) span
 {
     color: #FFC506;
 }

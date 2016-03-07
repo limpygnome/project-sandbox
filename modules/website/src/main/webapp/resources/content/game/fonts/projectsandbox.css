@@ -1,0 +1,32 @@
+@font-face {
+    font-family: 'projectsandbox';
+    src:
+        url('projectsandbox.ttf?96sc2c') format('truetype'),
+        url('projectsandbox.woff?96sc2c') format('woff'),
+        url('projectsandbox.svg?96sc2c#projectsandbox') format('svg');
+    font-weight: normal;
+    font-style: normal;
+}
+
+[class^="icon-"], [class*=" icon-"] {
+    /* use !important to prevent issues with browser extensions that change fonts */
+    font-family: 'projectsandbox' !important;
+    speak: none;
+    font-style: normal;
+    font-weight: normal;
+    font-variant: normal;
+    text-transform: none;
+    line-height: 1;
+
+    /* Better Font Rendering =========== */
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+.icon-enlarge:before {
+    content: "\e989";
+}
+.icon-enter:before {
+    content: "\ea13";
+}
+

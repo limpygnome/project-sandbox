@@ -352,8 +352,16 @@ game.ui =
 
     scoreboardAdd: function(player)
     {
+        // Check if current player, so that we can set special class
+        var specialClasses = "";
+
+        if (player.playerId == projectSandbox.playerId)
+        {
+            specialClasses = "current-player";
+        }
+
         // Build HTML
-        var html = "<li id='scoreboard_item_" + player.playerId + "'><span>" + player.score + "</span>" + player.displayName + "</li>";
+        var html = "<li id='scoreboard_item_" + player.playerId + "' class=\"" + specialClasses + "\"><span>" + player.score + "</span>" + player.displayName + "</li>";
 
         // Add element
         $(this.elementSidebarScoreboard).find("ol").append(html);

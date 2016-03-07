@@ -6,6 +6,7 @@
 
 <div id="projectsandbox">
 
+<!--
     <div id="ps-sidebar-left" class="ps-sidebar left">
 
         <div class="container">
@@ -201,77 +202,80 @@
             <h3>
                 Scoreboard
             </h3>
-            <div id="ps-scoreboard">
-                <ol>
-                    <li>
-                        <span>
-                            1,000,000,000
-                        </span>
-                        test #1
-                    </li>
-                    <li>
-                        <span>
-                            1,000,000,000
-                        </span>
-                        unifsfddosofkfq39r8ejfs
-                    </li>
-                    <li>
-                        <span>
-                            1,000,000
-                        </span>
-                        test #2
-                    </li>
-                    <li>
-                        <span>
-                            448
-                        </span>
-                        test #3
-                    </li>
-                    <li>
-                        <span class="current-player">
-                            123
-                        </span>
-                        current player
-                    </li>
 
-                    <li><span>1,234</span>span user</li>
-                    <li><span>1,234</span>span user</li>
-                    <li><span>1,234</span>span user</li>
-                    <li><span>1,234</span>span user</li>
-                    <li><span>1,234</span>span user</li>
-                    <li><span>1,234</span>span user</li>
-                    <li><span>1,234</span>span user</li>
-                    <li><span>1,234</span>span user</li>
-                    <li><span>1,234</span>span user</li>
-                    <li><span>1,234</span>span user</li>
-                    <li><span>1,234</span>span user</li>
-                    <li><span>1,234</span>span user</li>
-                    <li><span>1,234</span>span user</li>
-                    <li><span>1,234</span>span user</li>
-                    <li><span>1,234</span>span user</li>
-                    <li><span>1,234</span>span user</li>
-                </ol>
-            </div>
         </div>
 
         <div class="container">
             <h3>
                 Options
             </h3>
-            <div id="ps-options">
-                <div id="button-fullscreen" class="options button fullscreen">
-                    <span>
-                        Toggle Fullscreen
-                    </span>
-                </div>
-                <a class="options button" href="/">
-                    <span>
-                        Exit
-                    </span>
-                </a>
-            </div>
         </div>
 
+    </div>
+-->
+
+    <div id="ps-scoreboard">
+        <h1>
+            Scores
+        </h1>
+        <ol>
+            <li>
+                <span>
+                    1,000,000,000
+                </span>
+                test #1
+            </li>
+            <li>
+                <span>
+                    1,000,000,000
+                </span>
+                unifsfddosofkfq39r8ejfs
+            </li>
+            <li>
+                <span>
+                    1,000,000
+                </span>
+                test #2
+            </li>
+            <li>
+                <span>
+                    448
+                </span>
+                test #3
+            </li>
+            <li>
+                <span class="current-player">
+                    123
+                </span>
+                current player
+            </li>
+
+            <li><span>1,234</span>span user</li>
+            <li><span>1,234</span>span user</li>
+            <li><span>1,234</span>span user</li>
+            <li><span>1,234</span>span user</li>
+            <li><span>1,234</span>span user</li>
+            <li><span>1,234</span>span user</li>
+            <li><span>1,234</span>span user</li>
+            <li><span>1,234</span>span user</li>
+            <li><span>1,234</span>span user</li>
+            <li><span>1,234</span>span user</li>
+            <li><span>1,234</span>span user</li>
+            <li><span>1,234</span>span user</li>
+            <li><span>1,234</span>span user</li>
+            <li><span>1,234</span>span user</li>
+            <li><span>1,234</span>span user</li>
+            <li><span>1,234</span>span user</li>
+        </ol>
+    </div>
+
+    <div id="ps-options" class="overlay">
+        <div id="button-fullscreen" class="button fullscreen">
+            <span class="icon-enlarge"></span>
+        </div>
+        <a class="button" href="/">
+            <span class="icon-enter"></span>
+        </a>
     </div>
 
     <div id="ps-render-container" tabindex="1">

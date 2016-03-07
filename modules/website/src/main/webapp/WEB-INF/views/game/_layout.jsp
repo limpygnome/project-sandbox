@@ -66,6 +66,9 @@
         <script src="/content/game/js/effects.js"></script>
         <script src="/content/game/js/ui.js"></script>
 
+        <!-- Game: Font Icons -->
+        <link rel="stylesheet" href="/content/game/fonts/projectsandbox.css" />
+
         <!-- Game: Living -->
         <script src="/content/game/js/ent/living/player.js"></script>
         <script src="/content/game/js/ent/living/sentry.js"></script>
