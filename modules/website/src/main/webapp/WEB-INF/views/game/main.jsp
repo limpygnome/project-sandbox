@@ -214,61 +214,6 @@
     </div>
 -->
 
-    <div id="ps-scoreboard">
-        <h1>
-            Scores
-        </h1>
-        <ol>
-            <li>
-                <span>
-                    1,000,000,000
-                </span>
-                test #1
-            </li>
-            <li>
-                <span>
-                    1,000,000,000
-                </span>
-                unifsfddosofkfq39r8ejfs
-            </li>
-            <li>
-                <span>
-                    1,000,000
-                </span>
-                test #2
-            </li>
-            <li>
-                <span>
-                    448
-                </span>
-                test #3
-            </li>
-            <li>
-                <span class="current-player">
-                    123
-                </span>
-                current player
-            </li>
-
-            <li><span>1,234</span>span user</li>
-            <li><span>1,234</span>span user</li>
-            <li><span>1,234</span>span user</li>
-            <li><span>1,234</span>span user</li>
-            <li><span>1,234</span>span user</li>
-            <li><span>1,234</span>span user</li>
-            <li><span>1,234</span>span user</li>
-            <li><span>1,234</span>span user</li>
-            <li><span>1,234</span>span user</li>
-            <li><span>1,234</span>span user</li>
-            <li><span>1,234</span>span user</li>
-            <li><span>1,234</span>span user</li>
-            <li><span>1,234</span>span user</li>
-            <li><span>1,234</span>span user</li>
-            <li><span>1,234</span>span user</li>
-            <li><span>1,234</span>span user</li>
-        </ol>
-    </div>
-
     <div id="ps-render-container" tabindex="1">
 
         <div id="ps-connecting">
@@ -294,6 +239,18 @@
         </div>
 
         <div id="ps-ui">
+
+            <div id="ps-scoreboard">
+                <h1>
+                    Scores
+                </h1>
+                <ol>
+                    <li>
+                        <span class="current-player">0</span>
+                        Waiting for server...
+                    </li>
+                </ol>
+            </div>
 
             <div id="ps-chat">
                 <div id="ps-chat-messages">

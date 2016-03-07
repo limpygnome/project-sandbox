@@ -1,8 +1,11 @@
 - remove playerid from commands, server should know - reduces commonly wasted bytes
 
-- move canvas to fullscreen / page
-- move score top left
-- move chat bottom right
+- bring back activity above chat
+-- make scores/activity/chat modules, which can be turned off; have activity turned off by default
+--- weapons could have modules in the future, or something like that...
+-- make UI modules moveable
+- add ability so that camera bounds triggered better; if zoom, triggers limits. doesnt on initial map load / ent set etc...
+-- define as global hook?
 - add trigger for when player id received, so that UI can set current player on scoreboard
 - improve text of selected inventory slot item
 - move scoreboard to a partially/transparent top-right box
