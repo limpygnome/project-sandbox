@@ -28,7 +28,7 @@ projectSandbox.network.map =
         // Parse tile types
         for(i = 0; i < numTileTypes; i++)
         {
-            offset += this.packetMapDataTileType(packet);
+            this.packetMapDataTileType(packet);
         }
 
         // Parse attributes

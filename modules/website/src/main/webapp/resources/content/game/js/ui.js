@@ -38,9 +38,9 @@ game.ui =
 
         // -- UI
         this.elementUI = document.getElementById("ps-ui");
-        this.elementUIHealthBar = document.getElementById("ps-ui-healthbar-fill");
-        this.elementUIInventory = document.getElementById("ps-ui-inventory");
-        this.elementUIScore = document.getElementById("ps-ui-score");
+        this.elementUIHealthBar = document.getElementById("ps-healthbar-fill");
+        this.elementUIInventory = document.getElementById("ps-inventory");
+        this.elementUIScore = document.getElementById("ps-score");
 
         // -- Sidebar
         this.elementSidebarActivity = document.getElementById("ps-activity");

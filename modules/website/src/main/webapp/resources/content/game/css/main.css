@@ -6,6 +6,7 @@ html, body
 {
     width: 100%;
     height: 100%;
+    overflow: hidden;
 }
 body
 {
@@ -167,30 +168,11 @@ body
 
 
 /*
-    Top right box
+    Healthbar
     --------------------------------------------------------------------------------------------------------------------
 */
-#projectsandbox #ps-ui #ps-ui-top-right
-{
-    position: absolute;
-    top: 1em;
-    right: 2em;
-    height: 100%;
-    padding: 0.5em;
-}
 
-#projectsandbox #ps-ui #ps-ui-score,
-#projectsandbox #ps-ui #ps-ui-healthbar
-{
-}
-#projectsandbox #ps-ui #ps-ui-top-right #ps-ui-score
-{
-    font-size: 3em;
-    text-shadow: #000 0em 0em 0.4em;
-    color: #FFF;
-}
-
-#projectsandbox #ps-ui #ps-ui-healthbar
+#projectsandbox #ps-ui #ps-healthbar
 {
     height: 1.5em;
     background: #425867;
@@ -198,7 +180,7 @@ body
     overflow: hidden;
 }
 
-#projectsandbox #ps-ui #ps-ui-healthbar #ps-ui-healthbar-fill
+#projectsandbox #ps-ui #ps-healthbar #ps-healthbar-fill
 {
     width: 50%;
     height: inherit;
@@ -207,22 +189,37 @@ body
 }
 
 /*
+    Score
+    --------------------------------------------------------------------------------------------------------------------
+*/
+
+#projectsandbox #ps-ui #ps-score
+{
+    position: fixed;
+    top: 1em;
+    left: 1em;
+    font-size: 3em;
+    text-shadow: #000 0em 0em 0.4em;
+    color: #FFF;
+}
+
+/*
     Inventory
     --------------------------------------------------------------------------------------------------------------------
 */
 
-#projectsandbox #ps-ui .inventory-container
+#projectsandbox #ps-ui #ps-inventory-container
 {
     position: absolute;
     bottom: 0;
     width: 100%;
     padding: 1em;
 }
-#projectsandbox #ps-ui #ps-ui-inventory
+#projectsandbox #ps-ui #ps-inventory
 {
     margin: auto;
 }
-#projectsandbox #ps-ui #ps-ui-inventory .slot
+#projectsandbox #ps-ui #ps-inventory .slot
 {
     display: inline-block;
     vertical-align: bottom;
@@ -247,16 +244,17 @@ body
     text-align: center;
     text-shadow: #000 0em 0em 0.2em;
 }
-#projectsandbox #ps-ui #ps-ui-inventory .slot.depleted
+#projectsandbox #ps-ui #ps-inventory .slot.depleted
 {
     background: rgba(255, 80, 80, 0.4);
 }
-#projectsandbox #ps-ui #ps-ui-inventory .slot.selected
+#projectsandbox #ps-ui #ps-inventory .slot.selected
 {
     background: rgba(51, 174, 255, 0.4);
     border-color: #3396CB;
     text-shadow: #33345F 0em 0em 0.4em;
 }
+
 
 /*
     Sidebar
@@ -302,45 +300,43 @@ body
 
 
 /*
-    Sidebar - Chat
+    Chat
     ********************************************************************************************************************
 */
 
-#projectsandbox .ps-sidebar #ps-chat
+#projectsandbox #ps-ui #ps-chat
 {
-    display: flex;
-    flex-direction: column;
-    height: calc(100% - 4em);
+    position: fixed;
+    width: 24em;
+    bottom: 1.5em;
+    left: 1.5em;
+    background: rgba(30, 30, 30, 0.5);
+    border-radius: 0.5em;
+    box-shadow: 0em 0em 1em #333;
+    border: solid 0.1em #111;
+    z-index: 2;
+    overflow: hidden;
 }
-
-#projectsandbox .ps-sidebar #ps-chat #ps-chat-box
-{
-    height: 4em;
-}
-#projectsandbox .ps-sidebar #ps-chat #ps-chat-box input
+#projectsandbox #ps-ui #ps-chat #ps-chat-box input
 {
     width: 100%;
+    padding: 0.6em 0.5em;
     border: none;
     outline: none;
-    padding: 0.6em 0.5em;
-    background: #333;
+    background: transparent;
     color: #CCC;
-    border-bottom: solid 0.2em #111;
-}
-#projectsandbox .ps-sidebar #ps-chat #ps-chat-box input:focus,
-#projectsandbox .ps-sidebar #ps-chat #ps-chat-box input:hover
-{
-
+    border-top: solid 0.1em #111;
+    box-sizing: border-box;
 }
 
-#projectsandbox .ps-sidebar #ps-chat #ps-chat-messages
+#projectsandbox #ps-ui #ps-chat #ps-chat-messages
 {
-    flex: 2;
-    height: 100vh;
+    text-align: left;
     overflow-y: scroll;
     overflow-x: hidden;
+    height: 10em;
 }
-#projectsandbox .ps-sidebar #ps-chat #ps-chat-messages p
+#projectsandbox #ps-ui #ps-chat #ps-chat-messages p
 {
     clear: both;
     margin: 0em;
@@ -348,12 +344,12 @@ body
     border-bottom: solid 0.1em #111;
     min-height: 2em;
 }
-#projectsandbox .ps-sidebar #ps-chat #ps-chat-messages p .player
+#projectsandbox #ps-chat #ps-chat-messages p .player
 {
     font-weight: bold;
     padding-right: 0.5em;
 }
-#projectsandbox .ps-sidebar #ps-chat #ps-chat-messages p .player img
+#projectsandbox #ps-chat #ps-chat-messages p .player img
 {
     float: left;
     vertical-align: middle;
@@ -361,17 +357,8 @@ body
     height: 2em;
     margin: 0em 0.4em 0em 0.2em;
 }
-#projectsandbox .ps-sidebar #ps-chat #ps-chat-messages p .text
+#projectsandbox #ps-chat #ps-chat-messages p .text
 {
-}
-
-/*
-    Generic - (topmost) overlay elements
-    ********************************************************************************************************************
-*/
-#projectsandbox .overlay
-{
-    z-index: 999;
 }
 
 /*
@@ -464,6 +451,7 @@ body
     background: rgba(30, 30, 30, 0.5);
     border-radius: 0.5em;
     padding: 0.5em;
+    border: solid 0.1em #111;
 }
 #projectsandbox #ps-scoreboard h1
 {
