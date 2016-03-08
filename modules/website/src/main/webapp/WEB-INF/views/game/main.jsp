@@ -240,7 +240,7 @@
 
         <div id="ps-ui">
 
-            <div id="ps-scoreboard">
+            <div id="ps-scoreboard" class="panel">
                 <h1>
                     Scores
                 </h1>
@@ -252,7 +252,23 @@
                 </ol>
             </div>
 
-            <div id="ps-chat">
+            <div id="ps-activity" class="panel">
+                <div id="ps-activity-items">
+                    <p>
+                        <span class="left">
+                            <img src="" />
+                        </span>
+                        <span class="info">
+                            Waiting for server...
+                        </span>
+                        <span class="right">
+                            <img src="" />
+                        </span>
+                    </p>
+                </div>
+            </div>
+
+            <div id="ps-chat" class="panel">
                 <div id="ps-chat-messages">
                     <p>
                         <img class="thumb" src="" />
@@ -273,10 +289,11 @@
                 --
             </div>
 
+            <div id="ps-fps">
+                FPS: <span id="ps-fps-value">--</span>
+            </div>
+
             <div id="ps-inventory-container">
-                <div class="ps-ui-fps">
-                    FPS: <span id="ps-options-fps">--</span>
-                </div>
                 <div id="ps-inventory">
                 </div>
             </div>

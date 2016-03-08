@@ -1,0 +1,20 @@
+/*
+    Healthbar
+    ********************************************************************************************************************
+*/
+
+#projectsandbox #ps-ui #ps-healthbar
+{
+    height: 1.5em;
+    background: #425867;
+    box-shadow: #333 0em 0em 1.5em;
+    overflow: hidden;
+}
+
+#projectsandbox #ps-ui #ps-healthbar #ps-healthbar-fill
+{
+    width: 50%;
+    height: inherit;
+    background: #33aeff;
+    border-right: solid 0.2em #333;
+}

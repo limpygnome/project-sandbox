@@ -11,9 +11,35 @@
             Project Sandbox - Prototype
         </title>
 
+        <!--
+            CSS
+            ************************************************************************************************************
+        -->
+
         <link rel="stylesheet" href="/content/game/css/main.css" />
         <link rel="stylesheet" href="/content/game/css/main-anims.css" />
         <link rel="stylesheet" href="/content/game/css/weapons.css" />
+
+        <!-- Overlays -->
+        <link rel="stylesheet" href="/content/game/css/overlay/shared.css" />
+        <link rel="stylesheet" href="/content/game/css/overlay/connecting.css" />
+        <link rel="stylesheet" href="/content/game/css/overlay/death-screen.css" />
+        <link rel="stylesheet" href="/content/game/css/overlay/ui.css" />
+
+        <!-- UI -->
+        <link rel="stylesheet" href="/content/game/css/ui/activity.css" />
+        <link rel="stylesheet" href="/content/game/css/ui/chat.css" />
+        <link rel="stylesheet" href="/content/game/css/ui/fps.css" />
+        <link rel="stylesheet" href="/content/game/css/ui/health-bar.css" />
+        <link rel="stylesheet" href="/content/game/css/ui/inventory.css" />
+        <link rel="stylesheet" href="/content/game/css/ui/options.css" />
+        <link rel="stylesheet" href="/content/game/css/ui/score.css" />
+        <link rel="stylesheet" href="/content/game/css/ui/scoreboard.css" />
+
+        <!--
+            JavaScript
+            ************************************************************************************************************
+        -->
 
         <!-- Third-Party -->
         <script src="/content/third-party/js/gl-matrix-min.js"></script>

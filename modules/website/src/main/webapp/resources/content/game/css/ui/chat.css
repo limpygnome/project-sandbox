@@ -1,0 +1,56 @@
+/*
+    Chat
+    ********************************************************************************************************************
+*/
+
+#projectsandbox #ps-ui #ps-chat
+{
+    position: fixed;
+    width: 24em;
+    bottom: 1.5em;
+    left: 1.5em;
+    z-index: 2;
+}
+#projectsandbox #ps-ui #ps-chat #ps-chat-box input
+{
+    width: 100%;
+    padding: 0.6em 0.5em;
+    border: none;
+    outline: none;
+    background: transparent;
+    color: #CCC;
+    border-top: solid 0.1em #111;
+    box-sizing: border-box;
+}
+
+#projectsandbox #ps-ui #ps-chat #ps-chat-messages
+{
+    text-align: left;
+    overflow-y: scroll;
+    overflow-x: hidden;
+    height: 10em;
+}
+#projectsandbox #ps-ui #ps-chat #ps-chat-messages p
+{
+    clear: both;
+    margin: 0em;
+    padding: 0.4em 0.2em;
+    border-bottom: solid 0.1em #111;
+    min-height: 2em;
+}
+#projectsandbox #ps-chat #ps-chat-messages p .player
+{
+    font-weight: bold;
+    padding-right: 0.5em;
+}
+#projectsandbox #ps-chat #ps-chat-messages p .player img
+{
+    float: left;
+    vertical-align: middle;
+    width: 2em;
+    height: 2em;
+    margin: 0em 0.4em 0em 0.2em;
+}
+#projectsandbox #ps-chat #ps-chat-messages p .text
+{
+}

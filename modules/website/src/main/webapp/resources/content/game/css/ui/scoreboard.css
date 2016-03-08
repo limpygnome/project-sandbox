@@ -1,0 +1,46 @@
+/*
+    Scoreboard
+    ********************************************************************************************************************
+*/
+
+#projectsandbox #ps-scoreboard
+{
+    position: fixed;
+    top: 2.5em;
+    right: 1em;
+    width: 20em;
+    padding: 0.5em;
+    overflow: hidden;
+}
+#projectsandbox #ps-scoreboard h1
+{
+    text-align: center;
+    font-size: 1.2em;
+    margin: 0;
+    padding: 0;
+}
+#projectsandbox #ps-scoreboard ol
+{
+    margin: 0em;
+    padding: 0em;
+    padding-left: 3em;
+}
+#projectsandbox #ps-scoreboard ol li
+{
+    padding: 0.5em;
+}
+#projectsandbox #ps-scoreboard ol li span
+{
+    float: right;
+    color: #999;
+    font-size: larger;
+    font-weight: bold;
+}
+#projectsandbox #ps-scoreboard ol li.current-player span
+{
+    color: #33AEFF;
+}
+#projectsandbox #ps-scoreboard ol li:nth-child(1) span
+{
+    color: #FFC506;
+}

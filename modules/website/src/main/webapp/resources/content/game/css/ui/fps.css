@@ -1,0 +1,19 @@
+/*
+    FPS counter
+    ********************************************************************************************************************
+*/
+
+#projectsandbox #ps-ui #ps-fps
+{
+    position: fixed;
+    top: 1.5em;
+    left: 0;
+    width: 100%;
+    text-align: center;
+    font-size: 2em;
+    text-shadow: 0em 0em 0.2em #333;
+}
+
+#projectsandbox #ps-ui #ps-fps #ps-fps-value
+{
+}

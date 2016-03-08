@@ -1,0 +1,51 @@
+/*
+    Inventory
+    ********************************************************************************************************************
+*/
+
+#projectsandbox #ps-ui #ps-inventory-container
+{
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    padding: 1em;
+}
+#projectsandbox #ps-ui #ps-inventory
+{
+    margin: auto;
+}
+#projectsandbox #ps-ui #ps-inventory .slot
+{
+    display: inline-block;
+    vertical-align: bottom;
+
+    width: 4.5em;
+    height: 4.5em;
+    line-height: 8em;
+
+    padding: 0.5em;
+    margin: 0.5em;
+    margin-left: 0em;
+
+    background: rgba(0, 0, 0, 0.8);
+    background-size: 100%;
+    background-repeat: no-repeat;
+
+    border: solid 0.1em #333;
+    border-radius: 0.5em;
+
+    box-shadow: #666 0em 0em 1.5em;
+
+    text-align: center;
+    text-shadow: #000 0em 0em 0.2em;
+}
+#projectsandbox #ps-ui #ps-inventory .slot.depleted
+{
+    background: rgba(255, 80, 80, 0.4);
+}
+#projectsandbox #ps-ui #ps-inventory .slot.selected
+{
+    background: rgba(51, 174, 255, 0.4);
+    border-color: #3396CB;
+    text-shadow: #33345F 0em 0em 0.4em;
+}

@@ -21,7 +21,7 @@ game.ui =
     elementSidebarScoreboard: null,
 
     // Elements - options
-    elementOptionsFpsCounter: null,
+    elementFpsCounter: null,
 
 
     setup: function()
@@ -43,13 +43,13 @@ game.ui =
         this.elementUIScore = document.getElementById("ps-score");
 
         // -- Sidebar
-        this.elementSidebarActivity = document.getElementById("ps-activity");
+        this.elementSidebarActivity = document.getElementById("ps-activity-items");
         this.elementSidebarChatBox = document.getElementById("ps-chat-box-field");
         this.elementSidebarChatMessages = document.getElementById("ps-chat-messages");
         this.elementSidebarScoreboard = document.getElementById("ps-scoreboard");
 
         // -- Options
-        this.elementOptionsFpsCounter = document.getElementById("ps-options-fps");
+        this.elementFpsCounter = document.getElementById("ps-fps-value");
 
         // Bind resize event for window
         $(window).resize(function () {
@@ -223,7 +223,7 @@ game.ui =
         }
 
         // Update FPS counter
-        $(this.elementOptionsFpsCounter).text(projectSandbox.fps);
+        $(this.elementFpsCounter).text(projectSandbox.fps);
     },
     
     render: function(gl, shaderProgram, modelView, perspective)

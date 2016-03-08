@@ -1,0 +1,23 @@
+/*
+    UI
+    ********************************************************************************************************************
+*/
+
+#projectsandbox #ps-ui
+{
+    position: fixed;
+    z-index: 1;
+}
+
+#projectsandbox #ps-ui .panel
+{
+    background: rgba(30, 30, 30, 0.5);
+    border-radius: 0.5em;
+    box-shadow: 0em 0em 1em #333;
+    border: solid 0.1em #111;
+    background: rgba(30, 30, 30, 0.5);
+    border-radius: 0.5em;
+    border: solid 0.1em #111;
+
+    overflow: hidden;
+}

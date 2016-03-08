@@ -1,0 +1,56 @@
+/*
+    Activity
+    ********************************************************************************************************************
+*/
+
+#projectsandbox #ps-ui #ps-activity
+{
+    position: fixed;
+    left: 1.5em;
+    bottom: 16em;
+    width: 24em;
+    height: 25em;
+}
+#projectsandbox #ps-ui #ps-activity #ps-activity-items
+{
+    width: 100%;
+    height: 100%;
+    overflow-y: scroll;
+}
+#projectsandbox #ps-ui #ps-activity p
+{
+    display: table;
+    width: 100%;
+    margin: 0em;
+    border-bottom: solid 0.1em #111;
+    min-height: 2.5em;
+}
+#projectsandbox #ps-ui #ps-activity p span
+{
+    display: table-cell;
+}
+#projectsandbox #ps-ui #ps-activity p span.info
+{
+    padding: 0.5em;
+    vertical-align: middle;
+    text-align: center;
+}
+#projectsandbox #ps-ui #ps-activity p span.left,
+#projectsandbox #ps-ui #ps-activity p span.right,
+#projectsandbox #ps-ui #ps-activity p span img
+{
+    width: 2.5em;
+    vertical-align: middle;
+}
+#projectsandbox #ps-ui #ps-activity p span
+{
+    height: 100%;
+}
+#projectsandbox #ps-ui #ps-activity p span img
+{
+    height: 2.5em;
+}
+#projectsandbox #ps-ui #ps-activity p span.right
+{
+    width: 3em;
+}
