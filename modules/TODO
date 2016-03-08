@@ -20,3 +20,5 @@
 - add map property for gravity / physics settings
 -- physics engines for diff maps? diff props for diff maps?
 
+bugs/security:
+- limit chat message size; both clientside and server -> server shud disconnect if violated and log error

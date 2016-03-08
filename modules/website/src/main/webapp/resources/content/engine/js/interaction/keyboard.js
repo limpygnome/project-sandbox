@@ -1,4 +1,4 @@
-projectSandbox.keyboard =
+projectSandbox.interaction.keyboard =
 {
     keys: new Map(),
     
@@ -18,21 +18,24 @@ projectSandbox.keyboard =
         $(renderContainer).keyup(function (event) {
             self.handlerUp(event);
         });
-
-        // Put focus on render container
-        $(renderContainer).focus();
     },
     
     handlerDown: function(event)
     {
-        var keyCode = event.keyCode;
-        this.setKeyCode(keyCode, true);
+        if (projectSandbox.interaction.shared.isRenderArea(event))
+        {
+            var keyCode = event.keyCode;
+            this.setKeyCode(keyCode, true);
+        }
     },
     
     handlerUp: function(event)
     {
-        var keyCode = event.keyCode;
-        this.setKeyCode(keyCode, false);
+        if (projectSandbox.interaction.shared.isRenderArea(event))
+        {
+            var keyCode = event.keyCode;
+            this.setKeyCode(keyCode, false);
+        }
     },
     
     setKeyCode: function(keyCode, value)

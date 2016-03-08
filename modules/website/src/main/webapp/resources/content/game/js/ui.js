@@ -64,8 +64,11 @@ game.ui =
             }
         });
 
-        // Bind chatbox keydown
-        $(this.elementSidebarChatBox).keyup(this.chatboxKeyUp);
+        // Bind chatbox key-down
+        $(this.elementSidebarChatBox).bind("keyup", this.chatboxKeyUp);
+
+        // Bind render area key-up
+        // -- we need global delegate
 
         // Bind options / fullscreen
         $("#button-fullscreen").click(function () {
@@ -80,14 +83,28 @@ game.ui =
         this.reset();
     },
 
+    renderAreaKeyUp: function(event)
+    {
+        var keyCode = event.keyCode;
+
+        if (keyCode == 'Y')
+        {
+            // Put focus on chatbox input
+            $(this.elementSidebarChatBox).focus();
+        }
+    }
+
     chatboxKeyUp: function(event)
     {
         var keyCode = event.keyCode;
 
+        // Check if keycode is enter key (13); if so, we'll send message...
         if (keyCode == 13)
         {
+            // Fetch message
             var message = $(game.ui.elementSidebarChatBox).val();
 
+            // Check we can send it...
             if (message != null && message.length > 0)
             {
                 // Reset field
@@ -96,6 +113,9 @@ game.ui =
                 // Send message
                 projectSandbox.network.player.sendChatMessage(message);
             }
+
+            // Put focus back on render area
+            projectSandbox.interaction.shared.focusRenderArea();
         }
     },
 

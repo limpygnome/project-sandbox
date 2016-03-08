@@ -87,8 +87,10 @@ projectSandbox.camera =
     
     logic: function()
     {
+        var mouse = projectSandbox.interaction.mouse;
+
         // Update zoom level
-        var delta = projectSandbox.mouse.scrollDelta;
+        var delta = mouse.scrollDelta;
         
         if(delta != 0)
         {
@@ -122,24 +124,24 @@ projectSandbox.camera =
             }
             
             // Reset delta
-            projectSandbox.mouse.scrollDelta = 0;
+            mouse.scrollDelta = 0;
         }
         
         // Update rotation
-        if(projectSandbox.mouse.left)
+        if(mouse.left)
         {
             // Check if this is the first loop with mouse down
             if(!this.mouseMove)
             {
                 this.mouseMove = true;
-                this.mouseX = projectSandbox.mouse.x;
-                this.mouseY = projectSandbox.mouse.y;
+                this.mouseX = mouse.x;
+                this.mouseY = mouse.y;
             }
             else
             {
                 // Move rotation based on amount of movement
-                var diffX = (projectSandbox.mouse.x - this.mouseX)/projectSandbox.canvas.width;
-                var diffY = (projectSandbox.mouse.y - this.mouseY)/projectSandbox.canvas.height;
+                var diffX = (mouse.x - this.mouseX)/projectSandbox.canvas.width;
+                var diffY = (mouse.y - this.mouseY)/projectSandbox.canvas.height;
                 this.rotationY += diffX * this.mouseRotationFactor;
                 this.rotationX += diffY * this.mouseRotationFactor;
             }

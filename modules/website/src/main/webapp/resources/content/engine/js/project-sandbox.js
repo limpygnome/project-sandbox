@@ -124,12 +124,9 @@ var projectSandbox =
         
         // Setup comms
         projectSandbox.network.setup();
-        
-        // Hook keyboard
-        projectSandbox.keyboard.hook();
-        
-        // Hook mouse
-        projectSandbox.mouse.hook();
+
+        // Hook interaction
+        projectSandbox.interaction.shared.hook();
         
         // Setup scene
         this.sceneSetup();

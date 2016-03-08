@@ -221,38 +221,40 @@ projectSandbox.network.player =
 
     sendUpdateMovementPacket: function()
     {
+        var keyboard = projectSandbox.interaction.keyboard;
+
         // Compute new movement packet
         var movement = 0;
 
-        if(projectSandbox.keyboard.isKeyDown("W"))
+        if (keyboard.isKeyDown("W"))
         {
             movement |= this.MOVEMENT_UP;
         }
-        if(projectSandbox.keyboard.isKeyDown("S"))
+        if (keyboard.isKeyDown("S"))
         {
             movement |= this.MOVEMENT_DOWN;
         }
-        if(projectSandbox.keyboard.isKeyDown("A"))
+        if (keyboard.isKeyDown("A"))
         {
             movement |= this.MOVEMENT_LEFT;
         }
-        if(projectSandbox.keyboard.isKeyDown("D"))
+        if (keyboard.isKeyDown("D"))
         {
             movement |= this.MOVEMENT_RIGHT;
         }
 
-        if (projectSandbox.keyboard.isKeyDown("F"))
+        if (keyboard.isKeyDown("F"))
         {
             movement |= this.ACTION_KEY;
         }
 
-        if (projectSandbox.keyboard.isKeyDown(" "))
+        if (keyboard.isKeyDown(" "))
         {
             movement |= this.SPACEBAR;
         }
 
         // Compare and decide if to send
-        if(movement != this.previousMovement)
+        if (movement != this.previousMovement)
         {
             // Update state
             this.previousMovement = movement;

@@ -65,13 +65,18 @@
         <script src="/content/engine/js/texture.js"></script>
         <script src="/content/engine/js/textures.js"></script>
         <script src="/content/engine/js/map.js"></script>
-        <script src="/content/engine/js/keyboard.js"></script>
-        <script src="/content/engine/js/mouse.js"></script>
         <script src="/content/engine/js/network.js"></script>
         <script src="/content/engine/js/utils.js"></script>
         <script src="/content/engine/js/inventory.js"></script>
         <script src="/content/engine/js/inventory-item.js"></script>
         <script src="/content/engine/js/text.js"></script>
+
+        <!-- Interaction -->
+        <script src="/content/engine/js/interaction/shared.js"></script>
+        <script src="/content/engine/js/interaction/keyboard.js"></script>
+        <script src="/content/engine/js/interaction/mouse.js"></script>
+
+        <!-- Lighting -->
         <script src="/content/engine/js/lighting/lights.js"></script>
         <script src="/content/engine/js/lighting/light.js"></script>
 

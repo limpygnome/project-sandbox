@@ -214,15 +214,15 @@
     </div>
 -->
 
-    <div id="ps-render-container" tabindex="1">
+    <div id="ps-render-container" tabindex="1" class="clickable">
 
-        <div id="ps-connecting">
+        <div id="ps-connecting" class="clickable">
             <div class="message">
                 connecting...
             </div>
         </div>
 
-        <div id="ps-death-screen" tabindex="1">
+        <div id="ps-death-screen" tabindex="1" class="clickable">
             <div class="container">
                 <div class="message">
                     <div class="wrekt">
@@ -238,7 +238,7 @@
             </div>
         </div>
 
-        <div id="ps-ui">
+        <div id="ps-ui" class="clickable">
 
             <div id="ps-scoreboard" class="panel">
                 <h1>
@@ -294,7 +294,7 @@
             </div>
 
             <div id="ps-inventory-container">
-                <div id="ps-inventory">
+                <div id="ps-inventory" class="clickable">
                 </div>
             </div>
 
@@ -309,7 +309,7 @@
 
         </div>
 
-        <canvas id="ps_render" width="1024" height="768">
+        <canvas id="ps_render" width="1024" height="768" class="clickable">
             <p>
                 No support for HTML5 canvas.
             </p>
