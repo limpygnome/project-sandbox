@@ -22,3 +22,6 @@
 
 bugs/security:
 - limit chat message size; both clientside and server -> server shud disconnect if violated and log error
+
+nice features:
+- add page on controls / how to play -> make it overlay available all over site?
