@@ -252,7 +252,7 @@
                 </ol>
             </div>
 
-            <div id="ps-activity" class="panel">
+            <div id="ps-activity" class="panel top">
                 <div id="ps-activity-items">
                     <p>
                         <span class="left">
@@ -268,7 +268,7 @@
                 </div>
             </div>
 
-            <div id="ps-chat" class="panel">
+            <div id="ps-chat" class="panel top">
                 <div id="ps-chat-messages">
                     <p>
                         <img class="thumb" src="" />
@@ -276,7 +276,7 @@
                     </p>
                 </div>
                 <div id="ps-chat-box">
-                    <input type="text" placeholder="Enter message here..." id="ps-chat-box-field" />
+                    <input type="text" tabindex="2" placeholder="Enter message here..." id="ps-chat-box-field" />
                 </div>
             </div>
 
@@ -298,7 +298,7 @@
                 </div>
             </div>
 
-            <div id="ps-options">
+            <div id="ps-options" class="top">
                 <div id="button-fullscreen" class="button fullscreen">
                     <span class="icon-enlarge"></span>
                 </div>

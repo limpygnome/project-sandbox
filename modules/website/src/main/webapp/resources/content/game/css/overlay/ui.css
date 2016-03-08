@@ -21,3 +21,9 @@
 
     overflow: hidden;
 }
+
+/* Allows elements to be higher than default, so that they're clickable. */
+#projectsandbox #ps-ui .top
+{
+    z-index: 2;
+}
