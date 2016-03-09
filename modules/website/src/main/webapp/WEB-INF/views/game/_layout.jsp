@@ -36,69 +36,92 @@
         <link rel="stylesheet" href="/content/game/css/ui/score.css" />
         <link rel="stylesheet" href="/content/game/css/ui/scoreboard.css" />
 
+        <!-- Font Icons -->
+        <link rel="stylesheet" href="/content/game/fonts/projectsandbox.css" />
+
         <!--
             JavaScript
             ************************************************************************************************************
         -->
 
-        <!-- Third-Party -->
+        <!--
+            Third-party
+            ------------------------------------------------------------------------------------------------------------
+        -->
         <script src="/content/third-party/js/gl-matrix-min.js"></script>
         <script src="/content/third-party/js/jquery-1.11.3.min.js"></script>
 
-        <!-- Main -->
+        <!--
+            Engine
+            ------------------------------------------------------------------------------------------------------------
+        -->
+
         <script src="/content/engine/js/project-sandbox.js"></script>
 
-        <!-- Engine -->
+        <!-- Prototype -->
         <script src="/content/engine/js/_namespace.js"></script>
         <script src="/content/engine/js/_prototype_inheritence.js"></script>
-        <script src="/content/engine/js/frustrum.js"></script>
-        <script src="/content/engine/js/asset-loader.js"></script>
-        <script src="/content/engine/js/buffer-cache.js"></script>
-        <script src="/content/engine/js/camera.js"></script>
-        <script src="/content/engine/js/shaders.js"></script>
-        <script src="/content/engine/js/primitive.js"></script>
-        <script src="/content/engine/js/primitive-bar.js"></script>
-        <script src="/content/engine/js/entity.js"></script>
-        <script src="/content/engine/js/effect.js"></script>
-        <script src="/content/engine/js/trail.js"></script>
-        <script src="/content/engine/js/texturesrc.js"></script>
-        <script src="/content/engine/js/texture.js"></script>
-        <script src="/content/engine/js/textures.js"></script>
-        <script src="/content/engine/js/map.js"></script>
-        <script src="/content/engine/js/network.js"></script>
-        <script src="/content/engine/js/utils.js"></script>
-        <script src="/content/engine/js/inventory.js"></script>
-        <script src="/content/engine/js/inventory-item.js"></script>
-        <script src="/content/engine/js/text.js"></script>
+
+        <!-- Rendering -->
+        <script src="/content/engine/js/rendering/frustrum.js"></script>
+        <script src="/content/engine/js/rendering/buffer-cache.js"></script>
+        <script src="/content/engine/js/rendering/shaders.js"></script>
+        <script src="/content/engine/js/rendering/primitive.js"></script>
+        <script src="/content/engine/js/rendering/primitive-bar.js"></script>
+        <script src="/content/engine/js/rendering/entity.js"></script>
+        <script src="/content/engine/js/rendering/effect.js"></script>
+        <script src="/content/engine/js/rendering/trail.js"></script>
+        <script src="/content/engine/js/rendering/text.js"></script>
+
+        <!-- World -->
+        <script src="/content/engine/js/world/camera.js"></script>
+        <script src="/content/engine/js/world/map.js"></script>
+
+        <!-- Lighting -->
+        <script src="/content/engine/js/lighting/lights.js"></script>
+        <script src="/content/engine/js/lighting/light.js"></script>
+
+        <!-- Textures -->
+        <script src="/content/engine/js/textures/texturesrc.js"></script>
+        <script src="/content/engine/js/textures/texture.js"></script>
+        <script src="/content/engine/js/textures/textures.js"></script>
 
         <!-- Interaction -->
         <script src="/content/engine/js/interaction/shared.js"></script>
         <script src="/content/engine/js/interaction/keyboard.js"></script>
         <script src="/content/engine/js/interaction/mouse.js"></script>
 
-        <!-- Lighting -->
-        <script src="/content/engine/js/lighting/lights.js"></script>
-        <script src="/content/engine/js/lighting/light.js"></script>
+        <!-- Inventory -->
+        <script src="/content/engine/js/inventory/inventory.js"></script>
+        <script src="/content/engine/js/inventory/inventory-item.js"></script>
 
-        <script src="/content/engine/js/players.js"></script>
-
+        <!-- Network -->
+        <script src="/content/engine/js/network/asset-loader.js"></script>
+        <script src="/content/engine/js/network/network.js"></script>
         <script src="/content/engine/js/network/inbound-packet.js"></script>
         <script src="/content/engine/js/network/outbound-packet.js"></script>
-        <script src="/content/engine/js/network/entities.js"></script>
-        <script src="/content/engine/js/network/inventory.js"></script>
-        <script src="/content/engine/js/network/map.js"></script>
-        <script src="/content/engine/js/network/player.js"></script>
-        <script src="/content/engine/js/network/session.js"></script>
 
+        <!-- Network: Components -->
+        <script src="/content/engine/js/network/components/entities.js"></script>
+        <script src="/content/engine/js/network/components/inventory.js"></script>
+        <script src="/content/engine/js/network/components/map.js"></script>
+        <script src="/content/engine/js/network/components/player.js"></script>
+        <script src="/content/engine/js/network/components/session.js"></script>
+
+        <!-- Types -->
         <script src="/content/engine/js/types/player.js"></script>
 
-        <!-- Game -->
+        <!-- Misc / unsorted -->
+        <script src="/content/engine/js/utils.js"></script>
+        <script src="/content/engine/js/players.js"></script>
+
+        <!--
+            Game
+            ------------------------------------------------------------------------------------------------------------
+        -->
         <script src="/content/game/js/_namespace.js"></script>
         <script src="/content/game/js/effects.js"></script>
         <script src="/content/game/js/ui.js"></script>
-
-        <!-- Game: Font Icons -->
-        <link rel="stylesheet" href="/content/game/fonts/projectsandbox.css" />
 
         <!-- Game: Living -->
         <script src="/content/game/js/ent/living/player.js"></script>
