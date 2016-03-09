@@ -1,4 +1,4 @@
-projectSandbox.map =
+projectSandbox.world.map =
 {
     // Indicates if the map is setup
     isSetup: false,

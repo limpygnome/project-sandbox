@@ -2,3 +2,4 @@
 projectSandbox.interaction = { }
 projectSandbox.network = { }
 projectSandbox.types = { }
+projectSandbox.world = { }

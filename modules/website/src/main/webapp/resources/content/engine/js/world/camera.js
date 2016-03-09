@@ -207,7 +207,7 @@ projectSandbox.camera =
     buildLimits: function()
     {
         // Check map is ready
-        if (!projectSandbox.map.isSetup)
+        if (!projectSandbox.world.map.isSetup)
         {
             console.warn("engine/camera - unable to build limits, map not setup");
             return;
@@ -215,9 +215,9 @@ projectSandbox.camera =
 
         var cameraZ = this.z + this.zoom;
 
-        var mapTileSize = projectSandbox.map.tileSize;
-        var mapWidth = projectSandbox.map.width * mapTileSize;
-        var mapHeight = projectSandbox.map.height * mapTileSize;
+        var mapTileSize = projectSandbox.world.map.tileSize;
+        var mapWidth = projectSandbox.world.map.width * mapTileSize;
+        var mapHeight = projectSandbox.world.map.height * mapTileSize;
 
         var frustrumSize = projectSandbox.frustrum.computeFrustrumSize(cameraZ);
         var frustumWidthHalf = frustrumSize[0] / 2.0;

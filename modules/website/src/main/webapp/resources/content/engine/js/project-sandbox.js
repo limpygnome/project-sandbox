@@ -55,7 +55,7 @@ var projectSandbox =
         }
         
         // Reset map
-        projectSandbox.map.reset();
+        projectSandbox.world.map.reset();
 
         // Reset inventory
         projectSandbox.inventory.reset();
@@ -265,7 +265,7 @@ var projectSandbox =
         gl.uniformMatrix4fv(this.shaderProgram.uniformCameraViewMatrix, false, this.cameraView);
         
         // Render map
-        projectSandbox.map.render(gl, this.shaderProgram, this.modelView, this.perspective);
+        projectSandbox.world.map.render(gl, this.shaderProgram, this.modelView, this.perspective);
 
         // Render effects
         var effect;
