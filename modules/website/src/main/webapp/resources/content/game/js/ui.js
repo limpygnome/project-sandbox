@@ -68,13 +68,12 @@ game.ui =
         $(this.elementSidebarChatBox).bind("keyup", this.chatboxKeyUp);
 
         // Bind render area key-up
-        // -- we need global delegate
+        $(this.renderContainer).bind("keyup", this.renderAreaKeyUp);
 
         // Bind options / fullscreen
         $("#button-fullscreen").click(function () {
             game.ui.toggleFullScreen();
         });
-
 
         // Set UI size
         this.resize();
@@ -85,14 +84,17 @@ game.ui =
 
     renderAreaKeyUp: function(event)
     {
-        var keyCode = event.keyCode;
-
-        if (keyCode == 'Y')
+        if (projectSandbox.interaction.shared.isRenderArea(event))
         {
-            // Put focus on chatbox input
-            $(this.elementSidebarChatBox).focus();
+            var keyCode = String.fromCharCode(event.keyCode);
+
+            if (keyCode == "Y")
+            {
+                // Put focus on chatbox input
+                $(game.ui.elementSidebarChatBox).focus();
+            }
         }
-    }
+    },
 
     chatboxKeyUp: function(event)
     {
@@ -127,46 +129,10 @@ game.ui =
         var width = $("body").width();
         var height = $("body").height();
 
-//        if (width > height)
-//        {
-//            height = width / 1.33;
-//        }
-//        else
-//        {
-//            width = height / 1.33;
-//        }
-
-        //$(this.elementRender).width(width).height(height);
-
         // By setting the actual width/height attributes, the canvas renders at a much higher quality,
         // rather than scaling between the initial width/height and CSS styles
         $(this.elementRender).attr("width", width);
         $(this.elementRender).attr("height", height);
-
-//        // Calculate size of render area
-//        var totalWidth = $("#projectsandbox").width();
-//        var sidebarLeftWidth = $("#ps-sidebar-left").width();
-//        var sidebarRightWidth = $("#ps-sidebar-right").width();
-//
-//        var newWidth = totalWidth - (sidebarLeftWidth + sidebarRightWidth);
-//        newWidth *= 1.0;
-//        var newHeight = newWidth / 1.33; $("#projectsandbox").height();
-//
-//        // Update render canvas
-//        $(this.elementRender).width(totalWidth).height(totalHeight);
-//
-//        // Update layers
-//        this.updateRenderOverlayElement(this.elementDeathScreen, newWidth, newHeight);
-//        this.updateRenderOverlayElement(this.elementUI, newWidth, newHeight);
-//        this.updateRenderOverlayElement(this.elementConnecting, newWidth, newHeight);
-//
-//        console.debug("engine/ui - render size changed - " + newWidth + "x" + newHeight);
-//
-//        // Recompute size of UI
-//        this.uiWidth = gl.viewportWidth;
-//        this.uiHeight = gl.viewportHeight;
-//
-//        console.debug("engine/ui - size set to viewport - " + this.uiWidth + "x" + this.uiHeight);
     },
 
     updateRenderOverlayElement: function(element, width, height)
