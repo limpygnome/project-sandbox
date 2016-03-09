@@ -17,7 +17,10 @@
 -- physics engines for diff maps? diff props for diff maps?
 
 bugs/security:
+- cull number of chat / activity messages, could be spammed and crash client browsers
+= limit speed of chat messages
 - limit chat message size; both clientside and server -> server shud disconnect if violated and log error
+- limit content of chat messages
 
 nice features:
 - add page on controls / how to play -> make it overlay available all over site?
