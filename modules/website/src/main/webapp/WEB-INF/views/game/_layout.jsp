@@ -8,7 +8,7 @@
 <html>
     <head>
         <title>
-            Project Sandbox - Prototype
+            Project Sandbox
         </title>
 
         <!--

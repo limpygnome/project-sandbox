@@ -193,6 +193,9 @@ projectSandbox.camera =
         // Update frustrum
         projectSandbox.frustrum.update();
 
+        // Rebuild camera limits
+        this.buildLimits();
+
         // Update shader
         var gl = projectSandbox.gl;
         if (projectSandbox.shaderProgram != null)
