@@ -44,6 +44,7 @@ public class Controller
     @Autowired
     public SessionService sessionService;
 
+    // Services which need an event invoked on startup
     @Autowired
     private List<LoadService> loadServices;
 

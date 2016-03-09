@@ -20,6 +20,7 @@ public class WorldMap
     private final Controller controller;
     private final MapService mapService;
 
+    // TODO: services need to send only data to players in map; thus we'll need to map players to maps i.e. broadcastToMap
     public EntityManager entityManager;
     public RespawnManager respawnManager;
     public EffectsManager effectsManager;
