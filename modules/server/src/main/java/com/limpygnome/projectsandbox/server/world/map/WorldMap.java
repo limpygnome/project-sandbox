@@ -5,15 +5,16 @@ import com.limpygnome.projectsandbox.server.effect.EffectsManager;
 import com.limpygnome.projectsandbox.server.entity.EntityManager;
 import com.limpygnome.projectsandbox.server.entity.RespawnManager;
 import com.limpygnome.projectsandbox.server.entity.ai.ArtificialIntelligenceManager;
-import com.limpygnome.projectsandbox.server.packet.imp.map.MapDataOutboundPacket;
+import com.limpygnome.projectsandbox.server.world.map.packet.TileMapDataOutboundPacket;
 
+import com.limpygnome.projectsandbox.server.world.map.tile.TileData;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 /**
  * Represents a (world) map, an environment/area in which a player interacts.
  */
-public class WorldMap
+public abstract class WorldMap
 {
     private final static Logger LOG = LogManager.getLogger(WorldMap.class);
 
@@ -36,19 +37,19 @@ public class WorldMap
     /**
      * Properties and cached values for this map.
      */
-    public WorldMapProperties properties;
+    private WorldMapProperties properties;
 
     /**
      * Tile data for this map.
      */
-    public WorldMapTileData tileData;
+    public TileData tileData;
 
     /**
      * Cached packet of data sent to client for map.
      *
      * WARNING: if this is used elsewhere, it needs thread protection.
      */
-    public MapDataOutboundPacket packet;
+    public TileMapDataOutboundPacket packet;
 
     /**
      * Creates a new instance and sets up internal state ready for tile data.
@@ -79,9 +80,12 @@ public class WorldMap
         effectsManager.logic();
     }
 
+    public abstract WorldMapProperties getProperties();
+
     @Override
     public String toString()
     {
+        // TODO: regenerate this / move into imp
         StringBuilder sb = new StringBuilder();
 
         sb      .append("map{properties:\n")

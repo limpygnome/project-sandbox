@@ -10,7 +10,7 @@ import com.limpygnome.projectsandbox.server.entity.physics.proximity.DefaultProx
 import com.limpygnome.projectsandbox.server.entity.physics.proximity.ProximityResult;
 import com.limpygnome.projectsandbox.server.util.CustomMath;
 import com.limpygnome.projectsandbox.server.world.map.WorldMap;
-import com.limpygnome.projectsandbox.server.world.tile.TileType;
+import com.limpygnome.projectsandbox.server.world.map.tile.TileType;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 

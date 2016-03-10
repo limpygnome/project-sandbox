@@ -6,8 +6,8 @@ projectSandbox.network.map =
 
         switch (subType)
         {
-            // Read map data
-            case "D":
+            // Tile data map
+            case "T":
                 this.packetMapData(packet);
                 return;
 

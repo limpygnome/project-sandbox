@@ -35,6 +35,12 @@ public class PacketData
         add((byte) value);
     }
 
+    public void add(boolean value)
+    {
+        char charValue = value ? (char) 0x01 : (char) 0x0;
+        add(charValue);
+    }
+
     public void add(float value)
     {
         add(new Float32DataType(value));

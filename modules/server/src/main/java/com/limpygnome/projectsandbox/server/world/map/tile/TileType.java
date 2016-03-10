@@ -1,4 +1,4 @@
-package com.limpygnome.projectsandbox.server.world.tile;
+package com.limpygnome.projectsandbox.server.world.map.tile;
 
 import com.limpygnome.projectsandbox.server.Controller;
 import java.io.IOException;

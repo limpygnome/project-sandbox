@@ -1,13 +1,14 @@
-package com.limpygnome.projectsandbox.server.world.map;
+package com.limpygnome.projectsandbox.server.world.map.tile;
 
 import com.limpygnome.projectsandbox.server.entity.physics.Vector2;
 import com.limpygnome.projectsandbox.server.entity.physics.Vertices;
-import com.limpygnome.projectsandbox.server.world.tile.TileType;
+import com.limpygnome.projectsandbox.server.world.map.MapPosition;
+import com.limpygnome.projectsandbox.server.world.map.WorldMap;
 
 /**
  * Used to hold tile data for an instance of {@link WorldMap}.
  */
-public class WorldMapTileData
+public class TileData
 {
     private WorldMap map;
 
@@ -32,7 +33,7 @@ public class WorldMapTileData
      *
      * @param map the map to which this belongs
      */
-    public WorldMapTileData(WorldMap map)
+    public TileData(WorldMap map)
     {
         this.map = map;
     }
@@ -119,4 +120,5 @@ public class WorldMapTileData
 
         return sb.toString();
     }
+
 }

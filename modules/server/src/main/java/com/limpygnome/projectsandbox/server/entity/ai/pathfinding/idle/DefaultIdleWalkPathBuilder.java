@@ -8,7 +8,7 @@ import com.limpygnome.projectsandbox.server.entity.ai.pathfinding.Path;
 import com.limpygnome.projectsandbox.server.world.map.WorldMap;
 import com.limpygnome.projectsandbox.server.world.map.MapPosition;
 
-import com.limpygnome.projectsandbox.server.world.tile.TileType;
+import com.limpygnome.projectsandbox.server.world.map.tile.TileType;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;

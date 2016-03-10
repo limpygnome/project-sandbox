@@ -1,7 +1,7 @@
-package com.limpygnome.projectsandbox.server.packet.imp.map;
+package com.limpygnome.projectsandbox.server.world.map.packet;
 
 import com.limpygnome.projectsandbox.server.world.map.WorldMap;
-import com.limpygnome.projectsandbox.server.world.tile.TileType;
+import com.limpygnome.projectsandbox.server.world.map.tile.TileType;
 import com.limpygnome.projectsandbox.server.packet.OutboundPacket;
 
 import java.io.IOException;
@@ -11,14 +11,12 @@ import java.io.IOException;
  * map by the client.
  * 
  * TODO: somehow update only certain bytes without remaking the entire packet.
- * 
- * @author limpygnome
  */
-public class MapDataOutboundPacket extends OutboundPacket
+public class TileMapDataOutboundPacket extends OutboundPacket
 {
-    public MapDataOutboundPacket()
+    public TileMapDataOutboundPacket()
     {
-        super((byte)'M', (byte)'D');
+        super((byte)'M', (byte)'T');
     }
     
     public void build(WorldMap map) throws IOException

@@ -3,17 +3,28 @@ package com.limpygnome.projectsandbox.server.world.map;
 /**
  * Used to contain properties belonging to an instance of {@link WorldMap}.
  */
-public final class WorldMapProperties
+public class WorldMapProperties
 {
+    private String name;
+    private boolean lobby;
 
-    public String name;
-    public boolean lobby;
+    public String getName()
+    {
+        return name;
+    }
 
+    public boolean isLobby()
+    {
+        return lobby;
+    }
 
     @Override
     public String toString()
     {
-        return "properties{ name: " + name + ", lobby: " + lobby + "}";
+        return "WorldMapProperties{" +
+                "name='" + name + '\'' +
+                ", lobby=" + lobby +
+                '}';
     }
 
 }

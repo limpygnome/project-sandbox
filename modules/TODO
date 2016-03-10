@@ -1,5 +1,7 @@
 - remove playerid from commands, server should know - reduces commonly wasted bytes
 
+- change design pattern so that classes are organised into modules, rather than by type
+-- allows individual units to be turned on/off
 - make scores/activity/chat modules, which can be turned off; have activity turned off by default
 --- weapons could have modules in the future, or something like that...
 -- make UI modules moveable
