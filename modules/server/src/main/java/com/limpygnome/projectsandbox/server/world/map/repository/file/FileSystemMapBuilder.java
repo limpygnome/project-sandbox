@@ -3,6 +3,7 @@ package com.limpygnome.projectsandbox.server.world.map.repository.file;
 import com.limpygnome.projectsandbox.server.Controller;
 import com.limpygnome.projectsandbox.server.world.map.MapService;
 import com.limpygnome.projectsandbox.server.world.map.WorldMap;
+import com.limpygnome.projectsandbox.server.world.map.WorldMapProperties;
 import org.json.simple.JSONObject;
 
 import java.io.IOException;
@@ -16,6 +17,23 @@ public interface FileSystemMapBuilder
 {
 
     /**
+     * Creates a new instance of {@link WorldMap}.
+     *
+     * @param controller
+     * @param mapService
+     * @param mapId
+     * @return
+     */
+    WorldMap createMapInstance(Controller controller, MapService mapService, short mapId);
+
+    /**
+     * Creates a new instance of {@link WorldMapProperties}.
+     *
+     * @return
+     */
+    WorldMapProperties createPropertiesInstance();
+
+    /**
      * Builds an instance from the provided map data.
      *
      * @param controller
@@ -23,6 +41,6 @@ public interface FileSystemMapBuilder
      * @param mapData
      * @return
      */
-    WorldMap build(Controller controller, MapService mapService, JSONObject mapData) throws IOException
+    WorldMap build(Controller controller, MapService mapService, JSONObject mapData) throws IOException;
 
 }

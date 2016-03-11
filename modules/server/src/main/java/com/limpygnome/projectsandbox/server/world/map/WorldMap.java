@@ -5,23 +5,25 @@ import com.limpygnome.projectsandbox.server.effect.EffectsManager;
 import com.limpygnome.projectsandbox.server.entity.EntityManager;
 import com.limpygnome.projectsandbox.server.entity.RespawnManager;
 import com.limpygnome.projectsandbox.server.entity.ai.ArtificialIntelligenceManager;
+import com.limpygnome.projectsandbox.server.packet.OutboundPacket;
 import com.limpygnome.projectsandbox.server.world.map.packet.TileMapDataOutboundPacket;
 
 import com.limpygnome.projectsandbox.server.world.map.tile.TileData;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import java.io.IOException;
+
 /**
  * Represents a (world) map, an environment/area in which a player interacts.
  */
 public abstract class WorldMap
 {
-    private final static Logger LOG = LogManager.getLogger(WorldMap.class);
-
-    private final Controller controller;
-    private final MapService mapService;
+    protected final Controller controller;
+    protected final MapService mapService;
 
     // TODO: services need to send only data to players in map; thus we'll need to map players to maps i.e. broadcastToMap
+    // TODO: consider making protected...
     public EntityManager entityManager;
     public RespawnManager respawnManager;
     public EffectsManager effectsManager;
@@ -32,7 +34,7 @@ public abstract class WorldMap
      *
      * TODO: convert to UUID.
      */
-    public short mapId;
+    private final short mapId;
 
     /**
      * Properties and cached values for this map.
@@ -49,7 +51,7 @@ public abstract class WorldMap
      *
      * WARNING: if this is used elsewhere, it needs thread protection.
      */
-    public TileMapDataOutboundPacket packet;
+    protected OutboundPacket packet;
 
     /**
      * Creates a new instance and sets up internal state ready for tile data.
@@ -80,7 +82,30 @@ public abstract class WorldMap
         effectsManager.logic();
     }
 
-    public abstract WorldMapProperties getProperties();
+    /**
+     * Used to update the internal packet used to represent the map.
+     *
+     * The packet should be reusable, so that it can be sent to multiple players. This may occur before the serber has
+     * actually finished starting up, thus implementations shouldn't rely on other dependencies.
+     *
+     * @throws IOException thrown if the packet cannot be constructed
+     */
+    public abstract void rebuildMapPacket() throws IOException;
+
+    public short getMapId()
+    {
+        return mapId;
+    }
+
+    public void setProperties(WorldMapProperties properties)
+    {
+        this.properties = properties;
+    }
+
+    public WorldMapProperties getProperties()
+    {
+        return properties;
+    }
 
     @Override
     public String toString()

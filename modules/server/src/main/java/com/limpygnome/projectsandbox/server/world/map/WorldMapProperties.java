@@ -13,9 +13,19 @@ public class WorldMapProperties
         return name;
     }
 
+    public void setName(String name)
+    {
+        this.name = name;
+    }
+
     public boolean isLobby()
     {
         return lobby;
+    }
+
+    public void setLobby(boolean lobby)
+    {
+        this.lobby = lobby;
     }
 
     @Override

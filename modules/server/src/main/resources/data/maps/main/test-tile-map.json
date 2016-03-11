@@ -1,10 +1,11 @@
 {
-    "id" : 1,
+    "type" : "tile-world-map",
+    "id" : 2,
 
     "properties" :
     {
-        "name" : "main",
-        "lobby" : true
+        "name" : "main tile test map",
+        "lobby" : false
     },
 
     "tileProperties" :

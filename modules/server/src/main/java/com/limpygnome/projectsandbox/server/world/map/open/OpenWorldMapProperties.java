@@ -16,14 +16,29 @@ public class OpenWorldMapProperties extends WorldMapProperties
         return limitWidth;
     }
 
+    public void setLimitWidth(float limitWidth)
+    {
+        this.limitWidth = limitWidth;
+    }
+
     public float getLimitHeight()
     {
         return limitHeight;
     }
 
+    public void setLimitHeight(float limitHeight)
+    {
+        this.limitHeight = limitHeight;
+    }
+
     public String getBackground()
     {
         return background;
+    }
+
+    public void setBackground(String background)
+    {
+        this.background = background;
     }
 
     @Override

@@ -42,7 +42,7 @@ public class MapService implements LoadService, LogicService
 
     public synchronized void put(WorldMap map)
     {
-        mapCache.put(map.mapId, map);
+        mapCache.put(map.getMapId(), map);
     }
 
     @Override
@@ -60,7 +60,7 @@ public class MapService implements LoadService, LogicService
         {
             map = kv.getValue();
 
-            if (map.properties.lobby)
+            if (map.getProperties().isLobby())
             {
                 // Check lobby not already found; can only be one...
                 if (this.mainMap != null)
@@ -78,7 +78,7 @@ public class MapService implements LoadService, LogicService
             throw new RuntimeException("Main/lobby map not found");
         }
 
-        LOG.info("Loaded {} maps, lobby: {} [uuid: {}]", mapCache.size(), mainMap.properties.name, mainMap.mapId);
+        LOG.info("Loaded {} maps, lobby: {} [uuid: {}]", mapCache.size(), mainMap.getProperties().getName(), mainMap.getMapId());
     }
 
     @Override
