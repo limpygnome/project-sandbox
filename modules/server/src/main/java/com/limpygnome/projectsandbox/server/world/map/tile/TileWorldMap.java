@@ -1,6 +1,7 @@
 package com.limpygnome.projectsandbox.server.world.map.tile;
 
 import com.limpygnome.projectsandbox.server.Controller;
+import com.limpygnome.projectsandbox.server.entity.ai.ArtificialIntelligenceManager;
 import com.limpygnome.projectsandbox.server.world.map.MapService;
 import com.limpygnome.projectsandbox.server.world.map.WorldMap;
 import com.limpygnome.projectsandbox.server.world.map.packet.TileMapDataOutboundPacket;
@@ -16,9 +17,13 @@ public class TileWorldMap extends WorldMap
 {
     private final static Logger LOG = LogManager.getLogger(TileWorldMap.class);
 
+    public ArtificialIntelligenceManager artificialIntelligenceManager;
+
     public TileWorldMap(Controller controller, MapService mapService, short mapId)
     {
         super(controller, mapService, mapId);
+
+        this.artificialIntelligenceManager = new ArtificialIntelligenceManager(controller, this);
     }
 
     @Override

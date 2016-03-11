@@ -16,6 +16,8 @@ import java.io.IOException;
 public interface FileSystemMapBuilder
 {
 
+    String getBuilderName();
+
     /**
      * Creates a new instance of {@link WorldMap}.
      *

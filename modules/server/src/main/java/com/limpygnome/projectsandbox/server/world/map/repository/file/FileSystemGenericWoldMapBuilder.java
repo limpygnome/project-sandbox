@@ -31,6 +31,11 @@ public abstract class FileSystemGenericWoldMapBuilder implements FileSystemMapBu
         // Create new instance
         WorldMap map = createMapInstance(controller, mapService, mapId);
 
+        if (map == null)
+        {
+            throw new RuntimeException("Implementation did not create map instance...");
+        }
+
         // Build parts of map from JSON data
         buildMapProperties(map, mapData);
         buildFactionSpawns(controller, mapData, map);

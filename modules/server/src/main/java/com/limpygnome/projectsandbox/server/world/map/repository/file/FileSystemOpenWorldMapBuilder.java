@@ -7,15 +7,20 @@ import com.limpygnome.projectsandbox.server.world.map.WorldMapProperties;
 import com.limpygnome.projectsandbox.server.world.map.open.OpenWorldMap;
 import com.limpygnome.projectsandbox.server.world.map.open.OpenWorldMapProperties;
 import org.json.simple.JSONObject;
-
-import javax.annotation.Resource;
+import org.springframework.stereotype.Component;
 
 /**
  * Implementation for {@link OpenWorldMap}.
  */
-@Resource(name = "open-world-map")
+@Component
 public class FileSystemOpenWorldMapBuilder extends FileSystemGenericWoldMapBuilder
 {
+
+    @Override
+    public String getBuilderName()
+    {
+        return "open-world-map";
+    }
 
     @Override
     public WorldMap createMapInstance(Controller controller, MapService mapService, short mapId)

@@ -15,7 +15,10 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
+
 import org.springframework.stereotype.Repository;
+
+import javax.annotation.Resource;
 
 /**
  * Used to load maps from a file-system or the class-path.
@@ -25,6 +28,7 @@ public class FileSystemMapRepository implements MapRepository
 {
     private final static Logger LOG = LogManager.getLogger(FileSystemMapRepository.class);
 
+    @Resource(name = "fileSystemMapBuilders")
     private Map<String, FileSystemMapBuilder> builders;
 
     @Override
@@ -50,6 +54,11 @@ public class FileSystemMapRepository implements MapRepository
                 // Read type and fetch builder
                 mapType = (String) mapData.get("type");
                 mapBuilder = builders.get(mapType);
+
+                if (mapBuilder == null)
+                {
+                    throw new RuntimeException("Unable to find map builder for map type: " + mapType);
+                }
 
                 // Build map using data
                 map = mapBuilder.build(controller, mapService, mapData);

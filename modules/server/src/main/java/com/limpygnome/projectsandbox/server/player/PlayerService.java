@@ -239,7 +239,7 @@ public class PlayerService implements LogicService, IdCounterConsumer
         map.respawnManager.respawn(new EntityPendingRespawn(controller, entityPlayer));
 
         // Send map data
-        packetService.send(playerInfo, map.packet);
+        packetService.send(playerInfo, map.getPacket());
 
         // Send update of entire world to the player
         EntityUpdatesOutboundPacket packetUpdates = new EntityUpdatesOutboundPacket();

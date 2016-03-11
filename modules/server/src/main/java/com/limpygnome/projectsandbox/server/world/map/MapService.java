@@ -24,14 +24,14 @@ public class MapService implements LoadService, LogicService
     @Autowired
     private Controller controller;
 
-    /* The repository used for fetching maps. */
+    // The repository used for fetching maps
     @Autowired
     private MapRepository mapRepository;
 
-    /* A cache for storing either common or active maps. */
+    // A cache for storing either common or active maps
     private Map<Short, WorldMap> mapCache;
 
-    /* The mapMain/lobby map. */
+    // The mapMain/lobby map
     public WorldMap mainMap;
 
     public MapService()

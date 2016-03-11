@@ -10,8 +10,8 @@ import com.limpygnome.projectsandbox.server.world.map.tile.TileType;
 import com.limpygnome.projectsandbox.server.world.map.tile.TileWorldMap;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
+import org.springframework.stereotype.Component;
 
-import javax.annotation.Resource;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
@@ -19,9 +19,15 @@ import java.util.Map;
 /**
  * Implementation for {@link TileWorldMap}.
  */
-@Resource(name = "tile-world-map")
+@Component
 public class FileSystemTileWorldMapBuilder extends FileSystemGenericWoldMapBuilder
 {
+
+    @Override
+    public String getBuilderName()
+    {
+        return "tile-world-map";
+    }
 
     @Override
     public WorldMap createMapInstance(Controller controller, MapService mapService, short mapId)

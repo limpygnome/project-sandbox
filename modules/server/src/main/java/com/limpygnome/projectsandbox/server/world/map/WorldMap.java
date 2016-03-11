@@ -27,7 +27,6 @@ public abstract class WorldMap
     public EntityManager entityManager;
     public RespawnManager respawnManager;
     public EffectsManager effectsManager;
-    public ArtificialIntelligenceManager artificialIntelligenceManager;
 
     /**
      * Unique identifier for this map.
@@ -71,7 +70,6 @@ public abstract class WorldMap
         this.entityManager = new EntityManager(controller, this);
         this.respawnManager = new RespawnManager(controller, this);
         this.effectsManager = new EffectsManager(controller);
-        this.artificialIntelligenceManager = new ArtificialIntelligenceManager(controller, this);
     }
 
     public void logic()
@@ -91,6 +89,15 @@ public abstract class WorldMap
      * @throws IOException thrown if the packet cannot be constructed
      */
     public abstract void rebuildMapPacket() throws IOException;
+
+    /**
+     * Retrieves the packet used
+     * @return
+     */
+    public OutboundPacket getPacket()
+    {
+        return packet;
+    }
 
     public short getMapId()
     {
