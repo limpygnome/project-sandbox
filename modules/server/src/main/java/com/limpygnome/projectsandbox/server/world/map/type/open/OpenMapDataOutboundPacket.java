@@ -1,8 +1,8 @@
-package com.limpygnome.projectsandbox.server.world.map.packet;
+package com.limpygnome.projectsandbox.server.world.map.type.open;
 
 import com.limpygnome.projectsandbox.server.packet.OutboundPacket;
-import com.limpygnome.projectsandbox.server.world.map.open.OpenWorldMap;
-import com.limpygnome.projectsandbox.server.world.map.open.OpenWorldMapProperties;
+import com.limpygnome.projectsandbox.server.world.map.type.open.OpenWorldMap;
+import com.limpygnome.projectsandbox.server.world.map.type.open.OpenWorldMapProperties;
 
 import java.io.IOException;
 

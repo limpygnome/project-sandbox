@@ -4,13 +4,14 @@ import com.limpygnome.projectsandbox.server.entity.ai.pathfinding.Node;
 import com.limpygnome.projectsandbox.server.entity.ai.pathfinding.Path;
 import com.limpygnome.projectsandbox.server.entity.ai.pathfinding.TilePosition;
 import com.limpygnome.projectsandbox.server.world.map.WorldMap;
+import com.limpygnome.projectsandbox.server.world.map.type.tile.TileWorldMap;
 
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.TreeSet;
 
 /**
- * Created by limpygnome on 07/09/15.
+ * Used to produce a path result from A*.
  */
 public class AStarPath extends Path
 {
@@ -25,7 +26,7 @@ public class AStarPath extends Path
         this.nodes = new HashMap<>();
     }
 
-    public void finalizePath(WorldMap map, int targetX, int targetY)
+    public void finalizePath(TileWorldMap tileMap, int targetX, int targetY)
     {
         // Build final path
         Node nodeTarget = nodes.get(new TilePosition(targetX, targetY));
@@ -40,7 +41,7 @@ public class AStarPath extends Path
             while (--i >= 0 && nodeTarget != null)
             {
                 finalPath[i] = nodeTarget;
-                nodeTarget.buildAndCacheXY(map);
+                nodeTarget.buildAndCacheXY(tileMap);
                 nodeTarget = nodeTarget.parent;
             }
         }
@@ -50,7 +51,7 @@ public class AStarPath extends Path
         }
 
         // Node separation is tile size
-        nodeSeparation = map.tileData.tileSize;
+        nodeSeparation = tileMap.tileData.tileSize;
 
         // Destroy data structures used during search
         closedNodes.clear();

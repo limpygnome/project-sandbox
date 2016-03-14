@@ -13,14 +13,13 @@ public interface IdleWalkPathBuilder
     /**
      * Constructs a randomised walkable path for the specified entity.
      *
-     * This will construct a random path along pedestrian designated tiles.
+     * This will construct a random path along either pedestrian designated tiles or random space.
      *
-     * @param controller The controller
-     * @param map The current map
-     * @param entity The entity
-     * @param maxDepth The maximum steps for the entity; this excludes steps required to get to a pedestrian tile.
-     * @return The path to walk
+     * @param controller the controller
+     * @param entity the entity
+     * @param maxDepth the maximum steps for the entity; this excludes steps required to get to a pedestrian tile.
+     * @return the path to walk
      */
-    Path build(Controller controller, WorldMap map, Entity entity, int maxDepth);
+    Path build(Controller controller, Entity entity, int maxDepth);
 
 }

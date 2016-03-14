@@ -1,7 +1,7 @@
 package com.limpygnome.projectsandbox.server.entity.physics;
 
 import com.limpygnome.projectsandbox.server.entity.Entity;
-import com.limpygnome.projectsandbox.server.world.map.tile.TileData;
+import com.limpygnome.projectsandbox.server.world.map.type.tile.TileData;
 
 /**
  * A data-structure for vertices.

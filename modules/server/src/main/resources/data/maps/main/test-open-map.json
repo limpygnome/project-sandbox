@@ -7,8 +7,8 @@
         "name" : "main open test map",
         "lobby" : false,
         "background" : "not yet used...",
-        "width" : 4096,
-        "height" : 4096
+        "width" : 4096.0,
+        "height" : 4096.0
     },
 
     "entities":
@@ -57,11 +57,6 @@
                 "pickup.respawn_delay" : 30000,
                 "health_pickup.health" : 500.0
             }
-        },
-        {
-            "typeName" : "living/pedestrian/attacking",
-            "count" : 50,
-            "faction" : 3000
         }
     ],
 

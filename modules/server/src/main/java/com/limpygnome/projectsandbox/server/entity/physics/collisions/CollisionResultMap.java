@@ -1,6 +1,6 @@
 package com.limpygnome.projectsandbox.server.entity.physics.collisions;
 
-import com.limpygnome.projectsandbox.server.world.map.tile.TileType;
+import com.limpygnome.projectsandbox.server.world.map.type.tile.TileType;
 
 /**
  *

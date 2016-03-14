@@ -10,15 +10,15 @@ import com.limpygnome.projectsandbox.server.entity.physics.proximity.DefaultProx
 import com.limpygnome.projectsandbox.server.entity.physics.proximity.ProximityResult;
 import com.limpygnome.projectsandbox.server.util.CustomMath;
 import com.limpygnome.projectsandbox.server.world.map.WorldMap;
-import com.limpygnome.projectsandbox.server.world.map.tile.TileType;
+import com.limpygnome.projectsandbox.server.world.map.type.tile.TileType;
+import com.limpygnome.projectsandbox.server.world.map.type.tile.TileWorldMap;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.util.List;
 
 /**
- *
- * @author limpygnome
+ * Allows for casting a vector and returning a collision result.
  */
 public class Casting
 {
@@ -28,6 +28,9 @@ public class Casting
 
     public static CastingResult cast(Controller controller, Entity origin, float radians, float maxDistance)
     {
+        CastingResult resultEnt;
+        CastingResult resultMap;
+
         // Create line from origin
         Vector2 lineStart = new Vector2(origin.positionNew.x, origin.positionNew.y);
         Vector2 lineEnd = Vector2.vectorFromAngle(radians, maxDistance);
@@ -39,12 +42,22 @@ public class Casting
         linePerpEnd.offset(linePerpStart);
 
         // Find closest entity intersection
-        CastingResult resultEnt = castEnts(controller, origin, lineStart, lineEnd, linePerpStart, linePerpEnd, maxDistance);
+        resultEnt = castEnts(controller, origin, lineStart, lineEnd, linePerpStart, linePerpEnd, maxDistance);
 
-        // Find closest map intersection
-        CastingResult resultMap = castMap(controller, origin, lineStart, lineEnd, linePerpStart, linePerpEnd, maxDistance);
+        // Find closest map intersection for tile maps
+        WorldMap map = origin.map;
 
-        // Prepare the result from our tests
+        if (map instanceof TileWorldMap)
+        {
+            TileWorldMap tileMap = (TileWorldMap) map;
+            resultMap = castMap(tileMap, origin, lineStart, lineEnd, linePerpStart, linePerpEnd, maxDistance);
+        }
+        else
+        {
+            resultMap = null;
+        }
+
+        // Prepare the result from our tests, by picking closest collision...
         CastingResult result = null;
 
         if (resultEnt != null && resultMap != null)
@@ -125,7 +138,7 @@ public class Casting
         return closestResult;
     }
 
-    private static CastingResult castMap(Controller controller, Entity origin, Vector2 lineStart, Vector2 lineEnd,
+    private static CastingResult castMap(TileWorldMap map, Entity origin, Vector2 lineStart, Vector2 lineEnd,
                                          Vector2 linePerpStart, Vector2 linePerpEnd, float maxDistance)
     {
         // Get the area the line can cross for the map tiles
@@ -161,8 +174,6 @@ public class Casting
         }
 
         // Now find the start/end indexes for tiles to consider
-        WorldMap map = origin.map;
-
         int tileStartX = (int) Math.floor(startX / map.tileData.tileSize);
         int tileStartY = (int) Math.floor(startY / map.tileData.tileSize);
         int tileEndX = (int) Math.ceil(endX / map.tileData.tileSize);
@@ -326,4 +337,5 @@ public class Casting
 
         return resultCorrectSide && resultVerticesCrossLine;
     }
+
 }

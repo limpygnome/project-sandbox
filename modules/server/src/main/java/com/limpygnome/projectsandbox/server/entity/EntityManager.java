@@ -1,10 +1,11 @@
 package com.limpygnome.projectsandbox.server.entity;
 
 import com.limpygnome.projectsandbox.server.entity.death.MapBoundsKiller;
+import com.limpygnome.projectsandbox.server.entity.physics.collisions.CollisionDetection;
 import com.limpygnome.projectsandbox.server.entity.physics.collisions.CollisionResult;
 import com.limpygnome.projectsandbox.server.Controller;
 import com.limpygnome.projectsandbox.server.entity.physics.collisions.CollisionResultMap;
-import com.limpygnome.projectsandbox.server.entity.physics.collisions.SAT;
+import com.limpygnome.projectsandbox.server.entity.physics.collisions.SATCollisionDetection;
 import com.limpygnome.projectsandbox.server.packet.imp.entity.EntityUpdatesOutboundPacket;
 import com.limpygnome.projectsandbox.server.service.LogicService;
 import com.limpygnome.projectsandbox.server.util.IdCounterProvider;
@@ -32,6 +33,9 @@ public class EntityManager implements LogicService, IdCounterConsumer
     private WorldMap map;
 
     @Autowired
+    private CollisionDetection collisionDetection;
+
+    @Autowired
     public EntTypeMappingStoreService entTypeMappingStoreService;
 
     public final HashMap<Short, Entity> entities;
@@ -46,7 +50,6 @@ public class EntityManager implements LogicService, IdCounterConsumer
         // Setup collections...
         this.entities = new HashMap<>();
         this.entitiesNew = new HashMap<>();
-        this.entTypeMappingStoreService = new EntTypeMappingStoreService();
         this.idCounterProvider = new IdCounterProvider(this);
 
         // Inject dependencies...
@@ -181,9 +184,8 @@ public class EntityManager implements LogicService, IdCounterConsumer
                 }
 
                 // Fetch map boundaries
-                // TODO: update if we have multiple maps
-                float mapMaxX = map.tileData.maxX;
-                float mapMaxY = map.tileData.maxY;
+                float mapMaxX = map.getMaxX();
+                float mapMaxY = map.getMaxY();
 
                 // Perform collision check for each entity
                 CollisionResult collisionResult;
@@ -196,7 +198,7 @@ public class EntityManager implements LogicService, IdCounterConsumer
                     // Check entity is not deleted or dead
                     if (!entityA.isDeleted() && !entityA.isDead())
                     {
-                        // TODO: upgrade with quadtree, N^N - really bad...
+                        // TODO: CRITICAL - upgrade with quadtree, N^2 - really bad...
 
                         // Perform collision detection/handling with other ents
                         for (Map.Entry<Short, Entity> kv2 : entities.entrySet())
@@ -207,7 +209,7 @@ public class EntityManager implements LogicService, IdCounterConsumer
                             if (!entityB.isDeleted() && !entityB.isDead() &&  entityA.id != entityB.id)
                             {
                                 // Perform collision detection
-                                collisionResult = SAT.collision(entityA, entityB);
+                                collisionResult = collisionDetection.collision(entityA, entityB);
 
                                 // Check if a collision occurred
                                 if (collisionResult.collision)
@@ -230,8 +232,7 @@ public class EntityManager implements LogicService, IdCounterConsumer
                         if (!entityA.isDeleted() && !entityA.isDead())
                         {
                             // Perform collision with map
-                            // TODO: add support for multiple maps
-                            mapResults = SAT.collisionMap(map, entityA);
+                            mapResults = collisionDetection.collisionMap(entityA);
 
                             for (CollisionResultMap mapResult : mapResults)
                             {

@@ -4,11 +4,11 @@ import com.limpygnome.projectsandbox.server.entity.Entity;
 import com.limpygnome.projectsandbox.server.world.map.WorldMap;
 
 /**
- * Created by limpygnome on 01/09/15.
+ * Used for finding a path between two points.
  */
 public interface PathFinder
 {
 
-    Path findPath(WorldMap map, Entity entity, float startX, float startY, float endX, float endY);
+    Path findPath(Entity entity, float startX, float startY, float endX, float endY);
 
 }

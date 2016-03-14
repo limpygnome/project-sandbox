@@ -1,4 +1,4 @@
-package com.limpygnome.projectsandbox.server.world.map.tile;
+package com.limpygnome.projectsandbox.server.world.map.type.tile;
 
 import javax.imageio.IIOException;
 import org.json.simple.JSONObject;

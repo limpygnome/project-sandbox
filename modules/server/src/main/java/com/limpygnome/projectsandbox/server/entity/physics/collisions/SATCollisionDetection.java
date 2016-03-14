@@ -6,7 +6,9 @@ import com.limpygnome.projectsandbox.server.entity.physics.Vector2;
 import com.limpygnome.projectsandbox.server.entity.physics.Vertices;
 import com.limpygnome.projectsandbox.server.util.CustomMath;
 import com.limpygnome.projectsandbox.server.world.map.WorldMap;
-import com.limpygnome.projectsandbox.server.world.map.tile.TileType;
+import com.limpygnome.projectsandbox.server.world.map.type.tile.TileType;
+import com.limpygnome.projectsandbox.server.world.map.type.tile.TileWorldMap;
+import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -16,10 +18,9 @@ import java.util.Collection;
  * 
  * Useful resources:
  * - http://www.dyn4j.org/2010/01/sat/#sat-proj
- * 
- * @author limpygnome
  */
-public class SAT
+@Component
+public class SATCollisionDetection implements CollisionDetection
 {
     /**
      * The distance added to the penetration depth / axis overlay of MTV
@@ -28,20 +29,34 @@ public class SAT
      * be penetrating.
      */
     private static final float ADDED_DEPTH_MTV = 0.0001f;
-    
-    public static CollisionResult collision(Entity a, Entity b)
+
+    public CollisionResult collision(Entity a, Entity b)
     {
         return collision(a.cachedVertices, b.cachedVertices);
     }
-    
-    public static Collection<CollisionResultMap> collisionMap(WorldMap map, Entity ent)
+
+    public Collection<CollisionResultMap> collisionMap(Entity entity)
+    {
+        WorldMap map = entity.map;
+
+        if (map instanceof TileWorldMap)
+        {
+            TileWorldMap tileMap = (TileWorldMap) map;
+            return collisionTileMap(tileMap, entity);
+        }
+
+        return new ArrayList<>(0);
+    }
+
+
+    private Collection<CollisionResultMap> collisionTileMap(TileWorldMap map, Entity entity)
     {
         // Perform collision test for each possible solid tile within range of
         // ent
-        float minX = ent.positionNew.x - ent.cachedVertices.collisionRadius;
-        float maxX = ent.positionNew.x + ent.cachedVertices.collisionRadius;
-        float minY = ent.positionNew.y - ent.cachedVertices.collisionRadius;
-        float maxY = ent.positionNew.y + ent.cachedVertices.collisionRadius;
+        float minX = entity.positionNew.x - entity.cachedVertices.collisionRadius;
+        float maxX = entity.positionNew.x + entity.cachedVertices.collisionRadius;
+        float minY = entity.positionNew.y - entity.cachedVertices.collisionRadius;
+        float maxY = entity.positionNew.y + entity.cachedVertices.collisionRadius;
         
         // Divide by tilesize for tile array indices
         int indexMinX = (int) Math.floor(minX / map.tileData.tileSize);
@@ -80,7 +95,7 @@ public class SAT
                 )
                 {
                     // Perform collision check between tile and ent
-                    result = SAT.collision(ent.cachedVertices, map.tileData.tileVertices[y][x]);
+                    result = collision(entity.cachedVertices, map.tileData.tileVertices[y][x]);
                     
                     // Check if a collision occurred
                     if (result.collision)
@@ -94,7 +109,7 @@ public class SAT
         return collisions;
     }
     
-    public static CollisionResult collision(Vertices verticesA, Vertices verticesB)
+    public CollisionResult collision(Vertices verticesA, Vertices verticesB)
     {
         float dist = Vector2.distance(verticesA.center, verticesB.center);
 
@@ -122,7 +137,7 @@ public class SAT
         return mtvA.depth < mtvB.depth ? mtvA : mtvB;
     }
     
-    private static CollisionResult axesOverlap(Vector2[] axes, Vertices verticesA, Vertices verticesB)
+    private CollisionResult axesOverlap(Vector2[] axes, Vertices verticesA, Vertices verticesB)
     {
         Projection pA;
         Projection pB;

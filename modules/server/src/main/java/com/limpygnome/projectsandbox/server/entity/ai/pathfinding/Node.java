@@ -2,6 +2,7 @@ package com.limpygnome.projectsandbox.server.entity.ai.pathfinding;
 
 import com.limpygnome.projectsandbox.server.entity.physics.Vector2;
 import com.limpygnome.projectsandbox.server.world.map.WorldMap;
+import com.limpygnome.projectsandbox.server.world.map.type.tile.TileWorldMap;
 
 /**
  * Created by limpygnome on 01/09/15.
@@ -32,7 +33,7 @@ public class Node implements Comparable<Node>
         this.searchDepth = searchDepth;
     }
 
-    public void buildAndCacheXY(WorldMap map)
+    public void buildAndCacheXY(TileWorldMap map)
     {
         float x = ((float) tileX * map.tileData.tileSize) + map.tileData.tileSizeHalf;
         float y = ((float) tileY * map.tileData.tileSize) + map.tileData.tileSizeHalf;

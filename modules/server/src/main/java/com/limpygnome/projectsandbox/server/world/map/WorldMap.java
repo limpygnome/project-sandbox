@@ -6,11 +6,8 @@ import com.limpygnome.projectsandbox.server.entity.EntityManager;
 import com.limpygnome.projectsandbox.server.entity.RespawnManager;
 import com.limpygnome.projectsandbox.server.entity.ai.ArtificialIntelligenceManager;
 import com.limpygnome.projectsandbox.server.packet.OutboundPacket;
-import com.limpygnome.projectsandbox.server.world.map.packet.TileMapDataOutboundPacket;
 
-import com.limpygnome.projectsandbox.server.world.map.tile.TileData;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import com.limpygnome.projectsandbox.server.world.map.type.tile.TileData;
 
 import java.io.IOException;
 
@@ -27,6 +24,7 @@ public abstract class WorldMap
     public EntityManager entityManager;
     public RespawnManager respawnManager;
     public EffectsManager effectsManager;
+    public ArtificialIntelligenceManager artificialIntelligenceManager;
 
     /**
      * Unique identifier for this map.
@@ -39,11 +37,6 @@ public abstract class WorldMap
      * Properties and cached values for this map.
      */
     private WorldMapProperties properties;
-
-    /**
-     * Tile data for this map.
-     */
-    public TileData tileData;
 
     /**
      * Cached packet of data sent to client for map.
@@ -70,6 +63,7 @@ public abstract class WorldMap
         this.entityManager = new EntityManager(controller, this);
         this.respawnManager = new RespawnManager(controller, this);
         this.effectsManager = new EffectsManager(controller);
+        this.artificialIntelligenceManager = new ArtificialIntelligenceManager(controller, this);
     }
 
     public void logic()
@@ -114,6 +108,16 @@ public abstract class WorldMap
         return properties;
     }
 
+    /**
+     * @return the maximum x axis for this map
+     */
+    public abstract float getMaxX();
+
+    /**
+     * @return he maximum y axis for this map
+     */
+    public abstract float getMaxY();
+
     @Override
     public String toString()
     {
@@ -123,7 +127,6 @@ public abstract class WorldMap
         sb      .append("map{properties:\n")
                 .append(properties.toString())
                 .append("\n,\ntile data:\n")
-                .append(tileData.toString())
                 .append("\n}");
         
         return sb.toString();

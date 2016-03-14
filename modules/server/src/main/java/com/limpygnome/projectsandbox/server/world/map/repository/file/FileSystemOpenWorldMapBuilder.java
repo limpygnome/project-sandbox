@@ -4,8 +4,8 @@ import com.limpygnome.projectsandbox.server.Controller;
 import com.limpygnome.projectsandbox.server.world.map.MapService;
 import com.limpygnome.projectsandbox.server.world.map.WorldMap;
 import com.limpygnome.projectsandbox.server.world.map.WorldMapProperties;
-import com.limpygnome.projectsandbox.server.world.map.open.OpenWorldMap;
-import com.limpygnome.projectsandbox.server.world.map.open.OpenWorldMapProperties;
+import com.limpygnome.projectsandbox.server.world.map.type.open.OpenWorldMap;
+import com.limpygnome.projectsandbox.server.world.map.type.open.OpenWorldMapProperties;
 import org.json.simple.JSONObject;
 import org.springframework.stereotype.Component;
 
@@ -41,12 +41,17 @@ public class FileSystemOpenWorldMapBuilder extends FileSystemGenericWoldMapBuild
 
         JSONObject rawProperties = (JSONObject) mapData.get("properties");
 
+        if (rawProperties == null)
+        {
+            throw new RuntimeException("No properties section found in map file");
+        }
+
         // Read custom properties for this map
         OpenWorldMapProperties properties = (OpenWorldMapProperties) map.getProperties();
 
         properties.setBackground((String) rawProperties.get("background"));
-        properties.setLimitWidth((float) rawProperties.get("width"));
-        properties.setLimitHeight((float) rawProperties.get("height"));
+        properties.setLimitWidth((float) (double) rawProperties.get("width"));
+        properties.setLimitHeight((float) (double) rawProperties.get("height"));
     }
 
 }

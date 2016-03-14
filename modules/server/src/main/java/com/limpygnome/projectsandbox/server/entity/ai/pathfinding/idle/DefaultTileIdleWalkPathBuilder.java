@@ -8,7 +8,9 @@ import com.limpygnome.projectsandbox.server.entity.ai.pathfinding.Path;
 import com.limpygnome.projectsandbox.server.world.map.WorldMap;
 import com.limpygnome.projectsandbox.server.world.map.MapPosition;
 
-import com.limpygnome.projectsandbox.server.world.map.tile.TileType;
+import com.limpygnome.projectsandbox.server.world.map.type.tile.TileType;
+import com.limpygnome.projectsandbox.server.world.map.type.tile.TileWorldMap;
+
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
@@ -17,16 +19,16 @@ import java.util.Set;
 import java.util.TreeSet;
 
 /**
- * Created by limpygnome on 07/09/15.
+ * Default basic implementation for tile maps.
  */
-public class DefaultIdleWalkPathBuilder implements IdleWalkPathBuilder
+public class DefaultTileIdleWalkPathBuilder implements IdleWalkPathBuilder
 {
 
     @Override
-    public Path build(Controller controller, WorldMap map, Entity entity, int maxDepth)
+    public Path build(Controller controller, Entity entity, int maxDepth)
     {
-        // TODO: refactor to use current map
-        // TODO: critical, needs fix
+        TileWorldMap map = (TileWorldMap) entity.map;
+
         MapPosition entityPosition = map.tileData.positionFromReal(entity.positionNew);
 
         // Build path to first pedestrian node; this will be our starting place
@@ -74,7 +76,7 @@ public class DefaultIdleWalkPathBuilder implements IdleWalkPathBuilder
         return path;
     }
 
-    private Node findStartNode(WorldMap map, List<Node> pathNodes, MapPosition entityPosition, int maxDepth)
+    private Node findStartNode(TileWorldMap map, List<Node> pathNodes, MapPosition entityPosition, int maxDepth)
     {
         // NOTE: this is very similar to the A* path-finding code in some ways...
 
@@ -128,7 +130,7 @@ public class DefaultIdleWalkPathBuilder implements IdleWalkPathBuilder
         return null;
     }
 
-    private Node buildNextStep(WorldMap map, Random random, Set<Node> pathNodesPresent, List<Node> pathNodes, Node lastNode)
+    private Node buildNextStep(TileWorldMap map, Random random, Set<Node> pathNodesPresent, List<Node> pathNodes, Node lastNode)
     {
         // Check node before last node for direction; looks more natural than chaotic picking
         if (pathNodes.size() > 2)
@@ -214,7 +216,7 @@ public class DefaultIdleWalkPathBuilder implements IdleWalkPathBuilder
         return node;
     }
 
-    private void offsetPedestrianNodes(Path path, int offsetStart, WorldMap map)
+    private void offsetPedestrianNodes(Path path, int offsetStart, TileWorldMap map)
     {
         int totalNodes = path.finalPath.length;
 

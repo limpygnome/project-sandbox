@@ -1,4 +1,4 @@
-package com.limpygnome.projectsandbox.server.world.map.tile;
+package com.limpygnome.projectsandbox.server.world.map.type.tile;
 
 import com.limpygnome.projectsandbox.server.entity.physics.Vector2;
 import com.limpygnome.projectsandbox.server.entity.physics.Vertices;

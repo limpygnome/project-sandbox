@@ -5,9 +5,9 @@ import com.limpygnome.projectsandbox.server.entity.physics.Vertices;
 import com.limpygnome.projectsandbox.server.world.map.MapService;
 import com.limpygnome.projectsandbox.server.world.map.WorldMap;
 import com.limpygnome.projectsandbox.server.world.map.WorldMapProperties;
-import com.limpygnome.projectsandbox.server.world.map.tile.TileData;
-import com.limpygnome.projectsandbox.server.world.map.tile.TileType;
-import com.limpygnome.projectsandbox.server.world.map.tile.TileWorldMap;
+import com.limpygnome.projectsandbox.server.world.map.type.tile.TileData;
+import com.limpygnome.projectsandbox.server.world.map.type.tile.TileType;
+import com.limpygnome.projectsandbox.server.world.map.type.tile.TileWorldMap;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.springframework.stereotype.Component;
@@ -49,7 +49,7 @@ public class FileSystemTileWorldMapBuilder extends FileSystemGenericWoldMapBuild
         return map;
     }
 
-    private void buildTileTypesAndTiles(Controller controller, JSONObject mapData, WorldMap map)
+    private void buildTileTypesAndTiles(Controller controller, JSONObject mapData, TileWorldMap map)
             throws IOException
     {
         TileData tileData = new TileData(map);

@@ -1,4 +1,4 @@
-package com.limpygnome.projectsandbox.server.world.map.open;
+package com.limpygnome.projectsandbox.server.world.map.type.open;
 
 import com.limpygnome.projectsandbox.server.world.map.WorldMapProperties;
 
