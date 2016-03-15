@@ -26,6 +26,9 @@ var projectSandbox =
     // Effects
     effects: new Array(),
 
+    // Current map
+    map: null,
+
     // Identifier of current player; set by: network / player
     playerId: null,
     
@@ -53,9 +56,6 @@ var projectSandbox =
         {
             this.game.ui.reset();
         }
-        
-        // Reset map
-        projectSandbox.world.map.reset();
 
         // Reset inventory
         projectSandbox.inventory.reset();
@@ -265,7 +265,10 @@ var projectSandbox =
         gl.uniformMatrix4fv(this.shaderProgram.uniformCameraViewMatrix, false, this.cameraView);
         
         // Render map
-        projectSandbox.world.map.render(gl, this.shaderProgram, this.modelView, this.perspective);
+        if (this.map != null)
+        {
+            this.map.render(gl, this.shaderProgram, this.modelView, this.perspective);
+        }
 
         // Render effects
         var effect;

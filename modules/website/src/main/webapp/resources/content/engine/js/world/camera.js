@@ -207,7 +207,7 @@ projectSandbox.camera =
     buildLimits: function()
     {
         // Check map is ready
-        if (!projectSandbox.world.map.isSetup)
+        if (projectSandbox.map == null || !projectSandbox.map.isSetup())
         {
             console.warn("engine/camera - unable to build limits, map not setup");
             return;

@@ -1,4 +1,4 @@
-projectSandbox.network.map =
+projectSandbox.network.world.map =
 {
     handlePacket: function(packet)
     {
@@ -8,7 +8,11 @@ projectSandbox.network.map =
         {
             // Tile data map
             case "T":
-                this.packetMapData(packet);
+                projectSandbox.network.world.mapTiles.handlePacket(packet);
+                return;
+            // Open map
+            case "O":
+                projectSandbox.network.world.mapOpen.handlePacket(packet);
                 return;
 
             default:

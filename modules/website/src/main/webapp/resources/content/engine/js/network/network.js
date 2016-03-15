@@ -1,7 +1,12 @@
 projectSandbox.network =
 {
+    // Namespaces...
+    world: {},
+
+    // Current socket used to communicate with server
     webSocket: null,
 
+    // Connection flags
     closed: true,
     disabled: false,
     
@@ -103,7 +108,7 @@ projectSandbox.network =
 
             // Maps
             case "M":
-                projectSandbox.network.map.handlePacket(packet);
+                projectSandbox.network.world.map.handlePacket(packet);
                 return;
 
             // Players

@@ -76,6 +76,8 @@
         <!-- World -->
         <script src="/content/engine/js/world/camera.js"></script>
         <script src="/content/engine/js/world/map.js"></script>
+        <script src="/content/engine/js/world/map-open.js"></script>
+        <script src="/content/engine/js/world/map-tiles.js"></script>
 
         <!-- Lighting -->
         <script src="/content/engine/js/lighting/lights.js"></script>
@@ -104,7 +106,9 @@
         <!-- Network: Components -->
         <script src="/content/engine/js/network/components/entities.js"></script>
         <script src="/content/engine/js/network/components/inventory.js"></script>
-        <script src="/content/engine/js/network/components/map.js"></script>
+        <script src="/content/engine/js/network/components/world/map.js"></script>
+        <script src="/content/engine/js/network/components/world/map-open.js"></script>
+        <script src="/content/engine/js/network/components/world/map-tiles.js"></script>
         <script src="/content/engine/js/network/components/player.js"></script>
         <script src="/content/engine/js/network/components/session.js"></script>
 
