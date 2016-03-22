@@ -151,7 +151,7 @@ projectSandbox.frustrum =
         }
 
         // Determine z-level of map relative to camera
-        var mapZ = (projectSandbox.world.map.renderZ * -1.0) + projectSandbox.camera.z + projectSandbox.camera.zoom;
+        var mapZ = (projectSandbox.map.renderZ * -1.0) + projectSandbox.camera.z + projectSandbox.camera.zoom;
 
         // Determine frustrum size
         var frustrumSize = this.computeFrustrumSize(mapZ);
@@ -170,15 +170,18 @@ projectSandbox.frustrum =
             Math.floor((projectSandbox.camera.y - frustrumHeightHalf) / tileSize),
         ];
 
+        var mapWidth = projectSandbox.map.width;
+        var mapHeight = projectSandbox.map.height;
+
         // Invert y
-        mapIndexes[1] = (projectSandbox.world.map.height - 1) - mapIndexes[1];
-        mapIndexes[3] = (projectSandbox.world.map.height - 1) - mapIndexes[3];
+        mapIndexes[1] = (mapHeight - 1) - mapIndexes[1];
+        mapIndexes[3] = (mapHeight - 1) - mapIndexes[3];
 
         // Clamp to size of map
-        mapIndexes[0] = projectSandbox.utils.clamp(mapIndexes[0], 0, projectSandbox.world.map.width - 1);
-        mapIndexes[1] = projectSandbox.utils.clamp(mapIndexes[1], 0, projectSandbox.world.map.height - 1);
-        mapIndexes[2] = projectSandbox.utils.clamp(mapIndexes[2], 0, projectSandbox.world.map.width - 1);
-        mapIndexes[3] = projectSandbox.utils.clamp(mapIndexes[3], 0, projectSandbox.world.map.height - 1);
+        mapIndexes[0] = projectSandbox.utils.clamp(mapIndexes[0], 0, mapWidth - 1);
+        mapIndexes[1] = projectSandbox.utils.clamp(mapIndexes[1], 0, mapHeight - 1);
+        mapIndexes[2] = projectSandbox.utils.clamp(mapIndexes[2], 0, mapWidth - 1);
+        mapIndexes[3] = projectSandbox.utils.clamp(mapIndexes[3], 0, mapHeight - 1);
 
         return mapIndexes;
     },

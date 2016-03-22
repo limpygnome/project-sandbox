@@ -186,3 +186,8 @@ projectSandbox.world.Map.prototype.bindTile = function(gl, shaderProgram, height
     // Bind index data
     gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this.bufferIndexes);
 };
+
+projectSandbox.world.Map.prototype.isSetup = function()
+{
+    return this.isSetup;
+}
