@@ -1,7 +1,7 @@
 projectSandbox.world.Map = function() {
 
     // Indicates if the map is setup
-    this.isSetup = false;
+    this.flagIsSetup = false;
 
     // The z-level at which to render the map
     this.renderZ = -1.0;
@@ -37,7 +37,7 @@ projectSandbox.world.Map.prototype.setup = function()
     this.scaledTileSizeHalf = this.scaledTileSize / 2;
 
     // Set state to setup
-    this.isSetup = true;
+    this.flagIsSetup = true;
 
     // TODO: create hook/event system for this?
     // Rebuild camera limits
@@ -46,7 +46,7 @@ projectSandbox.world.Map.prototype.setup = function()
 
 projectSandbox.world.Map.prototype.reset = function()
 {
-    this.isSetup = false;
+    this.flagIsSetup = false;
 
     this.types = [];
     this.tiles = [];
@@ -60,7 +60,7 @@ projectSandbox.world.Map.prototype.reset = function()
 projectSandbox.world.Map.prototype.render = function(gl, shaderProgram, modelView, perspective)
 {
     // Check map is setup
-    if (!this.isSetup)
+    if (!this.flagIsSetup)
     {
         return;
     }
@@ -189,5 +189,5 @@ projectSandbox.world.Map.prototype.bindTile = function(gl, shaderProgram, height
 
 projectSandbox.world.Map.prototype.isSetup = function()
 {
-    return this.isSetup;
-}
+    return this.flagIsSetup;
+};

@@ -1,10 +1,6 @@
 projectSandbox.world.MapTiles = function() {
 
-    // Each tile is a short indicating the type
-    var types = [];
-
-    // Each tile is a short indicating the type
-    var tiles = [];
+    projectSandbox.world.Map.call(this);
 
     var getWidth = function()
     {
