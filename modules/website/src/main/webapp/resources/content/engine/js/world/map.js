@@ -93,7 +93,7 @@ projectSandbox.world.Map.prototype.render = function(gl, shaderProgram, modelVie
     // Translate to start Y
     mat4.translate(modelView, modelView, [0, this.scaledTileSize * ((this.height - 1) - renderEndY), 0]);
 
-    for(y = renderEndY; y >= renderStartY; y--) // Y is inverse!
+    for (y = renderEndY; y >= renderStartY; y--) // Y is inverse!
     {
         // Move to start of x
         mat4.translate(modelView, modelView, [this.scaledTileSize * renderStartX, 0, 0]);
