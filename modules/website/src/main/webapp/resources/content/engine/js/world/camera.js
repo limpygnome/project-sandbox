@@ -194,7 +194,8 @@ projectSandbox.camera =
         projectSandbox.frustrum.update();
 
         // Rebuild camera limits
-        this.buildLimits();
+        // TODO: fix performance / dont call each time + bug when resizing to small height with big width (ratio issues)
+        //this.buildLimits();
 
         // Update shader
         var gl = projectSandbox.gl;

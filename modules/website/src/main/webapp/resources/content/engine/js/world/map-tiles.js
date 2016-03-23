@@ -5,12 +5,12 @@ projectSandbox.world.MapTiles = function() {
 
     this.getWidth = function()
     {
-        return this.width * this.mapTileSize;
+        return this.width * this.tileSize;
     };
 
     this.getHeight = function()
     {
-        return this.height * this.mapTileSize;
+        return this.height * this.tileSize;
     };
 
 
