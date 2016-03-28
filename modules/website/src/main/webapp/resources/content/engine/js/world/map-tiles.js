@@ -18,10 +18,10 @@ projectSandbox.world.MapTiles = function() {
     this.tileSize = 0.0;
 
     // The number of tiles across as the width
-    this.tilesWidth = null;
+    this.tilesWidth = 0.0;
 
     // The number of tiles downwards as the height
-    this.tilesHeight = null;
+    this.tilesHeight = 0.0;
 };
 
 projectSandbox.world.MapTiles.inherits(projectSandbox.world.Map);

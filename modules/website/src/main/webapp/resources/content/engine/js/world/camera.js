@@ -175,8 +175,6 @@ projectSandbox.camera =
             {
                 y = limits[3];
             }
-
-            console.error(x + "," + y + " - " + limits[0] + "," + limits[1] + "," + limits[2] + "," + limits[3]);
         }
 
         // Update camera
