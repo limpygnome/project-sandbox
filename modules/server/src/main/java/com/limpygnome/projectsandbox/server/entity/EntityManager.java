@@ -289,8 +289,8 @@ public class EntityManager implements LogicService, IdCounterConsumer
                 entityUpdatesOutboundPacket.build(this, false);
             }
 
-            // Send updates to all players
-            controller.playerService.broadcast(entityUpdatesOutboundPacket);
+            // Send updates to players in map
+            controller.playerService.broadcast(entityUpdatesOutboundPacket, map);
         }
         catch (Exception e)
         {
