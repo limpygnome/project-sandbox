@@ -41,7 +41,7 @@ projectSandbox.network.world.mapTiles =
             }
         }
 
-        // Set map to setup
+        // Invoke map setup
         projectSandbox.map.setup();
     },
 

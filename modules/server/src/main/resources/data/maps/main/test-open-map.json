@@ -13,51 +13,6 @@
 
     "entities":
     [
-        {
-            "typeName" :    "vehicle/ice-cream-van",
-            "count": 1,
-            "faction" : 1000
-        },
-        {
-            "typeName" :    "vehicle/rocket-car",
-            "count": 1,
-            "faction" : 1000
-        },
-        {
-            "typeName" :    "vehicle/bus",
-            "count": 1,
-            "faction" : 1000
-        },
-        {
-            "typeName"  :   "living/sentry",
-            "count" :   1,
-            "faction" : 2000,
-
-            "spawn" :
-            {
-                "x" : 740.0,
-                "y" : 70.0,
-                "rotation" : 0.0
-            }
-        },
-        {
-            "typeName"  :    "pickup/health",
-            "count" :   1,
-            "faction" : 2000,
-
-            "spawn" :
-            {
-                "x" : 90.0,
-                "y" : 250.0,
-                "rotation" : 0.0
-            },
-
-            "properties" :
-            {
-                "pickup.respawn_delay" : 30000,
-                "health_pickup.health" : 500.0
-            }
-        }
     ],
 
     "factionSpawns":

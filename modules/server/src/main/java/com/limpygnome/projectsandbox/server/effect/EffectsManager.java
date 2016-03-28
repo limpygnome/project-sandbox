@@ -5,6 +5,7 @@ import com.limpygnome.projectsandbox.server.effect.types.AbstractEffect;
 import com.limpygnome.projectsandbox.server.packet.imp.effect.EffectUpdatesOutboundPacket;
 
 import com.limpygnome.projectsandbox.server.service.LogicService;
+import com.limpygnome.projectsandbox.server.world.map.WorldMap;
 import java.io.IOException;
 import java.util.LinkedList;
 import java.util.List;
@@ -18,13 +19,16 @@ public class EffectsManager implements LogicService
 {
     private final static Logger LOG = LogManager.getLogger(EffectsManager.class);
 
-    public Controller controller;
+    private Controller controller;
+    private WorldMap map;
 
     private List<AbstractEffect> pendingSend;
 
-    public EffectsManager(Controller controller)
+    public EffectsManager(Controller controller, WorldMap map)
     {
         this.controller = controller;
+        this.map = map;
+
         this.pendingSend = new LinkedList<>();
     }
 
@@ -53,8 +57,8 @@ public class EffectsManager implements LogicService
             packet.writeEffects(pendingSend);
             pendingSend.clear();
 
-            // Broadcast to all players
-            controller.playerService.broadcast(packet);
+            // Broadcast to all players in map
+            controller.playerService.broadcast(packet, map);
         }
     }
 

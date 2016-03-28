@@ -258,7 +258,7 @@ var projectSandbox =
         gl.uniformMatrix4fv(this.shaderProgram.uniformCameraViewMatrix, false, this.cameraView);
         
         // Render map
-        if (this.map != null)
+        if (this.map != null && this.map.isSetup())
         {
             this.map.render(gl, this.shaderProgram, this.modelView, this.perspective);
         }

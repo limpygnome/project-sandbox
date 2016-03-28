@@ -62,7 +62,7 @@ public abstract class WorldMap
         // TODO: either pass or remove references to controller for managers
         this.entityManager = new EntityManager(controller, this);
         this.respawnManager = new RespawnManager(controller, this);
-        this.effectsManager = new EffectsManager(controller);
+        this.effectsManager = new EffectsManager(controller, this);
         this.artificialIntelligenceManager = new ArtificialIntelligenceManager(controller, this);
     }
 

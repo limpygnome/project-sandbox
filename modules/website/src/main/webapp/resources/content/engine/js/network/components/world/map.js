@@ -10,6 +10,7 @@ projectSandbox.network.world.map =
             case "T":
                 projectSandbox.network.world.mapTiles.handlePacket(packet);
                 return;
+
             // Open map
             case "O":
                 projectSandbox.network.world.mapOpen.handlePacket(packet);

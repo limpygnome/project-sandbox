@@ -35,7 +35,7 @@ public class OpenMapDataOutboundPacket extends OutboundPacket
         if (background != null && background.length() > 0)
         {
             packetData.add(true);
-            packetData.addUtf8(background);
+            packetData.addAscii(background);
         }
         else
         {

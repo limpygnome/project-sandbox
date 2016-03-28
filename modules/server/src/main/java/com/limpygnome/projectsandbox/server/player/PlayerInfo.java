@@ -4,6 +4,8 @@ import com.limpygnome.projectsandbox.server.Controller;
 import com.limpygnome.projectsandbox.server.entity.death.AbstractKiller;
 import com.limpygnome.projectsandbox.server.packet.imp.player.global.PlayerKilledOutboundPacket;
 import com.limpygnome.projectsandbox.server.entity.Entity;
+import com.limpygnome.projectsandbox.server.world.map.MapService;
+import com.limpygnome.projectsandbox.server.world.map.WorldMap;
 import com.limpygnome.projectsandbox.shared.model.GameSession;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -67,6 +69,30 @@ public class PlayerInfo
     public synchronized boolean isKeyDown(PlayerKeys key)
     {
         return (keys & key.FLAG) == key.FLAG;
+    }
+
+    /**
+     * Retrieves the map to which the player is currently within.
+     *
+     * If the player has no entity, they will belong to the main/lobby/default map.
+     *
+     * @param mapService map service
+     * @return the current map; should never be null
+     */
+    public synchronized WorldMap getCurrentMap(MapService mapService)
+    {
+        WorldMap map;
+
+        if (entity != null)
+        {
+            map = entity.map;
+        }
+        else
+        {
+            map = mapService.mainMap;
+        }
+
+        return map;
     }
 
     public synchronized void setKey(PlayerKeys key, boolean down)

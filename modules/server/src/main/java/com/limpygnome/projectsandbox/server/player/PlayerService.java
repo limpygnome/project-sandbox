@@ -308,5 +308,27 @@ public class PlayerService implements LogicService, IdCounterConsumer
             controller.packetService.send(playerInfo, outboundPacket);
         }
     }
+
+    /**
+     * Sends a packet to all players in a map.
+     *
+     * @param outboundPacket
+     * @param map
+     */
+    public synchronized void broadcast(OutboundPacket outboundPacket, WorldMap map)
+    {
+        PlayerInfo playerInfo;
+        Entity entity;
+
+        for (Map.Entry<WebSocket, PlayerInfo> kv : mappings.entrySet())
+        {
+            playerInfo = kv.getValue();
+
+            if (playerInfo.getCurrentMap(mapService) == map)
+            {
+                controller.packetService.send(playerInfo, outboundPacket);
+            }
+        }
+    }
     
 }

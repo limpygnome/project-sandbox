@@ -51,12 +51,6 @@ projectSandbox.world.MapTiles.prototype.setup = function()
 
 projectSandbox.world.MapTiles.prototype.render = function(gl, shaderProgram, modelView, perspective)
 {
-    // Check map is setup
-    if (!this.flagIsSetup)
-    {
-        return;
-    }
-
     // Fetch frustrum culled region to render
     var clippedIndexes = projectSandbox.frustrum.mapRegionToRender(this.tileSize);
 

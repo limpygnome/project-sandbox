@@ -25,6 +25,13 @@ projectSandbox.network.InboundPacket.prototype.readByte = function()
     return value;
 }
 
+projectSandbox.network.InboundPacket.prototype.readBool = function()
+{
+    var value = this.dataView.getInt8(this.bytesRead);
+    this.bytesRead += 1;
+    return value > 0;
+}
+
 projectSandbox.network.InboundPacket.prototype.readChar = function()
 {
     var value = String.fromCharCode(this.data[this.bytesRead]);
