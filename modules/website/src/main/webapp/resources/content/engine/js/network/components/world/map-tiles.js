@@ -47,9 +47,6 @@ projectSandbox.network.world.mapTiles =
 
     packetMapData: function(packet)
     {
-        // Reset map
-        projectSandbox.map.reset();
-
         // Parse number of tile types
         var numTileTypes = packet.readShort();
 

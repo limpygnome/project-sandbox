@@ -6,26 +6,20 @@ projectSandbox.world.Map = function() {
     // The z-level at which to render the map
     this.renderZ = -1.0;
 
-    // The size of each tile (scaled)
-    this.tileSize = 0.0;
-
     // Scaled tile sizes used for rendering
     this.scaledTileSize = 0.0;
 
     // Half of scaledTileSize
     this.scaledTileSizeHalf = 0.0;
 
+    // The size of each tile (scaled)
+    this.tileSize = 0.0;
+
     // The width of the tiles
     this.width = 0;
 
     // The height of the tiles
     this.height = 0;
-
-    // Each type has {texture, height}
-    this.types = [];
-
-    // Each tile is a short indicating the type
-    this.tiles = [];
 
 };
 
@@ -41,20 +35,7 @@ projectSandbox.world.Map.prototype.setup = function()
 
     // TODO: create hook/event system for this?
     // Rebuild camera limits
-    projectSandbox.camera.buildLimits();
-};
-
-projectSandbox.world.Map.prototype.reset = function()
-{
-    this.flagIsSetup = false;
-
-    this.types = [];
-    this.tiles = [];
-    this.width = 0;
-    this.height = 0;
-    this.tileSize = 0.0;
-    this.scaledTileSize = 0.0;
-    this.scaledTileSizeHalf = 0.0;
+    //projectSandbox.camera.buildLimits();
 };
 
 projectSandbox.world.Map.prototype.render = function(gl, shaderProgram, modelView, perspective)
