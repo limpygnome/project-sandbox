@@ -1,3 +1,33 @@
+long-term goals
+================
+- allow maps to control default ents of player / perhaps use service to spawn player based on session data
+--- default ent + loadout *or* use serialized stuff from session
+--- already partially implemented
+- introduce ships
+- introduce new weapons/abilities
+-- shields
+--- basic bullets/small energy shot weapon
+--- warp drive
+--- heavy missile battery
+--- basic turrets -> consider making rotation clientside / send locked-on ent id instead?
+- introduce shipyard
+--- player has collection of inventory items, can pick which ones are in a slot -> drag+drop?
+--- order determines how ship is rendered
+--- allow player to buy new ship for cash $$$
+- render inventory items on ships i.e. turrets/radars/warp drives etc
+- introduce asteroids / blackholes
+- introduce warning UI
+- introduce capturing areas for more money
+- introduce killing a player drops 10% of their funds (for collection) + reset player
+- introduce teams
+- introduce ship weights for players to kamikazi -> new player ships are nothing, to avoid spam damage
+
+
+short-term goals/issues
+============================
+- backgrounds need ratio
+- make backgrounds generic for all maps
+
 - remove playerid from commands, server should know - reduces commonly wasted bytes
 
 - change design pattern so that classes are organised into modules, rather than by type
