@@ -20,7 +20,6 @@ varying vec3 vAmbientLighting;
 varying vec3 vNormals;
 varying vec4 vPosition;
 uniform sampler2D uSampler;
-varying vec3 vCameraPosition;
 varying vec4 vWorldVertex;
 
 uniform Light uLights[1];

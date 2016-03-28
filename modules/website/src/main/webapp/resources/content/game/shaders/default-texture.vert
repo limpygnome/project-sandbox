@@ -14,7 +14,6 @@ varying vec4 vColour;
 varying vec3 vAmbientLighting;
 varying vec3 vNormals;
 varying vec4 vPosition;
-varying vec3 vCameraPosition;
 
 varying vec4 vWorldVertex;
 
@@ -30,7 +29,6 @@ void main(void)
     vColour = aColour;
     vNormals = aNormals;
     vPosition = gl_Position;
-    vCameraPosition = aCameraPosition;
 
     // Ambient light settings
     highp vec3 ambientLight = vec3(0.6, 0.6, 0.6);

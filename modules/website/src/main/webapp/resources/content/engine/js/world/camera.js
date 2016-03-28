@@ -43,14 +43,6 @@ projectSandbox.camera =
 
     buildCameraView: function()
     {
-        // Translate to center of camera
-        //mat4.translate(projectSandbox.cameraView, projectSandbox.cameraView, [-this.x, -this.y, -this.z]);
-
-        // Apply rotations
-//        mat4.rotateX(projectSandbox.cameraView, projectSandbox.cameraView, this.rotationX);
-//        mat4.rotateY(projectSandbox.cameraView, projectSandbox.cameraView, this.rotationY);
-//        mat4.rotateZ(projectSandbox.cameraView, projectSandbox.cameraView, this.rotationZ);
-
         // Translate by zoom
         mat4.translate(projectSandbox.cameraView, projectSandbox.cameraView, [0, 0, -this.zoom]);
         mat4.translate(projectSandbox.cameraView, projectSandbox.cameraView, [-this.x, -this.y, 0.0]);
@@ -196,13 +188,6 @@ projectSandbox.camera =
         // Rebuild camera limits
         // TODO: fix performance / dont call each time + bug when resizing to small height with big width (ratio issues)
         //this.buildLimits();
-
-        // Update shader
-        var gl = projectSandbox.gl;
-        if (projectSandbox.shaderProgram != null)
-        {
-            gl.vertexAttrib3f(projectSandbox.shaderProgram.cameraPosition, this.x, this.y, this.z + this.zoom);
-        }
     },
 
     buildLimits: function()
@@ -226,17 +211,17 @@ projectSandbox.camera =
         var frustumWidthHalf = frustrumSize[0] / 2.0;
         var frustumHeightHalf = frustrumSize[1] / 2.0;
 
-        this.limits =
-        [
-            Math.ceil(frustumWidthHalf),
-            Math.ceil(frustumHeightHalf),
-            Math.floor(mapWidth - frustumWidthHalf),
-            Math.floor(mapHeight - frustumHeightHalf)
-        ];
+//        this.limits =
+//        [
+//            Math.ceil(frustumWidthHalf),
+//            Math.ceil(frustumHeightHalf),
+//            Math.floor(mapWidth - frustumWidthHalf),
+//            Math.floor(mapHeight - frustumHeightHalf)
+//        ];
 
-        console.debug(
-            "engine/camera - limits rebuilt - " +
-            this.limits[0] + "," + this.limits[1] + "," + this.limits[2] + "," + this.limits[3]
-        );
+//        console.debug(
+//            "engine/camera - limits rebuilt - " +
+//            this.limits[0] + "," + this.limits[1] + "," + this.limits[2] + "," + this.limits[3]
+//        );
     }
 }
