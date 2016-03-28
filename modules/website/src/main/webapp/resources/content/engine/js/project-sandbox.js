@@ -3,10 +3,7 @@ var projectSandbox =
     // Constants
     // -- The rate at which logic is executed in ms
     RATE_LOGIC_MS: 60,
-    // -- Pixel scaling factor for co-ords
-    // TODO: remove this...
-    SCALE_FACTOR: null,
-    
+
     // Session ID
     sessionId: null,
     
@@ -84,10 +81,6 @@ var projectSandbox =
 
         // Fetch canvas instance
         this.canvas = document.getElementById("ps_render");
-        
-        // Setup scaling in respect to canvas
-        // TODO: remove this scale rubbish...probably not needed now.
-        this.SCALE_FACTOR = 1.0;//0.05;
         
         // Initialise WebGL
         this.gl = this.initWebGl();
