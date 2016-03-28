@@ -175,6 +175,8 @@ projectSandbox.camera =
             {
                 y = limits[3];
             }
+
+            console.error(x + "," + y + " - " + limits[0] + "," + limits[1] + "," + limits[2] + "," + limits[3]);
         }
 
         // Update camera
@@ -186,8 +188,7 @@ projectSandbox.camera =
         projectSandbox.frustrum.update();
 
         // Rebuild camera limits
-        // TODO: fix performance / dont call each time + bug when resizing to small height with big width (ratio issues)
-        //this.buildLimits();
+        this.buildLimits();
     },
 
     buildLimits: function()
@@ -211,17 +212,23 @@ projectSandbox.camera =
         var frustumWidthHalf = frustrumSize[0] / 2.0;
         var frustumHeightHalf = frustrumSize[1] / 2.0;
 
-//        this.limits =
-//        [
-//            Math.ceil(frustumWidthHalf),
-//            Math.ceil(frustumHeightHalf),
-//            Math.floor(mapWidth - frustumWidthHalf),
-//            Math.floor(mapHeight - frustumHeightHalf)
-//        ];
+        this.limits =
+        [
+            Math.ceil(frustumWidthHalf),
+            Math.ceil(frustumHeightHalf),
+            Math.floor(mapWidth - frustumWidthHalf),
+            Math.floor(mapHeight - frustumHeightHalf)
+        ];
+    },
 
-//        console.debug(
-//            "engine/camera - limits rebuilt - " +
-//            this.limits[0] + "," + this.limits[1] + "," + this.limits[2] + "," + this.limits[3]
-//        );
+    getWidth: function()
+    {
+        return projectSandbox.canvas.clientWidth;
+    },
+
+    getHeight: function()
+    {
+        return projectSandbox.canvas.clientHeight;
     }
+
 }

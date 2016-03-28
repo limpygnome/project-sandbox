@@ -6,6 +6,7 @@
         "/content/game/textures/data/players.json",
         "/content/game/textures/data/vehicles.json",
         "/content/game/textures/data/ui-weapons.json",
-        "/content/game/textures/data/pickups.json"
+        "/content/game/textures/data/pickups.json",
+        "/content/game/textures/data/background-space-red.json"
     ]
 }

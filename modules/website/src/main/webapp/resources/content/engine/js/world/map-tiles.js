@@ -2,6 +2,8 @@ projectSandbox.world.MapTiles = function() {
 
     projectSandbox.world.Map.call(this);
 
+    // The z-level at which to render the map
+    this.renderZ = -1.0;
 
     // Each type has {texture, height}
     this.types = [];
@@ -16,25 +18,23 @@ projectSandbox.world.MapTiles = function() {
     this.tileSize = 0.0;
 
     // The number of tiles across as the width
-    this.tilesWidth = 0;
+    this.tilesWidth = null;
 
     // The number of tiles downwards as the height
-    this.tilesHeight = 0;
-
-
-    this.getWidth = function()
-    {
-        return this.tilesWidth * this.tileSize;
-    };
-
-    this.getHeight = function()
-    {
-        return this.tilesHeight * this.tileSize;
-    };
-
+    this.tilesHeight = null;
 };
 
 projectSandbox.world.MapTiles.inherits(projectSandbox.world.Map);
+
+projectSandbox.world.MapTiles.prototype.getWidth = function()
+{
+    return this.tilesWidth * this.tileSize;
+};
+
+projectSandbox.world.MapTiles.prototype.getHeight = function()
+{
+    return this.tilesHeight * this.tileSize;
+};
 
 projectSandbox.world.MapTiles.prototype.setup = function()
 {
@@ -44,9 +44,8 @@ projectSandbox.world.MapTiles.prototype.setup = function()
     // Set state to setup
     this.flagIsSetup = true;
 
-    // TODO: create hook/event system for this?
-    // Rebuild camera limits
-    //projectSandbox.camera.buildLimits();
+    // Rebuild camera limits - must come after flag
+    projectSandbox.camera.buildLimits();
 };
 
 projectSandbox.world.MapTiles.prototype.render = function(gl, shaderProgram, modelView, perspective)

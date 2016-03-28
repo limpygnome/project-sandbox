@@ -6,6 +6,14 @@ function Primitive(params)
         return;
     }
 
+    /*
+        Params:
+        - width
+        - height
+        - model (optional)
+        - depth (3d model only)
+    */
+
     var width = params.width;
     var height = params.height;
 
@@ -140,6 +148,8 @@ Primitive.prototype.setTexture = function(name)
         {
             // Fetch error texture
             texture = projectSandbox.textures.get("error");
+
+            console.warn("engine / primitive - failed to retrieve texture - name: " + name);
         }
         
         this.texture = texture;
