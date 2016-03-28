@@ -24,8 +24,8 @@ projectSandbox.network.world.mapTiles =
 
         // Setup map
         projectSandbox.map.tileSize = tileSize;
-        projectSandbox.map.width = width;
-        projectSandbox.map.height = height;
+        projectSandbox.map.tilesWidth = width;
+        projectSandbox.map.tilesHeight = height;
 
         // Parse tiles
         var type;

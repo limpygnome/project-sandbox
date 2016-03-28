@@ -76,7 +76,7 @@ projectSandbox.world.MapTiles.prototype.render = function(gl, shaderProgram, mod
     var lastHeight = -1;
 
     // Translate to start Y
-    mat4.translate(modelView, modelView, [0, this.tileSize * ((this.height - 1) - renderEndY), 0]);
+    mat4.translate(modelView, modelView, [0, this.tileSize * ((this.tilesHeight - 1) - renderEndY), 0]);
 
     for (y = renderEndY; y >= renderStartY; y--) // Y is inverse!
     {
@@ -129,7 +129,7 @@ projectSandbox.world.MapTiles.prototype.render = function(gl, shaderProgram, mod
 
     // Undo translation for Y
     // -- We don't subtract 1 from height since the last translation in the loop always shifts on Y by ts
-    mat4.translate(modelView, modelView, [0, this.tileSize * -((this.height) - renderStartY), 0]);
+    mat4.translate(modelView, modelView, [0, this.tileSize * -((this.tilesHeight) - renderStartY), 0]);
 
     // Undo bottom left translation
     mat4.translate(modelView, modelView, [-this.tileSizeHalf, -this.tileSizeHalf, -this.renderZ]);

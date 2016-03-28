@@ -5,7 +5,7 @@
     "properties" :
     {
         "name" : "main open test map",
-        "lobby" : false,
+        "lobby" : true,
         "background" : "background/space-red",
         "width" : 4096.0,
         "height" : 4096.0

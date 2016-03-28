@@ -170,18 +170,18 @@ projectSandbox.frustrum =
             Math.floor((projectSandbox.camera.y - frustrumHeightHalf) / tileSize),
         ];
 
-        var mapWidth = projectSandbox.map.width;
-        var mapHeight = projectSandbox.map.height;
+        var tilesWidth = projectSandbox.map.tilesWidth;
+        var tilesHeight = projectSandbox.map.tilesHeight;
 
         // Invert y
-        mapIndexes[1] = (mapHeight - 1) - mapIndexes[1];
-        mapIndexes[3] = (mapHeight - 1) - mapIndexes[3];
+        mapIndexes[1] = (tilesHeight - 1) - mapIndexes[1];
+        mapIndexes[3] = (tilesHeight - 1) - mapIndexes[3];
 
         // Clamp to size of map
-        mapIndexes[0] = projectSandbox.utils.clamp(mapIndexes[0], 0, mapWidth - 1);
-        mapIndexes[1] = projectSandbox.utils.clamp(mapIndexes[1], 0, mapHeight - 1);
-        mapIndexes[2] = projectSandbox.utils.clamp(mapIndexes[2], 0, mapWidth - 1);
-        mapIndexes[3] = projectSandbox.utils.clamp(mapIndexes[3], 0, mapHeight - 1);
+        mapIndexes[0] = projectSandbox.utils.clamp(mapIndexes[0], 0, tilesWidth - 1);
+        mapIndexes[1] = projectSandbox.utils.clamp(mapIndexes[1], 0, tilesHeight - 1);
+        mapIndexes[2] = projectSandbox.utils.clamp(mapIndexes[2], 0, tilesWidth - 1);
+        mapIndexes[3] = projectSandbox.utils.clamp(mapIndexes[3], 0, tilesHeight - 1);
 
         return mapIndexes;
     },
