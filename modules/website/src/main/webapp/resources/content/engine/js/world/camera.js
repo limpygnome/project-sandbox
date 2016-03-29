@@ -25,6 +25,9 @@ projectSandbox.camera =
     // - 0,1 - XY lower limit
     // - 2,3 - XY upper limit
     limits: null,
+
+    // The game time at which the limits were last built
+    limitsLastBuiltTime: 0,
     
     // Last co-ordinates of mouse
     mouseX: 0,
@@ -187,10 +190,20 @@ projectSandbox.camera =
 
         // Rebuild camera limits
         this.buildLimits();
+
+        console.debug(projectSandbox.currentTime);
     },
 
     buildLimits: function()
     {
+        // Check if already built for current logic cycle
+        var currentTime = projectSandbox.currentTime;
+
+        if (this.limitsLastBuiltTime != currentTime)
+        {
+            this.limitsLastBuiltTime = currentTime;
+        }
+
         var map = projectSandbox.map;
 
         // Check map is ready

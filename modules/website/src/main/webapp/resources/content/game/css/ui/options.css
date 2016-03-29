@@ -6,9 +6,12 @@
 #projectsandbox #ps-options
 {
     position: fixed;
-    bottom: 1em;
-    right: 1em;
-    font-size: 2em;
+    bottom: 2em;
+    right: 2em;
+}
+#projectsandbox #ps-options span
+{
+    font-size: 3em !important;
 }
 #projectsandbox #ps-options .button
 {
@@ -16,11 +19,11 @@
     color: #FFF;
     text-decoration: none;
     text-shadow: 0em 0em 0.4em #333;
-    margin: 0em 0.2em;
+    margin: 0em 1em;
     cursor: pointer;
 }
 #projectsandbox #ps-options .button:focus,
 #projectsandbox #ps-options .button:hover
 {
-    color: #DDD;
+    color: #CCC;
 }
