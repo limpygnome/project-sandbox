@@ -10,6 +10,28 @@ function Entity(params)
 
 Entity.inherits(Primitive);
 
+Entity.prototype.prelogic = function()
+{
+    // Copy updated values across
+    if (this.updatedX != null)
+    {
+        this.x = this.updatedX;
+        this.updatedX = null;
+    }
+
+    if (this.updatedY != null)
+    {
+        this.y = this.updatedY;
+        this.updatedY = null;
+    }
+
+    if (this.updatedRotation != null)
+    {
+        this.rotation = this.updatedRotation;
+        this.updatedRotation = null;
+    }
+}
+
 Entity.prototype.readBytesUpdate = function(packet)
 {
     // Nothing by default

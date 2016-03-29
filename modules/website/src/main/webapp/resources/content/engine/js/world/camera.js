@@ -53,29 +53,6 @@ projectSandbox.camera =
     
     renderLogic: function()
     {
-        // Update chase co-ordinates
-        if(this.chaseEntityId != null)
-        {
-            var ent = projectSandbox.entities.get(this.chaseEntityId);
-            
-            if(ent != null)
-            {
-                if (this.x != ent.x || this.y != ent.y || this.z != ent.z)
-                {
-                    // Update camera
-                    this.setPosition(ent.x, ent.y, ent.z);
-                }
-            }
-            else
-            {
-                console.warn("engine/camera - chase entity " + this.chaseEntityId + " not found");
-            }
-        }
-        else if (!projectSandbox.network.closed)
-        {
-            console.warn("engine/camera - no chase entity");
-        }
-
         // Build camera view perspective
         this.buildCameraView();
     },
@@ -146,6 +123,29 @@ projectSandbox.camera =
             // Reset ready for next loop
             this.mouseMove = false;
         }
+
+        // Update chase co-ordinates
+        if(this.chaseEntityId != null)
+        {
+            var ent = projectSandbox.entities.get(this.chaseEntityId);
+
+            if(ent != null)
+            {
+                if (this.x != ent.x || this.y != ent.y || this.z != ent.z)
+                {
+                    // Update camera
+                    this.setPosition(ent.x, ent.y, ent.z);
+                }
+            }
+            else
+            {
+                console.warn("engine/camera - chase entity " + this.chaseEntityId + " not found");
+            }
+        }
+        else if (!projectSandbox.network.closed)
+        {
+            console.warn("engine/camera - no chase entity");
+        }
     },
 
     setPosition: function(x, y, z)
@@ -190,8 +190,6 @@ projectSandbox.camera =
 
         // Rebuild camera limits
         this.buildLimits();
-
-        console.debug(projectSandbox.currentTime);
     },
 
     buildLimits: function()

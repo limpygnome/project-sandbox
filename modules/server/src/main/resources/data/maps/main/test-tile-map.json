@@ -5,7 +5,7 @@
     "properties" :
     {
         "name" : "main tile test map",
-        "lobby" : true
+        "lobby" : false
     },
 
     "tileProperties" :

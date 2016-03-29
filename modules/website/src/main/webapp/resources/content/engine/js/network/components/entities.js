@@ -145,17 +145,23 @@ projectSandbox.network.entities =
                 }
             }
 
+            /*
+                Copy some values to an "updated" field i.e. updatedX.
+
+                This is to prevent updates to entities outside of logic and rendering cycles, causing glitching.
+                The "updated" field should then be copied during the entity's pre-logic cycle.
+            */
             if ((mask & this.UPDATEMASK_X) == this.UPDATEMASK_X)
             {
-                ent.x = packet.readFloat();
+                ent.updatedX = packet.readFloat();
             }
             if ((mask & this.UPDATEMASK_Y) == this.UPDATEMASK_Y)
             {
-                ent.y = packet.readFloat();
+                ent.updatedY = packet.readFloat();
             }
             if ((mask & this.UPDATEMASK_ROTATION) == this.UPDATEMASK_ROTATION)
             {
-                ent.rotation = packet.readFloat();
+                ent.updatedRotation = packet.readFloat();
             }
             if ((mask & this.UPDATEMASK_HEALTH) == this.UPDATEMASK_HEALTH)
             {

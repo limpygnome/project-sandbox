@@ -183,6 +183,7 @@ var projectSandbox =
             ent = kv[1];
             if (ent.logic)
             {
+                ent.prelogic();
                 ent.logic();
             }
         }
