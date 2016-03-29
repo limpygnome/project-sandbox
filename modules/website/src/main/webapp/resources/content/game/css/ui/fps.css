@@ -10,10 +10,14 @@
     left: 0;
     width: 100%;
     text-align: center;
-    font-size: 2em;
     text-shadow: 0em 0em 0.2em #333;
 }
 
+#projectsandbox #ps-ui #ps-fps
+{
+    font-size: 2em;
+}
 #projectsandbox #ps-ui #ps-fps #ps-fps-value
 {
+    font-size: 1em;
 }
