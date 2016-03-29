@@ -11,6 +11,15 @@
     width: 24em;
     height: 25em;
 }
+
+@media all and (max-width: 1000px)
+{
+    #projectsandbox #ps-ui #ps-activity
+    {
+        height: 16em;
+    }
+}
+
 #projectsandbox #ps-ui #ps-activity #ps-activity-items
 {
     width: 100%;

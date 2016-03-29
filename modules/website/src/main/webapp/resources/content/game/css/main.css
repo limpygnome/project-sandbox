@@ -15,6 +15,51 @@ body
     margin: 0em;
 }
 
+.mobile-warning
+{
+    display: none;
+}
+
+/*
+    These CSS rules are the key for working on mobile.
+
+    Since we use em as a unit, we can just scale everything on the page to fit for smaller resolutions.
+*/
+@media all and (max-width: 1000px)
+{
+    *
+    {
+        font-size: 8px;
+    }
+
+    .mobile-warning
+    {
+        display: block;
+        position: fixed;
+        top: calc(50% - 1em);
+        width: 16em;
+        left: calc(50% - 8em);
+        font-size: 4em;
+        background: rgba(30, 30, 30, 0.7);
+        text-align: center;
+        border-radius: 0.2em;
+        padding: 0.5em;
+        z-index: 99999;
+
+        -webkit-animation: notification-hide 0s ease-in 2s forwards;
+        -moz-animation: notification-hide 0s ease-in 2s forwards;
+        -o-animation: notification-hide 0s ease-in 2s forwards;
+        animation: notification-hide 0s ease-in 2s forwards;
+    }
+}
+@media all and (max-width: 600px)
+{
+    *
+    {
+        font-size: 6px;
+    }
+}
+
 #projectsandbox
 {
     display: table;
@@ -52,56 +97,3 @@ body
     background: #FFF;
     border: solid 0.2em #F00;
 }
-
-
-
-
-
-
-
-
-
-/*
-    Sidebar
-    DEPRECATED
-    ********************************************************************************************************************
-*/
-
-/*
-#projectsandbox .ps-sidebar
-{
-    position: fixed;
-    top: 0;
-    width: 25em;
-    height: 100%;
-    background: #222;
-    overflow: hidden;
-    z-index: 999;
-}
-#projectsandbox .ps-sidebar.left
-{
-    left: 0;
-    border-right: solid 0.2em #111;
-    box-shadow: #222 0.5em 0em 4.5em;
-    opacity: 0.2;
-}
-
-#projectsandbox .ps-sidebar.right
-{
-    right: 0;
-    border-left: solid 0.2em #111;
-    box-shadow: #222 -0.5em 0em 4.5em;
-    opacity: 0.2;
-}
-#projectsandbox .ps-sidebar .container
-{
-    height: 50%;
-}
-#projectsandbox .ps-sidebar h3
-{
-    width: 100%;
-    padding: 0.5em;
-    margin: 0em;
-    background: #111;
-}
-*/

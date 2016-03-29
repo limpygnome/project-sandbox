@@ -12,6 +12,13 @@
         </title>
 
         <!--
+            Prevent page zooming/scaling on mobile devices
+
+            This prevents page from being zoomed when exiting full-screen mode.
+        -->
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0" />
+
+        <!--
             CSS
             ************************************************************************************************************
         -->
