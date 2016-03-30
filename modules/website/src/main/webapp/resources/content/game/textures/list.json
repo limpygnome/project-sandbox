@@ -7,6 +7,8 @@
         "/content/game/textures/data/vehicles.json",
         "/content/game/textures/data/ui-weapons.json",
         "/content/game/textures/data/pickups.json",
-        "/content/game/textures/data/background-space-red.json"
+        "/content/game/textures/data/background-space-red.json",
+        "/content/game/textures/data/flames.json",
+        "/content/game/textures/data/ships.json"
     ]
 }

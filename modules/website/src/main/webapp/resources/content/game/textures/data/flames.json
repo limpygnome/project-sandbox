@@ -1,0 +1,42 @@
+{
+    "name" : "flames",
+    "width" : 256,
+    "height" : 64,
+    "url" : "/content/game/images/flames.png",
+    "description" : "Rocket/exhaust flames for ships.",
+    "textures" :
+    [
+        {
+            "name" : "flames/blue",
+            "speed" : 0,
+            "type" : "2d",
+            "frames" :
+            [
+                {
+                    "x" : 0,
+                    "y" : 0,
+                    "width" : 64,
+                    "height" : 64
+                },
+                {
+                    "x" : 64,
+                    "y" : 0,
+                    "width" : 64,
+                    "height" : 64
+                },
+                {
+                    "x" : 128,
+                    "y" : 0,
+                    "width" : 64,
+                    "height" : 64
+                },
+                {
+                    "x" : 192,
+                    "y" : 0,
+                    "width" : 64,
+                    "height" : 64
+                }
+            ]
+        }
+    ]
+}

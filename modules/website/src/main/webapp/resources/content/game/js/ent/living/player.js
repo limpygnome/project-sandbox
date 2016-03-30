@@ -10,7 +10,7 @@ function Player()
     
     // Set custom params for this ent
     this.setTexture("players/default");
-    
+
     this.running = false;
     
     this.trail = new Trail(
