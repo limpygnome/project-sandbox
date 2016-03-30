@@ -2,6 +2,7 @@ package com.limpygnome.projectsandbox.server.entity.imp.vehicle;
 
 import com.limpygnome.projectsandbox.server.entity.annotation.EntityType;
 import com.limpygnome.projectsandbox.server.entity.physics.Vector2;
+import com.limpygnome.projectsandbox.server.player.PlayerInfo;
 import com.limpygnome.projectsandbox.server.world.map.WorldMap;
 
 /**
@@ -11,10 +12,12 @@ import com.limpygnome.projectsandbox.server.world.map.WorldMap;
 @EntityType(typeId = 20, typeName = "vehicle/ice-cream-van")
 public class IceCreamVan extends AbstractVehicle
 {
-    public IceCreamVan(WorldMap map)
+
+    public IceCreamVan(WorldMap map, PlayerInfo playerInfo)
     {
         super(
                 map,
+                playerInfo,
                 (short) 32,
                 (short) 64,
                 new Vector2[]
@@ -32,9 +35,15 @@ public class IceCreamVan extends AbstractVehicle
         maxSpeed = 5.0f;
     }
 
+    public IceCreamVan(WorldMap map)
+    {
+        this(map, null);
+    }
+
     @Override
     public String friendlyNameVehicle()
     {
         return "Ice Cream Truck";
     }
+
 }

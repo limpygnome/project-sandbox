@@ -31,41 +31,7 @@ projectSandbox.network.entityPool = (function() {
     var internalCreate = function (typeId)
     {
         // TODO: we need game, not engine, to produce entities based on type, thus add hook to game to do this instead...
-        var entity;
-
-        switch (typeId)
-        {
-            case 0:
-                entity = new Entity();
-                break;
-            case 1:
-                entity = new Player();
-                break;
-            case 500:
-                entity = new Sentry();
-                break;
-            case 510:
-                entity = new Pedestrian();
-                break;
-            case 600:
-                entity = new Rocket();
-                break;
-            case 20:
-                entity = new IceCreamVan();
-                break;
-            case 21:
-                entity = new RocketCar();
-                break;
-            case 22:
-                entity = new Bus();
-                break;
-            case 1201:
-                entity = new HealthPickup();
-                break;
-            default:
-                console.error("engine/network/entityPool - unhandled entity type id: " + typeId);
-                break;
-        }
+        var entity = game.entityFactory.create(typeId);
 
         if (entity != null)
         {

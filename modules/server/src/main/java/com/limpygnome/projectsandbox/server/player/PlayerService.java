@@ -3,6 +3,8 @@ package com.limpygnome.projectsandbox.server.player;
 
 import com.limpygnome.projectsandbox.server.Controller;
 import com.limpygnome.projectsandbox.server.entity.Entity;
+import com.limpygnome.projectsandbox.server.entity.imp.ships.YutamoC1;
+import com.limpygnome.projectsandbox.server.entity.imp.vehicle.AbstractVehicle;
 import com.limpygnome.projectsandbox.server.entity.respawn.pending.EntityPendingRespawn;
 import com.limpygnome.projectsandbox.server.entity.imp.living.Player;
 import com.limpygnome.projectsandbox.server.packet.OutboundPacket;
@@ -262,7 +264,8 @@ public class PlayerService implements LogicService, IdCounterConsumer
     public synchronized Entity playerEntCreate(WorldMap map, PlayerInfo playerInfo)
     {
         // Create Entity
-        return new Player(map, controller, playerInfo);
+        //return new Player(map, controller, playerInfo);
+        return new YutamoC1(map, playerInfo);
     }
 
     public void setPlayerEnt(PlayerInfo playerInfo, Entity entity)

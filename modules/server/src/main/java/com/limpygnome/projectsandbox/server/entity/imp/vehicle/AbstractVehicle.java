@@ -51,8 +51,16 @@ public abstract class AbstractVehicle extends Entity
     // Player slotState
     protected Vector2[] playerEjectPositions;
     protected PlayerInfo[] players;
-    
-    public AbstractVehicle(WorldMap map, short width, short height, Vector2[] playerEjectPositions)
+
+    /**
+     *
+     * @param map
+     * @param playerInfo player spawned into new entity; optional, can be null
+     * @param width
+     * @param height
+     * @param playerEjectPositions
+     */
+    public AbstractVehicle(WorldMap map, PlayerInfo playerInfo, short width, short height, Vector2[] playerEjectPositions)
     {
         super(map, width, height);
         
@@ -60,10 +68,16 @@ public abstract class AbstractVehicle extends Entity
         {
             throw new IllegalArgumentException("Must be at least one eject position for driver");
         }
-        
+
         this.speed = 0.0f;
         this.playerEjectPositions = playerEjectPositions;
         this.players = new PlayerInfo[playerEjectPositions.length];
+
+        if (playerInfo != null)
+        {
+            // Set player as first person in vehicle
+            this.players[0] = playerInfo;
+        }
         
         setMaxHealth(DEFAULT_HEALTH);
     }

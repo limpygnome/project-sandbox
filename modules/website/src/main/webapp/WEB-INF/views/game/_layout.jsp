@@ -133,6 +133,7 @@
         -->
         <script src="/content/game/js/_namespace.js"></script>
         <script src="/content/game/js/effects.js"></script>
+        <script src="/content/game/js/entity-factory.js"></script>
         <script src="/content/game/js/ui.js"></script>
 
         <!-- Game: Living -->
@@ -148,6 +149,9 @@
         <script src="/content/game/js/ent/vehicle/ice-cream-van.js"></script>
         <script src="/content/game/js/ent/vehicle/rocket-car.js"></script>
         <script src="/content/game/js/ent/vehicle/bus.js"></script>
+
+        <!-- Game: Ships -->
+        <script src="/content/game/js/ent/ships/yutamo-c1.js"></script>
 
         <!-- Game: Weapons -->
         <script src="/content/game/js/ent/weapon/rocket.js"></script>
