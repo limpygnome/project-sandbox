@@ -15,7 +15,7 @@ projectSandbox.frustrum =
     update: function()
     {
         // Compute ratio
-        this.ratio = projectSandbox.gl.drawingBufferWidth / projectSandbox.gl.drawingBufferHeight;
+        this.ratio = projectSandbox.camera.getRenderWidth() / projectSandbox.camera.getRenderHeight();
 
         // Camera variables
         var camearaPos =
@@ -186,7 +186,7 @@ projectSandbox.frustrum =
         return mapIndexes;
     },
 
-    computeFrustrumSize: function(distance)
+    computeFrustrumSize: function (distance)
     {
         var frustrumHeight = 2 * Math.tan(this.FRUSTRUM_VERTICAL_FOV / 2.0) * distance;
         var frustrumWidth = frustrumHeight * this.ratio;

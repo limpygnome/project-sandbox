@@ -230,14 +230,31 @@ projectSandbox.camera =
         ];
     },
 
-    getWidth: function()
+    /*
+        Rendering uses the actual width/height of the canvas as the viewport size and ratio.
+
+        The following were used in the past:
+        - projectSandbox.gl.viewportWidth;
+        - projectSandbox.gl.viewportHeight;
+        - projectSandbox.gl.viewportWidth / projectSandbox.gl.viewportHeight;
+
+        But this doesn't work for a dynamically sized canvas, and looked blurry. Although this does gain a few FPS,
+        due to a smaller rendering area.
+    */
+
+    getRenderWidth: function()
     {
-        return projectSandbox.canvas.clientWidth;
+        return projectSandbox.gl.drawingBufferWidth;
     },
 
-    getHeight: function()
+    getRenderHeight: function()
     {
-        return projectSandbox.canvas.clientHeight;
+        return projectSandbox.gl.drawingBufferHeight;
+    },
+
+    getRenderRatio: function()
+    {
+        return projectSandbox.canvas.clientWidth / projectSandbox.canvas.clientHeight;
     }
 
 }

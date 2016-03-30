@@ -229,7 +229,7 @@ var projectSandbox =
     
         // Reset scene
         // -- If width/height changes, update frustrum culling since it uses it for calculating aspect ratio
-        gl.viewport(0, 0, gl.drawingBufferWidth, gl.drawingBufferHeight);
+        gl.viewport(0, 0, projectSandbox.camera.getRenderWidth(), projectSandbox.camera.getRenderHeight());
         gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
         // Reset perspective matrix
@@ -237,7 +237,7 @@ var projectSandbox =
         // -- aspect ratio
         // -- near bound of frustrum
         // -- far bound of frustrum
-        var aspectRatio = this.canvas.clientWidth / this.canvas.clientHeight;
+        var aspectRatio = projectSandbox.camera.getRenderRatio();
 
         mat4.perspective(
             this.perspective,
