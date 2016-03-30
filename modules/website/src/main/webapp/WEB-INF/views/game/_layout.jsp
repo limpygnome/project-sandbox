@@ -112,6 +112,7 @@
 
         <!-- Network: Components -->
         <script src="/content/engine/js/network/components/entities.js"></script>
+        <script src="/content/engine/js/network/components/entity-pool.js"></script>
         <script src="/content/engine/js/network/components/inventory.js"></script>
         <script src="/content/engine/js/network/components/world/map.js"></script>
         <script src="/content/engine/js/network/components/world/map-open.js"></script>

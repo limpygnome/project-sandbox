@@ -53,41 +53,7 @@ projectSandbox.network.entities =
         var maxHealth = packet.readFloat();
 
         // Create entity based on type
-        var ent = null;
-
-        switch(entityType)
-        {
-            default:
-                console.warn("engine/network/entities - unhandled ent type " + entityType);
-                break;
-            case 0:
-                ent = new Entity();
-                break;
-            case 1:
-                ent = new Player();
-                break;
-            case 500:
-                ent = new Sentry();
-                break;
-            case 510:
-                ent = new Pedestrian();
-                break;
-            case 600:
-                ent = new Rocket();
-                break;
-            case 20:
-                ent = new IceCreamVan();
-                break;
-            case 21:
-                ent = new RocketCar();
-                break;
-            case 22:
-                ent = new Bus();
-                break;
-            case 1201:
-                ent = new HealthPickup();
-                break;
-        }
+        var ent = projectSandbox.network.entityPool.get(entityType);
 
         if (ent != null)
         {
@@ -186,6 +152,9 @@ projectSandbox.network.entities =
         {
             // Remove from world
             projectSandbox.entities.delete(id);
+
+            // Add entity back to pool
+            projectSandbox.network.entityPool.dispose(entity);
 
             // Raise death event
             this.invokeEntityDeath(entity);
