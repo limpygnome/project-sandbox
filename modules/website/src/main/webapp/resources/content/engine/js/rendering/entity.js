@@ -1,3 +1,10 @@
+/*
+    Reuse & Pooling
+    ===================>
+    An entity will be reused by an entity pool, located in the engine. Thus if changes need to be reset, for a new life,
+    implement the function "reset", which will be called before the entity is placed into the world for re-use.
+*/
+
 function Entity(params)
 {
     Primitive.call(this, params);

@@ -30,6 +30,7 @@ projectSandbox.network.entityPool = (function() {
 
     var internalCreate = function (typeId)
     {
+        // TODO: we need game, not engine, to produce entities based on type, thus add hook to game to do this instead...
         var entity;
 
         switch (typeId)
@@ -62,7 +63,7 @@ projectSandbox.network.entityPool = (function() {
                 entity = new HealthPickup();
                 break;
             default:
-                console.error("engine/network/entityPool - unhandled ent type " + typeId);
+                console.error("engine/network/entityPool - unhandled entity type id: " + typeId);
                 break;
         }
 
@@ -70,6 +71,8 @@ projectSandbox.network.entityPool = (function() {
         {
             // Set typeId for use in pool when entity disposed
             entity.typeId = typeId;
+
+            console.debug("engine/network/entityPool - created new entity - type id: " + typeId);
         }
 
         return entity;

@@ -42,6 +42,16 @@ projectSandbox.camera =
 
         // Update position to check it's within limits
         this.setPosition(this.x, this.y, this.z);
+
+        // Output useful debug information
+        console.debug(  "engine/camera - render width: " + this.getRenderWidth() +
+                        ", render height: " + this.getRenderHeight() +
+                        ", render ratio: " + this.getRenderRatio() +
+                        ", canvas width: " + projectSandbox.canvas.clientWidth +
+                        ", canvas height: " + projectSandbox.canvas.clientHeight +
+                        ", viewport width: " + projectSandbox.gl.viewportWidth +
+                        ", viewport height: " + projectSandbox.gl.viewportHeight
+        );
     },
 
     buildCameraView: function()
