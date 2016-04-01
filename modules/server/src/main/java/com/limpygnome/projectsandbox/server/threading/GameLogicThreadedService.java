@@ -43,7 +43,19 @@ public class GameLogicThreadedService implements Runnable
                 // Execute logic for each service
                 for (LogicService logicService : logicServices)
                 {
-                    logicService.logic();
+                    try
+                    {
+                        logicService.logic();
+                    }
+                    catch (Exception e)
+                    {
+                        if (e instanceof InterruptedException)
+                        {
+                            throw e;
+                        }
+
+                        LOG.error("Failed to execute logic for service", e);
+                    }
                 }
                 
                 // Sleep for another cycle
@@ -60,9 +72,9 @@ public class GameLogicThreadedService implements Runnable
                 }
             }
         }
-        catch(InterruptedException ex)
+        catch (InterruptedException ex)
         {
-            LOG.error("Logic cycle failure, thread interrupted", ex);
+            LOG.error("Logic cycle thread interrupted", ex);
         }
     }
 

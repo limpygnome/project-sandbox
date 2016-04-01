@@ -3,8 +3,8 @@ function YutamoC1()
     Entity.call(this,
         {
             model: "2d-rect",
-            width: 90.0,
-            height: 100.0
+            width: 45.0,
+            height: 50.0
         }
     );
 
@@ -13,15 +13,15 @@ function YutamoC1()
     this.trail = new Trail(
         this,
         "flames/blue",
-        64,
-        64,
-        60,
+        32,
+        32,
+        0,
         1000,
         true,
         -2,
         2,
-        -50,
-        -70
+        -25,
+        -35
     );
 }
 

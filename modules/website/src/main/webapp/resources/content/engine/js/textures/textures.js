@@ -142,7 +142,7 @@ projectSandbox.textures =
         );
     },
 
-    parseFramesTypeGeneric: function(frames, src)
+    parseFramesTypeGeneric: function (frames, src)
     {
         // -- Check number of vertices per frame from first item
         // -- -- Note: this is actually not verts, but total co-ordinates - divide by 2 for total verts
@@ -322,19 +322,19 @@ projectSandbox.textures =
     {
         // -- Bottom,left
         frameDataArray[frameDataOffset + 0] = x;
-        frameDataArray[frameDataOffset + 1] = y;
+        frameDataArray[frameDataOffset + 1] = y + (height - 1);
 
         // -- Bottom,right
         frameDataArray[frameDataOffset + 2] = x + (width - 1);
-        frameDataArray[frameDataOffset + 3] = y;
+        frameDataArray[frameDataOffset + 3] = y + (height - 1);
 
         // -- Top,right
         frameDataArray[frameDataOffset + 4] = x + (width - 1);
-        frameDataArray[frameDataOffset + 5] = y + (height - 1);
+        frameDataArray[frameDataOffset + 5] = y;
 
         // -- Top,left
         frameDataArray[frameDataOffset + 6] = x;
-        frameDataArray[frameDataOffset + 7] = y + (height - 1);
+        frameDataArray[frameDataOffset + 7] = y;
 
         // Now convert co-ordinates into unit vector
         for (var i = 0; i < 8; i++)

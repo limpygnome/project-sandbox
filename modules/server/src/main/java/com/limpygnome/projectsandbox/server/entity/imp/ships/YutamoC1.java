@@ -25,10 +25,10 @@ public class YutamoC1 extends AbstractVehicle
                 }
         );
 
-        accelerationFactor = 0.15f;
+        accelerationFactor = 0.5f;
         deaccelerationMultiplier = 0.95f;
         steeringAngle = 0.9f;
-        maxSpeed = 5.0f;
+        maxSpeed = 25.0f;
     }
 
     @Override
