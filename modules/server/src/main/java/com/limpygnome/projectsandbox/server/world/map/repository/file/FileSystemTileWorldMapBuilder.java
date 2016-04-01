@@ -45,7 +45,12 @@ public class FileSystemTileWorldMapBuilder extends FileSystemGenericWoldMapBuild
     public WorldMap build(Controller controller, MapService mapService, JSONObject mapData) throws IOException
     {
         TileWorldMap map = (TileWorldMap) super.build(controller, mapService, mapData);
-        buildTileTypesAndTiles(controller, mapData, map);
+
+        if (map != null)
+        {
+            buildTileTypesAndTiles(controller, mapData, map);
+        }
+
         return map;
     }
 

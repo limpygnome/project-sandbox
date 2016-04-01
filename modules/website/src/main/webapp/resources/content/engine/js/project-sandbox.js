@@ -181,9 +181,14 @@ var projectSandbox =
         for (var kv of this.entities)
         {
             ent = kv[1];
-            if (ent.logic)
+
+            if (ent.prelogic)
             {
                 ent.prelogic();
+            }
+
+            if (ent.logic)
+            {
                 ent.logic();
             }
         }

@@ -7,6 +7,7 @@ public class WorldMapProperties
 {
     private String name;
     private boolean lobby;
+    private boolean enabled;
 
     public String getName()
     {
@@ -28,12 +29,23 @@ public class WorldMapProperties
         this.lobby = lobby;
     }
 
+    public boolean isEnabled()
+    {
+        return enabled;
+    }
+
+    public void setEnabled(boolean enabled)
+    {
+        this.enabled = enabled;
+    }
+
     @Override
     public String toString()
     {
         return "WorldMapProperties{" +
                 "name='" + name + '\'' +
                 ", lobby=" + lobby +
+                ", enabled=" + enabled +
                 '}';
     }
 

@@ -63,13 +63,16 @@ public class FileSystemMapRepository implements MapRepository
                 // Build map using data
                 map = mapBuilder.build(controller, mapService, mapData);
 
-                // Build initial packet
-                map.rebuildMapPacket();
+                if (map != null)
+                {
+                    // Build initial packet
+                    map.rebuildMapPacket();
 
-                // Add to result
-                maps.put(map.getMapId(), map);
+                    // Add to result
+                    maps.put(map.getMapId(), map);
 
-                LOG.debug("loaded public map - {}", map);
+                    LOG.debug("loaded public map - {}", map);
+                }
             }
         }
         catch (IOException e)

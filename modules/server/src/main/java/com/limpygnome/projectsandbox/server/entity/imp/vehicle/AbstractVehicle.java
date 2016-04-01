@@ -52,6 +52,9 @@ public abstract class AbstractVehicle extends Entity
     protected Vector2[] playerEjectPositions;
     protected PlayerInfo[] players;
 
+    // Indicates that the driver, player zero, was spawned in this vehcle - thus respawn vehicle with player on death
+    protected boolean flagDriverSpawned;
+
     /**
      *
      * @param map
@@ -78,6 +81,7 @@ public abstract class AbstractVehicle extends Entity
             // Set player as first person in vehicle
             this.players[0] = playerInfo;
         }
+        this.flagDriverSpawned = (playerInfo != null);
         
         setMaxHealth(DEFAULT_HEALTH);
     }
@@ -355,7 +359,7 @@ public abstract class AbstractVehicle extends Entity
         {
             playerInfo = players[i];
             
-            if (playerInfo != null)
+            if (playerInfo != null && !(flagDriverSpawned && i == 0))
             {
                 // Create and respawn player
                 Entity entityPlayer = controller.playerService.playerEntCreate(map, playerInfo);

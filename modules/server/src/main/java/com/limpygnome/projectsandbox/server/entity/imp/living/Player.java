@@ -14,8 +14,6 @@ import static com.limpygnome.projectsandbox.server.constant.PlayerConstants.*;
 
 /**
  * An entity which represents a player.
- * 
- * @author limpygnome
  */
 @EntityType(typeId = 1, typeName = "living/player")
 public class Player extends Entity

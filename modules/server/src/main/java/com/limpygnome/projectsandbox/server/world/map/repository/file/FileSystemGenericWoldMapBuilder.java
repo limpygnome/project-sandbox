@@ -9,6 +9,8 @@ import com.limpygnome.projectsandbox.server.world.map.WorldMap;
 import com.limpygnome.projectsandbox.server.world.map.WorldMapProperties;
 import com.limpygnome.projectsandbox.server.world.spawn.FactionSpawns;
 import com.limpygnome.projectsandbox.server.world.spawn.Spawn;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
@@ -21,6 +23,7 @@ import java.util.Iterator;
  */
 public abstract class FileSystemGenericWoldMapBuilder implements FileSystemMapBuilder
 {
+    private final static Logger LOG = LogManager.getLogger(FileSystemGenericWoldMapBuilder.class);
 
     @Override
     public WorldMap build(Controller controller, MapService mapService, JSONObject mapData) throws IOException
@@ -38,6 +41,13 @@ public abstract class FileSystemGenericWoldMapBuilder implements FileSystemMapBu
 
         // Build parts of map from JSON data
         buildMapProperties(map, mapData);
+
+        if (!map.getProperties().isEnabled())
+        {
+            LOG.warn("Map not enabled, skipped loading - id: {}", mapId);
+            return null;
+        }
+
         buildFactionSpawns(controller, mapData, map);
         buildEntities(controller, mapData, map);
 
@@ -52,6 +62,7 @@ public abstract class FileSystemGenericWoldMapBuilder implements FileSystemMapBu
         WorldMapProperties properties = createPropertiesInstance();
 
         properties.setName((String) rawProperties.get("name"));
+        properties.setEnabled((boolean) rawProperties.get("enabled"));
         properties.setLobby((boolean) rawProperties.get("lobby"));
 
         // Set map with properties loaded

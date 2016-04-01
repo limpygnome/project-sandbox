@@ -81,7 +81,7 @@ projectSandbox.network.entities =
     packetUpdatesEntUpdated: function(packet, id)
     {
         // Find entity
-        ent = projectSandbox.entities.get(id);
+        var ent = projectSandbox.entities.get(id);
 
         if (ent)
         {
@@ -119,15 +119,18 @@ projectSandbox.network.entities =
             */
             if ((mask & this.UPDATEMASK_X) == this.UPDATEMASK_X)
             {
-                ent.updatedX = packet.readFloat();
+                var updatedX = packet.readFloat();
+                ent.updatedX = updatedX;
             }
             if ((mask & this.UPDATEMASK_Y) == this.UPDATEMASK_Y)
             {
-                ent.updatedY = packet.readFloat();
+                var updatedY = packet.readFloat();;
+                ent.updatedY = updatedY;
             }
             if ((mask & this.UPDATEMASK_ROTATION) == this.UPDATEMASK_ROTATION)
             {
-                ent.updatedRotation = packet.readFloat();
+                var updatedRotation = packet.readFloat();
+                ent.updatedRotation = updatedRotation;
             }
             if ((mask & this.UPDATEMASK_HEALTH) == this.UPDATEMASK_HEALTH)
             {
@@ -135,7 +138,7 @@ projectSandbox.network.entities =
             }
 
             // Allow ent to parse custom update bytes
-            offset = ent.readBytesUpdate(packet);
+            ent.readBytesUpdate(packet);
         }
         else
         {
