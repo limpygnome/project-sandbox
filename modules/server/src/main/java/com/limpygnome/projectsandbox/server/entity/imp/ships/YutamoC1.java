@@ -17,8 +17,8 @@ public class YutamoC1 extends AbstractVehicle
         super(
                 map,
                 playerInfo,
-                (short) 90,
-                (short) 100,
+                (short) 45,
+                (short) 50,
                 new Vector2[]
                 {
                         new Vector2(+138.0f, +110.0f)
@@ -35,15 +35,6 @@ public class YutamoC1 extends AbstractVehicle
     public String friendlyNameVehicle()
     {
         return "Yutamo C1";
-    }
-
-    @Override
-    public synchronized void eventSpawn(Controller controller, Spawn spawn)
-    {
-        // Set player to use this entity
-        controller.playerService.setPlayerEnt(players[0], this);
-
-        super.eventSpawn(controller, spawn);
     }
 
 }

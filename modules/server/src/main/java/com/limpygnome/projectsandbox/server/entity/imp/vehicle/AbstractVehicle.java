@@ -197,6 +197,12 @@ public abstract class AbstractVehicle extends Entity
                     // Free-up the space
                     players[i] = null;
 
+                    // Reset spawn flag if driver
+                    if (playerInfo == playerInfoDriver)
+                    {
+                        flagDriverSpawned = false;
+                    }
+
                     // Invoke event hook
                     eventPlayerExit(playerInfo, i);
                 }
@@ -382,6 +388,21 @@ public abstract class AbstractVehicle extends Entity
     }
 
     @Override
+    public synchronized void eventSpawn(Controller controller, Spawn spawn)
+    {
+        // Set this as player's ent if any player's are left in vehicle
+        for (PlayerInfo playerInfo : players)
+        {
+            if (playerInfo != null)
+            {
+                controller.playerService.setPlayerEnt(playerInfo, this);
+            }
+        }
+
+        super.eventSpawn(controller, spawn);
+    }
+
+    @Override
     public String friendlyName()
     {
         PlayerInfo driver = players[0];
@@ -419,4 +440,5 @@ public abstract class AbstractVehicle extends Entity
     {
         // Nothing by default...
     }
+
 }

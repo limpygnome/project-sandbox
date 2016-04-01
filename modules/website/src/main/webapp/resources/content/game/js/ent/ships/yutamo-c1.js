@@ -10,18 +10,32 @@ function YutamoC1()
 
     this.setTexture("ships/yutamo-c1");
 
-    this.trail = new Trail(
+    this.trailLeft = new Trail(
         this,
         "flames/blue",
-        32,
-        32,
+        16,
+        16,
         0,
         1000,
         true,
-        -2,
-        2,
-        -25,
-        -35
+        -18,
+        -18,
+        -18,
+        -18
+    );
+
+    this.trailRight = new Trail(
+        this,
+        "flames/blue",
+        16,
+        16,
+        0,
+        1000,
+        true,
+        16,
+        16,
+        -18,
+        -18
     );
 }
 
@@ -30,5 +44,12 @@ YutamoC1.inherits(Entity);
 YutamoC1.prototype.logic = function()
 {
     // Update trail
-    this.trail.logic(this);
+    this.trailLeft.logic(this);
+    this.trailRight.logic(this);
 }
+
+YutamoC1.prototype.eventDeath = function()
+{
+    game.effects.createExplosion(this.x, this.y, 256, 4000, -2, 2);
+}
+

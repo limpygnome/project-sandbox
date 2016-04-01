@@ -80,7 +80,7 @@ game.effects =
         projectSandbox.effects.push(effect);
     },
 
-    packetCreateExplosion: function(packet)
+    packetCreateExplosion: function (packet)
     {
         // Parse data
         var subType = packet.readByte();
@@ -122,7 +122,7 @@ game.effects =
 
         for (var i = 0; i < particles; i++)
         {
-            effect = new Effect("error", this.EXPLOSION_WIDTH, this.EXPLOSION_HEIGHT, x, y, this.EXPLOSION_Z, lifeSpan, this.EXPLOSION_FADE);
+            effect = new Effect("flames/blue", this.EXPLOSION_WIDTH, this.EXPLOSION_HEIGHT, x, y, this.EXPLOSION_Z, lifeSpan, this.EXPLOSION_FADE);
 
             effect.rotation = projectSandbox.utils.randRotation();
             effect.vx = projectSandbox.utils.randPrecise(velocityMin, velocityMax, 100.0);

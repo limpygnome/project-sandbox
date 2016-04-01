@@ -4,6 +4,9 @@ var projectSandbox =
     // -- The rate at which logic is executed in ms
     RATE_LOGIC_MS: 60,
 
+    // Used to toggle transparency; this will disable the depth buffer / 3D
+    TRANSPARENCY_ENABLED: true,
+
     // Session ID
     sessionId: null,
     
@@ -320,7 +323,7 @@ var projectSandbox =
         try
         {
             // Setup WebGL
-            gl = this.canvas.getContext("webgl", {alpha: false}) || this.canvas.getContext("experimental-webgl", {alpha: false});
+            gl = this.canvas.getContext("webgl", {alpha: true}) || this.canvas.getContext("experimental-webgl", {alpha: true});
 
             if (gl == null)
             {
@@ -363,7 +366,15 @@ var projectSandbox =
         var gl = this.gl;
         
         gl.clearColor(0.0, 0.0, 0.0, 1.0);
-        gl.enable(gl.DEPTH_TEST);
+
+        if (this.TRANSPARENCY_ENABLED)
+        {
+            gl.disable(gl.DEPTH_TEST);
+        }
+        else
+        {
+            gl.enable(gl.DEPTH_TEST);
+        }
         
         // Due to depth, we use alpha test rather than blending, implemented in shader
         gl.enable(gl.BLEND);
