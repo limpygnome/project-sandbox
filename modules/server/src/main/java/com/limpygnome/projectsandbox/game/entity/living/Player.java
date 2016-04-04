@@ -31,8 +31,6 @@ public class Player extends PlayerEntity
      */
     public float rotationFactor;
 
-    public Inventory inventory;
-
     public Player(WorldMap map, PlayerInfo[] players)
     {
         super(map, PLAYER_WIDTH, PLAYER_HEIGHT, players);
@@ -132,22 +130,6 @@ public class Player extends PlayerEntity
         {
             throw new RuntimeException("Attempted to retrieveInventory inventory for different player");
         }
-    }
-
-    @Override
-    public void eventPendingDeleted(Controller controller)
-    {
-        inventory.setOwner(null);
-    }
-
-    @Override
-    public synchronized void eventSpawn(Controller controller, Spawn spawn)
-    {
-        super.eventSpawn(controller, spawn);
-
-        // Setup owner
-        PlayerInfo playerInfo = getPlayer();
-        this.inventory.setOwner(playerInfo);
     }
 
 }
