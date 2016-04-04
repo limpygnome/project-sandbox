@@ -1,16 +1,17 @@
-package com.limpygnome.projectsandbox.server.entity.imp.vehicle;
+package com.limpygnome.projectsandbox.game.entity.vehicle;
 
+import com.limpygnome.projectsandbox.server.entity.PlayerEntity;
 import com.limpygnome.projectsandbox.server.entity.death.AbstractKiller;
 import com.limpygnome.projectsandbox.server.entity.death.CarDamage;
 import com.limpygnome.projectsandbox.server.entity.death.CarKiller;
-import com.limpygnome.projectsandbox.server.entity.imp.living.pedestrian.AbstractPedestrian;
+import com.limpygnome.projectsandbox.game.entity.living.pedestrian.AbstractPedestrian;
 import com.limpygnome.projectsandbox.server.entity.physics.collisions.CollisionResult;
 import com.limpygnome.projectsandbox.server.Controller;
 import com.limpygnome.projectsandbox.server.entity.Entity;
 import com.limpygnome.projectsandbox.server.entity.physics.collisions.CollisionResultMap;
 import com.limpygnome.projectsandbox.server.entity.respawn.pending.EntityPendingRespawn;
 import com.limpygnome.projectsandbox.server.entity.respawn.pending.PositionPendingRespawn;
-import com.limpygnome.projectsandbox.server.entity.imp.living.Player;
+import com.limpygnome.projectsandbox.game.entity.living.Player;
 import com.limpygnome.projectsandbox.server.entity.physics.Vector2;
 import com.limpygnome.projectsandbox.server.player.PlayerInfo;
 import com.limpygnome.projectsandbox.server.player.PlayerKeys;
@@ -20,10 +21,9 @@ import com.limpygnome.projectsandbox.server.world.spawn.Spawn;
 import static com.limpygnome.projectsandbox.server.constant.entity.AbstractVehicleConstants.*;
 
 /**
- *
- * @author limpygnome
+ * Generic vehicle for players.
  */
-public abstract class AbstractVehicle extends Entity
+public abstract class AbstractVehicle extends PlayerEntity
 {
     /**
      * The minimum (absolute) speed supported, until the speed is set to 0.
@@ -50,7 +50,6 @@ public abstract class AbstractVehicle extends Entity
     
     // Player slotState
     protected Vector2[] playerEjectPositions;
-    protected PlayerInfo[] players;
 
     // Indicates that the driver, player zero, was spawned in this vehcle - thus respawn vehicle with player on death
     protected boolean flagDriverSpawned;
@@ -58,14 +57,14 @@ public abstract class AbstractVehicle extends Entity
     /**
      *
      * @param map
-     * @param playerInfo player spawned into new entity; optional, can be null
+     * @param players players spawned into new entity; optional, can be null
      * @param width
      * @param height
      * @param playerEjectPositions
      */
-    public AbstractVehicle(WorldMap map, PlayerInfo playerInfo, short width, short height, Vector2[] playerEjectPositions)
+    public AbstractVehicle(WorldMap map, PlayerInfo[] players, short width, short height, Vector2[] playerEjectPositions)
     {
-        super(map, width, height);
+        super(map, width, height, players);
         
         if (playerEjectPositions.length < 1)
         {
@@ -74,14 +73,30 @@ public abstract class AbstractVehicle extends Entity
 
         this.speed = 0.0f;
         this.playerEjectPositions = playerEjectPositions;
-        this.players = new PlayerInfo[playerEjectPositions.length];
 
-        if (playerInfo != null)
+        if (players == null)
         {
-            // Set player as first person in vehicle
-            this.players[0] = playerInfo;
+            this.players = new PlayerInfo[playerEjectPositions.length];
         }
-        this.flagDriverSpawned = (playerInfo != null);
+        else
+        {
+            int playersLen = players.length;
+            int playerEjectLen = playerEjectPositions.length;
+
+            if (playersLen > playerEjectLen)
+            {
+                throw new IllegalArgumentException("More players spawning into vehicle than eject positions");
+            }
+
+            // Setup new array to allow future players to get in vehicle
+            this.players = new PlayerInfo[playerEjectLen];
+            for (int i = 0; i < playersLen; i++)
+            {
+                this.players[i] = players[i];
+            }
+        }
+
+        this.flagDriverSpawned = (players != null && players[0] != null);
         
         setMaxHealth(DEFAULT_HEALTH);
     }
@@ -268,11 +283,11 @@ public abstract class AbstractVehicle extends Entity
          */
 
         // Check if player
-        if (entOther instanceof Player)
+        if (entOther instanceof PlayerEntity)
         {
             // Check if they're holding down action key to get in vehicle
-            Player ply = (Player) entOther;
-            PlayerInfo playerInfo = ply.playerInfo;
+            PlayerEntity ply = (Player) entOther;
+            PlayerInfo playerInfo = ply.getPlayer();
             
             if (playerInfo.isKeyDown(PlayerKeys.Action))
             {
@@ -388,21 +403,6 @@ public abstract class AbstractVehicle extends Entity
     }
 
     @Override
-    public synchronized void eventSpawn(Controller controller, Spawn spawn)
-    {
-        // Set this as player's ent if any player's are left in vehicle
-        for (PlayerInfo playerInfo : players)
-        {
-            if (playerInfo != null)
-            {
-                controller.playerService.setPlayerEnt(playerInfo, this);
-            }
-        }
-
-        super.eventSpawn(controller, spawn);
-    }
-
-    @Override
     public String friendlyName()
     {
         PlayerInfo driver = players[0];
@@ -418,12 +418,6 @@ public abstract class AbstractVehicle extends Entity
     }
 
     public abstract String friendlyNameVehicle();
-
-    @Override
-    public PlayerInfo[] getPlayers()
-    {
-        return players;
-    }
 
     @Override
     public float getSpeed()

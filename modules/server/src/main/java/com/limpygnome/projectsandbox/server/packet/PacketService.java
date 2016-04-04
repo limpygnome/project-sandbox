@@ -127,10 +127,8 @@ public class PacketService
         }
 
         // Some other packet / invalid data / no session
-        // TODO: add debug msg; nothing else. could be attack...
-
+        LOG.debug("unknown data, closing socket - main type: {}, sub type: {}", mainType, subType);
         socket.close();
-        return;
     }
 
     private void handleInboundPacketSession(WebSocket socket, byte mainType, byte subType, ByteBuffer message, byte[] data, PlayerInfo playerInfo)

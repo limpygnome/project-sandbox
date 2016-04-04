@@ -3,7 +3,7 @@ package com.limpygnome.projectsandbox.server.inventory.item.weapon;
 import com.limpygnome.projectsandbox.server.Controller;
 import com.limpygnome.projectsandbox.server.entity.Entity;
 import com.limpygnome.projectsandbox.server.entity.respawn.pending.CurrentPositionRespawn;
-import com.limpygnome.projectsandbox.server.entity.imp.weapon.Rocket;
+import com.limpygnome.projectsandbox.game.entity.weapon.Rocket;
 import com.limpygnome.projectsandbox.server.inventory.annotation.InventoryItemTypeId;
 import com.limpygnome.projectsandbox.server.inventory.InventoryInvokeType;
 import com.limpygnome.projectsandbox.server.player.PlayerInfo;

@@ -1,4 +1,4 @@
-package com.limpygnome.projectsandbox.server.entity.imp.pickup;
+package com.limpygnome.projectsandbox.game.entity.pickup;
 
 import com.limpygnome.projectsandbox.server.Controller;
 import com.limpygnome.projectsandbox.server.entity.Entity;

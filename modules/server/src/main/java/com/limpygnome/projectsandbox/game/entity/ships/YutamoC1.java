@@ -1,27 +1,25 @@
-package com.limpygnome.projectsandbox.server.entity.imp.ships;
+package com.limpygnome.projectsandbox.game.entity.ships;
 
-import com.limpygnome.projectsandbox.server.Controller;
 import com.limpygnome.projectsandbox.server.entity.annotation.EntityType;
-import com.limpygnome.projectsandbox.server.entity.imp.vehicle.AbstractVehicle;
+import com.limpygnome.projectsandbox.game.entity.vehicle.AbstractVehicle;
 import com.limpygnome.projectsandbox.server.entity.physics.Vector2;
 import com.limpygnome.projectsandbox.server.player.PlayerInfo;
 import com.limpygnome.projectsandbox.server.world.map.WorldMap;
-import com.limpygnome.projectsandbox.server.world.spawn.Spawn;
 
 @EntityType(typeId = 200, typeName = "ships/yutamo-c1")
 public class YutamoC1 extends AbstractVehicle
 {
 
-    public YutamoC1(WorldMap map, PlayerInfo playerInfo)
+    public YutamoC1(WorldMap map, PlayerInfo[] players)
     {
         super(
                 map,
-                playerInfo,
+                players,
                 (short) 45,
                 (short) 50,
                 new Vector2[]
                 {
-                        new Vector2(+138.0f, +110.0f)
+                    new Vector2(+138.0f, +110.0f)
                 }
         );
 

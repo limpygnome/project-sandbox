@@ -1,4 +1,4 @@
-package com.limpygnome.projectsandbox.server.entity.imp.living.pedestrian;
+package com.limpygnome.projectsandbox.game.entity.living.pedestrian;
 
 import com.limpygnome.projectsandbox.server.entity.ai.IdleMode;
 import com.limpygnome.projectsandbox.server.entity.annotation.EntityType;

@@ -1,21 +1,18 @@
-package com.limpygnome.projectsandbox.server.entity.imp.vehicle;
+package com.limpygnome.projectsandbox.game.entity.vehicle;
 
 import com.limpygnome.projectsandbox.server.entity.annotation.EntityType;
 import com.limpygnome.projectsandbox.server.entity.physics.Vector2;
 import com.limpygnome.projectsandbox.server.player.PlayerInfo;
 import com.limpygnome.projectsandbox.server.world.map.WorldMap;
 
-/**
- * Created by limpygnome on 01/07/15.
- */
 @EntityType(typeId = 22, typeName = "vehicle/bus")
 public class Bus extends AbstractVehicle
 {
-    public Bus(WorldMap map, PlayerInfo playerInfo)
+    public Bus(WorldMap map, PlayerInfo[] players)
     {
         super(
                 map,
-                playerInfo,
+                players,
                 (short) 28,
                 (short) 96,
                 new Vector2[]

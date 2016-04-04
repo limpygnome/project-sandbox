@@ -18,9 +18,11 @@ public class EntTypeMappingStoreService
 {
     private final static Logger LOG = LogManager.getLogger(EntTypeMappingStoreService.class);
 
+    // TODO: move into a settings file
     private static final String[] ENTS_CLASS_PATHS = new String[]
     {
-            "/com/limpygnome/projectsandbox/server/entity"
+            "/com/limpygnome/projectsandbox/server/entity",
+            "/com/limpygnome/projectsandbox/game/entity"
     };
 
     private HashMap<Short, Class> typeIdToClass;

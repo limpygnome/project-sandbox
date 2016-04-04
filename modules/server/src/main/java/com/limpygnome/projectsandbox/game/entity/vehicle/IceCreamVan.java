@@ -1,4 +1,4 @@
-package com.limpygnome.projectsandbox.server.entity.imp.vehicle;
+package com.limpygnome.projectsandbox.game.entity.vehicle;
 
 import com.limpygnome.projectsandbox.server.entity.annotation.EntityType;
 import com.limpygnome.projectsandbox.server.entity.physics.Vector2;
@@ -13,11 +13,11 @@ import com.limpygnome.projectsandbox.server.world.map.WorldMap;
 public class IceCreamVan extends AbstractVehicle
 {
 
-    public IceCreamVan(WorldMap map, PlayerInfo playerInfo)
+    public IceCreamVan(WorldMap map, PlayerInfo[] players)
     {
         super(
                 map,
-                playerInfo,
+                players,
                 (short) 32,
                 (short) 64,
                 new Vector2[]

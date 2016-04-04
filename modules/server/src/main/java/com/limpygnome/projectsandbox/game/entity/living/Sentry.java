@@ -1,4 +1,4 @@
-package com.limpygnome.projectsandbox.server.entity.imp.living;
+package com.limpygnome.projectsandbox.game.entity.living;
 
 import com.limpygnome.projectsandbox.server.Controller;
 import com.limpygnome.projectsandbox.server.effect.types.BulletEffect;

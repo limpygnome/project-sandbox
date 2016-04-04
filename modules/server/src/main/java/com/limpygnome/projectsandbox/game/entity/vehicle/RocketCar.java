@@ -1,4 +1,4 @@
-package com.limpygnome.projectsandbox.server.entity.imp.vehicle;
+package com.limpygnome.projectsandbox.game.entity.vehicle;
 
 import com.limpygnome.projectsandbox.server.Controller;
 import com.limpygnome.projectsandbox.server.entity.annotation.EntityType;
@@ -9,19 +9,16 @@ import com.limpygnome.projectsandbox.server.player.PlayerInfo;
 import com.limpygnome.projectsandbox.server.world.map.WorldMap;
 import com.limpygnome.projectsandbox.server.world.spawn.Spawn;
 
-/**
- * Created by limpygnome on 01/07/15.
- */
 @EntityType(typeId = 21, typeName = "vehicle/rocket-car")
 public class RocketCar extends AbstractVehicle
 {
     public Inventory inventory;
 
-    public RocketCar(WorldMap map, PlayerInfo playerInfo)
+    public RocketCar(WorldMap map, PlayerInfo[] players)
     {
         super(
                 map,
-                playerInfo,
+                players,
                 (short) 24,
                 (short) 36,
                 new Vector2[]
@@ -93,4 +90,5 @@ public class RocketCar extends AbstractVehicle
                 break;
         }
     }
+
 }

@@ -1,11 +1,11 @@
-package com.limpygnome.projectsandbox.server.entity.imp.living.pedestrian;
+package com.limpygnome.projectsandbox.game.entity.living.pedestrian;
 
 import com.limpygnome.projectsandbox.server.Controller;
 import com.limpygnome.projectsandbox.server.entity.Entity;
 import com.limpygnome.projectsandbox.server.entity.ai.IdleMode;
 import com.limpygnome.projectsandbox.server.entity.ai.PedestrianState;
-import com.limpygnome.projectsandbox.server.entity.imp.living.Player;
-import com.limpygnome.projectsandbox.server.entity.imp.vehicle.AbstractVehicle;
+import com.limpygnome.projectsandbox.game.entity.living.Player;
+import com.limpygnome.projectsandbox.game.entity.vehicle.AbstractVehicle;
 import com.limpygnome.projectsandbox.server.entity.physics.Vector2;
 import com.limpygnome.projectsandbox.server.entity.physics.casting.Casting;
 import com.limpygnome.projectsandbox.server.entity.physics.casting.CastingResult;
