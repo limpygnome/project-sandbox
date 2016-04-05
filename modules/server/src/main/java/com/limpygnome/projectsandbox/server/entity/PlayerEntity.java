@@ -82,10 +82,13 @@ public abstract class PlayerEntity extends Entity
         // TODO: do we need to unbind old inventories?
         this.inventories = inventories;
 
-        // Make sure all players are owners, if available...
-        for (int i = 0; i < inventories.length; i++)
+        if (inventories != null)
         {
-            updateInventoryOwnership(i);
+            // Make sure all players are owners, if available...
+            for (int i = 0; i < inventories.length; i++)
+            {
+                updateInventoryOwnership(i);
+            }
         }
     }
 

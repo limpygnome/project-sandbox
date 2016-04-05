@@ -289,7 +289,9 @@ public abstract class AbstractVehicle extends PlayerEntity
                 playerInfo.setKey(PlayerKeys.Action, false);
                 
                 // Check for next available seat
+                PlayerInfo[] players = getPlayers();
                 PlayerInfo plyInSeat;
+
                 for (int i = 0; i < players.length; i++)
                 {
                     plyInSeat = players[i];
@@ -300,7 +302,7 @@ public abstract class AbstractVehicle extends PlayerEntity
                         controller.playerService.setPlayerEnt(playerInfo, this);
                         
                         // Add as passenger
-                        players[i] = playerInfo;
+                        setPlayer(playerInfo, i);
 
                         // Invoke event hook
                         eventPlayerEnter(playerInfo, i);
@@ -369,7 +371,9 @@ public abstract class AbstractVehicle extends PlayerEntity
     public synchronized strictfp void eventHandleDeath(Controller controller, AbstractKiller killer)
     {
         // Respawn players in vehicle
+        PlayerInfo[] players = getPlayers();
         PlayerInfo playerInfo;
+
         for (int i = 0; i < players.length; i++)
         {
             playerInfo = players[i];
@@ -399,7 +403,7 @@ public abstract class AbstractVehicle extends PlayerEntity
     @Override
     public synchronized String friendlyName()
     {
-        PlayerInfo driver = players[0];
+        PlayerInfo driver = getPlayer();
 
         if (driver != null)
         {

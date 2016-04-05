@@ -59,26 +59,4 @@ public class RocketCar extends AbstractVehicle
         setInventory(0, inventory);
     }
 
-    @Override
-    public void eventPlayerEnter(PlayerInfo playerInfo, int seat)
-    {
-        switch (seat)
-        {
-            case 0:
-                inventory.setOwner(playerInfo);
-                break;
-        }
-    }
-
-    @Override
-    public void eventPlayerExit(PlayerInfo playerInfo, int seat)
-    {
-        switch (seat)
-        {
-            case 0:
-                inventory.setOwner(null);
-                break;
-        }
-    }
-
 }
