@@ -14,9 +14,10 @@ public class YutamoC1 extends AbstractVehicle
     {
         super(
                 map,
-                players,
                 (short) 45,
                 (short) 50,
+                players,
+                null,
                 new Vector2[]
                 {
                     new Vector2(+138.0f, +110.0f)

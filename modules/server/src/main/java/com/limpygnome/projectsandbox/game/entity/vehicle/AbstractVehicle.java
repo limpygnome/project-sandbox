@@ -13,6 +13,7 @@ import com.limpygnome.projectsandbox.server.entity.respawn.pending.EntityPending
 import com.limpygnome.projectsandbox.server.entity.respawn.pending.PositionPendingRespawn;
 import com.limpygnome.projectsandbox.game.entity.living.Player;
 import com.limpygnome.projectsandbox.server.entity.physics.Vector2;
+import com.limpygnome.projectsandbox.server.inventory.Inventory;
 import com.limpygnome.projectsandbox.server.player.PlayerInfo;
 import com.limpygnome.projectsandbox.server.player.PlayerKeys;
 import com.limpygnome.projectsandbox.server.world.map.WorldMap;
@@ -54,57 +55,36 @@ public abstract class AbstractVehicle extends PlayerEntity
     // Indicates that the driver, player zero, was spawned in this vehcle - thus respawn vehicle with player on death
     protected boolean flagDriverSpawned;
 
-    /**
-     *
-     * @param map
-     * @param players players spawned into new entity; optional, can be null
-     * @param width
-     * @param height
-     * @param playerEjectPositions
-     */
-    public AbstractVehicle(WorldMap map, PlayerInfo[] players, short width, short height, Vector2[] playerEjectPositions)
+
+    public AbstractVehicle(WorldMap map, short width, short height, PlayerInfo[] players, Inventory[] inventories, Vector2[] playerEjectPositions)
     {
-        super(map, width, height, players);
-        
-        if (playerEjectPositions.length < 1)
+        super(map, width, height, players, inventories);
+
+        if (players == null || players.length == 0)
         {
-            throw new IllegalArgumentException("Must be at least one eject position for driver");
+            throw new IllegalArgumentException("Players must be defined, even if null sized array; defines number of players able to use vehicle");
+        }
+        else if (playerEjectPositions == null || playerEjectPositions.length == 0 || playerEjectPositions[0] == null)
+        {
+            throw new IllegalArgumentException("Player ejection positions must have at least one non-null item");
+        }
+        else if (playerEjectPositions.length < 1)
+        {
+            throw new IllegalArgumentException("Must be at least one eject position");
         }
 
         this.speed = 0.0f;
         this.playerEjectPositions = playerEjectPositions;
 
-        if (players == null)
-        {
-            this.players = new PlayerInfo[playerEjectPositions.length];
-        }
-        else
-        {
-            int playersLen = players.length;
-            int playerEjectLen = playerEjectPositions.length;
-
-            if (playersLen > playerEjectLen)
-            {
-                throw new IllegalArgumentException("More players spawning into vehicle than eject positions");
-            }
-
-            // Setup new array to allow future players to get in vehicle
-            this.players = new PlayerInfo[playerEjectLen];
-            for (int i = 0; i < playersLen; i++)
-            {
-                this.players[i] = players[i];
-            }
-        }
-
-        this.flagDriverSpawned = (players != null && players[0] != null);
+        this.flagDriverSpawned = (players[0] != null);
         
         setMaxHealth(DEFAULT_HEALTH);
     }
 
     @Override
-    public strictfp void logic(Controller controller)
+    public synchronized strictfp void logic(Controller controller)
     {
-        PlayerInfo playerInfoDriver = players[0];
+        PlayerInfo playerInfoDriver = getPlayer();
         float acceleration = 0.0f;
         float steerAngle = 0.0f;
         
@@ -189,7 +169,9 @@ public abstract class AbstractVehicle extends PlayerEntity
         }
         
         // Check if players want to get out / are still connected
+        PlayerInfo[] players = getPlayers();
         PlayerInfo playerInfo;
+
         for (int i = 0; i < players.length; i++)
         {
             playerInfo = players[i];
@@ -206,8 +188,20 @@ public abstract class AbstractVehicle extends PlayerEntity
                     // Set action key to handled
                     playerInfo.setKey(PlayerKeys.Action, false);
 
-                    // Eject them from the vehicle
-                    playerEject(controller, playerInfo, playerEjectPositions[i]);
+                    // Fetch ejection seat
+                    Vector2 ejectPosition;
+
+                    if (playerEjectPositions.length >= i)
+                    {
+                        ejectPosition = playerEjectPositions[0];
+                    }
+                    else
+                    {
+                        ejectPosition = playerEjectPositions[i];
+                    }
+
+                    // Eject player from the vehicle
+                    playerEject(controller, playerInfo, ejectPosition);
 
                     // Free-up the space
                     players[i] = null;
@@ -225,9 +219,9 @@ public abstract class AbstractVehicle extends PlayerEntity
         }
     }
     
-    private void playerEject(Controller controller, PlayerInfo playerInfo, Vector2 ejectPosition)
+    private synchronized void playerEject(Controller controller, PlayerInfo playerInfo, Vector2 ejectPosition)
     {
-        // Offset position so that the playr exits to the left of the vehicle
+        // Offset position so that the player exits to the left of the vehicle
         Vector2 plyPos = ejectPosition.clone();
 
         // Create new player ent in position of vehicle
@@ -252,7 +246,7 @@ public abstract class AbstractVehicle extends PlayerEntity
         ));
     }
     
-    private float playerEjectVectorPos(float coord, float value)
+    private synchronized float playerEjectVectorPos(float coord, float value)
     {
         if (coord == 0)
         {
@@ -269,7 +263,7 @@ public abstract class AbstractVehicle extends PlayerEntity
     }
 
     @Override
-    public strictfp void eventHandleCollision(Controller controller, Entity entCollider, Entity entVictim, Entity entOther, CollisionResult result)
+    public synchronized strictfp void eventHandleCollision(Controller controller, Entity entCollider, Entity entVictim, Entity entOther, CollisionResult result)
     {
         /*
             OLD IDEA:
@@ -283,7 +277,7 @@ public abstract class AbstractVehicle extends PlayerEntity
          */
 
         // Check if player
-        if (entOther instanceof PlayerEntity)
+        if (entOther instanceof PlayerEntity && !(entOther instanceof AbstractVehicle))
         {
             // Check if they're holding down action key to get in vehicle
             PlayerEntity ply = (Player) entOther;
@@ -356,7 +350,7 @@ public abstract class AbstractVehicle extends PlayerEntity
     }
 
     @Override
-    public void eventHandleCollisionMap(Controller controller, CollisionResultMap collisionResultMap)
+    public synchronized void eventHandleCollisionMap(Controller controller, CollisionResultMap collisionResultMap)
     {
         // Apply damage based on speed - similar to ent collisions
         if (speed > MINIMUM_SPEED_DAMAGE)
@@ -372,7 +366,7 @@ public abstract class AbstractVehicle extends PlayerEntity
     }
 
     @Override
-    public strictfp void eventHandleDeath(Controller controller, AbstractKiller killer)
+    public synchronized strictfp void eventHandleDeath(Controller controller, AbstractKiller killer)
     {
         // Respawn players in vehicle
         PlayerInfo playerInfo;
@@ -395,7 +389,7 @@ public abstract class AbstractVehicle extends PlayerEntity
     }
 
     @Override
-    public void eventReset(Controller controller, Spawn spawn)
+    public synchronized void eventReset(Controller controller, Spawn spawn)
     {
         super.eventReset(controller, spawn);
 
@@ -403,7 +397,7 @@ public abstract class AbstractVehicle extends PlayerEntity
     }
 
     @Override
-    public String friendlyName()
+    public synchronized String friendlyName()
     {
         PlayerInfo driver = players[0];
 
@@ -420,7 +414,7 @@ public abstract class AbstractVehicle extends PlayerEntity
     public abstract String friendlyNameVehicle();
 
     @Override
-    public float getSpeed()
+    public synchronized float getSpeed()
     {
         return speed;
     }

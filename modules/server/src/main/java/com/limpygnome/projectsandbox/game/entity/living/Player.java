@@ -33,7 +33,7 @@ public class Player extends PlayerEntity
 
     public Player(WorldMap map, PlayerInfo[] players)
     {
-        super(map, PLAYER_WIDTH, PLAYER_HEIGHT, players);
+        super(map, PLAYER_WIDTH, PLAYER_HEIGHT, players, new Inventory[players.length]);
 
         // Set default values
         this.movementSpeedFactor = DEFAULT_MOVEMENT_SPEED_FACTOR;
@@ -46,16 +46,16 @@ public class Player extends PlayerEntity
         if (playerInfo != null)
         {
             // Load inventory
-            this.inventory = (Inventory) playerInfo.session.gameDataGet(PLAYERDATA_INVENTORY_KEY);
+            Inventory inventory = (Inventory) playerInfo.session.gameDataGet(PLAYERDATA_INVENTORY_KEY);
 
-            if (this.inventory == null)
+            if (inventory == null)
             {
-                // Create new inventory
-                this.inventory = new Inventory(this);
-
-                // Give player default inventory items
-                this.inventory.add(DEFAULT_INVENTORY_ITEMS);
+                // Create new inventory with default items
+                inventory = new Inventory(this);
+                inventory.add(DEFAULT_INVENTORY_ITEMS);
             }
+
+            setInventory(playerInfo, inventory);
         }
     }
     
@@ -65,8 +65,12 @@ public class Player extends PlayerEntity
     }
 
     @Override
-    public void logic(Controller controller)
+    public synchronized void logic(Controller controller)
     {
+        // Perform parent logic
+        super.logic(controller);
+
+        // Check for movement
         float changeDist = 0.0f;
         float changeRotation = 0.0f;
 
@@ -108,27 +112,6 @@ public class Player extends PlayerEntity
             {
                 rotationOffset(changeRotation);
             }
-        }
-
-        // Run logic for inventory
-        inventory.logic(controller);
-
-        // Perform ent logic
-        super.logic(controller);
-    }
-
-    @Override
-    public Inventory retrieveInventory(PlayerInfo playerInfo)
-    {
-        PlayerInfo mainPlayerInfo = getPlayer();
-
-        if (mainPlayerInfo == playerInfo)
-        {
-            return inventory;
-        }
-        else
-        {
-            throw new RuntimeException("Attempted to retrieveInventory inventory for different player");
         }
     }
 

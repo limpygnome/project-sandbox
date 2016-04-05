@@ -12,19 +12,19 @@ import com.limpygnome.projectsandbox.server.world.spawn.Spawn;
 @EntityType(typeId = 21, typeName = "vehicle/rocket-car")
 public class RocketCar extends AbstractVehicle
 {
-    public Inventory inventory;
 
     public RocketCar(WorldMap map, PlayerInfo[] players)
     {
         super(
                 map,
-                players,
                 (short) 24,
                 (short) 36,
+                players,
+                new Inventory[1],
                 new Vector2[]
                 {
-                        new Vector2(+16.0f, 0.0f),
-                        new Vector2(-16.0f, 0.0f),
+                    new Vector2(+16.0f, 0.0f),
+                    new Vector2(-16.0f, 0.0f),
                 }
         );
 
@@ -36,7 +36,7 @@ public class RocketCar extends AbstractVehicle
 
     public RocketCar(WorldMap map)
     {
-        this(map, null);
+        this(map, new PlayerInfo[2]);
     }
 
     @Override
@@ -46,27 +46,17 @@ public class RocketCar extends AbstractVehicle
     }
 
     @Override
-    public void eventReset(Controller controller, Spawn spawn)
+    public synchronized void eventReset(Controller controller, Spawn spawn)
     {
         super.eventReset(controller, spawn);
 
         // Load default inventory
-        this.inventory = new Inventory(this);
+        Inventory inventory = new Inventory(this);
 
         RocketLauncher rocketLauncher = new RocketLauncher();
-        this.inventory.add(rocketLauncher);
-    }
+        inventory.add(rocketLauncher);
 
-    @Override
-    public void logic(Controller controller)
-    {
-        // Run logic for inventory
-        if (inventory != null)
-        {
-            inventory.logic(controller);
-        }
-
-        super.logic(controller);
+        setInventory(0, inventory);
     }
 
     @Override

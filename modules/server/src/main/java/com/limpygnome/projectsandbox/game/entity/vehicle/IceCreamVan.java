@@ -17,9 +17,10 @@ public class IceCreamVan extends AbstractVehicle
     {
         super(
                 map,
-                players,
                 (short) 32,
                 (short) 64,
+                players,
+                null,
                 new Vector2[]
                 {
                     new Vector2(+16.0f, +8.0f),
@@ -37,7 +38,7 @@ public class IceCreamVan extends AbstractVehicle
 
     public IceCreamVan(WorldMap map)
     {
-        this(map, null);
+        this(map, new PlayerInfo[4]);
     }
 
     @Override

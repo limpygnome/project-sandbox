@@ -12,9 +12,10 @@ public class Bus extends AbstractVehicle
     {
         super(
                 map,
-                players,
                 (short) 28,
                 (short) 96,
+                players,
+                null,
                 new Vector2[]
                 {
                         new Vector2(+16.0f, +24.0f),
@@ -45,7 +46,7 @@ public class Bus extends AbstractVehicle
 
     public Bus(WorldMap map)
     {
-        this(map, null);
+        this(map, new PlayerInfo[12]);
     }
 
     @Override
