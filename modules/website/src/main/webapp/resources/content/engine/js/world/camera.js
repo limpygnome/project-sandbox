@@ -128,7 +128,7 @@ projectSandbox.camera =
                 this.rotationX += diffY * this.mouseRotationFactor;
             }
         }
-        else if(this.mouseMove)
+        else if (this.mouseMove)
         {
             // Reset ready for next loop
             this.mouseMove = false;

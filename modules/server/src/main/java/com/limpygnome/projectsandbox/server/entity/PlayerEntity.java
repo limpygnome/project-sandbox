@@ -110,9 +110,15 @@ public abstract class PlayerEntity extends Entity
 
         if (inventories != null)
         {
-            for (Inventory inventory : inventories)
+            Inventory inventory;
+            for (int i = 0; i < inventories.length; i++)
             {
-                inventory.logic(controller);
+                inventory = inventories[i];
+
+                if (inventory != null)
+                {
+                    inventory.logic(controller);
+                }
             }
         }
     }
