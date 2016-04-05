@@ -17,7 +17,7 @@ function Entity(params)
 
 Entity.inherits(Primitive);
 
-Entity.prototype.prelogic = function()
+Entity.prototype.renderLogic = function()
 {
     // Copy updated values across
     if (this.updatedX != null)

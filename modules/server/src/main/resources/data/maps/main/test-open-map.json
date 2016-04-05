@@ -6,7 +6,7 @@
     {
         "name" : "main open test map",
         "enabled" : true,
-        "lobby" : true,
+        "lobby" : false,
         "background" : "background/space-red",
         "width" : 4096.0,
         "height" : 4096.0

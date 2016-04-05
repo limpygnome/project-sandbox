@@ -266,7 +266,8 @@ public class PlayerService implements LogicService, IdCounterConsumer
         //return new Player(map, controller, playerInfo);
 
         PlayerInfo[] players = new PlayerInfo[] { playerInfo };
-        return new YutamoC1(map, players);
+        //return new YutamoC1(map, players);
+        return new Player(map, new PlayerInfo[] { playerInfo });
     }
 
     public void setPlayerEnt(PlayerInfo playerInfo, Entity entity)

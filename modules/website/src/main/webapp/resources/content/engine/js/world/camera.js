@@ -110,10 +110,10 @@ projectSandbox.camera =
         }
         
         // Update rotation
-        if(mouse.left)
+        if (mouse.left)
         {
             // Check if this is the first loop with mouse down
-            if(!this.mouseMove)
+            if (!this.mouseMove)
             {
                 this.mouseMove = true;
                 this.mouseX = mouse.x;
@@ -135,11 +135,11 @@ projectSandbox.camera =
         }
 
         // Update chase co-ordinates
-        if(this.chaseEntityId != null)
+        if (this.chaseEntityId != null)
         {
             var ent = projectSandbox.entities.get(this.chaseEntityId);
 
-            if(ent != null)
+            if (ent != null)
             {
                 if (this.x != ent.x || this.y != ent.y || this.z != ent.z)
                 {
