@@ -55,7 +55,7 @@ public class Player extends PlayerEntity
                 inventory.add(DEFAULT_INVENTORY_ITEMS);
             }
 
-            setInventory(playerInfo, inventory);
+            setInventory(0, inventory);
         }
     }
     

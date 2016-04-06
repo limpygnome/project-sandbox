@@ -50,6 +50,5 @@ YutamoC1.prototype.logic = function()
 
 YutamoC1.prototype.eventDeath = function()
 {
-    game.effects.createExplosion(this.x, this.y, 256, 4000, -2, 2);
+    game.effects.createExplosion(this.x, this.y, 64, 4000, -2, 2);
 }
-

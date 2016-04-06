@@ -47,7 +47,7 @@ public abstract class AbstractVehicle extends PlayerEntity
     protected float maxSpeed;
     
     // Car slotState
-    public float speed;
+    protected float speed;
     
     // Player slotState
     protected Vector2[] playerEjectPositions;
@@ -84,6 +84,8 @@ public abstract class AbstractVehicle extends PlayerEntity
     @Override
     public synchronized strictfp void logic(Controller controller)
     {
+        super.logic(controller);
+
         PlayerInfo playerInfoDriver = getPlayer();
         float acceleration = 0.0f;
         float steerAngle = 0.0f;
@@ -314,7 +316,7 @@ public abstract class AbstractVehicle extends PlayerEntity
         }
 
         // Compute collision speed
-        float speedUs = Math.abs(this.getSpeed());
+        float speedUs = Math.abs(speed);
         float speedOther = Math.abs(entOther.getSpeed());
 
         Vector2 velocityUs = Vector2.vectorFromAngle(this.rotation, speedUs);
@@ -421,6 +423,11 @@ public abstract class AbstractVehicle extends PlayerEntity
     public synchronized float getSpeed()
     {
         return speed;
+    }
+
+    public synchronized float getAccelerationFactor()
+    {
+        return accelerationFactor;
     }
 
     public void eventPlayerEnter(PlayerInfo playerInfo, int seat)

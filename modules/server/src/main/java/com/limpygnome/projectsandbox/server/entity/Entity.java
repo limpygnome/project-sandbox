@@ -1,5 +1,6 @@
 package com.limpygnome.projectsandbox.server.entity;
 
+import com.limpygnome.projectsandbox.game.entity.vehicle.AbstractVehicle;
 import com.limpygnome.projectsandbox.server.entity.annotation.EntityType;
 import com.limpygnome.projectsandbox.server.entity.death.AbstractKiller;
 import com.limpygnome.projectsandbox.server.entity.physics.collisions.CollisionResult;
@@ -226,8 +227,21 @@ public strictfp abstract class Entity
 
         // Calculate new position, so we're in front of parent
         Vector2 newPosition = parent.positionNew.clone();
+        newPosition.offset(Vector2.vectorFromAngle(this.rotation, parent.height / 2.0f));
         newPosition.offset(Vector2.vectorFromAngle(this.rotation, height));
         newPosition.offset(Vector2.vectorFromAngle(this.rotation, spacing));
+
+        if (parent instanceof AbstractVehicle)
+        {
+            // Add velocity?
+            AbstractVehicle vehicle = (AbstractVehicle) parent;
+            float speed = vehicle.getSpeed() + vehicle.getAccelerationFactor();
+
+            if (speed > 0.0f)
+            {
+                newPosition.offset(Vector2.vectorFromAngle(this.rotation, speed));
+            }
+        }
 
         position(newPosition);
     }

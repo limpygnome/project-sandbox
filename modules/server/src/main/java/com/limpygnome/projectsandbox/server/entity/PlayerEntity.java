@@ -208,32 +208,12 @@ public abstract class PlayerEntity extends Entity
         return null;
     }
 
-    public synchronized void setInventory(PlayerInfo playerInfo, Inventory inventory)
-    {
-        if (inventories == null)
-        {
-            LOG.warn("Unable to set inventory, inventories not set / null - ply id: {}, ent id; {}", playerInfo.playerId, id);
-        }
-        else
-        {
-            int index = getPlayerIndex(playerInfo);
-
-            if (index == -1)
-            {
-                LOG.warn("Player not using entity, unable to set inventory - ply id: {}, ent id: {}", playerInfo.playerId, id);
-            }
-            else
-            {
-                setInventory(index, inventory);
-            }
-        }
-    }
-
     public synchronized void setInventory(int index, Inventory inventory)
     {
         if (index < inventories.length)
         {
             inventories[index] = inventory;
+            updateInventoryOwnership(index);
         }
         else
         {
