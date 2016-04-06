@@ -1,8 +1,10 @@
-package com.limpygnome.projectsandbox.server.entity;
+package com.limpygnome.projectsandbox.server.entity.respawn;
 
 import com.limpygnome.projectsandbox.server.Controller;
-import com.limpygnome.projectsandbox.server.entity.respawn.PendingRespawn;
-import com.limpygnome.projectsandbox.server.entity.respawn.RespawnData;
+import com.limpygnome.projectsandbox.server.entity.Entity;
+import com.limpygnome.projectsandbox.server.entity.factory.EntityFactory;
+import com.limpygnome.projectsandbox.server.entity.EntityManager;
+import com.limpygnome.projectsandbox.server.entity.EntityState;
 import com.limpygnome.projectsandbox.server.service.LogicService;
 import com.limpygnome.projectsandbox.server.world.map.WorldMap;
 import com.limpygnome.projectsandbox.server.world.spawn.FactionSpawns;
@@ -26,6 +28,7 @@ public class RespawnManager implements LogicService
     private Controller controller;
 
     private WorldMap map;
+    private EntityFactory entityFactory;
     private LinkedList<PendingRespawn> pendingRespawnList;
 
     /* Faction ID -> FactionSpawns */

@@ -12,6 +12,10 @@ public abstract class PlayerEntity extends Entity
 {
     private final static Logger LOG = LogManager.getLogger(PlayerEntity.class);
 
+    /* Used to indicate if the entity should be persisted to the player's session when leaving */
+    private PlayerInfo owner;
+
+    /* All of the players which are using this entity. */
     private PlayerInfo[] players;
 
     /* The index should match the players index i.e. players[0] controls inventories[0]. */
@@ -53,6 +57,7 @@ public abstract class PlayerEntity extends Entity
     public synchronized void setPlayers(PlayerInfo[] players)
     {
         // TODO: do we need to unbind old players
+        this.persistToSession = false;
         this.players = players;
 
         // Update inventory ownership
@@ -68,6 +73,13 @@ public abstract class PlayerEntity extends Entity
     public synchronized void setPlayer(PlayerInfo player, int index)
     {
         // TODO: do we need to unbind old player?
+
+        // Reset persistence flag if main player changes
+        if (index == 0)
+        {
+            persistToSession = false;
+        }
+
         this.players[index] = player;
         updateInventoryOwnership(index);
     }

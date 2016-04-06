@@ -91,7 +91,6 @@ public class Player extends PlayerEntity
             // Check for rotation
             if (playerInfo.isKeyDown(PlayerKeys.MovementRight))
             {
-                //changeX += movementFactor;
                 changeRotation = rotationFactor;
             }
             if (playerInfo.isKeyDown(PlayerKeys.MovementLeft))

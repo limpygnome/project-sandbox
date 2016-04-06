@@ -70,7 +70,7 @@ public class EntityManager implements LogicService, IdCounterConsumer
      * @param entity
      * @return
      */
-    protected boolean add(Entity entity)
+    public boolean add(Entity entity)
     {
         // Fetch the next available identifier
         Short entityId = idCounterProvider.nextId(entity.id);

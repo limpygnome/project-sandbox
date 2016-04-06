@@ -150,12 +150,17 @@ public class GameSession implements Serializable
         return gameDataGet(key, null);
     }
 
-    public synchronized long gameDataGetLong(String key)
+    public synchronized Short gameDataGetShort(String key)
+    {
+        return (Short) gameDataGet(key, 0);
+    }
+
+    public synchronized Long gameDataGetLong(String key)
     {
         return (Long) gameDataGet(key, 0L);
     }
 
-    public synchronized int gameDataGetInt(String key)
+    public synchronized Integer gameDataGetInt(String key)
     {
         return (Integer) gameDataGet(key, 0);
     }

@@ -10,7 +10,7 @@
         "background" : "background/space-red",
         "width" : 4096.0,
         "height" : 4096.0,
-        "playerEntityFactory" : "ships"
+        "defaultPlayerEntity" : "ships/yutamo-c1"
     },
 
     "entities":

@@ -65,6 +65,17 @@ public abstract class FileSystemGenericWoldMapBuilder implements FileSystemMapBu
         properties.setEnabled((boolean) rawProperties.get("enabled"));
         properties.setLobby((boolean) rawProperties.get("lobby"));
 
+        // -- Read type and fetch from ent mappings
+        String entityTypeName = (String) rawProperties.get("defaultPlayerEntity");
+        Class clazz = map.entityManager.entTypeMappingStoreService.getEntityClassByTypeName(entityTypeName);
+
+        if (clazz == null)
+        {
+            throw new RuntimeException("Unable to use '" + entityTypeName + "' as default player entity, type does not exist");
+        }
+
+        properties.setDefaultEntityType(clazz);
+
         // Set map with properties loaded
         map.setProperties(properties);
     }

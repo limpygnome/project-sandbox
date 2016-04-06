@@ -8,6 +8,7 @@ public class WorldMapProperties
     private String name;
     private boolean lobby;
     private boolean enabled;
+    private Class defaultEntityType;
 
     public String getName()
     {
@@ -39,6 +40,16 @@ public class WorldMapProperties
         this.enabled = enabled;
     }
 
+    public Class getDefaultEntityType()
+    {
+        return defaultEntityType;
+    }
+
+    public void setDefaultEntityType(Class defaultEntityType)
+    {
+        this.defaultEntityType = defaultEntityType;
+    }
+
     @Override
     public String toString()
     {
@@ -46,6 +57,7 @@ public class WorldMapProperties
                 "name='" + name + '\'' +
                 ", lobby=" + lobby +
                 ", enabled=" + enabled +
+                ", defaultEntityType=" + defaultEntityType +
                 '}';
     }
 
