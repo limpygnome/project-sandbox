@@ -185,6 +185,10 @@ var projectSandbox =
         {
             ent = kv[1];
 
+            // Core logic
+            ent.coreLogic();
+
+            // Custom ent logic
             if (ent.logic)
             {
                 ent.logic();
@@ -285,12 +289,6 @@ var projectSandbox =
             ent = kv[1];
             if (!ent.dead && projectSandbox.frustrum.intersects(ent))
             {
-                // Execute pre-render logic
-                if (ent.renderLogic)
-                {
-                    ent.renderLogic();
-                }
-
                 // Render entity
                 ent.render(gl, this.shaderProgram, this.modelView, this.perspective);
             }

@@ -17,8 +17,13 @@ function Entity(params)
 
 Entity.inherits(Primitive);
 
-Entity.prototype.renderLogic = function()
+Entity.prototype.coreLogic = function()
 {
+    /*
+        These values must be copied in logic cycle to avoid camera and entity updating at different times, which causes
+        a jitter/shaking effect.
+    */
+
     // Copy updated values across
     if (this.updatedX != null)
     {
@@ -39,7 +44,7 @@ Entity.prototype.renderLogic = function()
     }
 }
 
-Entity.prototype.readBytesUpdate = function(packet)
+Entity.prototype.readBytesUpdate = function (packet)
 {
     // Nothing by default
 }
