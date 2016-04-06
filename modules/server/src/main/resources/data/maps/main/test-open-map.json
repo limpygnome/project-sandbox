@@ -9,7 +9,8 @@
         "lobby" : true,
         "background" : "background/space-red",
         "width" : 4096.0,
-        "height" : 4096.0
+        "height" : 4096.0,
+        "playerEntityFactory" : "ships"
     },
 
     "entities":
