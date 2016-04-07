@@ -83,7 +83,7 @@ public class InventoryManager implements EventServerPreStartup
     }
 
     @Override
-    public void eventServerStartup(Controller controller)
+    public void eventServerPreStartup(Controller controller)
     {
         buildInventoryTypes();
     }

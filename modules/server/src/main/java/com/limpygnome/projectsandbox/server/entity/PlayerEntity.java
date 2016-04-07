@@ -272,4 +272,23 @@ public abstract class PlayerEntity extends Entity
         return persistToSession && players[0] == playerInfo;
     }
 
+    /**
+     * Should be invoked when a player changes their set entity to determine if to remove this entity.
+     *
+     * @param playerInfo the player which has been removed
+     * @return true = should be removed, false = should not be removed
+     */
+    public boolean isRemovableOnPlayerEntChange(PlayerInfo playerInfo)
+    {
+        for (PlayerInfo playerInfoLeft : players)
+        {
+            if (playerInfoLeft != null)
+            {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
 }

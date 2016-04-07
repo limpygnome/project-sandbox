@@ -6,7 +6,8 @@
     {
         "name" : "main tile test map",
         "enabled" : false,
-        "lobby" : true
+        "lobby" : true,
+        "defaultPlayerEntity" : "living/player"
     },
 
     "tileProperties" :

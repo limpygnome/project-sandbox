@@ -1,12 +1,14 @@
 package com.limpygnome.projectsandbox.server.inventory;
 
+import java.io.Serializable;
+
 /**
  * All of the data regarding an item being held in an inventory, as a slot.
- *
- * @author limpygnome
  */
-public class InventorySlotData
+public class InventorySlotData implements Serializable
 {
+    public static final long serialVersionUID = 1L;
+
     public short id;
     public byte idByte;
     public Inventory inventory;

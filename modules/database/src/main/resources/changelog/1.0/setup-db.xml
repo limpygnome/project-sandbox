@@ -55,8 +55,8 @@
             create table game_sessions_kv
             (
                 token varchar(36) not null,
-                v tinyblob,
                 k varchar(255) not null,
+                v blob,
 
                 foreign key(token) references game_sessions(token) on update cascade on delete cascade,
                 primary key (token, k)

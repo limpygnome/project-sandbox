@@ -11,6 +11,6 @@ public interface EventServerPreStartup
     /**
      * Invoked when game logic first starts, before the first actual logic cycle.
      */
-    void eventServerStartup(Controller controller);
+    void eventServerPreStartup(Controller controller);
 
 }

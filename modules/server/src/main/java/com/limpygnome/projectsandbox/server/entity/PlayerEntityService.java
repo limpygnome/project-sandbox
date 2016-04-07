@@ -1,7 +1,5 @@
-package com.limpygnome.projectsandbox.server.entity.factory;
+package com.limpygnome.projectsandbox.server.entity;
 
-import com.limpygnome.projectsandbox.server.entity.Entity;
-import com.limpygnome.projectsandbox.server.entity.PlayerEntity;
 import com.limpygnome.projectsandbox.server.inventory.Inventory;
 import com.limpygnome.projectsandbox.server.player.PlayerInfo;
 import com.limpygnome.projectsandbox.server.world.map.WorldMap;
@@ -59,9 +57,9 @@ public class PlayerEntityService
         {
             Class clazz = worldMap.entityManager.entTypeMappingStoreService.getEntityClassByTypeId(entityTypeId);
 
-            if (!clazz.isAssignableFrom(PlayerEntity.class))
+            if (clazz == null || !clazz.isAssignableFrom(PlayerEntity.class))
             {
-                LOG.warn("Attempted to spawn player from non player entity class - type id: {}, actual class: {}", entityTypeId, clazz.getName());
+                LOG.warn("Attempted to spawn player from non player entity class - type id: {}, actual class: {}", entityTypeId, clazz != null ? clazz.getName() : null);
             }
             else
             {

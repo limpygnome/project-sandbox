@@ -1,6 +1,6 @@
 package com.limpygnome.projectsandbox.server;
 
-import com.limpygnome.projectsandbox.server.entity.factory.PlayerEntityService;
+import com.limpygnome.projectsandbox.server.entity.PlayerEntityService;
 import com.limpygnome.projectsandbox.server.network.packet.PacketService;
 import com.limpygnome.projectsandbox.server.player.ChatService;
 import com.limpygnome.projectsandbox.server.player.PlayerService;
@@ -63,7 +63,7 @@ public class Controller
             // Invoke pre-startup events on services
             for (EventServerPreStartup eventServerPreStartup : eventServerPreStartups)
             {
-                eventServerPreStartup.eventServerStartup(this);
+                eventServerPreStartup.eventServerPreStartup(this);
             }
 
             // Setup logic thread

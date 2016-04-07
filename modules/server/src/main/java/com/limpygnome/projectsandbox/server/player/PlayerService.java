@@ -3,8 +3,8 @@ package com.limpygnome.projectsandbox.server.player;
 
 import com.limpygnome.projectsandbox.server.Controller;
 import com.limpygnome.projectsandbox.server.entity.Entity;
-import com.limpygnome.projectsandbox.game.entity.ships.YutamoC1;
-import com.limpygnome.projectsandbox.server.entity.factory.PlayerEntityService;
+import com.limpygnome.projectsandbox.server.entity.PlayerEntity;
+import com.limpygnome.projectsandbox.server.entity.PlayerEntityService;
 import com.limpygnome.projectsandbox.server.entity.respawn.pending.EntityPendingRespawn;
 import com.limpygnome.projectsandbox.game.entity.living.Player;
 import com.limpygnome.projectsandbox.server.network.packet.OutboundPacket;
@@ -267,11 +267,15 @@ public class PlayerService implements EventLogicCycleService, IdCounterConsumer
         // Persist the player's current entity
         playerEntityService.persistPlayer(playerInfo);
 
-        // TODO: remove this specific rubbish, need more generic way, perhaps for abstract vehicle to dispose entity...perhaps remove if spawned entity...
-        // Remove Player entity for when player gets in cars etc
-        if (currentEntity != null && currentEntity != entity && currentEntity instanceof Player)
+        // Check if to remove entity...
+        if (currentEntity != null && currentEntity instanceof PlayerEntity)
         {
-            entity.map.entityManager.remove(currentEntity);
+            PlayerEntity playerEntity = (PlayerEntity) currentEntity;
+
+            if (playerEntity.isRemovableOnPlayerEntChange(playerInfo))
+            {
+                entity.map.entityManager.remove(currentEntity);
+            }
         }
 
         synchronized (this)

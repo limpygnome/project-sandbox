@@ -71,7 +71,7 @@ public abstract class FileSystemGenericWoldMapBuilder implements FileSystemMapBu
 
         if (clazz == null)
         {
-            throw new RuntimeException("Unable to use '" + entityTypeName + "' as default player entity, type does not exist");
+            throw new RuntimeException("Unable to use '" + entityTypeName + "' as default player entity, type does not exist - map id: " + map.getMapId());
         }
 
         properties.setDefaultEntityType(clazz);

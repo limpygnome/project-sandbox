@@ -46,7 +46,7 @@ public class MapService implements EventServerPreStartup, EventLogicCycleService
     }
 
     @Override
-    public synchronized void eventServerStartup(Controller controller)
+    public synchronized void eventServerPreStartup(Controller controller)
     {
         // Load public maps into cache
         Map<Short, WorldMap> publicMaps = mapRepository.fetchPublicMaps(controller, this);

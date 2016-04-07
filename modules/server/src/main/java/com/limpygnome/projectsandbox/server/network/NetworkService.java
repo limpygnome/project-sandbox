@@ -2,6 +2,7 @@ package com.limpygnome.projectsandbox.server.network;
 
 import com.limpygnome.projectsandbox.server.Controller;
 import com.limpygnome.projectsandbox.server.player.PlayerService;
+import com.limpygnome.projectsandbox.server.service.EventServerPostStartup;
 import com.limpygnome.projectsandbox.server.service.EventServerShutdown;
 import com.limpygnome.projectsandbox.server.service.EventServerPreStartup;
 import org.apache.logging.log4j.LogManager;
@@ -12,14 +13,14 @@ import org.springframework.stereotype.Service;
  * Used as a wrapper around a socket endpoint to handle inbound data to the game server, from clients.
  */
 @Service
-public class NetworkService implements EventServerPreStartup, EventServerShutdown
+public class NetworkService implements EventServerPostStartup, EventServerShutdown
 {
     private final static Logger LOG = LogManager.getLogger(PlayerService.class);
 
     private SocketEndpoint socketEndpoint;
 
     @Override
-    public void eventServerStartup(Controller controller)
+    public void eventServerPostStartup(Controller controller)
     {
         LOG.info("Starting network service...");
 

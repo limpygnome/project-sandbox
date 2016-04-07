@@ -227,7 +227,7 @@ public abstract class AbstractVehicle extends PlayerEntity
         Vector2 plyPos = ejectPosition.clone();
 
         // Create new player ent in position of vehicle
-        Entity entityPlayer = controller.playerService.playerEntCreate(map, playerInfo);
+        Entity entityPlayer = controller.playerEntityService.createPlayer(map, playerInfo);
 
         // Add player to pos offset
         float plyx = playerEjectVectorPos(ejectPosition.x, entityPlayer.width / 2.0f);
@@ -383,7 +383,7 @@ public abstract class AbstractVehicle extends PlayerEntity
             if (playerInfo != null && !(flagDriverSpawned && i == 0))
             {
                 // Create and respawn player
-                Entity entityPlayer = controller.playerService.playerEntCreate(map, playerInfo);
+                Entity entityPlayer = controller.playerEntityService.createPlayer(map, playerInfo);
                 map.respawnManager.respawn(new EntityPendingRespawn(controller, entityPlayer));
 
                 // Set seat to empty

@@ -2,7 +2,6 @@ package com.limpygnome.projectsandbox.server.entity.respawn;
 
 import com.limpygnome.projectsandbox.server.Controller;
 import com.limpygnome.projectsandbox.server.entity.Entity;
-import com.limpygnome.projectsandbox.server.entity.factory.EntityFactory;
 import com.limpygnome.projectsandbox.server.entity.EntityManager;
 import com.limpygnome.projectsandbox.server.entity.EntityState;
 import com.limpygnome.projectsandbox.server.service.EventLogicCycleService;
@@ -28,7 +27,6 @@ public class RespawnManager implements EventLogicCycleService
     private Controller controller;
 
     private WorldMap map;
-    private EntityFactory entityFactory;
     private LinkedList<PendingRespawn> pendingRespawnList;
 
     /* Faction ID -> FactionSpawns */

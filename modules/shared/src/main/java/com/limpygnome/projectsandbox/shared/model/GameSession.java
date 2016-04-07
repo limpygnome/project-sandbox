@@ -38,7 +38,7 @@ public class GameSession implements Serializable
     @CollectionTable(name = "game_sessions_kv", joinColumns = @JoinColumn(name = "token"))
     @MapKeyClass(String.class)
     @MapKeyColumn(name = "k")
-    @Column(name = "v")
+    @Column(name = "v", columnDefinition = "blob")
     private Map<String, Serializable> gameData;
 
     @Column(name = "connected", nullable = false)
@@ -152,7 +152,7 @@ public class GameSession implements Serializable
 
     public synchronized Short gameDataGetShort(String key)
     {
-        return (Short) gameDataGet(key, 0);
+        return (Short) gameDataGet(key, (short) 0);
     }
 
     public synchronized Long gameDataGetLong(String key)

@@ -3,7 +3,7 @@ package com.limpygnome.projectsandbox.server.inventory;
 /**
  * Created by limpygnome on 30/04/15.
  */
-public enum InventoryInvokeType
+public enum     InventoryInvokeType
 {
     /**
      * Indicates a single invocation of the item toggles the ON/OFF state.
