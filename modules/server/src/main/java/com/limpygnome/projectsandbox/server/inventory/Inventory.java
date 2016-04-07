@@ -3,7 +3,7 @@ package com.limpygnome.projectsandbox.server.inventory;
 import com.limpygnome.projectsandbox.server.Controller;
 import com.limpygnome.projectsandbox.server.entity.Entity;
 import com.limpygnome.projectsandbox.server.inventory.item.AbstractInventoryItem;
-import com.limpygnome.projectsandbox.server.packet.imp.inventory.InventoryUpdatesOutboundPacket;
+import com.limpygnome.projectsandbox.server.network.packet.imp.inventory.InventoryUpdatesOutboundPacket;
 import com.limpygnome.projectsandbox.server.player.PlayerInfo;
 import com.limpygnome.projectsandbox.server.player.PlayerKeys;
 import org.apache.logging.log4j.LogManager;

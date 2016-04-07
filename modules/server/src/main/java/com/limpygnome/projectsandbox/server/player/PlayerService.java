@@ -4,14 +4,15 @@ package com.limpygnome.projectsandbox.server.player;
 import com.limpygnome.projectsandbox.server.Controller;
 import com.limpygnome.projectsandbox.server.entity.Entity;
 import com.limpygnome.projectsandbox.game.entity.ships.YutamoC1;
+import com.limpygnome.projectsandbox.server.entity.factory.PlayerEntityService;
 import com.limpygnome.projectsandbox.server.entity.respawn.pending.EntityPendingRespawn;
 import com.limpygnome.projectsandbox.game.entity.living.Player;
-import com.limpygnome.projectsandbox.server.packet.OutboundPacket;
-import com.limpygnome.projectsandbox.server.packet.PacketService;
-import com.limpygnome.projectsandbox.server.packet.imp.entity.EntityUpdatesOutboundPacket;
-import com.limpygnome.projectsandbox.server.packet.imp.player.global.PlayerEventsUpdatesOutboundPacket;
-import com.limpygnome.projectsandbox.server.packet.imp.player.individual.PlayerIdentityOutboundPacket;
-import com.limpygnome.projectsandbox.server.service.LogicService;
+import com.limpygnome.projectsandbox.server.network.packet.OutboundPacket;
+import com.limpygnome.projectsandbox.server.network.packet.PacketService;
+import com.limpygnome.projectsandbox.server.network.packet.imp.entity.EntityUpdatesOutboundPacket;
+import com.limpygnome.projectsandbox.server.network.packet.imp.player.global.PlayerEventsUpdatesOutboundPacket;
+import com.limpygnome.projectsandbox.server.network.packet.imp.player.individual.PlayerIdentityOutboundPacket;
+import com.limpygnome.projectsandbox.server.service.EventLogicCycleService;
 import com.limpygnome.projectsandbox.server.world.map.MapService;
 import com.limpygnome.projectsandbox.server.world.map.WorldMap;
 import java.io.IOException;
@@ -36,7 +37,7 @@ import org.springframework.stereotype.Service;
  * TODO: decouple Player class, perhaps config defines player ent or game logic gives us instance.
  */
 @Service
-public class PlayerService implements LogicService, IdCounterConsumer
+public class PlayerService implements EventLogicCycleService, IdCounterConsumer
 {
     private final static Logger LOG = LogManager.getLogger(PlayerService.class);
 
@@ -46,6 +47,8 @@ public class PlayerService implements LogicService, IdCounterConsumer
     private MapService mapService;
     @Autowired
     private PacketService packetService;
+    @Autowired
+    private PlayerEntityService playerEntityService;
 
     private final HashMap<WebSocket, PlayerInfo> mappings;
     private final HashMap<Short, PlayerInfo> mappingsById;
@@ -150,7 +153,11 @@ public class PlayerService implements LogicService, IdCounterConsumer
         {
             Entity ent = playerInfo.entity;
 
+            // Persist player's current entity
+            playerEntityService.persistPlayer(playerInfo);
+
             // Remove entity
+            // TODO: make this more generic...perhaps remove if spawned entity
             if (ent != null && ent instanceof Player)
             {
                 ent.map.entityManager.remove(ent);
@@ -234,7 +241,7 @@ public class PlayerService implements LogicService, IdCounterConsumer
         WorldMap map = mapService.mainMap;
 
         // Create entity for player
-        Entity entityPlayer = playerEntCreate(map, playerInfo);
+        Entity entityPlayer = playerEntityService.createPlayer(map, playerInfo);
 
         // Spawn the player
         map.respawnManager.respawn(new EntityPendingRespawn(controller, entityPlayer));
@@ -253,27 +260,14 @@ public class PlayerService implements LogicService, IdCounterConsumer
         broadcast(playerEventsUpdatesOutboundPacket);
     }
 
-    /**
-     * Creates a new instance of a player.
-     *
-     * @param map the map in which the player entity will be spawned
-     * @param playerInfo The player's info.
-     * @return An instance of an entity.
-     */
-    public synchronized Entity playerEntCreate(WorldMap map, PlayerInfo playerInfo)
-    {
-        // Create Entity
-        //return new Player(map, controller, playerInfo);
-
-        PlayerInfo[] players = new PlayerInfo[] { playerInfo };
-        return new YutamoC1(map, players);
-        //return new Player(map, new PlayerInfo[] { playerInfo });
-    }
-
     public void setPlayerEnt(PlayerInfo playerInfo, Entity entity)
     {
         Entity currentEntity = playerInfo.entity;
 
+        // Persist the player's current entity
+        playerEntityService.persistPlayer(playerInfo);
+
+        // TODO: remove this specific rubbish, need more generic way, perhaps for abstract vehicle to dispose entity...perhaps remove if spawned entity...
         // Remove Player entity for when player gets in cars etc
         if (currentEntity != null && currentEntity != entity && currentEntity instanceof Player)
         {

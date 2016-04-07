@@ -1,7 +1,8 @@
 package com.limpygnome.projectsandbox.server.inventory;
 
+import com.limpygnome.projectsandbox.server.Controller;
 import com.limpygnome.projectsandbox.server.inventory.annotation.InventoryItemTypeId;
-import com.limpygnome.projectsandbox.server.service.LoadService;
+import com.limpygnome.projectsandbox.server.service.EventServerPreStartup;
 import com.limpygnome.projectsandbox.server.util.Annotations;
 import com.limpygnome.projectsandbox.server.util.counters.AnnotationInfo;
 import org.apache.logging.log4j.LogManager;
@@ -16,7 +17,7 @@ import org.springframework.stereotype.Service;
  * @author limpygnome
  */
 @Service
-public class InventoryManager implements LoadService
+public class InventoryManager implements EventServerPreStartup
 {
     private final static Logger LOG = LogManager.getLogger(Annotations.class);
 
@@ -82,7 +83,7 @@ public class InventoryManager implements LoadService
     }
 
     @Override
-    public void load()
+    public void eventServerStartup(Controller controller)
     {
         buildInventoryTypes();
     }

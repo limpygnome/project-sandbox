@@ -1,7 +1,7 @@
 package com.limpygnome.projectsandbox.server.effect.types;
 
 import com.limpygnome.projectsandbox.server.entity.physics.Vector2;
-import com.limpygnome.projectsandbox.server.packet.PacketData;
+import com.limpygnome.projectsandbox.server.network.packet.PacketData;
 
 /**
  * Created by limpygnome on 08/05/15.

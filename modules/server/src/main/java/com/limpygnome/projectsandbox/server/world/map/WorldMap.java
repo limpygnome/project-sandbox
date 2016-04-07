@@ -5,7 +5,7 @@ import com.limpygnome.projectsandbox.server.effect.EffectsManager;
 import com.limpygnome.projectsandbox.server.entity.EntityManager;
 import com.limpygnome.projectsandbox.server.entity.respawn.RespawnManager;
 import com.limpygnome.projectsandbox.server.entity.ai.ArtificialIntelligenceManager;
-import com.limpygnome.projectsandbox.server.packet.OutboundPacket;
+import com.limpygnome.projectsandbox.server.network.packet.OutboundPacket;
 
 import java.io.IOException;
 

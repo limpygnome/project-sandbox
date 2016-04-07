@@ -1,6 +1,6 @@
 package com.limpygnome.projectsandbox.server.player;
 
-import com.limpygnome.projectsandbox.server.service.LogicService;
+import com.limpygnome.projectsandbox.server.service.EventLogicCycleService;
 import com.limpygnome.projectsandbox.shared.jpa.provider.GameProvider;
 import com.limpygnome.projectsandbox.shared.jpa.provider.UserProvider;
 import com.limpygnome.projectsandbox.shared.model.GameSession;
@@ -20,7 +20,7 @@ import org.springframework.stereotype.Service;
  * Created by limpygnome on 26/07/15.
  */
 @Service
-public class SessionService implements LogicService
+public class SessionService implements EventLogicCycleService
 {
     private final static Logger LOG = LogManager.getLogger(SessionService.class);
 

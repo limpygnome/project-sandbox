@@ -1,13 +1,18 @@
 package com.limpygnome.projectsandbox.server;
 
-import com.limpygnome.projectsandbox.server.packet.PacketService;
+import com.limpygnome.projectsandbox.server.entity.factory.PlayerEntityService;
+import com.limpygnome.projectsandbox.server.network.packet.PacketService;
 import com.limpygnome.projectsandbox.server.player.ChatService;
 import com.limpygnome.projectsandbox.server.player.PlayerService;
 import com.limpygnome.projectsandbox.server.player.SessionService;
-import com.limpygnome.projectsandbox.server.service.LoadService;
+import com.limpygnome.projectsandbox.server.service.EventServerPostStartup;
+import com.limpygnome.projectsandbox.server.service.EventServerShutdown;
+import com.limpygnome.projectsandbox.server.service.EventServerPreStartup;
 import com.limpygnome.projectsandbox.server.threading.GameLogicThreadedService;
-import com.limpygnome.projectsandbox.server.threading.SocketEndpoint;
 import java.util.List;
+
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.AutowireCapableBeanFactory;
 import org.springframework.context.ApplicationContext;
@@ -19,13 +24,10 @@ import org.springframework.stereotype.Component;
 @Component
 public class Controller
 {
+    private final static Logger LOG = LogManager.getLogger(PlayerService.class);
+
     @Autowired
     private ApplicationContext applicationContext;
-
-    /**
-     * The endpoint used to accept and transfer data between clients.
-     */
-    public SocketEndpoint endpoint;
 
     /**
      * Thread used to execute periodic game logic cycles.
@@ -40,32 +42,45 @@ public class Controller
     @Autowired
     public PlayerService playerService;
     @Autowired
+    public PlayerEntityService playerEntityService;
+    @Autowired
     public ChatService chatService;
     @Autowired
     public SessionService sessionService;
 
-    // Services which need an event invoked on startup
     @Autowired
-    private List<LoadService> loadServices;
+    private List<EventServerPreStartup> eventServerPreStartups;
+    @Autowired
+    private List<EventServerPostStartup> eventServerPostStartups;
+    @Autowired
+    private List<EventServerShutdown> eventServerShutdowns;
 
     
-    public void start()
+    public void startAndJoin()
     {
         try
         {
-            // Invoke load methods on services requiring pre-logic loading...
-            for (LoadService loadService : loadServices)
+            // Invoke pre-startup events on services
+            for (EventServerPreStartup eventServerPreStartup : eventServerPreStartups)
             {
-                loadService.load();
+                eventServerPreStartup.eventServerStartup(this);
             }
 
             // Setup logic thread
             threadLogic = new Thread(gameLogicService);
             threadLogic.start();
 
-            // Start endpoint to receive clients...
-            endpoint = new SocketEndpoint(this, 4857);
-            endpoint.start();
+            // Invoke post-startup events on services
+            for (EventServerPostStartup eventServerPostStartup : eventServerPostStartups)
+            {
+                eventServerPostStartup.eventServerPostStartup(this);
+            }
+
+            // Join logic thread
+            threadLogic.join();
+
+            // Since we've left the logic thread, shutdown...
+            stop();
         }
         catch(Exception ex)
         {
@@ -75,8 +90,18 @@ public class Controller
     
     public void stop()
     {
+        LOG.info("Server shutting down...");
+
         // TODO: dispose managers etc...kill sockets / plys etc
         // TODO: consider sending packet to clients explaining shutdown reason?
+
+        // Invoke shutdown events
+        for (EventServerShutdown eventServerShutdown : eventServerShutdowns)
+        {
+            eventServerShutdown.eventServerShutdown(this);
+        }
+
+        LOG.info("Server shutdown successfully");
     }
 
     public long gameTime()

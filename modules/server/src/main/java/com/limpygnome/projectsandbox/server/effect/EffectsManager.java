@@ -2,9 +2,9 @@ package com.limpygnome.projectsandbox.server.effect;
 
 import com.limpygnome.projectsandbox.server.Controller;
 import com.limpygnome.projectsandbox.server.effect.types.AbstractEffect;
-import com.limpygnome.projectsandbox.server.packet.imp.effect.EffectUpdatesOutboundPacket;
+import com.limpygnome.projectsandbox.server.network.packet.imp.effect.EffectUpdatesOutboundPacket;
 
-import com.limpygnome.projectsandbox.server.service.LogicService;
+import com.limpygnome.projectsandbox.server.service.EventLogicCycleService;
 import com.limpygnome.projectsandbox.server.world.map.WorldMap;
 import java.io.IOException;
 import java.util.LinkedList;
@@ -15,7 +15,7 @@ import org.apache.logging.log4j.Logger;
 /**
  * Manages and executes logic for effects.
  */
-public class EffectsManager implements LogicService
+public class EffectsManager implements EventLogicCycleService
 {
     private final static Logger LOG = LogManager.getLogger(EffectsManager.class);
 

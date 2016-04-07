@@ -31,7 +31,7 @@ public class Program
 
         // Fetch controller instance using Spring and start server
         Controller controller = applicationContext.getBean(Controller.class);
-        controller.start();
+        controller.startAndJoin();
 
         // Dispose Spring context...
         ((ConfigurableApplicationContext) applicationContext).close();

@@ -1,6 +1,6 @@
 package com.limpygnome.projectsandbox.server.world.map.type.tile;
 
-import com.limpygnome.projectsandbox.server.packet.OutboundPacket;
+import com.limpygnome.projectsandbox.server.network.packet.OutboundPacket;
 
 import java.io.IOException;
 

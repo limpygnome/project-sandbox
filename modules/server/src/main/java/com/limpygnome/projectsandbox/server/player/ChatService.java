@@ -1,7 +1,7 @@
 package com.limpygnome.projectsandbox.server.player;
 
 import com.limpygnome.projectsandbox.server.Controller;
-import com.limpygnome.projectsandbox.server.packet.imp.player.chat.PlayerChatOutboundPacket;
+import com.limpygnome.projectsandbox.server.network.packet.imp.player.chat.PlayerChatOutboundPacket;
 
 import java.util.LinkedList;
 import org.springframework.beans.factory.annotation.Autowired;

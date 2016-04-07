@@ -5,7 +5,7 @@ import com.limpygnome.projectsandbox.server.entity.Entity;
 import com.limpygnome.projectsandbox.server.entity.factory.EntityFactory;
 import com.limpygnome.projectsandbox.server.entity.EntityManager;
 import com.limpygnome.projectsandbox.server.entity.EntityState;
-import com.limpygnome.projectsandbox.server.service.LogicService;
+import com.limpygnome.projectsandbox.server.service.EventLogicCycleService;
 import com.limpygnome.projectsandbox.server.world.map.WorldMap;
 import com.limpygnome.projectsandbox.server.world.spawn.FactionSpawns;
 import com.limpygnome.projectsandbox.server.world.spawn.Spawn;
@@ -21,7 +21,7 @@ import java.util.LinkedList;
  *
  * TODO: add support for multiple maps; this should be a single instance for all maps
  */
-public class RespawnManager implements LogicService
+public class RespawnManager implements EventLogicCycleService
 {
     private final static Logger LOG = LogManager.getLogger(RespawnManager.class);
 

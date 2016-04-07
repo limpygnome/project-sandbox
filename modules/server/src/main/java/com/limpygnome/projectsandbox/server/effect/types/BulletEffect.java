@@ -1,6 +1,6 @@
 package com.limpygnome.projectsandbox.server.effect.types;
 
-import com.limpygnome.projectsandbox.server.packet.PacketData;
+import com.limpygnome.projectsandbox.server.network.packet.PacketData;
 
 /**
  * Created by limpygnome on 06/05/15.

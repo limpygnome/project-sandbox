@@ -1,7 +1,7 @@
 package com.limpygnome.projectsandbox.server.threading;
 
 import com.limpygnome.projectsandbox.server.Controller;
-import com.limpygnome.projectsandbox.server.service.LogicService;
+import com.limpygnome.projectsandbox.server.service.EventLogicCycleService;
 import java.util.List;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -24,7 +24,7 @@ public class GameLogicThreadedService implements Runnable
     @Autowired
     private Controller controller;
     @Autowired
-    private List<LogicService> logicServices;
+    private List<EventLogicCycleService> eventLogicCycleServices;
 
     public void run()
     {
@@ -41,11 +41,11 @@ public class GameLogicThreadedService implements Runnable
                 timeStart = System.currentTimeMillis();
 
                 // Execute logic for each service
-                for (LogicService logicService : logicServices)
+                for (EventLogicCycleService eventLogicCycleService : eventLogicCycleServices)
                 {
                     try
                     {
-                        logicService.logic();
+                        eventLogicCycleService.logic();
                     }
                     catch (Exception e)
                     {

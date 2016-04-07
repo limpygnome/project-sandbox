@@ -5,9 +5,8 @@ import com.limpygnome.projectsandbox.server.entity.physics.collisions.CollisionD
 import com.limpygnome.projectsandbox.server.entity.physics.collisions.CollisionResult;
 import com.limpygnome.projectsandbox.server.Controller;
 import com.limpygnome.projectsandbox.server.entity.physics.collisions.CollisionResultMap;
-import com.limpygnome.projectsandbox.server.entity.physics.collisions.SATCollisionDetection;
-import com.limpygnome.projectsandbox.server.packet.imp.entity.EntityUpdatesOutboundPacket;
-import com.limpygnome.projectsandbox.server.service.LogicService;
+import com.limpygnome.projectsandbox.server.network.packet.imp.entity.EntityUpdatesOutboundPacket;
+import com.limpygnome.projectsandbox.server.service.EventLogicCycleService;
 import com.limpygnome.projectsandbox.server.util.IdCounterProvider;
 import com.limpygnome.projectsandbox.server.util.counters.IdCounterConsumer;
 import com.limpygnome.projectsandbox.server.world.map.WorldMap;
@@ -25,7 +24,7 @@ import org.springframework.beans.factory.annotation.Autowired;
  * Notes:
  * - Any modifications to the internal collections should always synchronize on `entities`.
  */
-public class EntityManager implements LogicService, IdCounterConsumer
+public class EntityManager implements EventLogicCycleService, IdCounterConsumer
 {
     private final static Logger LOG = LogManager.getLogger(EntityManager.class);
 

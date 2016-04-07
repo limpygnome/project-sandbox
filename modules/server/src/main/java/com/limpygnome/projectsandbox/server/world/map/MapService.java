@@ -2,8 +2,8 @@ package com.limpygnome.projectsandbox.server.world.map;
 
 import com.limpygnome.projectsandbox.server.Controller;
 
-import com.limpygnome.projectsandbox.server.service.LoadService;
-import com.limpygnome.projectsandbox.server.service.LogicService;
+import com.limpygnome.projectsandbox.server.service.EventServerPreStartup;
+import com.limpygnome.projectsandbox.server.service.EventLogicCycleService;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -17,7 +17,7 @@ import org.springframework.stereotype.Service;
  * Responsible for managing/handling maps.
  */
 @Service
-public class MapService implements LoadService, LogicService
+public class MapService implements EventServerPreStartup, EventLogicCycleService
 {
     private final static Logger LOG = LogManager.getLogger(MapService.class);
 
@@ -46,7 +46,7 @@ public class MapService implements LoadService, LogicService
     }
 
     @Override
-    public synchronized void load()
+    public synchronized void eventServerStartup(Controller controller)
     {
         // Load public maps into cache
         Map<Short, WorldMap> publicMaps = mapRepository.fetchPublicMaps(controller, this);

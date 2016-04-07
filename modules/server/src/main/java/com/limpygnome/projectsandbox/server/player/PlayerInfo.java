@@ -2,7 +2,7 @@ package com.limpygnome.projectsandbox.server.player;
 
 import com.limpygnome.projectsandbox.server.Controller;
 import com.limpygnome.projectsandbox.server.entity.death.AbstractKiller;
-import com.limpygnome.projectsandbox.server.packet.imp.player.global.PlayerKilledOutboundPacket;
+import com.limpygnome.projectsandbox.server.network.packet.imp.player.global.PlayerKilledOutboundPacket;
 import com.limpygnome.projectsandbox.server.entity.Entity;
 import com.limpygnome.projectsandbox.server.world.map.MapService;
 import com.limpygnome.projectsandbox.server.world.map.WorldMap;
