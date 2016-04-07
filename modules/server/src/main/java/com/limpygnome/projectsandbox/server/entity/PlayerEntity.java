@@ -12,8 +12,12 @@ public abstract class PlayerEntity extends Entity
 {
     private final static Logger LOG = LogManager.getLogger(PlayerEntity.class);
 
-    /* Used to indicate if the entity should be persisted to the player's session when leaving */
-    private PlayerInfo owner;
+    /*
+        Used to indicate if the entity should be persisted to the player's session when leaving.
+
+        The owner will be the player at the zero index/position.
+    */
+    private boolean persistToSession;
 
     /* All of the players which are using this entity. */
     private PlayerInfo[] players;
@@ -47,61 +51,6 @@ public abstract class PlayerEntity extends Entity
 
         setPlayers(players);
         setInventories(inventories);
-    }
-
-    /**
-     * Refer to constructor.
-     *
-     * @param players players
-     */
-    public synchronized void setPlayers(PlayerInfo[] players)
-    {
-        // TODO: do we need to unbind old players
-        this.persistToSession = false;
-        this.players = players;
-
-        // Update inventory ownership
-        if (inventories != null)
-        {
-            for (int i = 0; i < players.length; i++)
-            {
-                updateInventoryOwnership(i);
-            }
-        }
-    }
-
-    public synchronized void setPlayer(PlayerInfo player, int index)
-    {
-        // TODO: do we need to unbind old player?
-
-        // Reset persistence flag if main player changes
-        if (index == 0)
-        {
-            persistToSession = false;
-        }
-
-        this.players[index] = player;
-        updateInventoryOwnership(index);
-    }
-
-    /**
-     * Refer to constructor.
-     *
-     * @param inventories inventories
-     */
-    public synchronized void setInventories(Inventory[] inventories)
-    {
-        // TODO: do we need to unbind old inventories?
-        this.inventories = inventories;
-
-        if (inventories != null)
-        {
-            // Make sure all players are owners, if available...
-            for (int i = 0; i < inventories.length; i++)
-            {
-                updateInventoryOwnership(i);
-            }
-        }
     }
 
     private synchronized void updateInventoryOwnership(int index)
@@ -189,35 +138,39 @@ public abstract class PlayerEntity extends Entity
         return "Unknown";
     }
 
-    public synchronized PlayerInfo getPlayer()
+    /**
+     * Refer to constructor.
+     *
+     * @param players players
+     */
+    public synchronized void setPlayers(PlayerInfo[] players)
     {
-        return players != null && players.length >= 1 ? players[0] : null;
-    }
+        // TODO: do we need to unbind old players
+        this.persistToSession = false;
+        this.players = players;
 
-    @Override
-    public synchronized PlayerInfo[] getPlayers()
-    {
-        return players;
-    }
-
-    @Override
-    public synchronized Inventory retrieveInventory(PlayerInfo playerInfo)
-    {
-        if (inventories == null)
+        // Update inventory ownership
+        if (inventories != null)
         {
-            LOG.warn("Unable to retrieve inventory, inventories not set / null - ply id: {}, ent id; {}", playerInfo.playerId, id);
-        }
-        else
-        {
-            int index = getPlayerIndex(playerInfo);
-
-            if (index != -1 && index < inventories.length)
+            for (int i = 0; i < players.length; i++)
             {
-                return inventories[index];
+                updateInventoryOwnership(i);
             }
         }
+    }
 
-        return null;
+    public synchronized void setPlayer(PlayerInfo player, int index)
+    {
+        // TODO: do we need to unbind old player?
+
+        // Reset persistence flag if main player changes
+        if (index == 0 && player != players[0])
+        {
+            persistToSession = false;
+        }
+
+        this.players[index] = player;
+        updateInventoryOwnership(index);
     }
 
     public synchronized void setInventory(int index, Inventory inventory)
@@ -230,6 +183,26 @@ public abstract class PlayerEntity extends Entity
         else
         {
             LOG.warn("Unable to set inventory, inventories not large enough - index: {}, ent id; {}", index, id);
+        }
+    }
+
+    /**
+     * Refer to constructor.
+     *
+     * @param inventories inventories
+     */
+    public synchronized void setInventories(Inventory[] inventories)
+    {
+        // TODO: do we need to unbind old inventories?
+        this.inventories = inventories;
+
+        if (inventories != null)
+        {
+            // Make sure all players are owners, if available...
+            for (int i = 0; i < inventories.length; i++)
+            {
+                updateInventoryOwnership(i);
+            }
         }
     }
 
@@ -251,6 +224,52 @@ public abstract class PlayerEntity extends Entity
         }
 
         return -1;
+    }
+
+    public synchronized PlayerInfo getPlayer()
+    {
+        return players != null && players.length >= 1 ? players[0] : null;
+    }
+
+    @Override
+    public synchronized PlayerInfo[] getPlayers()
+    {
+        return players;
+    }
+
+    public synchronized Inventory getInventory()
+    {
+        return inventories != null && inventories.length > 0 ? inventories[0] : null;
+    }
+
+    public synchronized Inventory getInventory(PlayerInfo playerInfo)
+    {
+        int playerIndex = getPlayerIndex(playerInfo);
+
+        if (playerIndex != -1 && inventories != null && inventories.length > playerIndex)
+        {
+            return inventories[playerIndex];
+        }
+        else
+        {
+            return null;
+        }
+    }
+
+    public void setPersistToSession(boolean persistToSession)
+    {
+        this.persistToSession = persistToSession;
+    }
+
+    /**
+     * Indicates if the entity should be persisted to the driver's session.
+     *
+     * @param playerInfo the player to which the entity will be persisted
+     * @return true = persist, false = do not persist
+     */
+    public boolean isPersistToSession(PlayerInfo playerInfo)
+    {
+        return persistToSession && players[0] == playerInfo;
     }
 
 }

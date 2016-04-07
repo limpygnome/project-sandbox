@@ -11,13 +11,15 @@ public interface EntityFactory
 
     /**
      * Creates a new entity for a player.
+     *
+     * @param playerInfo the player
      */
     PlayerEntity createPlayer(PlayerInfo playerInfo);
 
     /**
-     * needs thought...
+     * Persists the player's current entity to their session.
      *
-     * @param playerInfo
+     * @param playerInfo the player
      */
     void persistPlayer(PlayerInfo playerInfo);
 

@@ -24,7 +24,7 @@ public class SessionService implements LogicService
 {
     private final static Logger LOG = LogManager.getLogger(SessionService.class);
 
-    private static final int INTERVAL_UPDATE_SESSION = 30;
+    private static final int INTERVAL_UPDATE_SESSION = 60;
 
     private UserProvider userProvider;
     private GameProvider gameProvider;

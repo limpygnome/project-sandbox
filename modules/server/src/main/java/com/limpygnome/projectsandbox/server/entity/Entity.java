@@ -496,18 +496,6 @@ public strictfp abstract class Entity
         this.updateMask = 0;
     }
 
-    /**
-     * Retrieves the inventory for a player associated with this instance.
-     *
-     * @param playerInfo
-     * @return Instance, or null if no inventory is available / not allowed.
-     */
-    public Inventory retrieveInventory(PlayerInfo playerInfo)
-    {
-        // No inventory by default
-        return null;
-    }
-
     public void eventPendingDeleted(Controller controller) { }
 
     /**

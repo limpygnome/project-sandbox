@@ -1,5 +1,6 @@
 package com.limpygnome.projectsandbox.server.entity.factory;
 
+import com.limpygnome.projectsandbox.server.entity.Entity;
 import com.limpygnome.projectsandbox.server.entity.PlayerEntity;
 import com.limpygnome.projectsandbox.server.inventory.Inventory;
 import com.limpygnome.projectsandbox.server.player.PlayerInfo;
@@ -8,8 +9,6 @@ import com.limpygnome.projectsandbox.shared.model.GameSession;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.stereotype.Component;
-
-import java.lang.reflect.InvocationTargetException;
 
 /**
  * The default implementation reads the following map property to spawn an entity of a type:
@@ -48,6 +47,9 @@ public class DefaultEntityFactory implements EntityFactory
                 // Create default entity for map
                 Class clazz = worldMap.getProperties().getDefaultEntityType();
                 playerEntity = createFromClass(clazz, playerInfo);
+
+                // Set flag to allow persistence of entity
+                playerEntity.setPersistToSession(true);
             }
 
             return playerEntity;
@@ -99,6 +101,26 @@ public class DefaultEntityFactory implements EntityFactory
     @Override
     public void persistPlayer(PlayerInfo playerInfo)
     {
+        // Fetch the player's current entity
+        Entity entity = playerInfo.entity;
+
+        if (entity instanceof PlayerEntity)
+        {
+            PlayerEntity playerEntity = (PlayerEntity) entity;
+
+            // Check entity can be persisted
+            if (playerEntity.isPersistToSession(playerInfo))
+            {
+                GameSession gameSession = playerInfo.session;
+
+                // Persist entity type
+                gameSession.gameDataPut(PLAYERDATA_ENT_TYPE_ID_KEY, playerEntity.entityType);
+
+                // Persist inventory
+                Inventory inventory = playerEntity.getInventory();
+                gameSession.gameDataPut(PLAYERDATA_INVENTORY_KEY, inventory);
+            }
+        }
     }
 
 }

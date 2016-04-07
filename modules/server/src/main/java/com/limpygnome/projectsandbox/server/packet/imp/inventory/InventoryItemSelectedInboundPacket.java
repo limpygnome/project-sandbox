@@ -2,6 +2,7 @@ package com.limpygnome.projectsandbox.server.packet.imp.inventory;
 
 import com.limpygnome.projectsandbox.server.Controller;
 import com.limpygnome.projectsandbox.server.entity.Entity;
+import com.limpygnome.projectsandbox.server.entity.PlayerEntity;
 import com.limpygnome.projectsandbox.server.inventory.Inventory;
 import com.limpygnome.projectsandbox.server.packet.InboundPacket;
 import com.limpygnome.projectsandbox.server.packet.PacketParseException;
@@ -25,11 +26,12 @@ public class InventoryItemSelectedInboundPacket extends InboundPacket
         short slotId = (short) rawSlotId;
 
         // Fetch the player's inventory
-        Entity currentEntity = playerInfo.entity;
+        Entity entity = playerInfo.entity;
 
-        if (currentEntity != null)
+        if (entity != null && entity instanceof PlayerEntity)
         {
-            Inventory inventory = currentEntity.retrieveInventory(playerInfo);
+            PlayerEntity playerEntity = (PlayerEntity) entity;
+            Inventory inventory = playerEntity.getInventory(playerInfo);
 
             if (inventory != null)
             {
