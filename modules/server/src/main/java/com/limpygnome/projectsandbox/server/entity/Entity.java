@@ -2,6 +2,7 @@ package com.limpygnome.projectsandbox.server.entity;
 
 import com.limpygnome.projectsandbox.game.entity.vehicle.AbstractVehicle;
 import com.limpygnome.projectsandbox.server.entity.annotation.EntityType;
+import com.limpygnome.projectsandbox.server.entity.component.EntityComponent;
 import com.limpygnome.projectsandbox.server.entity.death.AbstractKiller;
 import com.limpygnome.projectsandbox.server.entity.physics.collisions.CollisionResult;
 import com.limpygnome.projectsandbox.server.entity.physics.Vector2;
@@ -18,6 +19,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.lang.annotation.Annotation;
+import java.util.List;
 
 import static com.limpygnome.projectsandbox.server.constant.PlayerConstants.*;
 
@@ -86,6 +88,9 @@ public strictfp abstract class Entity
      * When true, other entities can move through this entity.
      */
     public boolean physicsIntangible;
+
+    /* List of components used to define the behaviour of the entity. */
+    private List<EntityComponent> entityComponents;
     
     public Entity(WorldMap map, short width, short height)
     {
