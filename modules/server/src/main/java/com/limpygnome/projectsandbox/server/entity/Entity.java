@@ -2,7 +2,9 @@ package com.limpygnome.projectsandbox.server.entity;
 
 import com.limpygnome.projectsandbox.game.entity.vehicle.AbstractVehicle;
 import com.limpygnome.projectsandbox.server.entity.annotation.EntityType;
+import com.limpygnome.projectsandbox.server.entity.component.ComponentCollection;
 import com.limpygnome.projectsandbox.server.entity.component.EntityComponent;
+import com.limpygnome.projectsandbox.server.entity.component.event.LogicComponentEvent;
 import com.limpygnome.projectsandbox.server.entity.death.AbstractKiller;
 import com.limpygnome.projectsandbox.server.entity.physics.collisions.CollisionResult;
 import com.limpygnome.projectsandbox.server.entity.physics.Vector2;
@@ -20,12 +22,12 @@ import org.apache.logging.log4j.Logger;
 
 import java.lang.annotation.Annotation;
 import java.util.List;
+import java.util.Set;
 
 import static com.limpygnome.projectsandbox.server.constant.PlayerConstants.*;
 
 /**
- *
- * @author limpygnome
+ * Base entity.
  */
 @EntityType(typeId = 0, typeName = "")
 public strictfp abstract class Entity
@@ -38,6 +40,11 @@ public strictfp abstract class Entity
      * The map to which this entity belongs.
      */
     public WorldMap map;
+
+    /**
+     * Used to register components, which add behaviour to the entity.
+     */
+    protected ComponentCollection components;
     
     // The unique ID for the entity
     public short id;
@@ -89,8 +96,6 @@ public strictfp abstract class Entity
      */
     public boolean physicsIntangible;
 
-    /* List of components used to define the behaviour of the entity. */
-    private List<EntityComponent> entityComponents;
     
     public Entity(WorldMap map, short width, short height)
     {
@@ -125,7 +130,12 @@ public strictfp abstract class Entity
     
     public synchronized void logic(Controller controller)
     {
-        // Nothing by default...
+        Set<LogicComponentEvent> callbacks = components.fetch(LogicComponentEvent.class);
+
+        for (LogicComponentEvent component : callbacks)
+        {
+            component.eventLogic(this, controller);
+        }
     }
     
     public synchronized void rotation(float radians)

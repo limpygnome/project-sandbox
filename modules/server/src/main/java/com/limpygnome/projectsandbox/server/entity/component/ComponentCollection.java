@@ -3,13 +3,13 @@ package com.limpygnome.projectsandbox.server.entity.component;
 import java.util.*;
 
 /**
- * Created by limpygnome on 08/04/16.
+ * Used to hold a collection of component callbacks.
  */
-public class ComponentEventHandler<K extends Class<ComponentEvent>, V extends EntityComponent, VT extends Class<V>>
+public class ComponentCollection<K extends Class<ComponentEvent>, V extends EntityComponent, VT extends Class<V>>
 {
     private Map<K, HashSet<V>> eventCallbacks;
 
-    public ComponentEventHandler()
+    public ComponentCollection()
     {
         eventCallbacks = new HashMap<>();
     }
@@ -21,6 +21,7 @@ public class ComponentEventHandler<K extends Class<ComponentEvent>, V extends En
 
     public synchronized void register(V entityComponent)
     {
+
         // Register entity for each event type
         Class[] clazzes = entityComponent.getClass().getClasses();
 
@@ -40,11 +41,13 @@ public class ComponentEventHandler<K extends Class<ComponentEvent>, V extends En
         Map.Entry<K, HashSet<V>> kv;
         HashSet<V> callbacks;
 
+        // Remove callbacks for component; quicker just to iterate all KVs than classes and fetching
         while (iterator.hasNext())
         {
             kv = iterator.next();
             callbacks = kv.getValue();
 
+            // Remove component and then entire list if empty
             if (callbacks.remove(entityComponent) && callbacks.isEmpty())
             {
                 iterator.remove();
