@@ -27,7 +27,7 @@ public abstract class AbstractPickup extends Entity
     public abstract boolean applyPickup(Controller controller, Entity entity);
 
     @Override
-    public void eventHandleCollision(Controller controller, Entity entCollider, Entity entVictim, Entity entOther, CollisionResult result)
+    public void eventCollisionEntity(Controller controller, Entity entCollider, Entity entVictim, Entity entOther, CollisionResult result)
     {
         // Call implementation to handle pickup
         if (applyPickup(controller, entOther))

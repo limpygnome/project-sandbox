@@ -5,18 +5,38 @@ import java.util.*;
 /**
  * Used to hold a collection of component callbacks.
  */
-public class ComponentCollection<K extends Class<ComponentEvent>, V extends EntityComponent, VT extends Class<V>>
+public class ComponentCollection< K extends Class<ComponentEvent>, V extends EntityComponent>
 {
-    private Map<K, HashSet<V>> eventCallbacks;
+    private final Map<K, HashSet<V>> eventCallbacks;
 
     public ComponentCollection()
     {
         eventCallbacks = new HashMap<>();
     }
 
+    /**
+     * Fetches list of components registered to class event.
+     *
+     * @param clazz
+     * @return always returns result, may be empty if no components registered
+     */
     public synchronized Set<V> fetch(K clazz)
     {
-        return eventCallbacks.get(clazz);
+        Set<V> result = eventCallbacks.get(clazz);
+
+        if (result == null)
+        {
+            result = Collections.emptySet();
+        }
+
+        return result;
+    }
+
+    public synchronized V fetchSingle(K clazz)
+    {
+        Set<V> result = fetch(clazz);
+        V scalarResult = result.iterator().next();
+        return scalarResult;
     }
 
     public synchronized void register(V entityComponent)

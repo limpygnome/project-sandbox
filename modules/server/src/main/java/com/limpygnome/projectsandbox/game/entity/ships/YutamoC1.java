@@ -3,6 +3,7 @@ package com.limpygnome.projectsandbox.game.entity.ships;
 import com.limpygnome.projectsandbox.server.Controller;
 import com.limpygnome.projectsandbox.server.entity.annotation.EntityType;
 import com.limpygnome.projectsandbox.game.entity.vehicle.AbstractVehicle;
+import com.limpygnome.projectsandbox.server.entity.component.imp.VelocityComponent;
 import com.limpygnome.projectsandbox.server.entity.physics.Vector2;
 import com.limpygnome.projectsandbox.server.inventory.Inventory;
 import com.limpygnome.projectsandbox.server.inventory.item.weapon.RocketLauncher;
@@ -32,6 +33,8 @@ public class YutamoC1 extends AbstractVehicle
         deaccelerationMultiplier = 0.95f;
         steeringAngle = 0.4f;
         maxSpeed = 25.0f;
+
+        components.register(new VelocityComponent());
     }
 
     @Override

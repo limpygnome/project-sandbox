@@ -178,7 +178,7 @@ public class EntityManager implements EventLogicCycleService, IdCounterConsumer
                     // We won't run logic for deleted or dead enities
                     if (!entityA.isDeleted() && !entityA.isDead())
                     {
-                        entityA.logic(controller);
+                        entityA.eventLogic(controller);
                     }
                 }
 
@@ -214,8 +214,8 @@ public class EntityManager implements EventLogicCycleService, IdCounterConsumer
                                 if (collisionResult.collision)
                                 {
                                     // Inform both ents of event
-                                    entityA.eventHandleCollision(controller, entityB, entityA, entityB, collisionResult);
-                                    entityB.eventHandleCollision(controller, entityB, entityA, entityA, collisionResult);
+                                    entityA.eventCollisionEntity(controller, entityB, entityA, entityB, collisionResult);
+                                    entityB.eventCollisionEntity(controller, entityB, entityA, entityA, collisionResult);
 
                                     // Check if our original entity is now deleted
                                     // -- Only the two above events should be able to kill it
@@ -235,7 +235,7 @@ public class EntityManager implements EventLogicCycleService, IdCounterConsumer
 
                             for (CollisionResultMap mapResult : mapResults)
                             {
-                                entityA.eventHandleCollisionMap(controller, mapResult);
+                                entityA.eventCollisionMap(controller, mapResult);
                             }
 
                             // Update position for ent

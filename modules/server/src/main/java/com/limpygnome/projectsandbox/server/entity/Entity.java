@@ -4,7 +4,9 @@ import com.limpygnome.projectsandbox.game.entity.vehicle.AbstractVehicle;
 import com.limpygnome.projectsandbox.server.entity.annotation.EntityType;
 import com.limpygnome.projectsandbox.server.entity.component.ComponentCollection;
 import com.limpygnome.projectsandbox.server.entity.component.EntityComponent;
+import com.limpygnome.projectsandbox.server.entity.component.event.CollisionEntityComponentEvent;
 import com.limpygnome.projectsandbox.server.entity.component.event.LogicComponentEvent;
+import com.limpygnome.projectsandbox.server.entity.component.event.ResetComponentEvent;
 import com.limpygnome.projectsandbox.server.entity.death.AbstractKiller;
 import com.limpygnome.projectsandbox.server.entity.physics.collisions.CollisionResult;
 import com.limpygnome.projectsandbox.server.entity.physics.Vector2;
@@ -44,7 +46,7 @@ public strictfp abstract class Entity
     /**
      * Used to register components, which add behaviour to the entity.
      */
-    protected ComponentCollection components;
+    public ComponentCollection components;
     
     // The unique ID for the entity
     public short id;
@@ -103,6 +105,7 @@ public strictfp abstract class Entity
         this.id = 0;
         this.faction = DEFAULT_FACTION;
         this.spawn = null;
+        this.components = new ComponentCollection();
         
         // Read type from annotation
         Annotation annotationEntityType = getClass().getAnnotation(EntityType.class);
@@ -126,16 +129,6 @@ public strictfp abstract class Entity
         this.flagDead = true;
 
         this.physicsStatic = false;
-    }
-    
-    public synchronized void logic(Controller controller)
-    {
-        Set<LogicComponentEvent> callbacks = components.fetch(LogicComponentEvent.class);
-
-        for (LogicComponentEvent component : callbacks)
-        {
-            component.eventLogic(this, controller);
-        }
     }
     
     public synchronized void rotation(float radians)
@@ -510,6 +503,16 @@ public strictfp abstract class Entity
         this.updateMask = 0;
     }
 
+    public synchronized void eventLogic(Controller controller)
+    {
+        Set<LogicComponentEvent> callbacks = components.fetch(LogicComponentEvent.class);
+
+        for (LogicComponentEvent component : callbacks)
+        {
+            component.eventLogic(controller, this);
+        }
+    }
+
     public void eventPendingDeleted(Controller controller) { }
 
     /**
@@ -542,7 +545,7 @@ public strictfp abstract class Entity
     {
     }
 
-    public synchronized void eventHandleCollision(Controller controller, Entity entCollider, Entity entVictim, Entity entOther, CollisionResult result)
+    public synchronized void eventCollisionEntity(Controller controller, Entity entCollider, Entity entVictim, Entity entOther, CollisionResult result)
     {
         // This entity cannot be static and both entities cannot be intangible
         if  (
@@ -558,9 +561,17 @@ public strictfp abstract class Entity
             // Push ent out by default
             positionOffset(result.mtv);
         }
+
+        // Invoke component event
+        Set<CollisionEntityComponentEvent> callbacks = components.fetch(CollisionEntityComponentEvent.class);
+
+        for (CollisionEntityComponentEvent component : callbacks)
+        {
+            component.eventHandleCollisionEntity(controller, this, entOther, result);
+        }
     }
 
-    public synchronized void eventHandleCollisionMap(Controller controller, CollisionResultMap collisionResultMap)
+    public synchronized void eventCollisionMap(Controller controller, CollisionResultMap collisionResultMap)
     {
         // Check if solid for collision response
         if (collisionResultMap.tileType.properties.solid)
@@ -588,6 +599,14 @@ public strictfp abstract class Entity
         position.copy(positionNew);
         rotation = spawn.rotation;
         updateMask(UpdateMasks.ALL_MASKS);
+
+        // Invoke component event
+        Set<ResetComponentEvent> callbacks = components.fetch(ResetComponentEvent.class);
+
+        for (ResetComponentEvent component : callbacks)
+        {
+            component.eventReset(controller, this);
+        }
     }
 
     /**

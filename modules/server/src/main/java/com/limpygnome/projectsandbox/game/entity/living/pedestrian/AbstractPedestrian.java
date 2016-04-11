@@ -107,7 +107,7 @@ public abstract class AbstractPedestrian extends Entity
     }
 
     @Override
-    public synchronized void logic(Controller controller)
+    public synchronized void eventLogic(Controller controller)
     {
         // Run inventory logic
         if (this.inventory != null)
@@ -121,7 +121,7 @@ public abstract class AbstractPedestrian extends Entity
         // Execute tracking logic to search and destroy...or walk around...
         trackingLogic(controller);
 
-        super.logic(controller);
+        super.eventLogic(controller);
     }
 
     private synchronized void trackingLogic(Controller controller)

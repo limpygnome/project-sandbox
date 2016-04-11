@@ -10,6 +10,6 @@ import com.limpygnome.projectsandbox.server.entity.component.ComponentEvent;
 public interface LogicComponentEvent extends ComponentEvent
 {
 
-    void eventLogic(Entity entity, Controller controller);
+    void eventLogic(Controller controller, Entity entity);
 
 }

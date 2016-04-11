@@ -82,9 +82,9 @@ public abstract class AbstractVehicle extends PlayerEntity
     }
 
     @Override
-    public synchronized strictfp void logic(Controller controller)
+    public synchronized strictfp void eventLogic(Controller controller)
     {
-        super.logic(controller);
+        super.eventLogic(controller);
 
         PlayerInfo playerInfoDriver = getPlayer();
         float acceleration = 0.0f;
@@ -265,7 +265,7 @@ public abstract class AbstractVehicle extends PlayerEntity
     }
 
     @Override
-    public synchronized strictfp void eventHandleCollision(Controller controller, Entity entCollider, Entity entVictim, Entity entOther, CollisionResult result)
+    public synchronized strictfp void eventCollisionEntity(Controller controller, Entity entCollider, Entity entVictim, Entity entOther, CollisionResult result)
     {
         /*
             OLD IDEA:
@@ -350,11 +350,11 @@ public abstract class AbstractVehicle extends PlayerEntity
             }
         }
 
-        super.eventHandleCollision(controller, entCollider, entVictim, entOther, result);
+        super.eventCollisionEntity(controller, entCollider, entVictim, entOther, result);
     }
 
     @Override
-    public synchronized void eventHandleCollisionMap(Controller controller, CollisionResultMap collisionResultMap)
+    public synchronized void eventCollisionMap(Controller controller, CollisionResultMap collisionResultMap)
     {
         // Apply damage based on speed - similar to ent collisions
         if (speed > MINIMUM_SPEED_DAMAGE)
@@ -366,7 +366,7 @@ public abstract class AbstractVehicle extends PlayerEntity
         // Slow down vehicle
         speed *= MAP_COLLISION_SPEED_MULTIPLIER;
 
-        super.eventHandleCollisionMap(controller, collisionResultMap);
+        super.eventCollisionMap(controller, collisionResultMap);
     }
 
     @Override

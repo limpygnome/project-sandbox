@@ -1,7 +1,6 @@
 package com.limpygnome.projectsandbox.game.entity.living;
 
 import com.limpygnome.projectsandbox.server.Controller;
-import com.limpygnome.projectsandbox.server.entity.Entity;
 import com.limpygnome.projectsandbox.server.entity.PlayerEntity;
 import com.limpygnome.projectsandbox.server.entity.annotation.EntityType;
 import com.limpygnome.projectsandbox.server.entity.physics.Vector2;
@@ -9,7 +8,6 @@ import com.limpygnome.projectsandbox.server.inventory.Inventory;
 import com.limpygnome.projectsandbox.server.player.PlayerInfo;
 import com.limpygnome.projectsandbox.server.player.PlayerKeys;
 import com.limpygnome.projectsandbox.server.world.map.WorldMap;
-import com.limpygnome.projectsandbox.server.world.spawn.Spawn;
 
 import static com.limpygnome.projectsandbox.server.constant.PlayerConstants.*;
 
@@ -65,10 +63,10 @@ public class Player extends PlayerEntity
     }
 
     @Override
-    public synchronized void logic(Controller controller)
+    public synchronized void eventLogic(Controller controller)
     {
         // Perform parent logic
-        super.logic(controller);
+        super.eventLogic(controller);
 
         // Check for movement
         float changeDist = 0.0f;

@@ -48,7 +48,7 @@ public class Sentry extends Entity
     }
 
     @Override
-    public void logic(Controller controller)
+    public void eventLogic(Controller controller)
     {
         // Find nearest ent
         List<ProximityResult> ents = DefaultProximity.nearbyEnts(controller, this, RANGE, true, true);
@@ -78,7 +78,7 @@ public class Sentry extends Entity
         }
 
         // Perform ent logic
-        super.logic(controller);
+        super.eventLogic(controller);
     }
 
     private void fire(Controller controller)

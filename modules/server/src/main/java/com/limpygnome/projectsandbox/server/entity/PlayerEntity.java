@@ -65,9 +65,9 @@ public abstract class PlayerEntity extends Entity
     }
 
     @Override
-    public synchronized void logic(Controller controller)
+    public synchronized void eventLogic(Controller controller)
     {
-        super.logic(controller);
+        super.eventLogic(controller);
 
         if (inventories != null)
         {

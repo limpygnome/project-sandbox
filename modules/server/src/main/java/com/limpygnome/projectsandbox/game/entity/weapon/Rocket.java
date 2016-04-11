@@ -72,7 +72,7 @@ public class Rocket extends Entity
     }
 
     @Override
-    public void logic(Controller controller)
+    public void eventLogic(Controller controller)
     {
         // Check if Rocket has expired
         float lifespan = controller.gameTime() - gameTimeCreated;
@@ -101,17 +101,17 @@ public class Rocket extends Entity
             positionOffset(offset);
         }
 
-        super.logic(controller);
+        super.eventLogic(controller);
     }
 
     @Override
-    public void eventHandleCollision(Controller controller, Entity entCollider, Entity entVictim, Entity entOther, CollisionResult result)
+    public void eventCollisionEntity(Controller controller, Entity entCollider, Entity entVictim, Entity entOther, CollisionResult result)
     {
         performCollisionExplosion(controller);
     }
 
     @Override
-    public void eventHandleCollisionMap(Controller controller, CollisionResultMap collisionResultMap)
+    public void eventCollisionMap(Controller controller, CollisionResultMap collisionResultMap)
     {
         performCollisionExplosion(controller);
     }
