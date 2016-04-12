@@ -33,11 +33,6 @@ public abstract class AbstractVehicle extends PlayerEntity
      */
     public static final float SPEED_FP_MIN = 0.01f;
     
-    /**
-     * The space between a vehicle and an ejected player.
-     */
-    public static final float EJECT_SPACING = 2.0f;
-    
     public static final float DEFAULT_HEALTH = 200.0f;
 
     // Car properties
@@ -50,13 +45,13 @@ public abstract class AbstractVehicle extends PlayerEntity
     protected float speed;
     
     // Player slotState
-    protected Vector2[] playerEjectPositions;
+
 
     // Indicates that the driver, player zero, was spawned in this vehcle - thus respawn vehicle with player on death
     protected boolean flagDriverSpawned;
 
 
-    public AbstractVehicle(WorldMap map, short width, short height, PlayerInfo[] players, Inventory[] inventories, Vector2[] playerEjectPositions)
+    public AbstractVehicle(WorldMap map, short width, short height, PlayerInfo[] players, Inventory[] inventories)
     {
         super(map, width, height, players, inventories);
 
@@ -169,101 +164,8 @@ public abstract class AbstractVehicle extends PlayerEntity
                 speed = 0.0f;
             }
         }
-        
-        // Check if players want to get out / are still connected
-        PlayerInfo[] players = getPlayers();
-        PlayerInfo playerInfo;
-
-        for (int i = 0; i < players.length; i++)
-        {
-            playerInfo = players[i];
-            
-            if (playerInfo != null)
-            {
-                if (!playerInfo.isConnected())
-                {
-                    // Free the seat...
-                    players[i] = null;
-                }
-                else if (playerInfo.isKeyDown(PlayerKeys.Action))
-                {
-                    // Set action key to handled
-                    playerInfo.setKey(PlayerKeys.Action, false);
-
-                    // Fetch ejection seat
-                    Vector2 ejectPosition;
-
-                    if (playerEjectPositions.length >= i)
-                    {
-                        ejectPosition = playerEjectPositions[0];
-                    }
-                    else
-                    {
-                        ejectPosition = playerEjectPositions[i];
-                    }
-
-                    // Eject player from the vehicle
-                    playerEject(controller, playerInfo, ejectPosition);
-
-                    // Free-up the space
-                    players[i] = null;
-
-                    // Reset spawn flag if driver
-                    if (playerInfo == playerInfoDriver)
-                    {
-                        flagDriverSpawned = false;
-                    }
-
-                    // Invoke event hook
-                    eventPlayerExit(playerInfo, i);
-                }
-            }
-        }
     }
     
-    private synchronized void playerEject(Controller controller, PlayerInfo playerInfo, Vector2 ejectPosition)
-    {
-        // Offset position so that the player exits to the left of the vehicle
-        Vector2 plyPos = ejectPosition.clone();
-
-        // Create new player ent in position of vehicle
-        Entity entityPlayer = controller.playerEntityService.createPlayer(map, playerInfo);
-
-        // Add player to pos offset
-        float plyx = playerEjectVectorPos(ejectPosition.x, entityPlayer.width / 2.0f);
-        float plyy = playerEjectVectorPos(ejectPosition.y, entityPlayer.height / 2.0f);
-        plyPos = Vector2.add(plyPos, plyx, plyy);
-
-        // Rotate pos to align with vehicle
-        plyPos.rotate(0.0f, 0.0f, rotation);
-
-        // Add pos of vehicle to pos
-        plyPos = Vector2.add(plyPos, positionNew);
-
-        // Spawn player
-        map.respawnManager.respawn(new PositionPendingRespawn(
-                controller,
-                entityPlayer,
-                new Spawn(plyPos.x, plyPos.y, rotation)
-        ));
-    }
-    
-    private synchronized float playerEjectVectorPos(float coord, float value)
-    {
-        if (coord == 0)
-        {
-            return 0.0f;
-        }
-        else if (coord < 0)
-        {
-            return (value * -1.0f) + EJECT_SPACING;
-        }
-        else
-        {
-            return value + EJECT_SPACING;
-        }
-    }
-
     @Override
     public synchronized strictfp void eventCollisionEntity(Controller controller, Entity entCollider, Entity entVictim, Entity entOther, CollisionResult result)
     {
@@ -372,6 +274,7 @@ public abstract class AbstractVehicle extends PlayerEntity
     @Override
     public synchronized strictfp void eventHandleDeath(Controller controller, AbstractKiller killer)
     {
+        // TODO: move into base entity
         // Respawn players in vehicle
         PlayerInfo[] players = getPlayers();
         PlayerInfo playerInfo;
@@ -428,16 +331,6 @@ public abstract class AbstractVehicle extends PlayerEntity
     public synchronized float getAccelerationFactor()
     {
         return accelerationFactor;
-    }
-
-    public void eventPlayerEnter(PlayerInfo playerInfo, int seat)
-    {
-        // Nothing by default...
-    }
-
-    public void eventPlayerExit(PlayerInfo playerInfo, int seat)
-    {
-        // Nothing by default...
     }
 
 }

@@ -24,7 +24,7 @@ public class VelocityComponent implements EntityComponent, CollisionEntityCompon
     }
 
     @Override
-    public void eventLogic(Controller controller, Entity entity)
+    public synchronized void eventLogic(Controller controller, Entity entity)
     {
         entity.positionOffset(velocity.x, velocity.y);
     }
@@ -55,13 +55,13 @@ public class VelocityComponent implements EntityComponent, CollisionEntityCompon
     }
 
     @Override
-    public void eventReset(Controller controller, Entity entity)
+    public synchronized void eventReset(Controller controller, Entity entity)
     {
         velocity.set(0.0f, 0.0f);
     }
 
     @Override
-    public float getMass()
+    public synchronized float getMass()
     {
         return mass;
     }
