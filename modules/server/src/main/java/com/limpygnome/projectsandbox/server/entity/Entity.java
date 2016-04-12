@@ -3,10 +3,7 @@ package com.limpygnome.projectsandbox.server.entity;
 import com.limpygnome.projectsandbox.game.entity.vehicle.AbstractVehicle;
 import com.limpygnome.projectsandbox.server.entity.annotation.EntityType;
 import com.limpygnome.projectsandbox.server.entity.component.ComponentCollection;
-import com.limpygnome.projectsandbox.server.entity.component.event.CollisionEntityComponentEvent;
-import com.limpygnome.projectsandbox.server.entity.component.event.CollisionMapComponentEvent;
-import com.limpygnome.projectsandbox.server.entity.component.event.LogicComponentEvent;
-import com.limpygnome.projectsandbox.server.entity.component.event.ResetComponentEvent;
+import com.limpygnome.projectsandbox.server.entity.component.event.*;
 import com.limpygnome.projectsandbox.server.entity.death.AbstractKiller;
 import com.limpygnome.projectsandbox.server.entity.physics.collisions.CollisionResult;
 import com.limpygnome.projectsandbox.server.entity.physics.Vector2;
@@ -23,6 +20,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.lang.annotation.Annotation;
+import java.util.Iterator;
 import java.util.Set;
 
 import static com.limpygnome.projectsandbox.server.constant.PlayerConstants.*;
@@ -428,7 +426,7 @@ public strictfp abstract class Entity
         }
 
         // Raise death event for this entity
-        eventHandleDeath(controller, death);
+        eventDeath(controller, death);
     }
 
     private boolean killIsSuicide(PlayerInfo[] playerInfosA, PlayerInfo[] playerInfosB)
@@ -523,13 +521,20 @@ public strictfp abstract class Entity
      * @param controller
      * @param killer The cause of death.
      */
-    public synchronized void eventHandleDeath(Controller controller, AbstractKiller killer)
+    public synchronized void eventDeath(Controller controller, AbstractKiller killer)
     {
         // Set internal flag
         this.flagDead = true;
 
-        // Default action is to respawn the entity
+        // Respawn the entity
         map.respawnManager.respawn(new EntityPendingRespawn(controller, this, DEFAULT_RESPAWN_TIME_MS));
+
+        // Invoke callbacks
+        Set<DeathComponentEvent> callbacks = components.fetch(DeathComponentEvent.class);
+        for (DeathComponentEvent callback : callbacks)
+        {
+            callback.eventDeath(controller, this, killer);
+        }
     }
     
     public void eventPacketEntCreated(PacketData packetData)

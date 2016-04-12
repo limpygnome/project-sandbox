@@ -10,7 +10,6 @@ import com.limpygnome.projectsandbox.server.Controller;
 import com.limpygnome.projectsandbox.server.entity.Entity;
 import com.limpygnome.projectsandbox.server.entity.physics.collisions.CollisionResultMap;
 import com.limpygnome.projectsandbox.server.entity.respawn.pending.EntityPendingRespawn;
-import com.limpygnome.projectsandbox.server.entity.respawn.pending.PositionPendingRespawn;
 import com.limpygnome.projectsandbox.game.entity.living.Player;
 import com.limpygnome.projectsandbox.server.entity.physics.Vector2;
 import com.limpygnome.projectsandbox.server.inventory.Inventory;
@@ -47,8 +46,7 @@ public abstract class AbstractVehicle extends PlayerEntity
     // Player slotState
 
 
-    // Indicates that the driver, player zero, was spawned in this vehcle - thus respawn vehicle with player on death
-    protected boolean flagDriverSpawned;
+
 
 
     public AbstractVehicle(WorldMap map, short width, short height, PlayerInfo[] players, Inventory[] inventories)
@@ -59,20 +57,8 @@ public abstract class AbstractVehicle extends PlayerEntity
         {
             throw new IllegalArgumentException("Players must be defined, even if null sized array; defines number of players able to use vehicle");
         }
-        else if (playerEjectPositions == null || playerEjectPositions.length == 0 || playerEjectPositions[0] == null)
-        {
-            throw new IllegalArgumentException("Player ejection positions must have at least one non-null item");
-        }
-        else if (playerEjectPositions.length < 1)
-        {
-            throw new IllegalArgumentException("Must be at least one eject position");
-        }
 
         this.speed = 0.0f;
-        this.playerEjectPositions = playerEjectPositions;
-
-        this.flagDriverSpawned = (players[0] != null);
-        
         setMaxHealth(DEFAULT_HEALTH);
     }
 
@@ -180,43 +166,6 @@ public abstract class AbstractVehicle extends PlayerEntity
             idea is that if player's race around and hit something full speed, they instantly blowup/die
          */
 
-        // Check if player
-        if (entOther instanceof PlayerEntity && !(entOther instanceof AbstractVehicle))
-        {
-            // Check if they're holding down action key to get in vehicle
-            PlayerEntity ply = (Player) entOther;
-            PlayerInfo playerInfo = ply.getPlayer();
-            
-            if (playerInfo.isKeyDown(PlayerKeys.Action))
-            {
-                // Set action key off/handled
-                playerInfo.setKey(PlayerKeys.Action, false);
-                
-                // Check for next available seat
-                PlayerInfo[] players = getPlayers();
-                PlayerInfo plyInSeat;
-
-                for (int i = 0; i < players.length; i++)
-                {
-                    plyInSeat = players[i];
-                    
-                    if (plyInSeat == null || !plyInSeat.isConnected())
-                    {
-                        // Set the player to use this (vehicle) entity
-                        controller.playerService.setPlayerEnt(playerInfo, this);
-                        
-                        // Add as passenger
-                        setPlayer(playerInfo, i);
-
-                        // Invoke event hook
-                        eventPlayerEnter(playerInfo, i);
-                        
-                        break;
-                    }
-                }
-            }
-        }
-
         // Compute collision speed
         float speedUs = Math.abs(speed);
         float speedOther = Math.abs(entOther.getSpeed());
@@ -272,7 +221,7 @@ public abstract class AbstractVehicle extends PlayerEntity
     }
 
     @Override
-    public synchronized strictfp void eventHandleDeath(Controller controller, AbstractKiller killer)
+    public synchronized strictfp void eventDeath(Controller controller, AbstractKiller killer)
     {
         // TODO: move into base entity
         // Respawn players in vehicle
@@ -294,7 +243,7 @@ public abstract class AbstractVehicle extends PlayerEntity
             }
         }
         
-        super.eventHandleDeath(controller, killer);
+        super.eventDeath(controller, killer);
     }
 
     @Override

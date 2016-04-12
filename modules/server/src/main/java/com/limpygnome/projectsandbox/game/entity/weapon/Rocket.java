@@ -117,7 +117,7 @@ public class Rocket extends Entity
     }
 
     @Override
-    public synchronized void eventHandleDeath(Controller controller, AbstractKiller killer)
+    public synchronized void eventDeath(Controller controller, AbstractKiller killer)
     {
         // Do nothing...
     }
