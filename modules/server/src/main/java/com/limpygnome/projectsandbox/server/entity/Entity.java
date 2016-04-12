@@ -3,8 +3,8 @@ package com.limpygnome.projectsandbox.server.entity;
 import com.limpygnome.projectsandbox.game.entity.vehicle.AbstractVehicle;
 import com.limpygnome.projectsandbox.server.entity.annotation.EntityType;
 import com.limpygnome.projectsandbox.server.entity.component.ComponentCollection;
-import com.limpygnome.projectsandbox.server.entity.component.EntityComponent;
 import com.limpygnome.projectsandbox.server.entity.component.event.CollisionEntityComponentEvent;
+import com.limpygnome.projectsandbox.server.entity.component.event.CollisionMapComponentEvent;
 import com.limpygnome.projectsandbox.server.entity.component.event.LogicComponentEvent;
 import com.limpygnome.projectsandbox.server.entity.component.event.ResetComponentEvent;
 import com.limpygnome.projectsandbox.server.entity.death.AbstractKiller;
@@ -23,7 +23,6 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.lang.annotation.Annotation;
-import java.util.List;
 import java.util.Set;
 
 import static com.limpygnome.projectsandbox.server.constant.PlayerConstants.*;
@@ -567,7 +566,7 @@ public strictfp abstract class Entity
 
         for (CollisionEntityComponentEvent component : callbacks)
         {
-            component.eventHandleCollisionEntity(controller, this, entOther, result);
+            component.eventCollisionEntity(controller, this, entOther, result);
         }
     }
 
@@ -582,7 +581,15 @@ public strictfp abstract class Entity
         // Check if to apply damage
         if (collisionResultMap.tileType.properties.damage != 0)
         {
-            // TODO: apply damage from tile
+            // TODO: apply damage from tile - prolly move this to a component
+        }
+
+        // Invoke component handlers
+        Set<CollisionMapComponentEvent> callbacks = components.fetch(CollisionMapComponentEvent.class);
+
+        for (CollisionMapComponentEvent component : callbacks)
+        {
+            component.eventCollisionMap(controller, this, collisionResultMap);
         }
     }
 

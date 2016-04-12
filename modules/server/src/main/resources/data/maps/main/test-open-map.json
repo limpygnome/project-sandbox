@@ -19,6 +19,11 @@
             "typeName" :    "vehicle/ice-cream-van",
             "count": 1,
             "faction" : 1000
+        },
+        {
+            "typeName" : "ships/yutamo-c1",
+            "count" : 1,
+            "faction" : 1000
         }
     ],
 
@@ -40,13 +45,13 @@
             "spawns" :
             [
                 {
-                    "x" : 90.0,
-                    "y" : 70.0,
+                    "x" : 450.0,
+                    "y" : 450.0,
                     "rotation" : 0.0
                 },
                 {
-                    "x" : 90.0,
-                    "y" : 300.0,
+                    "x" : 750.0,
+                    "y" : 750.0,
                     "rotation" : 0.0
                 }
             ]

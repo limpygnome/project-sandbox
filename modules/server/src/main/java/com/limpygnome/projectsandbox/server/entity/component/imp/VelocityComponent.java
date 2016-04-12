@@ -4,7 +4,7 @@ import com.limpygnome.projectsandbox.server.Controller;
 import com.limpygnome.projectsandbox.server.entity.Entity;
 import com.limpygnome.projectsandbox.server.entity.component.EntityComponent;
 import com.limpygnome.projectsandbox.server.entity.component.event.CollisionEntityComponentEvent;
-import com.limpygnome.projectsandbox.server.entity.component.event.FetchMassComponentEvent;
+import com.limpygnome.projectsandbox.server.entity.component.event.FetchVelocityComponentEvent;
 import com.limpygnome.projectsandbox.server.entity.component.event.LogicComponentEvent;
 import com.limpygnome.projectsandbox.server.entity.component.event.ResetComponentEvent;
 import com.limpygnome.projectsandbox.server.entity.physics.Vector2;
@@ -13,13 +13,10 @@ import com.limpygnome.projectsandbox.server.entity.physics.collisions.CollisionR
 /**
  * Used to apply zero gravity to entities.
  */
-public class VelocityComponent implements EntityComponent, CollisionEntityComponentEvent, LogicComponentEvent, ResetComponentEvent, FetchMassComponentEvent
+public class VelocityComponent implements EntityComponent, CollisionEntityComponentEvent, LogicComponentEvent, ResetComponentEvent, FetchVelocityComponentEvent
 {
-    private float mass;
-    private float velocityX;
-    private float velocityY;
-
     private Vector2 velocity;
+    private float mass;
 
     public VelocityComponent(float mass)
     {
@@ -29,54 +26,38 @@ public class VelocityComponent implements EntityComponent, CollisionEntityCompon
     @Override
     public void eventLogic(Controller controller, Entity entity)
     {
-        entity.positionOffset(velocityX, velocityY);
+        entity.positionOffset(velocity.x, velocity.y);
     }
 
     @Override
-    public void eventHandleCollisionEntity(Controller controller, Entity entity, Entity entityOther, CollisionResult result)
+    public synchronized void eventCollisionEntity(Controller controller, Entity entity, Entity entityOther, CollisionResult result)
     {
         // Fetch velocity component of other entity
-        VelocityComponent componentOther = (VelocityComponent) entityOther.components.fetchSingle(FetchMassComponentEvent.class);
+        VelocityComponent componentOther = (VelocityComponent) entityOther.components.fetchSingle(FetchVelocityComponentEvent.class);
 
-        // Fetch mass of other entity
-        float massOther;
-        Velocity
-
+        if (componentOther != null)
         {
+            // Build required values to distribute energy
+            float massOther = componentOther.getMass();
+            float massTotal = mass + massOther;
+            float totalVelocityX = (velocity.x + componentOther.velocity.x) / massTotal;
+            float totalVelocityY = (velocity.y + componentOther.velocity.y) / massTotal;
 
-
-            if (massCallback == null)
-            {
-                massOther = massCallback.getMass();
-            }
-            else
-            {
-                massOther = 0.0f;
-            }
+            // Build new velocity for ents by distributing energy
+            velocity.set(totalVelocityX * mass, totalVelocityY * mass);
+            componentOther.velocity.set(totalVelocityX * massOther, totalVelocityY * massOther);
         }
-
-        // Fetch speeds
-        float speedUs = Vector2.length(velocity);
-        float speedOther = Math.abs(entityOther.getSpeed());
-
-        // Fetch velociy
-        Vector2 velocityUs = Vector2.vectorFromAngle(entity.rotation, speedUs);
-        Vector2 velocityOther = Vector2.vectorFromAngle(entityOther.rotation, speedOther);
-
-        float collisionVelocityX = Math.abs(velocityUs.x - velocityOther.x);
-        float collisionVelocityY = Math.abs(velocityUs.y - velocityOther.y);
-        float collisionSpeed = Vector2.length(new Vector2(collisionVelocityX, collisionVelocityY));
-
-        // Invert our velocity
-        velocityX = -velocityX;
-        velocityY = -velocityY;
+        else
+        {
+            // Simply invert our velocity so we bounce; may consider dampening in the future
+            velocity = new Vector2(-velocity.x, -velocity.y);
+        }
     }
 
     @Override
     public void eventReset(Controller controller, Entity entity)
     {
-        velocityX = 0.0f;
-        velocityY = 0.0f;
+        velocity.set(0.0f, 0.0f);
     }
 
     @Override

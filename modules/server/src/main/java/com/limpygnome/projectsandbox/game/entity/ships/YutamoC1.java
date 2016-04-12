@@ -34,7 +34,12 @@ public class YutamoC1 extends AbstractVehicle
         steeringAngle = 0.4f;
         maxSpeed = 25.0f;
 
-        components.register(new VelocityComponent());
+        components.register(new VelocityComponent(500.0f));
+    }
+
+    public YutamoC1(WorldMap map)
+    {
+        this(map, new PlayerInfo[1]);
     }
 
     @Override

@@ -10,6 +10,6 @@ import com.limpygnome.projectsandbox.server.entity.physics.collisions.CollisionR
 public interface CollisionEntityComponentEvent
 {
 
-    void eventHandleCollisionEntity(Controller controller, Entity entity, Entity entityOther, CollisionResult result);
+    void eventCollisionEntity(Controller controller, Entity entity, Entity entityOther, CollisionResult result);
 
 }

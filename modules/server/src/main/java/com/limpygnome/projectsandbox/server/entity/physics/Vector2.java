@@ -236,6 +236,34 @@ public class Vector2
         return CustomMath.clampAngle(targetRotation - sourceRotation);
     }
 
+    /**
+     * Inverts the value of this vector.
+     *
+     * @return current instance
+     */
+    public Vector2 invert()
+    {
+        x = -x;
+        y = -y;
+
+        return this;
+    }
+
+    /**
+     * Sets the values of this vector, saves on creating new instances.
+     *
+     * @param x the x value
+     * @param y the y vvalue
+     * @return current instance
+     */
+    public Vector2 set(float x, float y)
+    {
+        this.x = x;
+        this.y = y;
+
+        return this;
+    }
+
     @Override
     public String toString()
     {
