@@ -22,7 +22,6 @@ public class PlayerVehicleMovementComponent implements EntityComponent, LogicCom
      */
     public static final float SPEED_FP_MIN = 0.01f;
 
-
     // Car properties
     protected float accelerationFactor;
     protected float deaccelerationMultiplier;
@@ -100,7 +99,7 @@ public class PlayerVehicleMovementComponent implements EntityComponent, LogicCom
                     this.speed = maxSpeed;
                 }
             }
-            else
+            else if (deaccelerationMultiplier != 1.0f)
             {
                 this.speed *= deaccelerationMultiplier;
             }

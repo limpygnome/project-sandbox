@@ -32,7 +32,7 @@ public class YutamoC1 extends AbstractVehicle
 
         components.register(new PlayerVehicleMovementComponent(
                 0.5f,       // Acceleration factor
-                0.95f,      // Deacceleration multiplier
+                1.0f,       // Deacceleration multiplier
                 0.4f,       // Steering angle
                 25.0f       // Max speed
         ));
