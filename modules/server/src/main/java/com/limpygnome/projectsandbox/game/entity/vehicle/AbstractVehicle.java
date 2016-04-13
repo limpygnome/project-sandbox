@@ -1,6 +1,7 @@
 package com.limpygnome.projectsandbox.game.entity.vehicle;
 
 import com.limpygnome.projectsandbox.server.entity.PlayerEntity;
+import com.limpygnome.projectsandbox.server.entity.component.imp.PlayerEjectionComponent;
 import com.limpygnome.projectsandbox.server.entity.death.AbstractKiller;
 import com.limpygnome.projectsandbox.server.entity.death.CarDamage;
 import com.limpygnome.projectsandbox.server.entity.death.CarKiller;
@@ -49,7 +50,7 @@ public abstract class AbstractVehicle extends PlayerEntity
 
 
 
-    public AbstractVehicle(WorldMap map, short width, short height, PlayerInfo[] players, Inventory[] inventories)
+    public AbstractVehicle(WorldMap map, short width, short height, PlayerInfo[] players, Inventory[] inventories, Vector2[] playerEjectPositions)
     {
         super(map, width, height, players, inventories);
 
@@ -57,6 +58,8 @@ public abstract class AbstractVehicle extends PlayerEntity
         {
             throw new IllegalArgumentException("Players must be defined, even if null sized array; defines number of players able to use vehicle");
         }
+
+        components.register(new PlayerEjectionComponent(this, playerEjectPositions));
 
         this.speed = 0.0f;
         setMaxHealth(DEFAULT_HEALTH);
@@ -218,32 +221,6 @@ public abstract class AbstractVehicle extends PlayerEntity
         speed *= MAP_COLLISION_SPEED_MULTIPLIER;
 
         super.eventCollisionMap(controller, collisionResultMap);
-    }
-
-    @Override
-    public synchronized strictfp void eventDeath(Controller controller, AbstractKiller killer)
-    {
-        // TODO: move into base entity
-        // Respawn players in vehicle
-        PlayerInfo[] players = getPlayers();
-        PlayerInfo playerInfo;
-
-        for (int i = 0; i < players.length; i++)
-        {
-            playerInfo = players[i];
-            
-            if (playerInfo != null && !(flagDriverSpawned && i == 0))
-            {
-                // Create and respawn player
-                Entity entityPlayer = controller.playerEntityService.createPlayer(map, playerInfo);
-                map.respawnManager.respawn(new EntityPendingRespawn(controller, entityPlayer));
-
-                // Set seat to empty
-                players[i] = null;
-            }
-        }
-        
-        super.eventDeath(controller, killer);
     }
 
     @Override

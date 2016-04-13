@@ -237,6 +237,19 @@ public abstract class PlayerEntity extends Entity
         return players;
     }
 
+    public synchronized PlayerInfo removePlayer(PlayerInfo playerInfo)
+    {
+        for (int i = 0; i < players.length; i++)
+        {
+            if (players[i] == playerInfo)
+            {
+                players[i] = null;
+            }
+        }
+
+        return playerInfo;
+    }
+
     public synchronized Inventory getInventory()
     {
         return inventories != null && inventories.length > 0 ? inventories[0] : null;
@@ -280,6 +293,7 @@ public abstract class PlayerEntity extends Entity
      */
     public boolean isRemovableOnPlayerEntChange(PlayerInfo playerInfo)
     {
+        // Check if there are any players left
         for (PlayerInfo playerInfoLeft : players)
         {
             if (playerInfoLeft != null)

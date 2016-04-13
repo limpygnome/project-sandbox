@@ -8,10 +8,12 @@ import java.util.*;
 public class ComponentCollection< K extends Class<ComponentEvent>, V extends EntityComponent>
 {
     private final Map<K, HashSet<V>> eventCallbacks;
+    private final Map<Class<? extends EntityComponent>, V> components;
 
     public ComponentCollection()
     {
         eventCallbacks = new HashMap<>();
+        components = new HashMap<>();
     }
 
     /**
@@ -35,23 +37,31 @@ public class ComponentCollection< K extends Class<ComponentEvent>, V extends Ent
     public synchronized V fetchSingle(K clazz)
     {
         Set<V> result = fetch(clazz);
-        V scalarResult = result.iterator().next();
+        Iterator<V> iterator = result.iterator();
+        V scalarResult = iterator.hasNext() ? iterator.next() : null;
         return scalarResult;
+    }
+
+    public synchronized V fetchComponent(Class<V> clazz)
+    {
+        return components.get(clazz);
     }
 
     public synchronized void register(V entityComponent)
     {
-
-        // Register entity for each event type
-        Class[] clazzes = entityComponent.getClass().getClasses();
+        // Register entity for each event type for callback
+        Class[] clazzes = entityComponent.getClass().getInterfaces();
 
         for (Class clazz : clazzes)
         {
-            if (clazz.isAssignableFrom(ComponentEvent.class))
+            if (ComponentEvent.class.isAssignableFrom(clazz))
             {
                 registerEventType((K) clazz, entityComponent);
             }
         }
+
+        // Add to components
+        components.put(entityComponent.getClass(), entityComponent);
     }
 
     public synchronized void unregister(V entityComponent)
@@ -73,6 +83,9 @@ public class ComponentCollection< K extends Class<ComponentEvent>, V extends Ent
                 iterator.remove();
             }
         }
+
+        // Remove from components
+        components.remove(entityComponent);
     }
 
     public synchronized void registerEventType(K componentEvent, V entityComponent)

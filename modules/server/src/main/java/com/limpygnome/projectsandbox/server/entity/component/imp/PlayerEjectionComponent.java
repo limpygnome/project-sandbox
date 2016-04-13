@@ -179,22 +179,24 @@ public class PlayerEjectionComponent implements EntityComponent, LogicComponentE
     }
 
     @Override
-    public void eventCollisionEntity(Controller controller, Entity entity, Entity entityOther, CollisionResult result)
+    public synchronized void eventCollisionEntity(Controller controller, Entity entity, Entity entityOther, CollisionResult result)
     {
         // Check if player
-        if (entityOther instanceof PlayerEntity && !(entityOther instanceof AbstractVehicle))
+        if (entityOther instanceof PlayerEntity)
         {
-            // Check if they're holding down action key to get in vehicle
-            PlayerEntity ply = (Player) entityOther;
-            PlayerInfo playerInfo = ply.getPlayer();
+            PlayerEntity playerEntity = (PlayerEntity) entity;
+            PlayerEntity playerEntityOther = (PlayerEntity) entityOther;
 
-            if (playerInfo.isKeyDown(PlayerKeys.Action))
+            // Check if they're holding down action key to get in vehicle
+            PlayerInfo playerInfo = playerEntityOther.getPlayer();
+
+            if (playerInfo != null && playerInfo.isKeyDown(PlayerKeys.Action))
             {
                 // Set action key off/handled
                 playerInfo.setKey(PlayerKeys.Action, false);
 
                 // Check for next available seat
-                PlayerInfo[] players = getPlayers();
+                PlayerInfo[] players = playerEntity.getPlayers();
                 PlayerInfo plyInSeat;
 
                 for (int i = 0; i < players.length; i++)
@@ -203,15 +205,13 @@ public class PlayerEjectionComponent implements EntityComponent, LogicComponentE
 
                     if (plyInSeat == null || !plyInSeat.isConnected())
                     {
-                        // Set the player to use this (vehicle) entity
-                        controller.playerService.setPlayerEnt(playerInfo, this);
+                        // Set the player to use this entity
+                        controller.playerService.setPlayerEnt(playerInfo, entity);
 
                         // Add as passenger
-                        setPlayer(playerInfo, i);
+                        playerEntity.setPlayer(playerInfo, i);
 
-                        // Invoke event hook
-                        eventPlayerEnter(playerInfo, i);
-
+                        // NOTE: could add hook here for vehicle entry in future
                         break;
                     }
                 }

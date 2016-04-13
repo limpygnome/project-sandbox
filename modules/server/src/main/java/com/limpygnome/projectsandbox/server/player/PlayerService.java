@@ -260,40 +260,40 @@ public class PlayerService implements EventLogicCycleService, IdCounterConsumer
         broadcast(playerEventsUpdatesOutboundPacket);
     }
 
-    public void setPlayerEnt(PlayerInfo playerInfo, Entity entity)
+    public synchronized void setPlayerEnt(PlayerInfo playerInfo, Entity entity)
     {
         Entity currentEntity = playerInfo.entity;
 
         // Persist the player's current entity
         playerEntityService.persistPlayer(playerInfo);
 
-        // Check if to remove entity...
         if (currentEntity != null && currentEntity instanceof PlayerEntity)
         {
             PlayerEntity playerEntity = (PlayerEntity) currentEntity;
 
+            // Remove player from old entity
+            playerEntity.removePlayer(playerInfo);
+
+            // Check if to remove old entity...
             if (playerEntity.isRemovableOnPlayerEntChange(playerInfo))
             {
                 entity.map.entityManager.remove(currentEntity);
             }
         }
 
-        synchronized (this)
-        {
-            // Update entity
-            playerInfo.entity = entity;
+        // Update entity
+        playerInfo.entity = entity;
 
-            // Create packet to update ID for clientside
-            try
-            {
-                PlayerIdentityOutboundPacket packet = new PlayerIdentityOutboundPacket();
-                packet.writeIdentity(playerInfo);
-                controller.packetService.send(playerInfo, packet);
-            }
-            catch (IOException e)
-            {
-                LOG.error("Failed to set entity for player", e);
-            }
+        // Create packet to update ID for clientside
+        try
+        {
+            PlayerIdentityOutboundPacket packet = new PlayerIdentityOutboundPacket();
+            packet.writeIdentity(playerInfo);
+            controller.packetService.send(playerInfo, packet);
+        }
+        catch (IOException e)
+        {
+            LOG.error("Failed to set entity for player", e);
         }
     }
 

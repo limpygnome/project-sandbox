@@ -4,7 +4,6 @@ import com.limpygnome.projectsandbox.server.Controller;
 import com.limpygnome.projectsandbox.server.entity.Entity;
 import com.limpygnome.projectsandbox.server.entity.component.EntityComponent;
 import com.limpygnome.projectsandbox.server.entity.component.event.CollisionEntityComponentEvent;
-import com.limpygnome.projectsandbox.server.entity.component.event.FetchVelocityComponentEvent;
 import com.limpygnome.projectsandbox.server.entity.component.event.LogicComponentEvent;
 import com.limpygnome.projectsandbox.server.entity.component.event.ResetComponentEvent;
 import com.limpygnome.projectsandbox.server.entity.physics.Vector2;
@@ -13,13 +12,14 @@ import com.limpygnome.projectsandbox.server.entity.physics.collisions.CollisionR
 /**
  * Used to apply zero gravity to entities.
  */
-public class VelocityComponent implements EntityComponent, CollisionEntityComponentEvent, LogicComponentEvent, ResetComponentEvent, FetchVelocityComponentEvent
+public class VelocityComponent implements EntityComponent, CollisionEntityComponentEvent, LogicComponentEvent, ResetComponentEvent
 {
     private Vector2 velocity;
     private float mass;
 
     public VelocityComponent(float mass)
     {
+        this.velocity = new Vector2();
         this.mass = mass;
     }
 
@@ -33,7 +33,7 @@ public class VelocityComponent implements EntityComponent, CollisionEntityCompon
     public synchronized void eventCollisionEntity(Controller controller, Entity entity, Entity entityOther, CollisionResult result)
     {
         // Fetch velocity component of other entity
-        VelocityComponent componentOther = (VelocityComponent) entityOther.components.fetchSingle(FetchVelocityComponentEvent.class);
+        VelocityComponent componentOther = (VelocityComponent) entityOther.components.fetchComponent(VelocityComponent.class);
 
         if (componentOther != null)
         {
@@ -60,7 +60,6 @@ public class VelocityComponent implements EntityComponent, CollisionEntityCompon
         velocity.set(0.0f, 0.0f);
     }
 
-    @Override
     public synchronized float getMass()
     {
         return mass;
