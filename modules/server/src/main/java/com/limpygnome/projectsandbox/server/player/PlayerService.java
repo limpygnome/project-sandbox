@@ -264,25 +264,28 @@ public class PlayerService implements EventLogicCycleService, IdCounterConsumer
     {
         Entity currentEntity = playerInfo.entity;
 
-        // Persist the player's current entity
-        playerEntityService.persistPlayer(playerInfo);
-
-        if (currentEntity != null && currentEntity instanceof PlayerEntity)
+        if (entity != currentEntity)
         {
-            PlayerEntity playerEntity = (PlayerEntity) currentEntity;
+            // Persist the player's current entity
+            playerEntityService.persistPlayer(playerInfo);
 
-            // Remove player from old entity
-            playerEntity.removePlayer(playerInfo);
-
-            // Check if to remove old entity...
-            if (playerEntity.isRemovableOnPlayerEntChange(playerInfo))
+            if (currentEntity != null && currentEntity instanceof PlayerEntity)
             {
-                entity.map.entityManager.remove(currentEntity);
-            }
-        }
+                PlayerEntity playerEntity = (PlayerEntity) currentEntity;
 
-        // Update entity
-        playerInfo.entity = entity;
+                // Remove player from old entity
+                playerEntity.removePlayer(playerInfo);
+
+                // Check if to remove old entity...
+                if (playerEntity.isRemovableOnPlayerEntChange(playerInfo))
+                {
+                    entity.map.entityManager.remove(currentEntity);
+                }
+            }
+
+            // Update entity
+            playerInfo.entity = entity;
+        }
 
         // Create packet to update ID for clientside
         try

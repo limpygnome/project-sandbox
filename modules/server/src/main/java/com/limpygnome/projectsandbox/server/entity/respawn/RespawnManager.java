@@ -86,7 +86,8 @@ public class RespawnManager implements EventLogicCycleService
 
     private synchronized void addToInternalPendingRespawnCollectionSynchronized(PendingRespawn pendingRespawn)
     {
-        // Add at suitable index based on time to respawn
+        // Add at suitable index based on time to respawn, so that items with shortest time are at the front
+        // for efficiency (saves having to iterate the entire list, can just check top)
         Iterator<PendingRespawn> iterator = pendingRespawnList.iterator();
         PendingRespawn pendingRespawnItem;
         int index = 0;

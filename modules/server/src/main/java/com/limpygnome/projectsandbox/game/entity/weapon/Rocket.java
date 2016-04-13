@@ -119,7 +119,8 @@ public class Rocket extends Entity
     @Override
     public synchronized void eventDeath(Controller controller, AbstractKiller killer)
     {
-        // Do nothing...
+        // Do nothing to prevent respawn...
+        // TODO: mark for removal here as precaution?
     }
 
     private synchronized void performCollisionExplosion(Controller controller)
