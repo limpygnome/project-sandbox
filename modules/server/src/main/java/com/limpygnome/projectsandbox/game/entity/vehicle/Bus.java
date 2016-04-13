@@ -2,6 +2,7 @@ package com.limpygnome.projectsandbox.game.entity.vehicle;
 
 import com.limpygnome.projectsandbox.server.entity.annotation.EntityType;
 import com.limpygnome.projectsandbox.server.entity.component.imp.PlayerEjectionComponent;
+import com.limpygnome.projectsandbox.server.entity.component.imp.PlayerVehicleMovementComponent;
 import com.limpygnome.projectsandbox.server.entity.physics.Vector2;
 import com.limpygnome.projectsandbox.server.player.PlayerInfo;
 import com.limpygnome.projectsandbox.server.world.map.WorldMap;
@@ -39,10 +40,12 @@ public class Bus extends AbstractVehicle
                 }
         );
 
-        accelerationFactor = 0.1f;
-        deaccelerationMultiplier = 0.98f;
-        steeringAngle = 1.4f;
-        maxSpeed = 7.0f;
+        components.register(new PlayerVehicleMovementComponent(
+                0.1f,       // Acceleration factor
+                0.98f,      // Deacceleration multiplier
+                1.4f,       // Steering angle
+                7.0f        // Max speed
+        ));
     }
 
     public Bus(WorldMap map)

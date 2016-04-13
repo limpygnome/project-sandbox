@@ -2,6 +2,7 @@ package com.limpygnome.projectsandbox.game.entity.vehicle;
 
 import com.limpygnome.projectsandbox.server.Controller;
 import com.limpygnome.projectsandbox.server.entity.annotation.EntityType;
+import com.limpygnome.projectsandbox.server.entity.component.imp.PlayerVehicleMovementComponent;
 import com.limpygnome.projectsandbox.server.entity.physics.Vector2;
 import com.limpygnome.projectsandbox.server.inventory.Inventory;
 import com.limpygnome.projectsandbox.server.inventory.item.weapon.RocketLauncher;
@@ -28,10 +29,12 @@ public class RocketCar extends AbstractVehicle
                 }
         );
 
-        accelerationFactor = 0.4f;
-        deaccelerationMultiplier = 0.9f;
-        steeringAngle = 0.6f;
-        maxSpeed = 12.0f;
+        components.register(new PlayerVehicleMovementComponent(
+                0.4f,       // Acceleration factor
+                0.9f,       // Deacceleration multiplier
+                0.6f,       // Steering angle
+                12.0f       // Max speed
+        ));
     }
 
     public RocketCar(WorldMap map)

@@ -25,6 +25,8 @@ long-term goals
 
 short-term goals/issues
 ============================
+- may need to use treeset and allow components to specify order for executing component operations
+
 - backgrounds need ratio
 - make backgrounds generic for all maps
 

@@ -1,6 +1,7 @@
 package com.limpygnome.projectsandbox.game.entity.vehicle;
 
 import com.limpygnome.projectsandbox.server.entity.annotation.EntityType;
+import com.limpygnome.projectsandbox.server.entity.component.imp.PlayerVehicleMovementComponent;
 import com.limpygnome.projectsandbox.server.entity.physics.Vector2;
 import com.limpygnome.projectsandbox.server.player.PlayerInfo;
 import com.limpygnome.projectsandbox.server.world.map.WorldMap;
@@ -29,11 +30,13 @@ public class IceCreamVan extends AbstractVehicle
                     new Vector2(-16.0f, -8.0f)
                 }
         );
-        
-        accelerationFactor = 0.15f;
-        deaccelerationMultiplier = 0.95f;
-        steeringAngle = 0.9f;
-        maxSpeed = 5.0f;
+
+        components.register(new PlayerVehicleMovementComponent(
+                0.15f,      // Acceleration factor
+                0.95f,      // Deacceleration multiplier
+                0.9f,       // Steering angle
+                5.0f        // Max speed
+        ));
     }
 
     public IceCreamVan(WorldMap map)

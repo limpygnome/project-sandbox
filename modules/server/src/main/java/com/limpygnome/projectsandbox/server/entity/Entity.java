@@ -239,7 +239,7 @@ public strictfp abstract class Entity
         {
             // Add velocity?
             AbstractVehicle vehicle = (AbstractVehicle) parent;
-            float speed = vehicle.getSpeed() + vehicle.getAccelerationFactor();
+            float speed = vehicle.getSpeed();// + vehicle.getAccelerationFactor();
 
             if (speed > 0.0f)
             {
