@@ -8,8 +8,8 @@
         "enabled" : true,
         "lobby" : true,
         "background" : "background/space-red",
-        "width" : 4096.0,
-        "height" : 4096.0,
+        "width" : 120000.0,
+        "height" : 120000.0,
         "defaultPlayerEntity" : "ships/yutamo-c1"
     },
 

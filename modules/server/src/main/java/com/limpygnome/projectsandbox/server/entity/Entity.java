@@ -235,11 +235,28 @@ public strictfp abstract class Entity
         newPosition.offset(Vector2.vectorFromAngle(this.rotation, height));
         newPosition.offset(Vector2.vectorFromAngle(this.rotation, spacing));
 
+        // Attempt to fetch velocity
+        Set<FetchVelocityComponentEvent> callbacks = components.fetch(FetchVelocityComponentEvent.class);
+        Vector2 velocity = null;
+
+        for (FetchVelocityComponentEvent callback : callbacks)
+        {
+            velocity = callback.getVelocity();
+        }
+
+        // -- Offset by parent entity's velocity if found
+        if (velocity != null)
+        {
+            newPosition.offset(velocity);
+        }
+
+        // Add velocity if we found it
+        // TODO: deprecated - remove the below
         if (parent instanceof AbstractVehicle)
         {
             // Add velocity?
             AbstractVehicle vehicle = (AbstractVehicle) parent;
-            float speed = vehicle.getSpeed();// + vehicle.getAccelerationFactor();
+            float speed = vehicle.getSpeed();
 
             if (speed > 0.0f)
             {

@@ -50,7 +50,7 @@ public class VelocityComponent implements EntityComponent, CollisionEntityCompon
         else
         {
             // Simply invert our velocity so we bounce; may consider dampening in the future
-            velocity = new Vector2(-velocity.x, -velocity.y);
+            invert();
         }
     }
 
@@ -63,6 +63,16 @@ public class VelocityComponent implements EntityComponent, CollisionEntityCompon
     public synchronized float getMass()
     {
         return mass;
+    }
+
+    public synchronized void offset(Vector2 velocity)
+    {
+        this.velocity.offset(velocity);
+    }
+
+    public synchronized void invert()
+    {
+        velocity.invert();
     }
 
 }

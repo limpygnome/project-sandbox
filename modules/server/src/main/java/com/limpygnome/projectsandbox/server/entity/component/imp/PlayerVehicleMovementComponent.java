@@ -11,6 +11,8 @@ import com.limpygnome.projectsandbox.server.player.PlayerKeys;
 
 /**
  * Created by limpygnome on 12/04/16.
+ *
+ * TODO: need to workout how to use this with velocity component
  */
 public class PlayerVehicleMovementComponent implements EntityComponent, LogicComponentEvent
 {

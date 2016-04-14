@@ -4,6 +4,7 @@ import com.limpygnome.projectsandbox.server.Controller;
 import com.limpygnome.projectsandbox.server.entity.annotation.EntityType;
 import com.limpygnome.projectsandbox.game.entity.vehicle.AbstractVehicle;
 import com.limpygnome.projectsandbox.server.entity.component.imp.PlayerVehicleMovementComponent;
+import com.limpygnome.projectsandbox.server.entity.component.imp.SpaceMovementComponent;
 import com.limpygnome.projectsandbox.server.entity.component.imp.VelocityComponent;
 import com.limpygnome.projectsandbox.server.entity.physics.Vector2;
 import com.limpygnome.projectsandbox.server.inventory.Inventory;
@@ -30,16 +31,18 @@ public class YutamoC1 extends AbstractVehicle
                 }
         );
 
-        components.register(new PlayerVehicleMovementComponent(
-                0.5f,       // Acceleration factor
-                1.0f,       // Deacceleration multiplier
-                0.4f,       // Steering angle
-                25.0f       // Max speed
-        ));
+//        components.register(new PlayerVehicleMovementComponent(
+//                0.5f,       // Acceleration factor
+//                1.0f,       // Deacceleration multiplier
+//                0.4f,       // Steering angle
+//                25.0f       // Max speed
+//        ));
 
         components.register(new VelocityComponent(
                 500.0f      // Mass
         ));
+
+        components.register(new SpaceMovementComponent());
     }
 
     public YutamoC1(WorldMap map)
