@@ -7,9 +7,10 @@ import com.limpygnome.projectsandbox.server.entity.component.EntityComponent;
 import com.limpygnome.projectsandbox.server.entity.component.event.CollisionMapComponentEvent;
 import com.limpygnome.projectsandbox.server.entity.component.event.LogicComponentEvent;
 import com.limpygnome.projectsandbox.server.entity.physics.Vector2;
-import com.limpygnome.projectsandbox.server.entity.physics.collisions.CollisionResultMap;
+import com.limpygnome.projectsandbox.server.entity.physics.collisions.map.CollisionMapResult;
 import com.limpygnome.projectsandbox.server.player.PlayerInfo;
 import com.limpygnome.projectsandbox.server.player.PlayerKeys;
+import com.limpygnome.projectsandbox.server.world.map.WorldMap;
 
 /**
  * Created by limpygnome on 14/04/16.
@@ -64,10 +65,16 @@ public class SpaceMovementComponent implements EntityComponent, LogicComponentEv
     }
 
     @Override
-    public void eventCollisionMap(Controller controller, Entity entity, CollisionResultMap collisionResultMap)
+    public void eventCollisionMap(Controller controller, Entity entity, CollisionMapResult collisionMapResult)
     {
+        WorldMap worldMap = entity.map;
+
+        // Invert velocity
         VelocityComponent velocityComponent = (VelocityComponent) entity.components.fetchComponent(VelocityComponent.class);
         velocityComponent.invert();
+
+        // Make sure we're within map to avoid death
+        entity.positionNew.limit(0.0f, worldMap.getMaxX(), 0.0f, worldMap.getMaxY());
     }
 
 }

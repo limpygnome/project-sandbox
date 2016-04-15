@@ -8,7 +8,8 @@ import com.limpygnome.projectsandbox.server.entity.death.AbstractKiller;
 import com.limpygnome.projectsandbox.server.entity.physics.collisions.CollisionResult;
 import com.limpygnome.projectsandbox.server.entity.physics.Vector2;
 import com.limpygnome.projectsandbox.server.entity.physics.Vertices;
-import com.limpygnome.projectsandbox.server.entity.physics.collisions.CollisionResultMap;
+import com.limpygnome.projectsandbox.server.entity.physics.collisions.map.CollisionMapResult;
+import com.limpygnome.projectsandbox.server.entity.physics.collisions.map.CollisionTileMapResult;
 import com.limpygnome.projectsandbox.server.entity.respawn.pending.EntityPendingRespawn;
 import com.limpygnome.projectsandbox.server.network.packet.PacketData;
 import com.limpygnome.projectsandbox.server.player.PlayerInfo;
@@ -20,7 +21,6 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.lang.annotation.Annotation;
-import java.util.Iterator;
 import java.util.Set;
 
 import static com.limpygnome.projectsandbox.server.constant.PlayerConstants.*;
@@ -592,18 +592,24 @@ public strictfp abstract class Entity
         }
     }
 
-    public synchronized void eventCollisionMap(Controller controller, CollisionResultMap collisionResultMap)
+    public synchronized void eventCollisionMap(Controller controller, CollisionMapResult collisionMapResult)
     {
-        // Check if solid for collision response
-        if (collisionResultMap.tileType.properties.solid)
+        // Perform default behaviour for tile maps
+        if (collisionMapResult instanceof CollisionTileMapResult)
         {
-            positionOffset(collisionResultMap.result.mtv);
-        }
+            CollisionTileMapResult collisionTileMapResult = (CollisionTileMapResult) collisionMapResult;
 
-        // Check if to apply damage
-        if (collisionResultMap.tileType.properties.damage != 0)
-        {
-            // TODO: apply damage from tile - prolly move this to a component
+            // Check if solid for collision response
+            if (collisionTileMapResult.tileType.properties.solid)
+            {
+                positionOffset(collisionTileMapResult.result.mtv);
+            }
+
+            // Check if to apply damage
+            if (collisionTileMapResult.tileType.properties.damage != 0)
+            {
+                // TODO: apply damage from tile - prolly move this to a component
+            }
         }
 
         // Invoke component handlers
@@ -611,7 +617,7 @@ public strictfp abstract class Entity
 
         for (CollisionMapComponentEvent component : callbacks)
         {
-            component.eventCollisionMap(controller, this, collisionResultMap);
+            component.eventCollisionMap(controller, this, collisionMapResult);
         }
     }
 

@@ -4,7 +4,7 @@ import com.limpygnome.projectsandbox.server.entity.death.MapBoundsKiller;
 import com.limpygnome.projectsandbox.server.entity.physics.collisions.CollisionDetection;
 import com.limpygnome.projectsandbox.server.entity.physics.collisions.CollisionResult;
 import com.limpygnome.projectsandbox.server.Controller;
-import com.limpygnome.projectsandbox.server.entity.physics.collisions.CollisionResultMap;
+import com.limpygnome.projectsandbox.server.entity.physics.collisions.map.CollisionMapResult;
 import com.limpygnome.projectsandbox.server.network.packet.imp.entity.EntityUpdatesOutboundPacket;
 import com.limpygnome.projectsandbox.server.service.EventLogicCycleService;
 import com.limpygnome.projectsandbox.server.util.IdCounterProvider;
@@ -188,7 +188,7 @@ public class EntityManager implements EventLogicCycleService, IdCounterConsumer
 
                 // Perform collision check for each entity
                 CollisionResult collisionResult;
-                Collection<CollisionResultMap> mapResults;
+                Collection<CollisionMapResult> mapResults;
 
                 for (Map.Entry<Short, Entity> kv : entities.entrySet())
                 {
@@ -233,7 +233,7 @@ public class EntityManager implements EventLogicCycleService, IdCounterConsumer
                             // Perform collision with map
                             mapResults = collisionDetection.collisionMap(entityA);
 
-                            for (CollisionResultMap mapResult : mapResults)
+                            for (CollisionMapResult mapResult : mapResults)
                             {
                                 entityA.eventCollisionMap(controller, mapResult);
                             }

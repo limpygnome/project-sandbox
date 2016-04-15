@@ -4,14 +4,16 @@ import com.limpygnome.projectsandbox.server.entity.Entity;
 import com.limpygnome.projectsandbox.server.entity.physics.Projection;
 import com.limpygnome.projectsandbox.server.entity.physics.Vector2;
 import com.limpygnome.projectsandbox.server.entity.physics.Vertices;
+import com.limpygnome.projectsandbox.server.entity.physics.collisions.map.CollisionMapResult;
+import com.limpygnome.projectsandbox.server.entity.physics.collisions.map.CollisionOutsideMapResult;
+import com.limpygnome.projectsandbox.server.entity.physics.collisions.map.CollisionTileMapResult;
 import com.limpygnome.projectsandbox.server.util.CustomMath;
 import com.limpygnome.projectsandbox.server.world.map.WorldMap;
 import com.limpygnome.projectsandbox.server.world.map.type.tile.TileType;
 import com.limpygnome.projectsandbox.server.world.map.type.tile.TileWorldMap;
 import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
-import java.util.Collection;
+import java.util.*;
 
 /**
  * Separating axis theorem (SAT) with minimum translation vector (MTV).
@@ -35,21 +37,33 @@ public class SATCollisionDetection implements CollisionDetection
         return collision(a.cachedVertices, b.cachedVertices);
     }
 
-    public Collection<CollisionResultMap> collisionMap(Entity entity)
+    public Collection<CollisionMapResult> collisionMap(Entity entity)
     {
         WorldMap map = entity.map;
+        List<CollisionMapResult> collisions = new LinkedList<>();
 
+        // Check for tile collisions
         if (map instanceof TileWorldMap)
         {
             TileWorldMap tileMap = (TileWorldMap) map;
-            return collisionTileMap(tileMap, entity);
+            collisionTileMap(collisions, tileMap, entity);
         }
 
-        return new ArrayList<>(0);
+        // Check for outside world collisions
+        collisionOutsideMap(collisions, map, entity);
+
+        return collisions;
     }
 
+    private void collisionOutsideMap(List<CollisionMapResult> collisions, WorldMap worldMap, Entity entity)
+    {
+        if (entity.positionNew.isOutside(0.0f, worldMap.getMaxX(), 0.0f, worldMap.getMaxY()))
+        {
+            collisions.add(new CollisionOutsideMapResult());
+        }
+    }
 
-    private Collection<CollisionResultMap> collisionTileMap(TileWorldMap map, Entity entity)
+    private void collisionTileMap(List<CollisionMapResult> collisions, TileWorldMap map, Entity entity)
     {
         // Perform collision test for each possible solid tile within range of
         // ent
@@ -76,9 +90,8 @@ public class SATCollisionDetection implements CollisionDetection
         CollisionResult result;
         
         // Build array for results
-        int maxCollisions = (indexMaxY - indexMinY) * (indexMaxX - indexMinX);
-        ArrayList<CollisionResultMap> collisions = new ArrayList<>(maxCollisions);
-        
+        //int maxCollisions = (indexMaxY - indexMinY) * (indexMaxX - indexMinX);
+
         // Test tiles
         for (int y = indexMinY; y <= indexMaxY; y++)
         {
@@ -100,13 +113,11 @@ public class SATCollisionDetection implements CollisionDetection
                     // Check if a collision occurred
                     if (result.collision)
                     {
-                        collisions.add(new CollisionResultMap(result, x, y, tileType));
+                        collisions.add(new CollisionTileMapResult(result, x, y, tileType));
                     }
                 }
             }
         }
-        
-        return collisions;
     }
     
     public CollisionResult collision(Vertices verticesA, Vertices verticesB)

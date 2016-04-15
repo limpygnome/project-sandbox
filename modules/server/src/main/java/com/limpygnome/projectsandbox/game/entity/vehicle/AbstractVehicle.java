@@ -2,25 +2,15 @@ package com.limpygnome.projectsandbox.game.entity.vehicle;
 
 import com.limpygnome.projectsandbox.server.entity.PlayerEntity;
 import com.limpygnome.projectsandbox.server.entity.component.imp.PlayerEjectionComponent;
-import com.limpygnome.projectsandbox.server.entity.component.imp.PlayerVehicleMovementComponent;
-import com.limpygnome.projectsandbox.server.entity.death.AbstractKiller;
-import com.limpygnome.projectsandbox.server.entity.death.CarDamage;
-import com.limpygnome.projectsandbox.server.entity.death.CarKiller;
-import com.limpygnome.projectsandbox.game.entity.living.pedestrian.AbstractPedestrian;
 import com.limpygnome.projectsandbox.server.entity.physics.collisions.CollisionResult;
 import com.limpygnome.projectsandbox.server.Controller;
 import com.limpygnome.projectsandbox.server.entity.Entity;
-import com.limpygnome.projectsandbox.server.entity.physics.collisions.CollisionResultMap;
-import com.limpygnome.projectsandbox.server.entity.respawn.pending.EntityPendingRespawn;
-import com.limpygnome.projectsandbox.game.entity.living.Player;
+import com.limpygnome.projectsandbox.server.entity.physics.collisions.map.CollisionMapResult;
 import com.limpygnome.projectsandbox.server.entity.physics.Vector2;
 import com.limpygnome.projectsandbox.server.inventory.Inventory;
 import com.limpygnome.projectsandbox.server.player.PlayerInfo;
-import com.limpygnome.projectsandbox.server.player.PlayerKeys;
 import com.limpygnome.projectsandbox.server.world.map.WorldMap;
 import com.limpygnome.projectsandbox.server.world.spawn.Spawn;
-
-import static com.limpygnome.projectsandbox.server.constant.entity.AbstractVehicleConstants.*;
 
 /**
  * Generic vehicle for players.
@@ -110,7 +100,7 @@ public abstract class AbstractVehicle extends PlayerEntity
     }
 
     @Override
-    public synchronized void eventCollisionMap(Controller controller, CollisionResultMap collisionResultMap)
+    public synchronized void eventCollisionMap(Controller controller, CollisionMapResult collisionMapResult)
     {
 //        // Apply damage based on speed - similar to ent collisions
 //        if (speed > MINIMUM_SPEED_DAMAGE)
@@ -122,7 +112,7 @@ public abstract class AbstractVehicle extends PlayerEntity
 //        // Slow down vehicle
 //        speed *= MAP_COLLISION_SPEED_MULTIPLIER;
 
-        super.eventCollisionMap(controller, collisionResultMap);
+        super.eventCollisionMap(controller, collisionMapResult);
     }
 
     @Override

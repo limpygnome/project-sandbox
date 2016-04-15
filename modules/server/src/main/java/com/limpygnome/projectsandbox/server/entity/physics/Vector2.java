@@ -4,8 +4,6 @@ import com.limpygnome.projectsandbox.server.util.CustomMath;
 
 /**
  * Vector data-structure with operations.
- * 
- * @author limpygnome
  */
 public class Vector2
 {
@@ -260,6 +258,34 @@ public class Vector2
     {
         this.x = x;
         this.y = y;
+
+        return this;
+    }
+
+    public boolean isOutside(float xMin, float xMax, float yMin, float yMax)
+    {
+        return x < xMin || x > xMax || y < yMin || y > yMax;
+    }
+
+    public Vector2 limit(float xMin, float xMax, float yMin, float yMax)
+    {
+        if (x < xMin)
+        {
+            x = xMin;
+        }
+        else if (x > xMax)
+        {
+            x = xMax;
+        }
+
+        if (y < yMin)
+        {
+            y = yMin;
+        }
+        else if (y > yMax)
+        {
+            y = yMax;
+        }
 
         return this;
     }

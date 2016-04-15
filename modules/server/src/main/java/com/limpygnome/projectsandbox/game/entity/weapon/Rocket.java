@@ -7,7 +7,7 @@ import com.limpygnome.projectsandbox.server.entity.death.AbstractKiller;
 import com.limpygnome.projectsandbox.server.entity.death.RocketKiller;
 import com.limpygnome.projectsandbox.server.entity.physics.Vector2;
 import com.limpygnome.projectsandbox.server.entity.physics.collisions.CollisionResult;
-import com.limpygnome.projectsandbox.server.entity.physics.collisions.CollisionResultMap;
+import com.limpygnome.projectsandbox.server.entity.physics.collisions.map.CollisionMapResult;
 import com.limpygnome.projectsandbox.server.entity.physics.proximity.DefaultProximity;
 import com.limpygnome.projectsandbox.server.player.PlayerInfo;
 import com.limpygnome.projectsandbox.server.world.map.WorldMap;
@@ -111,7 +111,7 @@ public class Rocket extends Entity
     }
 
     @Override
-    public void eventCollisionMap(Controller controller, CollisionResultMap collisionResultMap)
+    public void eventCollisionMap(Controller controller, CollisionMapResult collisionMapResult)
     {
         performCollisionExplosion(controller);
     }

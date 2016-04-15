@@ -1,6 +1,7 @@
 package com.limpygnome.projectsandbox.server.entity.physics.collisions;
 
 import com.limpygnome.projectsandbox.server.entity.Entity;
+import com.limpygnome.projectsandbox.server.entity.physics.collisions.map.CollisionMapResult;
 
 import java.util.Collection;
 
@@ -27,6 +28,6 @@ public interface CollisionDetection
      * @param entity the entity to be tested
      * @return a collection of collision results
      */
-    Collection<CollisionResultMap> collisionMap(Entity entity);
+    Collection<CollisionMapResult> collisionMap(Entity entity);
 
 }
