@@ -89,85 +89,82 @@ public class Vector2
         this.y = rY + originY;
     }
     
-    public static Vector2 add(Vector2 v, Vector2 value)
+    public void add(Vector2 v, Vector2 value)
     {
-        return new Vector2(v.x + value.x, v.y + value.y);
+        this.x += value.x;
+        this.y += value.y;
     }
     
-    public static Vector2 add(Vector2 v, float value)
+    public void add(Vector2 v, float value)
     {
-        return new Vector2(v.x + value, v.y + value);
+        this.x += value;
+        this.y += value;
     }
     
-    public static Vector2 add(Vector2 v, float x, float y)
+    public void add(float x, float y)
     {
-        return new Vector2(v.x + x, v.y + y);
+        this.x += x;
+        this.y += y;
     }
     
-    public static Vector2 subtract(Vector2 v, Vector2 value)
+    public void subtract(Vector2 value)
     {
-        return new Vector2(v.x - value.x, v.y - value.y);
+        this.x -= value.x;
+        this.y -= value.y;
     }
     
-    public static Vector2 multiply(Vector2 v, float value)
+    public void multiply(float value)
     {
-        return new Vector2(v.x * value, v.y * value);
+        this.x *= value;
+        this.y *= value;
     }
     
-    public static Vector2 multiply(Vector2 a, Vector2 b)
+    public void multiply(Vector2 value)
     {
-        return new Vector2(a.x * b.x, a.y * b.y);
+        this.x *= value.x;
+        this.y *= value.y;
     }
     
-    public static Vector2 normalise(Vector2 v)
+    /**
+     * @return the length of this vector
+     */
+    public float length()
     {
-        float length = length(v);
-        
-        float normX;
-        float normY;
-        
+        return (float) Math.sqrt((x * x) + (y * y));
+    }
+
+    public void normalise()
+    {
+        float length = length();
+
         if (length != 0)
         {
-            normX = v.x / length;
-            normY = v.y / length;
+            this.x /= length;
+            this.y /= length;
         }
         else
         {
-            normX = 0;
-            normY = 0;
+            this.x = 0;
+            this.y = 0;
         }
-        
-        return new Vector2(normX, normY);
-    }
-
-    /**
-     * The length of the vector.
-     *
-     * @param vector
-     * @return
-     */
-    public static float length(Vector2 vector)
-    {
-        return (float) Math.sqrt(vector.x * vector.x + vector.y * vector.y);
     }
     
     /**
      * Creates the perpendicular vector of the provided vector.
      * 
-     * @param v The provided vector.
-     * @return The provided vector, perpendicular.
+     * @return the vector perpendicular to this vector
      */
-    public static Vector2 perp(Vector2 v)
+    public Vector2 perp()
     {
-        return new Vector2(-v.y, v.x);
+        return new Vector2(-this.y, this.x);
     }
     
     /**
      * Performs the scalar dot-product between two vectors.
      * 
-     * @param a The first vector.
-     * @param b The second vector.
-     * @return The scalar, delta of the, dot product of the two vectors.
+     * @param a the first vector.
+     * @param b the second vector.
+     * @return the scalar, delta of the, dot product of the two vectors.
      */
     public static float dotProduct(Vector2 a, Vector2 b)
     {
@@ -177,13 +174,13 @@ public class Vector2
      /**
      * Creates an edge between two vectors.
      * 
-     * @param v1 First vertex.
-     * @param v2 Second vertex.
+     * @param firstVertex
+     * @param secondVertex
      * @return Creates the edge between the provided vectors.
      */
-    public static Vector2 edge(Vector2 v1, Vector2 v2)
+    public static Vector2 edge(Vector2 firstVertex, Vector2 secondVertex)
     {
-        return subtract(v2, v1);
+        return new Vector2(secondVertex.x - firstVertex.x, secondVertex.y - firstVertex.y);
     }
     
     /**
@@ -239,12 +236,10 @@ public class Vector2
      *
      * @return current instance
      */
-    public Vector2 invert()
+    public void invert()
     {
         x = -x;
         y = -y;
-
-        return this;
     }
 
     /**
@@ -254,12 +249,10 @@ public class Vector2
      * @param y the y vvalue
      * @return current instance
      */
-    public Vector2 set(float x, float y)
+    public void set(float x, float y)
     {
         this.x = x;
         this.y = y;
-
-        return this;
     }
 
     public boolean isOutside(float xMin, float xMax, float yMin, float yMax)
@@ -267,7 +260,7 @@ public class Vector2
         return x < xMin || x > xMax || y < yMin || y > yMax;
     }
 
-    public Vector2 limit(float xMin, float xMax, float yMin, float yMax)
+    public void limit(float xMin, float xMax, float yMin, float yMax)
     {
         if (x < xMin)
         {
@@ -286,14 +279,12 @@ public class Vector2
         {
             y = yMax;
         }
-
-        return this;
     }
 
     @Override
     public String toString()
     {
-        return "[x: " + x + ", y: " + y + "]";
+        return "{x: " + x + ", y: " + y + "}";
     }
     
 }

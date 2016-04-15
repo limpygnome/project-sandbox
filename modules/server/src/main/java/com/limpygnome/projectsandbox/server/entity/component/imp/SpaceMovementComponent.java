@@ -69,12 +69,11 @@ public class SpaceMovementComponent implements EntityComponent, LogicComponentEv
                     velocity.offset(offset);
 
                     // Keep within speed limit
-                    float currentSpeed = Vector2.length(velocity);
+                    float currentSpeed = velocity.length();
                     if (currentSpeed > speedLimit)
                     {
-                        Vector2.normalise(velocity);
-                        Vector2.multiply(velocity, speedLimit);
-                        need to remove static methods...
+                        velocity.normalise();
+                        velocity.multiply(speedLimit);
                     }
                 }
             }
