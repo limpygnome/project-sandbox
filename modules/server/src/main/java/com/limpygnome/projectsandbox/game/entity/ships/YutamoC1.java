@@ -42,7 +42,7 @@ public class YutamoC1 extends AbstractVehicle
                 500.0f      // Mass
         ));
 
-        components.register(new SpaceMovementComponent());
+        components.register(new SpaceMovementComponent(35.0f));
     }
 
     public YutamoC1(WorldMap map)

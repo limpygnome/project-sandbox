@@ -17,16 +17,21 @@ import com.limpygnome.projectsandbox.server.world.map.WorldMap;
  */
 public class SpaceMovementComponent implements EntityComponent, LogicComponentEvent, CollisionMapComponentEvent
 {
+    private float speedLimit;
+
+    public SpaceMovementComponent(float speedLimit)
+    {
+        this.speedLimit = speedLimit;
+    }
 
     @Override
     public void eventLogic(Controller controller, Entity entity)
     {
         PlayerEntity playerEntity = (PlayerEntity) entity;
-        PlayerInfo playerDriver = ((PlayerEntity) entity).getPlayer();
+        PlayerInfo playerDriver = playerEntity.getPlayer();
 
         if (playerDriver != null)
         {
-
             VelocityComponent velocityComponent = (VelocityComponent) entity.components.fetchComponent(VelocityComponent.class);
 
             // Handle changing the rotation
@@ -58,7 +63,20 @@ public class SpaceMovementComponent implements EntityComponent, LogicComponentEv
 
             if (offset != null)
             {
-                velocityComponent.offset(offset);
+                synchronized (velocityComponent)
+                {
+                    Vector2 velocity = velocityComponent.getVelocity();
+                    velocity.offset(offset);
+
+                    // Keep within speed limit
+                    float currentSpeed = Vector2.length(velocity);
+                    if (currentSpeed > speedLimit)
+                    {
+                        Vector2.normalise(velocity);
+                        Vector2.multiply(velocity, speedLimit);
+                        need to remove static methods...
+                    }
+                }
             }
         }
 
@@ -71,7 +89,12 @@ public class SpaceMovementComponent implements EntityComponent, LogicComponentEv
 
         // Invert velocity
         VelocityComponent velocityComponent = (VelocityComponent) entity.components.fetchComponent(VelocityComponent.class);
-        velocityComponent.invert();
+
+        synchronized (velocityComponent)
+        {
+            Vector2 velocity = velocityComponent.getVelocity();
+            velocity.invert();
+        }
 
         // Make sure we're within map to avoid death
         entity.positionNew.limit(0.0f, worldMap.getMaxX(), 0.0f, worldMap.getMaxY());
