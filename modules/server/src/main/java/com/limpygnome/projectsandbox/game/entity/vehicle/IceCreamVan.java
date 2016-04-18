@@ -37,6 +37,8 @@ public class IceCreamVan extends AbstractVehicle
                 0.9f,       // Steering angle
                 5.0f        // Max speed
         ));
+
+        setMaxHealth(300.0f);
     }
 
     public IceCreamVan(WorldMap map)

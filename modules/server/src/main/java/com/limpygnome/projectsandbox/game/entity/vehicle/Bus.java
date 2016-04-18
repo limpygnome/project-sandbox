@@ -46,6 +46,8 @@ public class Bus extends AbstractVehicle
                 1.4f,       // Steering angle
                 7.0f        // Max speed
         ));
+
+        setMaxHealth(400.0f);
     }
 
     public Bus(WorldMap map)

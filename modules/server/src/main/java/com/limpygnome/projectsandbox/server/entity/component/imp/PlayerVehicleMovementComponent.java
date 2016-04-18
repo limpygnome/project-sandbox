@@ -130,4 +130,9 @@ public class PlayerVehicleMovementComponent implements EntityComponent, LogicCom
         }
     }
 
+    public float getSpeed()
+    {
+        return speed;
+    }
+
 }

@@ -35,6 +35,8 @@ public class RocketCar extends AbstractVehicle
                 0.6f,       // Steering angle
                 12.0f       // Max speed
         ));
+
+        setMaxHealth(50.0f);
     }
 
     public RocketCar(WorldMap map)

@@ -3,6 +3,8 @@ long-term goals
 - allow maps to control default ents of player / perhaps use service to spawn player based on session data
 --- default ent + loadout *or* use serialized stuff from session
 --- already partially implemented
+
+
 - introduce minimap
 - introduce ships
 - introduce new weapons/abilities

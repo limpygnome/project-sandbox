@@ -31,18 +31,13 @@ public class YutamoC1 extends AbstractVehicle
                 }
         );
 
-//        components.register(new PlayerVehicleMovementComponent(
-//                0.5f,       // Acceleration factor
-//                1.0f,       // Deacceleration multiplier
-//                0.4f,       // Steering angle
-//                25.0f       // Max speed
-//        ));
-
         components.register(new VelocityComponent(
                 500.0f      // Mass
         ));
 
         components.register(new SpaceMovementComponent(35.0f));
+
+        setMaxHealth(150.0f);
     }
 
     public YutamoC1(WorldMap map)
