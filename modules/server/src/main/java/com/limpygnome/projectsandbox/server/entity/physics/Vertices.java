@@ -144,11 +144,11 @@ public class Vertices
             edge = Vector2.edge(vertex, vertexNext);
             
             // Set edge to be perpendicular
-            edge = Vector2.perp(edge);
-            
+            edge.perp();
+
             // Normalise edge
-            edge = Vector2.normalise(edge);
-            
+            edge.normalise();
+
             // Set axis to edge
             axes[i] = edge;
         }

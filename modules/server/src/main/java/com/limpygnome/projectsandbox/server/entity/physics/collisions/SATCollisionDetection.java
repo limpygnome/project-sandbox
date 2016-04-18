@@ -187,18 +187,16 @@ public class SATCollisionDetection implements CollisionDetection
         if (smallestAxis != null)
         {
             // Check if to invert axis
-            Vector2 negativeAxisCheck = Vector2.subtract(verticesA.center, verticesB.center);
+            Vector2 negativeAxisCheck = verticesA.center.clone().subtract(verticesB.center);
+
             if (Vector2.dotProduct(negativeAxisCheck, smallestAxis) < 0)
             {
-                smallestAxis = Vector2.multiply(smallestAxis, -1.0f);
+                smallestAxis.multiply(-1.0f);
             }
         }
         
         // Create minimal translation vector (MTV)
-        Vector2 mtv = Vector2.multiply(
-                smallestAxis,
-                smallestOverlap + ADDED_DEPTH_MTV
-        );
+        Vector2 mtv = smallestAxis.clone().multiply(smallestOverlap + ADDED_DEPTH_MTV);
         
         // Return the result from the collision
         return new CollisionResult(true, mtv, smallestAxis, smallestOverlap);

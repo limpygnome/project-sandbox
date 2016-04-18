@@ -82,9 +82,8 @@ public class PlayerVehicleMovementComponent implements EntityComponent, LogicCom
             float wheelBase = entity.height / 2.0f;
 
             Vector2 heading = new Vector2(wheelBase * (float) Math.sin(entity.rotation), wheelBase * (float) Math.cos(entity.rotation));
-            Vector2 frontWheel = Vector2.add(entity.position, heading);
-
-            Vector2 backWheel = Vector2.subtract(entity.position, heading);
+            Vector2 frontWheel = entity.positionNew.clone().add(heading);
+            Vector2 backWheel = entity.positionNew.clone().subtract(heading);
 
             // Offset wheels by acceleration
             if (acceleration != 0.0f)
@@ -109,8 +108,8 @@ public class PlayerVehicleMovementComponent implements EntityComponent, LogicCom
             Vector2 backWheelAccel = new Vector2(speed * (float) Math.sin(entity.rotation), speed * (float) Math.cos(entity.rotation));
             Vector2 frontWheelAccel = new Vector2(speed * (float) Math.sin(entity.rotation + steerAngle), speed * (float) Math.cos(entity.rotation + steerAngle));
 
-            frontWheel = Vector2.add(frontWheel, frontWheelAccel);
-            backWheel = Vector2.add(backWheel, backWheelAccel);
+            backWheel.add(backWheelAccel);
+            frontWheel.add(frontWheelAccel);
 
             // Compute car position
             Vector2 carPosition = new Vector2(

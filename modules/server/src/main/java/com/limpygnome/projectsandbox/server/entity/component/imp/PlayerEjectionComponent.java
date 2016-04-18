@@ -118,15 +118,15 @@ public class PlayerEjectionComponent implements EntityComponent, LogicComponentE
         Entity entityPlayer = controller.playerEntityService.createPlayer(worldMap, playerInfo);
 
         // Add player to pos offset
-        float plyx = playerEjectVectorPos(ejectPosition.x, entityPlayer.width / 2.0f);
-        float plyy = playerEjectVectorPos(ejectPosition.y, entityPlayer.height / 2.0f);
-        plyPos = Vector2.add(plyPos, plyx, plyy);
+        float playerOffsetX = playerEjectVectorPos(ejectPosition.x, entityPlayer.width / 2.0f);
+        float playerOffsetY = playerEjectVectorPos(ejectPosition.y, entityPlayer.height / 2.0f);
+        plyPos.add(playerOffsetX, playerOffsetY);
 
         // Rotate pos to align with vehicle
         plyPos.rotate(0.0f, 0.0f, entity.rotation);
 
         // Add pos of vehicle to pos
-        plyPos = Vector2.add(plyPos, entity.positionNew);
+        plyPos.add(entity.positionNew);
 
         // Spawn player
         worldMap.respawnManager.respawn(new PositionPendingRespawn(

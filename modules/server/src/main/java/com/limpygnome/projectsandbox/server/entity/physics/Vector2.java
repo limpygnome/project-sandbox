@@ -89,40 +89,46 @@ public class Vector2
         this.y = rY + originY;
     }
     
-    public void add(Vector2 v, Vector2 value)
+    public Vector2 add(Vector2 value)
     {
         this.x += value.x;
         this.y += value.y;
+        return this;
     }
     
-    public void add(Vector2 v, float value)
+    public Vector2 add(float value)
     {
         this.x += value;
         this.y += value;
+        return this;
     }
     
-    public void add(float x, float y)
+    public Vector2 add(float x, float y)
     {
         this.x += x;
         this.y += y;
+        return this;
     }
     
-    public void subtract(Vector2 value)
+    public Vector2 subtract(Vector2 value)
     {
         this.x -= value.x;
         this.y -= value.y;
+        return this;
     }
     
-    public void multiply(float value)
+    public Vector2 multiply(float value)
     {
         this.x *= value;
         this.y *= value;
+        return this;
     }
     
-    public void multiply(Vector2 value)
+    public Vector2 multiply(Vector2 value)
     {
         this.x *= value.x;
         this.y *= value.y;
+        return this;
     }
     
     /**
@@ -133,7 +139,7 @@ public class Vector2
         return (float) Math.sqrt((x * x) + (y * y));
     }
 
-    public void normalise()
+    public Vector2 normalise()
     {
         float length = length();
 
@@ -147,6 +153,8 @@ public class Vector2
             this.x = 0;
             this.y = 0;
         }
+
+        return this;
     }
     
     /**
@@ -156,7 +164,11 @@ public class Vector2
      */
     public Vector2 perp()
     {
-        return new Vector2(-this.y, this.x);
+        // For perp vector: -y, x
+        float temp = x;
+        x = -y;
+        y = temp;
+        return this;
     }
     
     /**
@@ -236,10 +248,11 @@ public class Vector2
      *
      * @return current instance
      */
-    public void invert()
+    public Vector2 invert()
     {
         x = -x;
         y = -y;
+        return this;
     }
 
     /**
@@ -249,10 +262,11 @@ public class Vector2
      * @param y the y vvalue
      * @return current instance
      */
-    public void set(float x, float y)
+    public Vector2 set(float x, float y)
     {
         this.x = x;
         this.y = y;
+        return this;
     }
 
     public boolean isOutside(float xMin, float xMax, float yMin, float yMax)
@@ -260,7 +274,7 @@ public class Vector2
         return x < xMin || x > xMax || y < yMin || y > yMax;
     }
 
-    public void limit(float xMin, float xMax, float yMin, float yMax)
+    public Vector2 limit(float xMin, float xMax, float yMin, float yMax)
     {
         if (x < xMin)
         {
@@ -279,6 +293,8 @@ public class Vector2
         {
             y = yMax;
         }
+
+        return this;
     }
 
     @Override
