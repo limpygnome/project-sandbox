@@ -146,7 +146,7 @@
         },
         {
             "typeName" : "living/pedestrian/attacking",
-            "count" : 50,
+            "count" : 400,
             "faction" : 3000
         }
     ],
