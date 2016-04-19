@@ -2,10 +2,10 @@ package com.limpygnome.projectsandbox.game.entity.living.pedestrian;
 
 import com.limpygnome.projectsandbox.server.Controller;
 import com.limpygnome.projectsandbox.server.entity.Entity;
+import com.limpygnome.projectsandbox.server.entity.PlayerEntity;
 import com.limpygnome.projectsandbox.server.entity.ai.IdleMode;
 import com.limpygnome.projectsandbox.server.entity.ai.PedestrianState;
 import com.limpygnome.projectsandbox.game.entity.living.Player;
-import com.limpygnome.projectsandbox.game.entity.vehicle.AbstractVehicle;
 import com.limpygnome.projectsandbox.server.entity.physics.Vector2;
 import com.limpygnome.projectsandbox.server.entity.physics.casting.Casting;
 import com.limpygnome.projectsandbox.server.entity.physics.casting.CastingResult;
@@ -302,7 +302,7 @@ public abstract class AbstractPedestrian extends Entity
                     if  (
                             entity.faction != this.faction &&
                             (
-                                (entity instanceof Player) || (entity instanceof AbstractVehicle) ||
+                                (entity instanceof PlayerEntity)            ||
                                 (entity instanceof AbstractPedestrian)
                             )
                         )

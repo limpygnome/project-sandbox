@@ -49,6 +49,11 @@ public abstract class PlayerEntity extends Entity
     {
         super(map, width, height);
 
+        if (players == null || players.length == 0)
+        {
+            throw new IllegalArgumentException("Players must be defined, even if null sized array; defines number of players able to use vehicle");
+        }
+
         setPlayers(players);
         setInventories(inventories);
     }
@@ -135,8 +140,10 @@ public abstract class PlayerEntity extends Entity
             return playerInfo.session.getNickname();
         }
 
-        return "Unknown";
+        return entityName();
     }
+
+    public abstract String entityName();
 
     /**
      * Refer to constructor.

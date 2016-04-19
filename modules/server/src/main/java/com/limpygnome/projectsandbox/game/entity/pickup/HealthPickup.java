@@ -2,9 +2,9 @@ package com.limpygnome.projectsandbox.game.entity.pickup;
 
 import com.limpygnome.projectsandbox.server.Controller;
 import com.limpygnome.projectsandbox.server.entity.Entity;
+import com.limpygnome.projectsandbox.server.entity.PlayerEntity;
 import com.limpygnome.projectsandbox.server.entity.annotation.EntityType;
 import com.limpygnome.projectsandbox.game.entity.living.Player;
-import com.limpygnome.projectsandbox.game.entity.vehicle.AbstractVehicle;
 import com.limpygnome.projectsandbox.server.world.map.MapEntKV;
 import com.limpygnome.projectsandbox.server.world.map.WorldMap;
 
@@ -35,7 +35,7 @@ public class HealthPickup extends AbstractPickup
     {
         // Check entity can receive pickup
         if  (
-                (entity instanceof Player || entity instanceof AbstractVehicle) &&
+                entity instanceof PlayerEntity &&
                 entity.health > 0.0f && entity.health < entity.maxHealth
             )
         {

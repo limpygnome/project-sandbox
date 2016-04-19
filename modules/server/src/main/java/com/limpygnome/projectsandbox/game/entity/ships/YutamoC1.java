@@ -1,9 +1,9 @@
 package com.limpygnome.projectsandbox.game.entity.ships;
 
 import com.limpygnome.projectsandbox.server.Controller;
+import com.limpygnome.projectsandbox.server.entity.PlayerEntity;
 import com.limpygnome.projectsandbox.server.entity.annotation.EntityType;
-import com.limpygnome.projectsandbox.game.entity.vehicle.AbstractVehicle;
-import com.limpygnome.projectsandbox.server.entity.component.imp.PlayerVehicleMovementComponent;
+import com.limpygnome.projectsandbox.server.entity.component.imp.PlayerEjectionComponent;
 import com.limpygnome.projectsandbox.server.entity.component.imp.SpaceMovementComponent;
 import com.limpygnome.projectsandbox.server.entity.component.imp.VelocityComponent;
 import com.limpygnome.projectsandbox.server.entity.physics.Vector2;
@@ -14,7 +14,7 @@ import com.limpygnome.projectsandbox.server.world.map.WorldMap;
 import com.limpygnome.projectsandbox.server.world.spawn.Spawn;
 
 @EntityType(typeId = 200, typeName = "ships/yutamo-c1")
-public class YutamoC1 extends AbstractVehicle
+public class YutamoC1 extends PlayerEntity
 {
 
     public YutamoC1(WorldMap map, PlayerInfo[] players)
@@ -24,12 +24,13 @@ public class YutamoC1 extends AbstractVehicle
                 (short) 45,
                 (short) 50,
                 players,
-                new Inventory[1],
-                new Vector2[]
-                {
-                    new Vector2(0.0f, 50.0f)
-                }
+                new Inventory[1]
         );
+
+        components.register(new PlayerEjectionComponent(this, new Vector2[]
+        {
+                new Vector2(0.0f, 50.0f)
+        }));
 
         components.register(new VelocityComponent(
                 500.0f      // Mass
@@ -46,7 +47,7 @@ public class YutamoC1 extends AbstractVehicle
     }
 
     @Override
-    public String friendlyNameVehicle()
+    public String entityName()
     {
         return "Yutamo C1";
     }

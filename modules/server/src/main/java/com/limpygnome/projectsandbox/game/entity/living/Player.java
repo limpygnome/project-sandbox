@@ -112,4 +112,10 @@ public class Player extends PlayerEntity
         }
     }
 
+    @Override
+    public String entityName()
+    {
+        return "Pedestrian";
+    }
+
 }

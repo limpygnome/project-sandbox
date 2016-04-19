@@ -1,6 +1,5 @@
 package com.limpygnome.projectsandbox.server.entity;
 
-import com.limpygnome.projectsandbox.game.entity.vehicle.AbstractVehicle;
 import com.limpygnome.projectsandbox.server.entity.annotation.EntityType;
 import com.limpygnome.projectsandbox.server.entity.component.ComponentCollection;
 import com.limpygnome.projectsandbox.server.entity.component.event.*;
@@ -248,20 +247,6 @@ public strictfp abstract class Entity
         if (velocity != null)
         {
             newPosition.offset(velocity);
-        }
-
-        // Add velocity if we found it
-        // TODO: deprecated - remove the below
-        if (parent instanceof AbstractVehicle)
-        {
-            // Add velocity?
-            AbstractVehicle vehicle = (AbstractVehicle) parent;
-            float speed = vehicle.getSpeed();
-
-            if (speed > 0.0f)
-            {
-                newPosition.offset(Vector2.vectorFromAngle(this.rotation, speed));
-            }
         }
 
         position(newPosition);
