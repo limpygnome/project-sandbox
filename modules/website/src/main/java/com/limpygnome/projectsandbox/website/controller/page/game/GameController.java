@@ -43,7 +43,6 @@ public class GameController extends BaseController
 
         try
         {
-
             if (!gameSessionService.validateExists(gameProvider, gameSessionToken))
             {
                 LOG.debug("Failed to validate and consume game session token - token: {}", gameSessionToken);

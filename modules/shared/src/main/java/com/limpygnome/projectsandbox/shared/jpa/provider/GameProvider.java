@@ -32,6 +32,29 @@ public class GameProvider extends AbstractProvider
         super(ConnectionType.PROJECTSANDBOX);
     }
 
+    public String fetchExistingGameSessionToken(User user)
+    {
+        if (user == null)
+        {
+            LOG.error("Attempted to fetch game session by null user");
+            return null;
+        }
+
+        try
+        {
+            TypedQuery<String> typedQuery = em.createQuery("SELECT gs.token FROM GameSession gs WHERE user = :user", String.class);
+            typedQuery.setParameter("user", user);
+
+            List<String> tokens = typedQuery.getResultList();
+            return tokens.isEmpty() ? null : tokens.get(0);
+        }
+        catch (Exception e)
+        {
+            LOG.error("Failed to query for existing game session", e);
+            return null;
+        }
+    }
+
     public GameSession fetchGameSessionByUser(User user)
     {
         if (user == null)
@@ -95,6 +118,16 @@ public class GameProvider extends AbstractProvider
         }
     }
 
+    public boolean isTokenValid(String gameSessionToken)
+    {
+        TypedQuery<Long> typedQuery = em.createQuery("SELECT count(gs) FROM GameSession gs WHERE token = :token", Long.class);
+        typedQuery.setParameter("token", gameSessionToken);
+
+        List<Long> result = typedQuery.getResultList();
+        boolean exists = result.isEmpty() ? false : result.get(0) == 1;
+        return exists;
+    }
+
     public CreateGameSessionResult createGameSession(GameSession gameSession)
     {
         if (gameSession == null)
@@ -154,6 +187,7 @@ public class GameProvider extends AbstractProvider
         try
         {
             em.merge(gameSession);
+            //em.persist(gameSession);
             em.flush();
 
             LOG.debug("Updated game session - token: {}", gameSession.getToken());

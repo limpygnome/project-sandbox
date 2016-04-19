@@ -14,9 +14,9 @@ public interface GameSessionService
      * @param nickname
      * @return A session token, or null if failed.
      */
-    String generateSessionToken(GameProvider gameProvider, String nickname);
+    String fetchOrGenerateSessionToken(GameProvider gameProvider, String nickname);
 
-    String generateSessionToken(GameProvider gameProvider, User user);
+    String fetchOrGenerateSessionToken(GameProvider gameProvider, User user);
 
     /**
      * Validates the game session token exists.

@@ -20,7 +20,7 @@ public class DefaultGameSessionService implements GameSessionService
     private final static Logger LOG = LogManager.getLogger(DefaultGameSessionService.class);
 
     @Override
-    public String generateSessionToken(GameProvider gameProvider, String nickname)
+    public String fetchOrGenerateSessionToken(GameProvider gameProvider, String nickname)
     {
         gameProvider.begin();
 
@@ -42,17 +42,17 @@ public class DefaultGameSessionService implements GameSessionService
     }
 
     @Override
-    public String generateSessionToken(GameProvider gameProvider, User user)
+    public String fetchOrGenerateSessionToken(GameProvider gameProvider, User user)
     {
         // Attempt to find existing session
-        GameSession gameSession = gameProvider.fetchGameSessionByUser(user);
+        String gameSessionToken = gameProvider.fetchExistingGameSessionToken(user);
 
-        if (gameSession == null)
+        if (gameSessionToken == null)
         {
             gameProvider.begin();
 
             // Create new session
-            gameSession = new GameSession(user);
+            GameSession gameSession = new GameSession(user);
             CreateGameSessionResult createGameSessionResult = gameProvider.createGameSession(gameSession);
 
             gameProvider.commit();
@@ -63,9 +63,10 @@ public class DefaultGameSessionService implements GameSessionService
                 return null;
             }
 
+            gameSessionToken = gameSession.getToken();
         }
 
-        return gameSession.getToken().toString();
+        return gameSessionToken;
     }
 
     @Override
@@ -94,8 +95,7 @@ public class DefaultGameSessionService implements GameSessionService
         }
 
         // Check the session exists in the DB
-        GameSession gameSession = gameProvider.fetchGameSessionByToken(token);
-
-        return gameSession != null;
+        boolean exists = gameProvider.isTokenValid(token.toString());
+        return exists;
     }
 }

@@ -53,7 +53,7 @@ public class AuthController extends BaseController
         else
         {
             // Fetch guest session token
-            String sessionToken = gameSessionService.generateSessionToken(gameProvider, guestForm.getNickname());
+            String sessionToken = gameSessionService.fetchOrGenerateSessionToken(gameProvider, guestForm.getNickname());
 
             LOG.debug("Session token retrieved - token: {}", sessionToken);
 
@@ -82,7 +82,7 @@ public class AuthController extends BaseController
         }
 
         // Fetch account session token
-        String sessionToken = gameSessionService.generateSessionToken(gameProvider, user);
+        String sessionToken = gameSessionService.fetchOrGenerateSessionToken(gameProvider, user);
 
         // Determine model-view for joining session
         modelAndView = joinSession(sessionToken, null, redirectAttributes, null);
