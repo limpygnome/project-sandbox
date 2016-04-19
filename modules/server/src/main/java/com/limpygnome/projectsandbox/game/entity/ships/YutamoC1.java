@@ -57,9 +57,15 @@ public class YutamoC1 extends PlayerEntity
     {
         super.eventSpawn(controller, spawn);
 
-        Inventory inventory = new Inventory(this);
-        inventory.add(new RocketLauncher());
-        setInventory(0, inventory);
+        // Add inventory if not already set
+        Inventory inventory = getInventory();
+
+        if (inventory == null)
+        {
+            inventory = new Inventory(this);
+            inventory.add(new RocketLauncher());
+            setInventory(0, inventory);
+        }
     }
 
 }

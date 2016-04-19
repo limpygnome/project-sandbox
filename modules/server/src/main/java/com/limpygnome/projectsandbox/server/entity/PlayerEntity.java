@@ -66,6 +66,7 @@ public abstract class PlayerEntity extends Entity
         if (playerInfo != null && inventory != null)
         {
             inventory.setOwner(playerInfo);
+            inventory.setParent(this);
         }
     }
 

@@ -56,8 +56,9 @@ public class PlayerEntityService
         if (entityTypeId != null)
         {
             Class clazz = worldMap.entityManager.entTypeMappingStoreService.getEntityClassByTypeId(entityTypeId);
+            boolean isPlayerEntityInstance = PlayerEntity.class.isAssignableFrom(clazz);
 
-            if (clazz == null || !clazz.isAssignableFrom(PlayerEntity.class))
+            if (clazz == null || !isPlayerEntityInstance)
             {
                 LOG.warn("Attempted to spawn player from non player entity class - type id: {}, actual class: {}", entityTypeId, clazz != null ? clazz.getName() : null);
             }

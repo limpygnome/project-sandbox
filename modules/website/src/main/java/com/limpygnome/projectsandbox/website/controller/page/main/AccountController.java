@@ -152,20 +152,20 @@ public class AccountController extends BaseController
 
             try
             {
-                // Delete game session
-                GameSession gameSession = gameProvider.fetchGameSessionByUser(user);
+                // Fetch game session token
+                String gameSessionToken = gameProvider.fetchExistingGameSessionToken(user);
 
-                if (gameSession == null)
+                if (gameSessionToken == null)
                 {
-                    LOG.warn("Attempted to delete game session for user, but no game session found - user id: {}", user.getUserId());
+                    LOG.warn("attempted to delete game session for user, but no game session found - user id: {}", user.getUserId());
                 }
                 else
                 {
                     gameProvider.begin();
-                    gameProvider.removeGameSession(gameSession);
+                    gameProvider.removeGameSession(gameSessionToken);
                     gameProvider.commit();
 
-                    LOG.info("Deleted game session - token: {}, user id: {}", gameSession.getToken(), user.getUserId());
+                    LOG.info("deleted game session - token: {}, user id: {}", gameSessionToken, user.getUserId());
                 }
             }
             catch (Exception e)

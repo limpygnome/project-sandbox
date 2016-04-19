@@ -202,18 +202,22 @@ public class GameProvider extends AbstractProvider
         }
     }
 
-    public boolean removeGameSession(GameSession gameSession)
+    public boolean removeGameSession(String token)
     {
-        if (gameSession == null)
+        if (token == null)
         {
-            LOG.error("Attempted to remove null game session");
+            LOG.error("Attempted to remove game session with null token");
             return false;
         }
 
         try
         {
+            // Build query
+            int rowsDeleted = em.createQuery("DELETE FROM ").executeUpdate();
+            boolean success = rowsDeleted > 0;
+
             // Fetch proxy of object, instead of merging
-            GameSession gameSessionReference = em.getReference(GameSession.class, gameSession.getToken());
+            GameSession gameSessionReference = em.getReference(GameSession.class, token);
 
             if (gameSessionReference != null)
             {
@@ -222,14 +226,21 @@ public class GameProvider extends AbstractProvider
                 em.flush();
             }
 
-            LOG.info("Removed game session - uuid: {}", gameSession.getToken());
+            if (success)
+                finsih this..
+            {
+                LOG.info("removed game session - uuid: {}", token);
+            }
+            else
+            {
+                LOG.warn("no game session found for deletion - uuid: {}", token);
+            }
 
-            return true;
+            return success;
         }
         catch (Exception e)
         {
-            LOG.error("Failed to remove game session - uuid: {}", gameSession.getToken(), e);
-
+            LOG.error("Failed to remove game session - uuid: {}", token, e);
             return false;
         }
     }

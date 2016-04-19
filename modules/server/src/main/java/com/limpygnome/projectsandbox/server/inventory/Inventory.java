@@ -2,6 +2,7 @@ package com.limpygnome.projectsandbox.server.inventory;
 
 import com.limpygnome.projectsandbox.server.Controller;
 import com.limpygnome.projectsandbox.server.entity.Entity;
+import com.limpygnome.projectsandbox.server.entity.PlayerEntity;
 import com.limpygnome.projectsandbox.server.inventory.item.AbstractInventoryItem;
 import com.limpygnome.projectsandbox.server.network.packet.imp.inventory.InventoryUpdatesOutboundPacket;
 import com.limpygnome.projectsandbox.server.player.PlayerInfo;
@@ -16,8 +17,6 @@ import java.util.Map;
 
 /**
  * Represents an inventory.
- *
- * @author limpygnome
  */
 public class Inventory implements Serializable
 {
@@ -35,10 +34,10 @@ public class Inventory implements Serializable
      */
     private transient boolean flagReset;
 
-    // TODO: should this be transient? How to connect them up?
+    /* Set by PlayerEntity. */
     public transient Entity parent;
 
-    // TODO: should this be transient? How to connect them up?
+    /* Set by PlayerEntity. */
     private transient PlayerInfo owner;
 
     public AbstractInventoryItem selected;
@@ -69,6 +68,27 @@ public class Inventory implements Serializable
         {
             LOG.debug("Owner changed to no one");
         }
+    }
+
+    /**
+     * Sets the parent entity which owns this inventory.
+     *
+     * @param playerEntity
+     */
+    public void setParent(PlayerEntity playerEntity)
+    {
+        this.flagReset = true;
+
+        if (playerEntity != null)
+        {
+            LOG.debug("changed parent - entity id: {}", playerEntity.id);
+        }
+        else
+        {
+            throw new IllegalArgumentException("Cannot have null entity as parent of inventory");
+        }
+
+        this.parent = playerEntity;
     }
 
     /**
