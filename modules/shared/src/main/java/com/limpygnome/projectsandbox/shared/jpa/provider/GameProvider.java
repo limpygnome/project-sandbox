@@ -213,21 +213,14 @@ public class GameProvider extends AbstractProvider
         try
         {
             // Build query
-            int rowsDeleted = em.createQuery("DELETE FROM ").executeUpdate();
+            Query query = em.createQuery("DELETE FROM GameSession gs WHERE gs.token = :token");
+            query.setParameter("token", token);
+
+            // Execute query
+            int rowsDeleted = query.executeUpdate();
             boolean success = rowsDeleted > 0;
 
-            // Fetch proxy of object, instead of merging
-            GameSession gameSessionReference = em.getReference(GameSession.class, token);
-
-            if (gameSessionReference != null)
-            {
-                // Finally remove
-                em.remove(gameSessionReference);
-                em.flush();
-            }
-
             if (success)
-                finsih this..
             {
                 LOG.info("removed game session - uuid: {}", token);
             }

@@ -611,6 +611,7 @@ public strictfp abstract class Entity
      */
     public synchronized void eventReset(Controller controller, Spawn spawn)
     {
+        // Reset health
         health = maxHealth;
 
         // Set position etc for spawn
@@ -627,14 +628,21 @@ public strictfp abstract class Entity
         {
             component.eventReset(controller, this);
         }
+
+        // Set status to alive
+        flagDead = false;
+
+        // Rebuild collision vertices
+        rebuildCachedVertices();
     }
 
     /**
-     * Invoked after the entity has been spawned, and added to the world.
+     * Invoked after the entity has been added to the world.
+     *
+     * This should not be used to reset the state of the entity, instead use reset method.
      */
     public synchronized void eventSpawn(Controller controller, Spawn spawn)
     {
-        flagDead = false;
     }
 
     public abstract String friendlyName();

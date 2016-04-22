@@ -53,7 +53,7 @@ public class PlayerEntityService
 
         Short entityTypeId = gameSession.gameDataGetShort(PLAYERDATA_ENT_TYPE_ID_KEY);
 
-        if (entityTypeId != null)
+        if (entityTypeId != null && entityTypeId > 0)
         {
             Class clazz = worldMap.entityManager.entTypeMappingStoreService.getEntityClassByTypeId(entityTypeId);
             boolean isPlayerEntityInstance = PlayerEntity.class.isAssignableFrom(clazz);

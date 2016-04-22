@@ -92,7 +92,7 @@ public class SpaceMovementComponent implements EntityComponent, LogicComponentEv
         synchronized (velocityComponent)
         {
             Vector2 velocity = velocityComponent.getVelocity();
-            velocity.invert();
+            velocity.perp();
         }
 
         // Make sure we're within map to avoid death

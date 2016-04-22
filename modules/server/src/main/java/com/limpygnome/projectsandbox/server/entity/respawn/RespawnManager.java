@@ -176,9 +176,6 @@ public class RespawnManager implements EventLogicCycleService
         // Setup entity for its new life
         entity.eventReset(controller, respawnData.spawn);
 
-        // Rebuild vertices
-        entity.rebuildCachedVertices();
-
         // Add to world if new entity
         if (entity.getState() == EntityState.CREATED && !map.entityManager.add(entity))
         {

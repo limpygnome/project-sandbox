@@ -92,8 +92,10 @@ public abstract class AbstractPedestrian extends Entity
     }
 
     @Override
-    public synchronized void eventSpawn(Controller controller, Spawn spawn)
+    public synchronized void eventReset(Controller controller, Spawn spawn)
     {
+        super.eventReset(controller, spawn);
+
         // Save spawn if idle mode is to return to spawn, so we can later walk back to it...
         if (idleMode == IdleMode.RETURN_TO_SPAWN)
         {
@@ -102,8 +104,6 @@ public abstract class AbstractPedestrian extends Entity
 
         // Reset state/target etc
         resetTarget();
-
-        super.eventSpawn(controller, spawn);
     }
 
     @Override
