@@ -281,7 +281,7 @@ var projectSandbox =
         
         // Render ents
         var ent;
-        for(var kv of this.entities)
+        for (var kv of this.entities)
         {
             ent = kv[1];
             if (!ent.dead && projectSandbox.frustrum.intersects(ent))

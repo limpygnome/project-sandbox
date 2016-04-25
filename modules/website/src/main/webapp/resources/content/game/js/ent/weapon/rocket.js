@@ -38,3 +38,8 @@ Rocket.prototype.eventDeath = function()
 {
 	game.effects.createExplosion(this.x, this.y, 256, 8000, -2.0, 2.0);
 }
+
+Rocket.prototype.getRadarClasses = function()
+{
+    return "danger";
+}

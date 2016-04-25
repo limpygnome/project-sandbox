@@ -10,8 +10,20 @@
     bottom: 8em;
     width: 24em;
     height: 15em;
-    border-color: rgba(0, 204, 68, 0.4);
+    border-color: rgba(0, 255, 68, 0.4);
     background: rgba(0, 102, 34, 0.4);
+}
+
+#projectsandbox #ps-ui #ps-map span
+{
+    position: absolute;
+    background: rgba(0, 102, 34, 0.8);
+    min-width: 0.5em;
+    min-height: 0.5em;
+}
+#projectsandbox #ps-ui #ps-map span.danger
+{
+    background: rgba(255, 0, 0, 0.8);
 }
 
 @media all and (max-width: 1000px)
