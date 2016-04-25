@@ -1,2 +1,3 @@
 // Just to setup the namespace
-game = { }
+game = {}
+game.ui = {}

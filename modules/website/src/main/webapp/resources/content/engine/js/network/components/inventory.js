@@ -61,8 +61,7 @@ projectSandbox.network.inventory =
         inventory.reset();
 
         // Inform UI to reset
-        var gameUI = projectSandbox.game.ui;
-        gameUI.hook_inventoryReset();
+        projectSandbox.game.ui.controller.hook_inventoryReset();
     },
 
     packetInventoryItemSelected: function(packet)
@@ -78,8 +77,7 @@ projectSandbox.network.inventory =
         var inventoryItem = inventory.items.get(slotId);
 
         // Inform UI
-        var gameUI = projectSandbox.game.ui;
-        gameUI.hook_inventorySlotSelected(inventoryItem);
+        projectSandbox.game.ui.controller.hook_inventorySlotSelected(inventoryItem);
 
         console.debug("engine/network/inventory - item selected - " + slotId);
     },
@@ -91,8 +89,7 @@ projectSandbox.network.inventory =
         inventory.selected = -1;
 
         // Inform UI
-        var gameUI = projectSandbox.game.ui;
-        gameUI.hook_inventorySlotSelected(null);
+        projectSandbox.game.ui.controller.hook_inventorySlotSelected(null);
 
         console.debug("engine/network/inventory - no item selected");
 
@@ -123,8 +120,7 @@ projectSandbox.network.inventory =
         inventory.renderOrder.push(slotId);
 
         // Inform UI
-        var gameUI = projectSandbox.game.ui;
-        gameUI.hook_inventorySlotCreate(inventoryItem);
+        projectSandbox.game.ui.controller.hook_inventorySlotCreate(inventoryItem);
     },
 
     packetInventoryItemRemoved: function(packet)
@@ -152,8 +148,7 @@ projectSandbox.network.inventory =
             }
 
             // Inform UI
-            var gameUI = projectSandbox.game.ui;
-            gameUI.hook_inventorySlotRemove(inventoryItem);
+            projectSandbox.game.ui.controller.hook_inventorySlotRemove(inventoryItem);
 
             console.debug("engine/network/inventory - removed item - " + slotId);
         }
@@ -179,8 +174,7 @@ projectSandbox.network.inventory =
             inventoryItem.text = text;
 
             // Inform UI
-            var gameUI = projectSandbox.game.ui;
-            gameUI.hook_inventorySlotUpdate(inventoryItem);
+            projectSandbox.game.ui.controller.hook_inventorySlotUpdate(inventoryItem);
 
             console.debug("engine/network/inventory - item changed - " + slotId);
         }

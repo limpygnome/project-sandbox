@@ -51,7 +51,7 @@ projectSandbox.network.player =
         projectSandbox.camera.chaseEntityId = entityId;
 
         // Reset UI
-        projectSandbox.game.ui.hookPlayer_entChanged();
+        projectSandbox.game.ui.controller.hookPlayer_entChanged();
 
         console.debug("engine/network/player - updated player - player ID: " + playerId + ", entity ID: " + entityId);
     },
@@ -77,7 +77,7 @@ projectSandbox.network.player =
         }
 
         // Inform UI via hook
-        projectSandbox.game.ui.hookPlayer_entKilled(causeText, entityIdVictim, entityIdKiller, playerIdVictim, playerIdKiller);
+        projectSandbox.game.ui.controller.hookPlayer_entKilled(causeText, entityIdVictim, entityIdKiller, playerIdVictim, playerIdKiller);
     },
 
     packetPlayerEvents: function(packet)
@@ -120,7 +120,7 @@ projectSandbox.network.player =
             projectSandbox.players.add(player);
 
             // Invoke UI hook
-            projectSandbox.game.ui.hook_playerJoined(player);
+            projectSandbox.game.ui.controller.hook_playerJoined(player);
 
             console.debug("engine/network/player - player joined - ply id: " + playerId + ", name: " + displayName);
         }
@@ -145,7 +145,7 @@ projectSandbox.network.player =
         player.score = score;
 
         // Invoke UI hook
-        projectSandbox.game.ui.hook_playerUpdated(player);
+        projectSandbox.game.ui.controller.hook_playerUpdated(player);
 
         console.debug("engine/network/player - updated player - ply id: " + playerId + ", kills: " + kills + ", deaths: " + deaths + ", score: " + score);
 
@@ -166,7 +166,7 @@ projectSandbox.network.player =
             projectSandbox.players.remove(playerId);
 
             // Invoke UI hook
-            projectSandbox.game.ui.hook_playerLeft(player);
+            projectSandbox.game.ui.controller.hook_playerLeft(player);
         }
         else
         {
@@ -187,7 +187,7 @@ projectSandbox.network.player =
         var player = projectSandbox.players.get(playerId);
 
         // Invoke UI to handle message
-        projectSandbox.game.ui.hook_playerChatMessage(player, nickname, message);
+        projectSandbox.game.ui.controller.hook_playerChatMessage(player, nickname, message);
     },
 
     /*

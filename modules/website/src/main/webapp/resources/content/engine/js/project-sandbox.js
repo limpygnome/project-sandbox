@@ -52,10 +52,7 @@ var projectSandbox =
         this.lights.reset();
 
         // Reset UI
-        if (this.game.ui != null)
-        {
-            this.game.ui.reset();
-        }
+        this.game.ui.controller.reset();
 
         // Reset inventory
         projectSandbox.inventory.reset();
@@ -88,7 +85,7 @@ var projectSandbox =
         // Initialise WebGL
         this.gl = this.initWebGl();
         
-        if(!this.gl)
+        if (!this.gl)
         {
             alert("Browser does not support WebGL.");
             return;
@@ -111,7 +108,7 @@ var projectSandbox =
         
         // Setup game
         this.game.effects = game.effects;
-        this.game.ui = game.ui;
+        this.game = game;
     },
     
     postResources: function()
@@ -147,7 +144,7 @@ var projectSandbox =
         var self = this;
         
         // Setup UI
-        this.game.ui.setup();
+        this.game.ui.controller.setup();
         
         // Setup logic loop
         window.setInterval(
@@ -213,7 +210,7 @@ var projectSandbox =
         }
         
         // Update UI
-        this.game.ui.logic();
+        this.game.ui.controller.logic();
     },
     
     gameRenderLoop: function(self)
@@ -310,10 +307,7 @@ var projectSandbox =
         }
         
         // Render UI
-        if (this.game.ui != null)
-        {
-            this.game.ui.render(gl, this.shaderProgram, this.modelView, this.perspective);
-        }
+        this.game.ui.controller.render(gl, this.shaderProgram, this.modelView, this.perspective);
     },
     
     initWebGl: function()

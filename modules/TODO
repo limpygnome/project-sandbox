@@ -1,3 +1,8 @@
+critical goals
+================
+- 32 players is sending out 1 MB/s of data, need to send only the data needed to players i.e. of other players around them
+-- probably worth inspecting why so much data is going out
+
 long-term goals
 ================
 - allow maps to control default ents of player / perhaps use service to spawn player based on session data

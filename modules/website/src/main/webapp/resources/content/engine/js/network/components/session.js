@@ -39,7 +39,7 @@ projectSandbox.network.session =
         projectSandbox.network.disabled = true;
 
         // Invoke UI hook
-        projectSandbox.game.ui.hookSession_errorCode(errorCode);
+        projectSandbox.game.ui.controller.hookSession_errorCode(errorCode);
     }
 
 }

@@ -36,6 +36,11 @@
 
         <div id="ps-ui" class="clickable">
 
+            <div id="ps-healthbar">
+                <div id="ps-healthbar-fill">&nbsp;</div>
+                50%
+            </div>
+
             <div id="ps-scoreboard" class="panel">
                 <h1>
                     Scores
@@ -46,6 +51,10 @@
                         Waiting for server...
                     </li>
                 </ol>
+            </div>
+
+            <div id="ps-map" class="panel top">
+                &nbsp;
             </div>
 
             <div id="ps-activity" class="panel top">
@@ -74,11 +83,6 @@
                 <div id="ps-chat-box">
                     <input type="text" tabindex="2" placeholder="Enter message here..." id="ps-chat-box-field" />
                 </div>
-            </div>
-
-            <div id="ps-healthbar">
-                <div id="ps-healthbar-fill">&nbsp;</div>
-                50%
             </div>
 
             <div id="ps-score">

@@ -55,7 +55,7 @@ projectSandbox.network =
         this.closed = false;
 
         // Invoke UI hook
-        projectSandbox.game.ui.hookSocket_connected();
+        projectSandbox.game.ui.controller.hookSocket_connected();
 
         // Send session ID - must always be done first
         this.player.sendSessionIdPacket();
@@ -80,7 +80,7 @@ projectSandbox.network =
             projectSandbox.reset();
 
             // Invoke UI hook
-            projectSandbox.game.ui.hookSocket_disconnected();
+            projectSandbox.game.ui.controller.hookSocket_disconnected();
         }
 
         if (!this.disabled)

@@ -1,0 +1,24 @@
+/*
+    Map
+    ********************************************************************************************************************
+*/
+
+#projectsandbox #ps-ui #ps-map
+{
+    position: fixed;
+    right: 1.5em;
+    bottom: 8em;
+    width: 24em;
+    height: 15em;
+    border-color: rgba(0, 204, 68, 0.4);
+    background: rgba(0, 102, 34, 0.4);
+}
+
+@media all and (max-width: 1000px)
+{
+    #projectsandbox #ps-ui #ps-map
+    {
+        width: 18em;
+        height: 18em;
+    }
+}

@@ -34,6 +34,7 @@
         <link rel="stylesheet" href="/content/game/css/overlay/ui.css" />
 
         <!-- UI -->
+        <link rel="stylesheet" href="/content/game/css/ui/map.css" />
         <link rel="stylesheet" href="/content/game/css/ui/activity.css" />
         <link rel="stylesheet" href="/content/game/css/ui/chat.css" />
         <link rel="stylesheet" href="/content/game/css/ui/fps.css" />
@@ -134,7 +135,8 @@
         <script src="/content/game/js/_namespace.js"></script>
         <script src="/content/game/js/effects.js"></script>
         <script src="/content/game/js/entity-factory.js"></script>
-        <script src="/content/game/js/ui.js"></script>
+        <script src="/content/game/js/ui/controller.js"></script>
+        <script src="/content/game/js/ui/map.js"></script>
 
         <!-- Game: Living -->
         <script src="/content/game/js/ent/living/player.js"></script>

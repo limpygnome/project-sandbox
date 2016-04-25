@@ -1,4 +1,4 @@
-game.ui =
+game.ui.controller =
 {
     // Render container
     renderContainer: null,
@@ -53,14 +53,14 @@ game.ui =
 
         // Bind resize event for window
         $(window).resize(function () {
-            game.ui.resize();
+            game.ui.controller.resize();
         });
 
         // Bind death screen to close
         $(this.elementDeathScreen).keyup(function (event) {
             if (String.fromCharCode(event.which) == " ")
             {
-                game.ui.deathScreenHide();
+                game.ui.controller.deathScreenHide();
             }
         });
 
@@ -72,7 +72,7 @@ game.ui =
 
         // Bind options / fullscreen
         $("#button-fullscreen").click(function () {
-            game.ui.toggleFullScreen();
+            game.ui.controller.toggleFullScreen();
         });
 
         // Set UI size
@@ -91,7 +91,7 @@ game.ui =
             if (keyCode == "Y")
             {
                 // Put focus on chatbox input
-                $(game.ui.elementSidebarChatBox).focus();
+                $(game.ui.controller.elementSidebarChatBox).focus();
             }
         }
     },
@@ -104,13 +104,13 @@ game.ui =
         if (keyCode == 13)
         {
             // Fetch message
-            var message = $(game.ui.elementSidebarChatBox).val();
+            var message = $(game.ui.controller.elementSidebarChatBox).val();
 
             // Check we can send it...
             if (message != null && message.length > 0)
             {
                 // Reset field
-                $(game.ui.elementSidebarChatBox).val("");
+                $(game.ui.controller.elementSidebarChatBox).val("");
 
                 // Send message
                 projectSandbox.network.player.sendChatMessage(message);
