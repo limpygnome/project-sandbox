@@ -165,6 +165,9 @@ game.ui.controller =
 
         // Clear chat
         $(this.elementSidebarChatMessages).children().remove();
+
+        // Reset map
+        game.ui.map.reset();
     },
     
     logic: function()
@@ -210,6 +213,9 @@ game.ui.controller =
 
         // Update FPS counter
         $(this.elementFpsCounter).text(projectSandbox.fps);
+
+        // Update map
+        game.ui.map.logic();
     },
     
     render: function(gl, shaderProgram, modelView, perspective)

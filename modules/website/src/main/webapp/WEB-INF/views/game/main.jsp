@@ -54,7 +54,7 @@
             </div>
 
             <div id="ps-map" class="panel top">
-                &nbsp;
+                <span class="marker"></span>
             </div>
 
             <div id="ps-activity" class="panel top">
