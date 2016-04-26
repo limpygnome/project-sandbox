@@ -3,12 +3,15 @@ game.ui.map =
     // Multiplier for scaling items on radar
     markerMultiplier: 100.0,
 
-    // The container for the map
+    // The container for the map and cached size
     containerMap: null,
-
-    // The size of the container
     containerMapWidth: 0,
     containerMapHeight: 0,
+
+    // The container for radar and cached size
+    containerRadar: null,
+    containerRadarWidth: 0,
+    containerRadarHeight: 0,
 
     // The size of the map
     mapWidth: null,
@@ -27,6 +30,16 @@ game.ui.map =
             this.containerMapHeight = this.containerMap.height();
         }
 
+        // Fetch radar container, remove markers, cache size
+        this.containerRadar = $("#ps-map-radar");
+
+        if (this.containerRadar)
+        {
+            this.containerRadar.children().remove();
+            this.containerRadarWidth = this.containerRadar.width();
+            this.containerRadarHeight = this.containerRadar.height();
+        }
+
         // Reset map size
         this.mapWidth = null;
         this.mapHeight = null;
@@ -36,17 +49,27 @@ game.ui.map =
     {
         if (this.mapWidth != null && this.mapHeight != null)
         {
-            // Reset markers
-            this.markersReset();
-
-            // Render all entities available
-            for (var kv of projectSandbox.entities)
+            // Update map
+            if (this.containerMap != null)
             {
-                this.markerUpdate(this.containerMap, kv[1]);
+                // Reset markers
+                this.markersReset(this.containerMap);
+
+                // Render all entities available
+                for (var kv of projectSandbox.entities)
+                {
+                    this.markerUpdate(this.containerMap, kv[1]);
+                }
+
+                // Purge old
+                this.markersPurgeOld(this.containerMap);
             }
 
-            // Purge old
-            this.markersPurgeOld();
+            // Update radar
+            if (this.containerRadar != null)
+            {
+                //
+            }
         }
         else if (projectSandbox.map != null)
         {
@@ -57,16 +80,16 @@ game.ui.map =
         }
     },
 
-    markersReset: function()
+    markersReset: function (container)
     {
         // Add class to all markers for removal
-        $("#ps-map span").addClass("remove");
+        container.children().addClass("remove");
     },
 
-    markersPurgeOld: function()
+    markersPurgeOld: function (container)
     {
         // Remove markers with class for removal
-        $("#ps-map span.remove").remove();
+        container.find(".remove").remove();
     },
 
     markerUpdate: function (container, entity)
