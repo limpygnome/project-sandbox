@@ -4,11 +4,11 @@ game.ui.map =
     markerMultiplier: 100.0,
 
     // The container for the map
-    container: null,
+    containerMap: null,
 
     // The size of the container
-    containerWidth: 0,
-    containerHeight: 0,
+    containerMapWidth: 0,
+    containerMapHeight: 0,
 
     // The size of the map
     mapWidth: null,
@@ -17,17 +17,19 @@ game.ui.map =
 
     reset: function()
     {
-        // Fetch map container and cache size
-        this.container = $("#ps-map");
-        this.containerWidth = this.container.width();
-        this.containerHeight = this.container.height();
+        // Fetch map container, remove markers and cache size
+        this.containerMap = $("#ps-map");
+
+        if (this.containerMap)
+        {
+            this.containerMap.children().remove();
+            this.containerMapWidth = this.containerMap.width();
+            this.containerMapHeight = this.containerMap.height();
+        }
 
         // Reset map size
         this.mapWidth = null;
         this.mapHeight = null;
-
-        // Fetch map marker
-        this.marker = $("#ps-map .marker");
     },
 
     logic: function()
@@ -40,7 +42,7 @@ game.ui.map =
             // Render all entities available
             for (var kv of projectSandbox.entities)
             {
-                this.markerUpdate(kv[1]);
+                this.markerUpdate(this.containerMap, kv[1]);
             }
 
             // Purge old
@@ -67,25 +69,25 @@ game.ui.map =
         $("#ps-map span.remove").remove();
     },
 
-    markerUpdate: function (entity)
+    markerUpdate: function (container, entity)
     {
-        var marker = this.markerFetchOrCreate(entity);
+        var marker = this.markerFetchOrCreate(container, entity);
 
         // Calculate position as unit vector and multiply by container size
-        var posX = (entity.x / this.mapWidth) * this.containerWidth;
-        var posY = (entity.y / this.mapHeight) * this.containerHeight;
+        var posX = (entity.x / this.mapWidth) * this.containerMapWidth;
+        var posY = (entity.y / this.mapHeight) * this.containerMapHeight;
 
         // Convert to container position
         marker.css("left", posX);
         marker.css("bottom", posY);
-        marker.css("width", (entity.width / this.mapWidth) * this.containerWidth * this.markerMultiplier);
-        marker.css("height", (entity.height / this.mapHeight) * this.containerHeight * this.markerMultiplier);
+        marker.css("width", (entity.width / this.mapWidth) * this.containerMapWidth * this.markerMultiplier);
+        marker.css("height", (entity.height / this.mapHeight) * this.containerMapHeight * this.markerMultiplier);
         marker.removeClass("remove");
     },
 
-    markerFetchOrCreate: function (entity)
+    markerFetchOrCreate: function (container, entity)
     {
-        var result = $("#marker_" + entity.id);
+        var result = $(".marker_" + entity.id);
 
         if (result.size() == 0)
         {
@@ -93,7 +95,7 @@ game.ui.map =
             var specialClasses = entity.getRadarClasses ? entity.getRadarClasses() : null;
 
             // Add item
-            $("#ps-map").append("<span id='marker_" + entity.id + "'" + (specialClasses ? "class='" + specialClasses + "'" : "") + "></span>");
+            container.append("<span class='marker_" + entity.id + (specialClasses ? " " + specialClasses : "") + "'></span>");
         }
 
         return result;

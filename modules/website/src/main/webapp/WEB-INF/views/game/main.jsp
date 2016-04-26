@@ -57,6 +57,10 @@
                 <span class="marker"></span>
             </div>
 
+            <div id="ps-map-radar" class="panel top">
+                <span class="marker"></span>
+            </div>
+
             <div id="ps-activity" class="panel top">
                 <div id="ps-activity-items">
                     <p>

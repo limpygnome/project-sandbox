@@ -3,15 +3,27 @@
     ********************************************************************************************************************
 */
 
-#projectsandbox #ps-ui #ps-map
+#projectsandbox #ps-ui #ps-map,
+#projectsandbox #ps-ui #ps-map-radar
 {
     position: fixed;
     right: 1.5em;
-    bottom: 8em;
-    width: 24em;
-    height: 15em;
     border-color: rgba(0, 255, 68, 0.4);
     background: rgba(0, 102, 34, 0.4);
+}
+
+#projectsandbox #ps-ui #ps-map
+{
+    bottom: 8em;
+    width: 18em;
+    height: 18em;
+}
+
+#projectsandbox #ps-ui #ps-map-radar
+{
+    bottom: 28em;
+    width: 20em;
+    height: 20em;
 }
 
 #projectsandbox #ps-ui #ps-map span
