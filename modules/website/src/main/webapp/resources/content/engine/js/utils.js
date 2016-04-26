@@ -152,6 +152,14 @@ projectSandbox.utils =
     formatNumberCommas: function(value)
     {
         return value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+    },
+
+    distance: function(x1, y1, x2, y2)
+    {
+        var x = (x1 - x2) * (x1 - x2);
+        var y = (y1 - y2) * (y1 - y2);
+        var result = Math.sqrt(x + y);
+        return result;
     }
 
 }

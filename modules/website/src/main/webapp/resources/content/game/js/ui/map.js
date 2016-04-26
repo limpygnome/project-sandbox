@@ -1,7 +1,11 @@
 game.ui.map =
 {
-    // Multiplier for scaling items on radar
-    markerMultiplier: 100.0,
+    // Multiplier for scaling items on map
+    mapMarkerMultiplier: 100.0,
+
+    // Maximum distance for radar items
+    radarDistance: 700.0,
+    radarDistanceHalf: this.radarDistance / 2.0,
 
     // The container for the map and cached size
     containerMap: null,
@@ -49,27 +53,20 @@ game.ui.map =
     {
         if (this.mapWidth != null && this.mapHeight != null)
         {
-            // Update map
-            if (this.containerMap != null)
+            // Reset markers
+            this.markersReset(this.containerMap);
+            this.markersReset(this.containerRadar);
+
+            // Render all entities available
+            for (var kv of projectSandbox.entities)
             {
-                // Reset markers
-                this.markersReset(this.containerMap);
-
-                // Render all entities available
-                for (var kv of projectSandbox.entities)
-                {
-                    this.markerUpdate(this.containerMap, kv[1]);
-                }
-
-                // Purge old
-                this.markersPurgeOld(this.containerMap);
+                this.markerUpdateMap(kv[1]);
+                this.markerUpdateRadar(kv[1]);
             }
 
-            // Update radar
-            if (this.containerRadar != null)
-            {
-                //
-            }
+            // Purge old
+            this.markersPurgeOld(this.containerMap);
+            this.markersPurgeOld(this.containerRadar);
         }
         else if (projectSandbox.map != null)
         {
@@ -92,19 +89,41 @@ game.ui.map =
         container.find(".remove").remove();
     },
 
-    markerUpdate: function (container, entity)
+    markerUpdateMap: function (entity)
     {
-        var marker = this.markerFetchOrCreate(container, entity);
+        var marker = this.markerFetchOrCreate(this.containerMap, entity);
 
         // Calculate position as unit vector and multiply by container size
         var posX = (entity.x / this.mapWidth) * this.containerMapWidth;
         var posY = (entity.y / this.mapHeight) * this.containerMapHeight;
 
-        // Convert to container position
-        marker.css("left", posX);
-        marker.css("bottom", posY);
-        marker.css("width", (entity.width / this.mapWidth) * this.containerMapWidth * this.markerMultiplier);
-        marker.css("height", (entity.height / this.mapHeight) * this.containerMapHeight * this.markerMultiplier);
+        // Calculate size relative to size of entity
+        var width = (entity.width / this.mapWidth) * this.containerMapWidth * this.mapMarkerMultiplier;
+        var height = (entity.height / this.mapHeight) * this.containerMapHeight * this.mapMarkerMultiplier;
+
+        this.markerUpdate(marker, posX, posY, width, height);
+    },
+
+    markerUpdateRadar: function (container, entity)
+    {
+        // Check entity within range
+        // -- Use camera since cheaper
+        var distance = projectSandbox.utils.distance(projectSandbox.camera.x, projectSandbox.camera.y, entity.x, entity.y);
+
+        if (distance < this.radarDistance)
+        {
+            // Offset from center of distance, convert to unit vector, multiply by container size
+            var offsetX = (entity.x - projectSandbox.camera.x) + radarDistanceHalf;
+            var offsetY = (entity.y - projectSandbox.camera.y) + radarDistanceHalf;
+        }
+    },
+
+    markerUpdate: function (marker, x, y, width, height)
+    {
+        marker.css("left", x);
+        marker.css("bottom", y);
+        marker.css("width", width);
+        marker.css("height", height);
         marker.removeClass("remove");
     },
 
