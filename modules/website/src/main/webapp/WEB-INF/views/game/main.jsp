@@ -53,11 +53,11 @@
                 </ol>
             </div>
 
-            <div id="ps-map" class="panel top">
+            <div id="ps-map" class="panel top radar">
                 <span class="marker"></span>
             </div>
 
-            <div id="ps-map-radar" class="panel top">
+            <div id="ps-map-radar" class="panel top radar">
                 <span class="marker"></span>
             </div>
 

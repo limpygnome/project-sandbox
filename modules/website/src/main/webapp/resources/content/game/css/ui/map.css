@@ -1,16 +1,7 @@
 /*
-    Map
+    Map and radar UI panels
     ********************************************************************************************************************
 */
-
-#projectsandbox #ps-ui #ps-map,
-#projectsandbox #ps-ui #ps-map-radar
-{
-    position: fixed;
-    right: 1.5em;
-    border-color: rgba(0, 255, 68, 0.4);
-    background: rgba(0, 102, 34, 0.4);
-}
 
 #projectsandbox #ps-ui #ps-map
 {
@@ -26,18 +17,6 @@
     height: 20em;
 }
 
-#projectsandbox #ps-ui #ps-map span
-{
-    position: absolute;
-    background: rgba(0, 102, 34, 0.8);
-    min-width: 0.5em;
-    min-height: 0.5em;
-}
-#projectsandbox #ps-ui #ps-map span.danger
-{
-    background: rgba(255, 0, 0, 0.8);
-}
-
 @media all and (max-width: 1000px)
 {
     #projectsandbox #ps-ui #ps-map
@@ -45,4 +24,34 @@
         width: 18em;
         height: 18em;
     }
+}
+
+
+/*
+    Shared radar/map styling
+*/
+
+#projectsandbox #ps-ui .radar
+{
+    position: fixed;
+    right: 1.5em;
+    border-color: rgba(0, 255, 68, 0.4);
+    background: rgba(0, 102, 34, 0.4);
+}
+
+#projectsandbox #ps-ui .radar span
+{
+    position: absolute;
+    background: rgba(0, 102, 34, 0.8);
+    min-width: 0.5em;
+    min-height: 0.5em;
+}
+#projectsandbox #ps-ui .radar span.danger
+{
+    background: rgba(255, 0, 0, 0.5);
+}
+
+#projectsandbox #ps-ui .radar span.self
+{
+    background: rgba(0, 200, 34, 0.4);
 }

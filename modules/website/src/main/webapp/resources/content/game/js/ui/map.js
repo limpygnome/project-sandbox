@@ -4,8 +4,8 @@ game.ui.map =
     mapMarkerMultiplier: 100.0,
 
     // Maximum distance for radar items
-    radarDistance: 700.0,
-    radarDistanceHalf: this.radarDistance / 2.0,
+    radarDistance: 4096.0,
+    radarDistanceHalf: null,
 
     // The container for the map and cached size
     containerMap: null,
@@ -24,6 +24,9 @@ game.ui.map =
 
     reset: function()
     {
+        // Setup radar distance half
+        this.radarDistanceHalf = this.radarDistance / 2.0;
+
         // Fetch map container, remove markers and cache size
         this.containerMap = $("#ps-map");
 
@@ -58,10 +61,16 @@ game.ui.map =
             this.markersReset(this.containerRadar);
 
             // Render all entities available
+            var entity;
             for (var kv of projectSandbox.entities)
             {
-                this.markerUpdateMap(kv[1]);
-                this.markerUpdateRadar(kv[1]);
+                entity = kv[1];
+
+                if (!entity.dead)
+                {
+                    this.markerUpdateMap(entity);
+                    this.markerUpdateRadar(entity);
+                }
             }
 
             // Purge old
@@ -104,7 +113,7 @@ game.ui.map =
         this.markerUpdate(marker, posX, posY, width, height);
     },
 
-    markerUpdateRadar: function (container, entity)
+    markerUpdateRadar: function (entity)
     {
         // Check entity within range
         // -- Use camera since cheaper
@@ -112,9 +121,27 @@ game.ui.map =
 
         if (distance < this.radarDistance)
         {
-            // Offset from center of distance, convert to unit vector, multiply by container size
-            var offsetX = (entity.x - projectSandbox.camera.x) + radarDistanceHalf;
-            var offsetY = (entity.y - projectSandbox.camera.y) + radarDistanceHalf;
+            // Compute size
+            var width = 32;
+            var height = 32;
+
+            var playerEntity = projectSandbox.getPlayerEntity();
+
+            // Offset from center of distance, convert to unit vector
+            var posX = (entity.x - playerEntity.x + this.radarDistanceHalf) / this.radarDistance;
+            var posY = (entity.y - playerEntity.y + this.radarDistanceHalf) / this.radarDistance;
+
+            // Multiply by container size
+            posX *= this.containerRadarWidth;
+            posY *= this.containerRadarHeight;
+
+            // Subtract marker size
+            posX -= width / 2.0;
+            posY -= height / 2.0;
+
+            // Fetch marker and update
+            var marker = this.markerFetchOrCreate(this.containerRadar, entity);
+            this.markerUpdate(marker, posX, posY, width, height);
         }
     },
 
@@ -129,15 +156,21 @@ game.ui.map =
 
     markerFetchOrCreate: function (container, entity)
     {
-        var result = $(".marker_" + entity.id);
+        var result = container.find(".marker_" + entity.id);
 
         if (result.size() == 0)
         {
             // Fetch special radar classes
-            var specialClasses = entity.getRadarClasses ? entity.getRadarClasses() : null;
+            var specialClasses = entity.getRadarClasses ? entity.getRadarClasses() : "";
+
+            // Add class for self
+            if (entity.id == projectSandbox.playerEntityId)
+            {
+                specialClasses += " self";
+            }
 
             // Add item
-            container.append("<span class='marker_" + entity.id + (specialClasses ? " " + specialClasses : "") + "'></span>");
+            container.append("<span class='marker_" + entity.id + " " + specialClasses + "'></span>");
         }
 
         return result;

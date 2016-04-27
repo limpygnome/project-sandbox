@@ -376,6 +376,18 @@ var projectSandbox =
 
         // Setup camera
         projectSandbox.camera.setup();
+    },
+
+    getPlayerEntity: function()
+    {
+        var result = null;
+
+        if (this.playerEntityId != null && this.playerEntityId != 0)
+        {
+            result = this.entities.get(this.playerEntityId);
+        }
+
+        return result;
     }
 
 }
