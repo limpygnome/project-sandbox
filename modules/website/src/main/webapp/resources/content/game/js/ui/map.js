@@ -106,11 +106,7 @@ game.ui.map =
         var posX = (entity.x / this.mapWidth) * this.containerMapWidth;
         var posY = (entity.y / this.mapHeight) * this.containerMapHeight;
 
-        // Calculate size relative to size of entity
-        var width = (entity.width / this.mapWidth) * this.containerMapWidth * this.mapMarkerMultiplier;
-        var height = (entity.height / this.mapHeight) * this.containerMapHeight * this.mapMarkerMultiplier;
-
-        this.markerUpdate(marker, posX, posY, width, height);
+        this.markerUpdate(marker, posX, posY);
     },
 
     markerUpdateRadar: function (entity)
@@ -121,10 +117,7 @@ game.ui.map =
 
         if (distance < this.radarDistance)
         {
-            // Compute size
-            var width = 32;
-            var height = 32;
-
+            // TODO: move into project sandbox?
             var playerEntity = projectSandbox.getPlayerEntity();
 
             // Offset from center of distance, convert to unit vector
@@ -135,22 +128,16 @@ game.ui.map =
             posX *= this.containerRadarWidth;
             posY *= this.containerRadarHeight;
 
-            // Subtract marker size
-            posX -= width / 2.0;
-            posY -= height / 2.0;
-
             // Fetch marker and update
             var marker = this.markerFetchOrCreate(this.containerRadar, entity);
-            this.markerUpdate(marker, posX, posY, width, height);
+            this.markerUpdate(marker, posX, posY);
         }
     },
 
     markerUpdate: function (marker, x, y, width, height)
     {
-        marker.css("left", x);
-        marker.css("bottom", y);
-        marker.css("width", width);
-        marker.css("height", height);
+        marker.css("left", x - (marker.width() / 2));
+        marker.css("bottom", y - (marker.height() / 2));
         marker.removeClass("remove");
     },
 

@@ -26,7 +26,7 @@ public class RocketLauncher extends AbstractWeapon
     {
         super(
                 (short) 1,  // bullets per mag
-                (short) 10, // mags
+                (short) 100, // mags
                 1,          // fire delay
                 500         // reload delay
         );
@@ -64,7 +64,7 @@ public class RocketLauncher extends AbstractWeapon
     @Override
     public String eventFetchItemText(Controller controller)
     {
-        return String.format("%04d", mags);
+        return String.format("%04d", mags + bullets);
     }
 
 }
