@@ -34,6 +34,9 @@ var projectSandbox =
     
     // Identifier of current ent
     playerEntityId: null,
+
+    // The player's current entity
+    playerEntity: null,
     
     // The current time, updated every render loop execution
     currentTime: (new Date).getTime(),
@@ -161,6 +164,9 @@ var projectSandbox =
     
     gameLogic: function()
     {
+        // Update player's entity
+        this.playerEntity = this.entities.get(this.playerEntityId);
+
         // Update time
         this.currentTime = (new Date).getTime();
         
@@ -376,18 +382,6 @@ var projectSandbox =
 
         // Setup camera
         projectSandbox.camera.setup();
-    },
-
-    getPlayerEntity: function()
-    {
-        var result = null;
-
-        if (this.playerEntityId != null && this.playerEntityId != 0)
-        {
-            result = this.entities.get(this.playerEntityId);
-        }
-
-        return result;
     }
 
 }

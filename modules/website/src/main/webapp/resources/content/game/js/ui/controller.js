@@ -174,8 +174,7 @@ game.ui.controller =
     {
         // TODO: move this to be entirely event driven, so no logic loop is needed for UI except fps
 
-        var plyEntId = projectSandbox.playerEntityId;
-        var ent = projectSandbox.entities.get(plyEntId);
+        var ent = projectSandbox.playerEntity;
         
         if (ent != null)
         {

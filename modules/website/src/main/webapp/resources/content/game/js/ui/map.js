@@ -21,7 +21,6 @@ game.ui.map =
     mapWidth: null,
     mapHeight: null,
 
-
     reset: function()
     {
         // Setup radar distance half
@@ -117,8 +116,7 @@ game.ui.map =
 
         if (distance < this.radarDistance)
         {
-            // TODO: move into project sandbox?
-            var playerEntity = projectSandbox.getPlayerEntity();
+            var playerEntity = projectSandbox.playerEntity;
 
             // Offset from center of distance, convert to unit vector
             var posX = (entity.x - playerEntity.x + this.radarDistanceHalf) / this.radarDistance;
