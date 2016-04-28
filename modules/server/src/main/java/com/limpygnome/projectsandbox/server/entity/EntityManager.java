@@ -108,54 +108,29 @@ public class EntityManager implements EventLogicCycleService, IdCounterConsumer
         }
     }
 
-    public boolean remove(short entityId)
+    public void remove(Entity entity)
     {
-        return removeInternal(entityId, null);
-    }
-
-    public boolean remove(Entity entity)
-    {
-        return removeInternal(entity.id, entity);
-    }
-
-    private boolean removeInternal(short entityId, Entity entity)
-    {
-        boolean result = false;
-
         synchronized (this)
         {
-            // Check ents collection
-            Entity entityFetchedWorld = entities.get(entityId);
-
-            if (entityFetchedWorld != null && entityFetchedWorld == entity)
+            synchronized (entity)
             {
-                // Update entity and call events
-                entity.setState(EntityState.PENDING_DELETED);
-
-                LOG.debug("Entity set for removal - {}", entity);
-
-                result = true;
-            }
-            else
-            {
-                // Attempt removal on ents to be added - unlikely, but still possible
-                Entity entityFetchedNew = entitiesNew.get(entityId);
-
-                if (entityFetchedNew != null && entityFetchedNew == entity)
+                if (entities.containsKey(entity.id))
                 {
-                    LOG.debug("Newly added entity set for removal- {}", entity);
-                    result = true;
+                    // Mark entity for deletion
+                    entity.setState(EntityState.PENDING_DELETED);
+
+                    LOG.debug("Entity set for removal - ent id: {}", entity.id);
+
+                    // Invoke entity event handler
+                    entity.eventPendingDeleted(controller);
+                }
+                else
+                {
+                    // Remove from pending entities
+                    entitiesNew.remove(entity);
                 }
             }
         }
-
-        if (result)
-        {
-            // Invoke event for entity
-            entity.eventPendingDeleted(controller);
-        }
-
-        return result;
     }
 
     @Override

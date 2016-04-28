@@ -151,17 +151,22 @@ public class PlayerService implements EventLogicCycleService, IdCounterConsumer
 
         if (playerInfo != null)
         {
-            Entity ent = playerInfo.entity;
+            Entity entity = playerInfo.entity;
 
             // Persist player's current entity
             playerEntityService.persistPlayer(playerInfo);
 
             // Remove entity
             // TODO: make this more generic...perhaps remove if spawned entity
-            if (ent != null && ent instanceof Player)
+            if (entity != null && entity instanceof PlayerEntity)
             {
-                ent.map.entityManager.remove(ent);
-                LOG.debug("Removed entity for disconnecting player - ent id: {}", ent.id);
+                PlayerEntity playerEntity = (PlayerEntity) entity;
+
+                if (playerEntity.isRemovableOnPlayerEntChange(playerInfo))
+                {
+                    entity.map.entityManager.remove(playerEntity);
+                    LOG.debug("Removed entity for disconnecting player - ply id: {}, ent id: {}", playerInfo.playerId, entity.id);
+                }
             }
 
             synchronized (this)

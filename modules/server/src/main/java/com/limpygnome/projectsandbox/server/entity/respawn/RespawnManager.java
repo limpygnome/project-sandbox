@@ -63,20 +63,10 @@ public class RespawnManager implements EventLogicCycleService
         // Handle entity state transition based on current state
         Entity entity = pendingRespawn.entity;
 
-        switch (entity.getState())
-        {
-            case CREATED:
-                // Ensure entity does not already exist
-                map.entityManager.remove(entity);
-                break;
-            case NONE:
-            case UPDATED:
-                // Do nothing, basically just allowed states...
-                break;
-            default:
-                throw new RuntimeException("Invalid state for entity respawn");
-        }
+        // Remove from world, if already exists
+        map.entityManager.remove(entity);
 
+        // Add to pending respawn...
         addToInternalPendingRespawnCollectionSynchronized(pendingRespawn);
 
         LOG.debug("Entity added for respawn - ent id: {}, respawn time: {}, current time: {}",

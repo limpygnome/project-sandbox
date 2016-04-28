@@ -53,7 +53,11 @@ game.ui.map =
 
     logic: function()
     {
-        if (this.mapWidth != null && this.mapHeight != null)
+        if (projectSandbox.playerEntity == null)
+        {
+            console.debug("game / ui / map - waiting for player to load...")
+        }
+        else if (this.mapWidth != null && this.mapHeight != null)
         {
             // Reset markers
             this.markersReset(this.containerMap);
