@@ -18,23 +18,25 @@ public class PacketStatsManager implements EventLogicCycleService
      */
     private static final long STATS_INTERVAL_MS = 5000;
 
-    private long lastStatsOutput;
+    private long lastStatsOutputTime;
     private long totalBytesIn;
     private long totalBytesOut;
+
+    private long lastTotalBytesIn;
+    private long lastTotalBytesOut;
 
     @Override
     public void logic()
     {
+        // TODO: why not use sleep instead?
+
         // Check logging enabled
         if (LOG.isDebugEnabled())
         {
             long currentTime = System.currentTimeMillis();
 
-            if (currentTime - lastStatsOutput >= STATS_INTERVAL_MS)
+            if (currentTime - lastStatsOutputTime >= STATS_INTERVAL_MS)
             {
-                // Update time at which stats begun...
-                lastStatsOutput = currentTime;
-
                 // Capture snapshot of data in/out, so we don't block I/O doing logic...
                 long totalBytesIn;
                 long totalBytesOut;
@@ -48,12 +50,26 @@ public class PacketStatsManager implements EventLogicCycleService
                 // Compute total
                 long totalBytes = totalBytesIn + totalBytesOut;
 
+                // Compute speeds
+                float timePeriod = (currentTime - lastStatsOutputTime) / 1000.0f;
+                float totalBytesSecondIn = (totalBytesIn - lastTotalBytesIn) / timePeriod;
+                float totalBytesSecondOut = (totalBytesOut - lastTotalBytesOut) / timePeriod;
+
                 // Convert to friendly strings
                 String totalIn = humanBytes(totalBytesIn);
+                String totalInSecond = humanBytes((long) totalBytesSecondIn);
                 String totalOut = humanBytes(totalBytesOut);
+                String totalOutSecond = humanBytes((long) totalBytesSecondOut);
                 String total = humanBytes(totalBytes);
 
-                LOG.debug("network statistics - in: {}, out: {}, total: {}", totalIn, totalOut, total);
+                LOG.debug("in: {} ({}s), out: {} ({}s), total: {}", totalIn, totalInSecond, totalOut, totalOutSecond, total);
+
+                // Save for next time
+                lastTotalBytesIn = totalBytesIn;
+                lastTotalBytesOut = totalBytesOut;
+
+                // Update time at which stats begun...
+                lastStatsOutputTime = currentTime;
             }
         }
     }
