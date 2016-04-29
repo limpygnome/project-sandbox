@@ -45,7 +45,7 @@ public strictfp abstract class Entity
     public ComponentCollection components;
     
     // The unique ID for the entity
-    public short id;
+    public Short id;
 
     // The ID of the faction to which the player belongs
     public short faction;
@@ -98,7 +98,7 @@ public strictfp abstract class Entity
     public Entity(WorldMap map, short width, short height)
     {
         this.map = map;
-        this.id = 0;
+        this.id = null;
         this.faction = DEFAULT_FACTION;
         this.spawn = null;
         this.components = new ComponentCollection();
@@ -107,7 +107,7 @@ public strictfp abstract class Entity
         Annotation annotationEntityType = getClass().getAnnotation(EntityType.class);
         EntityType entType = (EntityType) annotationEntityType;
         this.entityType = entType.typeId();
-        
+
         // Set initial slotState
         this.state = EntityState.CREATED;
         

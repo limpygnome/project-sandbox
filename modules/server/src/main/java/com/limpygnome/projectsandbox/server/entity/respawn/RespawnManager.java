@@ -129,6 +129,10 @@ public class RespawnManager implements EventLogicCycleService
                         iterator.remove();
                         entitiesToSpawn.add(respawnData);
                     }
+                    else
+                    {
+                        LOG.warn("Could not respawn entity - ent id: {}", pendingRespawn.entity.id);
+                    }
                 }
             }
         }
@@ -138,6 +142,7 @@ public class RespawnManager implements EventLogicCycleService
         {
             if (!respawnEntity(respawnData))
             {
+                // Re-queue if failed...
                 addToInternalPendingRespawnCollectionSynchronized(respawnData.pendingRespawn);
             }
         }
@@ -167,7 +172,7 @@ public class RespawnManager implements EventLogicCycleService
         entity.eventReset(controller, respawnData.spawn);
 
         // Add to world if new entity
-        if (entity.getState() == EntityState.CREATED && !map.entityManager.add(entity))
+        if (!map.entityManager.add(entity))
         {
             LOG.warn("Could not respawn entity, failed to add to entity manager - entity id: {}", entity.id);
             return false;

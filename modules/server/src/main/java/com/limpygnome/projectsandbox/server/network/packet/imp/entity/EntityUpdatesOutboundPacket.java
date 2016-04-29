@@ -149,4 +149,5 @@ public class EntityUpdatesOutboundPacket extends OutboundPacket
         // Add custom data
         ent.eventPacketEntDeleted(packetData);
     }
+
 }

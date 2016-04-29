@@ -114,7 +114,7 @@ public class EntityManager implements EventLogicCycleService, IdCounterConsumer
         {
             synchronized (entity)
             {
-                if (entities.containsKey(entity.id))
+                if (entity.id != null && entities.containsKey(entity.id))
                 {
                     // Mark entity for deletion
                     entity.setState(EntityState.PENDING_DELETED);
