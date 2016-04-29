@@ -307,7 +307,7 @@ public abstract class PlayerEntity extends Entity
         // Check if there are any players left
         for (PlayerInfo playerInfoLeft : players)
         {
-            if (playerInfoLeft != null)
+            if (playerInfoLeft != null && playerInfoLeft != playerInfo)
             {
                 return false;
             }
