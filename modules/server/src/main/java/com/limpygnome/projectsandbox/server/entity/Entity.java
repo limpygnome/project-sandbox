@@ -261,6 +261,22 @@ public strictfp abstract class Entity
     {
         return state;
     }
+
+    public synchronized void transitionState()
+    {
+        switch(state)
+        {
+            case CREATED:
+                setState(EntityState.NONE);
+                break;
+            case PENDING_DELETED:
+                setState(EntityState.DELETED);
+                break;
+            case UPDATED:
+                setState(EntityState.NONE);
+                break;
+        }
+    }
     
     public synchronized void setState(EntityState state)
     {

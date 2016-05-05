@@ -15,6 +15,7 @@ import org.apache.logging.log4j.Logger;
 
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -142,6 +143,7 @@ public class EntityManager implements EventLogicCycleService, IdCounterConsumer
 
             synchronized (this)
             {
+                Entity entity;
                 Entity entityA;
                 Entity entityB;
 
@@ -239,8 +241,6 @@ public class EntityManager implements EventLogicCycleService, IdCounterConsumer
                 if (!entitiesNew.isEmpty())
                 {
                     // Iterate new ent and add to world
-                    Entity entity;
-
                     for (Map.Entry<Short, Entity> kv : entitiesNew.entrySet())
                     {
                         entity = kv.getValue();
@@ -256,6 +256,29 @@ public class EntityManager implements EventLogicCycleService, IdCounterConsumer
                     }
 
                     entitiesNew.clear();
+                }
+
+                // Build and distribute update packets
+
+
+                // Update state of entities
+                Iterator<Map.Entry<Short, Entity>> iterator = entities.entrySet().iterator();
+                Map.Entry<Short, Entity> kv;
+
+                while (iterator.hasNext())
+                {
+                    kv = iterator.next();
+                    entity = kv.getValue();
+
+                    // Remove deleted entities, else transition to next state...
+                    if (entity.getState() == EntityState.DELETED)
+                    {
+                        iterator.remove();
+                    }
+                    else
+                    {
+                        entity.transitionState();
+                    }
                 }
 
                 // Build update packet
