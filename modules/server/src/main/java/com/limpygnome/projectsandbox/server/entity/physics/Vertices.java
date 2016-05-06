@@ -26,6 +26,8 @@ public class Vertices
     
     /**
      * The vector of the centre of the vertices.
+     *
+     * TODO: is this needed? Seems like waste...
      */
     public Vector2 center;
     

@@ -7,6 +7,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
@@ -33,7 +34,7 @@ public class QuadTree
      *
      * @param entity the entity
      */
-    public void update(Entity entity)
+    public synchronized void update(Entity entity)
     {
         if (entityToNode.containsKey(entity))
         {
@@ -67,8 +68,9 @@ public class QuadTree
      *
      * @param entity the entity
      */
-    public void remove(Entity entity)
+    public synchronized void remove(Entity entity)
     {
+        // TODO: call this when entity marked for deletion; saves checking if ents are pending deleted...
         QuadTreeNode node = entityToNode.get(entity);
 
         if (node != null)
@@ -78,15 +80,51 @@ public class QuadTree
         }
     }
 
-    public List<Entity> getCollidableEntities(Entity entity)
+    /**
+     * Fetches entities which may be able to collide with the provided entity.
+     *
+     * @param entity the entity
+     * @return list of possible entities
+     */
+    public synchronized List<Entity> getCollidableEntities(Entity entity)
     {
-        // Fetch all nodes to which entity intersects
-        // -- just get node and work way up tree until null; big entity cud be in parent, so shud be added to result...
-        // -- add all entities from nodes to actual returned result
+        List<Entity> result = new LinkedList<>();
+
+        // Fetch node of entity
+        QuadTreeNode entityNode = entityToNode.get(entity);
+
+        // Add all entities in child nodes
+        entityNode.addEntitiesAndRecurseChildNodes(result);
+
+        // Traverse up to parent and add all entities along the way
+        // -- May be too big to fit into current or child quadtree nodes
+        QuadTreeNode currentNode = entityNode;
+
+        while ((currentNode = currentNode.parentNode) != null)
+        {
+            result.addAll(currentNode.entities);
+        }
+
+        return result;
     }
 
-    public List<Entity> getEntitiesWithinRadius(Vector2 position, float radius)
+    /**
+     * Fetches entities within a radius of another entity.
+     *
+     * @param entity the entity
+     * @param radius the radius
+     * @return list of entities within radius of entity
+     */
+    public synchronized List<Entity> getEntitiesWithinRadius(Entity entity, float radius)
     {
+        return getEntitiesWithinRadius(entity.position, radius);
+    }
+
+    public synchronized List<Entity> getEntitiesWithinRadius(Vector2 position, float radius)
+    {
+        // Calculate ranges needed for intersection of parent nodes
+
+        // Add intersecting child quads
         // calculate bounding box
         // work way down tree and test intersection with calculated bounds, add nodes to result
     }

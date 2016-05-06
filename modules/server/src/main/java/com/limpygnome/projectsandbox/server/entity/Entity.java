@@ -317,6 +317,7 @@ public strictfp abstract class Entity
         else
         {
             LOG.error("Disallowed state transition - old state: {} -> new state: {}, ent: {}", this.state, state, this);
+            throw new RuntimeException("Unexpected entity transition");
         }
     }
     
