@@ -60,11 +60,16 @@ public class QuadTreeNode
     boolean intersects(Entity entity)
     {
         // TODO: ask entity for bounding box, which entity cache's; or at least their largest size...
-        float maxSize = entity.cachedVertices.collisionRadius / 2.0f;
+        float maxSizeHalf = entity.cachedVertices.collisionRadius / 2.0f;
         float x = entity.position.x;
         float y = entity.position.y;
 
-        return x - maxSize >= lowerX && y - maxSize >= lowerY && x + maxSize <= upperX && y + maxSize <= upperY;
+        return intersects(x - maxSizeHalf, y - maxSizeHalf, x + maxSizeHalf, y + maxSizeHalf);
+    }
+
+    boolean intersects(float lowerX, float lowerY, float upperX, float upperY)
+    {
+        return lowerX >= this.lowerX && lowerY >= this.lowerY && upperX <= this.upperX && upperY <= this.upperY;
     }
 
     /*
@@ -127,6 +132,20 @@ public class QuadTreeNode
         for (QuadTreeNode node : childNodes)
         {
             addEntitiesAndRecurseChildNodes(result);
+        }
+    }
+
+    void addEntitiesAndRecurseFittingChildNodes(List<Entity> result, float lowerX, float lowerY, float upperX, float upperY)
+    {
+        result.addAll(entities);
+
+        // Traverse nodes which fit lower/upper co-ords
+        for (QuadTreeNode node : childNodes)
+        {
+            if (node.intersects(lowerX, lowerY, upperX, upperY))
+            {
+                addEntitiesAndRecurseFittingChildNodes(result, lowerX, lowerY, upperX, upperY);
+            }
         }
     }
 

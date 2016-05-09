@@ -6,10 +6,7 @@ import com.limpygnome.projectsandbox.server.world.map.WorldMap;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Quad-tree for spatial partitioning of entities.
@@ -122,11 +119,29 @@ public class QuadTree
 
     public synchronized List<Entity> getEntitiesWithinRadius(Vector2 position, float radius)
     {
-        // Calculate ranges needed for intersection of parent nodes
+        List<Entity> result = new LinkedList<>();
 
-        // Add intersecting child quads
-        // calculate bounding box
-        // work way down tree and test intersection with calculated bounds, add nodes to result
+        // Recurse nodes to add all items in quads which can fit the position
+        rootNode.addEntitiesAndRecurseFittingChildNodes(result, position.x - radius, position.y - radius, position.x + radius, position.y + radius);
+
+        // Now filter entities in result not within radius
+        Iterator<Entity> iterator = result.iterator();
+
+        Entity entity;
+        float entityDistance;
+
+        while (iterator.hasNext())
+        {
+            entity = iterator.next();
+            entityDistance = Vector2.distance(entity.positionNew, position);
+
+            if (entityDistance >= radius)
+            {
+                iterator.remove();
+            }
+        }
+
+        return result;
     }
 
 }
