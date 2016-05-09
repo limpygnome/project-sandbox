@@ -65,6 +65,9 @@ public class FileSystemMapRepository implements MapRepository
 
                 if (map != null)
                 {
+                    // Prepare for runtime
+                    map.postMapLoad();
+
                     // Build initial packet
                     map.rebuildMapPacket();
 

@@ -30,46 +30,59 @@ public class QuadTreeNode
 
         this.entities = new LinkedList<>();
         this.parentNode = parentNode;
-        this.childNodes = new QuadTreeNode[4];
 
         int newDepth = maxDepth - 1;
 
         if (newDepth >= 0)
         {
+            this.childNodes = new QuadTreeNode[4];
+
             // Split into four quadrants...
             float widthHalf = (upperX - lowerX) / 2.0f;
             float heightHalf = (upperY - lowerY) / 2.0f;
 
             // Bottom-left quad
-            childNodes[0] = new QuadTreeNode(this, newDepth, lowerX, lowerY, lowerX + widthHalf, lowerY + heightHalf);
+            this.childNodes[0] = new QuadTreeNode(this, newDepth, lowerX, lowerY, lowerX + widthHalf, lowerY + heightHalf);
 
             // Bottom-right quad
-            childNodes[1] = new QuadTreeNode(this, newDepth, lowerX + widthHalf, lowerY, upperX, lowerY + heightHalf);
+            this.childNodes[1] = new QuadTreeNode(this, newDepth, lowerX + widthHalf, lowerY, upperX, lowerY + heightHalf);
 
             // Top-left quad
-            childNodes[2] = new QuadTreeNode(this, newDepth, lowerX, lowerY + heightHalf, lowerX + widthHalf, upperY);
+            this.childNodes[2] = new QuadTreeNode(this, newDepth, lowerX, lowerY + heightHalf, lowerX + widthHalf, upperY);
 
             // Top-right quad
-            childNodes[3] = new QuadTreeNode(this, newDepth, lowerX + widthHalf, lowerY + heightHalf, upperX, upperY);
+            this.childNodes[3] = new QuadTreeNode(this, newDepth, lowerX + widthHalf, lowerY + heightHalf, upperX, upperY);
+        }
+        else
+        {
+            this.childNodes = new QuadTreeNode[0];
         }
     }
 
     /*
-        Checks if the entity intersects with this node.
+        Checks if the entity is contained within this node.
      */
-    boolean intersects(Entity entity)
+    boolean contains(Entity entity)
     {
         // TODO: ask entity for bounding box, which entity cache's; or at least their largest size...
         float maxSizeHalf = entity.cachedVertices.collisionRadius / 2.0f;
         float x = entity.position.x;
         float y = entity.position.y;
 
-        return intersects(x - maxSizeHalf, y - maxSizeHalf, x + maxSizeHalf, y + maxSizeHalf);
+        return contains(x - maxSizeHalf, y - maxSizeHalf, x + maxSizeHalf, y + maxSizeHalf);
     }
 
-    boolean intersects(float lowerX, float lowerY, float upperX, float upperY)
+    boolean contains(float lowerX, float lowerY, float upperX, float upperY)
     {
         return lowerX >= this.lowerX && lowerY >= this.lowerY && upperX <= this.upperX && upperY <= this.upperY;
+    }
+
+    /*
+        Determines if this node intersects with the region specified.
+     */
+    boolean intersects(float lowerX, float lowerY, float upperX, float upperY)
+    {
+        return (upperX >= this.lowerX && lowerX < this.upperX && upperY > this.lowerY && lowerY < this.upperY);
     }
 
     /*
@@ -81,7 +94,7 @@ public class QuadTreeNode
 
         for (QuadTreeNode node : childNodes)
         {
-            if (node.intersects(entity))
+            if (node.contains(entity))
             {
                 result = node.findNodeForEntity(entity);
             }
@@ -98,8 +111,9 @@ public class QuadTreeNode
     {
         QuadTreeNode result;
 
-        if (intersects(entity))
+        if (contains(entity))
         {
+            // Check if we can fit into a child node yet...
             QuadTreeNode childNode = findNodeForEntity(entity);
 
             if (childNode != null)
@@ -113,6 +127,7 @@ public class QuadTreeNode
         }
         else if (parentNode != null)
         {
+            // Start search using neighboring nodes
             result = parentNode.updateEntity(entity);
         }
         else
@@ -144,7 +159,7 @@ public class QuadTreeNode
         {
             if (node.intersects(lowerX, lowerY, upperX, upperY))
             {
-                addEntitiesAndRecurseFittingChildNodes(result, lowerX, lowerY, upperX, upperY);
+                node.addEntitiesAndRecurseFittingChildNodes(result, lowerX, lowerY, upperX, upperY);
             }
         }
     }

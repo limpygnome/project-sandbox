@@ -6,6 +6,7 @@ import com.limpygnome.projectsandbox.server.world.map.WorldMap;
 import com.limpygnome.projectsandbox.shared.model.GameSession;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 /**
@@ -18,6 +19,9 @@ public class PlayerEntityService
 
     private static final String PLAYERDATA_INVENTORY_KEY = "player_persisted_inventory";
     private static final String PLAYERDATA_ENT_TYPE_ID_KEY = "player_persisted_entity_type";
+
+    @Autowired
+    private EntTypeMappingStoreService entTypeMappingStoreService;
 
     public PlayerEntity createPlayer(WorldMap worldMap, PlayerInfo playerInfo)
     {
@@ -55,7 +59,7 @@ public class PlayerEntityService
 
         if (entityTypeId != null && entityTypeId > 0)
         {
-            Class clazz = worldMap.entityManager.entTypeMappingStoreService.getEntityClassByTypeId(entityTypeId);
+            Class clazz = entTypeMappingStoreService.getEntityClassByTypeId(entityTypeId);
             boolean isPlayerEntityInstance = PlayerEntity.class.isAssignableFrom(clazz);
 
             if (clazz == null || !isPlayerEntityInstance)

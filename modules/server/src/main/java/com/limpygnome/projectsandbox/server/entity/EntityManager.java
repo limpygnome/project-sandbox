@@ -1,6 +1,5 @@
 package com.limpygnome.projectsandbox.server.entity;
 
-import com.limpygnome.projectsandbox.game.entity.living.Player;
 import com.limpygnome.projectsandbox.server.entity.death.MapBoundsKiller;
 import com.limpygnome.projectsandbox.server.entity.physics.collisions.CollisionDetection;
 import com.limpygnome.projectsandbox.server.entity.physics.collisions.CollisionResult;
@@ -39,8 +38,8 @@ public class EntityManager implements EventLogicCycleService, IdCounterConsumer
     @Autowired
     private CollisionDetection collisionDetection;
     @Autowired
-    public EntTypeMappingStoreService entTypeMappingStoreService;
-    @Autowired
+    private EntTypeMappingStoreService entTypeMappingStoreService;
+
     private QuadTree quadTree;
 
     public final HashMap<Short, Entity> entities;
@@ -59,6 +58,11 @@ public class EntityManager implements EventLogicCycleService, IdCounterConsumer
 
         // Inject dependencies...
         controller.inject(this);
+    }
+
+    public void postMapLoad()
+    {
+        this.quadTree = new QuadTree(map);
     }
 
     public Entity fetch(Short key)

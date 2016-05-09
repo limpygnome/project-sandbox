@@ -57,11 +57,20 @@ public abstract class WorldMap
         this.mapId = mapId;
 
         // Setup managers
-        // TODO: either pass or remove references to controller for managers
         this.entityManager = new EntityManager(controller, this);
         this.respawnManager = new RespawnManager(controller, this);
         this.effectsManager = new EffectsManager(controller, this);
         this.artificialIntelligenceManager = new ArtificialIntelligenceManager(controller, this);
+    }
+
+    /**
+     * Sets the map up for runtime.
+     *
+     * This should be done post loading map properties and data.
+     */
+    public void postMapLoad()
+    {
+        this.entityManager.postMapLoad();
     }
 
     public void logic()

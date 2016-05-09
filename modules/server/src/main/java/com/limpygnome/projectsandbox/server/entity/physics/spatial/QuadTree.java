@@ -33,30 +33,52 @@ public class QuadTree
      */
     public synchronized void update(Entity entity)
     {
+        QuadTreeNode oldNode = null;
+        QuadTreeNode newNode = null;
+
+        // Determine if node needs to be set/changed
         if (entityToNode.containsKey(entity))
         {
             // Update entity by recursing from old node (most likely moved to neighbor)
-            QuadTreeNode oldNode = entityToNode.get(entity);
-            QuadTreeNode newNode = oldNode.updateEntity(entity);
+            oldNode = entityToNode.get(entity);
+            newNode = oldNode.updateEntity(entity);
 
-            if (oldNode != newNode)
+            // Check the two nodes are different...
+            if (oldNode == newNode)
             {
-                entityToNode.put(entity, newNode);
+                // Don't bother updating...
+                oldNode = null;
+                newNode = null;
             }
         }
         else
         {
-            QuadTreeNode node = rootNode.findNodeForEntity(entity);
+            newNode = rootNode.findNodeForEntity(entity);
 
-            if (node != null)
+            if (newNode != null)
             {
                 // Add mapping for entity
-                entityToNode.put(entity, node);
+                entityToNode.put(entity, newNode);
             }
             else
             {
                 LOG.warn("Could not insert entity into quad-tree - entity id: {}", entity.id);
             }
+        }
+
+        if (oldNode != null)
+        {
+            // Remove entity from old node
+            oldNode.entities.remove(entity);
+        }
+
+        if (newNode != null)
+        {
+            // Add entity to new node
+            newNode.entities.add(entity);
+
+            // Update mapping for entity -> node
+            entityToNode.put(entity, newNode);
         }
     }
 
