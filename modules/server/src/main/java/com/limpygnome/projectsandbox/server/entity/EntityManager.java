@@ -1,11 +1,14 @@
 package com.limpygnome.projectsandbox.server.entity;
 
+import com.limpygnome.projectsandbox.game.entity.living.Player;
 import com.limpygnome.projectsandbox.server.entity.death.MapBoundsKiller;
 import com.limpygnome.projectsandbox.server.entity.physics.collisions.CollisionDetection;
 import com.limpygnome.projectsandbox.server.entity.physics.collisions.CollisionResult;
 import com.limpygnome.projectsandbox.server.Controller;
 import com.limpygnome.projectsandbox.server.entity.physics.collisions.map.CollisionMapResult;
+import com.limpygnome.projectsandbox.server.entity.physics.spatial.QuadTree;
 import com.limpygnome.projectsandbox.server.network.packet.imp.entity.EntityUpdatesOutboundPacket;
+import com.limpygnome.projectsandbox.server.player.PlayerInfo;
 import com.limpygnome.projectsandbox.server.service.EventLogicCycleService;
 import com.limpygnome.projectsandbox.server.util.IdCounterProvider;
 import com.limpygnome.projectsandbox.server.util.counters.IdCounterConsumer;
@@ -34,9 +37,10 @@ public class EntityManager implements EventLogicCycleService, IdCounterConsumer
 
     @Autowired
     private CollisionDetection collisionDetection;
-
     @Autowired
     public EntTypeMappingStoreService entTypeMappingStoreService;
+    @Autowired
+    private QuadTree quadTree;
 
     public final HashMap<Short, Entity> entities;
     private final HashMap<Short, Entity> entitiesNew;
@@ -143,155 +147,203 @@ public class EntityManager implements EventLogicCycleService, IdCounterConsumer
 
             synchronized (this)
             {
-                Entity entity;
-                Entity entityA;
-                Entity entityB;
-
                 // Execute logic for each entity
-                for (Map.Entry<Short, Entity> kv : entities.entrySet())
-                {
-                    entityA = kv.getValue();
+                executeEntityLogic();
 
-                    // We won't run logic for deleted or dead enities
-                    if (!entityA.isDeleted() && !entityA.isDead())
-                    {
-                        entityA.eventLogic(controller);
-                    }
-                }
-
-                // Fetch map boundaries
-                float mapMaxX = map.getMaxX();
-                float mapMaxY = map.getMaxY();
-
-                // Perform collision check for each entity
-                CollisionResult collisionResult;
-                Collection<CollisionMapResult> mapResults;
-
-                for (Map.Entry<Short, Entity> kv : entities.entrySet())
-                {
-                    entityA = kv.getValue();
-
-                    // Check entity is not deleted or dead
-                    if (!entityA.isDeleted() && !entityA.isDead())
-                    {
-                        // TODO: CRITICAL - upgrade with quadtree, N^2 - really bad...
-
-                        // Perform collision detection/handling with other ents
-                        for (Map.Entry<Short, Entity> kv2 : entities.entrySet())
-                        {
-                            entityB = kv2.getValue();
-
-                            // Check next entity is not: dead, deleted or the same ent
-                            if (!entityB.isDeleted() && !entityB.isDead() &&  entityA.id != entityB.id)
-                            {
-                                // Perform collision detection
-                                collisionResult = collisionDetection.collision(entityA, entityB);
-
-                                // Check if a collision occurred
-                                if (collisionResult.collision)
-                                {
-                                    // Inform both ents of event
-                                    entityA.eventCollisionEntity(controller, entityB, entityA, entityB, collisionResult);
-                                    entityB.eventCollisionEntity(controller, entityB, entityA, entityA, collisionResult);
-
-                                    // Check if our original entity is now deleted
-                                    // -- Only the two above events should be able to kill it
-                                    if (entityA.isDeleted() || entityA.isDead())
-                                    {
-                                        break;
-                                    }
-                                }
-                            }
-                        }
-
-                        // Check entity has still not been deleted or dead
-                        if (!entityA.isDeleted() && !entityA.isDead())
-                        {
-                            // Perform collision with map
-                            mapResults = collisionDetection.collisionMap(entityA);
-
-                            for (CollisionMapResult mapResult : mapResults)
-                            {
-                                entityA.eventCollisionMap(controller, mapResult);
-                            }
-
-                            // Update position for ent
-                            entityA.position.copy(entityA.positionNew);
-
-                            // Check ent is not outside map
-                            if  (!entityA.isDeleted() && !entityA.isDead() &&
-                                    (
-                                            entityA.positionNew.x < 0.0f || entityA.positionNew.y < 0.0f ||
-                                                    entityA.positionNew.x > mapMaxX || entityA.positionNew.y > mapMaxY
-                                    )
-                                    )
-                            {
-                                LOG.warn("Entity went outside the map - ent: {}, pos: {}", entityA, entityA.positionNew);
-
-                                // Kill the ent...
-                                entityA.kill(controller, null, MapBoundsKiller.class);
-
-                            }
-                        }
-                    }
-
-                }
+                // Perform collision detection
+                performCollisionDetection();
 
                 // Add pending ents
-                if (!entitiesNew.isEmpty())
-                {
-                    // Iterate new ent and add to world
-                    for (Map.Entry<Short, Entity> kv : entitiesNew.entrySet())
-                    {
-                        entity = kv.getValue();
-
-                        // Check ent has not been deleted
-                        if (!entity.isDeleted())
-                        {
-                            // Add to world
-                            entities.put(entity.id, entity);
-
-                            LOG.debug("Added entity to world - entity: {}", entity);
-                        }
-                    }
-
-                    entitiesNew.clear();
-                }
+                addPendingEntities();
 
                 // Build and distribute update packets
-
+                sendEntityUpdatesToPlayers();
 
                 // Update state of entities
-                Iterator<Map.Entry<Short, Entity>> iterator = entities.entrySet().iterator();
-                Map.Entry<Short, Entity> kv;
-
-                while (iterator.hasNext())
-                {
-                    kv = iterator.next();
-                    entity = kv.getValue();
-
-                    // Remove deleted entities, else transition to next state...
-                    if (entity.getState() == EntityState.DELETED)
-                    {
-                        iterator.remove();
-                    }
-                    else
-                    {
-                        entity.transitionState();
-                    }
-                }
-
-                // Build update packet
-                entityUpdatesOutboundPacket = new EntityUpdatesOutboundPacket();
-                entityUpdatesOutboundPacket.build(this, false);
+                updateEntityStates();
             }
-
-            // Send updates to players in map
-            controller.playerService.broadcast(entityUpdatesOutboundPacket, map);
         }
         catch (Exception e)
         {
             LOG.error("Exception during logic", e);
+        }
+    }
+
+    public QuadTree getQuadTree()
+    {
+        return quadTree;
+    }
+
+    private void executeEntityLogic()
+    {
+        Entity entity;
+
+        for (Map.Entry<Short, Entity> kv : entities.entrySet())
+        {
+            entity = kv.getValue();
+
+            // We won't run logic for deleted or dead enities
+            if (!entity.isDeleted() && !entity.isDead())
+            {
+                entity.eventLogic(controller);
+            }
+        }
+    }
+
+    private void performCollisionDetection()
+    {
+        Entity entityA;
+        Entity entityB;
+
+        // Fetch map boundaries
+        float mapMaxX = map.getMaxX();
+        float mapMaxY = map.getMaxY();
+
+        // Perform collision check for each entity
+        CollisionResult collisionResult;
+        Collection<CollisionMapResult> mapResults;
+
+        for (Map.Entry<Short, Entity> kv : entities.entrySet())
+        {
+            entityA = kv.getValue();
+
+            // Check entity is not deleted or dead
+            if (!entityA.isDeleted() && !entityA.isDead())
+            {
+                // TODO: CRITICAL - upgrade with quadtree, N^2 - really bad...
+
+                // Perform collision detection/handling with other ents
+                for (Map.Entry<Short, Entity> kv2 : entities.entrySet())
+                {
+                    entityB = kv2.getValue();
+
+                    // Check next entity is not: dead, deleted or the same ent
+                    if (!entityB.isDeleted() && !entityB.isDead() &&  entityA.id != entityB.id)
+                    {
+                        // Perform collision detection
+                        collisionResult = collisionDetection.collision(entityA, entityB);
+
+                        // Check if a collision occurred
+                        if (collisionResult.collision)
+                        {
+                            // Inform both ents of event
+                            entityA.eventCollisionEntity(controller, entityB, entityA, entityB, collisionResult);
+                            entityB.eventCollisionEntity(controller, entityB, entityA, entityA, collisionResult);
+
+                            // Check if our original entity is now deleted
+                            // -- Only the two above events should be able to kill it
+                            if (entityA.isDeleted() || entityA.isDead())
+                            {
+                                break;
+                            }
+                        }
+                    }
+                }
+
+                // Check entity has still not been deleted or dead
+                if (!entityA.isDeleted() && !entityA.isDead())
+                {
+                    // Perform collision with map
+                    mapResults = collisionDetection.collisionMap(entityA);
+
+                    for (CollisionMapResult mapResult : mapResults)
+                    {
+                        entityA.eventCollisionMap(controller, mapResult);
+                    }
+
+                    // Update position for ent
+                    entityA.position.copy(entityA.positionNew);
+
+                    // Check ent is not outside map
+                    if  (!entityA.isDeleted() && !entityA.isDead() &&
+                            (
+                                    entityA.positionNew.x < 0.0f || entityA.positionNew.y < 0.0f ||
+                                            entityA.positionNew.x > mapMaxX || entityA.positionNew.y > mapMaxY
+                            )
+                            )
+                    {
+                        LOG.warn("Entity went outside the map - ent: {}, pos: {}", entityA, entityA.positionNew);
+
+                        // Kill the ent...
+                        entityA.kill(controller, null, MapBoundsKiller.class);
+
+                    }
+                }
+            }
+
+        }
+    }
+
+    private void addPendingEntities()
+    {
+        if (!entitiesNew.isEmpty())
+        {
+            Entity entity;
+
+            // Iterate new ent and add to world
+            for (Map.Entry<Short, Entity> kv : entitiesNew.entrySet())
+            {
+                entity = kv.getValue();
+
+                // Check ent has not been deleted
+                if (!entity.isDeleted())
+                {
+                    // Add to world
+                    entities.put(entity.id, entity);
+
+                    // Add to quadtree
+                    quadTree.update(entity);
+
+                    LOG.debug("Added entity to world - entity: {}", entity);
+                }
+            }
+
+            entitiesNew.clear();
+        }
+    }
+
+    private void sendEntityUpdatesToPlayers()
+    {
+        // Iterate each player and provide updates within radius
+        Entity playerEntity;
+
+        for (PlayerInfo player : controller.playerService.getPlayers())
+        {
+            // RADIUS_ENTITY_UPDATES
+
+            // Use player's entity as their position
+            playerEntity = player.entity;
+
+            if (playerEntity != null)
+            {
+                // Fetch entities around player
+
+                // Build updates packet
+            }
+        }
+    }
+
+    private void updateEntityStates()
+    {
+        Iterator<Map.Entry<Short, Entity>> iterator = entities.entrySet().iterator();
+
+        Map.Entry<Short, Entity> kv;
+        Entity entity;
+
+        while (iterator.hasNext())
+        {
+            kv = iterator.next();
+            entity = kv.getValue();
+
+            // Remove deleted entities, else transition to next state...
+            if (entity.getState() == EntityState.DELETED)
+            {
+                iterator.remove();
+            }
+            else
+            {
+                entity.transitionState();
+            }
         }
     }
 

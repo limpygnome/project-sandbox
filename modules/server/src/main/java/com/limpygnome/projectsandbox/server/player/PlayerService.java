@@ -16,10 +16,7 @@ import com.limpygnome.projectsandbox.server.service.EventLogicCycleService;
 import com.limpygnome.projectsandbox.server.world.map.MapService;
 import com.limpygnome.projectsandbox.server.world.map.WorldMap;
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 import com.limpygnome.projectsandbox.server.util.IdCounterProvider;
 import com.limpygnome.projectsandbox.server.util.counters.IdCounterConsumer;
@@ -50,10 +47,11 @@ public class PlayerService implements EventLogicCycleService, IdCounterConsumer
     @Autowired
     private PlayerEntityService playerEntityService;
 
+    private final IdCounterProvider idCounterProvider;
     private final HashMap<WebSocket, PlayerInfo> mappings;
     private final HashMap<Short, PlayerInfo> mappingsById;
     private final HashSet<UUID> connectedRegisteredPlayers;
-    private final IdCounterProvider idCounterProvider;
+    private final List<PlayerInfo> players;
 
     public PlayerService()
     {
@@ -61,6 +59,7 @@ public class PlayerService implements EventLogicCycleService, IdCounterConsumer
         this.mappingsById = new HashMap<>();
         this.connectedRegisteredPlayers = new HashSet<>();
         this.idCounterProvider = new IdCounterProvider(this);
+        this.players = new LinkedList<>();
     }
 
     /**
@@ -108,6 +107,9 @@ public class PlayerService implements EventLogicCycleService, IdCounterConsumer
 
                 // Add mapping for identifier
                 mappingsById.put(playerId, playerInfo);
+
+                // Add to list of players
+                players.add(playerInfo);
 
                 LOG.info("Player joined - ply id: {}, name: {}", playerId, session.getNickname());
             }
@@ -177,6 +179,9 @@ public class PlayerService implements EventLogicCycleService, IdCounterConsumer
                 // Remove ID mapping
                 mappingsById.remove(playerInfo.playerId);
 
+                // Remove from players
+                players.remove(playerInfo);
+
                 // Remove from connected registered players (if registered)
                 User user = playerInfo.session.getUser();
 
@@ -238,6 +243,11 @@ public class PlayerService implements EventLogicCycleService, IdCounterConsumer
     public synchronized boolean containsId(short id)
     {
         return mappingsById.containsKey(id);
+    }
+
+    public synchronized List<PlayerInfo> getPlayers()
+    {
+        return this.players;
     }
 
     public synchronized void playerSpawnAndSendData(PlayerInfo playerInfo) throws IOException

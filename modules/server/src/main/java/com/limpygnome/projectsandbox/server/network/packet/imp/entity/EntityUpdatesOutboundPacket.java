@@ -5,9 +5,11 @@ import com.limpygnome.projectsandbox.server.network.packet.OutboundPacket;
 import com.limpygnome.projectsandbox.server.entity.Entity;
 import com.limpygnome.projectsandbox.server.entity.EntityState;
 import com.limpygnome.projectsandbox.server.entity.UpdateMasks;
+import com.limpygnome.projectsandbox.server.player.PlayerInfo;
 
 import java.io.IOException;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -18,12 +20,60 @@ import java.util.Map;
  */
 public class EntityUpdatesOutboundPacket extends OutboundPacket
 {
+    /*
+        The maximum radius of entities to send to the player.
+
+        This uses the same value as the map/radar - update map.js in game package.
+     */
+    private static final float RADIUS_ENTITY_UPDATES = 4000.0f;
+
     public EntityUpdatesOutboundPacket()
     {
         super((byte)'E', (byte)'U');
     }
 
-    public void build(EntityManager entityManager, boolean forceCreate) throws IOException
+    public void build(EntityManager entityManager, PlayerInfo playerInfo, boolean forceCreate)
+    {
+        Entity playerEntity = playerInfo.entity;
+
+        if (playerEntity != null)
+        {
+            // Fetch entities within radius
+            List<Entity> nearbyEntities = entityManager.getQuadTree().getEntitiesWithinRadius(playerEntity, RADIUS_ENTITY_UPDATES);
+
+            // Write updates
+            if (forceCreate && !playerEntity.isDeleted())
+            {
+                writeEntCreated(playerEntity, forceCreate);
+                writeEntUpdated(playerEntity, forceCreate);
+            }
+            else
+            {
+                // Handle slotState
+                switch(entState)
+                {
+                    case CREATED:
+                        writeEntCreated(playerEntity, forceCreate);
+                        writeEntUpdated(playerEntity, forceCreate);
+                        ent.setState(EntityState.NONE);
+                        break;
+                    case PENDING_DELETED:
+                        writeEntDeleted(playerEntity);
+                        ent.setState(EntityState.DELETED);
+                        break;
+                    case DELETED:
+                        it.remove();
+                        break;
+                    case UPDATED:
+                        writeEntUpdated(playerEntity, forceCreate);
+                        ent.setState(EntityState.NONE);
+                        break;
+                }
+            }
+        }
+    }
+
+    public void buildOldGetRidOfThis(EntityManager entityManager, boolean forceCreate) throws IOException
     {
         synchronized (entityManager)
         {

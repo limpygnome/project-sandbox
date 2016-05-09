@@ -66,7 +66,7 @@ public strictfp abstract class Entity
     public short height;
 
     // Position
-    // TODO: consider if position/positionNew need to be separate
+    // TODO: consider if position/positionNew need to be separate anymore...
     public Vector2 position;
     public Vector2 positionNew;
     public Vertices cachedVertices;
@@ -201,6 +201,9 @@ public strictfp abstract class Entity
         
         // Rebuild cached vertices
         rebuildCachedVertices();
+
+        // Update quadtree
+        map.entityManager.getQuadTree().update(this);
         
         // Update slotState
         if (changeX && changeY)
@@ -297,6 +300,13 @@ public strictfp abstract class Entity
                 break;
             case PENDING_DELETED:
                 transitionAllowed = (state == EntityState.DELETED);
+
+                // Remove from quadtree...
+                if (transitionAllowed)
+                {
+                    map.entityManager.getQuadTree().remove(this);
+                }
+
                 break;
             case DELETED:
                 transitionAllowed = (state == EntityState.CREATED);
