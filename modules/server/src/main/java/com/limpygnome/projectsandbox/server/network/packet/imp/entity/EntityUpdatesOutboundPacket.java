@@ -15,8 +15,6 @@ import java.util.Map;
 /**
  * A packet sent to each player with data about each entity which has been
  * changed during the current logic cycle.
- * 
- * @author limpygnome
  */
 public class EntityUpdatesOutboundPacket extends OutboundPacket
 {
@@ -32,7 +30,7 @@ public class EntityUpdatesOutboundPacket extends OutboundPacket
         super((byte)'E', (byte)'U');
     }
 
-    public void build(EntityManager entityManager, PlayerInfo playerInfo, boolean forceCreate)
+    public void build(EntityManager entityManager, PlayerInfo playerInfo, boolean forceCreate) throws IOException
     {
         Entity playerEntity = playerInfo.entity;
 
@@ -41,33 +39,30 @@ public class EntityUpdatesOutboundPacket extends OutboundPacket
             // Fetch entities within radius
             List<Entity> nearbyEntities = entityManager.getQuadTree().getEntitiesWithinRadius(playerEntity, RADIUS_ENTITY_UPDATES);
 
-            // Write updates
-            if (forceCreate && !playerEntity.isDeleted())
+            for (Entity entity : nearbyEntities)
             {
-                writeEntCreated(playerEntity, forceCreate);
-                writeEntUpdated(playerEntity, forceCreate);
-            }
-            else
-            {
-                // Handle slotState
-                switch(entState)
+                // Write updates
+                if (forceCreate && !playerEntity.isDeleted())
                 {
-                    case CREATED:
-                        writeEntCreated(playerEntity, forceCreate);
-                        writeEntUpdated(playerEntity, forceCreate);
-                        ent.setState(EntityState.NONE);
-                        break;
-                    case PENDING_DELETED:
-                        writeEntDeleted(playerEntity);
-                        ent.setState(EntityState.DELETED);
-                        break;
-                    case DELETED:
-                        it.remove();
-                        break;
-                    case UPDATED:
-                        writeEntUpdated(playerEntity, forceCreate);
-                        ent.setState(EntityState.NONE);
-                        break;
+                    writeEntCreated(playerEntity, forceCreate);
+                    writeEntUpdated(playerEntity, forceCreate);
+                }
+                else
+                {
+                    // Handle slotState
+                    switch (entity.getState())
+                    {
+                        case CREATED:
+                            writeEntCreated(playerEntity, forceCreate);
+                            writeEntUpdated(playerEntity, forceCreate);
+                            break;
+                        case PENDING_DELETED:
+                            writeEntDeleted(playerEntity);
+                            break;
+                        case UPDATED:
+                            writeEntUpdated(playerEntity, forceCreate);
+                            break;
+                    }
                 }
             }
         }

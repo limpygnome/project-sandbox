@@ -16,6 +16,7 @@ import com.limpygnome.projectsandbox.server.world.map.WorldMap;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import java.io.IOException;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -305,20 +306,22 @@ public class EntityManager implements EventLogicCycleService, IdCounterConsumer
     private void sendEntityUpdatesToPlayers()
     {
         // Iterate each player and provide updates within radius
-        Entity playerEntity;
+        EntityUpdatesOutboundPacket packet;
 
-        for (PlayerInfo player : controller.playerService.getPlayers())
+        for (PlayerInfo playerInfo : controller.playerService.getPlayers())
         {
-            // RADIUS_ENTITY_UPDATES
-
-            // Use player's entity as their position
-            playerEntity = player.entity;
-
-            if (playerEntity != null)
+            try
             {
-                // Fetch entities around player
-
                 // Build updates packet
+                packet = new EntityUpdatesOutboundPacket();
+                packet.build(this, playerInfo, false);
+
+                // Send updates
+                controller.packetService.send(playerInfo, packet);
+            }
+            catch (IOException e)
+            {
+                LOG.error("Failed to build entity updates packet for player - player id: {}", playerInfo.playerId, e);
             }
         }
     }
