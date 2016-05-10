@@ -200,7 +200,7 @@ public class PacketService
             }
             catch (WebsocketNotConnectedException e)
             {
-                LOG.error("Failed to send data to player", e);
+                LOG.debug("Failed to send data to player", e);
             }
         }
     }

@@ -21,7 +21,7 @@ public class PlayerEntityService
     private static final String PLAYERDATA_ENT_TYPE_ID_KEY = "player_persisted_entity_type";
 
     @Autowired
-    private EntTypeMappingStoreService entTypeMappingStoreService;
+    private EntityTypeMappingStoreService entityTypeMappingStoreService;
 
     public PlayerEntity createPlayer(WorldMap worldMap, PlayerInfo playerInfo)
     {
@@ -59,7 +59,7 @@ public class PlayerEntityService
 
         if (entityTypeId != null && entityTypeId > 0)
         {
-            Class clazz = entTypeMappingStoreService.getEntityClassByTypeId(entityTypeId);
+            Class clazz = entityTypeMappingStoreService.getEntityClassByTypeId(entityTypeId);
             boolean isPlayerEntityInstance = PlayerEntity.class.isAssignableFrom(clazz);
 
             if (clazz == null || !isPlayerEntityInstance)

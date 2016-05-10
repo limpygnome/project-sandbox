@@ -53,39 +53,38 @@ game.ui.map =
 
     logic: function()
     {
-        if (projectSandbox.playerEntity == null)
+        if (projectSandbox.playerEntity != null)
         {
-            console.debug("game / ui / map - waiting for player to load...")
-        }
-        else if (this.mapWidth != null && this.mapHeight != null)
-        {
-            // Reset markers
-            this.markersReset(this.containerMap);
-            this.markersReset(this.containerRadar);
-
-            // Render all entities available
-            var entity;
-            for (var kv of projectSandbox.entities)
+            if (this.mapWidth != null && this.mapHeight != null)
             {
-                entity = kv[1];
+                // Reset markers
+                this.markersReset(this.containerMap);
+                this.markersReset(this.containerRadar);
 
-                if (!entity.dead)
+                // Render all entities available
+                var entity;
+                for (var kv of projectSandbox.entities)
                 {
-                    this.markerUpdateMap(entity);
-                    this.markerUpdateRadar(entity);
+                    entity = kv[1];
+
+                    if (!entity.dead)
+                    {
+                        this.markerUpdateMap(entity);
+                        this.markerUpdateRadar(entity);
+                    }
                 }
+
+                // Purge old
+                this.markersPurgeOld(this.containerMap);
+                this.markersPurgeOld(this.containerRadar);
             }
+            else if (projectSandbox.map != null)
+            {
+                this.mapWidth = projectSandbox.map.getWidth();
+                this.mapHeight = projectSandbox.map.getHeight();
 
-            // Purge old
-            this.markersPurgeOld(this.containerMap);
-            this.markersPurgeOld(this.containerRadar);
-        }
-        else if (projectSandbox.map != null)
-        {
-            this.mapWidth = projectSandbox.map.getWidth();
-            this.mapHeight = projectSandbox.map.getHeight();
-
-            console.debug("game / ui / map - loaded map");
+                console.debug("game / ui / map - loaded map");
+            }
         }
     },
 

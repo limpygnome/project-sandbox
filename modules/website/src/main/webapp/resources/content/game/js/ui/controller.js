@@ -205,10 +205,6 @@ game.ui.controller =
                 this.renderPlayerUI = true;
             }
         }
-        else if (!projectSandbox.network.closed)
-        {
-            console.warn("UI - unable to find player entity, cannot update UI");
-        }
 
         // Update FPS counter
         $(this.elementFpsCounter).text(projectSandbox.fps);

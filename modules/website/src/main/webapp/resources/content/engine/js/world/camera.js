@@ -147,10 +147,6 @@ projectSandbox.camera =
                     this.setPosition(ent.x, ent.y, ent.z);
                 }
             }
-            else
-            {
-                console.warn("engine/camera - chase entity " + this.chaseEntityId + " not found");
-            }
         }
         else if (!projectSandbox.network.closed)
         {

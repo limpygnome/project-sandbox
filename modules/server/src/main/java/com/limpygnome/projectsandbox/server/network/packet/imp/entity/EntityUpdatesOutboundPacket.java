@@ -30,10 +30,46 @@ public class EntityUpdatesOutboundPacket extends OutboundPacket
         super((byte)'E', (byte)'U');
     }
 
-    public void build(EntityManager entityManager, PlayerInfo playerInfo, boolean forceCreate) throws IOException
+    public void build(EntityManager entityManager, PlayerInfo playerInfo, boolean fullUpdate) throws IOException
+    {
+        if (fullUpdate)
+        {
+            buildFullUpdate(entityManager, playerInfo);
+        }
+        else
+        {
+            buildUpdates(entityManager, playerInfo);
+        }
+    }
+
+    /*
+        Add all active entities as created.
+     */
+    private void buildFullUpdate(EntityManager entityManager, PlayerInfo playerInfo) throws IOException
+    {
+        Map<Short, Entity> entities = entityManager.getEntities();
+        Entity entity;
+
+        for(Map.Entry<Short, Entity> kv : entities.entrySet())
+        {
+            entity = kv.getValue();
+
+            if (!entity.isDeleted())
+            {
+                writeEntCreated(entity);
+                writeEntUpdated(entity, true);
+            }
+        }
+    }
+
+    /*
+        Add only updates to the world, localized to the player for non creation and deletion states.
+     */
+    private void buildUpdates(EntityManager entityManager, PlayerInfo playerInfo) throws IOException
     {
         Entity playerEntity = playerInfo.entity;
 
+        // Write actual entity updates
         if (playerEntity != null)
         {
             // Fetch entities within radius
@@ -41,95 +77,29 @@ public class EntityUpdatesOutboundPacket extends OutboundPacket
 
             for (Entity entity : nearbyEntities)
             {
-                // Write updates
-                if (forceCreate && !playerEntity.isDeleted())
+                if (entity.getState() == EntityState.UPDATED)
                 {
-                    writeEntCreated(playerEntity, forceCreate);
-                    writeEntUpdated(playerEntity, forceCreate);
-                }
-                else
-                {
-                    // Handle slotState
-                    switch (entity.getState())
-                    {
-                        case CREATED:
-                            writeEntCreated(playerEntity, forceCreate);
-                            writeEntUpdated(playerEntity, forceCreate);
-                            break;
-                        case PENDING_DELETED:
-                            writeEntDeleted(playerEntity);
-                            break;
-                        case UPDATED:
-                            writeEntUpdated(playerEntity, forceCreate);
-                            break;
-                    }
+                    writeEntUpdated(playerEntity, false);
                 }
             }
         }
+
+        // Write global creation/deletion
     }
 
-    public void buildOldGetRidOfThis(EntityManager entityManager, boolean forceCreate) throws IOException
-    {
-        synchronized (entityManager)
-        {
-            // Add each entity with a changed slotState
-            Map.Entry<Short, Entity> kv;
-            Entity ent;
-            
-            Iterator<Map.Entry<Short, Entity>> it = entityManager.entities.entrySet().iterator();
-            EntityState entState;
-
-            while (it.hasNext())
-            {
-                kv = it.next();
-                ent = kv.getValue();
-                entState = ent.getState();
-
-                if (forceCreate && !ent.isDeleted())
-                {
-                    writeEntCreated(ent, forceCreate);
-                    writeEntUpdated(ent, forceCreate);
-                }
-                else
-                {
-                    // Handle slotState
-                    switch(entState)
-                    {
-                        case CREATED:
-                            writeEntCreated(ent, forceCreate);
-                            writeEntUpdated(ent, forceCreate);
-                            ent.setState(EntityState.NONE);
-                            break;
-                        case PENDING_DELETED:
-                            writeEntDeleted(ent);
-                            ent.setState(EntityState.DELETED);
-                            break;
-                        case DELETED:
-                            it.remove();
-                            break;
-                        case UPDATED:
-                            writeEntUpdated(ent, forceCreate);
-                            ent.setState(EntityState.NONE);
-                            break;
-                    }
-                }
-            }   
-        }
-    }
-    
-    private void writeEntCreated(Entity ent, boolean forced) throws IOException
+    private void writeEntCreated(Entity entity) throws IOException
     {
         // Add mandatory data
         packetData.add((byte)'C');
-        packetData.add(ent.id);
-        packetData.add(ent.entityType);
-        packetData.add(ent.maxHealth);
+        packetData.add(entity.id);
+        packetData.add(entity.entityType);
+        packetData.add(entity.maxHealth);
         
         // Add custom data
-        ent.eventPacketEntCreated(packetData);
+        entity.eventPacketEntCreated(packetData);
     }
     
-    private void writeEntUpdated(Entity ent, boolean forced) throws IOException
+    private void writeEntUpdated(Entity ent, boolean fullUpdate) throws IOException
     {
         // Add mandatory data
         packetData.add((byte)'U');
@@ -138,7 +108,7 @@ public class EntityUpdatesOutboundPacket extends OutboundPacket
         char mask;
 
         // Determine bit-fields we'll be updating
-        if (forced)
+        if (fullUpdate)
         {
             mask = (char) UpdateMasks.ALL_MASKS.MASK;
         }

@@ -8,22 +8,35 @@ public enum EntityState
     /**
     * Indicates no change to entity.
     */
-   NONE,
+   NONE(false),
+
    /**
     * Indicates a world update needs to be sent out before the entity
     * can be deleted.
     */
-   PENDING_DELETED,
+   PENDING_DELETED(true),
+
    /**
     * Indicates the entity can now be deleted.
     */
-   DELETED,
+   DELETED(true),
+
    /**
     * Indicates the entity's slotState has been updated.
     */
-   UPDATED,
+   UPDATED(false),
+
    /**
     * Indicates the entity has been created
     */
-   CREATED
+    CREATED(true)
+
+    ;
+
+    public final boolean GLOBAL_STATE;
+
+    EntityState(boolean GLOBAL_STATE)
+    {
+        this.GLOBAL_STATE = GLOBAL_STATE;
+    }
 }

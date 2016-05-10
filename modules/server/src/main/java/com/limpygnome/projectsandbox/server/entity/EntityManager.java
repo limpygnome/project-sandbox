@@ -16,17 +16,15 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.io.IOException;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
+import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
+
 import org.springframework.beans.factory.annotation.Autowired;
 
 /**
  * Handles all of the entities in the world.
  *
- * Notes:
- * - Any modifications to the internal collections should always synchronize on `entities`.
+ * Thread-safe.
  */
 public class EntityManager implements EventLogicCycleService, IdCounterConsumer
 {
@@ -35,16 +33,28 @@ public class EntityManager implements EventLogicCycleService, IdCounterConsumer
     private Controller controller;
     private WorldMap map;
 
+    /* Used for testing collision detection.  */
     @Autowired
     private CollisionDetection collisionDetection;
-    @Autowired
-    private EntTypeMappingStoreService entTypeMappingStoreService;
 
+    /* Used for converting entity types to classes. */
+    @Autowired
+    private EntityTypeMappingStoreService entityTypeMappingStoreService;
+
+    /* Used for efficient collision detection and network updates. */
     private QuadTree quadTree;
 
-    public final HashMap<Short, Entity> entities;
+    /* A map of entity id -> entity. */
+    private final ConcurrentHashMap<Short, Entity> entities;
+
+    /* Map of entities to be added to the world. */
     private final HashMap<Short, Entity> entitiesNew;
+
+    /* Counter for producing entity identifiers. */
     private IdCounterProvider idCounterProvider;
+
+    /* Used to track entities in a global state i.e. created or pending deletion. */
+    private List<Entity> entitiesGlobalState;
 
     public EntityManager(Controller controller, WorldMap map)
     {
@@ -52,9 +62,10 @@ public class EntityManager implements EventLogicCycleService, IdCounterConsumer
         this.map = map;
 
         // Setup collections...
-        this.entities = new HashMap<>();
+        this.entities = new ConcurrentHashMap<>();
         this.entitiesNew = new HashMap<>();
         this.idCounterProvider = new IdCounterProvider(this);
+        this.entitiesGlobalState = new LinkedList<>();
 
         // Inject dependencies...
         controller.inject(this);
@@ -144,42 +155,52 @@ public class EntityManager implements EventLogicCycleService, IdCounterConsumer
     }
 
     @Override
-    public void logic()
+    public synchronized void logic()
     {
         try
         {
-            EntityUpdatesOutboundPacket entityUpdatesOutboundPacket;
+            // Execute logic for each entity
+            executeEntityLogic();
 
-            synchronized (this)
-            {
-                // Execute logic for each entity
-                executeEntityLogic();
+            // Perform collision detection
+            performCollisionDetection();
 
-                // Perform collision detection
-                performCollisionDetection();
+            // Add pending ents
+            addPendingEntities();
 
-                // Add pending ents
-                addPendingEntities();
+            // Build and distribute update packets
+            sendEntityUpdatesToPlayers();
 
-                // Build and distribute update packets
-                sendEntityUpdatesToPlayers();
-
-                // Update state of entities
-                updateEntityStates();
-            }
+            // Update state of entities
+            updateEntityStates();
         }
         catch (Exception e)
         {
-            LOG.error("Exception during logic", e);
+            LOG.error("Exception during entity-manager logic", e);
         }
     }
 
-    public QuadTree getQuadTree()
+    public synchronized QuadTree getQuadTree()
     {
         return quadTree;
     }
 
-    private void executeEntityLogic()
+    public synchronized Map<Short, Entity> getEntities()
+    {
+        return entities;
+    }
+
+    /**
+     * Used to add an entity with a global EntityState of either CREATED or PENDING_DELETION.
+     *
+     * @param entity the entity
+     */
+    public synchronized void addEntityGlobalState(Entity entity)
+    {
+        entitiesGlobalState.add(entity);
+    }
+
+    private synchronized void executeEntityLogic()
     {
         Entity entity;
 
@@ -279,7 +300,7 @@ public class EntityManager implements EventLogicCycleService, IdCounterConsumer
         }
     }
 
-    private void addPendingEntities()
+    private synchronized void addPendingEntities()
     {
         if (!entitiesNew.isEmpty())
         {
@@ -307,7 +328,7 @@ public class EntityManager implements EventLogicCycleService, IdCounterConsumer
         }
     }
 
-    private void sendEntityUpdatesToPlayers()
+    private synchronized void sendEntityUpdatesToPlayers()
     {
         // Iterate each player and provide updates within radius
         EntityUpdatesOutboundPacket packet;
@@ -330,8 +351,12 @@ public class EntityManager implements EventLogicCycleService, IdCounterConsumer
         }
     }
 
-    private void updateEntityStates()
+    private synchronized void updateEntityStates()
     {
+        // Clear global states from this logic cycle
+        entitiesGlobalState.clear();
+
+        // Iterate each entity and transition their state
         Iterator<Map.Entry<Short, Entity>> iterator = entities.entrySet().iterator();
 
         Map.Entry<Short, Entity> kv;

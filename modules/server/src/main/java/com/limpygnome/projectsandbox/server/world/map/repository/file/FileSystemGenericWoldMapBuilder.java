@@ -1,7 +1,7 @@
 package com.limpygnome.projectsandbox.server.world.map.repository.file;
 
 import com.limpygnome.projectsandbox.server.Controller;
-import com.limpygnome.projectsandbox.server.entity.EntTypeMappingStoreService;
+import com.limpygnome.projectsandbox.server.entity.EntityTypeMappingStoreService;
 import com.limpygnome.projectsandbox.server.entity.Entity;
 import com.limpygnome.projectsandbox.server.entity.respawn.pending.EntityPendingRespawn;
 import com.limpygnome.projectsandbox.server.world.map.MapEntKV;
@@ -28,7 +28,7 @@ public abstract class FileSystemGenericWoldMapBuilder implements FileSystemMapBu
     private final static Logger LOG = LogManager.getLogger(FileSystemGenericWoldMapBuilder.class);
 
     @Autowired
-    private EntTypeMappingStoreService entTypeMappingStoreService;
+    private EntityTypeMappingStoreService entityTypeMappingStoreService;
 
     @Override
     public WorldMap build(Controller controller, MapService mapService, JSONObject mapData) throws IOException
@@ -72,7 +72,7 @@ public abstract class FileSystemGenericWoldMapBuilder implements FileSystemMapBu
 
         // -- Read type and fetch from ent mappings
         String entityTypeName = (String) rawProperties.get("defaultPlayerEntity");
-        Class clazz = entTypeMappingStoreService.getEntityClassByTypeName(entityTypeName);
+        Class clazz = entityTypeMappingStoreService.getEntityClassByTypeName(entityTypeName);
 
         if (clazz == null)
         {
@@ -140,11 +140,11 @@ public abstract class FileSystemGenericWoldMapBuilder implements FileSystemMapBu
 
         if (entData.containsKey("typeName"))
         {
-            entClass = entTypeMappingStoreService.getEntityClassByTypeName((String) entData.get("typeName"));
+            entClass = entityTypeMappingStoreService.getEntityClassByTypeName((String) entData.get("typeName"));
         }
         else if (entData.containsKey("typeId"))
         {
-            entClass = entTypeMappingStoreService.getEntityClassByTypeId((short) (long) entData.get("typeId"));
+            entClass = entityTypeMappingStoreService.getEntityClassByTypeId((short) (long) entData.get("typeId"));
         }
         else
         {

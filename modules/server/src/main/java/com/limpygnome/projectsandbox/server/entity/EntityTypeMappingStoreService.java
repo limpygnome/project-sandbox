@@ -14,9 +14,9 @@ import org.springframework.stereotype.Service;
  * Finds all of the annotated entities and builds a map for dynamically creating instances by name or identifier.
  */
 @Service
-public class EntTypeMappingStoreService
+public class EntityTypeMappingStoreService
 {
-    private final static Logger LOG = LogManager.getLogger(EntTypeMappingStoreService.class);
+    private final static Logger LOG = LogManager.getLogger(EntityTypeMappingStoreService.class);
 
     // TODO: move into a settings file
     private static final String[] ENTS_CLASS_PATHS = new String[]
@@ -28,7 +28,7 @@ public class EntTypeMappingStoreService
     private HashMap<Short, Class> typeIdToClass;
     private HashMap<String, Class> typeNameToClass;
 
-    public EntTypeMappingStoreService()
+    public EntityTypeMappingStoreService()
     {
         this.typeIdToClass = new HashMap<>();
         this.typeNameToClass = new HashMap<>();

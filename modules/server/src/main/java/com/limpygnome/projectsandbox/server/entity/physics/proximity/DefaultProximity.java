@@ -17,10 +17,8 @@ import java.util.Map;
  * TODO: refactor this class to use a quadtree.
  *
  * TOOD: refactor for spring to inject this for a map/entity manager, rather than static methods, ew...
- *
- * <p>
- * Created by limpygnome on 13/05/15.
  */
+@Deprecated
 public class DefaultProximity
 {
     private final static Logger LOG = LogManager.getLogger(DefaultProximity.class);
@@ -66,7 +64,7 @@ public class DefaultProximity
             Entity b;
             float entDistance;
 
-            for (Map.Entry<Short, Entity> kv : a.map.entityManager.entities.entrySet())
+            for (Map.Entry<Short, Entity> kv : a.map.entityManager.getEntities().entrySet())
             {
                 b = kv.getValue();
 
