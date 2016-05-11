@@ -81,7 +81,7 @@ public class PlayerService implements EventLogicCycleService, IdCounterConsumer
 
                 if (user != null && connectedRegisteredPlayers.contains(user.getUserId()))
                 {
-                    // TODO: this needs to throw an exception, detailing why the user cannot connect
+                    // TODO: this needs to throw an exception/send back data, detailing why the user cannot connect
                     LOG.warn("Player attempted to connect whilst already in session - user id: {}", user.getUserId());
                     return null;
                 }

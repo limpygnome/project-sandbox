@@ -47,9 +47,6 @@ public class EntityManager implements EventLogicCycleService, IdCounterConsumer
     /* A map of entity id -> entity. */
     private final Map<Short, Entity> entities;
 
-    /* Map of entities to be added to the world. */
-    private final Map<Short, Entity> entitiesNew;
-
     /* Counter for producing entity identifiers. */
     private IdCounterProvider idCounterProvider;
 
@@ -63,7 +60,6 @@ public class EntityManager implements EventLogicCycleService, IdCounterConsumer
 
         // Setup collections...
         this.entities = new ConcurrentHashMap<>();
-        this.entitiesNew = new HashMap<>();
         this.idCounterProvider = new IdCounterProvider(this);
         this.entitiesGlobalState = new LinkedList<>();
 
@@ -103,15 +99,22 @@ public class EntityManager implements EventLogicCycleService, IdCounterConsumer
         entity.id = entityId;
 
         // Add mapping
-        synchronized (this)
+        // TODO: consider removal of sync (entity), may be too excessive...
+        synchronized (entity)
         {
-            // Add entity to pending map
-            entitiesNew.put(entityId, entity);
+            synchronized (this)
+            {
+                // Update state to created - for update to all players!
+                entity.setState(EntityState.CREATED);
 
-            // Update state to created - for update to all players!
-            entity.setState(EntityState.CREATED);
+                // Add entity to pending map
+                entities.put(entityId, entity);
 
-            LOG.debug("Entity pending addition to the world - {}", entity);
+                // Add to quadtree
+                quadTree.update(entity);
+
+                LOG.debug("Added entity to world - entity: {}", entity);
+            }
         }
 
         return true;
@@ -120,7 +123,7 @@ public class EntityManager implements EventLogicCycleService, IdCounterConsumer
     @Override
     public synchronized boolean containsId(short id)
     {
-        return entities.containsKey(id) || entitiesNew.containsKey(id);
+        return entities.containsKey(id);
     }
 
     public synchronized void remove(Entity entity)
@@ -137,11 +140,6 @@ public class EntityManager implements EventLogicCycleService, IdCounterConsumer
                 // Invoke entity event handler
                 entity.eventPendingDeleted(controller);
             }
-            else
-            {
-                // Remove from pending entities
-                entitiesNew.remove(entity);
-            }
         }
     }
 
@@ -155,9 +153,6 @@ public class EntityManager implements EventLogicCycleService, IdCounterConsumer
 
             // Perform collision detection
             performCollisionDetection();
-
-            // Add pending ents
-            addPendingEntities();
 
             // Build and distribute update packets
             sendEntityUpdatesToPlayers();
@@ -289,34 +284,6 @@ public class EntityManager implements EventLogicCycleService, IdCounterConsumer
                 }
             }
 
-        }
-    }
-
-    private synchronized void addPendingEntities()
-    {
-        if (!entitiesNew.isEmpty())
-        {
-            Entity entity;
-
-            // Iterate new ent and add to world
-            for (Map.Entry<Short, Entity> kv : entitiesNew.entrySet())
-            {
-                entity = kv.getValue();
-
-                // Check ent has not been deleted
-                if (!entity.isDeleted())
-                {
-                    // Add to world
-                    entities.put(entity.id, entity);
-
-                    // Add to quadtree
-                    quadTree.update(entity);
-
-                    LOG.debug("Added entity to world - entity: {}", entity);
-                }
-            }
-
-            entitiesNew.clear();
         }
     }
 
