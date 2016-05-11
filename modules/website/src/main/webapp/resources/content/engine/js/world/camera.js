@@ -37,9 +37,6 @@ projectSandbox.camera =
 
     setup: function()
     {
-        // Build camera limits
-        this.buildLimits();
-
         // Update position to check it's within limits
         this.setPosition(this.x, this.y, this.z);
 
@@ -146,6 +143,10 @@ projectSandbox.camera =
                     // Update camera
                     this.setPosition(ent.x, ent.y, ent.z);
                 }
+            }
+            else
+            {
+                console.warn("engine/camera - chase entity not found");
             }
         }
     },

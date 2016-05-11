@@ -176,6 +176,11 @@ public class EntityManager implements EventLogicCycleService, IdCounterConsumer
         return entities;
     }
 
+    public List<Entity> getGlobalStateEntities()
+    {
+        return entitiesGlobalState;
+    }
+
     /**
      * Used to add an entity with a global EntityState of either CREATED or PENDING_DELETION.
      *
@@ -183,7 +188,10 @@ public class EntityManager implements EventLogicCycleService, IdCounterConsumer
      */
     public synchronized void addEntityGlobalState(Entity entity)
     {
-        entitiesGlobalState.add(entity);
+        synchronized (entitiesGlobalState)
+        {
+            entitiesGlobalState.add(entity);
+        }
     }
 
     private void executeEntityLogic()
@@ -318,7 +326,10 @@ public class EntityManager implements EventLogicCycleService, IdCounterConsumer
     private synchronized void updateEntityStates()
     {
         // Clear global states from this logic cycle
-        entitiesGlobalState.clear();
+        synchronized (entitiesGlobalState)
+        {
+            entitiesGlobalState.clear();
+        }
 
         // Iterate each entity and transition their state
         Iterator<Map.Entry<Short, Entity>> iterator = entities.entrySet().iterator();

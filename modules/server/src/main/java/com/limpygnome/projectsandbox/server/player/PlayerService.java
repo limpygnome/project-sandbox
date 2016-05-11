@@ -119,14 +119,14 @@ public class PlayerService implements EventLogicCycleService, IdCounterConsumer
                     LOG.info("Player joined - ply id: {}, name: {}", playerId, session.getNickname());
                 }
 
-                // Create, spawn and send data for player
-                playerSpawnAndSendData(playerInfo);
-
                 // Give the user all of the users and metrics/stats thus far
                 PlayerEventsUpdatesOutboundPacket playerEventsUpdatesOutboundSnapshotPacket = new PlayerEventsUpdatesOutboundPacket();
                 writePlayersJoined(playerEventsUpdatesOutboundSnapshotPacket);
                 writePlayerMetrics(playerEventsUpdatesOutboundSnapshotPacket, true);
                 controller.packetService.send(playerInfo, playerEventsUpdatesOutboundSnapshotPacket);
+
+                // Create, spawn and send data for player
+                playerSpawnAndSendData(playerInfo);
 
                 // Send previous chat messages
                 controller.chatService.sendPreviousMessages(playerInfo);

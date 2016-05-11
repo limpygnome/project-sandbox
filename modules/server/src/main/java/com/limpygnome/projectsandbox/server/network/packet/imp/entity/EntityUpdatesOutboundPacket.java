@@ -85,6 +85,26 @@ public class EntityUpdatesOutboundPacket extends OutboundPacket
         }
 
         // Write global creation/deletion
+        List<Entity> globalStateEntities = entityManager.getGlobalStateEntities();
+
+        synchronized (globalStateEntities)
+        {
+            EntityState state;
+            for (Entity entity : globalStateEntities)
+            {
+                state = entity.getState();
+
+                switch (state)
+                {
+                    case CREATED:
+                        writeEntCreated(entity);
+                        break;
+                    case PENDING_DELETED:
+                        writeEntDeleted(entity);
+                        break;
+                }
+            }
+        }
     }
 
     private void writeEntCreated(Entity entity) throws IOException
