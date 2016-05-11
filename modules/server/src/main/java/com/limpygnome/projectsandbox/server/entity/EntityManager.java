@@ -45,10 +45,10 @@ public class EntityManager implements EventLogicCycleService, IdCounterConsumer
     private QuadTree quadTree;
 
     /* A map of entity id -> entity. */
-    private final ConcurrentHashMap<Short, Entity> entities;
+    private final Map<Short, Entity> entities;
 
     /* Map of entities to be added to the world. */
-    private final HashMap<Short, Entity> entitiesNew;
+    private final Map<Short, Entity> entitiesNew;
 
     /* Counter for producing entity identifiers. */
     private IdCounterProvider idCounterProvider;
@@ -71,17 +71,14 @@ public class EntityManager implements EventLogicCycleService, IdCounterConsumer
         controller.inject(this);
     }
 
-    public void postMapLoad()
+    public synchronized void postMapLoad()
     {
         this.quadTree = new QuadTree(map);
     }
 
-    public Entity fetch(Short key)
+    public synchronized Entity fetch(Short key)
     {
-        synchronized (this)
-        {
-            return entities.get(key);
-        }
+        return entities.get(key);
     }
 
     /**
@@ -121,35 +118,29 @@ public class EntityManager implements EventLogicCycleService, IdCounterConsumer
     }
 
     @Override
-    public boolean containsId(short id)
+    public synchronized boolean containsId(short id)
     {
-        synchronized (this)
-        {
-            return entities.containsKey(id) || entitiesNew.containsKey(id);
-        }
+        return entities.containsKey(id) || entitiesNew.containsKey(id);
     }
 
-    public void remove(Entity entity)
+    public synchronized void remove(Entity entity)
     {
-        synchronized (this)
+        synchronized (entity)
         {
-            synchronized (entity)
+            if (entity.id != null && entities.containsKey(entity.id))
             {
-                if (entity.id != null && entities.containsKey(entity.id))
-                {
-                    // Mark entity for deletion
-                    entity.setState(EntityState.PENDING_DELETED);
+                // Mark entity for deletion
+                entity.setState(EntityState.PENDING_DELETED);
 
-                    LOG.debug("Entity set for removal - ent id: {}", entity.id);
+                LOG.debug("Entity set for removal - ent id: {}", entity.id);
 
-                    // Invoke entity event handler
-                    entity.eventPendingDeleted(controller);
-                }
-                else
-                {
-                    // Remove from pending entities
-                    entitiesNew.remove(entity);
-                }
+                // Invoke entity event handler
+                entity.eventPendingDeleted(controller);
+            }
+            else
+            {
+                // Remove from pending entities
+                entitiesNew.remove(entity);
             }
         }
     }
@@ -180,12 +171,12 @@ public class EntityManager implements EventLogicCycleService, IdCounterConsumer
         }
     }
 
-    public synchronized QuadTree getQuadTree()
+    public QuadTree getQuadTree()
     {
         return quadTree;
     }
 
-    public synchronized Map<Short, Entity> getEntities()
+    public Map<Short, Entity> getEntities()
     {
         return entities;
     }
@@ -200,7 +191,7 @@ public class EntityManager implements EventLogicCycleService, IdCounterConsumer
         entitiesGlobalState.add(entity);
     }
 
-    private synchronized void executeEntityLogic()
+    private void executeEntityLogic()
     {
         Entity entity;
 
@@ -216,8 +207,9 @@ public class EntityManager implements EventLogicCycleService, IdCounterConsumer
         }
     }
 
-    private void performCollisionDetection()
+    private synchronized void performCollisionDetection()
     {
+        // TODO: consider how to isolate synchronization, can deadlock if events use e.g. playerservice...
         Entity entityA;
         Entity entityB;
 
@@ -328,25 +320,30 @@ public class EntityManager implements EventLogicCycleService, IdCounterConsumer
         }
     }
 
-    private synchronized void sendEntityUpdatesToPlayers()
+    private void sendEntityUpdatesToPlayers()
     {
         // Iterate each player and provide updates within radius
         EntityUpdatesOutboundPacket packet;
 
-        for (PlayerInfo playerInfo : controller.playerService.getPlayers())
-        {
-            try
-            {
-                // Build updates packet
-                packet = new EntityUpdatesOutboundPacket();
-                packet.build(this, playerInfo, false);
+        List<PlayerInfo> players = controller.playerService.getPlayers();
 
-                // Send updates
-                controller.packetService.send(playerInfo, packet);
-            }
-            catch (IOException e)
+        synchronized (players)
+        {
+            for (PlayerInfo playerInfo : players)
             {
-                LOG.error("Failed to build entity updates packet for player - player id: {}", playerInfo.playerId, e);
+                try
+                {
+                    // Build updates packet
+                    packet = new EntityUpdatesOutboundPacket();
+                    packet.build(this, playerInfo, false);
+
+                    // Send updates
+                    controller.packetService.send(playerInfo, packet);
+                }
+                catch (IOException e)
+                {
+                    LOG.error("Failed to build entity updates packet for player - player id: {}", playerInfo.playerId, e);
+                }
             }
         }
     }

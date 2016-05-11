@@ -17,6 +17,7 @@ import com.limpygnome.projectsandbox.server.world.map.MapService;
 import com.limpygnome.projectsandbox.server.world.map.WorldMap;
 import java.io.IOException;
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 
 import com.limpygnome.projectsandbox.server.util.IdCounterProvider;
 import com.limpygnome.projectsandbox.server.util.counters.IdCounterConsumer;
@@ -48,9 +49,9 @@ public class PlayerService implements EventLogicCycleService, IdCounterConsumer
     private PlayerEntityService playerEntityService;
 
     private final IdCounterProvider idCounterProvider;
-    private final HashMap<WebSocket, PlayerInfo> mappings;
-    private final HashMap<Short, PlayerInfo> mappingsById;
-    private final HashSet<UUID> connectedRegisteredPlayers;
+    private final Map<WebSocket, PlayerInfo> mappings;
+    private final Map<Short, PlayerInfo> mappingsById;
+    private final Set<UUID> connectedRegisteredPlayers;
     private final List<PlayerInfo> players;
 
     public PlayerService()
@@ -74,7 +75,6 @@ public class PlayerService implements EventLogicCycleService, IdCounterConsumer
         try
         {
             // Check a registered user is not already connected
-            // TODO: probably remove this...
             synchronized (this)
             {
                 User user = session.getUser();
@@ -100,38 +100,44 @@ public class PlayerService implements EventLogicCycleService, IdCounterConsumer
             // Create new player
             PlayerInfo playerInfo = new PlayerInfo(ws, session, playerId);
 
-            synchronized (this)
+            synchronized (playerInfo)
             {
-                // Add mapping for sock
-                mappings.put(ws, playerInfo);
+                synchronized (this)
+                {
+                    // Add mapping for sock
+                    mappings.put(ws, playerInfo);
 
-                // Add mapping for identifier
-                mappingsById.put(playerId, playerInfo);
+                    // Add mapping for identifier
+                    mappingsById.put(playerId, playerInfo);
 
-                // Add to list of players
-                players.add(playerInfo);
+                    // Add to list of players
+                    synchronized (players)
+                    {
+                        players.add(playerInfo);
+                    }
 
-                LOG.info("Player joined - ply id: {}, name: {}", playerId, session.getNickname());
+                    LOG.info("Player joined - ply id: {}, name: {}", playerId, session.getNickname());
+                }
+
+                // Create, spawn and send data for player
+                playerSpawnAndSendData(playerInfo);
+
+                // Give the user all of the users and metrics/stats thus far
+                PlayerEventsUpdatesOutboundPacket playerEventsUpdatesOutboundSnapshotPacket = new PlayerEventsUpdatesOutboundPacket();
+                writePlayersJoined(playerEventsUpdatesOutboundSnapshotPacket);
+                writePlayerMetrics(playerEventsUpdatesOutboundSnapshotPacket, true);
+                controller.packetService.send(playerInfo, playerEventsUpdatesOutboundSnapshotPacket);
+
+                // Send previous chat messages
+                controller.chatService.sendPreviousMessages(playerInfo);
+
+                LOG.info(
+                        "Player joined - session token: {}, user id: {}, ply id: {}",
+                        session.getToken(),
+                        session.getUser() != null ? session.getUser().getUserId() : null,
+                        playerId
+                );
             }
-
-            // Create, spawn and send data for player
-            playerSpawnAndSendData(playerInfo);
-
-            // Give the user all of the users and metrics/stats thus far
-            PlayerEventsUpdatesOutboundPacket playerEventsUpdatesOutboundSnapshotPacket = new PlayerEventsUpdatesOutboundPacket();
-            writePlayersJoined(playerEventsUpdatesOutboundSnapshotPacket);
-            writePlayerMetrics(playerEventsUpdatesOutboundSnapshotPacket, true);
-            controller.packetService.send(playerInfo, playerEventsUpdatesOutboundSnapshotPacket);
-
-            // Send previous chat messages
-            controller.chatService.sendPreviousMessages(playerInfo);
-
-            LOG.info(
-                    "Player joined - session token: {}, user id: {}, ply id: {}",
-                    session.getToken(),
-                    session.getUser() != null ? session.getUser().getUserId() : null,
-                    playerId
-            );
 
             return playerInfo;
         }
@@ -153,41 +159,49 @@ public class PlayerService implements EventLogicCycleService, IdCounterConsumer
 
         if (playerInfo != null)
         {
-            Entity entity = playerInfo.entity;
-
-            // Persist player's current entity
-            playerEntityService.persistPlayer(playerInfo);
-
-            // Remove entity
-            // TODO: make this more generic...perhaps remove if spawned entity
-            if (entity != null && entity instanceof PlayerEntity)
+            synchronized (playerInfo)
             {
-                PlayerEntity playerEntity = (PlayerEntity) entity;
+                Entity entity = playerInfo.entity;
 
-                if (playerEntity.isRemovableOnPlayerEntChange(playerInfo))
+                // Persist player's current entity
+                playerEntityService.persistPlayer(playerInfo);
+
+                // Remove entity
+                // TODO: make this more generic...perhaps remove if spawned entity
+                if (entity != null && entity instanceof PlayerEntity)
                 {
-                    entity.map.entityManager.remove(playerEntity);
-                    LOG.debug("Removed entity for disconnecting player - ply id: {}, ent id: {}", playerInfo.playerId, entity.id);
+                    PlayerEntity playerEntity = (PlayerEntity) entity;
+
+                    if (playerEntity.isRemovableOnPlayerEntChange(playerInfo))
+                    {
+                        entity.map.entityManager.remove(playerEntity);
+                        LOG.debug("Removed entity for disconnecting player - ply id: {}, ent id: {}", playerInfo.playerId, entity.id);
+                    }
                 }
-            }
 
-            synchronized (this)
-            {
-                // Remove socket mapping
-                mappings.remove(ws);
+                User user;
 
-                // Remove ID mapping
-                mappingsById.remove(playerInfo.playerId);
-
-                // Remove from players
-                players.remove(playerInfo);
-
-                // Remove from connected registered players (if registered)
-                User user = playerInfo.session.getUser();
-
-                if (user != null)
+                synchronized (this)
                 {
-                    connectedRegisteredPlayers.remove(user.getUserId());
+                    // Remove socket mapping
+                    mappings.remove(ws);
+
+                    // Remove ID mapping
+                    mappingsById.remove(playerInfo.playerId);
+
+                    // Remove from players
+                    synchronized (players)
+                    {
+                        players.remove(playerInfo);
+                    }
+
+                    // Remove from connected registered players (if registered)
+                    user = playerInfo.session.getUser();
+
+                    if (user != null)
+                    {
+                        connectedRegisteredPlayers.remove(user.getUserId());
+                    }
                 }
 
                 // Unload game session
@@ -245,77 +259,83 @@ public class PlayerService implements EventLogicCycleService, IdCounterConsumer
         return mappingsById.containsKey(id);
     }
 
-    public synchronized List<PlayerInfo> getPlayers()
+    public List<PlayerInfo> getPlayers()
     {
         return this.players;
     }
 
-    public synchronized void playerSpawnAndSendData(PlayerInfo playerInfo) throws IOException
+    private void playerSpawnAndSendData(PlayerInfo playerInfo) throws IOException
     {
-        // Determine lobby/default map for player
-        WorldMap map = mapService.mainMap;
+        synchronized (playerInfo)
+        {
+            // Determine lobby/default map for player
+            WorldMap map = mapService.mainMap;
 
-        // Create entity for player
-        Entity entityPlayer = playerEntityService.createPlayer(map, playerInfo);
+            // Create entity for player
+            Entity entityPlayer = playerEntityService.createPlayer(map, playerInfo);
 
-        // Spawn the player
-        map.respawnManager.respawn(new EntityPendingRespawn(controller, entityPlayer));
+            // Spawn the player
+            map.respawnManager.respawn(new EntityPendingRespawn(controller, entityPlayer));
 
-        // Send map data
-        packetService.send(playerInfo, map.getPacket());
+            // Send map data
+            packetService.send(playerInfo, map.getPacket());
 
-        // Build packet for player
-        EntityUpdatesOutboundPacket packetUpdates = new EntityUpdatesOutboundPacket();
-        packetUpdates.build(map.entityManager, playerInfo, true);
-        controller.packetService.send(playerInfo, packetUpdates);
+            // Build packet for player
+            EntityUpdatesOutboundPacket packetUpdates = new EntityUpdatesOutboundPacket();
+            packetUpdates.build(map.entityManager, playerInfo, true);
+            controller.packetService.send(playerInfo, packetUpdates);
 
-        // Inform server player has joined
-        PlayerEventsUpdatesOutboundPacket playerEventsUpdatesOutboundPacket = new PlayerEventsUpdatesOutboundPacket();
-        playerEventsUpdatesOutboundPacket.writePlayerJoined(playerInfo);
-        broadcast(playerEventsUpdatesOutboundPacket);
+            // Inform server player has joined
+            PlayerEventsUpdatesOutboundPacket playerEventsUpdatesOutboundPacket = new PlayerEventsUpdatesOutboundPacket();
+            playerEventsUpdatesOutboundPacket.writePlayerJoined(playerInfo);
+            broadcast(playerEventsUpdatesOutboundPacket);
+        }
     }
 
-    public synchronized void setPlayerEnt(PlayerInfo playerInfo, Entity entity)
+    public void setPlayerEnt(PlayerInfo playerInfo, Entity entity)
     {
-        Entity currentEntity = playerInfo.entity;
-
-        if (entity != currentEntity)
+        synchronized (playerInfo)
         {
-            // Persist the player's current entity
-            playerEntityService.persistPlayer(playerInfo);
+            Entity currentEntity = playerInfo.entity;
 
-            if (currentEntity != null && currentEntity instanceof PlayerEntity)
+            if (entity != currentEntity)
             {
-                PlayerEntity playerEntity = (PlayerEntity) currentEntity;
+                // Persist the player's current entity
+                playerEntityService.persistPlayer(playerInfo);
 
-                // Remove player from old entity
-                playerEntity.removePlayer(playerInfo);
-
-                // Check if to remove old entity...
-                if (playerEntity.isRemovableOnPlayerEntChange(playerInfo))
+                if (currentEntity != null && currentEntity instanceof PlayerEntity)
                 {
-                    entity.map.entityManager.remove(currentEntity);
+                    PlayerEntity playerEntity = (PlayerEntity) currentEntity;
+
+                    // Remove player from old entity
+                    playerEntity.removePlayer(playerInfo);
+
+                    // Check if to remove old entity...
+                    if (playerEntity.isRemovableOnPlayerEntChange(playerInfo))
+                    {
+                        entity.map.entityManager.remove(currentEntity);
+                    }
                 }
+
+                // Update entity
+                playerInfo.entity = entity;
             }
 
-            // Update entity
-            playerInfo.entity = entity;
-        }
-
-        // Create packet to update ID for clientside
-        try
-        {
-            PlayerIdentityOutboundPacket packet = new PlayerIdentityOutboundPacket();
-            packet.writeIdentity(playerInfo);
-            controller.packetService.send(playerInfo, packet);
-        }
-        catch (IOException e)
-        {
-            LOG.error("Failed to set entity for player", e);
+            // Create packet to update ID for clientside
+            try
+            {
+                PlayerIdentityOutboundPacket packet = new PlayerIdentityOutboundPacket();
+                packet.writeIdentity(playerInfo);
+                controller.packetService.send(playerInfo, packet);
+            }
+            catch (IOException e)
+            {
+                LOG.error("Failed to set entity for player", e);
+            }
         }
     }
 
-    public synchronized PlayerInfo getPlayerByWebSocket(WebSocket ws)
+    public PlayerInfo getPlayerByWebSocket(WebSocket ws)
     {
         return mappings.get(ws);
     }

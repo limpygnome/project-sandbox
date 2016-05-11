@@ -148,10 +148,6 @@ projectSandbox.camera =
                 }
             }
         }
-        else if (!projectSandbox.network.closed)
-        {
-            console.warn("engine/camera - no chase entity");
-        }
     },
 
     setPosition: function(x, y, z)
