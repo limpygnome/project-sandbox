@@ -6,37 +6,29 @@ package com.limpygnome.projectsandbox.server.entity;
 public enum EntityState
 {
     /**
-    * Indicates no change to entity.
-    */
-   NONE(false),
+     * Indicates no change to entity.
+     */
+    NONE,
 
-   /**
-    * Indicates a world update needs to be sent out before the entity
-    * can be deleted.
-    */
-   PENDING_DELETED(true),
+    /**
+     * Indicates a world update needs to be sent out before the entity
+     * can be deleted.
+     */
+    PENDING_DELETED,
 
-   /**
-    * Indicates the entity can now be deleted.
-    */
-   DELETED(true),
+    /**
+     * Indicates the entity can now be deleted.
+     */
+    DELETED,
 
-   /**
-    * Indicates the entity's slotState has been updated.
-    */
-   UPDATED(false),
+    /**
+     * Indicates the entity's slotState has been updated.
+     */
+    UPDATED,
 
-   /**
-    * Indicates the entity has been created
-    */
-    CREATED(true)
+    /**
+     * Indicates the entity has been created
+     */
+    CREATED
 
-    ;
-
-    public final boolean GLOBAL_STATE;
-
-    EntityState(boolean GLOBAL_STATE)
-    {
-        this.GLOBAL_STATE = GLOBAL_STATE;
-    }
 }

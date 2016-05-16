@@ -42,16 +42,16 @@ projectSandbox.frustrum =
         // Calculate center points of far and near
         var farCenter =
         [
-            camearaPos[0] + cameraDirection[0] * this.FRUSTRUM_DISTANCE_FAR,
-            camearaPos[1] + cameraDirection[1] * this.FRUSTRUM_DISTANCE_FAR,
-            camearaPos[2] + cameraDirection[2] * this.FRUSTRUM_DISTANCE_FAR
+            camearaPos[0] + (cameraDirection[0] * this.FRUSTRUM_DISTANCE_FAR),
+            camearaPos[1] + (cameraDirection[1] * this.FRUSTRUM_DISTANCE_FAR),
+            camearaPos[2] + (cameraDirection[2] * this.FRUSTRUM_DISTANCE_FAR)
         ];
 
         var nearCenter =
         [
-            camearaPos[0] + cameraDirection[0] * this.FRUSTRUM_DISTANCE_NEAR,
-            camearaPos[1] + cameraDirection[1] * this.FRUSTRUM_DISTANCE_NEAR,
-            camearaPos[2] + cameraDirection[2] * this.FRUSTRUM_DISTANCE_NEAR
+            camearaPos[0] + (cameraDirection[0] * this.FRUSTRUM_DISTANCE_NEAR),
+            camearaPos[1] + (cameraDirection[1] * this.FRUSTRUM_DISTANCE_NEAR),
+            camearaPos[2] + (cameraDirection[2] * this.FRUSTRUM_DISTANCE_NEAR)
         ];
 
         // Build frustrum vert
@@ -147,6 +147,7 @@ projectSandbox.frustrum =
         // Check initial frustrum built
         if (this.planeVerts == null)
         {
+            console.warn("engine/rendering/frustrum - no verts, cannot build map region to render");
             return null;
         }
 
@@ -200,6 +201,7 @@ projectSandbox.frustrum =
         var z = primitive.z + projectSandbox.camera.z + projectSandbox.camera.zoom;
         var box = this.frustrumDistanceBoxes.get(z);
 
+        // TODO: change to use box, looks like mistake
         if (boxSize == null)
         {
             // Cache for speed

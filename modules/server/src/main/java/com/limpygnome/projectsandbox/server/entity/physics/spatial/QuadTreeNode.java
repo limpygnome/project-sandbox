@@ -4,6 +4,7 @@ import com.limpygnome.projectsandbox.server.entity.Entity;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
 
 /**
  * A node in a quad-tree.
@@ -138,7 +139,7 @@ public class QuadTreeNode
         return result;
     }
 
-    void addEntitiesAndRecurseChildNodes(List<Entity> result)
+    void addEntitiesAndRecurseChildNodes(Set<Entity> result)
     {
         // Add current entities
         result.addAll(entities);
@@ -150,7 +151,7 @@ public class QuadTreeNode
         }
     }
 
-    void addEntitiesAndRecurseFittingChildNodes(List<Entity> result, float lowerX, float lowerY, float upperX, float upperY)
+    void addEntitiesAndRecurseFittingChildNodes(Set<Entity> result, float lowerX, float lowerY, float upperX, float upperY)
     {
         result.addAll(entities);
 

@@ -6,9 +6,9 @@ projectSandbox.camera =
     zoomMax: 1000,
     
     // Co-ordinates of the camera
-    x: 0,
-    y: 0,
-    z: 0,
+    x: 0.0,
+    y: 0.0,
+    z: 0.0,
     
     // Rotation of the camera
     rotationX: 0.0,
@@ -148,6 +148,10 @@ projectSandbox.camera =
             {
                 console.warn("engine/camera - chase entity not found");
             }
+        }
+        else
+        {
+            console.warn("engine/camera - no chase entity setup");
         }
     },
 

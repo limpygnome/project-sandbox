@@ -267,6 +267,10 @@ public strictfp abstract class Entity
 
     public synchronized void transitionState()
     {
+        // Reset mask of properties updated
+        resetUpdateMask();
+
+        // Transition to next state...
         switch(state)
         {
             case CREATED:
@@ -323,11 +327,6 @@ public strictfp abstract class Entity
         if (transitionAllowed)
         {
             this.state = state;
-
-            if (state.GLOBAL_STATE)
-            {
-                map.entityManager.addEntityGlobalState(this);
-            }
         }
         else
         {

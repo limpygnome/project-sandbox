@@ -6,11 +6,11 @@ import com.limpygnome.projectsandbox.server.entity.Entity;
 import com.limpygnome.projectsandbox.server.entity.EntityState;
 import com.limpygnome.projectsandbox.server.entity.UpdateMasks;
 import com.limpygnome.projectsandbox.server.player.PlayerInfo;
+import com.limpygnome.projectsandbox.server.player.network.Scene;
+import com.limpygnome.projectsandbox.server.player.network.SceneUpdates;
 
 import java.io.IOException;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * A packet sent to each player with data about each entity which has been
@@ -34,7 +34,7 @@ public class EntityUpdatesOutboundPacket extends OutboundPacket
     {
         if (fullUpdate)
         {
-            buildFullUpdate(entityManager, playerInfo);
+            buildFullUpdate(entityManager);
         }
         else
         {
@@ -45,7 +45,7 @@ public class EntityUpdatesOutboundPacket extends OutboundPacket
     /*
         Add all active entities as created.
      */
-    private void buildFullUpdate(EntityManager entityManager, PlayerInfo playerInfo) throws IOException
+    private void buildFullUpdate(EntityManager entityManager) throws IOException
     {
         Map<Short, Entity> entities = entityManager.getEntities();
         Entity entity;
@@ -73,35 +73,35 @@ public class EntityUpdatesOutboundPacket extends OutboundPacket
         if (playerEntity != null)
         {
             // Fetch entities within radius
-            List<Entity> nearbyEntities = entityManager.getQuadTree().getEntitiesWithinRadius(playerEntity, RADIUS_ENTITY_UPDATES);
+//            Set<Entity> nearbyEntities = new HashSet<>(entityManager.getEntities().values());
+            Set<Entity> nearbyEntities = entityManager.getQuadTree().getEntitiesWithinRadius(playerEntity, RADIUS_ENTITY_UPDATES);
 
+            // Update player's scene
+            Scene scene = playerInfo.getScene();
+               SceneUpdates sceneUpdates = scene.update(nearbyEntities);
+
+            // Write entities created in scene
+            for (Entity entity : sceneUpdates.entitiesCreated)
+            {
+                if (!entity.isDeleted())
+                {
+                    writeEntCreated(entity);
+                    writeEntUpdated(entity, false);
+                }
+            }
+
+            // Write entities removed from scene
+            for (Entity entity : sceneUpdates.entitiesDeleted)
+            {
+                writeEntDeleted(entity);
+            }
+
+            // Write updates for everything
             for (Entity entity : nearbyEntities)
             {
                 if (entity.getState() == EntityState.UPDATED)
                 {
-                    writeEntUpdated(playerEntity, false);
-                }
-            }
-        }
-
-        // Write global creation/deletion
-        List<Entity> globalStateEntities = entityManager.getGlobalStateEntities();
-
-        synchronized (globalStateEntities)
-        {
-            EntityState state;
-            for (Entity entity : globalStateEntities)
-            {
-                state = entity.getState();
-
-                switch (state)
-                {
-                    case CREATED:
-                        writeEntCreated(entity);
-                        break;
-                    case PENDING_DELETED:
-                        writeEntDeleted(entity);
-                        break;
+                    writeEntUpdated(entity, false);
                 }
             }
         }
@@ -170,9 +170,6 @@ public class EntityUpdatesOutboundPacket extends OutboundPacket
         
         // Add custom datas
         ent.eventPacketEntUpdated(packetData);
-        
-        // Reset mask
-        ent.resetUpdateMask();
     }
     
     private void writeEntDeleted(Entity ent) throws IOException

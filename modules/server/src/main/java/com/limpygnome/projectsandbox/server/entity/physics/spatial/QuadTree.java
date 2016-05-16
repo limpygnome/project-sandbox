@@ -33,6 +33,10 @@ public class QuadTree
      */
     public synchronized void update(Entity entity)
     {
+        TODO: make entitymanager explicitly put entity into tree; updates when entity not mapped to node -> ignore..
+        currently an issue whereby entity position updated before entity in world, thus added to scene and update sent
+            to player without ent id.
+
         QuadTreeNode oldNode = null;
         QuadTreeNode newNode = null;
 
@@ -105,9 +109,9 @@ public class QuadTree
      * @param entity the entity
      * @return list of possible entities
      */
-    public synchronized List<Entity> getCollidableEntities(Entity entity)
+    public synchronized Set<Entity> getCollidableEntities(Entity entity)
     {
-        List<Entity> result = new LinkedList<>();
+        Set<Entity> result = new HashSet<>();
 
         // Fetch node of entity
         QuadTreeNode entityNode = entityToNode.get(entity);
@@ -134,14 +138,14 @@ public class QuadTree
      * @param radius the radius
      * @return list of entities within radius of entity
      */
-    public synchronized List<Entity> getEntitiesWithinRadius(Entity entity, float radius)
+    public synchronized Set<Entity> getEntitiesWithinRadius(Entity entity, float radius)
     {
         return getEntitiesWithinRadius(entity.position, radius);
     }
 
-    public synchronized List<Entity> getEntitiesWithinRadius(Vector2 position, float radius)
+    public synchronized Set<Entity> getEntitiesWithinRadius(Vector2 position, float radius)
     {
-        List<Entity> result = new LinkedList<>();
+        Set<Entity> result = new HashSet<>();
 
         // Recurse nodes to add all items in quads which can fit the position
         rootNode.addEntitiesAndRecurseFittingChildNodes(result, position.x - radius, position.y - radius, position.x + radius, position.y + radius);

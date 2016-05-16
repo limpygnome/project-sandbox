@@ -50,8 +50,6 @@ public class EntityManager implements EventLogicCycleService, IdCounterConsumer
     /* Counter for producing entity identifiers. */
     private IdCounterProvider idCounterProvider;
 
-    /* Used to track entities in a global state i.e. created or pending deletion. */
-    private List<Entity> entitiesGlobalState;
 
     public EntityManager(Controller controller, WorldMap map)
     {
@@ -61,7 +59,6 @@ public class EntityManager implements EventLogicCycleService, IdCounterConsumer
         // Setup collections...
         this.entities = new ConcurrentHashMap<>();
         this.idCounterProvider = new IdCounterProvider(this);
-        this.entitiesGlobalState = new LinkedList<>();
 
         // Inject dependencies...
         controller.inject(this);
@@ -174,24 +171,6 @@ public class EntityManager implements EventLogicCycleService, IdCounterConsumer
     public Map<Short, Entity> getEntities()
     {
         return entities;
-    }
-
-    public List<Entity> getGlobalStateEntities()
-    {
-        return entitiesGlobalState;
-    }
-
-    /**
-     * Used to add an entity with a global EntityState of either CREATED or PENDING_DELETION.
-     *
-     * @param entity the entity
-     */
-    public synchronized void addEntityGlobalState(Entity entity)
-    {
-        synchronized (entitiesGlobalState)
-        {
-            entitiesGlobalState.add(entity);
-        }
     }
 
     private void executeEntityLogic()
@@ -325,12 +304,6 @@ public class EntityManager implements EventLogicCycleService, IdCounterConsumer
 
     private synchronized void updateEntityStates()
     {
-        // Clear global states from this logic cycle
-        synchronized (entitiesGlobalState)
-        {
-            entitiesGlobalState.clear();
-        }
-
         // Iterate each entity and transition their state
         Iterator<Map.Entry<Short, Entity>> iterator = entities.entrySet().iterator();
 

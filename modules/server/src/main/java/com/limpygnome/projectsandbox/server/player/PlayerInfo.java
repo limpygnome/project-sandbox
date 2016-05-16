@@ -4,6 +4,7 @@ import com.limpygnome.projectsandbox.server.Controller;
 import com.limpygnome.projectsandbox.server.entity.death.AbstractKiller;
 import com.limpygnome.projectsandbox.server.network.packet.imp.player.global.PlayerKilledOutboundPacket;
 import com.limpygnome.projectsandbox.server.entity.Entity;
+import com.limpygnome.projectsandbox.server.player.network.Scene;
 import com.limpygnome.projectsandbox.server.world.map.MapService;
 import com.limpygnome.projectsandbox.server.world.map.WorldMap;
 import com.limpygnome.projectsandbox.shared.model.GameSession;
@@ -52,6 +53,12 @@ public class PlayerInfo
      */
     public Entity entity;
 
+    /**
+     * Holds the network scene, used for efficient updates.
+     */
+    private Scene scene;
+
+
     public PlayerInfo(WebSocket socket, GameSession session, short playerId)
     {
         this.keys = 0;
@@ -59,6 +66,7 @@ public class PlayerInfo
         this.entity = null;
         this.session = session;
         this.playerId = playerId;
+        this.scene = new Scene();
     }
 
     public synchronized boolean isConnected()
@@ -144,6 +152,11 @@ public class PlayerInfo
         }
 
         LOG.debug("Player inflicted death - ply id: {}, killer: {}", playerId, death);
+    }
+
+    public Scene getScene()
+    {
+        return scene;
     }
 
 }
