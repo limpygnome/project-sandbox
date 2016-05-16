@@ -193,7 +193,6 @@ public class EntityManager implements EventLogicCycleService, IdCounterConsumer
     {
         // TODO: consider how to isolate synchronization, can deadlock if events use e.g. playerservice...
         Entity entityA;
-        Entity entityB;
 
         // Fetch map boundaries
         float mapMaxX = map.getMaxX();
@@ -202,6 +201,7 @@ public class EntityManager implements EventLogicCycleService, IdCounterConsumer
         // Perform collision check for each entity
         CollisionResult collisionResult;
         Collection<CollisionMapResult> mapResults;
+        Set<Entity> collidableEntities;
 
         for (Map.Entry<Short, Entity> kv : entities.entrySet())
         {
@@ -211,12 +211,11 @@ public class EntityManager implements EventLogicCycleService, IdCounterConsumer
             if (!entityA.isDeleted() && !entityA.isDead())
             {
                 // TODO: CRITICAL - upgrade with quadtree, N^2 - really bad...
+                collidableEntities = quadTree.getCollidableEntities(entityA);
 
                 // Perform collision detection/handling with other ents
-                for (Map.Entry<Short, Entity> kv2 : entities.entrySet())
+                for (Entity entityB : collidableEntities)
                 {
-                    entityB = kv2.getValue();
-
                     // Check next entity is not: dead, deleted or the same ent
                     if (!entityB.isDeleted() && !entityB.isDead() &&  entityA.id != entityB.id)
                     {
