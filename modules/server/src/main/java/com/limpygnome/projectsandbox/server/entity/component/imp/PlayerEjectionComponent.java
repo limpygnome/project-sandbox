@@ -1,6 +1,5 @@
 package com.limpygnome.projectsandbox.server.entity.component.imp;
 
-import com.limpygnome.projectsandbox.game.entity.living.Player;
 import com.limpygnome.projectsandbox.server.Controller;
 import com.limpygnome.projectsandbox.server.entity.Entity;
 import com.limpygnome.projectsandbox.server.entity.PlayerEntity;

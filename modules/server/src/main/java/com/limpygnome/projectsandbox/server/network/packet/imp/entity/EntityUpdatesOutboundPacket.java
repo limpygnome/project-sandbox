@@ -86,7 +86,7 @@ public class EntityUpdatesOutboundPacket extends OutboundPacket
                 if (!entity.isDeleted())
                 {
                     writeEntCreated(entity);
-                    writeEntUpdated(entity, false);
+                    writeEntUpdated(entity, true);
                 }
             }
 

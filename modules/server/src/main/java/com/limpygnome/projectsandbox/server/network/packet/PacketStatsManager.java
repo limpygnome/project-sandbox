@@ -1,8 +1,10 @@
 package com.limpygnome.projectsandbox.server.network.packet;
 
+import com.limpygnome.projectsandbox.server.Controller;
 import com.limpygnome.projectsandbox.server.service.EventLogicCycleService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 /**
@@ -12,6 +14,9 @@ import org.springframework.stereotype.Service;
 public class PacketStatsManager implements EventLogicCycleService
 {
     private final static Logger LOG = LogManager.getLogger(PacketStatsManager.class);
+
+    @Autowired
+    private Controller controller;
 
     /**
      * The rate at which to output network stats, in debug mode, to the logs.
@@ -62,7 +67,9 @@ public class PacketStatsManager implements EventLogicCycleService
                 String totalOutSecond = humanBytes((long) totalBytesSecondOut);
                 String total = humanBytes(totalBytes);
 
-                LOG.debug("in: {} ({}s), out: {} ({}s), total: {}", totalIn, totalInSecond, totalOut, totalOutSecond, total);
+                long totalPlayers = controller.playerService.getPlayers().size();
+
+                LOG.debug("in: {} ({}s), out: {} ({}s), total: {}, plys: {}", totalIn, totalInSecond, totalOut, totalOutSecond, total, totalPlayers);
 
                 // Save for next time
                 lastTotalBytesIn = totalBytesIn;

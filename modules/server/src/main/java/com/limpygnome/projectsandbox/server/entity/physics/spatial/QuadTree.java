@@ -33,14 +33,16 @@ public class QuadTree
      */
     public synchronized void update(Entity entity)
     {
-        TODO: make entitymanager explicitly put entity into tree; updates when entity not mapped to node -> ignore..
-        currently an issue whereby entity position updated before entity in world, thus added to scene and update sent
-            to player without ent id.
-
-        QuadTreeNode oldNode = null;
-        QuadTreeNode newNode = null;
+        // Check entity can be added to quad-tree i.e. not dead and assigned identifier...
+        if (entity.id == null || entity.isDeleted())
+        {
+            return;
+        }
 
         // Determine if node needs to be set/changed
+        QuadTreeNode oldNode = null;
+        QuadTreeNode newNode;
+
         if (entityToNode.containsKey(entity))
         {
             // Update entity by recursing from old node (most likely moved to neighbor)
