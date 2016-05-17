@@ -3,7 +3,9 @@ package com.limpygnome.projectsandbox.server.player.network;
 import com.limpygnome.projectsandbox.server.entity.Entity;
 import com.limpygnome.projectsandbox.server.entity.physics.spatial.ProximityResult;
 
+import java.util.Collections;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -18,28 +20,21 @@ public class Scene
 
     public Scene()
     {
-        entitiesInScene = new HashSet<>();
+        entitiesInScene = Collections.emptySet();
     }
 
-    public synchronized SceneUpdates update(Set<ProximityResult> entitiesInScene)
+    public synchronized SceneUpdates update(Set<Entity> entitiesInScene)
     {
         // Create set of entities deleted
         Set<Entity> entitiesDeleted = new HashSet<>(this.entitiesInScene);
         entitiesDeleted.removeAll(entitiesInScene);
 
         // Create set of entities created
-        Set<Entity> entitiesCreated = new HashSet<>();
-
-        for (ProximityResult proximityResult : entitiesInScene)
-        {
-            entitiesCreated.add(proximityResult.entity);
-        }
-
+        Set<Entity> entitiesCreated = new HashSet<>(entitiesInScene);
         entitiesCreated.removeAll(this.entitiesInScene);
 
         // Update our scene
-        this.entitiesInScene.addAll(entitiesCreated);
-        this.entitiesInScene.removeAll(entitiesDeleted);
+        this.entitiesInScene = new HashSet<>(entitiesInScene);
 
         // Create result
         SceneUpdates sceneUpdates = new SceneUpdates(entitiesCreated, entitiesDeleted);

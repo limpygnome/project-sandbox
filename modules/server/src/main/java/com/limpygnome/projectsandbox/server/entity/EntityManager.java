@@ -262,21 +262,23 @@ public class EntityManager implements EventLogicCycleService, IdCounterConsumer
             entity.eventCollisionMap(controller, mapResult);
         }
 
-        // Update position for entity
-        entity.position.copy(entity.positionNew);
-
         // Check ent is not outside map
         if (!entity.isDeleted() &&
                 (
                         entity.positionNew.x < 0.0f || entity.positionNew.y < 0.0f ||
                                 entity.positionNew.x > mapMaxX || entity.positionNew.y > mapMaxY
                 )
-                )
+            )
         {
             LOG.warn("Entity went outside the map - ent: {}, pos: {}", entity, entity.positionNew);
 
             // Kill the ent...
             entity.kill(controller, null, MapBoundsKiller.class);
+        }
+        else
+        {
+            // Update position for entity
+            entity.position.copy(entity.positionNew);
         }
     }
 
@@ -326,8 +328,12 @@ public class EntityManager implements EventLogicCycleService, IdCounterConsumer
                 // Remove deleted entities, else transition to next state...
                 if (entity.getState() == EntityState.DELETED)
                 {
+                    Short entityId = entity.id;
+
                     entity.id = null;
                     iterator.remove();
+
+                    LOG.info("deleted entity - id: {}", entityId);
                 }
                 else
                 {

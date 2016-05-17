@@ -53,9 +53,17 @@ public class EntityUpdatesOutboundPacket extends OutboundPacket
             // Fetch entities within radius
             Set<ProximityResult> nearbyEntities = quadTree.getEntitiesWithinRadius(playerEntity, RADIUS_ENTITY_UPDATES);
 
+            // Convert to set for updating player's scene
+            Set<Entity> nearbyEntitiesSet = new HashSet<>(nearbyEntities.size());
+
+            for (ProximityResult proximityResult : nearbyEntities)
+            {
+                nearbyEntitiesSet.add(proximityResult.entity);
+            }
+
             // Update player's scene
             Scene scene = playerInfo.getScene();
-            SceneUpdates sceneUpdates = scene.update(nearbyEntities);
+            SceneUpdates sceneUpdates = scene.update(nearbyEntitiesSet);
 
             // Write entities created in scene
             for (Entity entity : sceneUpdates.entitiesCreated)

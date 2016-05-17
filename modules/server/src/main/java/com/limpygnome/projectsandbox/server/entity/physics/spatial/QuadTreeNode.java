@@ -133,7 +133,8 @@ public class QuadTreeNode
         }
         else
         {
-            result = null;
+            // This will only ever be the root, use this as a fallback...
+            result = this;
         }
 
         return result;
