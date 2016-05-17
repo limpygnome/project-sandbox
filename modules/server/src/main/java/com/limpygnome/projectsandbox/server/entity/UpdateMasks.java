@@ -6,35 +6,31 @@ package com.limpygnome.projectsandbox.server.entity;
 */
 public enum UpdateMasks
 {
-   /**
-    * Indicates the entity is alive.
-    */
-   ALIVE(1),
 
    /**
     * Indicates X of position has been updated.
     */
-   X(2),
+   X(1),
 
    /**
     * Indicates Y of position has been updated.
     */
-   Y(4),
+   Y(2),
 
    /**
     * The rotation has been updated.
     */
-   ROTATION(8),
+   ROTATION(4),
 
    /**
     * The health of the player has been updated.
     */
-   HEALTH(16),
+   HEALTH(8),
 
    /**
-    * All of the masks combined, excluding ALIVE (always intentionally added/not added).
+    * All of the masks combined.
     */
-   ALL_MASKS(2+4+8+16)
+   ALL_MASKS(1+2+4+8)
    ;
 
    public final int MASK;
@@ -43,4 +39,5 @@ public enum UpdateMasks
    {
        this.MASK = MASK;
    }
+
 }

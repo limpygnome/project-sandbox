@@ -174,36 +174,32 @@ game.ui.controller =
     {
         // TODO: move this to be entirely event driven, so no logic loop is needed for UI except fps
 
-        var ent = projectSandbox.playerEntity;
+        var entity = projectSandbox.playerEntity;
         
-        if (ent != null)
+        if (entity != null)
         {
-            // Check if dead
-            if (maxHealth != -1 && health <= 0.0)
+            // Update health bar
+            var maxHealth = entity.maxHealth;
+            var health = entity.health;
+
+            var healthPercent;
+            if (health > 0 && maxHealth > 0 && health <= maxHealth)
             {
-                this.renderPlayerUI = false;
+                healthPercent = (health / maxHealth) * 100.0;
             }
             else
             {
-                // Update health bar
-                var maxHealth = ent.maxHealth;
-                var health = ent.health;
-
-                var healthPercent;
-                if (health > 0 && maxHealth > 0 && health <= maxHealth)
-                {
-                    healthPercent = (health / maxHealth) * 100.0;
-                }
-                else
-                {
-                    healthPercent = 0;
-                }
-
-                $(this.elementUIHealthBar).width(healthPercent + "%");
-
-                // Update player UI to render
-                this.renderPlayerUI = true;
+                healthPercent = 0;
             }
+
+            $(this.elementUIHealthBar).width(healthPercent + "%");
+
+            // Update player UI to render
+            this.renderPlayerUI = true;
+        }
+        else
+        {
+            this.renderPlayerUI = false;
         }
 
         // Update FPS counter

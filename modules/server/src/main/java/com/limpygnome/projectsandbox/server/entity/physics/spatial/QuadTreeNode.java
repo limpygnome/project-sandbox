@@ -147,7 +147,7 @@ public class QuadTreeNode
         // Traverse child nodes
         for (QuadTreeNode node : childNodes)
         {
-            addEntitiesAndRecurseChildNodes(result);
+            node.addEntitiesAndRecurseChildNodes(result);
         }
     }
 

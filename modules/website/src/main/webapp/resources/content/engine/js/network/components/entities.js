@@ -72,7 +72,6 @@ projectSandbox.network.entities =
         }
     },
 
-    UPDATEMASK_ALIVE: 1,
     UPDATEMASK_X: 1,
     UPDATEMASK_Y: 2,
     UPDATEMASK_ROTATION: 4,
@@ -87,29 +86,6 @@ projectSandbox.network.entities =
         {
             // Read mask
             var mask = packet.readByte();
-
-            // Read updated params
-            if ((mask & this.UPDATEMASK_ALIVE) == this.UPDATEMASK_ALIVE)
-            {
-                // Set ent to alive
-                if (ent.dead)
-                {
-                    ent.dead = false;
-                    console.debug("engine/network/entities - entity alive - entity id: " + id);
-                }
-            }
-            else
-            {
-                // Set ent to dead
-                if (!ent.dead)
-                {
-                    ent.dead = true;
-                    console.debug("engine/network/entities - entity dead - entity id: " + id);
-
-                    // Raise death event
-                    this.invokeEntityDeath(ent);
-                }
-            }
 
             /*
                 Copy some values to an "updated" field i.e. updatedX.

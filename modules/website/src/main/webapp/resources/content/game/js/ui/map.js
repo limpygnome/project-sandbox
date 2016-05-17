@@ -66,12 +66,8 @@ game.ui.map =
                 for (var kv of projectSandbox.entities)
                 {
                     entity = kv[1];
-
-                    if (!entity.dead)
-                    {
-                        this.markerUpdateMap(entity);
-                        this.markerUpdateRadar(entity);
-                    }
+                    this.markerUpdateMap(entity);
+                    this.markerUpdateRadar(entity);
                 }
 
                 // Purge old

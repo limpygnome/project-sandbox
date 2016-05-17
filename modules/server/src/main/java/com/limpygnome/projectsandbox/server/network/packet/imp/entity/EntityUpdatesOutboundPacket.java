@@ -148,16 +148,6 @@ public class EntityUpdatesOutboundPacket extends OutboundPacket
             mask = ent.updateMask;
         }
 
-        // Add to mask to indicate if entity is alive
-        if (ent.isDeleted())
-        {
-            mask &= ~((char) UpdateMasks.ALIVE.MASK);
-        }
-        else
-        {
-            mask |= (char) UpdateMasks.ALIVE.MASK;
-        }
-
         // Finally add the mask its self
         packetData.add((byte) mask);
 
