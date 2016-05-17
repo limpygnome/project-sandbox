@@ -295,7 +295,7 @@ public class EntityManager implements EventLogicCycleService, IdCounterConsumer
                 {
                     // Build updates packet
                     packet = new EntityUpdatesOutboundPacket();
-                    packet.build(this, playerInfo, false);
+                    packet.build(this, playerInfo);
 
                     // Send updates
                     controller.packetService.send(playerInfo, packet);

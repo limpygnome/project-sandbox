@@ -280,12 +280,7 @@ public class PlayerService implements EventLogicCycleService, IdCounterConsumer
             // Send map data
             packetService.send(playerInfo, map.getPacket());
 
-            // Build packet for player
-            EntityUpdatesOutboundPacket packetUpdates = new EntityUpdatesOutboundPacket();
-            packetUpdates.build(map.entityManager, playerInfo, true);
-            controller.packetService.send(playerInfo, packetUpdates);
-
-            // Inform server player has joined
+            // Inform everyone else that player has joined
             PlayerEventsUpdatesOutboundPacket playerEventsUpdatesOutboundPacket = new PlayerEventsUpdatesOutboundPacket();
             playerEventsUpdatesOutboundPacket.writePlayerJoined(playerInfo);
             broadcast(playerEventsUpdatesOutboundPacket);

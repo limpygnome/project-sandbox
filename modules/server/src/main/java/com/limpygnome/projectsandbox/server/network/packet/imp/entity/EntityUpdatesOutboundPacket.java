@@ -30,39 +30,9 @@ public class EntityUpdatesOutboundPacket extends OutboundPacket
         super((byte)'E', (byte)'U');
     }
 
-    public void build(EntityManager entityManager, PlayerInfo playerInfo, boolean fullUpdate) throws IOException
+    public void build(EntityManager entityManager, PlayerInfo playerInfo) throws IOException
     {
-        if (fullUpdate)
-        {
-            buildFullUpdate(entityManager);
-        }
-        else
-        {
-            buildUpdates(entityManager, playerInfo);
-        }
-    }
-
-    /*
-        Add all active entities as created.
-     */
-    private void buildFullUpdate(EntityManager entityManager) throws IOException
-    {
-        Map<Short, Entity> entities = entityManager.getEntities();
-
-        synchronized (entities)
-        {
-            for (Entity entity : entities.values())
-            {
-                synchronized (entity)
-                {
-                    if (!entity.isDeleted())
-                    {
-                        writeEntCreated(entity);
-                        writeEntUpdated(entity, true);
-                    }
-                }
-            }
-        }
+        buildUpdates(entityManager, playerInfo);
     }
 
     /*
