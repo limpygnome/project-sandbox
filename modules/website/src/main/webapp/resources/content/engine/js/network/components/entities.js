@@ -73,10 +73,10 @@ projectSandbox.network.entities =
     },
 
     UPDATEMASK_ALIVE: 1,
-    UPDATEMASK_X: 2,
-    UPDATEMASK_Y: 4,
-    UPDATEMASK_ROTATION: 8,
-    UPDATEMASK_HEALTH: 16,
+    UPDATEMASK_X: 1,
+    UPDATEMASK_Y: 2,
+    UPDATEMASK_ROTATION: 4,
+    UPDATEMASK_HEALTH: 8,
 
     packetUpdatesEntUpdated: function(packet, id)
     {

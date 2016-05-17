@@ -261,7 +261,7 @@ public abstract class AbstractPedestrian extends Entity
         if (state == PedestrianState.TrackingEntity)
         {
             // Check target is still alive and not deleted
-            if (targetEntity.isDead() || targetEntity.isDeleted())
+            if (targetEntity.isDeleted())
             {
                 resetTarget();
             }

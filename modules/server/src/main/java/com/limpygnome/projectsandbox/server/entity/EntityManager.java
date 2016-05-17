@@ -180,7 +180,7 @@ public class EntityManager implements EventLogicCycleService, IdCounterConsumer
             for (Entity entity : entities.values())
             {
                 // We won't run logic for deleted or dead enities
-                if (!entity.isDeleted() && !entity.isDead())
+                if (!entity.isDeleted())
                 {
                     entity.eventLogic(controller);
                 }
@@ -190,7 +190,7 @@ public class EntityManager implements EventLogicCycleService, IdCounterConsumer
 
     private void performCollisionDetection()
     {
-        // Fetch map boundaries 
+        // Fetch map boundaries
         float mapMaxX = map.getMaxX();
         float mapMaxY = map.getMaxY();
 
@@ -207,12 +207,12 @@ public class EntityManager implements EventLogicCycleService, IdCounterConsumer
     private void performCollisionDetection(float mapMaxX, float mapMaxY, Entity entity)
     {
         // Check entity is not deleted or dead
-        if (!entity.isDeleted() && !entity.isDead())
+        if (!entity.isDeleted())
         {
             performCollisionDetectionEntities(entity);
 
             // Check entity has still not been deleted or dead
-            if (!entity.isDeleted() && !entity.isDead())
+            if (!entity.isDeleted())
             {
                 performCollisionDetectionMap(mapMaxX, mapMaxY, entity);
             }
@@ -229,7 +229,7 @@ public class EntityManager implements EventLogicCycleService, IdCounterConsumer
         for (Entity entityB : nearbyEntities)
         {
             // Check next entity is not: dead, deleted or the same entity
-            if (!entityB.isDeleted() && !entityB.isDead() && entityA.id != entityB.id)
+            if (!entityB.isDeleted() && entityA.id != entityB.id)
             {
                 // Perform collision detection
                 collisionResult = collisionDetection.collision(entityA, entityB);
@@ -243,7 +243,7 @@ public class EntityManager implements EventLogicCycleService, IdCounterConsumer
 
                     // Check if our original entity is now deleted
                     // -- Only the two above events should be able to kill it
-                    if (entityA.isDeleted() || entityA.isDead())
+                    if (entityA.isDeleted())
                     {
                         break;
                     }
@@ -266,7 +266,7 @@ public class EntityManager implements EventLogicCycleService, IdCounterConsumer
         entity.position.copy(entity.positionNew);
 
         // Check ent is not outside map
-        if (!entity.isDeleted() && !entity.isDead() &&
+        if (!entity.isDeleted() &&
                 (
                         entity.positionNew.x < 0.0f || entity.positionNew.y < 0.0f ||
                                 entity.positionNew.x > mapMaxX || entity.positionNew.y > mapMaxY
@@ -326,6 +326,7 @@ public class EntityManager implements EventLogicCycleService, IdCounterConsumer
                 // Remove deleted entities, else transition to next state...
                 if (entity.getState() == EntityState.DELETED)
                 {
+                    entity.id = null;
                     iterator.remove();
                 }
                 else

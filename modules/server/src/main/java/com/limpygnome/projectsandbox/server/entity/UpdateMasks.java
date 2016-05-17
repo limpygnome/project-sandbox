@@ -32,7 +32,7 @@ public enum UpdateMasks
    HEALTH(16),
 
    /**
-    * All of the masks combined, excluding ALIVE.
+    * All of the masks combined, excluding ALIVE (always intentionally added/not added).
     */
    ALL_MASKS(2+4+8+16)
    ;

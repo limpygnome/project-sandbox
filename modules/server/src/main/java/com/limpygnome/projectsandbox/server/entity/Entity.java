@@ -77,12 +77,6 @@ public strictfp abstract class Entity
     public float health;
     public float maxHealth;
 
-    /**
-     * Used as a flag to track if the entity has died and not respawned. Hooks into updateMasks mechanism. When the
-     * entity is next spawned, its flag is unset.
-     */
-    private boolean flagDead;
-
     // Physics
     /**
      * When true, this entity cannot be moved.
@@ -122,7 +116,6 @@ public strictfp abstract class Entity
         
         this.health = 0.0f;
         this.maxHealth = 0.0f;
-        this.flagDead = true;
 
         this.physicsStatic = false;
     }
@@ -257,7 +250,7 @@ public strictfp abstract class Entity
 
     public synchronized boolean isDeleted()
     {
-        return state == EntityState.PENDING_DELETED || state == EntityState.DELETED;
+        return state == EntityState.PENDING_DELETED || state == EntityState.DELETED || id == null;
     }
     
     public synchronized EntityState getState()
@@ -345,15 +338,6 @@ public strictfp abstract class Entity
     public synchronized void setGodmode()
     {
         setMaxHealth(-1.0f);
-    }
-
-    protected synchronized void setDead(boolean dead)
-    {
-        // Set dead flag
-        this.flagDead = dead;
-
-        // Set that we've updated the flag
-        updateMask(UpdateMasks.ALIVE);
     }
     
     /**
@@ -556,9 +540,6 @@ public strictfp abstract class Entity
      */
     public synchronized void eventDeath(Controller controller, AbstractKiller killer)
     {
-        // Set internal flag
-        this.flagDead = true;
-
         // Respawn the entity
         map.respawnManager.respawn(new EntityPendingRespawn(controller, this, DEFAULT_RESPAWN_TIME_MS));
 
@@ -660,9 +641,6 @@ public strictfp abstract class Entity
             component.eventReset(controller, this);
         }
 
-        // Set status to alive
-        flagDead = false;
-
         // Rebuild collision vertices
         rebuildCachedVertices();
     }
@@ -704,16 +682,6 @@ public strictfp abstract class Entity
     public float getSpeed()
     {
         return 0.0f;
-    }
-
-    /**
-     * Indicates if the current entity is dead.
-     *
-     * @return True = dead, false = not dead.
-     */
-    public boolean isDead()
-    {
-        return flagDead;
     }
 
     @Override
