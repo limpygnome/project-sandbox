@@ -9,6 +9,7 @@ import com.limpygnome.projectsandbox.server.entity.physics.Vector2;
 import com.limpygnome.projectsandbox.server.entity.physics.collisions.CollisionResult;
 import com.limpygnome.projectsandbox.server.entity.physics.collisions.map.CollisionMapResult;
 import com.limpygnome.projectsandbox.server.entity.physics.proximity.DefaultProximity;
+import com.limpygnome.projectsandbox.server.entity.physics.spatial.SpatialActions;
 import com.limpygnome.projectsandbox.server.player.PlayerInfo;
 import com.limpygnome.projectsandbox.server.world.map.WorldMap;
 import org.apache.logging.log4j.LogManager;
@@ -128,7 +129,7 @@ public class Rocket extends Entity
         if (!exploded)
         {
             // Apply damage to entities
-            DefaultProximity.applyLinearRadiusDamage(controller, this, ROCKET_BLAST_RADIUS, ROCKET_BLAST_DAMAGE, true, RocketKiller.class);
+            SpatialActions.applyLinearRadiusDamage(controller, this, ROCKET_BLAST_RADIUS, ROCKET_BLAST_DAMAGE, RocketKiller.class);
 
             // Mark this entity for removal
             remove();

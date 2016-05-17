@@ -11,19 +11,18 @@ import com.limpygnome.projectsandbox.server.entity.physics.casting.Casting;
 import com.limpygnome.projectsandbox.server.entity.physics.casting.CastingResult;
 import com.limpygnome.projectsandbox.server.entity.physics.casting.victims.EntityCastVictim;
 import com.limpygnome.projectsandbox.server.entity.physics.proximity.DefaultProximity;
-import com.limpygnome.projectsandbox.server.entity.physics.proximity.ProximityResult;
-import com.limpygnome.projectsandbox.server.entity.physics.proximity.RotateResult;
+import com.limpygnome.projectsandbox.server.entity.physics.spatial.ProximityResult;
+import com.limpygnome.projectsandbox.server.entity.physics.spatial.QuadTree;
+import com.limpygnome.projectsandbox.server.entity.physics.spatial.RotateResult;
+import com.limpygnome.projectsandbox.server.entity.physics.spatial.SpatialActions;
 import com.limpygnome.projectsandbox.server.player.PlayerInfo;
 import com.limpygnome.projectsandbox.server.world.map.WorldMap;
 import com.limpygnome.projectsandbox.server.world.spawn.Spawn;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.util.List;
+import java.util.Set;
 
-/**
- * Created by limpygnome on 12/05/15.
- */
 @EntityType(typeId = 500, typeName = "living/sentry")
 public class Sentry extends Entity
 {
@@ -50,15 +49,27 @@ public class Sentry extends Entity
     @Override
     public void eventLogic(Controller controller)
     {
-        // Find nearest ent
-        List<ProximityResult> ents = DefaultProximity.nearbyEnts(controller, this, RANGE, true, true);
+        // Fetch quad-tree
+        QuadTree quadTree = map.entityManager.getQuadTree();
+
+        // Find nearest entity
+        Set<ProximityResult> nearbyEntities = quadTree.getEntitiesWithinRadius(this, RANGE);
+        ProximityResult nearestResult = null;
+
+        for (ProximityResult proximityResult : nearbyEntities)
+        {
+            if (nearestResult == null || proximityResult.distance < nearestResult.distance)
+            {
+                nearestResult = proximityResult;
+            }
+        }
 
         // Decide on target vector
         Vector2 targetVector;
 
-        if (!ents.isEmpty())
+        if (nearestResult != null)
         {
-            targetVector = ents.get(0).entity.positionNew;
+            targetVector = nearestResult.entity.positionNew;
         }
         else
         {
@@ -67,7 +78,7 @@ public class Sentry extends Entity
         }
 
         // Move towards target
-        RotateResult rotateResult = DefaultProximity.rotateTowardsTarget(
+        RotateResult rotateResult = SpatialActions.rotateTowardsTarget(
                 this, targetVector, ROTATION_RATE, defaultRotation
         );
 

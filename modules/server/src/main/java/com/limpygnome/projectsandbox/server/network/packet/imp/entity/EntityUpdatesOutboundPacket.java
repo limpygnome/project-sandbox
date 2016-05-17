@@ -1,6 +1,8 @@
 package com.limpygnome.projectsandbox.server.network.packet.imp.entity;
 
 import com.limpygnome.projectsandbox.server.entity.EntityManager;
+import com.limpygnome.projectsandbox.server.entity.physics.spatial.ProximityResult;
+import com.limpygnome.projectsandbox.server.entity.physics.spatial.QuadTree;
 import com.limpygnome.projectsandbox.server.network.packet.OutboundPacket;
 import com.limpygnome.projectsandbox.server.entity.Entity;
 import com.limpygnome.projectsandbox.server.entity.EntityState;
@@ -45,8 +47,11 @@ public class EntityUpdatesOutboundPacket extends OutboundPacket
         // Write actual entity updates
         if (playerEntity != null)
         {
+            // Fetch quad-tree
+            QuadTree quadTree = entityManager.getQuadTree();
+
             // Fetch entities within radius
-            Set<Entity> nearbyEntities = entityManager.getQuadTree().getEntitiesWithinRadius(playerEntity, RADIUS_ENTITY_UPDATES);
+            Set<ProximityResult> nearbyEntities = quadTree.getEntitiesWithinRadius(playerEntity, RADIUS_ENTITY_UPDATES);
 
             // Update player's scene
             Scene scene = playerInfo.getScene();
@@ -75,8 +80,11 @@ public class EntityUpdatesOutboundPacket extends OutboundPacket
             }
 
             // Write updates for everything
-            for (Entity entity : nearbyEntities)
+            Entity entity;
+            for (ProximityResult proximityResult : nearbyEntities)
             {
+                entity = proximityResult.entity;
+
                 synchronized (entity)
                 {
                     if (entity.getState() == EntityState.UPDATED)

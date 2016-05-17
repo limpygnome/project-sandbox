@@ -1,4 +1,4 @@
-package com.limpygnome.projectsandbox.server.entity.physics.proximity;
+package com.limpygnome.projectsandbox.server.entity.physics.spatial;
 
 /**
  * Created by limpygnome on 28/08/15.

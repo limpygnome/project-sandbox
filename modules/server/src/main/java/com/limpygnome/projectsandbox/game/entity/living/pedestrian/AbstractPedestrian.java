@@ -5,22 +5,21 @@ import com.limpygnome.projectsandbox.server.entity.Entity;
 import com.limpygnome.projectsandbox.server.entity.PlayerEntity;
 import com.limpygnome.projectsandbox.server.entity.ai.IdleMode;
 import com.limpygnome.projectsandbox.server.entity.ai.PedestrianState;
-import com.limpygnome.projectsandbox.game.entity.living.Player;
 import com.limpygnome.projectsandbox.server.entity.physics.Vector2;
 import com.limpygnome.projectsandbox.server.entity.physics.casting.Casting;
 import com.limpygnome.projectsandbox.server.entity.physics.casting.CastingResult;
 import com.limpygnome.projectsandbox.server.entity.physics.casting.victims.EntityCastVictim;
 import com.limpygnome.projectsandbox.server.entity.ai.pathfinding.Node;
 import com.limpygnome.projectsandbox.server.entity.ai.pathfinding.Path;
-import com.limpygnome.projectsandbox.server.entity.physics.proximity.DefaultProximity;
-import com.limpygnome.projectsandbox.server.entity.physics.proximity.ProximityResult;
+import com.limpygnome.projectsandbox.server.entity.physics.spatial.ProximityResult;
+import com.limpygnome.projectsandbox.server.entity.physics.spatial.QuadTree;
 import com.limpygnome.projectsandbox.server.inventory.Inventory;
 import com.limpygnome.projectsandbox.server.inventory.InventoryInvokeState;
 import com.limpygnome.projectsandbox.server.player.PlayerInfo;
 import com.limpygnome.projectsandbox.server.world.map.WorldMap;
 import com.limpygnome.projectsandbox.server.world.spawn.Spawn;
 
-import java.util.List;
+import java.util.Set;
 
 import static com.limpygnome.projectsandbox.server.constant.entity.PedestrianConstants.*;
 
@@ -214,7 +213,7 @@ public abstract class AbstractPedestrian extends Entity
     private synchronized void rotateToTarget(Vector2 target)
     {
         // Get angle between current position and target
-        float angleOffset = DefaultProximity.computeTargetAngleOffset(this, target);
+        float angleOffset = Vector2.computeTargetAngleOffset(this, target);
 
         // Rotate towards target
         rotationOffset(angleOffset);
@@ -223,7 +222,7 @@ public abstract class AbstractPedestrian extends Entity
     private synchronized void moveToTarget(Vector2 target, boolean rotateTowardsTarget)
     {
         // Get angle between current position and target
-        float angleOffset = DefaultProximity.computeTargetAngleOffset(this, target);
+        float angleOffset = Vector2.computeTargetAngleOffset(this, target);
 
         // Measure distance to target
         float distance = Vector2.distance(positionNew, target);
@@ -285,11 +284,11 @@ public abstract class AbstractPedestrian extends Entity
         // See if we can find a new target...
         if (flagCanAttack && state.IDLE)
         {
+            // Fetch quad-tree
+            QuadTree quadTree = map.entityManager.getQuadTree();
+
             // Find nearest entity...
-            // NOTE: uses high accuracy; computation can be saved by turning testing all vertices off
-            List<ProximityResult> nearbyEnts = DefaultProximity.nearbyEnts(
-                    controller, this, engageDistance, true, true
-            );
+            Set<ProximityResult> nearbyEnts = quadTree.getEntitiesWithinRadius(this, engageDistance);
 
             if (!nearbyEnts.isEmpty())
             {
@@ -369,7 +368,7 @@ public abstract class AbstractPedestrian extends Entity
         }
 
         // Compute offset to target
-        float targetAngleOffsetToTarget = DefaultProximity.computeTargetAngleOffset(this, targetVector);
+        float targetAngleOffsetToTarget = Vector2.computeTargetAngleOffset(this, targetVector);
 
         if (inventory != null && Math.abs(targetAngleOffsetToTarget) <= ROTATIONAL_OFFSET_TO_ATTACK)
         {

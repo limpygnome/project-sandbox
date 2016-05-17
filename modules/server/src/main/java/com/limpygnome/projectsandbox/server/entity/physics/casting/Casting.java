@@ -7,7 +7,8 @@ import com.limpygnome.projectsandbox.server.entity.physics.Vertices;
 import com.limpygnome.projectsandbox.server.entity.physics.casting.victims.EntityCastVictim;
 import com.limpygnome.projectsandbox.server.entity.physics.casting.victims.MapCastVictim;
 import com.limpygnome.projectsandbox.server.entity.physics.proximity.DefaultProximity;
-import com.limpygnome.projectsandbox.server.entity.physics.proximity.ProximityResult;
+import com.limpygnome.projectsandbox.server.entity.physics.spatial.ProximityResult;
+import com.limpygnome.projectsandbox.server.entity.physics.spatial.QuadTree;
 import com.limpygnome.projectsandbox.server.util.CustomMath;
 import com.limpygnome.projectsandbox.server.world.map.WorldMap;
 import com.limpygnome.projectsandbox.server.world.map.type.tile.TileType;
@@ -16,6 +17,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.util.List;
+import java.util.Set;
 
 /**
  * Allows for casting a vector and returning a collision result.
@@ -98,8 +100,11 @@ public class Casting
     private static CastingResult castEnts(Controller controller, Entity origin, Vector2 lineStart, Vector2 lineEnd,
                                           Vector2 linePerpStart, Vector2 linePerpEnd, float maxDistance)
     {
+        // Fetch quad-tree
+        QuadTree quadTree = origin.map.entityManager.getQuadTree();
+
         // Iterate and find each entity within the radius of being hit
-        List<ProximityResult> possibleEnts = DefaultProximity.nearbyEnts(controller, origin, maxDistance, true, true);
+        Set<ProximityResult> possibleEnts = quadTree.getEntitiesWithinRadius(origin, maxDistance);
 
         // 1. Ignore all the ents which are on the other side of the perp of origin i.e. complete opposite direction
         // 2. Iterate each vertex; a collision has occurred when a vertex is on the different side of the line to

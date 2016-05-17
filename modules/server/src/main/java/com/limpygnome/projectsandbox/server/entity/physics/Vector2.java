@@ -1,5 +1,6 @@
 package com.limpygnome.projectsandbox.server.entity.physics;
 
+import com.limpygnome.projectsandbox.server.entity.Entity;
 import com.limpygnome.projectsandbox.server.util.CustomMath;
 
 /**
@@ -241,6 +242,20 @@ public class Vector2
 
         // Return the difference
         return CustomMath.clampAngle(targetRotation - sourceRotation);
+    }
+
+    /**
+     * Computes angle offset between entity and target vector.
+     *
+     * @param entity source entity
+     * @param target the target vector
+     * @return the rotation between entity's rotation and target vector
+     */
+    public static float computeTargetAngleOffset(Entity entity, Vector2 target)
+    {
+        return Vector2.angleToFaceTarget(
+                entity.positionNew, entity.rotation, target
+        );
     }
 
     /**

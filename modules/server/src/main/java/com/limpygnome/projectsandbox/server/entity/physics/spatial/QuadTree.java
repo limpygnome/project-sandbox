@@ -140,36 +140,32 @@ public class QuadTree
      * @param radius the radius
      * @return list of entities within radius of entity
      */
-    public synchronized Set<Entity> getEntitiesWithinRadius(Entity entity, float radius)
+    public synchronized Set<ProximityResult> getEntitiesWithinRadius(Entity entity, float radius)
     {
         return getEntitiesWithinRadius(entity.position, radius);
     }
 
-    public synchronized Set<Entity> getEntitiesWithinRadius(Vector2 position, float radius)
+    public synchronized Set<ProximityResult> getEntitiesWithinRadius(Vector2 position, float radius)
     {
-        Set<Entity> result = new HashSet<>();
-
         // Recurse nodes to add all items in quads which can fit the position
+        Set<Entity> result = new HashSet<>();
         rootNode.addEntitiesAndRecurseFittingChildNodes(result, position.x - radius, position.y - radius, position.x + radius, position.y + radius);
 
         // Now filter entities in result not within radius
-        Iterator<Entity> iterator = result.iterator();
+        Set<ProximityResult> proximityResult = new HashSet<>();
 
-        Entity entity;
         float entityDistance;
-
-        while (iterator.hasNext())
+        for (Entity entity : result)
         {
-            entity = iterator.next();
             entityDistance = Vector2.distance(entity.positionNew, position);
 
-            if (entityDistance >= radius)
+            if (entityDistance <= radius)
             {
-                iterator.remove();
+                proximityResult.add(new ProximityResult(entity, entityDistance));
             }
         }
 
-        return result;
+        return proximityResult;
     }
 
 }

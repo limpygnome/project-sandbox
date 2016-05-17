@@ -5,6 +5,7 @@ import com.limpygnome.projectsandbox.server.effect.types.ExplosionEffect;
 import com.limpygnome.projectsandbox.server.entity.Entity;
 import com.limpygnome.projectsandbox.server.entity.death.SuicideVestKiller;
 import com.limpygnome.projectsandbox.server.entity.physics.proximity.DefaultProximity;
+import com.limpygnome.projectsandbox.server.entity.physics.spatial.SpatialActions;
 import com.limpygnome.projectsandbox.server.inventory.annotation.InventoryItemTypeId;
 import com.limpygnome.projectsandbox.server.inventory.InventoryInvokeType;
 
@@ -65,7 +66,7 @@ public class SuicideVest extends AbstractWeapon
         if (parent != null)
         {
             // Apply damage to entities
-            DefaultProximity.applyLinearRadiusDamage(controller, parent, SUICIDE_VEST_RADIUS, SUICIDE_VEST_BLAST_DAMAGE, true, SuicideVestKiller.class);
+            SpatialActions.applyLinearRadiusDamage(controller, parent, SUICIDE_VEST_RADIUS, SUICIDE_VEST_BLAST_DAMAGE, SuicideVestKiller.class);
 
             // Create explosion effect
             ExplosionEffect explosionEffect = new ExplosionEffect(
