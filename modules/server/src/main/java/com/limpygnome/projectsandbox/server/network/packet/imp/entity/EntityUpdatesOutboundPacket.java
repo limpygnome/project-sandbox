@@ -48,16 +48,19 @@ public class EntityUpdatesOutboundPacket extends OutboundPacket
     private void buildFullUpdate(EntityManager entityManager) throws IOException
     {
         Map<Short, Entity> entities = entityManager.getEntities();
-        Entity entity;
 
-        for(Map.Entry<Short, Entity> kv : entities.entrySet())
+        synchronized (entities)
         {
-            entity = kv.getValue();
-
-            if (!entity.isDeleted())
+            for (Entity entity : entities.values())
             {
-                writeEntCreated(entity);
-                writeEntUpdated(entity, true);
+                synchronized (entity)
+                {
+                    if (!entity.isDeleted())
+                    {
+                        writeEntCreated(entity);
+                        writeEntUpdated(entity, true);
+                    }
+                }
             }
         }
     }
@@ -73,35 +76,43 @@ public class EntityUpdatesOutboundPacket extends OutboundPacket
         if (playerEntity != null)
         {
             // Fetch entities within radius
-//            Set<Entity> nearbyEntities = new HashSet<>(entityManager.getEntities().values());
             Set<Entity> nearbyEntities = entityManager.getQuadTree().getEntitiesWithinRadius(playerEntity, RADIUS_ENTITY_UPDATES);
 
             // Update player's scene
             Scene scene = playerInfo.getScene();
-               SceneUpdates sceneUpdates = scene.update(nearbyEntities);
+            SceneUpdates sceneUpdates = scene.update(nearbyEntities);
 
             // Write entities created in scene
             for (Entity entity : sceneUpdates.entitiesCreated)
             {
-                if (!entity.isDeleted())
+                synchronized (entity)
                 {
-                    writeEntCreated(entity);
-                    writeEntUpdated(entity, true);
+                    if (!entity.isDeleted())
+                    {
+                        writeEntCreated(entity);
+                        writeEntUpdated(entity, true);
+                    }
                 }
             }
 
             // Write entities removed from scene
             for (Entity entity : sceneUpdates.entitiesDeleted)
             {
-                writeEntDeleted(entity);
+                synchronized (entity)
+                {
+                    writeEntDeleted(entity);
+                }
             }
 
             // Write updates for everything
             for (Entity entity : nearbyEntities)
             {
-                if (entity.getState() == EntityState.UPDATED)
+                synchronized (entity)
                 {
-                    writeEntUpdated(entity, false);
+                    if (entity.getState() == EntityState.UPDATED)
+                    {
+                        writeEntUpdated(entity, false);
+                    }
                 }
             }
         }
