@@ -6,10 +6,9 @@ import com.limpygnome.projectsandbox.server.entity.Entity;
 import com.limpygnome.projectsandbox.server.entity.PlayerEntity;
 import com.limpygnome.projectsandbox.server.entity.PlayerEntityService;
 import com.limpygnome.projectsandbox.server.entity.respawn.pending.EntityPendingRespawn;
-import com.limpygnome.projectsandbox.game.entity.living.Player;
+import com.limpygnome.projectsandbox.server.network.Socket;
 import com.limpygnome.projectsandbox.server.network.packet.OutboundPacket;
 import com.limpygnome.projectsandbox.server.network.packet.PacketService;
-import com.limpygnome.projectsandbox.server.network.packet.imp.entity.EntityUpdatesOutboundPacket;
 import com.limpygnome.projectsandbox.server.network.packet.imp.player.global.PlayerEventsUpdatesOutboundPacket;
 import com.limpygnome.projectsandbox.server.network.packet.imp.player.individual.PlayerIdentityOutboundPacket;
 import com.limpygnome.projectsandbox.server.service.EventLogicCycleService;
@@ -17,7 +16,6 @@ import com.limpygnome.projectsandbox.server.world.map.MapService;
 import com.limpygnome.projectsandbox.server.world.map.WorldMap;
 import java.io.IOException;
 import java.util.*;
-import java.util.concurrent.ConcurrentHashMap;
 
 import com.limpygnome.projectsandbox.server.util.IdCounterProvider;
 import com.limpygnome.projectsandbox.server.util.counters.IdCounterConsumer;
@@ -49,7 +47,7 @@ public class PlayerService implements EventLogicCycleService, IdCounterConsumer
     private PlayerEntityService playerEntityService;
 
     private final IdCounterProvider idCounterProvider;
-    private final Map<WebSocket, PlayerInfo> mappings;
+    private final Map<Socket, PlayerInfo> mappings;
     private final Map<Short, PlayerInfo> mappingsById;
     private final Set<UUID> connectedRegisteredPlayers;
     private final List<PlayerInfo> players;
@@ -66,11 +64,11 @@ public class PlayerService implements EventLogicCycleService, IdCounterConsumer
     /**
      * Attempts to register a new player.
      *
-     * @param ws The socket
-     * @param session The game session
-     * @return An instance, or null if the player cannot be registered.
+     * @param socket the socket
+     * @param session the game session
+     * @return an instance, or null if the player cannot be registered.
      */
-    public PlayerInfo register(WebSocket ws, GameSession session)
+    public PlayerInfo register(Socket socket, GameSession session)
     {
         try
         {
@@ -98,14 +96,14 @@ public class PlayerService implements EventLogicCycleService, IdCounterConsumer
             }
 
             // Create new player
-            PlayerInfo playerInfo = new PlayerInfo(ws, session, playerId);
+            PlayerInfo playerInfo = new PlayerInfo(socket, session, playerId);
 
             synchronized (playerInfo)
             {
                 synchronized (this)
                 {
                     // Add mapping for sock
-                    mappings.put(ws, playerInfo);
+                    mappings.put(socket, playerInfo);
 
                     // Add mapping for identifier
                     mappingsById.put(playerId, playerInfo);
@@ -330,15 +328,15 @@ public class PlayerService implements EventLogicCycleService, IdCounterConsumer
         }
     }
 
-    public PlayerInfo getPlayerByWebSocket(WebSocket ws)
+    public PlayerInfo getPlayerBySocket(Socket socket)
     {
-        return mappings.get(ws);
+        return mappings.get(socket);
     }
 
     public synchronized void broadcast(OutboundPacket outboundPacket)
     {
         PlayerInfo playerInfo;
-        for (Map.Entry<WebSocket, PlayerInfo> kv : mappings.entrySet())
+        for (Map.Entry<Socket, PlayerInfo> kv : mappings.entrySet())
         {
             playerInfo = kv.getValue();
             controller.packetService.send(playerInfo, outboundPacket);
@@ -354,9 +352,8 @@ public class PlayerService implements EventLogicCycleService, IdCounterConsumer
     public synchronized void broadcast(OutboundPacket outboundPacket, WorldMap map)
     {
         PlayerInfo playerInfo;
-        Entity entity;
 
-        for (Map.Entry<WebSocket, PlayerInfo> kv : mappings.entrySet())
+        for (Map.Entry<Socket, PlayerInfo> kv : mappings.entrySet())
         {
             playerInfo = kv.getValue();
 

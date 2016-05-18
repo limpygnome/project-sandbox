@@ -50,4 +50,9 @@ public class NetworkService implements EventServerPostStartup, EventServerShutdo
         }
     }
 
+    public SocketEndpoint getSocketEndpoint()
+    {
+        return socketEndpoint;
+    }
+
 }

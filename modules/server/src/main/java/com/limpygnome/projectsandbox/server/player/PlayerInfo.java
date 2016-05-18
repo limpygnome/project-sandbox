@@ -2,6 +2,7 @@ package com.limpygnome.projectsandbox.server.player;
 
 import com.limpygnome.projectsandbox.server.Controller;
 import com.limpygnome.projectsandbox.server.entity.death.AbstractKiller;
+import com.limpygnome.projectsandbox.server.network.Socket;
 import com.limpygnome.projectsandbox.server.network.packet.imp.player.global.PlayerKilledOutboundPacket;
 import com.limpygnome.projectsandbox.server.entity.Entity;
 import com.limpygnome.projectsandbox.server.player.network.Scene;
@@ -10,7 +11,6 @@ import com.limpygnome.projectsandbox.server.world.map.WorldMap;
 import com.limpygnome.projectsandbox.shared.model.GameSession;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.java_websocket.WebSocket;
 
 import java.io.IOException;
 
@@ -39,7 +39,7 @@ public class PlayerInfo
     /**
      * The player's web socket.
      */
-    public WebSocket socket;
+    public Socket socket;
 
     /**
      * TODO: consider removal or move into player data
@@ -59,7 +59,7 @@ public class PlayerInfo
     private Scene scene;
 
 
-    public PlayerInfo(WebSocket socket, GameSession session, short playerId)
+    public PlayerInfo(Socket socket, GameSession session, short playerId)
     {
         this.keys = 0;
         this.socket = socket;

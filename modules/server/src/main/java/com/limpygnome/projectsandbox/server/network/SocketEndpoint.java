@@ -17,7 +17,7 @@ import org.java_websocket.server.WebSocketServer;
  * Basic implementation of a web socket server, using a third-party library. Implementation can be controlled and
  * switched by network service.
  */
-class SocketEndpoint extends WebSocketServer
+public class SocketEndpoint extends WebSocketServer
 {
     private final static Logger LOG = LogManager.getLogger(SocketEndpoint.class);
 
@@ -31,8 +31,10 @@ class SocketEndpoint extends WebSocketServer
     }
 
     @Override
-    public void onMessage(WebSocket socket, String msg)
+    public void onMessage(WebSocket webSocket, String msg)
     {
+        Socket socket = getSocketMapping(webSocket);
+
         if (socket != null)
         {
             // We're only allowing binary, most likely user tampering with us...
@@ -42,8 +44,10 @@ class SocketEndpoint extends WebSocketServer
     }
 
     @Override
-    public void onMessage(WebSocket socket, ByteBuffer message)
+    public void onMessage(WebSocket webSocket, ByteBuffer message)
     {
+        Socket socket = getSocketMapping(webSocket);
+
         if (socket != null && message != null)
         {
             controller.packetService.handleInbound(socket, message);
@@ -51,9 +55,11 @@ class SocketEndpoint extends WebSocketServer
     }
 
     @Override
-    public void onOpen(WebSocket ws, ClientHandshake ch)
+    public void onOpen(WebSocket webSocket, ClientHandshake ch)
     {
-        if (ws != null)
+        Socket socket = getSocketMapping(webSocket);
+
+        if (socket != null)
         {
             /*
             TODO: have a hashmap which rejects clients who've made too many
@@ -65,7 +71,7 @@ class SocketEndpoint extends WebSocketServer
             remove entries for them. Could still perform DOS by spamming 5, open
             one. Going to be fun to protect against attacks.
             */
-                LOG.info("Client connected - ip: {}", ws.getRemoteSocketAddress());
+                LOG.info("Client connected - ip: {}", webSocket.getRemoteSocketAddress());
         }
     }
     
@@ -80,8 +86,10 @@ class SocketEndpoint extends WebSocketServer
     }
 
     @Override
-    public void onError(WebSocket socket, Exception e)
+    public void onError(WebSocket webSocket, Exception e)
     {
+        Socket socket = getSocketMapping(webSocket);
+
         if (socket != null && e != null)
         {
             LOG.error("Socket exception, terminating - ip: {} - {}", socket != null ? socket.getRemoteSocketAddress() : "null", e);
@@ -89,6 +97,11 @@ class SocketEndpoint extends WebSocketServer
 
             socket.close();
         }
+    }
+
+    private Socket getSocketMapping(WebSocket webSocket)
+    {
+        // TODO: finish this...
     }
     
 }

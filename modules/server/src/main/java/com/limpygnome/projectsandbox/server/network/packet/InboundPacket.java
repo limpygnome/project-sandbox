@@ -3,8 +3,8 @@ package com.limpygnome.projectsandbox.server.network.packet;
 import com.limpygnome.projectsandbox.server.Controller;
 import java.nio.ByteBuffer;
 
+import com.limpygnome.projectsandbox.server.network.Socket;
 import com.limpygnome.projectsandbox.server.player.PlayerInfo;
-import org.java_websocket.WebSocket;
 
 /**
  *
@@ -22,11 +22,11 @@ public abstract class InboundPacket extends Packet
      * @param data The packet data
      * @throws PacketParseException Thrown if the packet cannot be parsed
      */
-    public abstract void parse(Controller controller, WebSocket socket, PlayerInfo playerInfo, ByteBuffer bb, byte[] data) throws PacketParseException;
+    public abstract void parse(Controller controller, Socket socket, PlayerInfo playerInfo, ByteBuffer bb, byte[] data) throws PacketParseException;
 
-    public PlayerInfo fetchPlayer(Controller controller, WebSocket socket)
+    public PlayerInfo fetchPlayer(Controller controller, Socket socket)
     {
-        PlayerInfo playerInfo = controller.playerService.getPlayerByWebSocket(socket);
+        PlayerInfo playerInfo = controller.playerService.getPlayerBySocket(socket);
 
         if (playerInfo == null)
         {

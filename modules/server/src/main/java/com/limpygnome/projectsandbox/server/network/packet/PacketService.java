@@ -1,6 +1,7 @@
 package com.limpygnome.projectsandbox.server.network.packet;
 
 import com.limpygnome.projectsandbox.server.Controller;
+import com.limpygnome.projectsandbox.server.network.Socket;
 import com.limpygnome.projectsandbox.server.network.packet.imp.inventory.InventoryItemSelectedInboundPacket;
 import com.limpygnome.projectsandbox.server.network.packet.imp.player.chat.PlayerChatInboundPacket;
 import com.limpygnome.projectsandbox.server.network.packet.imp.player.individual.PlayerMovementInboundPacket;
@@ -36,7 +37,7 @@ public class PacketService
     @Autowired
     private PlayerService playerService;
 
-    public void handleInbound(WebSocket socket, ByteBuffer message)
+    public void handleInbound(Socket socket, ByteBuffer message)
     {
         byte[] data = message.array();
 
@@ -49,14 +50,15 @@ public class PacketService
             packetStatsManager.incrementIn(data.length);
 
             // Fetch the player's info
-            PlayerInfo playerInfo = playerService.getPlayerByWebSocket(socket);
+            PlayerInfo playerInfo = playerService.getPlayerBySocket(socket);
 
             // Check if we're expecting a session packet - always first packet to system!
             if (playerInfo == null)
             {
                 // Handle packet outside of session - newly joined user
                 handleInboundPacketNonSession(socket, mainType, subType, message, data);
-            } else
+            }
+            else
             {
                 // Handle packet within a session
                 handleInboundPacketSession(socket, mainType, subType, message, data, playerInfo);
@@ -68,7 +70,7 @@ public class PacketService
         }
     }
 
-    private void handleInboundPacketNonSession(WebSocket socket, byte mainType, byte subType, ByteBuffer message, byte[] data)
+    private void handleInboundPacketNonSession(Socket socket, byte mainType, byte subType, ByteBuffer message, byte[] data)
     {
         // Check we have received session packet
         if (mainType == 'P' && subType == 'S')
@@ -78,7 +80,7 @@ public class PacketService
             sessPacket.parse(controller, socket, null, message, data);
 
             // Check data / socket valid
-            if (socket.isClosed())
+            if (!socket.isOpen())
             {
                 // Probably someone probing this port
                 LOG.debug("Socket closed prematurely");
@@ -131,7 +133,7 @@ public class PacketService
         socket.close();
     }
 
-    private void handleInboundPacketSession(WebSocket socket, byte mainType, byte subType, ByteBuffer message, byte[] data, PlayerInfo playerInfo)
+    private void handleInboundPacketSession(Socket socket, byte mainType, byte subType, ByteBuffer message, byte[] data, PlayerInfo playerInfo)
     {
         // Create packet based on imp
         InboundPacket packet = null;
@@ -185,7 +187,7 @@ public class PacketService
     public void send(PlayerInfo player, OutboundPacket packet)
     {
         // Check socket not closed
-        if (!player.socket.isClosed())
+        if (player.socket.isOpen())
         {
             try
             {
