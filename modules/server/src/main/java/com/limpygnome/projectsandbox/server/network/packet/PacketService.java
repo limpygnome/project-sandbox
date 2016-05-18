@@ -76,8 +76,8 @@ public class PacketService
         if (mainType == 'P' && subType == 'S')
         {
             // Parse packet and load session associated with player
-            SessionIdentifierInboundPacket sessPacket = new SessionIdentifierInboundPacket();
-            sessPacket.parse(controller, socket, null, message, data);
+            SessionIdentifierInboundPacket sessonIdentifierPacket = new SessionIdentifierInboundPacket();
+            sessonIdentifierPacket.parse(controller, socket, null, message, data);
 
             // Check data / socket valid
             if (!socket.isOpen())
@@ -86,19 +86,19 @@ public class PacketService
                 LOG.debug("Socket closed prematurely");
                 return;
             }
-            else if (sessPacket.sessionId == null)
+            else if (sessonIdentifierPacket.sessionId == null)
             {
                 LOG.warn("Client session packet missing or contains malformed session ID");
             }
             else
             {
                 // Load session data from database
-                GameSession gameSession = sessionService.load(sessPacket.sessionId);
+                GameSession gameSession = sessionService.load(sessonIdentifierPacket.sessionId);
 
                 // Check we found session
                 if (gameSession == null)
                 {
-                    LOG.warn("Game session not found - token: {}", sessPacket.sessionId);
+                    LOG.warn("Game session not found - token: {}", sessonIdentifierPacket.sessionId);
 
                     // Send packet regarding session not found
                     SessionErrorCodeOutboundPacket sessionErrorCodeOutboundPacket = new SessionErrorCodeOutboundPacket(

@@ -8,6 +8,7 @@ import com.limpygnome.projectsandbox.server.Controller;
 import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.nio.ByteBuffer;
+import java.util.HashMap;
 
 import org.java_websocket.WebSocket;
 import org.java_websocket.handshake.ClientHandshake;
@@ -21,6 +22,7 @@ public class SocketEndpoint extends WebSocketServer
 {
     private final static Logger LOG = LogManager.getLogger(SocketEndpoint.class);
 
+    private HashMap<WebSocket, Socket> internalToApiSocketMapper;
     private Controller controller;
     
     public SocketEndpoint(Controller controller, int port) throws IOException
@@ -28,6 +30,7 @@ public class SocketEndpoint extends WebSocketServer
         super(new InetSocketAddress(port));
         
         this.controller = controller;
+        this.internalToApiSocketMapper = new HashMap<>();
     }
 
     @Override
@@ -38,7 +41,7 @@ public class SocketEndpoint extends WebSocketServer
         if (socket != null)
         {
             // We're only allowing binary, most likely user tampering with us...
-            LOG.error("Non-binary received - ip: {}", socket.getRemoteSocketAddress());
+            LOG.error("non-binary received - ip: {}", socket.getRemoteSocketAddress());
             socket.close();
         }
     }
@@ -71,17 +74,24 @@ public class SocketEndpoint extends WebSocketServer
             remove entries for them. Could still perform DOS by spamming 5, open
             one. Going to be fun to protect against attacks.
             */
-                LOG.info("Client connected - ip: {}", webSocket.getRemoteSocketAddress());
+                LOG.info("client connected - ip: {}", webSocket.getRemoteSocketAddress());
         }
     }
     
     @Override
-    public void onClose(WebSocket ws, int i, String string, boolean bln)
+    public void onClose(WebSocket webSocket, int i, String string, boolean bln)
     {
-        if (ws != null)
+        Socket socket = getSocketMapping(webSocket);
+
+        if (socket != null)
         {
-            LOG.info("Client disconnected - ip: {}", ws.getRemoteSocketAddress());
-            controller.playerService.unregister(ws);
+            LOG.info("client disconnected - ip: {}", webSocket.getRemoteSocketAddress());
+
+            // Unregister player
+            controller.playerService.unregister(socket);
+
+            // Remove mapping
+            internalToApiSocketMapper.remove(webSocket);
         }
     }
 
@@ -92,16 +102,28 @@ public class SocketEndpoint extends WebSocketServer
 
         if (socket != null && e != null)
         {
-            LOG.error("Socket exception, terminating - ip: {} - {}", socket != null ? socket.getRemoteSocketAddress() : "null", e);
-            LOG.debug("Full stack trace from socket exception", e);
-
-            socket.close();
+            LOG.error("socket exception, terminating - ip: {} - {}", socket != null ? socket.getRemoteSocketAddress() : "null", e);
+            LOG.debug("full stack trace from socket exception", e);
         }
+
+        // Best to kill the socket...
+        webSocket.close();
+        LOG.warn("connection closed - socket error - remote host: {}", webSocket.getRemoteSocketAddress());
     }
 
     private Socket getSocketMapping(WebSocket webSocket)
     {
-        // TODO: finish this...
+        Socket socket = internalToApiSocketMapper.get(webSocket);
+
+        if (socket == null)
+        {
+            // Disconnect the socket, since we can't do anything with it...
+            webSocket.close();
+
+            LOG.debug("connection closed - could not find mapping for web-socket - remote host: {}", webSocket.getRemoteSocketAddress());
+        }
+
+        return socket;
     }
     
 }

@@ -2,6 +2,7 @@ critical goals
 ================
 - 32 players is sending out 1 MB/s of data, need to send only the data needed to players i.e. of other players around them
 -- probably worth inspecting why so much data is going out
+- fix session issues
 
 long-term goals
 ================

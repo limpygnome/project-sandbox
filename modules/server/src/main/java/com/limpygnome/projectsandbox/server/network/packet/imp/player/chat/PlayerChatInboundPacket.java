@@ -1,6 +1,7 @@
 package com.limpygnome.projectsandbox.server.network.packet.imp.player.chat;
 
 import com.limpygnome.projectsandbox.server.Controller;
+import com.limpygnome.projectsandbox.server.network.Socket;
 import com.limpygnome.projectsandbox.server.network.packet.InboundPacket;
 import com.limpygnome.projectsandbox.server.network.packet.PacketParseException;
 import com.limpygnome.projectsandbox.server.player.PlayerInfo;
@@ -19,7 +20,7 @@ public class PlayerChatInboundPacket extends InboundPacket
     public String message;
 
     @Override
-    public void parse(Controller controller, WebSocket socket, PlayerInfo playerInfo, ByteBuffer bb, byte[] data) throws PacketParseException
+    public void parse(Controller controller, Socket socket, PlayerInfo playerInfo, ByteBuffer bb, byte[] data) throws PacketParseException
     {
         // All messgaes should be at least 6 bytes:
         // - mapMain type (1 byte)

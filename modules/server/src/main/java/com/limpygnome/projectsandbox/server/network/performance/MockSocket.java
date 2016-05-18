@@ -4,6 +4,8 @@ import com.limpygnome.projectsandbox.server.network.Socket;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import java.net.InetSocketAddress;
+
 /**
  * Created by limpygnome on 18/05/16.
  */
@@ -35,6 +37,12 @@ public class MockSocket implements Socket
     {
         open = false;
         LOG.info("socket closed");
+    }
+
+    @Override
+    public InetSocketAddress getRemoteSocketAddress()
+    {
+        return new InetSocketAddress("localhost-mock", 1234);
     }
 
 }

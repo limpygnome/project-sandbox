@@ -15,6 +15,22 @@
 
     <dependencies>
 
+        <!--
+            TODO: need parent POM or shared place for version...
+        -->
+
+        <!-- Spring -->
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-core</artifactId>
+            <version>4.1.6.RELEASE</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-context-support</artifactId>
+            <version>4.1.6.RELEASE</version>
+        </dependency>
+
         <!-- JSON Serialization -->
         <dependency>
             <groupId>com.googlecode.json-simple</groupId>

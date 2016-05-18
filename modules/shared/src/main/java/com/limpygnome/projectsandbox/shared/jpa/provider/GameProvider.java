@@ -8,6 +8,7 @@ import com.limpygnome.projectsandbox.shared.model.User;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.joda.time.DateTime;
+import org.springframework.stereotype.Repository;
 
 import javax.persistence.NoResultException;
 import javax.persistence.Query;
@@ -23,6 +24,7 @@ import static com.limpygnome.projectsandbox.shared.constant.SessionConstants.TIM
  *
  * TODO: add more checking / safety
  */
+@Repository
 public class GameProvider extends AbstractProvider
 {
     private final static Logger LOG = LogManager.getLogger(GameProvider.class);

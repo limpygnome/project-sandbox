@@ -2,6 +2,7 @@ package com.limpygnome.projectsandbox.server.network.packet.imp.player.individua
 
 import com.limpygnome.projectsandbox.server.Controller;
 import com.limpygnome.projectsandbox.server.entity.Entity;
+import com.limpygnome.projectsandbox.server.network.Socket;
 import com.limpygnome.projectsandbox.server.network.packet.InboundPacket;
 import com.limpygnome.projectsandbox.server.network.packet.PacketParseException;
 import com.limpygnome.projectsandbox.server.player.PlayerInfo;
@@ -24,7 +25,7 @@ public class PlayerMovementInboundPacket extends InboundPacket
     public short keys;
 
     @Override
-    public void parse(Controller controller, WebSocket socket, PlayerInfo playerInfo, ByteBuffer bb, byte[] data) throws PacketParseException
+    public void parse(Controller controller, Socket socket, PlayerInfo playerInfo, ByteBuffer bb, byte[] data) throws PacketParseException
     {
         // Check length
         if (data.length != 6)

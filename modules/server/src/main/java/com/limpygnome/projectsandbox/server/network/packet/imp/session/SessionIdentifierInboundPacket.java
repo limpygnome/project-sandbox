@@ -1,6 +1,7 @@
 package com.limpygnome.projectsandbox.server.network.packet.imp.session;
 
 import com.limpygnome.projectsandbox.server.Controller;
+import com.limpygnome.projectsandbox.server.network.Socket;
 import com.limpygnome.projectsandbox.server.network.packet.InboundPacket;
 
 import java.nio.ByteBuffer;
@@ -28,7 +29,7 @@ public class SessionIdentifierInboundPacket extends InboundPacket
     }
 
     @Override
-    public void parse(Controller controller, WebSocket socket, PlayerInfo playerInfo, ByteBuffer bb, byte[] data)
+    public void parse(Controller controller, Socket socket, PlayerInfo playerInfo, ByteBuffer bb, byte[] data)
     {
         // TODO: upgrade to 16 bytes; at present, we want this to just be simple, but could be optimised
 
@@ -48,5 +49,6 @@ public class SessionIdentifierInboundPacket extends InboundPacket
                 LOG.error("Error parsing session UUID", e);
             }
         }
-    }   
+    }
+
 }

@@ -15,7 +15,8 @@ import java.util.Map;
  */
 @Configuration
 @ComponentScan({
-        "com.limpygnome.projectsandbox.server"
+        "com.limpygnome.projectsandbox.server",
+        "com.limpygnome.projectsandbox.shared.jpa.provider"
 })
 public class AppConfig
 {

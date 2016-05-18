@@ -4,6 +4,7 @@ import com.limpygnome.projectsandbox.server.Controller;
 import com.limpygnome.projectsandbox.server.entity.Entity;
 import com.limpygnome.projectsandbox.server.entity.PlayerEntity;
 import com.limpygnome.projectsandbox.server.inventory.Inventory;
+import com.limpygnome.projectsandbox.server.network.Socket;
 import com.limpygnome.projectsandbox.server.network.packet.InboundPacket;
 import com.limpygnome.projectsandbox.server.network.packet.PacketParseException;
 import com.limpygnome.projectsandbox.server.player.PlayerInfo;
@@ -17,7 +18,7 @@ import java.nio.ByteBuffer;
 public class InventoryItemSelectedInboundPacket extends InboundPacket
 {
     @Override
-    public void parse(Controller controller, WebSocket socket, PlayerInfo playerInfo, ByteBuffer bb, byte[] data) throws PacketParseException
+    public void parse(Controller controller, Socket socket, PlayerInfo playerInfo, ByteBuffer bb, byte[] data) throws PacketParseException
     {
         // Read raw data
         byte rawSlotId = bb.get(2);

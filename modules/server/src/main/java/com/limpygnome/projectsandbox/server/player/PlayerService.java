@@ -23,7 +23,6 @@ import com.limpygnome.projectsandbox.shared.model.GameSession;
 import com.limpygnome.projectsandbox.shared.model.User;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.java_websocket.WebSocket;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -145,7 +144,7 @@ public class PlayerService implements EventLogicCycleService, IdCounterConsumer
             return null;
         }
     }
-    public void unregister(WebSocket ws)
+    public void unregister(Socket ws)
     {
         // Fetch associated player, and entity
         PlayerInfo playerInfo;
