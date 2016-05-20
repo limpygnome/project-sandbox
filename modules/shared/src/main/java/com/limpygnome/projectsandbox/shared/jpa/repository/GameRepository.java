@@ -1,8 +1,6 @@
-package com.limpygnome.projectsandbox.shared.jpa.provider;
+package com.limpygnome.projectsandbox.shared.jpa.repository;
 
-import com.limpygnome.projectsandbox.shared.jpa.AbstractProvider;
-import com.limpygnome.projectsandbox.shared.jpa.ConnectionType;
-import com.limpygnome.projectsandbox.shared.jpa.provider.result.CreateGameSessionResult;
+import com.limpygnome.projectsandbox.shared.jpa.repository.result.CreateGameSessionResult;
 import com.limpygnome.projectsandbox.shared.model.GameSession;
 import com.limpygnome.projectsandbox.shared.model.User;
 import org.apache.logging.log4j.LogManager;
@@ -10,14 +8,14 @@ import org.apache.logging.log4j.Logger;
 import org.joda.time.DateTime;
 import org.springframework.stereotype.Repository;
 
-import javax.persistence.NoResultException;
-import javax.persistence.Query;
-import javax.persistence.TypedQuery;
+import javax.persistence.*;
+import javax.transaction.Transactional;
 import java.util.List;
 import java.util.UUID;
 
 import static com.limpygnome.projectsandbox.shared.constant.SessionConstants.TIMEOUT_INITIAL_CONNECTION_SECONDS;
 import static com.limpygnome.projectsandbox.shared.constant.SessionConstants.TIMEOUT_LAST_UPDATED_SECONDS;
+import static com.limpygnome.projectsandbox.shared.jpa.JpaConstants.PERSISTENCE_UNIT_NAME;
 
 /**
  * Created by limpygnome on 25/07/15.
@@ -25,15 +23,14 @@ import static com.limpygnome.projectsandbox.shared.constant.SessionConstants.TIM
  * TODO: add more checking / safety
  */
 @Repository
-public class GameProvider extends AbstractProvider
+public class GameRepository
 {
-    private final static Logger LOG = LogManager.getLogger(GameProvider.class);
+    private final static Logger LOG = LogManager.getLogger(GameRepository.class);
 
-    public GameProvider()
-    {
-        super(ConnectionType.PROJECTSANDBOX);
-    }
+    @PersistenceContext(unitName = PERSISTENCE_UNIT_NAME)
+    private EntityManager em;
 
+    @Transactional
     public String fetchExistingGameSessionToken(User user)
     {
         if (user == null)
@@ -57,6 +54,7 @@ public class GameProvider extends AbstractProvider
         }
     }
 
+    @Transactional
     public GameSession fetchGameSessionByUser(User user)
     {
         if (user == null)
@@ -81,6 +79,7 @@ public class GameProvider extends AbstractProvider
         }
     }
 
+    @Transactional
     public GameSession fetchGameSessionByToken(UUID token)
     {
         if (token == null)
@@ -120,6 +119,7 @@ public class GameProvider extends AbstractProvider
         }
     }
 
+    @Transactional
     public boolean isTokenValid(String gameSessionToken)
     {
         TypedQuery<Long> typedQuery = em.createQuery("SELECT count(gs) FROM GameSession gs WHERE token = :token", Long.class);
@@ -130,6 +130,7 @@ public class GameProvider extends AbstractProvider
         return exists;
     }
 
+    @Transactional
     public CreateGameSessionResult createGameSession(GameSession gameSession)
     {
         if (gameSession == null)
@@ -178,6 +179,7 @@ public class GameProvider extends AbstractProvider
         }
     }
 
+    @Transactional
     public boolean updateGameSession(GameSession gameSession)
     {
         if (gameSession == null)
@@ -204,6 +206,7 @@ public class GameProvider extends AbstractProvider
         }
     }
 
+    @Transactional
     public boolean removeGameSession(String token)
     {
         if (token == null)
@@ -240,6 +243,7 @@ public class GameProvider extends AbstractProvider
         }
     }
 
+    @Transactional
     public void setAllSessionsToDisconnected()
     {
         try
@@ -258,6 +262,7 @@ public class GameProvider extends AbstractProvider
         }
     }
 
+    @Transactional
     public boolean removeInactiveGuestGameSessions()
     {
         try

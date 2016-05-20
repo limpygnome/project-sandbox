@@ -1,6 +1,6 @@
 package com.limpygnome.projectsandbox.website.service;
 
-import com.limpygnome.projectsandbox.shared.jpa.provider.result.CreateUserResult;
+import com.limpygnome.projectsandbox.shared.jpa.repository.result.CreateUserResult;
 import com.limpygnome.projectsandbox.shared.model.User;
 import com.limpygnome.projectsandbox.website.model.result.LoginResult;
 import com.limpygnome.projectsandbox.website.model.form.home.LoginForm;

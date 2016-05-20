@@ -1,7 +1,7 @@
 package com.limpygnome.projectsandbox.website.controller.page.main.profile;
 
-import com.limpygnome.projectsandbox.shared.jpa.provider.GameProvider;
-import com.limpygnome.projectsandbox.shared.jpa.provider.UserProvider;
+import com.limpygnome.projectsandbox.shared.jpa.repository.GameRepository;
+import com.limpygnome.projectsandbox.shared.jpa.repository.UserRepository;
 import com.limpygnome.projectsandbox.shared.model.GameSession;
 import com.limpygnome.projectsandbox.shared.model.User;
 import com.limpygnome.projectsandbox.website.controller.BaseController;
@@ -34,6 +34,10 @@ public class ProfileViewController extends BaseController
 
     @Autowired
     private AuthenticationService authenticationService;
+    @Autowired
+    private UserRepository userRepository;
+    @Autowired
+    private GameRepository gameRepository;
 
     @RequestMapping(value = "")
     public ModelAndView viewCurrentUser(HttpSession httpSession)
@@ -50,24 +54,15 @@ public class ProfileViewController extends BaseController
         User profileUser;
 
         // Fetch user and render their profile
-        UserProvider userProvider = new UserProvider();
-
-        try
+        if (UUID_REGEX_PATTERN.matcher(userPath).matches())
         {
-            if (UUID_REGEX_PATTERN.matcher(userPath).matches())
-            {
-                // Load by UUID
-                profileUser = userProvider.fetchUserByUserId(userPath);
-            }
-            else
-            {
-                // Load by nickname
-                profileUser = userProvider.fetchUserByNickname(userPath);
-            }
+            // Load by UUID
+            profileUser = userRepository.fetchUserByUserId(userPath);
         }
-        finally
+        else
         {
-            userProvider.close();
+            // Load by nickname
+            profileUser = userRepository.fetchUserByNickname(userPath);
         }
 
         return viewProfile(profileUser);
@@ -82,20 +77,15 @@ public class ProfileViewController extends BaseController
         }
 
         // Fetch the user's game session (may not exist)
-        GameProvider gameProvider = new GameProvider();
         GameSession gameSession = null;
 
         try
         {
-            gameSession = gameProvider.fetchGameSessionByUser(profileUser);
+            gameSession = gameRepository.fetchGameSessionByUser(profileUser);
         }
         catch (Exception e)
         {
             LOG.error("Failed to retrieve game session for profile - user id: {}", profileUser.getUserId());
-        }
-        finally
-        {
-            gameProvider.close();
         }
 
         // Setup mv

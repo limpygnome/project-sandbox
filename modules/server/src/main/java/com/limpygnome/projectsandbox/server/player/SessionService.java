@@ -1,8 +1,8 @@
 package com.limpygnome.projectsandbox.server.player;
 
 import com.limpygnome.projectsandbox.server.service.EventLogicCycleService;
-import com.limpygnome.projectsandbox.shared.jpa.provider.GameProvider;
-import com.limpygnome.projectsandbox.shared.jpa.provider.UserProvider;
+import com.limpygnome.projectsandbox.shared.jpa.repository.GameRepository;
+import com.limpygnome.projectsandbox.shared.jpa.repository.UserRepository;
 import com.limpygnome.projectsandbox.shared.model.GameSession;
 import com.limpygnome.projectsandbox.shared.model.PlayerMetrics;
 import com.limpygnome.projectsandbox.shared.model.User;
@@ -14,7 +14,11 @@ import org.joda.time.Seconds;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.UUID;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import javax.annotation.PostConstruct;
 
 /**
  * Created by limpygnome on 26/07/15.
@@ -26,36 +30,36 @@ public class SessionService implements EventLogicCycleService
 
     private static final int INTERVAL_UPDATE_SESSION = 60;
 
-    private UserProvider userProvider;
-    private GameProvider gameProvider;
+    @Autowired
+    private UserRepository userRepository;
+    @Autowired
+    private GameRepository gameRepository;
 
     private List<GameSession> trackedGameSessions;
 
     public SessionService()
     {
-        this.userProvider = new UserProvider();
-        this.gameProvider = new GameProvider();
         this.trackedGameSessions = new LinkedList<>();
+    }
 
+    @PostConstruct
+    public void setup()
+    {
         try
         {
-            gameProvider.begin();
-            gameProvider.setAllSessionsToDisconnected();
-            gameProvider.commit();
+            gameRepository.setAllSessionsToDisconnected();
         }
         catch (Exception e)
         {
             LOG.error("Failed to set all pre-existing connected sessions to disconnected", e);
-
-            gameProvider.rollback();
         }
     }
 
     public synchronized GameSession load(UUID token)
     {
-        if (gameProvider != null)
+        if (gameRepository != null)
         {
-            GameSession gameSession = gameProvider.fetchGameSessionByToken(token);
+            GameSession gameSession = gameRepository.fetchGameSessionByToken(token);
 
             // Track session for periodic DB updates
             if (gameSession != null)
@@ -67,7 +71,7 @@ public class SessionService implements EventLogicCycleService
         }
         else
         {
-            LOG.error("Unable to load game session, provider not set - token: {}", token);
+            LOG.error("Unable to load game session, repository not set - token: {}", token);
 
             return null;
         }
@@ -115,20 +119,16 @@ public class SessionService implements EventLogicCycleService
         }
 
         // Check valid providers available
-        if (gameProvider != null && (user == null || userProvider != null))
+        if (gameRepository != null && (user == null || userRepository != null))
         {
             // Persist session
             try
             {
-                gameProvider.begin();
-                gameProvider.updateGameSession(gameSession);
-                gameProvider.commit();
+                gameRepository.updateGameSession(gameSession);
             }
             catch (Exception e)
             {
                 LOG.error("Failed to persist game session", e);
-
-                gameProvider.rollback();
                 return;
             }
 
@@ -137,16 +137,12 @@ public class SessionService implements EventLogicCycleService
             {
                 if (user != null)
                 {
-                    userProvider.begin();
-                    userProvider.updateUser(user);
-                    userProvider.commit();
+                    userRepository.updateUser(user);
                 }
             }
             catch (Exception e)
             {
                 LOG.error("Failed to persist user", e);
-
-                userProvider.rollback();
                 return;
             }
 
@@ -154,7 +150,7 @@ public class SessionService implements EventLogicCycleService
         }
         else
         {
-            LOG.error("Unable to persist game session, provider(s) not setup - token: {}", gameSession.getToken());
+            LOG.error("Unable to persist game session, repository(s) not setup - token: {}", gameSession.getToken());
         }
     }
 
@@ -163,8 +159,6 @@ public class SessionService implements EventLogicCycleService
     {
         try
         {
-            gameProvider.begin();
-
             // Persist all tracked sessions
             int secondsSinceUpdated;
             for (GameSession gameSession : trackedGameSessions)
@@ -175,37 +169,13 @@ public class SessionService implements EventLogicCycleService
                 if (gameSession.getPlayerMetrics().isDirtyDatabaseFlag() || secondsSinceUpdated >= INTERVAL_UPDATE_SESSION)
                 {
                     gameSession.getPlayerMetrics().setLastUpdatedNow();
-                    gameProvider.updateGameSession(gameSession);
+                    gameRepository.updateGameSession(gameSession);
                 }
             }
-
-            gameProvider.commit();
         }
         catch (Exception e)
         {
             LOG.error("Failed to perform periodic game session sync", e);
-
-            gameProvider.rollback();
-        }
-    }
-
-    // TODO: call on shutdown
-    public synchronized void dispose()
-    {
-        if (gameProvider != null)
-        {
-            gameProvider.close();
-            gameProvider = null;
-
-            LOG.info("Disposed game provider");
-        }
-
-        if (userProvider != null)
-        {
-            userProvider.close();
-            userProvider = null;
-
-            LOG.info("Disposed user provider");
         }
     }
 

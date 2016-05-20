@@ -1,35 +1,32 @@
 package com.limpygnome.projectsandbox.website.service.imp;
 
-import com.limpygnome.projectsandbox.shared.jpa.provider.GameProvider;
-import com.limpygnome.projectsandbox.shared.jpa.provider.result.CreateGameSessionResult;
+import com.limpygnome.projectsandbox.shared.jpa.repository.GameRepository;
+import com.limpygnome.projectsandbox.shared.jpa.repository.result.CreateGameSessionResult;
 import com.limpygnome.projectsandbox.shared.model.GameSession;
 import com.limpygnome.projectsandbox.shared.model.User;
 import com.limpygnome.projectsandbox.website.service.GameSessionService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.UUID;
 
-/**
- * Created by limpygnome on 17/07/15.
- */
 @Service
 public class DefaultGameSessionService implements GameSessionService
 {
     private final static Logger LOG = LogManager.getLogger(DefaultGameSessionService.class);
 
-    @Override
-    public String fetchOrGenerateSessionToken(GameProvider gameProvider, String nickname)
-    {
-        gameProvider.begin();
+    @Autowired
+    private GameRepository gameRepository;
 
+    @Override
+    public String fetchOrGenerateSessionToken(String nickname)
+    {
         // Create new session
         // TODO: make sure registered users cant start with _guest
         GameSession gameSession = new GameSession("guest_" + nickname);
-        CreateGameSessionResult gameSessionResult = gameProvider.createGameSession(gameSession);
-
-        gameProvider.commit();
+        CreateGameSessionResult gameSessionResult = gameRepository.createGameSession(gameSession);
 
         if (gameSessionResult != CreateGameSessionResult.SUCCESS)
         {
@@ -42,20 +39,16 @@ public class DefaultGameSessionService implements GameSessionService
     }
 
     @Override
-    public String fetchOrGenerateSessionToken(GameProvider gameProvider, User user)
+    public String fetchOrGenerateSessionToken(User user)
     {
         // Attempt to find existing session
-        String gameSessionToken = gameProvider.fetchExistingGameSessionToken(user);
+        String gameSessionToken = gameRepository.fetchExistingGameSessionToken(user);
 
         if (gameSessionToken == null)
         {
-            gameProvider.begin();
-
             // Create new session
             GameSession gameSession = new GameSession(user);
-            CreateGameSessionResult createGameSessionResult = gameProvider.createGameSession(gameSession);
-
-            gameProvider.commit();
+            CreateGameSessionResult createGameSessionResult = gameRepository.createGameSession(gameSession);
 
             // Check new session could be created
             if (createGameSessionResult != CreateGameSessionResult.SUCCESS)
@@ -70,7 +63,7 @@ public class DefaultGameSessionService implements GameSessionService
     }
 
     @Override
-    public boolean validateExists(GameProvider gameProvider, String gameSessionToken)
+    public boolean validateExists(String gameSessionToken)
     {
         // Validate this token is correct; attacks will probably be made against this code
         if (gameSessionToken == null)
@@ -95,7 +88,8 @@ public class DefaultGameSessionService implements GameSessionService
         }
 
         // Check the session exists in the DB
-        boolean exists = gameProvider.isTokenValid(token.toString());
+        boolean exists = gameRepository.isTokenValid(token.toString());
         return exists;
     }
+
 }

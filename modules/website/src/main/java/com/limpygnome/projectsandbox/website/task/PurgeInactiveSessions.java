@@ -1,8 +1,9 @@
 package com.limpygnome.projectsandbox.website.task;
 
-import com.limpygnome.projectsandbox.shared.jpa.provider.GameProvider;
+import com.limpygnome.projectsandbox.shared.jpa.repository.GameRepository;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 
 import static com.limpygnome.projectsandbox.website.constant.SessionConstants.PURGE_SESSIONS_INTERVAL_MS;
@@ -15,29 +16,19 @@ public class PurgeInactiveSessions
 {
     private final static Logger LOG = LogManager.getLogger(PurgeInactiveSessions.class);
 
+    @Autowired
+    private GameRepository gameRepository;
+
     @Scheduled(initialDelay = PURGE_SESSIONS_INITIAL_DELAY_MS, fixedRate = PURGE_SESSIONS_INTERVAL_MS)
     public void purge()
     {
         LOG.debug("Purging inactive sessions...");
 
-        // Setup DB connection
-        GameProvider gameProvider = new GameProvider();
-
         // Remove inactive sessions
-        gameProvider.begin();
-
-        if (!gameProvider.removeInactiveGuestGameSessions())
+        if (!gameRepository.removeInactiveGuestGameSessions())
         {
             LOG.error("Failed to purge inactive sessions");
-            gameProvider.rollback();
         }
-        else
-        {
-            gameProvider.commit();
-        }
-
-        // Dispose DB connection
-        gameProvider.close();
 
         LOG.debug("Finished purging inactive sessions");
     }

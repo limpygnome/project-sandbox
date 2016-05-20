@@ -1,10 +1,11 @@
 package com.limpygnome.projectsandbox.website.controller.page.main;
 
-import com.limpygnome.projectsandbox.shared.jpa.provider.UserProvider;
+import com.limpygnome.projectsandbox.shared.jpa.repository.UserRepository;
 import com.limpygnome.projectsandbox.website.controller.BaseController;
 import com.limpygnome.projectsandbox.website.model.form.home.GuestForm;
 import com.limpygnome.projectsandbox.website.model.form.home.LoginForm;
 import com.limpygnome.projectsandbox.website.model.form.home.RegisterForm;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -16,6 +17,8 @@ import org.springframework.web.servlet.ModelAndView;
 @Controller
 public class HomeController extends BaseController
 {
+    @Autowired
+    private UserRepository userRepository;
 
     @RequestMapping(value = {"/", "/home"})
     public ModelAndView home()
@@ -23,9 +26,9 @@ public class HomeController extends BaseController
         ModelAndView modelAndView = createMV("main/home", "welcome", "join");
 
         // Add players online
-        UserProvider userProvider = new UserProvider();
-        modelAndView.addObject("playersOnline", userProvider.getUsersOnline());
-        userProvider.close();
+        // TODO: have a service make such requests periodically and cache values...
+        long usersOnline = userRepository.getUsersOnline();
+        modelAndView.addObject("playersOnline", usersOnline);
 
         return modelAndView;
     }

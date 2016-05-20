@@ -1,7 +1,7 @@
 package com.limpygnome.projectsandbox.website.service.imp;
 
-import com.limpygnome.projectsandbox.shared.jpa.provider.UserProvider;
-import com.limpygnome.projectsandbox.shared.jpa.provider.result.CreateUserResult;
+import com.limpygnome.projectsandbox.shared.jpa.repository.UserRepository;
+import com.limpygnome.projectsandbox.shared.jpa.repository.result.CreateUserResult;
 import com.limpygnome.projectsandbox.shared.model.Role;
 import com.limpygnome.projectsandbox.shared.model.User;
 import com.limpygnome.projectsandbox.website.model.result.LoginResult;
@@ -10,6 +10,7 @@ import com.limpygnome.projectsandbox.website.model.form.home.RegisterForm;
 import com.limpygnome.projectsandbox.website.service.AuthenticationService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -25,6 +26,9 @@ public class DefaultAuthenticationService implements AuthenticationService
 
     private final static Logger LOG = LogManager.getLogger(DefaultAuthenticationService.class);
 
+    @Autowired
+    private UserRepository userRepository;
+
     @Value("${password.hash}")
     private String globalPasswordSalt;
 
@@ -37,26 +41,16 @@ public class DefaultAuthenticationService implements AuthenticationService
         );
 
         // Store model in DB
-        UserProvider userProvider = new UserProvider();
-
         CreateUserResult createUserResult;
 
         try
         {
-            userProvider.begin();
-            createUserResult = userProvider.createUser(user);
-            userProvider.commit();
+            createUserResult = userRepository.createUser(user);
         }
         catch (Exception e)
         {
-            userProvider.rollback();
-
             LOG.error("Failed to persist user for registration", e);
             return CreateUserResult.FAILED;
-        }
-        finally
-        {
-            userProvider.close();
         }
 
         if (createUserResult == CreateUserResult.SUCCESS)
@@ -77,12 +71,10 @@ public class DefaultAuthenticationService implements AuthenticationService
             return LoginResult.FAILED;
         }
 
-        UserProvider userProvider = new UserProvider();
-
         try
         {
             // Fetch user
-            User user = userProvider.fetchUserByNickname(loginForm.getNickname());
+            User user = userRepository.fetchUserByNickname(loginForm.getNickname());
 
             if (user == null)
             {
@@ -113,10 +105,6 @@ public class DefaultAuthenticationService implements AuthenticationService
         {
             LOG.error("Failed to authenticate user - nickname: {}", loginForm.getNickname(), e);
             return LoginResult.FAILED;
-        }
-        finally
-        {
-            userProvider.close();
         }
     }
 

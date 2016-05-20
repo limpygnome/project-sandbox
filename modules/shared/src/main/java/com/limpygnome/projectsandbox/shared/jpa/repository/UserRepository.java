@@ -1,30 +1,34 @@
-package com.limpygnome.projectsandbox.shared.jpa.provider;
+package com.limpygnome.projectsandbox.shared.jpa.repository;
 
-import com.limpygnome.projectsandbox.shared.jpa.AbstractProvider;
-import com.limpygnome.projectsandbox.shared.jpa.ConnectionType;
-import com.limpygnome.projectsandbox.shared.jpa.provider.result.CreateUserResult;
+import com.limpygnome.projectsandbox.shared.jpa.repository.result.CreateUserResult;
 import com.limpygnome.projectsandbox.shared.model.User;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.springframework.stereotype.Repository;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import javax.persistence.TypedQuery;
+import javax.transaction.Transactional;
 import java.util.List;
+
+import static com.limpygnome.projectsandbox.shared.jpa.JpaConstants.PERSISTENCE_UNIT_NAME;
 
 /**
  * Created by limpygnome on 07/08/15.
  *
  * TODO: add more checking / safety
  */
-public class UserProvider extends AbstractProvider
+@Repository
+public class UserRepository
 {
-    private final static Logger LOG = LogManager.getLogger(UserProvider.class);
+    private final static Logger LOG = LogManager.getLogger(UserRepository.class);
 
-    public UserProvider()
-    {
-        super(ConnectionType.PROJECTSANDBOX);
-    }
+    @PersistenceContext(unitName = PERSISTENCE_UNIT_NAME)
+    private EntityManager em;
 
+    @Transactional
     public CreateUserResult createUser(User user)
     {
         if (user == null)
@@ -73,6 +77,7 @@ public class UserProvider extends AbstractProvider
         }
     }
 
+    @Transactional
     public User fetchUserByUserId(String userId)
     {
         if (userId == null)
@@ -97,6 +102,7 @@ public class UserProvider extends AbstractProvider
         }
     }
 
+    @Transactional
     public User fetchUserByNickname(String nickname)
     {
         if (nickname == null)
@@ -121,6 +127,7 @@ public class UserProvider extends AbstractProvider
         }
     }
 
+    @Transactional
     public boolean updateUser(User user)
     {
         if (user == null)
@@ -143,6 +150,7 @@ public class UserProvider extends AbstractProvider
         }
     }
 
+    @Transactional
     public boolean removeUser(User user)
     {
         if (user == null)
@@ -168,6 +176,7 @@ public class UserProvider extends AbstractProvider
         }
     }
 
+    @Transactional
     public long getUsersOnline()
     {
         try

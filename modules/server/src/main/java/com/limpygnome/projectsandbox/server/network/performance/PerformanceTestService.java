@@ -5,7 +5,7 @@ import com.limpygnome.projectsandbox.server.network.Socket;
 import com.limpygnome.projectsandbox.server.network.packet.PacketService;
 import com.limpygnome.projectsandbox.server.service.EventLogicCycleService;
 import com.limpygnome.projectsandbox.server.service.EventServerPostStartup;
-import com.limpygnome.projectsandbox.shared.jpa.provider.GameProvider;
+import com.limpygnome.projectsandbox.shared.jpa.repository.GameRepository;
 import com.limpygnome.projectsandbox.shared.model.GameSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -24,7 +24,7 @@ public class PerformanceTestService implements EventServerPostStartup, EventLogi
     @Autowired
     private PacketService packetService;
     @Autowired
-    private GameProvider gameProvider;
+    private GameRepository gameRepository;
 
     private List<TestPlayer> players;
     private Random random;
@@ -106,7 +106,7 @@ public class PerformanceTestService implements EventServerPostStartup, EventLogi
     {
         // Setup fake game session
         GameSession gameSession = new GameSession("mock user");
-        gameProvider.createGameSession(gameSession);
+        gameRepository.createGameSession(gameSession);
 
         // Convert token to raw
         byte[] token = gameSession.getToken().getBytes();

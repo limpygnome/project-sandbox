@@ -1,8 +1,7 @@
 package com.limpygnome.projectsandbox.website.controller.page.main;
 
-import com.limpygnome.projectsandbox.shared.jpa.provider.GameProvider;
-import com.limpygnome.projectsandbox.shared.jpa.provider.UserProvider;
-import com.limpygnome.projectsandbox.shared.model.GameSession;
+import com.limpygnome.projectsandbox.shared.jpa.repository.GameRepository;
+import com.limpygnome.projectsandbox.shared.jpa.repository.UserRepository;
 import com.limpygnome.projectsandbox.shared.model.Password;
 import com.limpygnome.projectsandbox.shared.model.User;
 import com.limpygnome.projectsandbox.website.controller.BaseController;
@@ -34,6 +33,10 @@ public class AccountController extends BaseController
 
     @Autowired
     private AuthenticationService authenticationService;
+    @Autowired
+    private GameRepository gameRepository;
+    @Autowired
+    private UserRepository userRepository;
 
     @ModelAttribute("updateDetailsForm")
     public UpdateDetailsForm beanUpdateDetailsForm()
@@ -113,23 +116,16 @@ public class AccountController extends BaseController
             authenticationService.logout(httpSession);
 
             // Delete account
-            UserProvider userProvider = new UserProvider();
+            UserRepository userRepository = new UserRepository();
 
             try
             {
-                userProvider.begin();
-                userProvider.removeUser(user);
-                userProvider.commit();
-
+                userRepository.removeUser(user);
                 LOG.info("Deleted user - user id: {}, nickname: {}", user.getUserId(), user.getNickname());
             }
             catch (Exception e)
             {
                 LOG.error("Failed to remove user - user id: {}", user.getUserId(), e);
-            }
-            finally
-            {
-                userProvider.close();
             }
 
             // Redirect to home
@@ -148,12 +144,11 @@ public class AccountController extends BaseController
         else
         {
             User user = authenticationService.retrieveCurrentUser(httpSession);
-            GameProvider gameProvider = new GameProvider();
 
             try
             {
                 // Fetch game session token
-                String gameSessionToken = gameProvider.fetchExistingGameSessionToken(user);
+                String gameSessionToken = gameRepository.fetchExistingGameSessionToken(user);
 
                 if (gameSessionToken == null)
                 {
@@ -161,22 +156,14 @@ public class AccountController extends BaseController
                 }
                 else
                 {
-                    gameProvider.begin();
-                    gameProvider.removeGameSession(gameSessionToken);
-                    gameProvider.commit();
+                    gameRepository.removeGameSession(gameSessionToken);
 
                     LOG.info("deleted game session - token: {}, user id: {}", gameSessionToken, user.getUserId());
                 }
             }
             catch (Exception e)
             {
-                gameProvider.rollback();
-
                 LOG.error("Failed to reset game session - user id: {}", user.getUserId());
-            }
-            finally
-            {
-                gameProvider.close();
             }
 
             return redirectToAccountView(null, null, null, null);
@@ -198,25 +185,14 @@ public class AccountController extends BaseController
             user.getPlayerMetrics().reset();
 
             // Persist changes
-            UserProvider userProvider = new UserProvider();
-
             try
             {
-                userProvider.begin();
-                userProvider.updateUser(user);
-                userProvider.commit();
-
+                userRepository.updateUser(user);
                 LOG.info("Reset player stats - user id: {}", user.getUserId());
             }
             catch (Exception e)
             {
-                userProvider.rollback();
-
                 LOG.error("Failed to reset stats for user - user id: {}", user.getUserId(), e);
-            }
-            finally
-            {
-                userProvider.close();
             }
 
             return redirectToAccountView(null, null, null, null);

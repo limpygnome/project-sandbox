@@ -1,6 +1,5 @@
 package com.limpygnome.projectsandbox.website.controller.page.game;
 
-import com.limpygnome.projectsandbox.shared.jpa.provider.GameProvider;
 import com.limpygnome.projectsandbox.website.controller.BaseController;
 import com.limpygnome.projectsandbox.website.service.GameSessionService;
 import org.apache.logging.log4j.LogManager;
@@ -39,30 +38,21 @@ public class GameController extends BaseController
         }
 
         // Check token is valid, else redirect back to home
-        GameProvider gameProvider = new GameProvider();
-
-        try
+        if (!gameSessionService.validateExists(gameSessionToken))
         {
-            if (!gameSessionService.validateExists(gameProvider, gameSessionToken))
-            {
-                LOG.debug("Failed to validate and consume game session token - token: {}", gameSessionToken);
-                return new ModelAndView("redirect:/home");
-            }
-
-            // Setup new page
-            ModelAndView modelAndView = createMV("game/main", null);
-
-            modelAndView.addObject("game_session_token", gameSessionToken);
-
-            // Store token into session to allow refresh of page
-            httpSession.setAttribute(GAME_SESSION_TOKEN_ATTRIB, gameSessionToken);
-
-            return modelAndView;
+            LOG.debug("Failed to validate and consume game session token - token: {}", gameSessionToken);
+            return new ModelAndView("redirect:/home");
         }
-        finally
-        {
-            gameProvider.close();
-        }
+
+        // Setup new page
+        ModelAndView modelAndView = createMV("game/main", null);
+
+        modelAndView.addObject("game_session_token", gameSessionToken);
+
+        // Store token into session to allow refresh of page
+        httpSession.setAttribute(GAME_SESSION_TOKEN_ATTRIB, gameSessionToken);
+
+        return modelAndView;
     }
 
 }
