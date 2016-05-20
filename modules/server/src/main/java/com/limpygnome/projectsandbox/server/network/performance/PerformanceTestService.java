@@ -54,16 +54,14 @@ public class PerformanceTestService implements EventServerPostStartup, EventLogi
 
     public void playerLogic(TestPlayer testPlayer)
     {
-        Socket socket = testPlayer.socket;
-
-        if (socket == null)
+        if (testPlayer.socket == null)
         {
             // Setup fake socket
-            socket = new MockSocket();
+            testPlayer.socket = new MockSocket();
 
             // Join server...
             ByteBuffer packet = packetIdentity();
-            packetService.handleInbound(socket, packet);
+            packetService.handleInbound(testPlayer.socket, packet);
         }
         else
         {
@@ -97,7 +95,7 @@ public class PerformanceTestService implements EventServerPostStartup, EventLogi
             // Send data if any
             if (packet != null)
             {
-                packetService.handleInbound(socket, packet);
+                packetService.handleInbound(testPlayer.socket, packet);
             }
         }
     }

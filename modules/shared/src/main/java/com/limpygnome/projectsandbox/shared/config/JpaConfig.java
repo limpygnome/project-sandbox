@@ -1,4 +1,4 @@
-package com.limpygnome.projectsandbox.server.config;
+package com.limpygnome.projectsandbox.shared.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -21,7 +21,7 @@ import static com.limpygnome.projectsandbox.shared.jpa.JpaConstants.PERSISTENCE_
 @EnableJpaRepositories
 @EnableTransactionManagement
 @ComponentScan({
-        "com.limpygnome.projectsandbox.*.repository"
+        "com.limpygnome.projectsandbox.**.repository"
 })
 public class JpaConfig
 {

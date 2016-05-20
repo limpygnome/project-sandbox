@@ -60,7 +60,7 @@ public class SocketEndpoint extends WebSocketServer
     @Override
     public void onOpen(WebSocket webSocket, ClientHandshake ch)
     {
-        Socket socket = getSocketMapping(webSocket);
+        Socket socket = createSocketMapping(webSocket);
 
         if (socket != null)
         {
@@ -109,6 +109,30 @@ public class SocketEndpoint extends WebSocketServer
         // Best to kill the socket...
         webSocket.close();
         LOG.warn("connection closed - socket error - remote host: {}", webSocket.getRemoteSocketAddress());
+    }
+
+    private Socket createSocketMapping(WebSocket webSocket)
+    {
+        Socket socket;
+
+        // Check socket not already in map - unlikely...
+        if (internalToApiSocketMapper.containsKey(webSocket))
+        {
+            webSocket.close();
+            socket = null;
+
+            LOG.error("connection closed - already has mapping - potentially critical security issue");
+        }
+        else
+        {
+            // Create and add to map
+            socket = new com.limpygnome.projectsandbox.server.network.WebSocket(webSocket);
+            internalToApiSocketMapper.put(webSocket, socket);
+
+            LOG.debug("socket mapping added - {}", webSocket.getRemoteSocketAddress());
+        }
+
+        return socket;
     }
 
     private Socket getSocketMapping(WebSocket webSocket)
