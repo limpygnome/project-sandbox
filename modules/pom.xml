@@ -15,6 +15,7 @@
         <module>database</module>
         <module>shared</module>
         <module>server</module>
+        <module>server-testing</module>
         <module>website</module>
     </modules>
 
