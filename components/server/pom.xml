@@ -2,22 +2,26 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
                              http://maven.apache.org/maven-v4_0_0.xsd">
+
     <modelVersion>4.0.0</modelVersion>
+
     <parent>
-        <groupId>com.limpygnome</groupId>
-        <artifactId>project-sandbox</artifactId>
-        <version>1.0.0</version>
+        <groupId>com.projectsandbox</groupId>
+        <artifactId>components</artifactId>
+        <version>1.0</version>
     </parent>
+
+    <groupId>com.projectsandbox.components</groupId>
     <artifactId>server</artifactId>
     <packaging>jar</packaging>
 
-    <name>Project Sandbox - Server</name>
+    <name>Project Sandbox / Components / Server</name>
 
     <dependencies>
 
         <!-- Local -->
         <dependency>
-            <groupId>com.limpygnome</groupId>
+            <groupId>com.projectsandbox.components</groupId>
             <artifactId>shared</artifactId>
             <version>${project.version}</version>
         </dependency>
@@ -68,10 +72,10 @@
                 <configuration>
                     <archive>
                         <manifest>
-                            <mainClass>com.limpygnome.projectsandbox.server.Program</mainClass>
+                            <mainClass>com.limpygnome.projectsandbox.components.server.Program</mainClass>
                         </manifest>
                     </archive>
-                    <finalName>project-sandbox-server-${project.version}</finalName>
+                    <finalName>server-${project.version}</finalName>
                     <descriptorRefs>
                         <descriptorRef>jar-with-dependencies</descriptorRef>
                     </descriptorRefs>

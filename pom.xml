@@ -5,18 +5,15 @@
 
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>com.limpygnome</groupId>
-    <artifactId>project-sandbox</artifactId>
+    <groupId>com</groupId>
+    <artifactId>projectsandbox</artifactId>
+    <version>1.0</version>
     <packaging>pom</packaging>
-    <version>1.0.0</version>
+
     <name>Project Sandbox</name>
 
     <modules>
-        <module>database</module>
-        <module>shared</module>
-        <module>server</module>
-        <module>server-testing</module>
-        <module>website</module>
+        <module>components</module>
     </modules>
 
     <build>
@@ -29,24 +26,6 @@
                     <configuration>
                         <source>1.7</source>
                         <target>1.7</target>
-                    </configuration>
-                </plugin>
-
-                <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-war-plugin</artifactId>
-                </plugin>
-
-                <!-- Embedded Tomcat server -->
-                <plugin>
-                    <groupId>org.apache.tomcat.maven</groupId>
-                    <artifactId>tomcat7-maven-plugin</artifactId>
-                    <version>2.2</version>
-                    <configuration>
-                        <port>8080</port>
-                        <path>/</path>
-                        <contextFile>src/main/webapp/META-INF/context.xml</contextFile>
-                        <warSourceDirectory>${project.build.directory}/${project.build.finalName}</warSourceDirectory>
                     </configuration>
                 </plugin>
                 
