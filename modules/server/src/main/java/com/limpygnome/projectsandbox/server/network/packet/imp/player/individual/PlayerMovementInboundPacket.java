@@ -21,39 +21,24 @@ public class PlayerMovementInboundPacket extends InboundPacket
 {
     private final static Logger LOG = LogManager.getLogger(PlayerMovementInboundPacket.class);
 
-    public short id;
     public short keys;
 
     @Override
     public void parse(Controller controller, Socket socket, PlayerInfo playerInfo, ByteBuffer bb, byte[] data) throws PacketParseException
     {
         // Check length
-        if (data.length != 6)
+        if (data.length != 4)
         {
             throw new PacketParseException("Incorrect length", data);
         }
 
         // Parse data
-        id = bb.getShort(2);
-        keys = bb.getShort(4);
+        keys = bb.getShort(2);
 
-        Entity currentEntity = playerInfo.entity;
+        // Update current player
+        playerInfo.keys = keys;
 
-        if (currentEntity == null || currentEntity.id != id)
-        {
-            // Check the socket is allowed to update the player, or drop them...
-            // TODO: check player can move player - MAJOR SECURITY RISK
-
-            // Now update player keys belonging to player of ent
-            // TODO: update player of entity - tricky
-            // TODO: consider dropping this feature; we want it so admins can control/watch players etc
-        }
-        else
-        {
-            // Update current player
-            playerInfo.keys = keys;
-        }
-
-        LOG.debug("Movement - ply id: {}, ent id: {}, flags: {}", playerInfo.playerId, id, keys);
+        //LOG.debug("Movement - ply id: {},flags: {}", playerInfo.playerId, keys);
     }
+
 }

@@ -263,7 +263,6 @@ projectSandbox.network.player =
             var packet = new projectSandbox.network.OutboundPacket();
             packet.addChar("P");
             packet.addChar("M");
-            packet.addShort(projectSandbox.playerEntityId);
             packet.addShort(movement);
 
             // Send packet

@@ -84,6 +84,7 @@
             <!-- Builds executable JAR with dependencies included -->
             <plugin>
                 <artifactId>maven-assembly-plugin</artifactId>
+                <version>2.6</version>
                 <executions>
                     <execution>
                         <phase>package</phase>

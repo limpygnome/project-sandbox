@@ -9,11 +9,15 @@ import org.springframework.context.annotation.Configuration;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import org.springframework.scheduling.annotation.EnableAsync;
+import org.springframework.scheduling.annotation.EnableScheduling;
 
 /**
  * Primary context configuration class for Spring.
  */
 @Configuration
+@EnableAsync
+@EnableScheduling
 @ComponentScan({
         "com.limpygnome.projectsandbox.shared.config",
         "com.limpygnome.projectsandbox.server"

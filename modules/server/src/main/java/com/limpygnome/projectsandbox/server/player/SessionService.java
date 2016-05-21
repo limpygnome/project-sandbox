@@ -1,6 +1,5 @@
 package com.limpygnome.projectsandbox.server.player;
 
-import com.limpygnome.projectsandbox.server.service.EventLogicCycleService;
 import com.limpygnome.projectsandbox.shared.jpa.repository.GameRepository;
 import com.limpygnome.projectsandbox.shared.jpa.repository.UserRepository;
 import com.limpygnome.projectsandbox.shared.model.GameSession;
@@ -16,15 +15,16 @@ import java.util.List;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
 
 /**
- * Created by limpygnome on 26/07/15.
+ * Used to manage session data for players.
  */
 @Service
-public class SessionService implements EventLogicCycleService
+public class SessionService
 {
     private final static Logger LOG = LogManager.getLogger(SessionService.class);
 
@@ -154,8 +154,11 @@ public class SessionService implements EventLogicCycleService
         }
     }
 
-    @Override
-    public synchronized void logic()
+    /**
+     * Routinely persist session data every 60 seconds in the event of an outage.
+     */
+    @Scheduled(fixedRate = 60000)
+    public synchronized void persistSessions()
     {
         try
         {

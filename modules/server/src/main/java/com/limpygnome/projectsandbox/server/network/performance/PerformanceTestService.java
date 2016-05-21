@@ -1,7 +1,6 @@
 package com.limpygnome.projectsandbox.server.network.performance;
 
 import com.limpygnome.projectsandbox.server.Controller;
-import com.limpygnome.projectsandbox.server.network.Socket;
 import com.limpygnome.projectsandbox.server.network.packet.PacketService;
 import com.limpygnome.projectsandbox.server.service.EventLogicCycleService;
 import com.limpygnome.projectsandbox.server.service.EventServerPostStartup;
@@ -21,6 +20,11 @@ import java.util.Random;
 @Service
 public class PerformanceTestService implements EventServerPostStartup, EventLogicCycleService
 {
+    /*
+        The number of fake player we want in the game.
+     */
+    private static final int MOCK_PLAYERS = 800;
+
     @Autowired
     private PacketService packetService;
     @Autowired
@@ -39,7 +43,10 @@ public class PerformanceTestService implements EventServerPostStartup, EventLogi
     public void eventServerPostStartup(Controller controller)
     {
         // Create fake players...
-        players.add(new TestPlayer());
+        for (int i = 0; i < MOCK_PLAYERS; i++)
+        {
+            players.add(new TestPlayer());
+        }
     }
 
     @Override
@@ -65,26 +72,29 @@ public class PerformanceTestService implements EventServerPostStartup, EventLogi
         }
         else
         {
-            int randomAction = random.nextInt(8);
+            int randomAction = random.nextInt(9);
             ByteBuffer packet = null;
 
             switch (randomAction)
             {
                 case 0:
-                    // Go forwards
-                    //packet = packetForwards();
-                    break;
                 case 1:
-                    // Go backwards
-                    //packet = packetBackwards();
-                    break;
                 case 2:
-                    // Turn left
-                    //packet = packetLeft();
-                    break;
                 case 3:
+                    // Go forwards
+                    packet = packetForwards();
+                    break;
+                case 4:
+                    // Go backwards
+                    packet = packetBackwards();
+                    break;
+                case 5:
+                    // Turn left
+                    packet = packetLeft();
+                    break;
+                case 6:
                     // Turn right
-                    //packet = packetRight();
+                    packet = packetRight();
                     break;
                 default:
                     // Do nothing....
@@ -120,22 +130,31 @@ public class PerformanceTestService implements EventServerPostStartup, EventLogi
 
     private ByteBuffer packetForwards()
     {
-        return null;
+        return packetMovement((short) 1);
     }
 
     private ByteBuffer packetBackwards()
     {
-        return null;
+        return packetMovement((short) 4);
     }
 
     private ByteBuffer packetLeft()
     {
-        return null;
+        return packetMovement((short) 2);
     }
 
     private ByteBuffer packetRight()
     {
-        return null;
+        return packetMovement((short) 8);
+    }
+
+    private ByteBuffer packetMovement(short value)
+    {
+        ByteBuffer byteBuffer = ByteBuffer.allocate(4);
+        byteBuffer.put((byte) 'P');
+        byteBuffer.put((byte) 'M');
+        byteBuffer.putShort(value);
+        return byteBuffer;
     }
 
     private ByteBuffer convert(byte[] data)
