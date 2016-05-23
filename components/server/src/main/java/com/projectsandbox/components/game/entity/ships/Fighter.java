@@ -13,11 +13,11 @@ import com.projectsandbox.components.server.player.PlayerInfo;
 import com.projectsandbox.components.server.world.map.WorldMap;
 import com.projectsandbox.components.server.world.spawn.Spawn;
 
-@EntityType(typeId = 200, typeName = "ships/yutamo-c1")
-public class YutamoC1 extends PlayerEntity
+@EntityType(typeId = 200, typeName = "ships/fighter")
+public class Fighter extends PlayerEntity
 {
 
-    public YutamoC1(WorldMap map, PlayerInfo[] players)
+    public Fighter(WorldMap map, PlayerInfo[] players)
     {
         super(
                 map,
@@ -36,12 +36,12 @@ public class YutamoC1 extends PlayerEntity
                 500.0f      // Mass
         ));
 
-        components.register(new SpaceMovementComponent(35.0f));
+        components.register(new SpaceMovementComponent(40.0f));
 
         setMaxHealth(150.0f);
     }
 
-    public YutamoC1(WorldMap map)
+    public Fighter(WorldMap map)
     {
         this(map, new PlayerInfo[1]);
     }
@@ -49,7 +49,7 @@ public class YutamoC1 extends PlayerEntity
     @Override
     public String entityName()
     {
-        return "Yutamo C1";
+        return "Fighter";
     }
 
     @Override

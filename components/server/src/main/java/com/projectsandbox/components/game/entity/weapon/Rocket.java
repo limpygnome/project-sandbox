@@ -3,6 +3,7 @@ package com.projectsandbox.components.game.entity.weapon;
 import com.projectsandbox.components.server.Controller;
 import com.projectsandbox.components.server.entity.Entity;
 import com.projectsandbox.components.server.entity.annotation.EntityType;
+import com.projectsandbox.components.server.entity.component.imp.VelocityComponent;
 import com.projectsandbox.components.server.entity.death.AbstractKiller;
 import com.projectsandbox.components.server.entity.death.RocketKiller;
 import com.projectsandbox.components.server.entity.physics.Vector2;
@@ -29,7 +30,6 @@ public class Rocket extends Entity
     private final static Logger LOG = LogManager.getLogger(Rocket.class);
 
     private long gameTimeCreated;
-    private float speedStep;
     private boolean exploded;
 
     private PlayerInfo playerInfoOwner;
@@ -40,10 +40,13 @@ public class Rocket extends Entity
 
         this.playerInfoOwner = playerInfoOwner;
         this.gameTimeCreated = controller.gameTime();
-        this.speedStep = initialSpeed;
         this.exploded = false;
 
         setMaxHealth(10);
+
+        components.register(new VelocityComponent(
+                100.0f      // Mass
+        ));
     }
 
     /**
@@ -87,22 +90,18 @@ public class Rocket extends Entity
         }
         else
         {
-            // Check if to increment rocket speed
-            if (this.speedStep < ROCKET_SPEED)
+            VelocityComponent velocityComponent = (VelocityComponent) components.fetchComponent(VelocityComponent.class);
+            Vector2 velocity = velocityComponent.getVelocity();
+            float currentSpeed = velocity.length();
+
+            if (currentSpeed < ROCKET_SPEED)
             {
-                // Increment by speed step, towards reaching max speed
-                this.speedStep += ROCKET_SPEED_STEP;
+                // Increase speed
+                velocity.offset(Vector2.vectorFromAngle(rotation, ROCKET_SPEED_STEP));
 
-                // Check step has not exceeded max speed
-                if (this.speedStep > ROCKET_SPEED)
-                {
-                    this.speedStep = ROCKET_SPEED;
-                }
+                // Limit to max speed
+                velocity.limit(ROCKET_SPEED);
             }
-
-            // Move rocket
-            Vector2 offset = Vector2.vectorFromAngle(rotation, speedStep);
-            positionOffset(offset);
         }
 
         super.eventLogic(controller);

@@ -10,7 +10,7 @@
         "background" : "background/space-red",
         "width" : 120000.0,
         "height" : 120000.0,
-        "defaultPlayerEntity" : "ships/yutamo-c1"
+        "defaultPlayerEntity" : "ships/destroyer"
     },
 
     "entities":
@@ -21,7 +21,12 @@
             "faction" : 1000
         },
         {
-            "typeName" : "ships/yutamo-c1",
+            "typeName" : "ships/fighter",
+            "count" : 1,
+            "faction" : 1000
+        },
+        {
+            "typeName" : "ships/destroyer",
             "count" : 1,
             "faction" : 1000
         }

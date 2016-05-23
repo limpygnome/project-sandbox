@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 (
-    mvn clean package &&
+    mvn --projects components/shared,components/server clean package &&
     cd ./components/server/target &&
-    java -jar `ls *.jar`
+    java -jar `ls projectsandbox-*.jar`
 )

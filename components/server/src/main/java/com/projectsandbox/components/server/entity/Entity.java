@@ -3,6 +3,7 @@ package com.projectsandbox.components.server.entity;
 import com.projectsandbox.components.server.entity.annotation.EntityType;
 import com.projectsandbox.components.server.entity.component.ComponentCollection;
 import com.projectsandbox.components.server.entity.component.event.*;
+import com.projectsandbox.components.server.entity.component.imp.VelocityComponent;
 import com.projectsandbox.components.server.entity.death.AbstractKiller;
 import com.projectsandbox.components.server.entity.physics.collisions.CollisionResult;
 import com.projectsandbox.components.server.entity.physics.Vector2;
@@ -227,22 +228,15 @@ public strictfp abstract class Entity
         // Calculate new position, so we're in front of parent
         Vector2 newPosition = parent.positionNew.clone();
         newPosition.offset(Vector2.vectorFromAngle(this.rotation, parent.height / 2.0f));
-        newPosition.offset(Vector2.vectorFromAngle(this.rotation, height));
+        newPosition.offset(Vector2.vectorFromAngle(this.rotation, height / 2.0f));
         newPosition.offset(Vector2.vectorFromAngle(this.rotation, spacing));
 
-        // Attempt to fetch velocity
-        Set<FetchVelocityComponentEvent> callbacks = components.fetch(FetchVelocityComponentEvent.class);
-        Vector2 velocity = null;
+        // Make any callbacks to components
+        Set<ProjectInFrontOfEntityEvent> callbacks = components.fetch(ProjectInFrontOfEntityEvent.class);
 
-        for (FetchVelocityComponentEvent callback : callbacks)
+        for (ProjectInFrontOfEntityEvent callback : callbacks)
         {
-            velocity = callback.getVelocity();
-        }
-
-        // -- Offset by parent entity's velocity if found
-        if (velocity != null)
-        {
-            newPosition.offset(velocity);
+            callback.projectInFrontOfEntity(this, parent, spacing, newPosition);
         }
 
         position(newPosition);

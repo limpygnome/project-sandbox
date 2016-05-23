@@ -43,11 +43,8 @@ public class RocketLauncher extends AbstractWeapon
 
         if (owner != null)
         {
-            // Get current speed of owner, so that they don't go into their own rocket
-            float plySpeed = owner.width > owner.height ? owner.width : owner.height;
-
             // Create Rocket
-            Entity rpg = new Rocket(owner.map, controller, playerInfoOwner, plySpeed);
+            Entity rpg = new Rocket(owner.map, controller, playerInfoOwner);
 
             // Project in front of player
             rpg.projectInFrontOfEntity(owner, ROCKET_LAUNCH_SPACING);

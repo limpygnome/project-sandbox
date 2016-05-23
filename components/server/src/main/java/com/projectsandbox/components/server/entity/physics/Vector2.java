@@ -5,6 +5,8 @@ import com.projectsandbox.components.server.util.CustomMath;
 
 /**
  * Vector data-structure with operations.
+ *
+ * TODO: consider thread safety
  */
 public class Vector2
 {
@@ -153,6 +155,23 @@ public class Vector2
         {
             this.x = 0;
             this.y = 0;
+        }
+
+        return this;
+    }
+
+    public Vector2 limit(float lengthLimit)
+    {
+        // Limit speed/length if over
+        float currentLength = length();
+
+        if (currentLength > lengthLimit)
+        {
+            // Convert to unit vector
+            normalise();
+
+            // Multiply by limit
+            multiply(lengthLimit);
         }
 
         return this;

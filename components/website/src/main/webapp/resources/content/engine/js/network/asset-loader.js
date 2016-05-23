@@ -122,7 +122,7 @@ projectSandbox.assetLoader =
         self.expectedAssets[assetListIndexId][assetId] = true;
         
         // Check if all the assets have loaded yet
-        if (this.isLoaded() == true)
+        if (this.isLoaded())
         {
             // Invoke postResources method to continue game
             projectSandbox.postResources();

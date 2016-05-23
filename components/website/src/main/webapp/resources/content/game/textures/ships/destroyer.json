@@ -1,0 +1,24 @@
+{
+    "name" : "ships",
+    "width" : 512,
+    "height" : 512,
+    "url" : "/content/game/textures/ships/destroyer.png",
+    "description" : "Destroyer ship",
+    "textures" :
+    [
+        {
+            "name" : "ships/destroyer",
+            "speed" : 0,
+            "type" : "2d",
+            "frames" :
+            [
+                {
+                    "x" : 0,
+                    "y" : 0,
+                    "width" : 334,
+                    "height" : 463
+                }
+            ]
+        }
+    ]
+}

@@ -108,6 +108,8 @@ var projectSandbox =
         this.assetLoader.loadFromAssetsFile("/content/game/settings.json");
         this.assetLoader.loadFromAssetsFile("/content/game/shaders/list.json");
         this.assetLoader.loadFromAssetsFile("/content/game/textures/list.json");
+
+        console.debug("finished loading assets");
         
         // Setup game
         this.game.effects = game.effects;

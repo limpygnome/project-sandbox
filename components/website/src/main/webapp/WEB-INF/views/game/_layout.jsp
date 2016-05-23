@@ -153,7 +153,8 @@
         <script src="/content/game/js/ent/vehicle/bus.js"></script>
 
         <!-- Game: Ships -->
-        <script src="/content/game/js/ent/ships/yutamo-c1.js"></script>
+        <script src="/content/game/js/ent/ships/fighter.js"></script>
+        <script src="/content/game/js/ent/ships/destroyer.js"></script>
 
         <!-- Game: Weapons -->
         <script src="/content/game/js/ent/weapon/rocket.js"></script>

@@ -5,6 +5,7 @@ import com.projectsandbox.components.server.entity.Entity;
 import com.projectsandbox.components.server.entity.component.EntityComponent;
 import com.projectsandbox.components.server.entity.component.event.CollisionEntityComponentEvent;
 import com.projectsandbox.components.server.entity.component.event.LogicComponentEvent;
+import com.projectsandbox.components.server.entity.component.event.ProjectInFrontOfEntityEvent;
 import com.projectsandbox.components.server.entity.component.event.ResetComponentEvent;
 import com.projectsandbox.components.server.entity.physics.Vector2;
 import com.projectsandbox.components.server.entity.physics.collisions.CollisionResult;
@@ -12,7 +13,7 @@ import com.projectsandbox.components.server.entity.physics.collisions.CollisionR
 /**
  * Used to apply zero gravity to entities.
  */
-public class VelocityComponent implements EntityComponent, CollisionEntityComponentEvent, LogicComponentEvent, ResetComponentEvent
+public class VelocityComponent implements EntityComponent, CollisionEntityComponentEvent, LogicComponentEvent, ResetComponentEvent, ProjectInFrontOfEntityEvent
 {
     private Vector2 velocity;
     private float mass;
@@ -58,6 +59,22 @@ public class VelocityComponent implements EntityComponent, CollisionEntityCompon
     public synchronized void eventReset(Controller controller, Entity entity)
     {
         velocity.set(0.0f, 0.0f);
+    }
+
+    @Override
+    public void projectInFrontOfEntity(Entity entity, Entity parent, float spacing, Vector2 newPosition)
+    {
+        // Check if parent has velocity to match
+        VelocityComponent velocityComponent = (VelocityComponent) parent.components.fetchComponent(VelocityComponent.class);
+
+        if (velocityComponent != null)
+        {
+            // Match new position with parent velocity
+            newPosition.offset(velocityComponent.velocity);
+
+            // Set our velocity to match parent
+            this.velocity = velocityComponent.velocity.clone();
+        }
     }
 
     public synchronized float getMass()

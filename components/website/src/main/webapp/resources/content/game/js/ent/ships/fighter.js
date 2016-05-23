@@ -1,4 +1,4 @@
-function YutamoC1()
+function Fighter()
 {
     Entity.call(this,
         {
@@ -8,7 +8,7 @@ function YutamoC1()
         }
     );
 
-    this.setTexture("ships/yutamo-c1");
+    this.setTexture("ships/fighter");
 
     this.trailLeft = new Trail(
         this,
@@ -16,7 +16,7 @@ function YutamoC1()
         16,
         16,
         0,
-        1000,
+        800,
         true,
         -18,
         -18,
@@ -30,7 +30,7 @@ function YutamoC1()
         16,
         16,
         0,
-        1000,
+        800,
         true,
         16,
         16,
@@ -39,16 +39,16 @@ function YutamoC1()
     );
 }
 
-YutamoC1.inherits(Entity);
+Fighter.inherits(Entity);
 
-YutamoC1.prototype.logic = function()
+Fighter.prototype.logic = function()
 {
     // Update trail
     this.trailLeft.logic(this);
     this.trailRight.logic(this);
 }
 
-YutamoC1.prototype.eventDeath = function()
+Fighter.prototype.eventDeath = function()
 {
     game.effects.createExplosion(this.x, this.y, 64, 4000, -2, 2);
 }

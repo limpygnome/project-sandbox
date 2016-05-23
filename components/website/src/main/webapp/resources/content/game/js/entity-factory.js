@@ -37,7 +37,10 @@ game.entityFactory = {
 
             // Ships
             case 200:
-                entity = new YutamoC1();
+                entity = new Fighter();
+                break;
+            case 210:
+                entity = new Destroyer();
                 break;
 
             // Pickups

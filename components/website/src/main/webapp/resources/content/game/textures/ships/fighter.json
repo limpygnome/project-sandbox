@@ -2,12 +2,12 @@
     "name" : "ships",
     "width" : 256,
     "height" : 256,
-    "url" : "/content/game/images/yutamo-c1.png",
-    "description" : "Yutamo ships.",
+    "url" : "/content/game/textures/ships/fighter.png",
+    "description" : "Small fighter ship",
     "textures" :
     [
         {
-            "name" : "ships/yutamo-c1",
+            "name" : "ships/fighter",
             "speed" : 0,
             "type" : "2d",
             "frames" :
