@@ -18,7 +18,7 @@
         </init-param>
         <init-param>
             <param-name>contextConfigLocation</param-name>
-            <param-value>com.limpygnome.projectsandbox.website.config.AppConfig</param-value>
+            <param-value>com.projectsandbox.components.website.config.AppConfig</param-value>
         </init-param>
         <init-param>
             <param-name>trimSpaces</param-name>

@@ -59,6 +59,19 @@
             <version>1.1.1</version>
         </dependency>
 
+        <!-- Jackson (needed by EntityManager / JPA) -->
+        <!-- TODO: are these actually needed? Not needed in past. -->
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-core</artifactId>
+            <version>2.6.1</version>
+        </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-databind</artifactId>
+            <version>2.6.1</version>
+        </dependency>
+
     </dependencies>
     
     <build>
@@ -82,27 +95,6 @@
                     <target>NONE</target>
                     <type>CREATE</type>
                     <outputFile>${project.build.outputDirectory}/schema.sql</outputFile>
-                </configuration>
-            </plugin>
-        
-            <!-- Builds executable JAR with dependencies included -->
-            <plugin>
-                <artifactId>maven-assembly-plugin</artifactId>
-                <version>2.6</version>
-                <executions>
-                    <execution>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>single</goal>
-                        </goals>
-                    </execution>
-                </executions>
-                <configuration>
-                    <finalName>project-sandbox-shared-${project.version}</finalName>
-                    <descriptorRefs>
-                        <descriptorRef>jar-with-dependencies</descriptorRef>
-                    </descriptorRefs>
-                    <appendAssemblyId>false</appendAssemblyId>
                 </configuration>
             </plugin>
             

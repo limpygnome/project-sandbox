@@ -1,6 +1,6 @@
 package com.limpygnome.projectsandbox.server.testing;
 
-import com.limpygnome.projectsandbox.server.network.Socket;
+import com.projectsandbox.components.server.network.Socket;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 

@@ -1,14 +1,7 @@
-export MAVEN_OPTS=-agentlib:jdwp=transport=dt_socket,address=8081,server=y,suspend=n
+#!/usr/bin/env bash
 
-cd modules
 
-#cd shared
-#mvn clean
-#cd ../
-
-cd website
-mvn clean
-cd ../
-
-mvn tomcat7:run
-
+(
+    export MAVEN_OPTS=-agentlib:jdwp=transport=dt_socket,address=8081,server=y,suspend=n &&
+    mvn clean tomcat7:run
+)

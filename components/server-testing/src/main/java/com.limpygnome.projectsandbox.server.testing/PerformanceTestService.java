@@ -1,11 +1,11 @@
 package com.limpygnome.projectsandbox.server.testing;
 
-import com.limpygnome.projectsandbox.server.Controller;
-import com.limpygnome.projectsandbox.server.network.packet.PacketService;
-import com.limpygnome.projectsandbox.server.service.EventLogicCycleService;
-import com.limpygnome.projectsandbox.server.service.EventServerPostStartup;
-import com.limpygnome.projectsandbox.shared.jpa.repository.GameRepository;
-import com.limpygnome.projectsandbox.shared.model.GameSession;
+import com.projectsandbox.components.server.Controller;
+import com.projectsandbox.components.server.network.packet.PacketService;
+import com.projectsandbox.components.server.service.EventLogicCycleService;
+import com.projectsandbox.components.server.service.EventServerPostStartup;
+import com.projectsandbox.components.shared.jpa.repository.GameRepository;
+import com.projectsandbox.components.shared.model.GameSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

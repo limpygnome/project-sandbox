@@ -19,16 +19,24 @@
     <build>
         <pluginManagement>
             <plugins>
-            
+
+                <!-- Set version of Java -->
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-compiler-plugin</artifactId>
                     <configuration>
-                        <source>1.7</source>
-                        <target>1.7</target>
+                        <source>1.8</source>
+                        <target>1.8</target>
                     </configuration>
                 </plugin>
-                
+
+                <!-- Embedded Tomcat server -->
+                <plugin>
+                    <groupId>org.apache.tomcat.maven</groupId>
+                    <artifactId>tomcat7-maven-plugin</artifactId>
+                    <version>2.2</version>
+                </plugin>
+
             </plugins>
         </pluginManagement>
     </build>
