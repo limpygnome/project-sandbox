@@ -99,12 +99,18 @@
         <dependency>
             <groupId>org.jadira.usertype</groupId>
             <artifactId>usertype.core</artifactId>
-            <version>4.0.0.GA</version>
+            <version>3.2.0.GA</version>
         </dependency>
         <dependency>
             <groupId>org.jadira.usertype</groupId>
-            <artifactId>usertype.extended</artifactId>
-            <version>4.0.0.GA</version>
+            <artifactId>usertype.jodatime</artifactId>
+            <version>2.0.1</version>
+        </dependency>
+        <!-- NOTE: below dependency is suspicious, should not be required. -->
+        <dependency>
+            <groupId>org.threeten</groupId>
+            <artifactId>threetenbp</artifactId>
+            <version>1.3.1</version>
         </dependency>
 
         <!-- Logging -->
@@ -128,4 +134,5 @@
         </dependency>
         
     </dependencies>
+
 </project>

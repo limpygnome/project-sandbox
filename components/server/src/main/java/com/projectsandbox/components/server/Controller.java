@@ -24,7 +24,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class Controller
 {
-    private final static Logger LOG = LogManager.getLogger(PlayerService.class);
+    private final static Logger LOG = LogManager.getLogger(Controller.class);
 
     @Autowired
     private ApplicationContext applicationContext;
@@ -60,6 +60,8 @@ public class Controller
     {
         try
         {
+            LOG.info("starting instance...");
+
             // Invoke pre-startup events on services
             for (EventServerPreStartup eventServerPreStartup : eventServerPreStartups)
             {
@@ -77,9 +79,11 @@ public class Controller
             }
 
             // Join logic thread
+            LOG.info("joining logic thread...");
             threadLogic.join();
 
             // Since we've left the logic thread, shutdown...
+            LOG.info("stopping instance...");
             stop();
         }
         catch(Exception ex)

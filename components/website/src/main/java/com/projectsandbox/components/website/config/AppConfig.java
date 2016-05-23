@@ -6,13 +6,10 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
 
-/**
- * Created by limpygnome on 20/07/15.
- */
 @Configuration
 @ComponentScan({
-        "com.limpygnome.projectsandbox.shared.config",
-        "com.limpygnome.projectsandbox.website"
+        "com.projectsandbox.components.shared",
+        "com.projectsandbox.components.website"
 })
 @PropertySource("classpath:settings.properties")
 public class AppConfig

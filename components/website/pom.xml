@@ -145,28 +145,7 @@
                <groupId>org.apache.maven.plugins</groupId>
                <artifactId>maven-war-plugin</artifactId>
                 <configuration>
-                    <warName>project-sandbox-website-${project.version}</warName>
-                </configuration>
-            </plugin>
-
-            <!-- Automatic generation of schema from JPA models -->
-            <plugin>
-                <groupId>de.juplo</groupId>
-                <artifactId>hibernate4-maven-plugin</artifactId>
-                <version>1.0.4</version>
-                <executions>
-                    <execution>
-                        <phase>compile</phase>
-                        <goals>
-                            <goal>export</goal>
-                        </goals>
-                    </execution>
-                </executions>
-                <configuration>
-                    <hibernateDialect>org.hibernate.dialect.MySQLDialect</hibernateDialect>
-                    <target>NONE</target>
-                    <type>CREATE</type>
-                    <outputFile>${project.build.directory}/schema.sql</outputFile>
+                    <warName>projectsandbox-website-${project.version}</warName>
                 </configuration>
             </plugin>
 

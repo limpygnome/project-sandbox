@@ -21,8 +21,8 @@ public class EntityTypeMappingStoreService
     // TODO: move into a settings file
     private static final String[] ENTS_CLASS_PATHS = new String[]
     {
-            "/com/limpygnome/projectsandbox/server/entity",
-            "/com/limpygnome/projectsandbox/game/entity"
+            "/com/projectsandbox/components/server/entity",
+            "/com/projectsandbox/components/game/entity"
     };
 
     private HashMap<Short, Class> typeIdToClass;

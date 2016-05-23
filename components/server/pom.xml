@@ -75,7 +75,7 @@
                             <mainClass>com.projectsandbox.components.server.Program</mainClass>
                         </manifest>
                     </archive>
-                    <finalName>server-${project.version}</finalName>
+                    <finalName>projectsandbox-server-${project.version}</finalName>
                     <descriptorRefs>
                         <descriptorRef>jar-with-dependencies</descriptorRef>
                     </descriptorRefs>

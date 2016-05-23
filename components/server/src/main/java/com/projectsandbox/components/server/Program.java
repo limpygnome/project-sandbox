@@ -26,7 +26,7 @@ public class Program
         if (LOG.isDebugEnabled())
         {
             String pid = ManagementFactory.getRuntimeMXBean().getName();
-            LOG.debug("Launching Project Sandbox server - pid: {}", pid);
+            LOG.debug("launching Project Sandbox server - pid: {}", pid);
         }
 
         // Fetch controller instance using Spring and start server

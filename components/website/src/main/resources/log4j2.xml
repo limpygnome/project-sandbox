@@ -8,7 +8,7 @@
     <Loggers>
         <Root level="debug">
         </Root>
-        <Logger name="com.limpygnome.projectsandbox" level="debug">
+        <Logger name="com.projectsandbox.components" level="debug">
             <AppenderRef ref="Console"/>
         </Logger>
     </Loggers>
