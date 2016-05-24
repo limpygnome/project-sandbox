@@ -105,7 +105,7 @@ public abstract class PlayerEntity extends Entity
             if (playerInfo != null)
             {
                 // Set player to use this entity
-                controller.playerService.setPlayerEnt(playerInfo, this);
+                controller.playerService.setPlayerEntity(playerInfo, this);
 
                 // Set owner of inventory to player
                 if (inventories != null && inventories[i] != null)

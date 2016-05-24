@@ -1,5 +1,6 @@
 package com.projectsandbox.components.server.effect.types;
 
+import com.projectsandbox.components.server.entity.physics.Vector2;
 import com.projectsandbox.components.server.network.packet.PacketData;
 
 /**
@@ -21,4 +22,14 @@ public abstract class AbstractEffect
     }
 
     public abstract void writeCustomData(PacketData packetData);
+
+    /**
+     * Used to calculate if an effect is within rendering distance of the provided position.
+     *
+     * @param position the position of rendering
+     * @param renderDistance the distance within which the effect would be rendered
+     * @return true = within range, false = not within range
+     */
+    public abstract boolean isWithinRenderDistance(Vector2 position, float renderDistance);
+
 }

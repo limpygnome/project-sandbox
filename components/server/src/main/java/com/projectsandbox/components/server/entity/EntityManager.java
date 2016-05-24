@@ -287,7 +287,7 @@ public class EntityManager implements EventLogicCycleService, IdCounterConsumer
         // Iterate each player and provide updates within radius
         EntityUpdatesOutboundPacket packet;
 
-        List<PlayerInfo> players = controller.playerService.getPlayers();
+        Set<PlayerInfo> players = controller.playerService.getPlayers();
 
         synchronized (players)
         {

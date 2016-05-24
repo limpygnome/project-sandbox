@@ -49,7 +49,14 @@ public class PlayerService implements EventLogicCycleService, IdCounterConsumer
     private final Map<Socket, PlayerInfo> mappings;
     private final Map<Short, PlayerInfo> mappingsById;
     private final Set<UUID> connectedRegisteredPlayers;
-    private final List<PlayerInfo> players;
+    private final Set<PlayerInfo> players;
+
+    /*
+        Stores players in a map.
+
+        WARNING: if we ever implement dynamic map loading, this will cause a memory leak.
+     */
+    private final Map<WorldMap, Set<PlayerInfo>> playersInMap;
 
     public PlayerService()
     {
@@ -57,7 +64,8 @@ public class PlayerService implements EventLogicCycleService, IdCounterConsumer
         this.mappingsById = new HashMap<>();
         this.connectedRegisteredPlayers = new HashSet<>();
         this.idCounterProvider = new IdCounterProvider(this);
-        this.players = new LinkedList<>();
+        this.players = new HashSet<>();
+        this.playersInMap = new HashMap<>();
     }
 
     /**
@@ -160,6 +168,15 @@ public class PlayerService implements EventLogicCycleService, IdCounterConsumer
             {
                 Entity entity = playerInfo.entity;
 
+                // Flush player from map
+                synchronized (playersInMap)
+                {
+                    for (Set<PlayerInfo> players : playersInMap.values())
+                    {
+                        players.remove(playerInfo);
+                    }
+                }
+
                 // Persist player's current entity
                 playerEntityService.persistPlayer(playerInfo);
 
@@ -256,9 +273,35 @@ public class PlayerService implements EventLogicCycleService, IdCounterConsumer
         return mappingsById.containsKey(id);
     }
 
-    public List<PlayerInfo> getPlayers()
+    public Set<PlayerInfo> getPlayers()
     {
         return this.players;
+    }
+
+    /**
+     * Retrieves players currently in the given map.
+     *
+     * @param worldMap the map
+     * @return a set; either empty or has players, never null
+     */
+    public Set<PlayerInfo> getPlayers(WorldMap worldMap)
+    {
+        Set<PlayerInfo> result;
+
+        // Fetch players
+        synchronized (playersInMap)
+        {
+            result = playersInMap.get(worldMap);
+        }
+
+        // Always give back a result...
+        if (result == null)
+        {
+            result = new HashSet<>();
+            playersInMap.put(worldMap, result);
+        }
+
+        return result;
     }
 
     private void playerSpawnAndSendData(PlayerInfo playerInfo) throws IOException
@@ -284,7 +327,7 @@ public class PlayerService implements EventLogicCycleService, IdCounterConsumer
         }
     }
 
-    public void setPlayerEnt(PlayerInfo playerInfo, Entity entity)
+    public void setPlayerEntity(PlayerInfo playerInfo, Entity entity)
     {
         synchronized (playerInfo)
         {
@@ -309,8 +352,25 @@ public class PlayerService implements EventLogicCycleService, IdCounterConsumer
                     }
                 }
 
+                // Remove from map if ents have different map
+                if (currentEntity != null && currentEntity.map != entity.map)
+                {
+                    synchronized (playersInMap)
+                    {
+                        Set<PlayerInfo> players = playersInMap.get(currentEntity.map);
+                        players.remove(playerInfo);
+                    }
+                }
+
                 // Update entity
                 playerInfo.entity = entity;
+
+                // Add to map
+                synchronized (playersInMap)
+                {
+                    Set<PlayerInfo> players = getPlayers(entity.map);
+                    players.add(playerInfo);
+                }
             }
 
             // Create packet to update ID for clientside

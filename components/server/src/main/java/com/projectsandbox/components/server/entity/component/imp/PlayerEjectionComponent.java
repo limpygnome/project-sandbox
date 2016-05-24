@@ -205,7 +205,7 @@ public class PlayerEjectionComponent implements EntityComponent, LogicComponentE
                     if (plyInSeat == null || !plyInSeat.isConnected())
                     {
                         // Set the player to use this entity
-                        controller.playerService.setPlayerEnt(playerInfo, entity);
+                        controller.playerService.setPlayerEntity(playerInfo, entity);
 
                         // Add as passenger
                         playerEntity.setPlayer(playerInfo, i);

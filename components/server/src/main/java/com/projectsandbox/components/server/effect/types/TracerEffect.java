@@ -27,4 +27,16 @@ public class TracerEffect extends AbstractEffect
         packetData.add(end.x);
         packetData.add(end.y);
     }
+
+    @Override
+    public boolean isWithinRenderDistance(Vector2 position, float renderDistance)
+    {
+        // This is flawed, since the range may be greater than render distance, but unlikely...lets keep it simple
+        // for now...
+
+        float distanceStart = Vector2.distance(position, start);
+        float distanceEnd = Vector2.distance(position, end);
+        return distanceStart <= renderDistance || distanceEnd <= renderDistance;
+    }
+
 }

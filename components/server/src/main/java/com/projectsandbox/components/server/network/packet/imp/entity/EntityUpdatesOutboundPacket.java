@@ -25,7 +25,7 @@ public class EntityUpdatesOutboundPacket extends OutboundPacket
 
         This uses the same value as the map/radar - update map.js in game package.
      */
-    private static final float RADIUS_ENTITY_UPDATES = 4000.0f;
+    public static final float RADIUS_ENTITY_UPDATES = 4000.0f;
 
     public EntityUpdatesOutboundPacket()
     {

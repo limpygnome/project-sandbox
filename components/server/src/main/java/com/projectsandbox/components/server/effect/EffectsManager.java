@@ -4,11 +4,13 @@ import com.projectsandbox.components.server.Controller;
 import com.projectsandbox.components.server.effect.types.AbstractEffect;
 import com.projectsandbox.components.server.network.packet.imp.effect.EffectUpdatesOutboundPacket;
 
+import com.projectsandbox.components.server.player.PlayerInfo;
 import com.projectsandbox.components.server.service.EventLogicCycleService;
 import com.projectsandbox.components.server.world.map.WorldMap;
 import java.io.IOException;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -49,17 +51,22 @@ public class EffectsManager implements EventLogicCycleService
 
     private void sendUpdates() throws IOException
     {
-        // TODO: only send to players within a certain distance (?)
-
         if (pendingSend.size() > 0)
         {
-            // Build packet from buffer and reset
-            EffectUpdatesOutboundPacket packet = new EffectUpdatesOutboundPacket();
-            packet.writeEffects(pendingSend);
-            pendingSend.clear();
+            Set<PlayerInfo> players = controller.playerService.getPlayers(map);
 
-            // Broadcast to all players in map
-            controller.playerService.broadcast(packet, map);
+            for (PlayerInfo playerInfo : players)
+            {
+                // Build packet for player
+                EffectUpdatesOutboundPacket packet = new EffectUpdatesOutboundPacket();
+                packet.writeEffects(playerInfo, pendingSend);
+
+                // Send packet
+                controller.packetService.send(playerInfo, packet);
+            }
+
+            // Clear pending effects
+            pendingSend.clear();
         }
     }
 
