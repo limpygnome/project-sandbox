@@ -1,6 +1,6 @@
 package com.projectsandbox.components.server.constant.entity;
 
-import com.projectsandbox.components.server.inventory.item.weapon.Smg;
+import com.projectsandbox.components.server.inventory.item.weapon.Gatling;
 
 /**
  * Created by limpygnome on 04/09/15.
@@ -26,7 +26,7 @@ public final class PedestrianConstants
 
     public static final Class[] ATTACKING_PED_INVENTORY =
     {
-        Smg.class
+        Gatling.class
     };
 
     public static final float ATTACKING_PED_ENGAGE_DISTANCE = 150.0f;

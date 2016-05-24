@@ -34,12 +34,12 @@ public class Casting
         // Create line from origin
         Vector2 lineStart = new Vector2(origin.positionNew.x, origin.positionNew.y);
         Vector2 lineEnd = Vector2.vectorFromAngle(radians, maxDistance);
-        lineEnd.offset(lineStart);
+        lineEnd.add(lineStart);
 
         // Create perpendicular line from origin
         Vector2 linePerpStart = lineStart.clone();
         Vector2 linePerpEnd = Vector2.vectorFromAngle(radians + RADIANS_90_DEGREES, maxDistance);
-        linePerpEnd.offset(linePerpStart);
+        linePerpEnd.add(linePerpStart);
 
         // Find closest entity intersection
         resultEnt = castEnts(controller, origin, lineStart, lineEnd, linePerpStart, linePerpEnd, maxDistance);

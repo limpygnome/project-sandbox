@@ -18,10 +18,14 @@ import com.projectsandbox.components.server.world.map.WorldMap;
 public class SpaceMovementComponent implements EntityComponent, LogicComponentEvent, CollisionMapComponentEvent
 {
     private float speedLimit;
+    private float acceleration;
+    private float turnRadians;
 
-    public SpaceMovementComponent(float speedLimit)
+    public SpaceMovementComponent(float speedLimit, float acceleration, float turnRadians)
     {
         this.speedLimit = speedLimit;
+        this.acceleration = acceleration;
+        this.turnRadians = turnRadians;
     }
 
     @Override
@@ -39,12 +43,12 @@ public class SpaceMovementComponent implements EntityComponent, LogicComponentEv
 
             if (playerDriver.isKeyDown(PlayerKeys.MovementLeft))
             {
-                angleOffset -= 0.2f;
+                angleOffset -= turnRadians;
             }
 
             if (playerDriver.isKeyDown(PlayerKeys.MovementRight))
             {
-                angleOffset += 0.2f;
+                angleOffset += turnRadians;
             }
 
             entity.rotationOffset(angleOffset);
@@ -54,11 +58,11 @@ public class SpaceMovementComponent implements EntityComponent, LogicComponentEv
 
             if (playerDriver.isKeyDown(PlayerKeys.MovementUp))
             {
-                offset = Vector2.vectorFromAngle(entity.rotation, 0.5f);
+                offset = Vector2.vectorFromAngle(entity.rotation, acceleration);
             }
             else if (playerDriver.isKeyDown(PlayerKeys.MovementDown))
             {
-                offset = Vector2.vectorFromAngle(entity.rotation, -0.5f);
+                offset = Vector2.vectorFromAngle(entity.rotation, -acceleration);
             }
 
             if (offset != null)
@@ -66,7 +70,7 @@ public class SpaceMovementComponent implements EntityComponent, LogicComponentEv
                 synchronized (velocityComponent)
                 {
                     Vector2 velocity = velocityComponent.getVelocity();
-                    velocity.offset(offset);
+                    velocity.add(offset);
 
                     // Keep within speed limit
                     velocity.limit(speedLimit);

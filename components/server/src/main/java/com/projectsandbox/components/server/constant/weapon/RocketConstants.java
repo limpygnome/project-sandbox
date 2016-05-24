@@ -18,12 +18,12 @@ public class RocketConstants
     /**
      * The spacing between an Rocket and the source which fired it.
      */
-    public static final float ROCKET_LAUNCH_SPACING = 16.0f;
+    public static final float ROCKET_LAUNCH_SPACING = 0.0f;
 
     /**
      * The lifespan of a rocket.
      */
-    public static final float ROCKET_LIFESPAN_MS = 5000.0f;
+    public static final float ROCKET_LIFESPAN_MS = 30000.0f;
 
     /**
      * The amount to increment the rocket speed.

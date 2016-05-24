@@ -227,9 +227,9 @@ public strictfp abstract class Entity
 
         // Calculate new position, so we're in front of parent
         Vector2 newPosition = parent.positionNew.clone();
-        newPosition.offset(Vector2.vectorFromAngle(this.rotation, parent.height / 2.0f));
-        newPosition.offset(Vector2.vectorFromAngle(this.rotation, height / 2.0f));
-        newPosition.offset(Vector2.vectorFromAngle(this.rotation, spacing));
+        newPosition.add(Vector2.vectorFromAngle(this.rotation, parent.height / 2.0f));
+        newPosition.add(Vector2.vectorFromAngle(this.rotation, height / 2.0f));
+        newPosition.add(Vector2.vectorFromAngle(this.rotation, spacing));
 
         // Make any callbacks to components
         Set<ProjectInFrontOfEntityEvent> callbacks = components.fetch(ProjectInFrontOfEntityEvent.class);

@@ -8,6 +8,7 @@ import com.projectsandbox.components.server.entity.component.imp.SpaceMovementCo
 import com.projectsandbox.components.server.entity.component.imp.VelocityComponent;
 import com.projectsandbox.components.server.entity.physics.Vector2;
 import com.projectsandbox.components.server.inventory.Inventory;
+import com.projectsandbox.components.server.inventory.item.weapon.Gatling;
 import com.projectsandbox.components.server.inventory.item.weapon.RocketLauncher;
 import com.projectsandbox.components.server.player.PlayerInfo;
 import com.projectsandbox.components.server.world.map.WorldMap;
@@ -36,7 +37,11 @@ public class Destroyer extends PlayerEntity
                 10000.0f      // Mass
         ));
 
-        components.register(new SpaceMovementComponent(20.0f));
+        components.register(new SpaceMovementComponent(
+                20.0f,      // Speed limit
+                0.4f,       // Acceleration
+                0.05f       // Turning speed
+        ));
 
         setMaxHealth(400.0f);
     }
@@ -59,6 +64,7 @@ public class Destroyer extends PlayerEntity
 
         Inventory inventory = new Inventory(this);
         inventory.add(new RocketLauncher());
+        inventory.add(new Gatling());
         setInventory(0, inventory);
     }
 

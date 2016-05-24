@@ -52,17 +52,6 @@ public class Vector2
     }
     
     /**
-     * Offsets this instance/vector by the provided vector.
-     * 
-     * @param v The provided vector.
-     */
-    public void offset(Vector2 v)
-    {
-        this.x += v.x;
-        this.y += v.y;
-    }
-    
-    /**
      * Rotates this vector.
      * 
      * @param origin The origin of the rotation.

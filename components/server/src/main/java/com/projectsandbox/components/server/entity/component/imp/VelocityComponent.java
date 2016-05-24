@@ -16,10 +16,12 @@ import com.projectsandbox.components.server.entity.physics.collisions.CollisionR
 public class VelocityComponent implements EntityComponent, CollisionEntityComponentEvent, LogicComponentEvent, ResetComponentEvent, ProjectInFrontOfEntityEvent
 {
     private Vector2 velocity;
+    private Vector2 initialVelocity;
     private float mass;
 
     public VelocityComponent(float mass)
     {
+        this.initialVelocity = null;
         this.velocity = new Vector2();
         this.mass = mass;
     }
@@ -58,7 +60,15 @@ public class VelocityComponent implements EntityComponent, CollisionEntityCompon
     @Override
     public synchronized void eventReset(Controller controller, Entity entity)
     {
-        velocity.set(0.0f, 0.0f);
+        if (initialVelocity != null)
+        {
+            velocity = initialVelocity;
+            initialVelocity = null;
+        }
+        else
+        {
+            velocity.set(0.0f, 0.0f);
+        }
     }
 
     @Override
@@ -69,11 +79,13 @@ public class VelocityComponent implements EntityComponent, CollisionEntityCompon
 
         if (velocityComponent != null)
         {
-            // Match new position with parent velocity
-            newPosition.offset(velocityComponent.velocity);
+            // Match new position with parent velocity; apply twice for safety
+            newPosition.add(velocityComponent.velocity);
+            newPosition.add(Vector2.vectorFromAngle(parent.rotation, 50.0f));
 
             // Set our velocity to match parent
             this.velocity = velocityComponent.velocity.clone();
+            this.initialVelocity = this.velocity.clone();
         }
     }
 

@@ -6,5 +6,5 @@ package com.projectsandbox.components.server.inventory;
  */
 public interface WeaponConstants
 {
-    float   DEFAULT_MAX_DISTANCE = 300.0f;
+    float   DEFAULT_MAX_DISTANCE = 1000.0f;
 }

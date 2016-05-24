@@ -36,7 +36,11 @@ public class Fighter extends PlayerEntity
                 500.0f      // Mass
         ));
 
-        components.register(new SpaceMovementComponent(40.0f));
+        components.register(new SpaceMovementComponent(
+                40.0f,      // Speed limit
+                1.0f,       // Acceleration
+                0.2f        // Turning speed
+        ));
 
         setMaxHealth(150.0f);
     }

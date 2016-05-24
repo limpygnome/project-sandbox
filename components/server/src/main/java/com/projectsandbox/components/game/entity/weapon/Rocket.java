@@ -42,7 +42,7 @@ public class Rocket extends Entity
         this.gameTimeCreated = controller.gameTime();
         this.exploded = false;
 
-        setMaxHealth(10);
+        setMaxHealth(1);
 
         components.register(new VelocityComponent(
                 100.0f      // Mass
@@ -97,7 +97,8 @@ public class Rocket extends Entity
             if (currentSpeed < ROCKET_SPEED)
             {
                 // Increase speed
-                velocity.offset(Vector2.vectorFromAngle(rotation, ROCKET_SPEED_STEP));
+                Vector2 increasedSpeed = Vector2.vectorFromAngle(rotation, ROCKET_SPEED_STEP);
+                velocity.add(increasedSpeed);
 
                 // Limit to max speed
                 velocity.limit(ROCKET_SPEED);
