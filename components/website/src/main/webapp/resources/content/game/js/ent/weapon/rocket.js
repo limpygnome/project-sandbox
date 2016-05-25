@@ -30,13 +30,15 @@ Rocket.inherits(Entity);
 
 Rocket.prototype.logic = function()
 {
-	// Update trail
-	this.trail.logic();
+    // Update trail
+    this.trail.logic();
+
+//    console.debug(this.x + "," + this.y);
 }
 
 Rocket.prototype.eventDeath = function()
 {
-	game.effects.createExplosion(this.x, this.y, 256, 8000, -2.0, 2.0);
+    game.effects.createExplosion(this.x, this.y, 256, 8000, -2.0, 2.0);
 }
 
 Rocket.prototype.getRadarClasses = function()
