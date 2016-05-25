@@ -38,18 +38,8 @@ public class VelocityComponent implements EntityComponent, CollisionEntityCompon
         // Fetch velocity component of other entity
         VelocityComponent componentOther = (VelocityComponent) entityOther.components.fetchComponent(VelocityComponent.class);
 
-        if (componentOther != null)
+        if (componentOther != null && entity.isCollidable(entityOther))
         {
-            // Build required values to distribute energy
-//            float massOther = componentOther.getMass();
-//            float massTotal = mass + massOther;
-//            float totalVelocityX = (velocity.x + componentOther.velocity.x) / massTotal;
-//            float totalVelocityY = (velocity.y + componentOther.velocity.y) / massTotal;
-
-            // Build new velocity for ents by distributing energy
-//            velocity.set(totalVelocityX * mass, totalVelocityY * mass);
-//            componentOther.velocity.set(totalVelocityX * massOther, totalVelocityY * massOther);
-
             Vector2 velocityOther = componentOther.velocity;
 
             float massOther = componentOther.getMass();
@@ -65,8 +55,6 @@ public class VelocityComponent implements EntityComponent, CollisionEntityCompon
             float vxOtherMass = vx * mass;
             float vyOtherMass = vy * mass;
             velocityOther.set(vxOtherMass, vyOtherMass);
-
-
         }
         else
         {

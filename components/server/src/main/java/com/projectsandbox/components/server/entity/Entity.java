@@ -563,18 +563,15 @@ public strictfp abstract class Entity
     {
     }
 
-    public synchronized void eventCollisionEntity(Controller controller, Entity entCollider, Entity entVictim, Entity entOther, CollisionResult result)
+    public boolean isCollidable(Entity entityOther)
+    {
+        return !(physicsStatic || entityOther.physicsStatic) && !(physicsIntangible || entityOther.physicsIntangible);
+    }
+
+    public synchronized void eventCollisionEntity(Controller controller, Entity entityCollider, Entity entityVictim, Entity entityOther, CollisionResult result)
     {
         // This entity cannot be static and both entities cannot be intangible
-        if  (
-                (
-                    entCollider != this || entOther.physicsStatic
-                )
-                    &&
-                (
-                    !physicsStatic && !(physicsIntangible || entOther.physicsIntangible)
-                )
-            )
+        if (entityCollider != this && isCollidable(entityOther))
         {
             // Push ent out by default
             positionOffset(result.mtv);
@@ -585,7 +582,7 @@ public strictfp abstract class Entity
 
         for (CollisionEntityComponentEvent component : callbacks)
         {
-            component.eventCollisionEntity(controller, this, entOther, result);
+            component.eventCollisionEntity(controller, this, entityOther, result);
         }
     }
 

@@ -66,8 +66,8 @@ public class Destroyer extends PlayerEntity
         inventory.add(new RocketLauncher(
                 new Vector2[]
                 {
-                    new Vector2(-40.0f, 0.0f),
-                    new Vector2(40.0f, 0.0f)
+                    new Vector2(-40.0f, -100.0f),
+                    new Vector2(+40.0f, -100.0f)
                 }
         ));
         inventory.add(new Gatling());
