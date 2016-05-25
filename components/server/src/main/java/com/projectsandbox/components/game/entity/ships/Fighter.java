@@ -62,7 +62,7 @@ public class Fighter extends PlayerEntity
         super.eventReset(controller, spawn);
 
         Inventory inventory = new Inventory(this);
-        inventory.add(new RocketLauncher());
+        inventory.add(new RocketLauncher(null));
         setInventory(0, inventory);
     }
 

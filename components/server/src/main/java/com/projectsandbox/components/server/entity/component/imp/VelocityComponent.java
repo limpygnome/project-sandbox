@@ -41,14 +41,32 @@ public class VelocityComponent implements EntityComponent, CollisionEntityCompon
         if (componentOther != null)
         {
             // Build required values to distribute energy
-            float massOther = componentOther.getMass();
-            float massTotal = mass + massOther;
-            float totalVelocityX = (velocity.x + componentOther.velocity.x) / massTotal;
-            float totalVelocityY = (velocity.y + componentOther.velocity.y) / massTotal;
+//            float massOther = componentOther.getMass();
+//            float massTotal = mass + massOther;
+//            float totalVelocityX = (velocity.x + componentOther.velocity.x) / massTotal;
+//            float totalVelocityY = (velocity.y + componentOther.velocity.y) / massTotal;
 
             // Build new velocity for ents by distributing energy
-            velocity.set(totalVelocityX * mass, totalVelocityY * mass);
-            componentOther.velocity.set(totalVelocityX * massOther, totalVelocityY * massOther);
+//            velocity.set(totalVelocityX * mass, totalVelocityY * mass);
+//            componentOther.velocity.set(totalVelocityX * massOther, totalVelocityY * massOther);
+
+            Vector2 velocityOther = componentOther.velocity;
+
+            float massOther = componentOther.getMass();
+            float totalMass = mass + massOther;
+
+            float vx = (velocity.x + velocityOther.x) / totalMass;
+            float vy = (velocity.y + velocityOther.y) / totalMass;
+
+            float vxMass = vx * massOther;
+            float vyMass = vy * massOther;
+            velocity.set(vxMass, vyMass);
+
+            float vxOtherMass = vx * mass;
+            float vyOtherMass = vy * mass;
+            velocityOther.set(vxOtherMass, vyOtherMass);
+
+
         }
         else
         {

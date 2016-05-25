@@ -109,15 +109,15 @@ public class Rocket extends Entity
     }
 
     @Override
-    public void eventCollisionEntity(Controller controller, Entity entCollider, Entity entVictim, Entity entOther, CollisionResult result)
+    public void eventCollisionEntity(Controller controller, Entity entCollider, Entity entVictim, Entity entityOther, CollisionResult result)
     {
-        performCollisionExplosion(controller);
+        performCollisionExplosion(controller, entityOther);
     }
 
     @Override
     public void eventCollisionMap(Controller controller, CollisionMapResult collisionMapResult)
     {
-        performCollisionExplosion(controller);
+        performCollisionExplosion(controller, null);
     }
 
     @Override
@@ -127,9 +127,9 @@ public class Rocket extends Entity
         // TODO: mark for removal here as precaution?
     }
 
-    private synchronized void performCollisionExplosion(Controller controller)
+    private synchronized void performCollisionExplosion(Controller controller, Entity entityOther)
     {
-        if (!exploded)
+        if (!exploded && (entityOther == null || entityOther != playerInfoOwner.entity))
         {
             // Apply damage to entities
             SpatialActions.applyLinearRadiusDamage(controller, this, ROCKET_BLAST_RADIUS, ROCKET_BLAST_DAMAGE, RocketKiller.class);

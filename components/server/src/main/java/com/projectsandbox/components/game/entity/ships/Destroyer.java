@@ -63,7 +63,13 @@ public class Destroyer extends PlayerEntity
         super.eventReset(controller, spawn);
 
         Inventory inventory = new Inventory(this);
-        inventory.add(new RocketLauncher());
+        inventory.add(new RocketLauncher(
+                new Vector2[]
+                {
+                    new Vector2(-40.0f, 0.0f),
+                    new Vector2(40.0f, 0.0f)
+                }
+        ));
         inventory.add(new Gatling());
         setInventory(0, inventory);
     }

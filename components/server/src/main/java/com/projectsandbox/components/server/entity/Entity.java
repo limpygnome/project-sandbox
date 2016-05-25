@@ -217,19 +217,26 @@ public strictfp abstract class Entity
     /**
      * Places this entity in front of the specified parent.
      *
-     * @param parent The parent entity
-     * @param spacing The spacing between the two ents
+     * @param parent the parent entity
+     * @param spacing the spacing between the two ents
+     * @param offset the offset from the centre front of the entity; can be null
      */
-    public synchronized void projectInFrontOfEntity(Entity parent, float spacing)
+    public synchronized void projectInFrontOfEntity(Entity parent, float spacing, Vector2 offset)
     {
         // Clone the rotation of the parent
         rotation(parent.rotation);
 
         // Calculate new position, so we're in front of parent
         Vector2 newPosition = parent.positionNew.clone();
+
         newPosition.add(Vector2.vectorFromAngle(this.rotation, parent.height / 2.0f));
         newPosition.add(Vector2.vectorFromAngle(this.rotation, height / 2.0f));
         newPosition.add(Vector2.vectorFromAngle(this.rotation, spacing));
+
+        if (offset != null)
+        {
+            newPosition.add(offset);
+        }
 
         // Make any callbacks to components
         Set<ProjectInFrontOfEntityEvent> callbacks = components.fetch(ProjectInFrontOfEntityEvent.class);
@@ -653,9 +660,21 @@ public strictfp abstract class Entity
     /**
      * Used to fetch all the associated players with this Entity.
      *
-     * @return
+     * @return players, or null
      */
     public abstract PlayerInfo[] getPlayers();
+
+    /**
+     * Retrieves the first player in players associated with this entity. THis player is considered the driver, or
+     * primary player.
+     *
+     * @return player or null
+     */
+    public synchronized PlayerInfo getPlayer()
+    {
+        PlayerInfo[] players = getPlayers();
+        return players != null && players.length >= 1 ? players[0] : null;
+    }
 
     /**
      * Used to indicate if the entity is AI.

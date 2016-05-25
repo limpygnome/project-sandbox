@@ -237,11 +237,6 @@ public abstract class PlayerEntity extends Entity
         return -1;
     }
 
-    public synchronized PlayerInfo getPlayer()
-    {
-        return players != null && players.length >= 1 ? players[0] : null;
-    }
-
     @Override
     public synchronized PlayerInfo[] getPlayers()
     {

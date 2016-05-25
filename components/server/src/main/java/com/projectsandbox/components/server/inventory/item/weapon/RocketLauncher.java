@@ -2,11 +2,13 @@ package com.projectsandbox.components.server.inventory.item.weapon;
 
 import com.projectsandbox.components.server.Controller;
 import com.projectsandbox.components.server.entity.Entity;
+import com.projectsandbox.components.server.entity.physics.Vector2;
 import com.projectsandbox.components.server.entity.respawn.pending.CurrentPositionRespawn;
 import com.projectsandbox.components.game.entity.weapon.Rocket;
 import com.projectsandbox.components.server.inventory.annotation.InventoryItemTypeId;
 import com.projectsandbox.components.server.inventory.InventoryInvokeType;
 import com.projectsandbox.components.server.player.PlayerInfo;
+import com.projectsandbox.components.server.world.map.WorldMap;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -22,40 +24,61 @@ public class RocketLauncher extends AbstractWeapon
 
     private final static Logger LOG = LogManager.getLogger(RocketLauncher.class);
 
-    public RocketLauncher()
+    private final Vector2[] offsets;
+
+    /**
+     * Creates a new rocket launcher inventory item.
+     *
+     * @param offsets locations of where rockets are fired from; if null, only single rocket is fired from front-centre of ship
+     */
+    public RocketLauncher(Vector2[] offsets)
     {
         super(
-                (short) 1,  // bullets per mag
-                (short) 100, // mags
-                1,          // fire delay
-                500         // reload delay
+                (short) 1,      // bullets per mag
+                (short) 100,    // mags
+                1,              // fire delay
+                500             // reload delay
         );
 
         this.invokeType = InventoryInvokeType.FIRE_ONCE;
+        this.offsets = offsets;
     }
 
     @Override
     protected void fireBullet(Controller controller)
     {
-        Entity owner = this.slot.inventory.parent;
-        PlayerInfo[] playerInfoOwners = owner.getPlayers();
-        PlayerInfo playerInfoOwner = (playerInfoOwners != null && playerInfoOwners.length > 0 ? playerInfoOwners[0] : null);
+        Entity entityOwner = this.slot.inventory.parent;
+        PlayerInfo playerInfoOwner = entityOwner.getPlayer();
 
-        if (owner != null)
+        if (entityOwner != null)
         {
-            // Create Rocket
-            Entity rpg = new Rocket(owner.map, controller, playerInfoOwner);
-
             // Project in front of player
-            rpg.projectInFrontOfEntity(owner, ROCKET_LAUNCH_SPACING);
-
-            // Create rocket entity
-            owner.map.respawnManager.respawn(new CurrentPositionRespawn(controller, rpg));
+            if (offsets != null)
+            {
+                for (Vector2 offset : offsets)
+                {
+                    fireRocket(controller, playerInfoOwner, entityOwner, offset);
+                }
+            }
+            else
+            {
+                fireRocket(controller, playerInfoOwner, entityOwner, null);
+            }
         }
         else
         {
-            LOG.debug("unable to create rocket, owner not correctly set");
+            LOG.warn("unable to create rocket, owner not correctly set");
         }
+    }
+
+    private void fireRocket(Controller controller, PlayerInfo playerInfoOwner, Entity entityOwner, Vector2 offset)
+    {
+        // Create entity and put in front of owner/parent entity
+        Entity rpg = new Rocket(entityOwner.map, controller, playerInfoOwner);
+        rpg.projectInFrontOfEntity(entityOwner, ROCKET_LAUNCH_SPACING, offset);
+
+        // Add rocket to world
+        entityOwner.map.respawnManager.respawn(new CurrentPositionRespawn(controller, rpg));
     }
 
     @Override

@@ -61,7 +61,7 @@ public class RocketCar extends PlayerEntity
         // Load default inventory
         Inventory inventory = new Inventory(this);
 
-        RocketLauncher rocketLauncher = new RocketLauncher();
+        RocketLauncher rocketLauncher = new RocketLauncher(null);
         inventory.add(rocketLauncher);
 
         setInventory(0, inventory);
