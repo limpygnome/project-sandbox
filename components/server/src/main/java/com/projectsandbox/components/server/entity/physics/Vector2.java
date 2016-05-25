@@ -57,12 +57,13 @@ public class Vector2
      * @param origin The origin of the rotation.
      * @param theta The rotation amount, in radians.
      */
-    public void rotate(Vector2 origin, float theta)
+    public Vector2 rotate(Vector2 origin, float theta)
     {
-        rotate(origin.x, origin.y, theta);
+        Vector2 result = rotate(origin.x, origin.y, theta);
+        return result;
     }
     
-    public void rotate(float originX, float originY, float theta)
+    public Vector2 rotate(float originX, float originY, float theta)
     {
         // Create sin/cos of rotation
         float angleSin = (float) Math.sin(-theta);
@@ -79,6 +80,8 @@ public class Vector2
         // Upadte co-ords with origin added
         this.x = rX + originX;
         this.y = rY + originY;
+
+        return this;
     }
     
     public Vector2 add(Vector2 value)
@@ -226,8 +229,14 @@ public class Vector2
     {
         float x = distance * (float) Math.sin(radians);
         float y = distance * (float) Math.cos(radians);
-        
+
         return new Vector2(x, y);
+    }
+
+    public static Vector2 vectorFromAngle(float radians, Vector2 offset)
+    {
+        Vector2 offsetRotated = offset.clone().rotate(0.0f, 0.0f, radians);
+        return offsetRotated;
     }
 
     public static boolean leftSide(Vector2 lineStart, Vector2 lineEnd, Vector2 vertex)

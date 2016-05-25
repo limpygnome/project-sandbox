@@ -3,7 +3,6 @@ package com.projectsandbox.components.server.entity;
 import com.projectsandbox.components.server.entity.annotation.EntityType;
 import com.projectsandbox.components.server.entity.component.ComponentCollection;
 import com.projectsandbox.components.server.entity.component.event.*;
-import com.projectsandbox.components.server.entity.component.imp.VelocityComponent;
 import com.projectsandbox.components.server.entity.death.AbstractKiller;
 import com.projectsandbox.components.server.entity.physics.collisions.CollisionResult;
 import com.projectsandbox.components.server.entity.physics.Vector2;
@@ -235,7 +234,7 @@ public strictfp abstract class Entity
 
         if (offset != null)
         {
-            newPosition.add(offset);
+            newPosition.add(Vector2.vectorFromAngle(this.rotation, offset));
         }
 
         // Make any callbacks to components
