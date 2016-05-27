@@ -16,7 +16,7 @@
     "entities":
     [
         {
-            "typeName" :    "vehicle/ice-cream-van",
+            "typeName" : "vehicle/ice-cream-van",
             "count": 1,
             "faction" : 1000
         },
@@ -29,6 +29,11 @@
             "typeName" : "ships/destroyer",
             "count" : 1,
             "faction" : 1000
+        },
+        {
+            "typeName" : "world/blackhole",
+            "count" : 1,
+            "faction" : 2000
         }
     ],
 
@@ -57,6 +62,17 @@
                 {
                     "x" : 750.0,
                     "y" : 750.0,
+                    "rotation" : 0.0
+                }
+            ]
+        },
+        {
+            "id" : 2000,
+            "spawns" :
+            [
+                {
+                    "x" : 800.0,
+                    "y" : 800.0,
                     "rotation" : 0.0
                 }
             ]

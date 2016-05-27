@@ -48,6 +48,11 @@ game.entityFactory = {
                 entity = new HealthPickup();
                 break;
 
+            // Environment
+            case 4000:
+                entity = new game.entities.world.Blackhole();
+                break;
+
             default:
                 entity = null;
                 console.error("engine/network/entityPool - unhandled entity type id: " + typeId);

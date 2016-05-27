@@ -159,6 +159,9 @@
         <!-- Game: Weapons -->
         <script src="/content/game/js/ent/weapon/rocket.js"></script>
 
+        <!-- Game: World -->
+        <script src="/content/game/js/ent/world/blackhole.js"></script>
+
         <!-- Game: Inventory -->
         <script src="/content/game/js/inventory/fist.js"></script>
         <script src="/content/game/js/inventory/gatling.js"></script>
