@@ -113,11 +113,6 @@ projectSandbox.network.entities =
                 ent.health = packet.readFloat();
             }
 
-            if (ent.id != projectSandbox.playerEntityId)
-            {
-            console.log(ent.id + " - " + ent.updatedX + "," + ent.updatedY);
-            }
-
             // Allow ent to parse custom update bytes
             ent.readBytesUpdate(packet);
         }

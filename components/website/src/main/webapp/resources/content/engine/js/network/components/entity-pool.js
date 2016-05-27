@@ -46,21 +46,23 @@ projectSandbox.network.entityPool = (function() {
 
     var dispose = function (entity)
     {
-        // Fetch array for type from pool
-        var disposedArray = disposedEntityPool.get(typeId);
-
-        // Create array if it doesn't exist
-        if (disposedArray == null)
+        if (entity != null)
         {
-            disposedArray = new Array();
+            // Fetch array for type from pool
+            var disposedArray = disposedEntityPool.get(typeId);
+
+            // Create array if it doesn't exist
+            if (disposedArray == null)
+            {
+                disposedArray = new Array();
+
+                var typeId = entity.typeId;
+                disposedEntityPool.set(typeId, disposedArray);
+            }
+
+            // Append entity to end of array
             disposedArray.push(entity);
-
-            var typeId = entity.typeId;
-            disposedEntityPool.set(typeId, disposedArray);
         }
-
-        // Append entity to end of array
-        disposedArray.push(entity);
     };
 
     return {

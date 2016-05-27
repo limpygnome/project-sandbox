@@ -43,6 +43,21 @@ Entity.prototype.coreLogic = function()
     }
 }
 
+Entity.prototype.reset = function()
+{
+    this.id = null;
+    this.health = 0;
+    this.maxHealth = 0;
+
+    this.x = 0;
+    this.y = 0;
+    this.rotation = 0;
+
+    this.updatedX = null;
+    this.updatedY = null;
+    this.updatedRotation = 0;
+}
+
 Entity.prototype.readBytesUpdate = function (packet)
 {
     // Nothing by default
