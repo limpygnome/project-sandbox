@@ -5,7 +5,7 @@ var projectSandbox =
     RATE_LOGIC_MS: 60,
 
     // Used to toggle transparency; this will disable the depth buffer / 3D
-    TRANSPARENCY_ENABLED: true,
+    TRANSPARENCY_ENABLED: false,
 
     // Session ID
     sessionId: null,
@@ -368,16 +368,18 @@ var projectSandbox =
         var gl = this.gl;
         
         gl.clearColor(0.0, 0.0, 0.0, 1.0);
+//        gl.enable(gl.DEPTH_TEST);
 
         if (this.TRANSPARENCY_ENABLED)
         {
-            gl.disable(gl.DEPTH_TEST);
+//            gl.disable(gl.DEPTH_TEST);
+            gl.depthMask(false);
         }
         else
         {
-            gl.enable(gl.DEPTH_TEST);
+            //gl.enable(gl.DEPTH_TEST);
         }
-        
+
         // Due to depth, we use alpha test rather than blending, implemented in shader
         gl.enable(gl.BLEND);
         gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);

@@ -189,6 +189,7 @@ projectSandbox.frustrum =
 
     computeFrustrumSize: function (distance)
     {
+        // TODO: cache this
         var frustrumHeight = 2 * Math.tan(this.FRUSTRUM_VERTICAL_FOV / 2.0) * distance;
         var frustrumWidth = frustrumHeight * this.ratio;
 
@@ -199,31 +200,31 @@ projectSandbox.frustrum =
     {
         // Fetcb/generate box for Z level
         var z = primitive.z + projectSandbox.camera.z + projectSandbox.camera.zoom;
-        var box = this.frustrumDistanceBoxes.get(z);
+        var box;// = this.frustrumDistanceBoxes.get(z);
 
-        // TODO: change to use box, looks like mistake
-        if (boxSize == null)
+        // TODO: cache box, but not in map; likely to be called many times for same origin
+//        if (box == null)
         {
             // Cache for speed
             var boxSize = this.computeFrustrumSize(z);
             var frustrumWidthHalf = boxSize[0] / 2.0;
             var frustrumHeightHalf = boxSize[1] / 2.0;
 
-            var box =
-            [
-                projectSandbox.camera.x - frustrumWidthHalf,
-                projectSandbox.camera.y - frustrumHeightHalf,
-                projectSandbox.camera.x + frustrumWidthHalf,    // (+ w)
-                projectSandbox.camera.y + frustrumHeightHalf,    // (+ h)
-            ];
+            box = {
+                lowerX : projectSandbox.camera.x - frustrumWidthHalf,
+                lowerY : projectSandbox.camera.y - frustrumHeightHalf,
+                upperX : projectSandbox.camera.x + frustrumWidthHalf,
+                upperY : projectSandbox.camera.y + frustrumHeightHalf
+            };
 
-            this.frustrumDistanceBoxes.set(z, box);
+            // This wouldn't work, due to xy changing...
+//            this.frustrumDistanceBoxes.set(z, box);
         }
 
-        var intersects =    primitive.x                     <     box[2]     &&
-                            primitive.x + primitive.radius    >    box[0]    &&
-                            primitive.y                        <    box[3]    &&
-                            primitive.y + primitive.radius    >    box[1]    ;
+        var intersects =    primitive.x - primitive.radius    <=      box.upperX    &&
+                            primitive.x + primitive.radius    >=      box.lowerX    &&
+                            primitive.y - primitive.radius    <=      box.upperY    &&
+                            primitive.y + primitive.radius    >=      box.lowerY    ;
 
         return intersects;
     }

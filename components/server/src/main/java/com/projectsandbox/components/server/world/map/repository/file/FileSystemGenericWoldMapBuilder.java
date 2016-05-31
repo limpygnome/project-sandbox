@@ -274,11 +274,16 @@ public abstract class FileSystemGenericWoldMapBuilder implements FileSystemMapBu
     {
         if (spawn != null)
         {
+            /*
+                Parse each component, but Z is optional.
+             */
+
             float x = (float) (double) spawn.get("x");
             float y = (float) (double) spawn.get("y");
+            float z = (float) (double) (spawn.containsKey("z") ? spawn.get("z") : 0.0);
             float rotation = (float) (double) spawn.get("rotation");
 
-            return new Spawn(x, y, rotation);
+            return new Spawn(x, y, z, rotation);
         }
         else
         {

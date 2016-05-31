@@ -23,7 +23,7 @@ function Primitive(params)
     // Set size
     this.width = width;
     this.height = height;
-    this.radius = width > height ? width : height;
+    this.radius = (width > height ? width : height) / 2.0;
 
     // Actual live version of position
     this.x = 0.0;

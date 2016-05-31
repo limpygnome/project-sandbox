@@ -8,6 +8,7 @@ public class Spawn
 {
     public float x;
     public float y;
+    public float z;
     public float rotation;
     
     public Spawn(float x, float y, float rotation)
@@ -17,9 +18,23 @@ public class Spawn
         this.rotation = rotation;
     }
 
+    public Spawn(float x, float y, float z, float rotation)
+    {
+        this.x = x;
+        this.y = y;
+        this.z = z;
+        this.rotation = rotation;
+    }
+
     @Override
     public String toString()
     {
-        return "[x: " + x + ", y: " + y + ", rotation: " + rotation + "]";
+        return "Spawn{" +
+                "x=" + x +
+                ", y=" + y +
+                ", z=" + z +
+                ", rotation=" + rotation +
+                '}';
     }
+
 }
