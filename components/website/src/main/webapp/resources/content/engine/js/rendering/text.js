@@ -38,7 +38,7 @@ projectSandbox.text =
 
     buildTexture: function()
     {
-        var gl = projectSandbox.gl;
+        var gl = projectSandbox.rendering.core.getGl();
 
         var texture = gl.createTexture();
 

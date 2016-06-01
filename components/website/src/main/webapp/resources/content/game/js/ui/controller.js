@@ -123,8 +123,6 @@ game.ui.controller =
 
     resize: function()
     {
-        var gl = projectSandbox.gl;
-
         // Set canvas to fill page
         var width = $("body").width();
         var height = $("body").height();

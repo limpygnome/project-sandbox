@@ -9,17 +9,15 @@ projectSandbox.bufferCache =
     // Map of normal buffers
     normalsBuffers: new Map(),
     
-    setup: function()
+    setup: function(gl)
     {
         // Compile initial index buffers
-        this.buildBuffers2d();
-        this.buildBuffers3d();
+        this.buildBuffers2d(gl);
+        this.buildBuffers3d(gl);
     },
 
-    buildBuffers2d: function()
+    buildBuffers2d: function(gl)
     {
-        var gl = projectSandbox.gl;
-
         // Index buffer
         var indexBufferIndices2d =
         [
@@ -54,10 +52,8 @@ projectSandbox.bufferCache =
         this.normalsBuffers.set("2d-rect", normalsBuffer);
     },
 
-    buildBuffers3d: function()
+    buildBuffers3d: function(gl)
     {
-        var gl = projectSandbox.gl;
-
         // Index buffer
         var indexBufferIndices3d =
         [
@@ -183,7 +179,7 @@ projectSandbox.bufferCache =
         var depth = params.depth;
 
         // Note: width is on x, height is on z, height is y, depth is z
-        var gl = projectSandbox.gl;
+        var gl = projectSandbox.rendering.core.getGl();
         
         // Round value, to avoid lots of decimally-sized buffers which are similar
         width = Math.round(width);
@@ -252,7 +248,7 @@ projectSandbox.bufferCache =
         var width = params.width;
         var height = params.height;
 
-        var gl = projectSandbox.gl;
+        var gl = projectSandbox.rendering.core.getGl();
         
         // Round value, to avoid lots of decimally-sized buffers which are similar
         width = Math.round(width);

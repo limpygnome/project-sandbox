@@ -6,12 +6,9 @@ projectSandbox.lights =
 
     lights: null,
 
-    init: function()
+    init: function(gl, shaderProgram)
     {
-        var gl = projectSandbox.gl;
-        var shaderProgram = projectSandbox.shaderProgram;
-
-        console.debug("engine/lights - initializing...");
+        console.debug("engine/lighting/lights - initializing...");
 
         // Setup lights array
         this.lights = new Array();
@@ -26,12 +23,12 @@ projectSandbox.lights =
             this.lights.push(light);
         }
 
-        console.debug("engine/lights - setup complete - " + this.LIGHTS_LIMIT + " lights");
+        console.debug("engine/lighting/lights - setup complete - " + this.LIGHTS_LIMIT + " lights");
     },
 
     reset: function()
     {
-        console.debug("engine/lights - resetting...");
+        console.debug("engine/lighting/lights - resetting...");
 
         // Setup new lights
         var light;
@@ -41,7 +38,7 @@ projectSandbox.lights =
             light.reset();
         }
 
-        console.debug("engine/lights - lights reset");
+        console.debug("engine/lighting/lights - lights reset");
     },
 
     fetch: function(light)
@@ -51,7 +48,7 @@ projectSandbox.lights =
         {
             var light = lights.splice(0, 1);
 
-            console.debug("engine/lights - light taken from pool - index: " + light.index);
+            console.debug("engine/lighting/lights - light taken from pool - index: " + light.index);
 
             return light;
         }
@@ -67,7 +64,7 @@ projectSandbox.lights =
         light.reset();
         lights.push(light);
 
-        console.debug("engine/lights - light added to pool - index: " + light.index);
+        console.debug("engine/lighting/lights - light added to pool - index: " + light.index);
     }
 
 }

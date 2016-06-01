@@ -1,6 +1,6 @@
 function TextureSrc(name, url, width, height, texture)
 {
-    var gl = projectSandbox.gl;
+    var gl = projectSandbox.rendering.core.getGl();
 
     // Assign data
     this.name = name;

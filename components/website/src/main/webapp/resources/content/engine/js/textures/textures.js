@@ -8,8 +8,6 @@ projectSandbox.textures =
     
     setup: function(gl)
     {
-        var gl = projectSandbox.gl;
-        
         // Fetch empty texture
         this.emptyTexture = this.textures.get("white");
     },

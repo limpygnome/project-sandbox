@@ -4,6 +4,12 @@ critical goals
 
 http://delphic.me.uk/webglalpha.html
 
+technical debt
+===============
+- remove accessors from projectSandbox.rendering.core
+- move scripts in engine/rendering to rendering namespace
+
+
 long-term goals
 ================
 - allow maps to control default ents of player / perhaps use service to spawn player based on session data

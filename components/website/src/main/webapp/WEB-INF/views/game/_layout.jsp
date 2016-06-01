@@ -71,6 +71,7 @@
         <script src="/content/engine/js/_prototype_inheritence.js"></script>
 
         <!-- Rendering -->
+        <script src="/content/engine/js/rendering/core.js"></script>
         <script src="/content/engine/js/rendering/frustrum.js"></script>
         <script src="/content/engine/js/rendering/buffer-cache.js"></script>
         <script src="/content/engine/js/rendering/shaders.js"></script>

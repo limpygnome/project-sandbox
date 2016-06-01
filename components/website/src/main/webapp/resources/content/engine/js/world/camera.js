@@ -35,7 +35,7 @@ projectSandbox.camera =
     mouseMove: false,
     mouseRotationFactor: 0.1,
 
-    setup: function()
+    setup: function(canvas, gl)
     {
         // Update position to check it's within limits
         this.setPosition(this.x, this.y, this.z);
@@ -44,24 +44,24 @@ projectSandbox.camera =
         console.debug(  "engine/camera - render width: " + this.getRenderWidth() +
                         ", render height: " + this.getRenderHeight() +
                         ", render ratio: " + this.getRenderRatio() +
-                        ", canvas width: " + projectSandbox.canvas.clientWidth +
-                        ", canvas height: " + projectSandbox.canvas.clientHeight +
-                        ", viewport width: " + projectSandbox.gl.viewportWidth +
-                        ", viewport height: " + projectSandbox.gl.viewportHeight
+                        ", canvas width: " + canvas.clientWidth +
+                        ", canvas height: " + canvas.clientHeight +
+                        ", viewport width: " + gl.viewportWidth +
+                        ", viewport height: " + gl.viewportHeight
         );
     },
 
-    buildCameraView: function()
-    {
-        // Translate by zoom
-        mat4.translate(projectSandbox.cameraView, projectSandbox.cameraView, [0, 0, -this.zoom]);
-        mat4.translate(projectSandbox.cameraView, projectSandbox.cameraView, [-this.x, -this.y, 0.0]);
-    },
-    
-    renderLogic: function()
+    renderLogic: function(cameraView)
     {
         // Build camera view perspective
-        this.buildCameraView();
+        this.buildCameraView(cameraView);
+    },
+
+    buildCameraView: function(cameraView)
+    {
+        // Translate by zoom
+        mat4.translate(cameraView, cameraView, [0, 0, -this.zoom]);
+        mat4.translate(cameraView, cameraView, [-this.x, -this.y, 0.0]);
     },
     
     logic: function()
@@ -119,8 +119,8 @@ projectSandbox.camera =
             else
             {
                 // Move rotation based on amount of movement
-                var diffX = (mouse.x - this.mouseX)/projectSandbox.canvas.width;
-                var diffY = (mouse.y - this.mouseY)/projectSandbox.canvas.height;
+                var diffX = (mouse.x - this.mouseX)/projectSandbox.rendering.core.getCanvas().width;
+                var diffY = (mouse.y - this.mouseY)/projectSandbox.rendering.core.getCanvas().height;
                 this.rotationY += diffX * this.mouseRotationFactor;
                 this.rotationX += diffY * this.mouseRotationFactor;
             }
@@ -251,17 +251,17 @@ projectSandbox.camera =
 
     getRenderWidth: function()
     {
-        return projectSandbox.gl.drawingBufferWidth;
+        return projectSandbox.rendering.core.getGl().drawingBufferWidth;
     },
 
     getRenderHeight: function()
     {
-        return projectSandbox.gl.drawingBufferHeight;
+        return projectSandbox.rendering.core.getGl().drawingBufferHeight;
     },
 
     getRenderRatio: function()
     {
-        return projectSandbox.canvas.clientWidth / projectSandbox.canvas.clientHeight;
+        return projectSandbox.rendering.core.getCanvas().clientWidth / projectSandbox.rendering.core.getCanvas().clientHeight;
     }
 
 }
