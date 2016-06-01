@@ -93,6 +93,7 @@ projectSandbox.network.entities =
                 This is to prevent updates to entities outside of logic and rendering cycles, causing glitching.
                 The "updated" field should then be copied during the entity's pre-logic cycle.
             */
+
             if ((mask & this.UPDATEMASK_X) == this.UPDATEMASK_X)
             {
                 var updatedX = packet.readFloat();

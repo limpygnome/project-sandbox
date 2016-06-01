@@ -130,28 +130,8 @@ projectSandbox.rendering.core = function()
             map.render(gl, shaderProgram, modelView, perspective);
         }
 
-        // Render effects
-        var effect;
-        for (var i = effects.length - 1; i >= 0; i--)
-        {
-            effect = effects[i];
-            if (projectSandbox.frustrum.intersects(effect))
-            {
-                effect.render(gl, shaderProgram, modelView, perspective);
-            }
-        }
-
-        // Render ents
-        var ent;
-        for (var kv of entities)
-        {
-            ent = kv[1];
-            if (projectSandbox.frustrum.intersects(ent))
-            {
-                // Render entity
-                ent.render(gl, shaderProgram, modelView, perspective);
-            }
-        }
+        // Render primitives in depth tree
+        projectSandbox.rendering.depthTree.render(gl, shaderProgram, modelView, perspective);
 
         // Update FPS
         var currentTime = (new Date).getTime();
@@ -182,6 +162,11 @@ projectSandbox.rendering.core = function()
         return canvas;
     };
 
+    var getFps = function()
+    {
+        return fps;
+    };
+
     return {
 
         // Exposed functions
@@ -191,7 +176,8 @@ projectSandbox.rendering.core = function()
 
         // Accessors
         getGl               : getGl,
-        getCanvas           : getCanvas
+        getCanvas           : getCanvas,
+        getFps              : getFps
 
     };
 

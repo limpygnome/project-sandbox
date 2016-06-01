@@ -56,9 +56,9 @@ Trail.prototype.logic = function()
             
             var effect = new Effect(this.textureName, this.width, this.height, this.primitive.x + randX, this.primitive.y + randY, -0.5, lifespan, true);
             effect.rotation = this.primitive.rotation;
-            
-            projectSandbox.effects.push(effect);
-            
+
+            projectSandbox.addEffect(effect);
+
             // Update last time created
             this.lastEffect = currTime;
         }

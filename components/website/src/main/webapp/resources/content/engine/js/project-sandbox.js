@@ -181,6 +181,7 @@ var projectSandbox =
                 if (effect.isExpired())
                 {
                     this.effects.splice(i, 1);
+                    projectSandbox.rendering.depthTree.remove(effect);
                 }
             }
         }
@@ -225,6 +226,15 @@ var projectSandbox =
         {
             console.log("Failed to setup request animation frame.");
         }
+    },
+
+    addEffect: function(effect)
+    {
+        // Add to internal array
+        this.effects.push(effect);
+
+        // Add to depth tree
+        projectSandbox.rendering.depthTree.update(effect);
     }
 
 }

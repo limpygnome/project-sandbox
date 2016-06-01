@@ -7,25 +7,29 @@ projectSandbox.network.entityPool = (function() {
     {
         // Attempt to find existing entity in pool
         var disposedArray = disposedEntityPool.get(typeId);
+        var entity;
 
         if (disposedArray == null || disposedArray.length == 0)
         {
             // Create new entity
-            return internalCreate(typeId);
+            entity = internalCreate(typeId);
         }
         else
         {
             // Take entity from end of pool
-            var entity = disposedArray.pop();
+            entity = disposedArray.pop();
 
             // Reset entity ready for new life
             if (entity.reset)
             {
                 entity.reset();
             }
-
-            return entity;
         }
+
+        // Add to depth tree
+        projectSandbox.rendering.depthTree.update(entity);
+
+        return entity;
     };
 
     var internalCreate = function (typeId)
@@ -62,6 +66,9 @@ projectSandbox.network.entityPool = (function() {
 
             // Append entity to end of array
             disposedArray.push(entity);
+
+            // Remove from depth tree
+            projectSandbox.rendering.depthTree.remove(entity);
         }
     };
 

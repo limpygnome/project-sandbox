@@ -51,7 +51,7 @@ game.effects =
         // Create bullet effect
         var effect = new Effect("error", this.BULLET_WIDTH, this.BULLET_HEIGHT, effectX, effectY, this.BULLET_Z, this.BULLET_LIFESPAN, this.BULLET_FADE);
         effect.rotation = projectSandbox.utils.randRotation();
-        projectSandbox.effects.push(effect);
+        projectSandbox.addEffect(effect);
     },
 
     packetCreateTracer: function(packet)
@@ -77,7 +77,7 @@ game.effects =
         // - Finally create the effect
         var effect = new Effect("error", this.TRACER_WIDTH, size, midx, midy, this.TRACER_Z, this.TRACER_LIFESPAN, this.TRACER_FADE);
         effect.rotation = rotation;
-        projectSandbox.effects.push(effect);
+        projectSandbox.addEffect(effect);
     },
 
     packetCreateExplosion: function (packet)
@@ -129,7 +129,7 @@ game.effects =
             effect.vy = projectSandbox.utils.randPrecise(velocityMin, velocityMax, 100.0);
             effect.vz = projectSandbox.utils.randPrecise(velocityMin, velocityMax, 100.0);
 
-            projectSandbox.effects.push(effect);
+            projectSandbox.addEffect(effect);
         }
     }
 

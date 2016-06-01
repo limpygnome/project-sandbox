@@ -24,6 +24,7 @@ Entity.prototype.coreLogic = function()
     */
 
     // Copy updated values across
+    // NOTE: if we ever add Z, need to update depth tree
     if (this.updatedX != null)
     {
         this.x = this.updatedX;

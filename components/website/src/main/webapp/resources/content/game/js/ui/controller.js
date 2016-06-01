@@ -201,7 +201,7 @@ game.ui.controller =
         }
 
         // Update FPS counter
-        $(this.elementFpsCounter).text(projectSandbox.fps);
+        $(this.elementFpsCounter).text(projectSandbox.rendering.core.getFps());
 
         // Update map
         game.ui.map.logic();
