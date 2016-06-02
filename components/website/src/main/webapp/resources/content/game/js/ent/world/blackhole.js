@@ -9,6 +9,7 @@ game.entities.world.Blackhole = function()
     );
 
     this.setTexture("error");
+    this.z = -0.6;
 };
 
 game.entities.world.Blackhole.inherits(Entity);

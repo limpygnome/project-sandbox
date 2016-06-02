@@ -8,13 +8,14 @@ projectSandbox.rendering.depthTree = function()
         var depth = computeDepth(primitive);
 
         // Check if depth has changed
-        if (primitive.depthTree == null || primitive.depthTree < depth)
+        var insertOnly = (primitive.depthTree == null);
+        if (insertOnly || primitive.depthTree < depth)
         {
             // Cache depth on primitive
             primitive.depthTree = depth;
 
             // Update
-            insertAndRemove(primitive, false);
+            insertAndRemove(primitive, false, insertOnly);
         }
     };
 
@@ -41,16 +42,16 @@ projectSandbox.rendering.depthTree = function()
         This will remove a primitive, if it exists, from a pre-existing position; whilst also inserting the primitive
         in the correct place. If the removeOnly param is true, the primitive is removed only.
     */
-    var insertAndRemove = function(primitive, removeOnly)
+    var insertAndRemove = function(primitive, removeOnly, insertOnly)
     {
         // Flags
         var inserted = removeOnly;  // Set straight to true if remove-only i.e. no need to insert
-        var removed = false;
+        var removed = insertOnly;   // Same for removal if inserting only
 
         var primitiveAtIndex;
-        for (var i = 0; (i == 0 || i < primitives.length) && !inserted && !removed; i++)
+        for (var i = 0; (i == 0 || i <= primitives.length) && (!inserted || !removed); i++)
         {
-            primitiveAtIndex = primitives[i];
+            primitiveAtIndex = primitives[i]; // May throw exception in some browsers due to being out of range
 
             if (!removed && primitiveAtIndex == primitive)
             {
@@ -58,7 +59,7 @@ projectSandbox.rendering.depthTree = function()
                 primitives.splice(i, 1);
                 removed = true;
             }
-            else if (!inserted && (primitiveAtIndex == null || primitiveAtIndex.depthTree <= primitive.depthTree))
+            else if (!inserted && (primitiveAtIndex == null || primitiveAtIndex.depthTree > primitive.depthTree))
             {
                 // Insert primitive at current index
                 primitives.splice(i, 0, primitive);
