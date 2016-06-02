@@ -43,8 +43,8 @@
 {
     position: absolute;
     background: rgba(0, 102, 34, 0.8);
-    width: 1em;
-    height: 1em;
+    min-width: 0.6em;
+    min-height: 0.6em;
 }
 #projectsandbox #ps-ui .radar span.danger
 {

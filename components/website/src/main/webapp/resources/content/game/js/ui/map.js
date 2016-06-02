@@ -1,7 +1,5 @@
 game.ui.map =
 {
-    // Multiplier for scaling items on map
-    mapMarkerMultiplier: 100.0,
 
     // Maximum distance for radar items
     radarDistance: 4096.0,
@@ -121,13 +119,16 @@ game.ui.map =
             var posX = (entity.x - playerEntity.x + this.radarDistanceHalf) / this.radarDistance;
             var posY = (entity.y - playerEntity.y + this.radarDistanceHalf) / this.radarDistance;
 
+            var width = (entity.width / this.radarDistance) * this.containerRadarWidth;
+            var height = (entity.height / this.radarDistance) * this.containerRadarHeight;
+
             // Multiply by container size
             posX *= this.containerRadarWidth;
             posY *= this.containerRadarHeight;
 
             // Fetch marker and update
             var marker = this.markerFetchOrCreate(this.containerRadar, entity);
-            this.markerUpdate(marker, posX, posY);
+            this.markerUpdate(marker, posX, posY, width, height);
         }
     },
 
@@ -135,6 +136,9 @@ game.ui.map =
     {
         marker.css("left", x - (marker.width() / 2));
         marker.css("bottom", y - (marker.height() / 2));
+        marker.css("width", width);
+        marker.css("height", height);
+
         marker.removeClass("remove");
     },
 
