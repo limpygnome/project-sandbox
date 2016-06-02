@@ -51,12 +51,14 @@ projectSandbox.rendering.depthTree = function()
         var primitiveAtIndex;
         for (var i = 0; (i == 0 || i <= primitives.length) && (!inserted || !removed); i++)
         {
-            primitiveAtIndex = primitives[i]; // May throw exception in some browsers due to being out of range
+            primitiveAtIndex = primitives[i]; // May throw exception in some browsers due to being out of range, fix if so...
 
-            if (!removed && primitiveAtIndex == primitive)
+            if (!removed && primitiveAtIndex != null && primitiveAtIndex == primitive)
             {
-                // Remove current primitive
+                // Remove current primitive and reset depthTree flag
                 primitives.splice(i, 1);
+                primitiveAtIndex.depthTree = null;
+
                 removed = true;
             }
             else if (!inserted && (primitiveAtIndex == null || primitiveAtIndex.depthTree > primitive.depthTree))
@@ -65,6 +67,11 @@ projectSandbox.rendering.depthTree = function()
                 primitives.splice(i, 0, primitive);
                 inserted = true;
             }
+        }
+
+        if (!inserted)
+        {
+            console.warn("engine/rendering/depth-tree - failed to insert primitive - " + primitive);
         }
     };
 
@@ -79,6 +86,11 @@ projectSandbox.rendering.depthTree = function()
         return primitive.z;
     };
 
+    var reset = function()
+    {
+        primitives = [];
+    };
+
     var getTotalPrimitives = function()
     {
         return primitives.length;
@@ -88,6 +100,7 @@ projectSandbox.rendering.depthTree = function()
         update              : update,
         remove              : remove,
         render              : render,
+        reset               : reset,
         getTotalPrimitives  : getTotalPrimitives
     };
 

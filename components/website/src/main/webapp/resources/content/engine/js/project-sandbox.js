@@ -33,6 +33,9 @@ var projectSandbox =
     
     reset: function()
     {
+        // Rendering
+        this.rendering.depthTree.reset();
+
         // Lights
         this.lights.reset();
 

@@ -40,5 +40,5 @@ RocketCar.prototype.logic = function()
 
 RocketCar.prototype.eventDeath = function()
 {
-	game.effects.createExplosion(this.x, this.y, 256, 4000, -4, 4);
+	game.effects.createExplosion(this.x, this.y, 64, 4000, -4, 4);
 }

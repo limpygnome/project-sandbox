@@ -50,5 +50,5 @@ Destroyer.prototype.logic = function()
 
 Destroyer.prototype.eventDeath = function()
 {
-    game.effects.createExplosion(this.x, this.y, 128, 4000, -6, 6);
+    game.effects.createExplosion(this.x, this.y, 64, 4000, -6, 6);
 }

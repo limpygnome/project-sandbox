@@ -38,7 +38,7 @@ Rocket.prototype.logic = function()
 
 Rocket.prototype.eventDeath = function()
 {
-    game.effects.createExplosion(this.x, this.y, 256, 8000, -2.0, 2.0);
+    game.effects.createExplosion(this.x, this.y, 32, 8000, -2.0, 2.0);
 }
 
 Rocket.prototype.getRadarClasses = function()

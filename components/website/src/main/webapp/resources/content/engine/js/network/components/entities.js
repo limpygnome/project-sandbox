@@ -145,7 +145,7 @@ projectSandbox.network.entities =
                 this.invokeEntityDeath(entity);
             }
 
-            console.debug("engine/network/entities - entity " + id + " deleted");
+            console.debug("engine/network/entities - entity " + id + " deleted - killed: " + isKilled);
         }
         else
         {

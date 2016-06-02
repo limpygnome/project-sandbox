@@ -40,5 +40,5 @@ IceCreamVan.prototype.logic = function()
 
 IceCreamVan.prototype.eventDeath = function()
 {
-    game.effects.createExplosion(this.x, this.y, 128, 4000, -2, 2);
+    game.effects.createExplosion(this.x, this.y, 64, 4000, -2, 2);
 }
