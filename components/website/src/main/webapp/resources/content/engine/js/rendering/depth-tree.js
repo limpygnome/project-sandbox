@@ -79,10 +79,16 @@ projectSandbox.rendering.depthTree = function()
         return primitive.z;
     };
 
+    var getTotalPrimitives = function()
+    {
+        return primitives.length;
+    };
+
     return {
-        update      : update,
-        remove      : remove,
-        render      : render
+        update              : update,
+        remove              : remove,
+        render              : render,
+        getTotalPrimitives  : getTotalPrimitives
     };
 
 }();

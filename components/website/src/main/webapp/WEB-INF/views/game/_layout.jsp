@@ -37,7 +37,7 @@
         <link rel="stylesheet" href="/content/game/css/ui/map.css" />
         <link rel="stylesheet" href="/content/game/css/ui/activity.css" />
         <link rel="stylesheet" href="/content/game/css/ui/chat.css" />
-        <link rel="stylesheet" href="/content/game/css/ui/fps.css" />
+        <link rel="stylesheet" href="/content/game/css/ui/stats.css" />
         <link rel="stylesheet" href="/content/game/css/ui/health-bar.css" />
         <link rel="stylesheet" href="/content/game/css/ui/inventory.css" />
         <link rel="stylesheet" href="/content/game/css/ui/options.css" />

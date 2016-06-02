@@ -20,8 +20,9 @@ game.ui.controller =
     elementSidebarChatMessages: null,
     elementSidebarScoreboard: null,
 
-    // Elements - options
+    // Elements - stats
     elementFpsCounter: null,
+    elementPrimitivesCounter: null,
 
 
     setup: function()
@@ -48,8 +49,9 @@ game.ui.controller =
         this.elementSidebarChatMessages = document.getElementById("ps-chat-messages");
         this.elementSidebarScoreboard = document.getElementById("ps-scoreboard");
 
-        // -- Options
-        this.elementFpsCounter = document.getElementById("ps-fps-value");
+        // -- Stats
+        this.elementFpsCounter = document.getElementById("ps-fps");
+        this.elementPrimitivesCounter = document.getElementById("ps-primitives");
 
         // Bind resize event for window
         $(window).resize(function () {
@@ -202,6 +204,7 @@ game.ui.controller =
 
         // Update FPS counter
         $(this.elementFpsCounter).text(projectSandbox.rendering.core.getFps());
+        $(this.elementPrimitivesCounter).text(projectSandbox.rendering.depthTree.getTotalPrimitives());
 
         // Update map
         game.ui.map.logic();

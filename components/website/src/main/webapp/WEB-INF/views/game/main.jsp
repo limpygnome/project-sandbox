@@ -93,8 +93,9 @@
                 --
             </div>
 
-            <div id="ps-fps">
-                FPS: <span id="ps-fps-value">--</span>
+            <div id="ps-stats">
+                FPS: <span id="ps-fps">--</span><br />
+                Primitives: <span id="ps-primitives">--</span>
             </div>
 
             <div id="ps-inventory-container">
