@@ -36,8 +36,11 @@ projectSandbox.network.entities =
                 case "U":
                     this.packetUpdatesEntUpdated(packet, id);
                     break;
+                case "K":
+                    this.packetUpdatesEntDeletedOrKilled(packet, id, true);
+                    break;
                 case "D":
-                    this.packetUpdatesEntDeleted(packet, id);
+                    this.packetUpdatesEntDeletedOrKilled(packet, id, false);
                     break;
                 default:
                     console.log("engine/network/entities - unknown entity update type '" + updateType + "'");
@@ -123,7 +126,7 @@ projectSandbox.network.entities =
         }
     },
 
-    packetUpdatesEntDeleted: function(packet, id)
+    packetUpdatesEntDeletedOrKilled: function(packet, id, isKilled)
     {
         // Remove entity from the world
         var entity = projectSandbox.entities.get(id);
@@ -136,8 +139,11 @@ projectSandbox.network.entities =
             // Add entity back to pool
             projectSandbox.network.entityPool.dispose(entity);
 
-            // Raise death event
-            this.invokeEntityDeath(entity);
+            if (isKilled)
+            {
+                // Raise death event
+                this.invokeEntityDeath(entity);
+            }
 
             console.debug("engine/network/entities - entity " + id + " deleted");
         }

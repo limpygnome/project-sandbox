@@ -83,7 +83,7 @@ public class EntityUpdatesOutboundPacket extends OutboundPacket
             {
                 synchronized (entity)
                 {
-                    writeEntDeleted(entity);
+                    writeEntDeletedOrKilled(entity, entity.isDeleted());
                 }
             }
 
@@ -159,10 +159,17 @@ public class EntityUpdatesOutboundPacket extends OutboundPacket
         ent.eventPacketEntUpdated(packetData);
     }
     
-    private void writeEntDeleted(Entity ent) throws IOException
+    private void writeEntDeletedOrKilled(Entity ent, boolean killed) throws IOException
     {
         // Add mandatory data
-        packetData.add((byte)'D');
+        if (killed)
+        {
+            packetData.add((byte) 'K');
+        }
+        else
+        {
+            packetData.add((byte) 'D');
+        }
         packetData.add(ent.id);
         
         // Add custom data
