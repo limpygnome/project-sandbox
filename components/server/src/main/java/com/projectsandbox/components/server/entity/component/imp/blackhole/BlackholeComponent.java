@@ -4,6 +4,7 @@ import com.projectsandbox.components.server.Controller;
 import com.projectsandbox.components.server.entity.Entity;
 import com.projectsandbox.components.server.entity.component.EntityComponent;
 import com.projectsandbox.components.server.entity.component.event.LogicComponentEvent;
+import com.projectsandbox.components.server.entity.component.imp.VelocityComponent;
 import com.projectsandbox.components.server.entity.physics.Vector2;
 import com.projectsandbox.components.server.entity.physics.spatial.ProximityResult;
 import com.projectsandbox.components.server.entity.physics.spatial.QuadTree;
@@ -37,6 +38,7 @@ public class BlackholeComponent implements EntityComponent, LogicComponentEvent
         float distance;
         Entity entityOther;
 
+        VelocityComponent velocityComponent;
         float distanceMultiplier;
         float acceleration;
         float damage;
@@ -50,15 +52,16 @@ public class BlackholeComponent implements EntityComponent, LogicComponentEvent
             if (entityOther != entity)
             {
                 distance = proximityResult.distance;
-                distanceMultiplier = distance / radius;
+                distanceMultiplier = (radius - distance) / radius;
 
                 // Calculate linear acceleration and angle in which entity is accelerated towards our center point
                 acceleration = distanceMultiplier * maxAcceleration;
-                angle = Vector2.computeTargetAngleOffset(entityOther, entity.positionNew);
+                angle = Vector2.angleToFaceTarget(entityOther.positionNew, 0.0f, entity.positionNew);
                 accelerationVelocity = Vector2.vectorFromAngle(angle, acceleration);
 
-                // Accelerate the entity
-                entityOther.positionOffset(accelerationVelocity);
+                // Accelerate the entity using velocity component
+                velocityComponent = (VelocityComponent) entityOther.components.fetchComponent(VelocityComponent.class);
+                velocityComponent.getVelocity().add(accelerationVelocity);
 
                 // Apply linear damage
                 damage = distanceMultiplier * maxDamage;

@@ -39,9 +39,10 @@ public class PlayerEntityService
                 Class clazz = worldMap.getProperties().getDefaultEntityType();
                 playerEntity = createFromClass(worldMap, clazz, playerInfo);
 
-                // Set flag to allow persistence of entity
-                playerEntity.setPersistToSession(true);
             }
+
+            // Set flag to allow persistence of entity
+            playerEntity.setPersistToSession(true);
 
             return playerEntity;
         }
@@ -95,7 +96,7 @@ public class PlayerEntityService
         // Fetch the player's current entity
         Entity entity = playerInfo.entity;
 
-        if (entity instanceof PlayerEntity)
+        if (entity != null && entity instanceof PlayerEntity)
         {
             PlayerEntity playerEntity = (PlayerEntity) entity;
 
@@ -111,6 +112,10 @@ public class PlayerEntityService
                 Inventory inventory = playerEntity.getInventory();
                 gameSession.gameDataPut(PLAYERDATA_INVENTORY_KEY, inventory);
             }
+        }
+        else if (entity != null)
+        {
+            LOG.debug("Player not persisted since entity is not a player entity");
         }
     }
 

@@ -2,8 +2,6 @@ critical goals
 ================
 - none
 
-http://delphic.me.uk/webglalpha.html
-
 technical debt
 ===============
 - remove accessors from projectSandbox.rendering.core
