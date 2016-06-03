@@ -45,7 +45,7 @@ public class Rocket extends Entity
 
         setMaxHealth(1);
 
-        components.register(new VelocityComponent(
+        components.add(new VelocityComponent(
                 100.0f      // Mass
         ));
     }

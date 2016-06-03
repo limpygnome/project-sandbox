@@ -27,16 +27,16 @@ public class Fighter extends PlayerEntity
                 new Inventory[1]
         );
 
-        components.register(new PlayerEjectionComponent(this, new Vector2[]
-        {
-                new Vector2(0.0f, 50.0f)
-        }));
+        components.add(new PlayerEjectionComponent(this, new Vector2[]
+                {
+                        new Vector2(0.0f, 50.0f)
+                }));
 
-        components.register(new VelocityComponent(
+        components.add(new VelocityComponent(
                 500.0f      // Mass
         ));
 
-        components.register(new SpaceMovementComponent(
+        components.add(new SpaceMovementComponent(
                 40.0f,      // Speed limit
                 1.0f,       // Acceleration
                 0.2f        // Turning speed

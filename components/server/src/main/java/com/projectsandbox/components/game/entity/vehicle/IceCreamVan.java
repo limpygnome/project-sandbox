@@ -26,15 +26,15 @@ public class IceCreamVan extends PlayerEntity
                 null
         );
 
-        components.register(new PlayerEjectionComponent(this, new Vector2[]
-        {
-                new Vector2(+16.0f, +8.0f),
-                new Vector2(-16.0f, +8.0f),
-                new Vector2(+16.0f, -8.0f),
-                new Vector2(-16.0f, -8.0f)
-        }));
+        components.add(new PlayerEjectionComponent(this, new Vector2[]
+                {
+                        new Vector2(+16.0f, +8.0f),
+                        new Vector2(-16.0f, +8.0f),
+                        new Vector2(+16.0f, -8.0f),
+                        new Vector2(-16.0f, -8.0f)
+                }));
 
-        components.register(new PlayerVehicleMovementComponent(
+        components.add(new PlayerVehicleMovementComponent(
                 0.15f,      // Acceleration factor
                 0.95f,      // Deacceleration multiplier
                 0.9f,       // Steering angle

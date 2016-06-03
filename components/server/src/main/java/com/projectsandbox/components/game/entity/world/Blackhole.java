@@ -2,6 +2,7 @@ package com.projectsandbox.components.game.entity.world;
 
 import com.projectsandbox.components.server.entity.Entity;
 import com.projectsandbox.components.server.entity.annotation.EntityType;
+import com.projectsandbox.components.server.entity.component.imp.blackhole.BlackholeComponent;
 import com.projectsandbox.components.server.player.PlayerInfo;
 import com.projectsandbox.components.server.world.map.WorldMap;
 
@@ -14,10 +15,17 @@ public class Blackhole extends Entity
 
     public Blackhole(WorldMap map)
     {
-        super(map, (short) 32, (short) 32);
+        super(map, (short) 2048, (short) 2048);
 
         this.physicsIntangible = true;
         this.physicsStatic = true;
+
+        float radius = (float) (width > height ? width : height) / 2.0f;
+        components.add(new BlackholeComponent(
+                25.0f,      // Max acceleration
+                0.2f,       // Max damage
+                radius
+        ));
     }
 
     @Override

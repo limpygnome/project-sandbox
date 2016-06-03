@@ -28,16 +28,16 @@ public class Destroyer extends PlayerEntity
                 new Inventory[1]
         );
 
-        components.register(new PlayerEjectionComponent(this, new Vector2[]
-        {
-                new Vector2(0.0f, 50.0f)
-        }));
+        components.add(new PlayerEjectionComponent(this, new Vector2[]
+                {
+                        new Vector2(0.0f, 50.0f)
+                }));
 
-        components.register(new VelocityComponent(
+        components.add(new VelocityComponent(
                 10000.0f      // Mass
         ));
 
-        components.register(new SpaceMovementComponent(
+        components.add(new SpaceMovementComponent(
                 20.0f,      // Speed limit
                 0.4f,       // Acceleration
                 0.05f       // Turning speed

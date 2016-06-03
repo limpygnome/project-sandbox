@@ -47,7 +47,7 @@ public class ComponentCollection< K extends Class<ComponentEvent>, V extends Ent
         return components.get(clazz);
     }
 
-    public synchronized void register(V entityComponent)
+    public synchronized void add(V entityComponent)
     {
         // Register entity for each event type for callback
         Class[] clazzes = entityComponent.getClass().getInterfaces();
@@ -64,7 +64,7 @@ public class ComponentCollection< K extends Class<ComponentEvent>, V extends Ent
         components.put(entityComponent.getClass(), entityComponent);
     }
 
-    public synchronized void unregister(V entityComponent)
+    public synchronized void remove(V entityComponent)
     {
         Set<Map.Entry<K, HashSet<V>>> set = eventCallbacks.entrySet();
         Iterator<Map.Entry<K, HashSet<V>>> iterator = set.iterator();

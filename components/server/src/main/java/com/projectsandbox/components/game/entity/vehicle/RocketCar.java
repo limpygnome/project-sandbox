@@ -26,13 +26,13 @@ public class RocketCar extends PlayerEntity
                 new Inventory[1]
         );
 
-        components.register(new PlayerEjectionComponent(this, new Vector2[]
-        {
-                new Vector2(+16.0f, 0.0f),
-                new Vector2(-16.0f, 0.0f),
-        }));
+        components.add(new PlayerEjectionComponent(this, new Vector2[]
+                {
+                        new Vector2(+16.0f, 0.0f),
+                        new Vector2(-16.0f, 0.0f),
+                }));
 
-        components.register(new PlayerVehicleMovementComponent(
+        components.add(new PlayerVehicleMovementComponent(
                 0.4f,       // Acceleration factor
                 0.9f,       // Deacceleration multiplier
                 0.6f,       // Steering angle

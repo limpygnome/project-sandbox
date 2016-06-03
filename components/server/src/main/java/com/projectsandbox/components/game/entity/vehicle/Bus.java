@@ -21,28 +21,28 @@ public class Bus extends PlayerEntity
                 null
         );
 
-        components.register(new PlayerEjectionComponent(this, new Vector2[]
-        {
-                new Vector2(+16.0f, +24.0f),
-                new Vector2(-16.0f, +24.0f),
+        components.add(new PlayerEjectionComponent(this, new Vector2[]
+                {
+                        new Vector2(+16.0f, +24.0f),
+                        new Vector2(-16.0f, +24.0f),
 
-                new Vector2(+16.0f, +16.0f),
-                new Vector2(-16.0f, +16.0f),
+                        new Vector2(+16.0f, +16.0f),
+                        new Vector2(-16.0f, +16.0f),
 
-                new Vector2(+16.0f, +8.0f),
-                new Vector2(-16.0f, +8.0f),
+                        new Vector2(+16.0f, +8.0f),
+                        new Vector2(-16.0f, +8.0f),
 
-                new Vector2(+16.0f, -8.0f),
-                new Vector2(-16.0f, -8.0f),
+                        new Vector2(+16.0f, -8.0f),
+                        new Vector2(-16.0f, -8.0f),
 
-                new Vector2(+16.0f, -18.0f),
-                new Vector2(-16.0f, -18.0f),
+                        new Vector2(+16.0f, -18.0f),
+                        new Vector2(-16.0f, -18.0f),
 
-                new Vector2(+16.0f, -24.0f),
-                new Vector2(-16.0f, -24.0f)
-        }));
+                        new Vector2(+16.0f, -24.0f),
+                        new Vector2(-16.0f, -24.0f)
+                }));
 
-        components.register(new PlayerVehicleMovementComponent(
+        components.add(new PlayerVehicleMovementComponent(
                 0.1f,       // Acceleration factor
                 0.98f,      // Deacceleration multiplier
                 1.4f,       // Steering angle
