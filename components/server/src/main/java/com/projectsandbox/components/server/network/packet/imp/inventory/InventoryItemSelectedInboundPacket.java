@@ -2,7 +2,7 @@ package com.projectsandbox.components.server.network.packet.imp.inventory;
 
 import com.projectsandbox.components.server.Controller;
 import com.projectsandbox.components.server.entity.Entity;
-import com.projectsandbox.components.server.entity.PlayerEntity;
+import com.projectsandbox.components.server.entity.player.PlayerEntity;
 import com.projectsandbox.components.server.inventory.Inventory;
 import com.projectsandbox.components.server.network.Socket;
 import com.projectsandbox.components.server.network.packet.InboundPacket;

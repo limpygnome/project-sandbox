@@ -1,6 +1,6 @@
 package com.projectsandbox.components.server;
 
-import com.projectsandbox.components.server.entity.PlayerEntityService;
+import com.projectsandbox.components.server.entity.player.PlayerEntityService;
 import com.projectsandbox.components.server.network.packet.PacketService;
 import com.projectsandbox.components.server.player.ChatService;
 import com.projectsandbox.components.server.player.PlayerService;

@@ -1,6 +1,6 @@
 package com.projectsandbox.components.game.entity.vehicle;
 
-import com.projectsandbox.components.server.entity.PlayerEntity;
+import com.projectsandbox.components.server.entity.player.PlayerEntity;
 import com.projectsandbox.components.server.entity.annotation.EntityType;
 import com.projectsandbox.components.server.entity.component.imp.PlayerEjectionComponent;
 import com.projectsandbox.components.server.entity.component.imp.PlayerVehicleMovementComponent;

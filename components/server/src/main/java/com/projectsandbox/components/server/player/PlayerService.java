@@ -3,8 +3,8 @@ package com.projectsandbox.components.server.player;
 
 import com.projectsandbox.components.server.Controller;
 import com.projectsandbox.components.server.entity.Entity;
-import com.projectsandbox.components.server.entity.PlayerEntity;
-import com.projectsandbox.components.server.entity.PlayerEntityService;
+import com.projectsandbox.components.server.entity.player.PlayerEntity;
+import com.projectsandbox.components.server.entity.player.PlayerEntityService;
 import com.projectsandbox.components.server.entity.respawn.pending.EntityPendingRespawn;
 import com.projectsandbox.components.server.network.Socket;
 import com.projectsandbox.components.server.network.packet.OutboundPacket;

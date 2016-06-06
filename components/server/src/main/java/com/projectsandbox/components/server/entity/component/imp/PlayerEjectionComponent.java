@@ -2,7 +2,7 @@ package com.projectsandbox.components.server.entity.component.imp;
 
 import com.projectsandbox.components.server.Controller;
 import com.projectsandbox.components.server.entity.Entity;
-import com.projectsandbox.components.server.entity.PlayerEntity;
+import com.projectsandbox.components.server.entity.player.PlayerEntity;
 import com.projectsandbox.components.server.entity.component.EntityComponent;
 import com.projectsandbox.components.server.entity.component.event.CollisionEntityComponentEvent;
 import com.projectsandbox.components.server.entity.component.event.DeathComponentEvent;
@@ -17,11 +17,14 @@ import com.projectsandbox.components.server.player.PlayerKeys;
 import com.projectsandbox.components.server.world.map.WorldMap;
 import com.projectsandbox.components.server.world.spawn.Spawn;
 
+import java.io.Serializable;
+
 /**
  * Created by limpygnome on 12/04/16.
  */
-public class PlayerEjectionComponent implements EntityComponent, LogicComponentEvent, DeathComponentEvent, CollisionEntityComponentEvent
+public class PlayerEjectionComponent implements Serializable, EntityComponent, LogicComponentEvent, DeathComponentEvent, CollisionEntityComponentEvent
 {
+    private static final long serialVersionUID = 1L;
 
     /**
      * The space between a vehicle and an ejected player.

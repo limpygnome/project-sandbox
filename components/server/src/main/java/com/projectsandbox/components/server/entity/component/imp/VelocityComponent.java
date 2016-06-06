@@ -10,11 +10,15 @@ import com.projectsandbox.components.server.entity.component.event.ResetComponen
 import com.projectsandbox.components.server.entity.physics.Vector2;
 import com.projectsandbox.components.server.entity.physics.collisions.CollisionResult;
 
+import java.io.Serializable;
+
 /**
  * Used to apply zero gravity to entities.
  */
-public class VelocityComponent implements EntityComponent, CollisionEntityComponentEvent, LogicComponentEvent, ResetComponentEvent, ProjectInFrontOfEntityEvent
+public class VelocityComponent implements Serializable, EntityComponent, CollisionEntityComponentEvent, LogicComponentEvent, ResetComponentEvent, ProjectInFrontOfEntityEvent
 {
+    private static final long serialVersionUID = 1L;
+
     private Vector2 velocity;
     private Vector2 initialVelocity;
     private float mass;
@@ -64,16 +68,19 @@ public class VelocityComponent implements EntityComponent, CollisionEntityCompon
     }
 
     @Override
-    public synchronized void eventReset(Controller controller, Entity entity)
+    public synchronized void eventReset(Controller controller, Entity entity, boolean respawnAfterPersisted)
     {
-        if (initialVelocity != null)
+        if (!respawnAfterPersisted)
         {
-            velocity = initialVelocity;
-            initialVelocity = null;
-        }
-        else
-        {
-            velocity.set(0.0f, 0.0f);
+            if (initialVelocity != null)
+            {
+                velocity = initialVelocity;
+                initialVelocity = null;
+            }
+            else
+            {
+                velocity.set(0.0f, 0.0f);
+            }
         }
     }
 

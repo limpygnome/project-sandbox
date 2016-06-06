@@ -2,20 +2,23 @@ package com.projectsandbox.components.server.entity.component.imp;
 
 import com.projectsandbox.components.server.Controller;
 import com.projectsandbox.components.server.entity.Entity;
-import com.projectsandbox.components.server.entity.PlayerEntity;
+import com.projectsandbox.components.server.entity.player.PlayerEntity;
 import com.projectsandbox.components.server.entity.component.EntityComponent;
 import com.projectsandbox.components.server.entity.component.event.LogicComponentEvent;
 import com.projectsandbox.components.server.entity.physics.Vector2;
 import com.projectsandbox.components.server.player.PlayerInfo;
 import com.projectsandbox.components.server.player.PlayerKeys;
 
+import java.io.Serializable;
+
 /**
  * Created by limpygnome on 12/04/16.
  *
  * TODO: need to workout how to use this with velocity component
  */
-public class PlayerVehicleMovementComponent implements EntityComponent, LogicComponentEvent
+public class PlayerVehicleMovementComponent implements Serializable, EntityComponent, LogicComponentEvent
 {
+    private static final long serialVersionUID = 1L;
 
     /**
      * The minimum (absolute) speed supported, until the speed is set to 0.

@@ -1,12 +1,15 @@
 package com.projectsandbox.components.server.entity.component;
 
+import java.io.Serializable;
 import java.util.*;
 
 /**
  * Used to hold a collection of component callbacks.
  */
-public class ComponentCollection< K extends Class<ComponentEvent>, V extends EntityComponent>
+public class ComponentCollection< K extends Class<ComponentEvent>, V extends EntityComponent> implements Serializable
 {
+    private static final long serialVersionUID = 1L;
+
     private final Map<K, HashSet<V>> eventCallbacks;
     private final Map<Class<? extends EntityComponent>, V> components;
 

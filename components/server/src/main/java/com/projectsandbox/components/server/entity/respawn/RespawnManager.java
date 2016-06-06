@@ -3,6 +3,7 @@ package com.projectsandbox.components.server.entity.respawn;
 import com.projectsandbox.components.server.Controller;
 import com.projectsandbox.components.server.entity.Entity;
 import com.projectsandbox.components.server.entity.EntityManager;
+import com.projectsandbox.components.server.entity.player.PlayerEntity;
 import com.projectsandbox.components.server.service.EventLogicCycleService;
 import com.projectsandbox.components.server.world.map.WorldMap;
 import com.projectsandbox.components.server.world.spawn.FactionSpawns;
@@ -167,8 +168,20 @@ public class RespawnManager implements EventLogicCycleService
     {
         Entity entity = respawnData.pendingRespawn.entity;
 
-        // Setup entity for its new life
-        entity.eventReset(controller, respawnData.spawn);
+        // Determine if entity has been respawned from persistence
+        boolean respawnAfterPersisted = false;
+
+        if (entity instanceof PlayerEntity)
+        {
+            PlayerEntity playerEntity = (PlayerEntity) entity;
+            if (playerEntity.isRespawnPersistedPlayer())
+            {
+                respawnAfterPersisted = true;
+            }
+        }
+
+        // Reset entity
+        entity.eventReset(controller, respawnData.spawn, respawnAfterPersisted);
 
         // Add to world if new entity
         if (!map.entityManager.add(entity))

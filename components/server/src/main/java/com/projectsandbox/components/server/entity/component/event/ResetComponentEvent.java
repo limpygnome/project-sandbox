@@ -10,6 +10,6 @@ import com.projectsandbox.components.server.entity.component.ComponentEvent;
 public interface ResetComponentEvent extends ComponentEvent
 {
 
-    void eventReset(Controller controller, Entity entity);
+    void eventReset(Controller controller, Entity entity, boolean respawnAfterPersisted);
 
 }

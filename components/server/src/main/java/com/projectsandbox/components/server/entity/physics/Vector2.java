@@ -3,13 +3,17 @@ package com.projectsandbox.components.server.entity.physics;
 import com.projectsandbox.components.server.entity.Entity;
 import com.projectsandbox.components.server.util.CustomMath;
 
+import java.io.Serializable;
+
 /**
  * Vector data-structure with operations.
  *
  * TODO: consider thread safety
  */
-public class Vector2
+public class Vector2 implements Serializable
 {
+    private static final long serialVersionUID = 1L;
+
     public float x;
     public float y;
     

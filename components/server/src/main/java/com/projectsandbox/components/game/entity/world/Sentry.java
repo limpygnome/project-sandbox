@@ -123,9 +123,9 @@ public class Sentry extends Entity
     }
 
     @Override
-    public synchronized void eventReset(Controller controller, Spawn spawn)
+    public synchronized void eventReset(Controller controller, Spawn spawn, boolean respawnAfterPersisted)
     {
-        super.eventReset(controller, spawn);
+        super.eventReset(controller, spawn, respawnAfterPersisted);
 
         this.defaultRotation = rotation;
     }

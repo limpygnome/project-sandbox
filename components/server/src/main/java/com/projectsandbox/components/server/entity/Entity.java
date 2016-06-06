@@ -19,6 +19,7 @@ import com.projectsandbox.components.server.world.spawn.Spawn;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import java.io.Serializable;
 import java.lang.annotation.Annotation;
 import java.util.Set;
 
@@ -28,8 +29,10 @@ import static com.projectsandbox.components.server.constant.PlayerConstants.DEFA
  * Base entity.
  */
 @EntityType(typeId = 0, typeName = "")
-public strictfp abstract class Entity
+public strictfp abstract class Entity implements Serializable
 {
+    private static final long serialVersionUID = 1L;
+
     private final static Logger LOG = LogManager.getLogger(EntityManager.class);
 
     public static final short DEFAULT_FACTION = 0;
@@ -37,7 +40,7 @@ public strictfp abstract class Entity
     /**
      * The map to which this entity belongs.
      */
-    public WorldMap map;
+    public transient WorldMap map;
 
     /**
      * Used to register components, which add behaviour to the entity.
@@ -45,7 +48,7 @@ public strictfp abstract class Entity
     public ComponentCollection components;
     
     // The unique ID for the entity
-    public Short id;
+    public transient Short id;
 
     // The ID of the faction to which the player belongs
     public short faction;
@@ -57,9 +60,9 @@ public strictfp abstract class Entity
     public Spawn spawn;
     
     // State flags
-    private EntityState state;
+    private transient EntityState state;
     /** Refer to {@link UpdateMasks} */
-    public char updateMask;
+    public transient char updateMask;
     
     // Size
     public short width;
@@ -69,8 +72,8 @@ public strictfp abstract class Entity
     // TODO: consider if position/positionNew need to be separate anymore...
     public Vector2 position;
     public Vector2 positionNew;
-    public Vertices cachedVertices;
     public float rotation;
+    public transient Vertices cachedVertices;
 
     // Health
     // -- -1 for godmode
@@ -617,17 +620,24 @@ public strictfp abstract class Entity
 
     /**
      * Invoked before the entity is respawned.
+     *
+     * @param respawnAfterPersisted indicates if entity is being respawned after being persisted
      */
-    public synchronized void eventReset(Controller controller, Spawn spawn)
+    public synchronized void eventReset(Controller controller, Spawn spawn, boolean respawnAfterPersisted)
     {
-        // Reset health
-        health = maxHealth;
+        if (!respawnAfterPersisted)
+        {
+            // Reset health
+            health = maxHealth;
 
-        // Set position etc for spawn
-        positionNew.x = spawn.x;
-        positionNew.y = spawn.y;
-        position.copy(positionNew);
-        rotation = spawn.rotation;
+            // Set position etc for spawn
+            positionNew.x = spawn.x;
+            positionNew.y = spawn.y;
+            position.copy(positionNew);
+            rotation = spawn.rotation;
+        }
+
+        // Set all masks as dirty
         updateMask(UpdateMasks.ALL_MASKS);
 
         // Invoke component event
@@ -635,7 +645,7 @@ public strictfp abstract class Entity
 
         for (ResetComponentEvent component : callbacks)
         {
-            component.eventReset(controller, this);
+            component.eventReset(controller, this, respawnAfterPersisted);
         }
 
         // Rebuild collision vertices

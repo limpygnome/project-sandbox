@@ -1,7 +1,7 @@
 package com.projectsandbox.components.game.entity.living;
 
 import com.projectsandbox.components.server.Controller;
-import com.projectsandbox.components.server.entity.PlayerEntity;
+import com.projectsandbox.components.server.entity.player.PlayerEntity;
 import com.projectsandbox.components.server.entity.annotation.EntityType;
 import com.projectsandbox.components.server.entity.physics.Vector2;
 import com.projectsandbox.components.server.inventory.Inventory;

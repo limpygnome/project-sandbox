@@ -1,5 +1,7 @@
-package com.projectsandbox.components.server.entity;
+package com.projectsandbox.components.server.entity.player;
 
+import com.projectsandbox.components.server.entity.Entity;
+import com.projectsandbox.components.server.entity.EntityTypeMappingStoreService;
 import com.projectsandbox.components.server.inventory.Inventory;
 import com.projectsandbox.components.server.player.PlayerInfo;
 import com.projectsandbox.components.server.world.map.WorldMap;
@@ -17,8 +19,7 @@ public class PlayerEntityService
 {
     private final static Logger LOG = LogManager.getLogger(PlayerEntityService.class);
 
-    private static final String PLAYERDATA_INVENTORY_KEY = "player_persisted_inventory";
-    private static final String PLAYERDATA_ENT_TYPE_ID_KEY = "player_persisted_entity_type";
+    private static final String PLAYERDATA_ENTITY_KEY = "entity";
 
     @Autowired
     private EntityTypeMappingStoreService entityTypeMappingStoreService;
@@ -38,7 +39,11 @@ public class PlayerEntityService
                 // Create default entity for map
                 Class clazz = worldMap.getProperties().getDefaultEntityType();
                 playerEntity = createFromClass(worldMap, clazz, playerInfo);
-
+            }
+            else
+            {
+                // TODO: need to sort this when multiple maps...
+                playerEntity.map = worldMap;
             }
 
             // Set flag to allow persistence of entity
@@ -54,34 +59,7 @@ public class PlayerEntityService
 
     private PlayerEntity createPlayerFromSession(WorldMap worldMap, PlayerInfo playerInfo, GameSession gameSession) throws Exception
     {
-        PlayerEntity playerEntity = null;
-
-        Short entityTypeId = gameSession.gameDataGetShort(PLAYERDATA_ENT_TYPE_ID_KEY);
-
-        if (entityTypeId != null && entityTypeId > 0)
-        {
-            Class clazz = entityTypeMappingStoreService.getEntityClassByTypeId(entityTypeId);
-            boolean isPlayerEntityInstance = PlayerEntity.class.isAssignableFrom(clazz);
-
-            if (clazz == null || !isPlayerEntityInstance)
-            {
-                LOG.warn("Attempted to spawn player from non player entity class - type id: {}, actual class: {}", entityTypeId, clazz != null ? clazz.getName() : null);
-            }
-            else
-            {
-                // Create instance
-                playerEntity = createFromClass(worldMap, clazz, playerInfo);
-
-                // Attempt to load inventory
-                Inventory inventory = (Inventory) gameSession.gameDataGet(PLAYERDATA_INVENTORY_KEY);
-
-                if (inventory != null)
-                {
-                    playerEntity.setInventory(0, inventory);
-                }
-            }
-        }
-
+        PlayerEntity playerEntity = (PlayerEntity) gameSession.gameDataGet(PLAYERDATA_ENTITY_KEY);
         return playerEntity;
     }
 
@@ -106,11 +84,7 @@ public class PlayerEntityService
                 GameSession gameSession = playerInfo.session;
 
                 // Persist entity type
-                gameSession.gameDataPut(PLAYERDATA_ENT_TYPE_ID_KEY, playerEntity.entityType);
-
-                // Persist inventory
-                Inventory inventory = playerEntity.getInventory();
-                gameSession.gameDataPut(PLAYERDATA_INVENTORY_KEY, inventory);
+                gameSession.gameDataPut(PLAYERDATA_ENTITY_KEY, playerEntity);
             }
         }
         else if (entity != null)

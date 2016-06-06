@@ -1,11 +1,14 @@
 package com.projectsandbox.components.server.world.spawn;
 
+import java.io.Serializable;
+
 /**
- *
- * @author limpygnome
+ * Used to hold information to respawn an entity.
  */
-public class Spawn
+public class Spawn implements Serializable
 {
+    private static final long serialVersionUID = 1L;
+
     public float x;
     public float y;
     public float z;

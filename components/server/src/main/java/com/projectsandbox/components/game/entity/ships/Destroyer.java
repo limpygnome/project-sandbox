@@ -1,7 +1,7 @@
 package com.projectsandbox.components.game.entity.ships;
 
 import com.projectsandbox.components.server.Controller;
-import com.projectsandbox.components.server.entity.PlayerEntity;
+import com.projectsandbox.components.server.entity.player.PlayerEntity;
 import com.projectsandbox.components.server.entity.annotation.EntityType;
 import com.projectsandbox.components.server.entity.component.imp.PlayerEjectionComponent;
 import com.projectsandbox.components.server.entity.component.imp.SpaceMovementComponent;
@@ -58,20 +58,25 @@ public class Destroyer extends PlayerEntity
     }
 
     @Override
-    public synchronized void eventReset(Controller controller, Spawn spawn)
+    public synchronized void eventReset(Controller controller, Spawn spawn, boolean respawnAfterPersisted)
     {
-        super.eventReset(controller, spawn);
+        super.eventReset(controller, spawn, respawnAfterPersisted);
 
-        Inventory inventory = new Inventory(this);
-        inventory.add(new RocketLauncher(
-                new Vector2[]
-                {
-                    new Vector2(-40.0f, -100.0f),
-                    new Vector2(+40.0f, -100.0f)
-                }
-        ));
-        inventory.add(new Gatling());
-        setInventory(0, inventory);
+        if (!respawnAfterPersisted)
+        {
+            Inventory inventory = new Inventory(this);
+
+            inventory.add(new RocketLauncher(
+                    new Vector2[]
+                            {
+                                    new Vector2(-40.0f, -100.0f),
+                                    new Vector2(+40.0f, -100.0f)
+                            }
+            ));
+            inventory.add(new Gatling());
+
+            setInventory(0, inventory);
+        }
     }
 
 }

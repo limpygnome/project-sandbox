@@ -22,7 +22,7 @@ public abstract class AbstractInventoryItem implements Serializable
     private final static Logger LOG = LogManager.getLogger(AbstractInventoryItem.class);
 
     public static final long serialVersionUID = 1L;
-    
+
     public short typeId = 0;
 
     public InventorySlotData slot;

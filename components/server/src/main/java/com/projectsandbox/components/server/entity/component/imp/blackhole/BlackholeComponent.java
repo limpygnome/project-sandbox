@@ -9,14 +9,17 @@ import com.projectsandbox.components.server.entity.physics.Vector2;
 import com.projectsandbox.components.server.entity.physics.spatial.ProximityResult;
 import com.projectsandbox.components.server.entity.physics.spatial.QuadTree;
 
+import java.io.Serializable;
 import java.util.Set;
 
 /**
  * A component for pulling other entities towards the center of an entity, with acceleration increasing with shorter
  * the distance.
  */
-public class BlackholeComponent implements EntityComponent, LogicComponentEvent
+public class BlackholeComponent implements Serializable, EntityComponent, LogicComponentEvent
 {
+    private static final long serialVersionUID = 1L;
+
     private float maxAcceleration;
     private float maxDamage;
     private float radius;

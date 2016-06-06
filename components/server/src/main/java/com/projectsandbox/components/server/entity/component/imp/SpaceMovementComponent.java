@@ -2,7 +2,7 @@ package com.projectsandbox.components.server.entity.component.imp;
 
 import com.projectsandbox.components.server.Controller;
 import com.projectsandbox.components.server.entity.Entity;
-import com.projectsandbox.components.server.entity.PlayerEntity;
+import com.projectsandbox.components.server.entity.player.PlayerEntity;
 import com.projectsandbox.components.server.entity.component.EntityComponent;
 import com.projectsandbox.components.server.entity.component.event.CollisionMapComponentEvent;
 import com.projectsandbox.components.server.entity.component.event.LogicComponentEvent;
@@ -12,11 +12,15 @@ import com.projectsandbox.components.server.player.PlayerInfo;
 import com.projectsandbox.components.server.player.PlayerKeys;
 import com.projectsandbox.components.server.world.map.WorldMap;
 
+import java.io.Serializable;
+
 /**
  * Created by limpygnome on 14/04/16.
  */
-public class SpaceMovementComponent implements EntityComponent, LogicComponentEvent, CollisionMapComponentEvent
+public class SpaceMovementComponent implements Serializable, EntityComponent, LogicComponentEvent, CollisionMapComponentEvent
 {
+    private static final long serialVersionUID = 1L;
+
     private float speedLimit;
     private float acceleration;
     private float turnRadians;

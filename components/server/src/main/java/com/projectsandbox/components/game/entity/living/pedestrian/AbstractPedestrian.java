@@ -2,7 +2,7 @@ package com.projectsandbox.components.game.entity.living.pedestrian;
 
 import com.projectsandbox.components.server.Controller;
 import com.projectsandbox.components.server.entity.Entity;
-import com.projectsandbox.components.server.entity.PlayerEntity;
+import com.projectsandbox.components.server.entity.player.PlayerEntity;
 import com.projectsandbox.components.server.entity.ai.IdleMode;
 import com.projectsandbox.components.server.entity.ai.PedestrianState;
 import com.projectsandbox.components.server.entity.physics.Vector2;
@@ -90,9 +90,9 @@ public abstract class AbstractPedestrian extends Entity
     }
 
     @Override
-    public synchronized void eventReset(Controller controller, Spawn spawn)
+    public synchronized void eventReset(Controller controller, Spawn spawn, boolean respawnAfterPersisted)
     {
-        super.eventReset(controller, spawn);
+        super.eventReset(controller, spawn, respawnAfterPersisted);
 
         // Save spawn if idle mode is to return to spawn, so we can later walk back to it...
         if (idleMode == IdleMode.RETURN_TO_SPAWN)

@@ -1,12 +1,15 @@
-package com.projectsandbox.components.server.entity;
+package com.projectsandbox.components.server.entity.player;
 
 import com.projectsandbox.components.server.Controller;
+import com.projectsandbox.components.server.entity.Entity;
 import com.projectsandbox.components.server.inventory.Inventory;
 import com.projectsandbox.components.server.player.PlayerInfo;
 import com.projectsandbox.components.server.world.map.WorldMap;
 import com.projectsandbox.components.server.world.spawn.Spawn;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+
+import java.io.Serializable;
 
 public abstract class PlayerEntity extends Entity
 {
@@ -17,10 +20,17 @@ public abstract class PlayerEntity extends Entity
 
         The owner will be the player at the zero index/position.
     */
-    private boolean persistToSession;
+    private transient boolean persistToSession;
+
+    /*
+        A flag used by the respawn manager, which changes the behaviour for respawning this entity if true.
+
+        This is for respawning entities which have been persisted.
+     */
+    private transient boolean respawnPersistedPlayer;
 
     /* All of the players which are using this entity. */
-    private PlayerInfo[] players;
+    private transient PlayerInfo[] players;
 
     /* The index should match the players index i.e. players[0] controls inventories[0]. */
     private Inventory[] inventories;
@@ -188,12 +198,13 @@ public abstract class PlayerEntity extends Entity
     {
         if (index < inventories.length)
         {
+            // Check if inventory already exists; if so, merge them...
             inventories[index] = inventory;
             updateInventoryOwnership(index);
         }
         else
         {
-            LOG.warn("Unable to set inventory, inventories not large enough - index: {}, ent id; {}", index, id);
+            LOG.warn("Unable to set inventory, inventories not large enough - index: {}, ent id: {}", index, id);
         }
     }
 
@@ -278,6 +289,27 @@ public abstract class PlayerEntity extends Entity
     public void setPersistToSession(boolean persistToSession)
     {
         this.persistToSession = persistToSession;
+    }
+
+    /**
+     * Indicates if this entity has been created from a persisted game session.
+     *
+     * @return true = previously persisted, false = normal entity
+     */
+    public boolean isRespawnPersistedPlayer()
+    {
+        return respawnPersistedPlayer;
+    }
+
+    /**
+     * Sets a flag to indicate if to change the behaviour when respawning the player, due to the entity being created
+     * from a persisted game session.
+     *
+     * @param respawnPersistedPlayer true = persisted, false = normal respawn
+     */
+    public void setRespawnPersistedPlayer(boolean respawnPersistedPlayer)
+    {
+        this.respawnPersistedPlayer = respawnPersistedPlayer;
     }
 
     /**
