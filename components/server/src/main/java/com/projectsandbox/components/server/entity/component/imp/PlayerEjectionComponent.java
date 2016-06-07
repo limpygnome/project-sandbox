@@ -117,7 +117,7 @@ public class PlayerEjectionComponent implements Serializable, EntityComponent, L
         Vector2 plyPos = ejectPosition.clone();
 
         // Create new player ent in position of vehicle
-        Entity entityPlayer = controller.playerEntityService.createPlayer(worldMap, playerInfo);
+        Entity entityPlayer = controller.playerEntityService.createPlayer(worldMap, playerInfo, true);
 
         // Add player to pos offset
         float playerOffsetX = playerEjectVectorPos(ejectPosition.x, entityPlayer.width / 2.0f);
@@ -171,7 +171,7 @@ public class PlayerEjectionComponent implements Serializable, EntityComponent, L
             if (playerInfo != null && !(flagDriverSpawned && i == 0))
             {
                 // Create and respawn player
-                Entity entityPlayer = controller.playerEntityService.createPlayer(worldMap, playerInfo);
+                Entity entityPlayer = controller.playerEntityService.createPlayer(worldMap, playerInfo, true);
                 worldMap.respawnManager.respawn(new EntityPendingRespawn(controller, entityPlayer));
 
                 // Set seat to empty

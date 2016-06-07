@@ -28,47 +28,62 @@ public class PlayerEntityService
     @Autowired
     private EntityTypeMappingStoreService entityTypeMappingStoreService;
 
-    public PlayerEntity createPlayer(WorldMap worldMap, PlayerInfo playerInfo)
+    /**
+     * Creates a new player.
+     *
+     * @param worldMap the current map
+     * @param playerInfo the player
+     * @param forceCreate true = always new entity, false = look for persisted entity
+     * @return an entity
+     */
+    public PlayerEntity createPlayer(WorldMap worldMap, PlayerInfo playerInfo, boolean forceCreate)
     {
         try
         {
             GameSession gameSession = playerInfo.session;
             PlayerEntity playerEntity;
 
-            // Attempt to load from session
-            playerEntity = createPlayerFromSession(worldMap, playerInfo, gameSession);
-
-            if (playerEntity != null)
+            if (!forceCreate)
             {
-                // Fetch the map to which the entity belonged
-                Short mapId = gameSession.gameDataGetShort(PLAYERDATA_MAPID);
-                WorldMap entityMap;
+                // Attempt to load from session
+                playerEntity = createPlayerFromSession(worldMap, playerInfo, gameSession);
 
-                if (mapId != null)
+                if (playerEntity != null)
                 {
-                    entityMap = mapService.get(mapId);
-                }
-                else
-                {
-                    entityMap = null;
-                }
+                    // Fetch the map to which the entity belonged
+                    Short mapId = gameSession.gameDataGetShort(PLAYERDATA_MAPID);
+                    WorldMap entityMap;
 
-                // Setup entity if we found the map
-                if (entityMap != null)
-                {
-                    // Set map
-                    playerEntity.map = entityMap;
+                    if (mapId != null)
+                    {
+                        entityMap = mapService.get(mapId);
+                    }
+                    else
+                    {
+                        entityMap = null;
+                    }
 
-                    // Set current players
-                    playerEntity.setPlayers(new PlayerInfo[]{ playerInfo });
+                    // Setup entity if we found the map
+                    if (entityMap != null)
+                    {
+                        // Set map
+                        playerEntity.map = entityMap;
 
-                    // Set flag to indicate this entity has been created from persistence
-                    playerEntity.setRespawnPersistedPlayer(true);
+                        // Set current players
+                        playerEntity.setPlayers(new PlayerInfo[]{playerInfo});
+
+                        // Set flag to indicate this entity has been created from persistence
+                        playerEntity.setRespawnPersistedPlayer(true);
+                    }
+                    else
+                    {
+                        playerEntity = null;
+                    }
                 }
-                else
-                {
-                    playerEntity = null;
-                }
+            }
+            else
+            {
+                playerEntity = null;
             }
 
             // Create default entity if no entity yet

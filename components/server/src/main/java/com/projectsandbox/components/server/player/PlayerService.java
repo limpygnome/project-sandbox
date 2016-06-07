@@ -311,7 +311,7 @@ public class PlayerService implements EventLogicCycleService, IdCounterConsumer
             WorldMap map = mapService.mainMap;
 
             // Create entity for player
-            Entity entityPlayer = playerEntityService.createPlayer(map, playerInfo);
+            Entity entityPlayer = playerEntityService.createPlayer(map, playerInfo, false);
 
             // Spawn the player
             map.respawnManager.respawn(new EntityPendingRespawn(controller, entityPlayer));
