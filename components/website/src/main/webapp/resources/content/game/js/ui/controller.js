@@ -52,6 +52,7 @@ game.ui.controller =
         // -- Stats
         this.elementFpsCounter = document.getElementById("ps-fps");
         this.elementPrimitivesCounter = document.getElementById("ps-primitives");
+        this.elementSpeedCounter = document.getElementById("ps-speed");
 
         // Bind resize event for window
         $(window).resize(function () {
@@ -204,7 +205,35 @@ game.ui.controller =
 
         // Update FPS counter
         $(this.elementFpsCounter).text(projectSandbox.rendering.core.getFps());
+
+        // Update primitives counter
         $(this.elementPrimitivesCounter).text(projectSandbox.rendering.depthTree.getTotalPrimitives());
+
+        // Update speed counter
+        if (entity != null)
+        {
+            // Compute speed
+            var xdiff = Math.abs(this.lastX - entity.x);
+            var ydiff = Math.abs(this.lastY - entity.y);
+            var speed = Math.sqrt(
+                (xdiff * xdiff) + (ydiff + ydiff)
+            );
+
+            // Apply rounding
+            speed = Math.round(speed * 10.0) / 10.0;
+
+            // Update counter
+            $(this.elementSpeedCounter).text(speed);
+
+            // Save current pos
+            this.lastX = entity.x;
+            this.lastY = entity.y;
+        }
+        else
+        {
+            this.lastX = 0.0;
+            this.lastY = 0.0;
+        }
 
         // Update map
         game.ui.map.logic();
