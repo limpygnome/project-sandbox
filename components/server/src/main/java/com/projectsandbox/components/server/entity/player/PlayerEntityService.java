@@ -4,6 +4,7 @@ import com.projectsandbox.components.server.entity.Entity;
 import com.projectsandbox.components.server.entity.EntityTypeMappingStoreService;
 import com.projectsandbox.components.server.inventory.Inventory;
 import com.projectsandbox.components.server.player.PlayerInfo;
+import com.projectsandbox.components.server.world.map.MapService;
 import com.projectsandbox.components.server.world.map.WorldMap;
 import com.projectsandbox.components.shared.model.GameSession;
 import org.apache.logging.log4j.LogManager;
@@ -20,7 +21,10 @@ public class PlayerEntityService
     private final static Logger LOG = LogManager.getLogger(PlayerEntityService.class);
 
     private static final String PLAYERDATA_ENTITY_KEY = "entity";
+    private static final String PLAYERDATA_MAPID = "entity_mapid";
 
+    @Autowired
+    private MapService mapService;
     @Autowired
     private EntityTypeMappingStoreService entityTypeMappingStoreService;
 
@@ -34,20 +38,45 @@ public class PlayerEntityService
             // Attempt to load from session
             playerEntity = createPlayerFromSession(worldMap, playerInfo, gameSession);
 
+            if (playerEntity != null)
+            {
+                // Fetch the map to which the entity belonged
+                Short mapId = gameSession.gameDataGetShort(PLAYERDATA_MAPID);
+                WorldMap entityMap;
+
+                if (mapId != null)
+                {
+                    entityMap = mapService.get(mapId);
+                }
+                else
+                {
+                    entityMap = null;
+                }
+
+                // Setup entity if we found the map
+                if (entityMap != null)
+                {
+                    // Set map
+                    playerEntity.map = entityMap;
+
+                    // Set current players
+                    playerEntity.setPlayers(new PlayerInfo[]{ playerInfo });
+
+                    // Set flag to indicate this entity has been created from persistence
+                    playerEntity.setRespawnPersistedPlayer(true);
+                }
+                else
+                {
+                    playerEntity = null;
+                }
+            }
+
+            // Create default entity if no entity yet
             if (playerEntity == null)
             {
                 // Create default entity for map
                 Class clazz = worldMap.getProperties().getDefaultEntityType();
                 playerEntity = createFromClass(worldMap, clazz, playerInfo);
-            }
-            else
-            {
-                // TODO: need to sort this when multiple maps...
-                playerEntity.map = worldMap;
-                playerEntity.setPlayers(new PlayerInfo[]{ playerInfo });
-
-                // Set flag to indicate this entity has been created from persistence
-                playerEntity.setRespawnPersistedPlayer(true);
             }
 
             // Set flag to allow persistence of entity
@@ -87,7 +116,8 @@ public class PlayerEntityService
             {
                 GameSession gameSession = playerInfo.session;
 
-                // Persist entity type
+                // Persist entity and mapid
+                gameSession.gameDataPut(PLAYERDATA_MAPID, playerEntity.map.getMapId());
                 gameSession.gameDataPut(PLAYERDATA_ENTITY_KEY, playerEntity);
             }
         }

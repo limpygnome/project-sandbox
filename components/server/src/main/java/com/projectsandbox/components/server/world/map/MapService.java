@@ -45,6 +45,11 @@ public class MapService implements EventServerPreStartup, EventLogicCycleService
         mapCache.put(map.getMapId(), map);
     }
 
+    public synchronized WorldMap get(short mapId)
+    {
+        return mapCache.get(mapId);
+    }
+
     @Override
     public synchronized void eventServerPreStartup(Controller controller)
     {
