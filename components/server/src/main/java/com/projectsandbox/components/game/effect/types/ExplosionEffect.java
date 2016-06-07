@@ -1,5 +1,6 @@
-package com.projectsandbox.components.server.effect.types;
+package com.projectsandbox.components.game.effect.types;
 
+import com.projectsandbox.components.server.effect.types.AbstractEffect;
 import com.projectsandbox.components.server.entity.physics.Vector2;
 import com.projectsandbox.components.server.network.packet.PacketData;
 

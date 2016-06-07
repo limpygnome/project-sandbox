@@ -1,10 +1,10 @@
-package com.projectsandbox.components.server.entity.component.imp.blackhole;
+package com.projectsandbox.components.game.component.blackhole;
 
 import com.projectsandbox.components.server.Controller;
 import com.projectsandbox.components.server.entity.Entity;
 import com.projectsandbox.components.server.entity.component.EntityComponent;
 import com.projectsandbox.components.server.entity.component.event.LogicComponentEvent;
-import com.projectsandbox.components.server.entity.component.imp.VelocityComponent;
+import com.projectsandbox.components.game.component.VelocityComponent;
 import com.projectsandbox.components.server.entity.physics.Vector2;
 import com.projectsandbox.components.server.entity.physics.spatial.ProximityResult;
 import com.projectsandbox.components.server.entity.physics.spatial.QuadTree;

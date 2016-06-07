@@ -1,8 +1,8 @@
 package com.projectsandbox.components.game.entity.world;
 
 import com.projectsandbox.components.server.Controller;
-import com.projectsandbox.components.server.effect.types.BulletEffect;
-import com.projectsandbox.components.server.effect.types.TracerEffect;
+import com.projectsandbox.components.game.effect.types.BulletEffect;
+import com.projectsandbox.components.game.effect.types.TracerEffect;
 import com.projectsandbox.components.server.entity.Entity;
 import com.projectsandbox.components.server.entity.annotation.EntityType;
 import com.projectsandbox.components.server.entity.death.SentryKiller;

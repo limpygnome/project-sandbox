@@ -1,4 +1,4 @@
-package com.projectsandbox.components.server.entity.component.imp.blackhole;
+package com.projectsandbox.components.game.component.blackhole;
 
 import com.projectsandbox.components.server.entity.death.AbstractKiller;
 

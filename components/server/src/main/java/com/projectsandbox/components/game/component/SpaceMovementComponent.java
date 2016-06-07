@@ -1,4 +1,4 @@
-package com.projectsandbox.components.server.entity.component.imp;
+package com.projectsandbox.components.game.component;
 
 import com.projectsandbox.components.server.Controller;
 import com.projectsandbox.components.server.entity.Entity;

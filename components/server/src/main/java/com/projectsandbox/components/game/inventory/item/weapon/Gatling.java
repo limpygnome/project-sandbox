@@ -1,4 +1,4 @@
-package com.projectsandbox.components.server.inventory.item.weapon;
+package com.projectsandbox.components.game.inventory.item.weapon;
 
 import com.projectsandbox.components.server.inventory.annotation.InventoryItemTypeId;
 import com.projectsandbox.components.server.inventory.InventoryInvokeType;

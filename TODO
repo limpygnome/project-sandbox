@@ -10,11 +10,6 @@ technical debt
 
 long-term goals
 ================
-- allow maps to control default ents of player / perhaps use service to spawn player based on session data
---- default ent + loadout *or* use serialized stuff from session
---- already partially implemented
-
-
 - introduce ships
 - introduce new weapons/abilities
 -- flares -> shoots out random entities, used for rockets to hit them, rather than ship -> shoots out and explodes, only minimal damage, make rocket health low

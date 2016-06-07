@@ -1,7 +1,7 @@
-package com.projectsandbox.components.server.inventory.item.weapon;
+package com.projectsandbox.components.game.inventory.item.weapon;
 
 import com.projectsandbox.components.server.Controller;
-import com.projectsandbox.components.server.effect.types.ExplosionEffect;
+import com.projectsandbox.components.game.effect.types.ExplosionEffect;
 import com.projectsandbox.components.server.entity.Entity;
 import com.projectsandbox.components.server.entity.death.SuicideVestKiller;
 import com.projectsandbox.components.server.entity.physics.spatial.SpatialActions;

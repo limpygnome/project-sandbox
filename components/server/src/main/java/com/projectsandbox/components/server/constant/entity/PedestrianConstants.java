@@ -1,6 +1,6 @@
 package com.projectsandbox.components.server.constant.entity;
 
-import com.projectsandbox.components.server.inventory.item.weapon.Gatling;
+import com.projectsandbox.components.game.inventory.item.weapon.Gatling;
 
 /**
  * Created by limpygnome on 04/09/15.

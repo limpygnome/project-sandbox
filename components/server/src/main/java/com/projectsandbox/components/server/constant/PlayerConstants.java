@@ -1,9 +1,9 @@
 package com.projectsandbox.components.server.constant;
 
-import com.projectsandbox.components.server.inventory.item.Fist;
-import com.projectsandbox.components.server.inventory.item.weapon.RocketLauncher;
-import com.projectsandbox.components.server.inventory.item.weapon.Gatling;
-import com.projectsandbox.components.server.inventory.item.weapon.SuicideVest;
+import com.projectsandbox.components.game.inventory.item.Fist;
+import com.projectsandbox.components.game.inventory.item.weapon.RocketLauncher;
+import com.projectsandbox.components.game.inventory.item.weapon.Gatling;
+import com.projectsandbox.components.game.inventory.item.weapon.SuicideVest;
 
 /**
  *

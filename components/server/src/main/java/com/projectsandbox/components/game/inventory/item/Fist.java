@@ -1,7 +1,8 @@
-package com.projectsandbox.components.server.inventory.item;
+package com.projectsandbox.components.game.inventory.item;
 
 import com.projectsandbox.components.server.Controller;
 import com.projectsandbox.components.server.inventory.annotation.InventoryItemTypeId;
+import com.projectsandbox.components.server.inventory.item.AbstractInventoryItem;
 
 /**
  * Created by limpygnome on 04/05/15.

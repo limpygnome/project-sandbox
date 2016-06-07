@@ -3,7 +3,7 @@ package com.projectsandbox.components.game.entity.weapon;
 import com.projectsandbox.components.server.Controller;
 import com.projectsandbox.components.server.entity.Entity;
 import com.projectsandbox.components.server.entity.annotation.EntityType;
-import com.projectsandbox.components.server.entity.component.imp.VelocityComponent;
+import com.projectsandbox.components.game.component.VelocityComponent;
 import com.projectsandbox.components.server.entity.death.AbstractKiller;
 import com.projectsandbox.components.server.entity.death.RocketKiller;
 import com.projectsandbox.components.server.entity.physics.Vector2;

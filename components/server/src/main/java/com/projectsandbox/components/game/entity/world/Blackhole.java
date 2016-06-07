@@ -2,7 +2,7 @@ package com.projectsandbox.components.game.entity.world;
 
 import com.projectsandbox.components.server.entity.Entity;
 import com.projectsandbox.components.server.entity.annotation.EntityType;
-import com.projectsandbox.components.server.entity.component.imp.blackhole.BlackholeComponent;
+import com.projectsandbox.components.game.component.blackhole.BlackholeComponent;
 import com.projectsandbox.components.server.player.PlayerInfo;
 import com.projectsandbox.components.server.world.map.WorldMap;
 

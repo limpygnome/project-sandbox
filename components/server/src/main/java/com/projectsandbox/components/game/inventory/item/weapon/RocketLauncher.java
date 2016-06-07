@@ -1,4 +1,4 @@
-package com.projectsandbox.components.server.inventory.item.weapon;
+package com.projectsandbox.components.game.inventory.item.weapon;
 
 import com.projectsandbox.components.server.Controller;
 import com.projectsandbox.components.server.entity.Entity;
@@ -8,7 +8,6 @@ import com.projectsandbox.components.game.entity.weapon.Rocket;
 import com.projectsandbox.components.server.inventory.annotation.InventoryItemTypeId;
 import com.projectsandbox.components.server.inventory.InventoryInvokeType;
 import com.projectsandbox.components.server.player.PlayerInfo;
-import com.projectsandbox.components.server.world.map.WorldMap;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
