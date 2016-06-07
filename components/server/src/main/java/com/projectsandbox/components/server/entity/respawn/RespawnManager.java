@@ -167,13 +167,15 @@ public class RespawnManager implements EventLogicCycleService
     private boolean respawnEntity(RespawnData respawnData)
     {
         Entity entity = respawnData.pendingRespawn.entity;
+        PlayerEntity playerEntity = null;
 
         // Determine if entity has been respawned from persistence
         boolean respawnAfterPersisted = false;
 
         if (entity instanceof PlayerEntity)
         {
-            PlayerEntity playerEntity = (PlayerEntity) entity;
+            playerEntity = (PlayerEntity) entity;
+
             if (playerEntity.isRespawnPersistedPlayer())
             {
                 respawnAfterPersisted = true;
@@ -188,6 +190,12 @@ public class RespawnManager implements EventLogicCycleService
         {
             LOG.warn("Could not respawn entity, failed to add to entity manager - entity id: {}", entity.id);
             return false;
+        }
+
+        // Reset respwan-persisted flag
+        if (respawnAfterPersisted)
+        {
+            playerEntity.setRespawnPersistedPlayer(false);
         }
 
         // Invoke spawn event

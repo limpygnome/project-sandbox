@@ -166,7 +166,7 @@ public abstract class PlayerEntity extends Entity
      */
     public synchronized void setPlayers(PlayerInfo[] players)
     {
-        // TODO: do we need to unbind old players
+        // TODO: do we need to unbind old players?
         this.persistToSession = false;
         this.players = players;
 

@@ -63,7 +63,7 @@ public strictfp abstract class Entity implements Serializable
     private transient EntityState state;
     /** Refer to {@link UpdateMasks} */
     public transient char updateMask;
-    
+
     // Size
     public short width;
     public short height;
@@ -91,7 +91,7 @@ public strictfp abstract class Entity implements Serializable
      */
     public boolean physicsIntangible;
 
-    
+
     public Entity(WorldMap map, short width, short height)
     {
         this.map = map;
@@ -105,9 +105,9 @@ public strictfp abstract class Entity implements Serializable
         EntityType entType = (EntityType) annotationEntityType;
         this.entityType = entType.typeId();
 
-        // Set initial slotState
+        // Set initial state
         this.state = EntityState.CREATED;
-        
+
         // Create initial/default slotState data
         this.width = width;
         this.height = height;
@@ -286,37 +286,44 @@ public strictfp abstract class Entity implements Serializable
         // Determine if state change is allowed
         boolean transitionAllowed;
 
-        switch (this.state)
+        if (this.state != null)
         {
-            case CREATED:
-                transitionAllowed = (
-                                        state == EntityState.UPDATED || state == EntityState.PENDING_DELETED ||
-                                        state == EntityState.DELETED || state == EntityState.NONE ||
-                                        state == EntityState.CREATED
-                                    );
-                break;
-            case UPDATED:
-                transitionAllowed = (state == EntityState.UPDATED || state == EntityState.PENDING_DELETED || state == EntityState.NONE);
-                break;
-            case PENDING_DELETED:
-                transitionAllowed = (state == EntityState.DELETED);
+            switch (this.state)
+            {
+                case CREATED:
+                    transitionAllowed = (
+                            state == EntityState.UPDATED || state == EntityState.PENDING_DELETED ||
+                                    state == EntityState.DELETED || state == EntityState.NONE ||
+                                    state == EntityState.CREATED
+                    );
+                    break;
+                case UPDATED:
+                    transitionAllowed = (state == EntityState.UPDATED || state == EntityState.PENDING_DELETED || state == EntityState.NONE);
+                    break;
+                case PENDING_DELETED:
+                    transitionAllowed = (state == EntityState.DELETED);
 
-                // Remove from quadtree...
-                if (transitionAllowed)
-                {
-                    map.entityManager.getQuadTree().remove(this);
-                }
+                    // Remove from quadtree...
+                    if (transitionAllowed)
+                    {
+                        map.entityManager.getQuadTree().remove(this);
+                    }
 
-                break;
-            case DELETED:
-                transitionAllowed = (state == EntityState.CREATED);
-                break;
-            case NONE:
-                transitionAllowed = (state == EntityState.UPDATED || state == EntityState.PENDING_DELETED);
-                break;
-            default:
-                transitionAllowed = false;
-                break;
+                    break;
+                case DELETED:
+                    transitionAllowed = (state == EntityState.CREATED);
+                    break;
+                case NONE:
+                    transitionAllowed = (state == EntityState.UPDATED || state == EntityState.PENDING_DELETED);
+                    break;
+                default:
+                    transitionAllowed = false;
+                    break;
+            }
+        }
+        else
+        {
+            transitionAllowed = true;
         }
 
         // Update transition if allowed
@@ -327,7 +334,7 @@ public strictfp abstract class Entity implements Serializable
         else
         {
             LOG.error("Disallowed state transition - old state: {} -> new state: {}, ent: {}", this.state, state, this);
-            throw new RuntimeException("Unexpected entity transition");
+            throw new RuntimeException("Unexpected entity transition - new: " + state + ", old: " + this.state);
         }
     }
     

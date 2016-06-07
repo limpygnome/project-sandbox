@@ -181,7 +181,6 @@ public class PlayerService implements EventLogicCycleService, IdCounterConsumer
                 playerEntityService.persistPlayer(playerInfo);
 
                 // Remove entity
-                // TODO: make this more generic...perhaps remove if spawned entity
                 if (entity != null && entity instanceof PlayerEntity)
                 {
                     PlayerEntity playerEntity = (PlayerEntity) entity;

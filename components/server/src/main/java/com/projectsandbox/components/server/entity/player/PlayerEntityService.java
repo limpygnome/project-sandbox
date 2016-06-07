@@ -44,6 +44,10 @@ public class PlayerEntityService
             {
                 // TODO: need to sort this when multiple maps...
                 playerEntity.map = worldMap;
+                playerEntity.setPlayers(new PlayerInfo[]{ playerInfo });
+
+                // Set flag to indicate this entity has been created from persistence
+                playerEntity.setRespawnPersistedPlayer(true);
             }
 
             // Set flag to allow persistence of entity

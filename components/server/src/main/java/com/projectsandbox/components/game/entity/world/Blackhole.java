@@ -15,15 +15,15 @@ public class Blackhole extends Entity
 
     public Blackhole(WorldMap map)
     {
-        super(map, (short) 2048, (short) 2048);
+        super(map, (short) 4096, (short) 4096);
 
         this.physicsIntangible = true;
         this.physicsStatic = true;
 
         float radius = (float) (width > height ? width : height) / 2.0f;
         components.add(new BlackholeComponent(
-                25.0f,      // Max acceleration
-                0.2f,       // Max damage
+                2.0f,       // Max acceleration
+                5.0f,       // Max damage
                 radius
         ));
     }

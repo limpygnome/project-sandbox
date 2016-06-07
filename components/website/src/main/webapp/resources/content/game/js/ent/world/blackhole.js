@@ -3,8 +3,8 @@ game.entities.world.Blackhole = function()
     Entity.call(this,
         {
             model: "2d-rect",
-            width: 2048.0,
-            height: 2048.0
+            width: 4096.0,
+            height: 4096.0
         }
     );
 

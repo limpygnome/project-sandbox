@@ -79,15 +79,20 @@ public class SessionService
 
     public synchronized void unload(GameSession gameSession)
     {
-        // Set session to unconnected
-        gameSession.getPlayerMetrics().setLastUpdatedNow();
-        gameSession.setConnected(false);
-
-        // Transfer score/kills/death to user's profile/account
         User user = gameSession.getUser();
 
-        if (user != null)
+        if (user == null)
         {
+            // Remove guest session immediately after disconnect...
+            gameRepository.removeGameSession(gameSession.getToken());
+        }
+        else
+        {
+            // Set session to unconnected
+            gameSession.getPlayerMetrics().setLastUpdatedNow();
+            gameSession.setConnected(false);
+
+            // Transfer score/kills/death to user's profile/account
             PlayerMetrics gameSessionMetrics = gameSession.getPlayerMetrics();
             PlayerMetrics userMetrics = user.getPlayerMetrics();
 
@@ -95,10 +100,6 @@ public class SessionService
             userMetrics.transferFromGameSession(gameSessionMetrics);
 
             persist(gameSession, user);
-        }
-        else
-        {
-            persist(gameSession);
         }
 
         // Remove from tracked list
