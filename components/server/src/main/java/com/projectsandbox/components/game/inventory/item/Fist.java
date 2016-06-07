@@ -17,4 +17,5 @@ public class Fist extends AbstractInventoryItem
     {
         return "";
     }
+
 }
