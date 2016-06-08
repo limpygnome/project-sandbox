@@ -103,6 +103,13 @@ game.effects =
                 );
                 break;
 
+            // Jump drive
+            case 101:
+                this.createExplosion(
+                    x, y, 256, 5000, -12.0, 12.0
+                );
+                break;
+
             default:
                 console.error("game/effects - unknown explosion effect sub-type - " + subType);
                 break;

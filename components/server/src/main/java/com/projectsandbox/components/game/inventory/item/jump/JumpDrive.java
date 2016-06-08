@@ -1,5 +1,6 @@
 package com.projectsandbox.components.game.inventory.item.jump;
 
+import com.projectsandbox.components.game.effect.types.ExplosionEffect;
 import com.projectsandbox.components.server.Controller;
 import com.projectsandbox.components.server.entity.Entity;
 import com.projectsandbox.components.server.entity.EntityManager;
@@ -7,6 +8,7 @@ import com.projectsandbox.components.server.entity.physics.Vector2;
 import com.projectsandbox.components.server.entity.physics.collisions.CollisionDetection;
 import com.projectsandbox.components.server.entity.physics.collisions.CollisionResult;
 import com.projectsandbox.components.server.inventory.InventoryInvokeType;
+import com.projectsandbox.components.server.inventory.InventorySlotState;
 import com.projectsandbox.components.server.inventory.annotation.InventoryItemTypeId;
 import com.projectsandbox.components.server.inventory.item.AbstractInventoryItem;
 
@@ -20,6 +22,11 @@ public class JumpDrive extends AbstractInventoryItem
 {
     public static final long serialVersionUID = 1L;
 
+    /*
+        Minimum delay between jumps.
+     */
+    private static final long MINIMUM_DELAY_MS = 5000;
+
     // Settings
     private float maxDistance;          // The maximum jump distance
     private float distanceStep;         // The additional jump distance the ship will jump when the player has the item on
@@ -28,6 +35,7 @@ public class JumpDrive extends AbstractInventoryItem
     // State
     private float rechargedDistance;    // The distance currently recharged and available to use
     private float jumpDistance;         // The distance to be jumped
+    private long lastUsed;              // Time at which jump was last used; prevents spam
 
     public JumpDrive(float maxDistance, float distanceStep, float rechargeStep)
     {
@@ -37,6 +45,7 @@ public class JumpDrive extends AbstractInventoryItem
 
         rechargedDistance = 0.0f;
         jumpDistance = 0.0f;
+        lastUsed = 0L;
 
         // Setup type to be toggled
         this.invokeType = InventoryInvokeType.TOGGLE;
@@ -48,93 +57,116 @@ public class JumpDrive extends AbstractInventoryItem
         // Execute logic to determine state
         super.logic(controller);
 
-        switch (slot.invokeState)
+        boolean changed = false;
+        long lastUsedMs = controller.gameTime() - lastUsed;
+
+        if(lastUsedMs >= MINIMUM_DELAY_MS)
         {
-            case OFF:
+            switch (slot.invokeState)
+            {
+                case OFF:
 
-                // Check if any jump distance built up
-                if (jumpDistance > 0)
-                {
-                    Entity parent = slot.inventory.parent;
-
-                    // Jump the parent...
-                    Vector2 jumpOffset = Vector2.vectorFromAngle(parent.rotation, jumpDistance);
-                    parent.positionNew.add(jumpOffset);
-
-                    // Fetch any possible collisions
-                    EntityManager entityManager = parent.map.entityManager;
-                    Set<Entity> nearbyEntities = entityManager.getQuadTree().getCollidableEntities(parent);
-                    CollisionDetection collisionDetection = entityManager.getCollisionDetection();
-
-                    CollisionResult collisionResult;
-
-                    for (Entity entity : nearbyEntities)
+                    // Check if any jump distance built up and able to use
+                    if (jumpDistance > 0)
                     {
-                        if (entity != parent && parent.isCollidable(entity))
-                        {
-                            collisionResult = collisionDetection.collision(parent, entity);
+                        Entity parent = slot.inventory.parent;
 
-                            if (collisionResult.collision)
+                        // Update when last used (now)...
+                        lastUsed = controller.gameTime();
+
+                        // Jump the parent...
+                        Vector2 jumpOffset = Vector2.vectorFromAngle(parent.rotation, jumpDistance);
+                        parent.positionNew.add(jumpOffset);
+
+                        // Create explosion effect
+                        ExplosionEffect effect = new ExplosionEffect(
+                                parent.positionNew.x, parent.positionNew.y, ExplosionEffect.SubType.JUMP_DRIVE
+                        );
+                        parent.map.effectsManager.add(effect);
+
+                        // Fetch any possible collisions
+                        EntityManager entityManager = parent.map.entityManager;
+                        Set<Entity> nearbyEntities = entityManager.getQuadTree().getCollidableEntities(parent);
+                        CollisionDetection collisionDetection = entityManager.getCollisionDetection();
+
+                        CollisionResult collisionResult;
+
+                        for (Entity entity : nearbyEntities)
+                        {
+                            if (entity != parent && parent.isCollidable(entity))
                             {
-                                // Cause parent to explode for dodgy jump...
-                                parent.kill(controller, entity, JumpDriveKiller.class);
-                                break;
+                                collisionResult = collisionDetection.collision(parent, entity);
+
+                                if (collisionResult.collision)
+                                {
+                                    // Cause parent to explode for dodgy jump...
+                                    parent.kill(controller, entity, JumpDriveKiller.class);
+                                    break;
+                                }
                             }
+                        }
+
+                        // Reset jump distance
+                        jumpDistance = 0.0f;
+                    }
+
+                    break;
+                case ON:
+
+                    // Increase jump distance, if any recharge available...
+                    if (rechargedDistance > 0)
+                    {
+                        // Scrape any available recharge distance...
+                        if (distanceStep > rechargedDistance)
+                        {
+                            jumpDistance += rechargedDistance;
+                            rechargedDistance = 0;
+                        }
+                        else
+                        {
+                            jumpDistance += distanceStep;
+                            rechargedDistance -= distanceStep;
+                        }
+
+                        // Limit jump distance to maximum jump distance
+                        if (jumpDistance > maxDistance)
+                        {
+                            jumpDistance = maxDistance;
                         }
                     }
 
-                    // Reset jump distance
-                    jumpDistance = 0.0f;
-                }
-
-                break;
-            case ON:
-
-                // Increase jump distance, if any recharge available...
-                if (rechargedDistance > 0)
-                {
-                    // Scrape any available recharge distance...
-                    if (distanceStep > rechargedDistance)
-                    {
-                        jumpDistance += rechargedDistance;
-                        rechargedDistance = 0;
-                    }
-                    else
-                    {
-                        jumpDistance += distanceStep;
-                        rechargedDistance -= distanceStep;
-                    }
-
-                    // Limit jump distance to maximum jump distance
-                    if (jumpDistance > maxDistance)
-                    {
-                        jumpDistance = maxDistance;
-                    }
-                }
-
-                break;
-        }
-
-        // Check if drive needs to recharge...
-        if (rechargedDistance != maxDistance)
-        {
-            float newRechargedDistance = rechargedDistance + rechargeStep;
-
-            // Limit to maximum jump distance
-            if (newRechargedDistance > maxDistance)
-            {
-                newRechargedDistance = maxDistance;
+                    break;
             }
 
-            // Set new recharged distance
-            rechargedDistance = newRechargedDistance;
+            // Check if drive needs to recharge...
+            if (rechargedDistance != maxDistance)
+            {
+                float newRechargedDistance = rechargedDistance + rechargeStep;
+
+                // Limit to maximum jump distance
+                if (newRechargedDistance > maxDistance)
+                {
+                    newRechargedDistance = maxDistance;
+                }
+
+                // Set new recharged distance
+                rechargedDistance = newRechargedDistance;
+                changed = true;
+            }
+        }
+
+        // Check if to change state
+        if (changed)
+        {
+            slot.setState(InventorySlotState.CHANGED);
         }
     }
 
     @Override
     public String eventFetchItemText(Controller controller)
     {
-        return String.valueOf(System.currentTimeMillis());
+        float percentRecharged = (rechargedDistance / maxDistance) * 100.0f;
+        return String.format("%.0f%%", percentRecharged);
     }
 
 }

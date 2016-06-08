@@ -11,7 +11,8 @@ public class ExplosionEffect extends AbstractEffect
 {
     public enum SubType
     {
-        SUICIDE_VEST((byte) 100)
+        SUICIDE_VEST((byte) 100),
+        JUMP_DRIVE((byte) 101)
         ;
 
         private final byte SUB_TYPE;

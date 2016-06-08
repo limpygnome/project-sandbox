@@ -1,6 +1,7 @@
 package com.projectsandbox.components.game.entity.ships;
 
 import com.projectsandbox.components.game.inventory.item.jump.JumpDrive;
+import com.projectsandbox.components.game.inventory.item.weapon.Gatling;
 import com.projectsandbox.components.server.Controller;
 import com.projectsandbox.components.server.entity.player.PlayerEntity;
 import com.projectsandbox.components.server.entity.annotation.EntityType;
@@ -66,7 +67,8 @@ public class Fighter extends PlayerEntity
         {
             Inventory inventory = new Inventory(this);
             inventory.add(new RocketLauncher(null));
-            inventory.add(new JumpDrive(8000.0f, 50.0f, 500.0f));
+            inventory.add(new JumpDrive(100000.0f, 1000.0f, 50.0f));
+            inventory.add(new Gatling());
             setInventory(0, inventory);
         }
     }
