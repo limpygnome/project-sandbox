@@ -343,4 +343,9 @@ public class EntityManager implements EventLogicCycleService, IdCounterConsumer
         }
     }
 
+    public CollisionDetection getCollisionDetection()
+    {
+        return collisionDetection;
+    }
+
 }
