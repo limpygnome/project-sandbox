@@ -1,7 +1,8 @@
 package com.projectsandbox.components.game.entity.ships;
 
-import com.projectsandbox.components.game.inventory.item.jump.JumpDrive;
-import com.projectsandbox.components.game.inventory.item.weapon.Gatling;
+import com.projectsandbox.components.game.inventory.item.ShieldItem;
+import com.projectsandbox.components.game.inventory.item.jump.JumpDriveItem;
+import com.projectsandbox.components.game.inventory.item.weapon.GatlingItem;
 import com.projectsandbox.components.server.Controller;
 import com.projectsandbox.components.server.entity.player.PlayerEntity;
 import com.projectsandbox.components.server.entity.annotation.EntityType;
@@ -10,7 +11,7 @@ import com.projectsandbox.components.game.component.SpaceMovementComponent;
 import com.projectsandbox.components.game.component.VelocityComponent;
 import com.projectsandbox.components.server.entity.physics.Vector2;
 import com.projectsandbox.components.server.inventory.Inventory;
-import com.projectsandbox.components.game.inventory.item.weapon.RocketLauncher;
+import com.projectsandbox.components.game.inventory.item.weapon.RocketLauncherItem;
 import com.projectsandbox.components.server.player.PlayerInfo;
 import com.projectsandbox.components.server.world.map.WorldMap;
 import com.projectsandbox.components.server.world.spawn.Spawn;
@@ -66,9 +67,10 @@ public class Fighter extends PlayerEntity
         if (!respawnAfterPersisted)
         {
             Inventory inventory = new Inventory(this);
-            inventory.add(new RocketLauncher(null));
-            inventory.add(new JumpDrive(100000.0f, 1000.0f, 50.0f));
-            inventory.add(new Gatling());
+            inventory.add(new RocketLauncherItem(null));
+            inventory.add(new JumpDriveItem(100000.0f, 1000.0f, 50.0f));
+            inventory.add(new GatlingItem());
+            inventory.add(new ShieldItem(1000.0f, 5.0f));
             setInventory(0, inventory);
         }
     }

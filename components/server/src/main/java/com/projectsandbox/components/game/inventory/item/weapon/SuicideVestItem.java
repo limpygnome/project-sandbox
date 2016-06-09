@@ -13,13 +13,13 @@ import com.projectsandbox.components.server.constant.weapon.SuicideVestConstants
  * Created by limpygnome on 30/06/15.
  */
 @InventoryItemTypeId(typeId = 610)
-public class SuicideVest extends AbstractWeapon
+public class SuicideVestItem extends AbstractWeaponItem
 {
     public static final long serialVersionUID = 1L;
 
     private long gameTimeDetonation;
 
-    public SuicideVest()
+    public SuicideVestItem()
     {
         super(
                 (short) 1,  // bullets per mag

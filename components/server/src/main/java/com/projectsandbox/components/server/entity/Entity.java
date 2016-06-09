@@ -358,7 +358,7 @@ public strictfp abstract class Entity implements Serializable
      * @param inflicter The entity causing damage, can be null
      * @param killerType The type of death in the event this Entity dies
      */
-    public synchronized  <T extends Class<? extends AbstractKiller>> void damage(Controller controller, Entity inflicter, float damage, T killerType)
+    public synchronized <T extends Class<? extends AbstractKiller>> void damage(Controller controller, Entity inflicter, float damage, T killerType)
     {
         // Check entity does not have godmode
         if (maxHealth <= 0.0f)
@@ -366,28 +366,25 @@ public strictfp abstract class Entity implements Serializable
             return;
         }
 
-        // Check health is not infinity
-        if
-        (
-            health == Float.NaN ||
-            health == Float.POSITIVE_INFINITY || 
-            health == Float.NEGATIVE_INFINITY
-        )
+        // Invoke components to handle damage
+        Set<DamageComponentEvent> handlers = components.fetch(DamageComponentEvent.class);
+        for (DamageComponentEvent handler : handlers)
         {
-            health = 0.0f;
+            damage = handler.eventDamage(controller, inflicter, damage);
         }
-        
-        // Apply damage
-        health -= damage;
-        
-        // Update mask
-        updateMask(UpdateMasks.HEALTH);
 
-        // Check health
-        if (health <= 0.0f)
+        // Apply damage and set mask as updated
+        if (damage != 0.0f)
         {
-            // Entity is now dead!
-            kill(controller, inflicter, killerType);
+            health -= damage;
+            updateMask(UpdateMasks.HEALTH);
+
+            // Check if entity has died...
+            if (health <= 0.0f)
+            {
+                // Entity is now dead!
+                kill(controller, inflicter, killerType);
+            }
         }
     }
     

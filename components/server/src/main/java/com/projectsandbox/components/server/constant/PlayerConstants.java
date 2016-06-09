@@ -1,9 +1,9 @@
 package com.projectsandbox.components.server.constant;
 
 import com.projectsandbox.components.game.inventory.item.Fist;
-import com.projectsandbox.components.game.inventory.item.weapon.RocketLauncher;
-import com.projectsandbox.components.game.inventory.item.weapon.Gatling;
-import com.projectsandbox.components.game.inventory.item.weapon.SuicideVest;
+import com.projectsandbox.components.game.inventory.item.weapon.RocketLauncherItem;
+import com.projectsandbox.components.game.inventory.item.weapon.GatlingItem;
+import com.projectsandbox.components.game.inventory.item.weapon.SuicideVestItem;
 
 /**
  *
@@ -22,9 +22,9 @@ public class PlayerConstants
      */
     public static final Class[] DEFAULT_INVENTORY_ITEMS = {
             Fist.class,
-            Gatling.class,
-            RocketLauncher.class,
-            SuicideVest.class
+            GatlingItem.class,
+            RocketLauncherItem.class,
+            SuicideVestItem.class
     };
 
     /**

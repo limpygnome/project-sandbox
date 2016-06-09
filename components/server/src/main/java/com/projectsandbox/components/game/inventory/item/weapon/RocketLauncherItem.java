@@ -17,11 +17,11 @@ import static com.projectsandbox.components.server.constant.weapon.RocketConstan
  * Created by limpygnome on 26/06/15.
  */
 @InventoryItemTypeId(typeId = 601)
-public class RocketLauncher extends AbstractWeapon
+public class RocketLauncherItem extends AbstractWeaponItem
 {
     public static final long serialVersionUID = 1L;
 
-    private final static Logger LOG = LogManager.getLogger(RocketLauncher.class);
+    private final static Logger LOG = LogManager.getLogger(RocketLauncherItem.class);
 
     private final Vector2[] offsets;
 
@@ -30,7 +30,7 @@ public class RocketLauncher extends AbstractWeapon
      *
      * @param offsets locations of where rockets are fired from; if null, only single rocket is fired from front-centre of ship
      */
-    public RocketLauncher(Vector2[] offsets)
+    public RocketLauncherItem(Vector2[] offsets)
     {
         super(
                 (short) 1,      // bullets per mag

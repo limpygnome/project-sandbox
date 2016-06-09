@@ -37,6 +37,12 @@ public class SATCollisionDetection implements CollisionDetection
         return collision(a.cachedVertices, b.cachedVertices);
     }
 
+    @Override
+    public CollisionResult collision(Entity entity, Vertices vertices)
+    {
+        return collision(entity.cachedVertices, vertices);
+    }
+
     public Collection<CollisionMapResult> collisionMap(Entity entity)
     {
         WorldMap map = entity.map;

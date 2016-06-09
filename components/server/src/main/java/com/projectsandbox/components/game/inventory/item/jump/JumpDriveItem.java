@@ -18,7 +18,7 @@ import java.util.Set;
  * Allows the player to instantly move around the map.
  */
 @InventoryItemTypeId(typeId = 800)
-public class JumpDrive extends AbstractInventoryItem
+public class JumpDriveItem extends AbstractInventoryItem
 {
     public static final long serialVersionUID = 1L;
 
@@ -37,7 +37,7 @@ public class JumpDrive extends AbstractInventoryItem
     private float jumpDistance;         // The distance to be jumped
     private long lastUsed;              // Time at which jump was last used; prevents spam
 
-    public JumpDrive(float maxDistance, float distanceStep, float rechargeStep)
+    public JumpDriveItem(float maxDistance, float distanceStep, float rechargeStep)
     {
         this.maxDistance = maxDistance;
         this.distanceStep = distanceStep;

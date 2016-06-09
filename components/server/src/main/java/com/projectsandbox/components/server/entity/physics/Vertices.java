@@ -88,7 +88,7 @@ public class Vertices
         // Build collision radius
         this.collisionRadius = buildCollisionRadius();
     }
-    
+
     /**
      * Projects this set of vertices onto an axis.
      * 
@@ -229,6 +229,50 @@ public class Vertices
         Vector2 position = new Vector2(x, y);
         
         return new Vertices(position, 0.0f, tileData.tileSize, tileData.tileSize);
+    }
+
+    /**
+     *
+     * @param entity the entity
+     * @param radiusX the radius of the X axis
+     * @param radiusY the radius of the Y axis
+     * @param numberOfVertices the total number of vertices
+     * @return
+     */
+    public static Vertices buildEllipsis(Entity entity, float radiusX, float radiusY, int numberOfVertices)
+    {
+        // Compute vertices
+        float rotation = entity.rotation;
+        float angleSeparation = 360.0f / numberOfVertices;
+
+        float angle;
+        Vector2 vertex;
+        Vector2[] vertices = new Vector2[numberOfVertices];
+
+        for (int vertexIndex = 0; vertexIndex < numberOfVertices; vertexIndex++)
+        {
+            // Calculate point of ellipsis
+            angle = angleSeparation * vertexIndex;
+            vertex = pointOfEllipsis(radiusX, radiusY, angle);
+
+            // Rotate by rotation of entity
+            vertex.rotate(0.0f, 0.0f, rotation);
+
+            vertices[vertexIndex] = vertex;
+        }
+
+        // Create Vertices instance
+        Vertices instance = new Vertices(entity.positionNew, vertices);
+        return instance;
+    }
+
+    private static Vector2 pointOfEllipsis(float radiusX, float radiusY, float radians)
+    {
+        Vector2 point = new Vector2(
+                radiusX * (float) Math.cos(radians),
+                radiusY * (float) Math.sin(radians)
+        );
+        return point;
     }
     
 }

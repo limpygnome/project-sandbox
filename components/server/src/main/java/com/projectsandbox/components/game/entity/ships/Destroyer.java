@@ -8,8 +8,8 @@ import com.projectsandbox.components.game.component.SpaceMovementComponent;
 import com.projectsandbox.components.game.component.VelocityComponent;
 import com.projectsandbox.components.server.entity.physics.Vector2;
 import com.projectsandbox.components.server.inventory.Inventory;
-import com.projectsandbox.components.game.inventory.item.weapon.Gatling;
-import com.projectsandbox.components.game.inventory.item.weapon.RocketLauncher;
+import com.projectsandbox.components.game.inventory.item.weapon.GatlingItem;
+import com.projectsandbox.components.game.inventory.item.weapon.RocketLauncherItem;
 import com.projectsandbox.components.server.player.PlayerInfo;
 import com.projectsandbox.components.server.world.map.WorldMap;
 import com.projectsandbox.components.server.world.spawn.Spawn;
@@ -66,14 +66,14 @@ public class Destroyer extends PlayerEntity
         {
             Inventory inventory = new Inventory(this);
 
-            inventory.add(new RocketLauncher(
+            inventory.add(new RocketLauncherItem(
                     new Vector2[]
                             {
                                     new Vector2(-40.0f, -100.0f),
                                     new Vector2(+40.0f, -100.0f)
                             }
             ));
-            inventory.add(new Gatling());
+            inventory.add(new GatlingItem());
 
             setInventory(0, inventory);
         }

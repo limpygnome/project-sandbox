@@ -228,13 +228,23 @@ public class Vector2 implements Serializable
         
         return Math.abs((float) Math.sqrt(expA + expB));
     }
-    
-    public static Vector2 vectorFromAngle(float radians, float distance)
+
+    public Vector2 offset(float radians, float distance)
     {
+        // Calculate vector for given radians and length/distance
         float x = distance * (float) Math.sin(radians);
         float y = distance * (float) Math.cos(radians);
 
-        return new Vector2(x, y);
+        // Offset current vector
+        this.x += x;
+        this.y += y;
+
+        return this;
+    }
+
+    public static Vector2 vectorFromAngle(float radians, float distance)
+    {
+        return new Vector2().offset(radians, distance);
     }
 
     public static Vector2 vectorFromAngle(float radians, Vector2 offset)
@@ -331,6 +341,16 @@ public class Vector2 implements Serializable
         }
 
         return this;
+    }
+
+    /**
+     * Converts this vector to an angle.
+     *
+     * @return the angle
+     */
+    public float getAngleInRadians()
+    {
+        return (float) Math.atan2(x, y);
     }
 
     @Override

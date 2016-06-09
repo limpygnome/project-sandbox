@@ -67,6 +67,17 @@ public class ComponentCollection< K extends Class<ComponentEvent>, V extends Ent
         components.put(entityComponent.getClass(), entityComponent);
     }
 
+    public synchronized void remove(Class<V> clazz)
+    {
+        // Fetch component
+        V entityComponent = fetchComponent(clazz);
+
+        if (entityComponent != null)
+        {
+            remove(entityComponent);
+        }
+    }
+
     public synchronized void remove(V entityComponent)
     {
         Set<Map.Entry<K, HashSet<V>>> set = eventCallbacks.entrySet();

@@ -1,6 +1,7 @@
 package com.projectsandbox.components.server.entity.physics.collisions;
 
 import com.projectsandbox.components.server.entity.Entity;
+import com.projectsandbox.components.server.entity.physics.Vertices;
 import com.projectsandbox.components.server.entity.physics.collisions.map.CollisionMapResult;
 
 import java.util.Collection;
@@ -19,6 +20,15 @@ public interface CollisionDetection
      * @return the result from testing the two entities
      */
     CollisionResult collision(Entity a, Entity b);
+
+    /**
+     * Performs collision detection between an entity and a set of vertices.
+     *
+     * @param entity
+     * @param vertices
+     * @return
+     */
+    CollisionResult collision(Entity entity, Vertices vertices);
 
     /**
      * Used to perform collision detection with a map.

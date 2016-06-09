@@ -7,7 +7,7 @@ import com.projectsandbox.components.game.component.PlayerEjectionComponent;
 import com.projectsandbox.components.game.component.PlayerVehicleMovementComponent;
 import com.projectsandbox.components.server.entity.physics.Vector2;
 import com.projectsandbox.components.server.inventory.Inventory;
-import com.projectsandbox.components.game.inventory.item.weapon.RocketLauncher;
+import com.projectsandbox.components.game.inventory.item.weapon.RocketLauncherItem;
 import com.projectsandbox.components.server.player.PlayerInfo;
 import com.projectsandbox.components.server.world.map.WorldMap;
 import com.projectsandbox.components.server.world.spawn.Spawn;
@@ -61,8 +61,8 @@ public class RocketCar extends PlayerEntity
         // Load default inventory
         Inventory inventory = new Inventory(this);
 
-        RocketLauncher rocketLauncher = new RocketLauncher(null);
-        inventory.add(rocketLauncher);
+        RocketLauncherItem rocketLauncherItem = new RocketLauncherItem(null);
+        inventory.add(rocketLauncherItem);
 
         setInventory(0, inventory);
     }

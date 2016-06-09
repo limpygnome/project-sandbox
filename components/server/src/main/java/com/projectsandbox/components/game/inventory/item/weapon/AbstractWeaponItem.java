@@ -21,9 +21,9 @@ import org.apache.logging.log4j.Logger;
  *
  * @author limpygnome
  */
-public abstract class AbstractWeapon extends AbstractInventoryItem
+public abstract class AbstractWeaponItem extends AbstractInventoryItem
 {
-    private final static Logger LOG = LogManager.getLogger(AbstractWeapon.class);
+    private final static Logger LOG = LogManager.getLogger(AbstractWeaponItem.class);
 
     public short bulletsPerMag;
     public short bullets;
@@ -35,7 +35,7 @@ public abstract class AbstractWeapon extends AbstractInventoryItem
     
     public float maxDistance;
     
-    public AbstractWeapon(short bulletsPerMag, short mags, long fireDelay, long reloadDelay)
+    public AbstractWeaponItem(short bulletsPerMag, short mags, long fireDelay, long reloadDelay)
     {
         this.bullets = bulletsPerMag;
         this.bulletsPerMag = bulletsPerMag;
@@ -169,9 +169,9 @@ public abstract class AbstractWeapon extends AbstractInventoryItem
     public InventoryMergeResult merge(AbstractInventoryItem item)
     {
         // This check should not be needed, but just for sanity purposes
-        if (item instanceof AbstractWeapon)
+        if (item instanceof AbstractWeaponItem)
         {
-            AbstractWeapon weapon = (AbstractWeapon) item;
+            AbstractWeaponItem weapon = (AbstractWeaponItem) item;
             
             // Add bullets from item
             short combinedBullets = (short) (this.bullets + weapon.bullets);
