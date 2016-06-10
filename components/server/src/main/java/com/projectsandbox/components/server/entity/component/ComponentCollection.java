@@ -67,7 +67,7 @@ public class ComponentCollection< K extends Class<ComponentEvent>, V extends Ent
         components.put(entityComponent.getClass(), entityComponent);
     }
 
-    public synchronized void remove(Class<V> clazz)
+    public synchronized V remove(Class<V> clazz)
     {
         // Fetch component
         V entityComponent = fetchComponent(clazz);
@@ -76,9 +76,11 @@ public class ComponentCollection< K extends Class<ComponentEvent>, V extends Ent
         {
             remove(entityComponent);
         }
+
+        return entityComponent;
     }
 
-    public synchronized void remove(V entityComponent)
+    public synchronized V remove(V entityComponent)
     {
         Set<Map.Entry<K, HashSet<V>>> set = eventCallbacks.entrySet();
         Iterator<Map.Entry<K, HashSet<V>>> iterator = set.iterator();
@@ -100,6 +102,8 @@ public class ComponentCollection< K extends Class<ComponentEvent>, V extends Ent
 
         // Remove from components
         components.remove(entityComponent);
+
+        return entityComponent;
     }
 
     public synchronized void registerEventType(K componentEvent, V entityComponent)

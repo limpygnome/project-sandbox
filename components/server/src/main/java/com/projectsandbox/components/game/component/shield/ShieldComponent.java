@@ -5,11 +5,7 @@ import com.projectsandbox.components.server.Controller;
 import com.projectsandbox.components.server.entity.Entity;
 import com.projectsandbox.components.server.entity.EntityManager;
 import com.projectsandbox.components.server.entity.component.EntityComponent;
-import com.projectsandbox.components.server.entity.component.event.CollisionEntityComponentEvent;
-import com.projectsandbox.components.server.entity.component.event.DeathComponentEvent;
 import com.projectsandbox.components.server.entity.component.event.LogicComponentEvent;
-import com.projectsandbox.components.server.entity.death.AbstractKiller;
-import com.projectsandbox.components.server.entity.physics.Vector2;
 import com.projectsandbox.components.server.entity.physics.Vertices;
 import com.projectsandbox.components.server.entity.physics.collisions.CollisionDetection;
 import com.projectsandbox.components.server.entity.physics.collisions.CollisionResult;
@@ -25,7 +21,7 @@ import java.util.Set;
  * - The shield is twice the size of the entity.
  * - Any entities within the shield radius are removed
  */
-public class ShieldComponent  implements Serializable, EntityComponent, LogicComponentEvent, CollisionEntityComponentEvent
+public class ShieldComponent  implements Serializable, EntityComponent, LogicComponentEvent
 {
     private static final long serialVersionUID = 1L;
 
@@ -45,39 +41,8 @@ public class ShieldComponent  implements Serializable, EntityComponent, LogicCom
         this.regenStep = regenStep;
 
         // Radius is currently width and height doubled
-        this.radiusX = entity.width * 2.0f;
-        this.radiusY = entity.height * 2.0f;
-    }
-
-    @Override
-    public void eventCollisionEntity(Controller controller, Entity entity, Entity entityOther, CollisionResult result)
-    {
-//        // Push other entity outside of shield
-//        // -- Convert mtv to angle
-//        float mtvAngle = result.mtv.getAngleInRadians();
-//        // -- Calculate point of shield
-//        Vector2 shieldPoint = new Vector2(
-//            radiusX * (float) Math.cos(mtvAngle),
-//            radiusY * (float) Math.sin(mtvAngle)
-//        );
-//        // -- Add position of current entity
-//        shieldPoint.add(entity.positionNew);
-//        // -- Offset mtv
-//        shieldPoint.add(result.mtv);
-//        // -- Change other ent's position
-//        entityOther.position(shieldPoint);
-//
-//        // TODO: velocity should be handled elsewhere / should not need to do anything here...
-////        // Invert velocity of entity
-////        VelocityComponent component = (VelocityComponent) entity.components.fetchSingle(VelocityComponent.class);
-////
-////        if (component != null)
-////        {
-////            component.getVelocity().invert();
-////        }
-//
-//        // Apply damage to shield
-//        damageFromMass(controller, entity, entityOther);
+        this.radiusX = entity.width * 4.0f;
+        this.radiusY = entity.height * 4.0f;
     }
 
     @Override
@@ -92,31 +57,29 @@ public class ShieldComponent  implements Serializable, EntityComponent, LogicCom
         QuadTree quadTree = entityManager.getQuadTree();
 
         // Perform collision detection between entities and shield vertices
-        Set<Entity> entities = quadTree.getCollidableEntities(entity);
+        float radius = radiusX > radiusY ? radiusX : radiusY;
+        Set<ProximityResult> entities = quadTree.getEntitiesWithinRadius(entity, radius);
         CollisionResult collisionResult;
 
-        for (Entity entityOther : entities)
+        Entity entityOther;
+        for (ProximityResult proximityResult : entities)
         {
-            collisionResult = collisionDetection.collision(entityOther, shieldVertices);
+            entityOther = proximityResult.entity;
 
-            if (collisionResult.collision)
+            if (entity != entityOther && entity.isCollidable(entityOther))
             {
-                // Move entity outside of shield
-                entityOther.positionNew.add(collisionResult.mtv);
+                collisionResult = collisionDetection.collision(entityOther, shieldVertices);
 
-                // Apply damage
-                damageFromMass(controller, entityOther, entity);
+                if (collisionResult.collision)
+                {
+                    // Move entity outside of shield
+                    entityOther.positionNew.add(collisionResult.mtv);
+
+                    // Apply damage
+                    damageFromMass(controller, entityOther, entity);
+                }
             }
         }
-
-
-//        // Find entities within radius
-//        float radius = radiusX > radiusY ? radiusX : radiusY;
-//        Set<ProximityResult> entities = quadTree.getEntitiesWithinRadius(entity, radius);
-//
-//        //
-
-
     }
 
     /*
@@ -130,7 +93,7 @@ public class ShieldComponent  implements Serializable, EntityComponent, LogicCom
         if (component != null)
         {
             // Use mass as damage from entity
-            float damage = component.getMass();
+            float damage = 0.0f;//component.getMass();
 
             if (damage > health)
             {

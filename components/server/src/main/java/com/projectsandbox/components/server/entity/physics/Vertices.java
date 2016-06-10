@@ -1,6 +1,7 @@
 package com.projectsandbox.components.server.entity.physics;
 
 import com.projectsandbox.components.server.entity.Entity;
+import com.projectsandbox.components.server.util.CustomMath;
 import com.projectsandbox.components.server.world.map.type.tile.TileData;
 
 /**
@@ -243,7 +244,7 @@ public class Vertices
     {
         // Compute vertices
         float rotation = entity.rotation;
-        float angleSeparation = 360.0f / numberOfVertices;
+        float angleSeparation = CustomMath.PI_FLOAT_DOUBLE / numberOfVertices;
 
         float angle;
         Vector2 vertex;
@@ -256,7 +257,7 @@ public class Vertices
             vertex = pointOfEllipsis(radiusX, radiusY, angle);
 
             // Rotate by rotation of entity
-            vertex.rotate(0.0f, 0.0f, rotation);
+            //vertex.rotate(0.0f, 0.0f, rotation);
 
             vertices[vertexIndex] = vertex;
         }

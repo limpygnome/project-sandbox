@@ -39,14 +39,12 @@ public class ShieldItem extends AbstractInventoryItem
         {
             // Shield on...
             case ON:
-                // Add shield component to parent
-                parent.components.add(new ShieldComponent(parent, maxHealth, regenStep));
-                break;
-
-            // Shield off...
-            case OFF:
-                // Remove shield component from parent
-                parent.components.remove(ShieldComponent.class);
+                // Remove shield component from parent if present
+                if (parent.components.remove(ShieldComponent.class) == null)
+                {
+                    // No shield present, thus add it...
+                    parent.components.add(new ShieldComponent(parent, maxHealth, regenStep));
+                }
                 break;
         }
 

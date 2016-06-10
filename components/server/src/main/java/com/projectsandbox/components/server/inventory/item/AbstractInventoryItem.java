@@ -39,7 +39,7 @@ public abstract class AbstractInventoryItem implements Serializable
         this.typeId = inventoryType.typeId();
     }
 
-    public void logic(Controller controller)
+    public synchronized void logic(Controller controller)
     {
         switch (invokeType)
         {
@@ -73,6 +73,9 @@ public abstract class AbstractInventoryItem implements Serializable
             default:
                 throw new IllegalArgumentException("Unhandled invoke type");
         }
+
+        // Reset keydown
+        slot.keyDown = false;
     }
 
     /**
