@@ -22,13 +22,13 @@ public interface CollisionDetection
     CollisionResult collision(Entity a, Entity b);
 
     /**
-     * Performs collision detection between an entity and a set of vertices.
+     * Performs collision detection between two sets of vertices.
      *
-     * @param entity
-     * @param vertices
+     * @param verticesA
+     * @param verticesB
      * @return
      */
-    CollisionResult collision(Entity entity, Vertices vertices);
+    CollisionResult collision(Vertices verticesA, Vertices verticesB);
 
     /**
      * Used to perform collision detection with a map.

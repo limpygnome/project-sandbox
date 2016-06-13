@@ -136,6 +136,8 @@ public class QuadTree
     /**
      * Fetches entities within a radius of another entity.
      *
+     * This will also test vertices.
+     *
      * @param entity the entity
      * @param radius the radius
      * @return list of entities within radius of entity
@@ -145,6 +147,15 @@ public class QuadTree
         return getEntitiesWithinRadius(entity.position, radius);
     }
 
+    /**
+     * Fetches entities within the radius of the given position.
+     *
+     * This will also test vertices.
+     *
+     * @param position the position
+     * @param radius the radius
+     * @return list of entities within radius of given position
+     */
     public synchronized Set<ProximityResult> getEntitiesWithinRadius(Vector2 position, float radius)
     {
         // Recurse nodes to add all items in quads which can fit the position
@@ -154,12 +165,36 @@ public class QuadTree
         // Now filter entities in result not within radius
         Set<ProximityResult> proximityResult = new HashSet<>();
 
-        float entityDistance;
+        float entityDistance, vertexDistance;
+        boolean isWithinRadius;
+
+        Vector2[] vertices;
+        Vector2 vertex;
+
         for (Entity entity : result)
         {
+            // First check distance between center points
             entityDistance = Vector2.distance(entity.positionNew, position);
+            isWithinRadius = (entityDistance <= radius);
 
-            if (entityDistance <= radius)
+            // Check each vertex if main test failed...
+            if (!isWithinRadius)
+            {
+                vertices = entity.cachedVertices.vertices;
+                for (int i = 0; !isWithinRadius && i < vertices.length; i++)
+                {
+                    vertex = vertices[i];
+                    vertexDistance = Vector2.distance(vertex, position);
+
+                    if (vertexDistance <= radius)
+                    {
+                        isWithinRadius = true;
+                    }
+                }
+            }
+
+            // Add to result set
+            if (isWithinRadius)
             {
                 proximityResult.add(new ProximityResult(entity, entityDistance));
             }

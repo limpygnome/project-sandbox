@@ -257,7 +257,10 @@ public class Vertices
             vertex = pointOfEllipsis(radiusX, radiusY, angle);
 
             // Rotate by rotation of entity
-            //vertex.rotate(0.0f, 0.0f, rotation);
+            vertex.rotate(0.0f, 0.0f, rotation);
+
+            // Offset by center-point of entity
+            vertex.add(entity.positionNew);
 
             vertices[vertexIndex] = vertex;
         }

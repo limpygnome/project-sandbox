@@ -49,7 +49,7 @@ public class ShieldComponent  implements Serializable, EntityComponent, LogicCom
     public void eventLogic(Controller controller, Entity entity)
     {
         // Rebuild shield vertices
-        shieldVertices = Vertices.buildEllipsis(entity, radiusX, radiusY, 16);
+        shieldVertices = Vertices.buildEllipsis(entity, radiusX, radiusY, 8);
 
         EntityManager entityManager = entity.map.entityManager;
 
@@ -68,7 +68,7 @@ public class ShieldComponent  implements Serializable, EntityComponent, LogicCom
 
             if (entity != entityOther && entity.isCollidable(entityOther))
             {
-                collisionResult = collisionDetection.collision(entityOther, shieldVertices);
+                collisionResult = collisionDetection.collision(entityOther.cachedVertices, shieldVertices);
 
                 if (collisionResult.collision)
                 {

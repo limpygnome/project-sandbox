@@ -64,7 +64,11 @@ public class BlackholeComponent implements Serializable, EntityComponent, LogicC
 
                 // Accelerate the entity using velocity component
                 velocityComponent = (VelocityComponent) entityOther.components.fetchComponent(VelocityComponent.class);
-                velocityComponent.getVelocity().add(accelerationVelocity);
+
+                if (velocityComponent != null)
+                {
+                    velocityComponent.getVelocity().add(accelerationVelocity);
+                }
 
                 // Apply linear damage
                 damage = distanceMultiplier * maxDamage;

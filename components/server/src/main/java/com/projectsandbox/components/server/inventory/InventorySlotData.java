@@ -12,8 +12,8 @@ public class InventorySlotData implements Serializable
     public short id;
     public byte idByte;
     public Inventory inventory;
-    public transient InventorySlotState slotState;
-    public transient InventoryInvokeState invokeState;
+    public InventorySlotState slotState;
+    public InventoryInvokeState invokeState;
 
     public transient boolean keyDown;
     public transient boolean keyAlreadyDown;
