@@ -10,8 +10,8 @@ public class ShieldKiller extends AbstractKiller
 
     private static final String[] CAUSES =
     {
-            "{1} wrekt the shield of {0}",
-            "{0} had shield failure from {1}"
+            "{1} inflicted force-field damage from {0}",
+            "{0} got wrekt with force-field damage from {1}"
     };
 
     @Override

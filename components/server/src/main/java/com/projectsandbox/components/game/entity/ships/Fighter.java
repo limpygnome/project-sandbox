@@ -70,7 +70,7 @@ public class Fighter extends PlayerEntity
             inventory.add(new RocketLauncherItem(null));
             inventory.add(new JumpDriveItem(100000.0f, 1000.0f, 50.0f));
             inventory.add(new GatlingItem());
-            inventory.add(new ShieldItem(1000.0f, 5.0f));
+            inventory.add(new ShieldItem(1000.0f, 0.5f));
             setInventory(0, inventory);
         }
     }

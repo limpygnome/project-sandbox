@@ -41,7 +41,6 @@ public class Rocket extends Entity
         this.playerInfoOwner = playerInfoOwner;
         this.gameTimeCreated = controller.gameTime();
         this.exploded = false;
-        this.physicsIntangible = true;
 
         setMaxHealth(1);
 

@@ -62,6 +62,8 @@ public class ShieldComponent  implements Serializable, EntityComponent, LogicCom
         CollisionResult collisionResult;
 
         Entity entityOther;
+        VelocityComponent velocityComponent;
+
         for (ProximityResult proximityResult : entities)
         {
             entityOther = proximityResult.entity;
@@ -75,6 +77,14 @@ public class ShieldComponent  implements Serializable, EntityComponent, LogicCom
                     // Move entity outside of shield
                     entityOther.positionNew.add(collisionResult.mtv);
 
+                    // Invert velocity
+                    velocityComponent = (VelocityComponent) entityOther.components.fetchComponent(VelocityComponent.class);
+
+                    if (velocityComponent != null)
+                    {
+                        velocityComponent.getVelocity().invert();
+                    }
+
                     // Apply damage
                     damageFromMass(controller, entityOther, entity);
                 }
@@ -85,15 +95,16 @@ public class ShieldComponent  implements Serializable, EntityComponent, LogicCom
     /*
         Applies damage to shield from mass of entity.
      */
-    private void damageFromMass(Controller controller, Entity entity, Entity entityInflicter)
+    private void damageFromMass(Controller controller, Entity entity, Entity entityOther)
     {
-        float damageLeft = 0.0f;
-        VelocityComponent component = (VelocityComponent) entity.components.fetchSingle(VelocityComponent.class);
+        VelocityComponent component = (VelocityComponent) entityOther.components.fetchSingle(VelocityComponent.class);
 
         if (component != null)
         {
+            float damageLeft = 0.0f;
+
             // Use mass as damage from entity
-            float damage = 0.0f;//component.getMass();
+            float damage = component.getMass();
 
             if (damage > health)
             {
@@ -104,12 +115,15 @@ public class ShieldComponent  implements Serializable, EntityComponent, LogicCom
             {
                 health -= damage;
             }
-        }
 
-        // Apply any left over damage
-        if (damageLeft > 0.0f)
-        {
-            entity.damage(controller, entityInflicter, damageLeft, ShieldKiller.class);
+            // Apply any left over damage
+            if (damageLeft > 0.0f)
+            {
+                entity.damage(controller, entityOther, damageLeft, ShieldKiller.class);
+            }
+
+            // Apply entity's own mass as damage to its self
+            entityOther.damage(controller, entity, damage, ShieldKiller.class);
         }
     }
 
