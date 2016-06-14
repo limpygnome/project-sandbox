@@ -180,7 +180,7 @@ public class Inventory implements Serializable
                     case CREATED:
                         packet.eventItemCreated(controller, item);
                         break;
-                    case CHANGED:
+                    case UPDATED:
                         packet.eventItemChanged(controller, item);
                         break;
                     case PENDING_REMOVE:

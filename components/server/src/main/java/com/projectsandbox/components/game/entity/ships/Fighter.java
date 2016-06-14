@@ -68,9 +68,20 @@ public class Fighter extends PlayerEntity
         {
             Inventory inventory = new Inventory(this);
             inventory.add(new RocketLauncherItem(null));
-            inventory.add(new JumpDriveItem(100000.0f, 1000.0f, 50.0f));
             inventory.add(new GatlingItem());
-            inventory.add(new ShieldItem(1000.0f, 0.5f));
+
+            inventory.add(new JumpDriveItem(
+                    100000.0f,  // Max distance
+                    1000.0f,    // Distance jumped for every cycle key held
+                    50.0f       // Distance charged each cycle
+            ));
+
+            inventory.add(new ShieldItem(
+                    1000.0f,    // Max health
+                    1.0f,       // Regen health per cycle
+                    5000L       // Delay before recharging after depleted
+            ));
+
             setInventory(0, inventory);
         }
     }

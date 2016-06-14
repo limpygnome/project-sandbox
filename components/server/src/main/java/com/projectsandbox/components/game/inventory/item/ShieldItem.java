@@ -18,13 +18,15 @@ public class ShieldItem extends AbstractInventoryItem
     public static final long serialVersionUID = 1L;
 
     // Settings
-    private float maxHealth;    // The maximum health of the shield
-    private float regenStep;    // The amount the shield regenerates each logic cycle
+    private float maxHealth;                // The maximum health of the shield
+    private float regenStep;                // The amount the shield regenerates each logic cycle
+    private long rechargeDelay;             // The delay before regenerating shields when no health at all
 
-    public ShieldItem(float maxHealth, float regenStep)
+    public ShieldItem(float maxHealth, float regenStep, long rechargeDelay)
     {
         this.maxHealth = maxHealth;
         this.regenStep = regenStep;
+        this.rechargeDelay = rechargeDelay;
 
         // Setup type to be toggled
         this.invokeType = InventoryInvokeType.TOGGLE;
@@ -43,12 +45,12 @@ public class ShieldItem extends AbstractInventoryItem
                 if (parent.components.remove(ShieldComponent.class) == null)
                 {
                     // No shield present, thus add it...
-                    parent.components.add(new ShieldComponent(parent, maxHealth, regenStep));
+                    parent.components.add(new ShieldComponent(this, parent, maxHealth, regenStep, rechargeDelay));
                 }
                 break;
         }
 
-        slot.setState(InventorySlotState.CHANGED);
+        slot.setState(InventorySlotState.UPDATED);
     }
 
     @Override

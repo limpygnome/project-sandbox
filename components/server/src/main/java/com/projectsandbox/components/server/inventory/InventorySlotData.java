@@ -43,7 +43,7 @@ public class InventorySlotData implements Serializable
             case REMOVED:
                 allowUpdate = true;
                 break;
-            case CHANGED:
+            case UPDATED:
                 allowUpdate = this.slotState != InventorySlotState.PENDING_REMOVE && this.slotState != InventorySlotState.REMOVED;
                 break;
             case NONE:

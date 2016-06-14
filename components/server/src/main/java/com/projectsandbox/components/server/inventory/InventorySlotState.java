@@ -14,9 +14,9 @@ public enum InventorySlotState
      */
     CREATED,
     /**
-     * Item has been changed e.g. ammo.
+     * Item has been changed/updated e.g. ammo.
      */
-    CHANGED,
+    UPDATED,
     /**
      * Item is pending removal.
      */

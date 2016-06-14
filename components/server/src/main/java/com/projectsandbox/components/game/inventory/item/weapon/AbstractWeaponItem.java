@@ -124,7 +124,7 @@ public abstract class AbstractWeaponItem extends AbstractInventoryItem
             fireBullet(controller);
 
             // Set slot to updated
-            slot.setState(InventorySlotState.CHANGED);
+            slot.setState(InventorySlotState.UPDATED);
         }
     }
 

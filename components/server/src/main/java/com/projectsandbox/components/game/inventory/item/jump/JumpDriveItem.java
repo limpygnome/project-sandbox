@@ -158,7 +158,7 @@ public class JumpDriveItem extends AbstractInventoryItem
         // Check if to change state
         if (changed)
         {
-            slot.setState(InventorySlotState.CHANGED);
+            slot.setState(InventorySlotState.UPDATED);
         }
     }
 
