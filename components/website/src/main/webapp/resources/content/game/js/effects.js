@@ -110,6 +110,13 @@ game.effects =
                 );
                 break;
 
+            // Force field
+            case 102:
+                this.createExplosion(
+                    x, y, 4, 5000, -2.0, 2.0
+                );
+                break;
+
             default:
                 console.error("game/effects - unknown explosion effect sub-type - " + subType);
                 break;

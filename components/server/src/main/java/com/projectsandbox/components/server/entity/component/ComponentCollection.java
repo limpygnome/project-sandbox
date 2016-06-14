@@ -37,14 +37,6 @@ public class ComponentCollection< K extends Class<ComponentEvent>, V extends Ent
         return result;
     }
 
-    public synchronized V fetchSingle(K clazz)
-    {
-        Set<V> result = fetch(clazz);
-        Iterator<V> iterator = result.iterator();
-        V scalarResult = iterator.hasNext() ? iterator.next() : null;
-        return scalarResult;
-    }
-
     public synchronized V fetchComponent(Class<V> clazz)
     {
         return components.get(clazz);
@@ -101,7 +93,7 @@ public class ComponentCollection< K extends Class<ComponentEvent>, V extends Ent
         }
 
         // Remove from components
-        components.remove(entityComponent);
+        components.remove(entityComponent.getClass());
 
         return entityComponent;
     }

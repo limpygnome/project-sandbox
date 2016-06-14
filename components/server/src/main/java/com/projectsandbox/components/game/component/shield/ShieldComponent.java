@@ -1,6 +1,7 @@
 package com.projectsandbox.components.game.component.shield;
 
 import com.projectsandbox.components.game.component.VelocityComponent;
+import com.projectsandbox.components.game.effect.types.ExplosionEffect;
 import com.projectsandbox.components.game.inventory.item.ShieldItem;
 import com.projectsandbox.components.server.Controller;
 import com.projectsandbox.components.server.entity.Entity;
@@ -8,6 +9,7 @@ import com.projectsandbox.components.server.entity.EntityManager;
 import com.projectsandbox.components.server.entity.component.EntityComponent;
 import com.projectsandbox.components.server.entity.component.event.LogicComponentEvent;
 import com.projectsandbox.components.server.entity.component.event.ResetComponentEvent;
+import com.projectsandbox.components.server.entity.physics.Vector2;
 import com.projectsandbox.components.server.entity.physics.Vertices;
 import com.projectsandbox.components.server.entity.physics.collisions.CollisionDetection;
 import com.projectsandbox.components.server.entity.physics.collisions.CollisionResult;
@@ -148,7 +150,6 @@ public class ShieldComponent  implements Serializable, EntityComponent, LogicCom
         CollisionResult collisionResult;
 
         Entity entityOther;
-        VelocityComponent velocityComponent;
         Iterator<ProximityResult> iterator = nearbyEntities.iterator();
         ProximityResult proximityResult;
 
@@ -163,22 +164,34 @@ public class ShieldComponent  implements Serializable, EntityComponent, LogicCom
 
                 if (collisionResult.collision)
                 {
-                    // Move entity outside of shield
-                    entityOther.positionNew.add(collisionResult.mtv);
-
-                    // Invert velocity
-                    velocityComponent = (VelocityComponent) entityOther.components.fetchComponent(VelocityComponent.class);
-
-                    if (velocityComponent != null)
-                    {
-                        velocityComponent.getVelocity().invert();
-                    }
-
-                    // Apply damage
-                    damageFromMass(controller, entity, entityOther, velocityComponent);
+                    handleCollision(controller, collisionResult, entity, entityOther);
                 }
             }
         }
+    }
+
+    private void handleCollision(Controller controller, CollisionResult collisionResult,
+                                 Entity entity, Entity entityOther)
+    {
+        Vector2 collisionPos = entityOther.positionNew.clone().subtract(collisionResult.mtv);
+
+        // Move entity outside of shield
+        entityOther.positionNew.add(collisionResult.mtv);
+
+        // Invert velocity
+        VelocityComponent velocityComponent = (VelocityComponent) entityOther.components.fetchComponent(VelocityComponent.class);
+
+        if (velocityComponent != null)
+        {
+            velocityComponent.getVelocity().invert();
+        }
+
+        // Apply damage
+        damageFromMass(controller, entity, entityOther, velocityComponent);
+
+        // Create effect at point of impact
+        ExplosionEffect effect = new ExplosionEffect(collisionPos.x, collisionPos.y, ExplosionEffect.SubType.FORCE_FIELD);
+        entity.map.effectsManager.add(effect);
     }
 
     /*
@@ -188,8 +201,8 @@ public class ShieldComponent  implements Serializable, EntityComponent, LogicCom
     {
         if (component != null)
         {
-            // Use mass as damage from entity
-            float damage = component.getMass();
+            // Use mass as damage to shield
+            float damage = (component.getMass() / 10.0f) * component.getVelocity().length();
 
             if (damage > health)
             {
