@@ -79,7 +79,8 @@ public class Fighter extends PlayerEntity
             inventory.add(new ShieldItem(
                     1000.0f,    // Max health
                     1.0f,       // Regen health per cycle
-                    5000L       // Delay before recharging after depleted
+                    5000L,      // Delay before recharging after depleted
+                    4.0f        // Size multiplier
             ));
 
             setInventory(0, inventory);

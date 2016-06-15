@@ -289,6 +289,16 @@ public class Vector2 implements Serializable
         );
     }
 
+    public static Vector2[] cloneArray(Vector2[] vectors)
+    {
+        Vector2[] clone = new Vector2[vectors.length];
+        for (int i = 0; i < vectors.length; i++)
+        {
+            clone[i] = vectors[i].clone();
+        }
+        return clone;
+    }
+
     /**
      * Inverts the value of this vector.
      *

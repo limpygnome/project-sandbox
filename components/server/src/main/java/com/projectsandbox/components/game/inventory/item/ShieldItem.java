@@ -15,18 +15,13 @@ import com.projectsandbox.components.server.inventory.item.AbstractInventoryItem
 @InventoryItemTypeId(typeId = 802)
 public class ShieldItem extends AbstractInventoryItem
 {
-    public static final long serialVersionUID = 1L;
+    public static final long serialVersionUID = 2L;
+    private ShieldComponent component;
 
-    // Settings
-    private float maxHealth;                // The maximum health of the shield
-    private float regenStep;                // The amount the shield regenerates each logic cycle
-    private long rechargeDelay;             // The delay before regenerating shields when no health at all
-
-    public ShieldItem(float maxHealth, float regenStep, long rechargeDelay)
+    public ShieldItem(float maxHealth, float regenStep, long rechargeDelay, float sizeMultiplier)
     {
-        this.maxHealth = maxHealth;
-        this.regenStep = regenStep;
-        this.rechargeDelay = rechargeDelay;
+        // Create component
+        component = new ShieldComponent(this, maxHealth, regenStep, rechargeDelay, sizeMultiplier);
 
         // Setup type to be toggled
         this.invokeType = InventoryInvokeType.TOGGLE;
@@ -39,13 +34,14 @@ public class ShieldItem extends AbstractInventoryItem
 
         switch (slot.invokeState)
         {
-            // Shield on...
+            // Toggle force-field...
             case ON:
                 // Remove shield component from parent if present
                 if (parent.components.remove(ShieldComponent.class) == null)
                 {
-                    // No shield present, thus add it...
-                    parent.components.add(new ShieldComponent(this, parent, maxHealth, regenStep, rechargeDelay));
+                    // No force-field at present, thus add it...
+                    parent.components.add(component);
+                    component.update(parent);
                 }
                 break;
         }
@@ -62,8 +58,17 @@ public class ShieldItem extends AbstractInventoryItem
         String text;
         if (shield != null)
         {
-            float healthPercent = (shield.getHealth() / shield.getMaxHealth()) * 100.0f;
-            text = String.format("%.0f%%", healthPercent);
+            float shieldHealth = shield.getHealth();
+
+            if (shieldHealth == 0.0f)
+            {
+                text = "depleted";
+            }
+            else
+            {
+                float healthPercent = (shield.getHealth() / shield.getMaxHealth()) * 100.0f;
+                text = String.format("%.0f%%", healthPercent);
+            }
         }
         else
         {

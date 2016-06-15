@@ -4,13 +4,15 @@ import com.projectsandbox.components.server.entity.Entity;
 import com.projectsandbox.components.server.util.CustomMath;
 import com.projectsandbox.components.server.world.map.type.tile.TileData;
 
+import java.io.Serializable;
+
 /**
  * A data-structure for vertices.
- * 
- * @author limpygnome
  */
-public class Vertices
+public class Vertices implements Serializable
 {
+    public static final long serialVersionUID = 1L;
+
     /**
      * The vertices of the convex shape, starting from top-left, going
      * clockwise.
@@ -36,18 +38,15 @@ public class Vertices
      * The minimum distance an ent must be within for a collision.
      */
     public float collisionRadius;
-    
-    
-    /**
-     * Builds vertices for an entity's new position.
-     * 
-     * @param ent 
-     */
-    public Vertices(Entity ent)
+
+    private Vertices(Vector2 position, Vector2[] vertices, Vector2[] axes, float collisionRadius)
     {
-        this(ent.positionNew, ent.rotation, ent.width, ent.height);
+        this.center = position;
+        this.vertices = vertices;
+        this.axes = axes;
+        this.collisionRadius = collisionRadius;
     }
-    
+
     public Vertices(Vector2 position, float rotation, float width, float height)
     {
         float hw = width / 2.0f;
@@ -75,6 +74,16 @@ public class Vertices
 
         // Build collision radius
         this.collisionRadius = buildCollisionRadius();
+    }
+
+    /**
+     * Builds vertices for an entity's new position.
+     *
+     * @param ent
+     */
+    public Vertices(Entity ent)
+    {
+        this(ent.positionNew, ent.rotation, ent.width, ent.height);
     }
 
     public Vertices(Vector2 center, Vector2[] vertices)
@@ -167,9 +176,6 @@ public class Vertices
      */
     public float buildCollisionRadius()
     {
-        // TODO: check this algorithm, seems hmhmmmm, especially *2,
-        // should it not be the max vertex distance?
-
         float max = 0.0f;
         float v;
 
@@ -187,36 +193,63 @@ public class Vertices
         return max;
     }
 
-    @Override
-    public String toString()
+    /**
+     * Creates a clone of the current instance.
+     *
+     * @return a clone of the current instance
+     */
+    public Vertices clone()
     {
-        StringBuilder sb = new StringBuilder();
-        
-        // Append vertices
-        sb.append("[").append(vertices.length).append(" vertices:\n");
-        
-        for (int i = 0; i < vertices.length; i++)
-        {
-            sb      .append("\tv").append(i).append(" - ").append(vertices[i])
-                    .append("\n");
-        }
-        
-        // Append center
-        sb.append("center: ").append(center).append("\n");
-        
-        // Append collision radius
-        sb.append("collision radius: ").append(collisionRadius).append("\n");
-        
-        // Remove tail
-        sb.append("]");
-        
-        return sb.toString();
+        // Clone data
+        Vector2 positionClone = center.clone();
+        Vector2[] verticesClone = Vector2.cloneArray(vertices);
+        Vector2[] axesClone = Vector2.cloneArray(axes);
+
+        // Create instance
+        Vertices vertices = new Vertices(positionClone, verticesClone, axesClone, collisionRadius);
+        return vertices;
     }
-    
+
+    /**
+     * Offsets vertices by provided vector/offset.
+     *
+     * This will offset vertices, center and axes.
+     *
+     * @param offset the offset
+     * @return the current instance
+     */
+    public Vertices offset(Vector2 offset)
+    {
+        // Offset position
+        center.add(offset);
+
+        // Offset vertices
+        for (Vector2 vertex : vertices)
+        {
+            vertex.add(offset);
+        }
+
+        return this;
+    }
+
+    public Vertices rotate(float rotation)
+    {
+        // Rotate vertices
+        for (Vector2 vertex : vertices)
+        {
+            vertex.rotate(center.x, center.y, rotation);
+        }
+
+        // Rebuild axes
+        this.axes = buildAxes();
+
+        return this;
+    }
+
     /**
      * Builds vertices for a map tile.
      * 
-     * @param map
+     * @param tileData
      * @param tileX
      * @param tileY
      * @return 
@@ -234,16 +267,14 @@ public class Vertices
 
     /**
      *
-     * @param entity the entity
      * @param radiusX the radius of the X axis
      * @param radiusY the radius of the Y axis
      * @param numberOfVertices the total number of vertices
      * @return
      */
-    public static Vertices buildEllipsis(Entity entity, float radiusX, float radiusY, int numberOfVertices)
+    public static Vertices buildEllipsis(float radiusX, float radiusY, int numberOfVertices)
     {
         // Compute vertices
-        float rotation = entity.rotation;
         float angleSeparation = CustomMath.PI_FLOAT_DOUBLE / numberOfVertices;
 
         float angle;
@@ -256,17 +287,11 @@ public class Vertices
             angle = angleSeparation * vertexIndex;
             vertex = pointOfEllipsis(radiusX, radiusY, angle);
 
-            // Rotate by rotation of entity
-            vertex.rotate(0.0f, 0.0f, rotation);
-
-            // Offset by center-point of entity
-            vertex.add(entity.positionNew);
-
             vertices[vertexIndex] = vertex;
         }
 
         // Create Vertices instance
-        Vertices instance = new Vertices(entity.positionNew, vertices);
+        Vertices instance = new Vertices(new Vector2(), vertices);
         return instance;
     }
 
@@ -278,5 +303,31 @@ public class Vertices
         );
         return point;
     }
-    
+
+    @Override
+    public String toString()
+    {
+        StringBuilder sb = new StringBuilder();
+
+        // Append vertices
+        sb.append("[").append(vertices.length).append(" vertices:\n");
+
+        for (int i = 0; i < vertices.length; i++)
+        {
+            sb      .append("\tv").append(i).append(" - ").append(vertices[i])
+                    .append("\n");
+        }
+
+        // Append center
+        sb.append("center: ").append(center).append("\n");
+
+        // Append collision radius
+        sb.append("collision radius: ").append(collisionRadius).append("\n");
+
+        // Remove tail
+        sb.append("]");
+
+        return sb.toString();
+    }
+
 }

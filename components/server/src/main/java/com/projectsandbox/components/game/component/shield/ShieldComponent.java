@@ -32,19 +32,20 @@ public class ShieldComponent  implements Serializable, EntityComponent, LogicCom
     private static final long serialVersionUID = 1L;
 
     // Settings
-    private float maxHealth;                    // The maximum health of the shield
+    private float maxHealth;                    // The maximum health of the force-field
     private float regenStep;                    // The amount the shield regenerates each logic cycle
     private long rechargeDelay;                 // The delay before regenerating shields when no health at all
+    private float sizeMultiplier;               // The multiplier applied to the size of an entity for the size of the force-field
 
     // State
     private ShieldItem inventoryItem;           // The inventory item to which this belong; can be null, used just for triggering updates
     private float radiusX;                      // The X radius of the current shield around the ship
     private float radiusY;                      // The Y radius of the current shield around the ship
-    private float health;                       // The health of the shield
-    private transient Vertices shieldVertices;  // The vertices of the shield
-    private transient long depletedTime;        // The game time at which the shield was depleted
+    private float health;                       // The health of the force-field
+    private Vertices shieldVertices;            // The vertices of the force-field, excluding position
+    private transient long depletedTime;        // The game time at which the force-field was depleted
 
-    public ShieldComponent(ShieldItem inventoryItem, Entity entity, float maxHealth, float regenStep, long rechargeDelay)
+    public ShieldComponent(ShieldItem inventoryItem, float maxHealth, float regenStep, long rechargeDelay, float sizeMultiplier)
     {
         this.inventoryItem = inventoryItem;
 
@@ -52,10 +53,22 @@ public class ShieldComponent  implements Serializable, EntityComponent, LogicCom
         this.health = maxHealth;
         this.regenStep = regenStep;
         this.rechargeDelay = rechargeDelay;
+        this.sizeMultiplier = sizeMultiplier;
+    }
 
-        // Radius is currently width and height doubled
-        this.radiusX = entity.width * 4.0f;
-        this.radiusY = entity.height * 4.0f;
+    /**
+     * Updates the entity to which this force-field is protecting.
+     *
+     * @param entity the entity
+     */
+    public void update(Entity entity)
+    {
+        // Setup radius size
+        this.radiusX = entity.width * sizeMultiplier;
+        this.radiusY = entity.height * sizeMultiplier;
+
+        // Build base vertices for shield
+        shieldVertices = Vertices.buildEllipsis(radiusX, radiusY, 8);
     }
 
     @Override
@@ -136,8 +149,10 @@ public class ShieldComponent  implements Serializable, EntityComponent, LogicCom
 
     private void applyShield(Controller controller, Entity entity)
     {
-        // Rebuild shield vertices
-        shieldVertices = Vertices.buildEllipsis(entity, radiusX, radiusY, 8);
+        // Build vertices with offsets
+        Vertices shieldVertices = this.shieldVertices.clone()
+                                                     .offset(entity.positionNew)
+                                                     .rotate(entity.rotation);
 
         EntityManager entityManager = entity.map.entityManager;
 
@@ -176,7 +191,7 @@ public class ShieldComponent  implements Serializable, EntityComponent, LogicCom
         Vector2 collisionPos = entityOther.positionNew.clone().subtract(collisionResult.mtv);
 
         // Move entity outside of shield
-        entityOther.positionNew.add(collisionResult.mtv);
+        entityOther.positionOffset(collisionResult.mtv);
 
         // Invert velocity
         VelocityComponent velocityComponent = (VelocityComponent) entityOther.components.fetchComponent(VelocityComponent.class);
@@ -202,21 +217,26 @@ public class ShieldComponent  implements Serializable, EntityComponent, LogicCom
         if (component != null)
         {
             // Use mass as damage to shield
-            float damage = (component.getMass() / 10.0f) * component.getVelocity().length();
+            float damage = (component.getMass() / 10.0f) * (0.1f + component.getVelocity().length());
 
+            // Limit damage to total health at most
             if (damage > health)
             {
-                health = 0.0f;
+                damage = health;
             }
-            else
-            {
-                health -= damage;
-            }
+
+            health -= damage;
 
             // Check if shield now depleted
             if (health == 0.0f)
             {
                 depletedTime = controller.gameTime();
+
+                // Trigger inventory item update
+                if (inventoryItem != null)
+                {
+                    inventoryItem.slot.setState(InventorySlotState.UPDATED);
+                }
             }
 
             // Apply entity's own mass as damage to its self
