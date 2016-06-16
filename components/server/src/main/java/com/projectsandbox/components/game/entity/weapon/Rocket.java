@@ -1,5 +1,6 @@
 package com.projectsandbox.components.game.entity.weapon;
 
+import com.projectsandbox.components.game.component.OwnershipComponent;
 import com.projectsandbox.components.server.Controller;
 import com.projectsandbox.components.server.entity.Entity;
 import com.projectsandbox.components.server.entity.annotation.EntityType;
@@ -27,23 +28,19 @@ import static com.projectsandbox.components.server.constant.weapon.RocketConstan
 @EntityType(typeId = 600, typeName = "weapon/rocket")
 public class Rocket extends Entity
 {
-    private final static Logger LOG = LogManager.getLogger(Rocket.class);
-
     private long gameTimeCreated;
     private boolean exploded;
-
-    private PlayerInfo playerInfoOwner;
 
     public Rocket(WorldMap map, Controller controller, PlayerInfo playerInfoOwner, float initialSpeed)
     {
         super(map, (short) 9, (short) 12);
 
-        this.playerInfoOwner = playerInfoOwner;
         this.gameTimeCreated = controller.gameTime();
         this.exploded = false;
 
         setMaxHealth(1);
 
+        components.add(new OwnershipComponent(playerInfoOwner));
         components.add(new VelocityComponent(
                 100.0f      // Mass
         ));
@@ -68,14 +65,8 @@ public class Rocket extends Entity
     @Override
     public PlayerInfo[] getPlayers()
     {
-        if (playerInfoOwner == null)
-        {
-            return new PlayerInfo[0];
-        }
-        else
-        {
-            return new PlayerInfo[]{playerInfoOwner};
-        }
+        OwnershipComponent component = (OwnershipComponent) components.fetchComponent(OwnershipComponent.class);
+        return new PlayerInfo[]{ component.getOwner() };
     }
 
     @Override
@@ -129,7 +120,9 @@ public class Rocket extends Entity
 
     private synchronized void performCollisionExplosion(Controller controller, Entity entityOther)
     {
-        if (!exploded && (entityOther == null || entityOther != playerInfoOwner.entity))
+        OwnershipComponent component = (OwnershipComponent) components.fetchComponent(OwnershipComponent.class);
+
+        if (!exploded && (entityOther == null || !component.isOwnedBySamePlayer(entityOther)))
         {
             // Apply damage to entities
             SpatialActions.applyLinearRadiusDamage(controller, this, ROCKET_BLAST_RADIUS, ROCKET_BLAST_DAMAGE, RocketKiller.class);

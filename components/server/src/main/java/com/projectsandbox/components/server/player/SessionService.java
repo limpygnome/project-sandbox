@@ -7,6 +7,7 @@ import com.projectsandbox.components.shared.model.PlayerMetrics;
 import com.projectsandbox.components.shared.model.User;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.hibernate.type.SerializationException;
 import org.joda.time.DateTime;
 import org.joda.time.Seconds;
 
@@ -57,24 +58,24 @@ public class SessionService
 
     public synchronized GameSession load(UUID token)
     {
+        GameSession gameSession = null;
+
         if (gameRepository != null)
         {
-            GameSession gameSession = gameRepository.fetchGameSessionByToken(token);
+            gameSession = gameRepository.fetchGameSessionByToken(token);
 
             // Track session for periodic DB updates
             if (gameSession != null)
             {
                 trackedGameSessions.add(gameSession);
             }
-
-            return gameSession;
         }
         else
         {
             LOG.error("Unable to load game session, repository not set - token: {}", token);
-
-            return null;
         }
+
+        return gameSession;
     }
 
     public synchronized void unload(GameSession gameSession)

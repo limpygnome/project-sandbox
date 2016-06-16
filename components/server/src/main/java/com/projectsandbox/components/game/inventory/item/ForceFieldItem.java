@@ -1,6 +1,6 @@
 package com.projectsandbox.components.game.inventory.item;
 
-import com.projectsandbox.components.game.component.shield.ShieldComponent;
+import com.projectsandbox.components.game.component.forcefield.ForceFieldComponent;
 import com.projectsandbox.components.server.Controller;
 import com.projectsandbox.components.server.entity.Entity;
 import com.projectsandbox.components.server.inventory.InventoryInvokeState;
@@ -10,18 +10,18 @@ import com.projectsandbox.components.server.inventory.annotation.InventoryItemTy
 import com.projectsandbox.components.server.inventory.item.AbstractInventoryItem;
 
 /**
- * An item which creates a protective shield around a ship.
+ * An item which creates a protective forcefield around a ship.
  */
 @InventoryItemTypeId(typeId = 802)
-public class ShieldItem extends AbstractInventoryItem
+public class ForceFieldItem extends AbstractInventoryItem
 {
     public static final long serialVersionUID = 2L;
-    private ShieldComponent component;
+    private ForceFieldComponent component;
 
-    public ShieldItem(float maxHealth, float regenStep, long rechargeDelay, float sizeMultiplier)
+    public ForceFieldItem(float maxHealth, float regenStep, long rechargeDelay, float sizeMultiplier)
     {
         // Create component
-        component = new ShieldComponent(this, maxHealth, regenStep, rechargeDelay, sizeMultiplier);
+        component = new ForceFieldComponent(this, maxHealth, regenStep, rechargeDelay, sizeMultiplier);
 
         // Setup type to be toggled
         this.invokeType = InventoryInvokeType.TOGGLE;
@@ -36,8 +36,8 @@ public class ShieldItem extends AbstractInventoryItem
         {
             // Toggle force-field...
             case ON:
-                // Remove shield component from parent if present
-                if (parent.components.remove(ShieldComponent.class) == null)
+                // Remove forcefield component from parent if present
+                if (parent.components.remove(ForceFieldComponent.class) == null)
                 {
                     // No force-field at present, thus add it...
                     parent.components.add(component);
@@ -53,7 +53,7 @@ public class ShieldItem extends AbstractInventoryItem
     public String eventFetchItemText(Controller controller)
     {
         Entity parent = slot.inventory.parent;
-        ShieldComponent shield = (ShieldComponent) parent.components.fetchComponent(ShieldComponent.class);
+        ForceFieldComponent shield = (ForceFieldComponent) parent.components.fetchComponent(ForceFieldComponent.class);
 
         String text;
         if (shield != null)

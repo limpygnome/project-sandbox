@@ -1,11 +1,11 @@
-package com.projectsandbox.components.game.component.shield;
+package com.projectsandbox.components.game.component.forcefield;
 
 import com.projectsandbox.components.server.entity.death.AbstractKiller;
 
 /**
  * Used for when an entity attempts to jump, but collides with another entity.
  */
-public class ShieldKiller extends AbstractKiller
+public class ForceFieldKiller extends AbstractKiller
 {
 
     private static final String[] CAUSES =

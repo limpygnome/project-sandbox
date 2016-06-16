@@ -1,8 +1,9 @@
-package com.projectsandbox.components.game.component.shield;
+package com.projectsandbox.components.game.component.forcefield;
 
+import com.projectsandbox.components.game.component.OwnershipComponent;
 import com.projectsandbox.components.game.component.VelocityComponent;
 import com.projectsandbox.components.game.effect.types.ExplosionEffect;
-import com.projectsandbox.components.game.inventory.item.ShieldItem;
+import com.projectsandbox.components.game.inventory.item.ForceFieldItem;
 import com.projectsandbox.components.server.Controller;
 import com.projectsandbox.components.server.entity.Entity;
 import com.projectsandbox.components.server.entity.EntityManager;
@@ -22,30 +23,30 @@ import java.util.Iterator;
 import java.util.Set;
 
 /**
- * A shield for protecting an entity.
+ * A force-field for protecting an entity.
  *
- * - The shield is twice the size of the entity.
- * - Any entities within the shield radius are removed
+ * - The force-field is twice the size of the entity.
+ * - Any entities within the force-field radius are removed
  */
-public class ShieldComponent  implements Serializable, EntityComponent, LogicComponentEvent, ResetComponentEvent
+public class ForceFieldComponent  implements Serializable, EntityComponent, LogicComponentEvent, ResetComponentEvent
 {
     private static final long serialVersionUID = 1L;
 
     // Settings
     private float maxHealth;                    // The maximum health of the force-field
-    private float regenStep;                    // The amount the shield regenerates each logic cycle
+    private float regenStep;                    // The amount the forcefield regenerates each logic cycle
     private long rechargeDelay;                 // The delay before regenerating shields when no health at all
     private float sizeMultiplier;               // The multiplier applied to the size of an entity for the size of the force-field
 
     // State
-    private ShieldItem inventoryItem;           // The inventory item to which this belong; can be null, used just for triggering updates
-    private float radiusX;                      // The X radius of the current shield around the ship
-    private float radiusY;                      // The Y radius of the current shield around the ship
+    private ForceFieldItem inventoryItem;       // The inventory item to which this belong; can be null, used just for triggering updates
+    private float radiusX;                      // The X radius of the current forcefield around the ship
+    private float radiusY;                      // The Y radius of the current forcefield around the ship
     private float health;                       // The health of the force-field
     private Vertices shieldVertices;            // The vertices of the force-field, excluding position
     private transient long depletedTime;        // The game time at which the force-field was depleted
 
-    public ShieldComponent(ShieldItem inventoryItem, float maxHealth, float regenStep, long rechargeDelay, float sizeMultiplier)
+    public ForceFieldComponent(ForceFieldItem inventoryItem, float maxHealth, float regenStep, long rechargeDelay, float sizeMultiplier)
     {
         this.inventoryItem = inventoryItem;
 
@@ -67,20 +68,20 @@ public class ShieldComponent  implements Serializable, EntityComponent, LogicCom
         this.radiusX = entity.width * sizeMultiplier;
         this.radiusY = entity.height * sizeMultiplier;
 
-        // Build base vertices for shield
+        // Build base vertices for forcefield
         shieldVertices = Vertices.buildEllipsis(radiusX, radiusY, 8);
     }
 
     @Override
     public synchronized void eventLogic(Controller controller, Entity entity)
     {
-        // Apply shield
+        // Apply forcefield
         if (isShieldEnabled())
         {
-            applyShield(controller, entity);
+            applyForceField(controller, entity);
         }
 
-        // Regenerate shield
+        // Regenerate forcefield
         if (isAbleToRegenerate(controller))
         {
             health += regenStep;
@@ -104,7 +105,7 @@ public class ShieldComponent  implements Serializable, EntityComponent, LogicCom
     {
         if (!respawnAfterPersisted)
         {
-            // Reset shield to fully charged
+            // Reset forcefield to fully charged
             health = maxHealth;
             depletedTime = 0;
         }
@@ -147,21 +148,21 @@ public class ShieldComponent  implements Serializable, EntityComponent, LogicCom
         return canRegen;
     }
 
-    private void applyShield(Controller controller, Entity entity)
+    private void applyForceField(Controller controller, Entity parent)
     {
         // Build vertices with offsets
         Vertices shieldVertices = this.shieldVertices.clone()
-                                                     .offset(entity.positionNew)
-                                                     .rotate(entity.rotation);
+                                                     .offset(parent.positionNew)
+                                                     .rotate(parent.rotation);
 
-        EntityManager entityManager = entity.map.entityManager;
+        EntityManager entityManager = parent.map.entityManager;
 
         CollisionDetection collisionDetection = entityManager.getCollisionDetection();
         QuadTree quadTree = entityManager.getQuadTree();
 
-        // Perform collision detection between entities and shield vertices
+        // Perform collision detection between entities and forcefield vertices
         float radius = radiusX > radiusY ? radiusX : radiusY;
-        Set<ProximityResult> nearbyEntities = quadTree.getEntitiesWithinRadius(entity, radius);
+        Set<ProximityResult> nearbyEntities = quadTree.getEntitiesWithinRadius(parent, radius);
         CollisionResult collisionResult;
 
         Entity entityOther;
@@ -173,24 +174,32 @@ public class ShieldComponent  implements Serializable, EntityComponent, LogicCom
             proximityResult = iterator.next();
             entityOther = proximityResult.entity;
 
-            if (entity != entityOther && entity.isCollidable(entityOther))
+            if (parent != entityOther && parent.isCollidable(entityOther))
             {
                 collisionResult = collisionDetection.collision(entityOther.cachedVertices, shieldVertices);
 
-                if (collisionResult.collision)
+                if (collisionResult.collision && isNotOwnedBySamePlayer(parent, entityOther))
                 {
-                    handleCollision(controller, collisionResult, entity, entityOther);
+                    handleCollision(controller, collisionResult, parent, entityOther);
                 }
             }
         }
     }
 
+    private boolean isNotOwnedBySamePlayer(Entity parent, Entity entityOther)
+    {
+        OwnershipComponent component = (OwnershipComponent) entityOther.components.fetchComponent(OwnershipComponent.class);
+
+        boolean result = component == null || !component.isOwnedBySamePlayer(parent);
+        return result;
+    }
+
     private void handleCollision(Controller controller, CollisionResult collisionResult,
-                                 Entity entity, Entity entityOther)
+                                 Entity parent, Entity entityOther)
     {
         Vector2 collisionPos = entityOther.positionNew.clone().subtract(collisionResult.mtv);
 
-        // Move entity outside of shield
+        // Move entity outside of forcefield
         entityOther.positionOffset(collisionResult.mtv);
 
         // Invert velocity
@@ -202,22 +211,22 @@ public class ShieldComponent  implements Serializable, EntityComponent, LogicCom
         }
 
         // Apply damage
-        damageFromMass(controller, entity, entityOther, velocityComponent);
+        damageFromMass(controller, parent, entityOther, velocityComponent);
 
         // Create effect at point of impact
         ExplosionEffect effect = new ExplosionEffect(collisionPos.x, collisionPos.y, ExplosionEffect.SubType.FORCE_FIELD);
-        entity.map.effectsManager.add(effect);
+        parent.map.effectsManager.add(effect);
     }
 
     /*
-        Applies damage to shield from mass of entity.
+        Applies damage to forcefield from mass of entity.
      */
-    private void damageFromMass(Controller controller, Entity entity, Entity entityOther, VelocityComponent component)
+    private void damageFromMass(Controller controller, Entity parent, Entity entityOther, VelocityComponent component)
     {
         if (component != null)
         {
-            // Use mass as damage to shield
-            float damage = (component.getMass() / 10.0f) * (0.1f + component.getVelocity().length());
+            // Use mass as damage to forcefield
+            float damage = component.getMass();
 
             // Limit damage to total health at most
             if (damage > health)
@@ -227,7 +236,7 @@ public class ShieldComponent  implements Serializable, EntityComponent, LogicCom
 
             health -= damage;
 
-            // Check if shield now depleted
+            // Check if forcefield now depleted
             if (health == 0.0f)
             {
                 depletedTime = controller.gameTime();
@@ -240,7 +249,7 @@ public class ShieldComponent  implements Serializable, EntityComponent, LogicCom
             }
 
             // Apply entity's own mass as damage to its self
-            entityOther.damage(controller, entity, damage, ShieldKiller.class);
+            entityOther.damage(controller, parent, damage, ForceFieldKiller.class);
         }
     }
 

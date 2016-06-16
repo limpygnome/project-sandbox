@@ -1,6 +1,6 @@
 package com.projectsandbox.components.game.entity.ships;
 
-import com.projectsandbox.components.game.inventory.item.ShieldItem;
+import com.projectsandbox.components.game.inventory.item.ForceFieldItem;
 import com.projectsandbox.components.game.inventory.item.jump.JumpDriveItem;
 import com.projectsandbox.components.game.inventory.item.weapon.GatlingItem;
 import com.projectsandbox.components.server.Controller;
@@ -76,7 +76,7 @@ public class Fighter extends PlayerEntity
                     50.0f       // Distance charged each cycle
             ));
 
-            inventory.add(new ShieldItem(
+            inventory.add(new ForceFieldItem(
                     1000.0f,    // Max health
                     1.0f,       // Regen health per cycle
                     5000L,      // Delay before recharging after depleted
