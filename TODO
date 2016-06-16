@@ -6,7 +6,8 @@ technical debt
 ===============
 - remove accessors from projectSandbox.rendering.core
 - move scripts in engine/rendering to rendering namespace
-
+- move death/kill and inventory item messages to clientside; perhaps unique 2-byte ID for messages in a giant file
+--- create enum for serverside
 
 long-term goals
 ================
@@ -21,7 +22,7 @@ long-term goals
 --- order determines how ship is rendered
 --- allow player to buy new ship for cash $$$
 - render inventory items on ships i.e. turrets/radars/warp drives etc
-- introduce asteroids / blackholes
+- introduce asteroids
 - introduce warning UI
 - introduce capturing areas for more money
 - introduce killing a player drops 10% of their funds (for collection) + reset player
