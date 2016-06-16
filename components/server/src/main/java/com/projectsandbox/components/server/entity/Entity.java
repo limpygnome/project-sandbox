@@ -708,8 +708,9 @@ public strictfp abstract class Entity implements Serializable
     }
 
     @Override
-    public synchronized String toString()
+    public String toString()
     {
         return "[" + getClass().getName() + " - id: " + id + "]";
     }
+
 }

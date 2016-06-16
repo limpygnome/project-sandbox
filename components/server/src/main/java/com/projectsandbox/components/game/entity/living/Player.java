@@ -37,23 +37,6 @@ public class Player extends PlayerEntity
         this.rotationFactor = PlayerConstants.DEFAULT_ROTATION_FACTOR;
 
         setMaxHealth(PlayerConstants.DEFAULT_HEALTH);
-
-        PlayerInfo playerInfo = getPlayer();
-
-        if (playerInfo != null)
-        {
-            // Load inventory
-            Inventory inventory = (Inventory) playerInfo.session.gameDataGet(PLAYERDATA_INVENTORY_KEY);
-
-            if (inventory == null)
-            {
-                // Create new inventory with default items
-                inventory = new Inventory(this);
-                inventory.add(PlayerConstants.DEFAULT_INVENTORY_ITEMS);
-            }
-
-            setInventory(0, inventory);
-        }
     }
     
     public Player(WorldMap map)

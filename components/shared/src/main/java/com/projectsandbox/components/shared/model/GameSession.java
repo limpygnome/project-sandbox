@@ -39,7 +39,7 @@ public class GameSession implements Serializable
     @MapKeyClass(String.class)
     @MapKeyColumn(name = "k")
     @Column(name = "v", columnDefinition = "blob")
-    private Map<String, Serializable> gameData;
+    private Map<String, GameSessionDataWrapper> gameData;
 
     @Column(name = "connected", nullable = false)
     private boolean connected;
@@ -135,7 +135,7 @@ public class GameSession implements Serializable
 
     public synchronized void gameDataPut(String key, Serializable value)
     {
-        this.gameData.put(key, value);
+        this.gameData.put(key, new GameSessionDataWrapper(value));
         playerMetrics.markDirty();
     }
 
@@ -152,38 +152,45 @@ public class GameSession implements Serializable
 
     public synchronized Short gameDataGetShort(String key)
     {
-        return (Short) gameDataGet(key, (short) 0);
+        return (Short) gameDataGet(key, null);
     }
 
     public synchronized Long gameDataGetLong(String key)
     {
-        return (Long) gameDataGet(key, 0L);
+        return (Long) gameDataGet(key, null);
     }
 
     public synchronized Integer gameDataGetInt(String key)
     {
-        return (Integer) gameDataGet(key, 0);
+        return (Integer) gameDataGet(key, null);
     }
 
     public synchronized String gameDataGetStr(String key)
     {
-        return (String) gameDataGet(key, "");
+        return (String) gameDataGet(key, null);
     }
 
     private synchronized Serializable gameDataGet(String key, Serializable defaultValue)
     {
-        Serializable v = gameData.get(key);
+        Serializable value = null;
+        GameSessionDataWrapper wrapper = gameData.get(key);
 
-        if (v == null)
+        // Safely retrieve value from wrapper
+        if (wrapper != null)
         {
-            v = defaultValue;
-            gameData.put(key, v);
+            value = wrapper.getValue();
+        }
+
+        // Check we have a value, else use default...
+        if (value == null)
+        {
+            value = defaultValue;
 
             // Mark this object as dirty
             playerMetrics.markDirty();
         }
 
-        return v;
+        return value;
     }
 
 }

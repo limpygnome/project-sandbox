@@ -75,21 +75,18 @@ public class PlayerService implements EventLogicCycleService, IdCounterConsumer
      * @param session the game session
      * @return an instance, or null if the player cannot be registered.
      */
-    public PlayerInfo register(Socket socket, GameSession session)
+    public synchronized PlayerInfo register(Socket socket, GameSession session)
     {
         try
         {
             // Check a registered user is not already connected
-            synchronized (this)
-            {
-                User user = session.getUser();
+            User user = session.getUser();
 
-                if (user != null && connectedRegisteredPlayers.contains(user.getUserId()))
-                {
-                    // TODO: this needs to throw an exception/send back data, detailing why the user cannot connect
-                    LOG.warn("Player attempted to connect whilst already in session - user id: {}", user.getUserId());
-                    return null;
-                }
+            if (user != null && connectedRegisteredPlayers.contains(user.getUserId()))
+            {
+                // TODO: this needs to throw an exception/send back data, detailing why the user cannot connect
+                LOG.warn("Player attempted to connect whilst already in session - user id: {}", user.getUserId());
+                return null;
             }
 
             // Generate new identifier
@@ -105,133 +102,114 @@ public class PlayerService implements EventLogicCycleService, IdCounterConsumer
             // Create new player
             PlayerInfo playerInfo = new PlayerInfo(socket, session, playerId);
 
-            synchronized (playerInfo)
+            // Add mapping for sock
+            mappings.put(socket, playerInfo);
+
+            // Add mapping for identifier
+            mappingsById.put(playerId, playerInfo);
+
+            // Add to list of players
+            synchronized (players)
             {
-                synchronized (this)
-                {
-                    // Add mapping for sock
-                    mappings.put(socket, playerInfo);
-
-                    // Add mapping for identifier
-                    mappingsById.put(playerId, playerInfo);
-
-                    // Add to list of players
-                    synchronized (players)
-                    {
-                        players.add(playerInfo);
-                    }
-
-                    LOG.info("Player joined - ply id: {}, name: {}", playerId, session.getNickname());
-                }
-
-                // Give the user all of the users and metrics/stats thus far
-                PlayerEventsUpdatesOutboundPacket playerEventsUpdatesOutboundSnapshotPacket = new PlayerEventsUpdatesOutboundPacket();
-                writePlayersJoined(playerEventsUpdatesOutboundSnapshotPacket);
-                writePlayerMetrics(playerEventsUpdatesOutboundSnapshotPacket, true);
-                controller.packetService.send(playerInfo, playerEventsUpdatesOutboundSnapshotPacket);
-
-                // Create, spawn and send data for player
-                playerSpawnAndSendData(playerInfo);
-
-                // Send previous chat messages
-                controller.chatService.sendPreviousMessages(playerInfo);
-
-                LOG.info(
-                        "Player joined - session token: {}, user id: {}, ply id: {}",
-                        session.getToken(),
-                        session.getUser() != null ? session.getUser().getUserId() : null,
-                        playerId
-                );
+                players.add(playerInfo);
             }
+
+            LOG.info("Player joined - ply id: {}, name: {}", playerId, session.getNickname());
+
+            // Give the user all of the users and metrics/stats thus far
+            PlayerEventsUpdatesOutboundPacket playerEventsUpdatesOutboundSnapshotPacket = new PlayerEventsUpdatesOutboundPacket();
+            writePlayersJoined(playerEventsUpdatesOutboundSnapshotPacket);
+            writePlayerMetrics(playerEventsUpdatesOutboundSnapshotPacket, true);
+            controller.packetService.send(playerInfo, playerEventsUpdatesOutboundSnapshotPacket);
+
+            // Create, spawn and send data for player
+            playerSpawnAndSendData(playerInfo);
+
+            // Send previous chat messages
+            controller.chatService.sendPreviousMessages(playerInfo);
+
+            LOG.info(
+                    "Player joined - session token: {}, user id: {}, ply id: {}",
+                    session.getToken(),
+                    session.getUser() != null ? session.getUser().getUserId() : null,
+                    playerId
+            );
 
             return playerInfo;
         }
-        catch(IOException e)
+        catch (IOException e)
         {
             LOG.error("Failed to register player", e);
             return null;
         }
     }
-    public void unregister(Socket ws)
+    public synchronized void unregister(Socket ws)
     {
         // Fetch associated player, and entity
-        PlayerInfo playerInfo;
-
-        synchronized (this)
-        {
-            playerInfo = mappings.get(ws);
-        }
+        PlayerInfo playerInfo = mappings.get(ws);
 
         if (playerInfo != null)
         {
-            synchronized (playerInfo)
+            Entity entity = playerInfo.entity;
+
+            // Flush player from map
+            synchronized (playersInMap)
             {
-                Entity entity = playerInfo.entity;
-
-                // Flush player from map
-                synchronized (playersInMap)
+                for (Set<PlayerInfo> players : playersInMap.values())
                 {
-                    for (Set<PlayerInfo> players : playersInMap.values())
-                    {
-                        players.remove(playerInfo);
-                    }
+                    players.remove(playerInfo);
                 }
-
-                // Persist player's current entity
-                playerEntityService.persistPlayer(playerInfo);
-
-                // Remove entity
-                if (entity != null && entity instanceof PlayerEntity)
-                {
-                    PlayerEntity playerEntity = (PlayerEntity) entity;
-
-                    if (playerEntity.isRemovableOnPlayerEntChange(playerInfo))
-                    {
-                        entity.map.entityManager.remove(playerEntity);
-                        LOG.debug("Removed entity for disconnecting player - ply id: {}, ent id: {}", playerInfo.playerId, entity.id);
-                    }
-                }
-
-                User user;
-
-                synchronized (this)
-                {
-                    // Remove socket mapping
-                    mappings.remove(ws);
-
-                    // Remove ID mapping
-                    mappingsById.remove(playerInfo.playerId);
-
-                    // Remove from players
-                    synchronized (players)
-                    {
-                        players.remove(playerInfo);
-                    }
-
-                    // Remove from connected registered players (if registered)
-                    user = playerInfo.session.getUser();
-
-                    if (user != null)
-                    {
-                        connectedRegisteredPlayers.remove(user.getUserId());
-                    }
-                }
-
-                // Unload game session
-                controller.sessionService.unload(playerInfo.session);
-
-                // Inform server the player has left
-                PlayerEventsUpdatesOutboundPacket playerEventsUpdatesOutboundPacket = new PlayerEventsUpdatesOutboundPacket();
-                playerEventsUpdatesOutboundPacket.writePlayerLeft(playerInfo);
-                broadcast(playerEventsUpdatesOutboundPacket);
-
-                LOG.info(
-                        "Player left - token: {}, user id: {}, ply id: {}",
-                        playerInfo.session.getToken(),
-                        user != null ? user.getUserId() : null,
-                        playerInfo.playerId
-                );
             }
+
+            // Persist player's current entity
+            playerEntityService.persistPlayer(playerInfo);
+
+            // Remove entity
+            if (entity != null && entity instanceof PlayerEntity)
+            {
+                PlayerEntity playerEntity = (PlayerEntity) entity;
+
+                if (playerEntity.isRemovableOnPlayerEntChange(playerInfo))
+                {
+                    entity.map.entityManager.remove(playerEntity);
+                    LOG.debug("Removed entity for disconnecting player - ply id: {}, ent id: {}", playerInfo.playerId, entity.id);
+                }
+            }
+
+            // Remove socket mapping
+            mappings.remove(ws);
+
+            // Remove ID mapping
+            mappingsById.remove(playerInfo.playerId);
+
+            // Remove from players
+            synchronized (players)
+            {
+                players.remove(playerInfo);
+            }
+
+            // Remove from connected registered players (if registered)
+            User user = playerInfo.session.getUser();
+
+            if (user != null)
+            {
+                connectedRegisteredPlayers.remove(user.getUserId());
+            }
+
+            // Unload game session
+            controller.sessionService.unload(playerInfo.session);
+
+            // Inform server the player has left
+            PlayerEventsUpdatesOutboundPacket playerEventsUpdatesOutboundPacket = new PlayerEventsUpdatesOutboundPacket();
+            playerEventsUpdatesOutboundPacket.writePlayerLeft(playerInfo);
+            broadcast(playerEventsUpdatesOutboundPacket);
+
+            LOG.info(
+                    "Player left - token: {}, user id: {}, ply id: {}",
+                    playerInfo.session.getToken(),
+                    user != null ? user.getUserId() : null,
+                    playerInfo.playerId
+            );
         }
         else
         {
