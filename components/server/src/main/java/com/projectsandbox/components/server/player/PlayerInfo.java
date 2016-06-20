@@ -21,6 +21,8 @@ public class PlayerInfo
 {
     private final static Logger LOG = LogManager.getLogger(PlayerInfo.class);
 
+    public static final PlayerInfo[] EMPTY_PLAYERS = new  PlayerInfo[0];
+
     /**
      * The identifier used for the player during their current session.
      */
