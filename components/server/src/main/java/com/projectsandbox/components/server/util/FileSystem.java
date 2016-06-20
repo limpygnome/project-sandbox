@@ -11,6 +11,7 @@ import java.util.jar.JarInputStream;
  * NOTE: jar will include sub-dirs, dir will not include subdirs or files in subdirs
  * @author limpygnome
  */
+@Deprecated
 public class FileSystem
 {
     

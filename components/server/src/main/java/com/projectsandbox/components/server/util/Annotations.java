@@ -15,6 +15,7 @@ import java.util.List;
  *
  * @author limpygnome
  */
+@Deprecated
 public final class Annotations
 {
     private final static Logger LOG = LogManager.getLogger(Annotations.class);

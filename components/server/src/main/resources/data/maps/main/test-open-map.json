@@ -10,7 +10,7 @@
         "background" : "background/space-red",
         "width" : 120000.0,
         "height" : 120000.0,
-        "defaultPlayerEntity" : "ships/fighter"
+        "defaultPlayerEntity" : "ship/fighter"
     },
 
     "entities":
@@ -21,12 +21,12 @@
             "faction" : 1000
         },
         {
-            "typeName" : "ships/fighter",
+            "typeName" : "ship/fighter",
             "count" : 1,
             "faction" : 1000
         },
         {
-            "typeName" : "ships/destroyer",
+            "typeName" : "ship/destroyer",
             "count" : 1,
             "faction" : 1000
         },

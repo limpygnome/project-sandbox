@@ -8,6 +8,7 @@ import org.apache.logging.log4j.Logger;
 
 import java.util.HashMap;
 import java.util.List;
+
 import org.springframework.stereotype.Service;
 
 /**
@@ -21,8 +22,7 @@ public class EntityTypeMappingStoreService
     // TODO: move into a settings file
     private static final String[] ENTS_CLASS_PATHS = new String[]
     {
-            "/com/projectsandbox/components/server/entity",
-            "/com/projectsandbox/components/game/entity"
+            "/com/projectsandbox"
     };
 
     private HashMap<Short, Class> typeIdToClass;

@@ -5,6 +5,7 @@ import java.lang.annotation.Annotation;
 /**
  * Created by limpygnome on 07/07/15.
  */
+@Deprecated
 public class AnnotationInfo
 {
     private Annotation annotation;

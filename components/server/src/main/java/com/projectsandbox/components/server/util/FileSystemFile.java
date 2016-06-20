@@ -8,6 +8,7 @@ import java.io.InputStream;
  *
  * @author limpygnome
  */
+@Deprecated
 public class FileSystemFile
 {
     private boolean isFile;
