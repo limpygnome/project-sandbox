@@ -24,7 +24,7 @@ public class InventoryManager implements EventServerPreStartup
     // TODO: move string constant to properties file
     private static final String[] CLASSPATHS_INVENTORY_ITEMS =
     {
-        "/com/projectsandbox/components/game/inventory/item/"
+        "/com/projectsandbox/"
     };
 
     public HashMap<Short, Class> types;

@@ -23,6 +23,9 @@ game.entityFactory = {
             case 600:
                 entity = new Rocket();
                 break;
+            case 610:
+                entity = new game.entities.world.Flare();
+                break;
 
             // Vehicles
             case 20:

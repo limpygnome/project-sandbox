@@ -160,6 +160,7 @@
 
         <!-- Game: Weapons -->
         <script src="/content/game/js/ent/weapon/rocket.js"></script>
+        <script src="/content/game/js/ent/weapon/flare.js"></script>
 
         <!-- Game: World -->
         <script src="/content/game/js/ent/world/blackhole.js"></script>

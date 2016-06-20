@@ -1,5 +1,6 @@
 package com.projectsandbox.components.game.vehicle.ship;
 
+import com.projectsandbox.components.game.flare.FlareItem;
 import com.projectsandbox.components.game.forcefield.ForceFieldItem;
 import com.projectsandbox.components.game.jumpdrive.JumpDriveItem;
 import com.projectsandbox.components.game.weapon.GatlingItem;
@@ -81,6 +82,12 @@ public class Fighter extends PlayerEntity
                     1.0f,       // Regen health per cycle
                     5000L,      // Delay before recharging after depleted
                     4.0f        // Size multiplier
+            ));
+
+            inventory.add(new FlareItem(
+                    (short) 12, // Flares
+                    5000,       // Lifespan
+                    20.0f       // Max velocity
             ));
 
             setInventory(0, inventory);

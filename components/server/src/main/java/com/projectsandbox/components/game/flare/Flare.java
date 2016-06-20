@@ -1,5 +1,6 @@
 package com.projectsandbox.components.game.flare;
 
+import com.projectsandbox.components.game.OwnershipComponent;
 import com.projectsandbox.components.server.Controller;
 import com.projectsandbox.components.server.entity.Entity;
 import com.projectsandbox.components.server.entity.annotation.EntityType;
@@ -13,7 +14,7 @@ import com.projectsandbox.components.server.world.spawn.Spawn;
  * A flare is designed to exist only for a small period of time, with low health, removed on collision with another
  * entity or after a period of time. This is useful as defence against weapons such as rockets.
  */
-@EntityType(typeId = 4000, typeName = "world/flare")
+@EntityType(typeId = 610, typeName = "world/flare")
 public class Flare extends Entity
 {
     private long gameTimeExpires;
@@ -26,6 +27,7 @@ public class Flare extends Entity
         setMaxHealth(1);
 
         this.lifespan = lifespan;
+        this.physicsIntangible = true;
     }
 
     @Override
@@ -53,8 +55,12 @@ public class Flare extends Entity
     {
         super.eventCollisionEntity(controller, entityCollider, entityVictim, entityOther, result);
 
-        // Remove this entity...
-        remove();
+        // Remove this entity if collided entity not owner
+        OwnershipComponent ownershipComponent = (OwnershipComponent) components.fetchComponent(OwnershipComponent.class);
+        if (!ownershipComponent.isOwnedBySamePlayer(entityOther))
+        {
+            remove();
+        }
     }
 
     @Override
