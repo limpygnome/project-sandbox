@@ -85,9 +85,9 @@ public class Fighter extends PlayerEntity
             ));
 
             inventory.add(new FlareItem(
-                    (short) 12, // Flares
-                    5000,       // Lifespan
-                    20.0f       // Max velocity
+                    (short) 12,     // Flares
+                    10000,          // Lifespan
+                    10.0f           // Max velocity
             ));
 
             setInventory(0, inventory);

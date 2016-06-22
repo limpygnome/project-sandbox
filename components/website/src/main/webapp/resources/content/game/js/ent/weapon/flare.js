@@ -3,8 +3,8 @@ game.entities.world.Flare = function()
     Entity.call(this,
         {
             model: "2d-rect",
-            width: 16.0,
-            height: 16.0
+            width: 32.0,
+            height: 32.0
         }
     );
 

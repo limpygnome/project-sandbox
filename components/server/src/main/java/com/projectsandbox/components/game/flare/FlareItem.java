@@ -14,6 +14,8 @@ import com.projectsandbox.components.server.inventory.annotation.InventoryItemTy
 import com.projectsandbox.components.server.inventory.item.AbstractWeaponItem;
 import com.projectsandbox.components.server.world.map.WorldMap;
 
+import java.util.List;
+
 /**
  * Enables a ship to shoot flares, which trigger a collision with entities. This is useful for things such as rockets,
  * since it will trigger them to explode.
@@ -66,7 +68,7 @@ public class FlareItem extends AbstractWeaponItem
             // Generate position behind entity
             Vector2 positionBehind = parent.positionNew.clone().offset(parent.rotation, (float) -parent.height / 2.0f);
 
-            // Shoot flares in random direction behind ship
+            // Shoot flare behind ship
             Flare flare;
             for (int i = 0; i < flares; i++)
             {
@@ -84,7 +86,7 @@ public class FlareItem extends AbstractWeaponItem
 
         // Add velocity component
         VelocityComponent velocityComponent = new VelocityComponent(1);
-        velocityComponent.getVelocity().set(x, y);
+        velocityComponent.setInitialVelocity(new Vector2(x, y));
         flare.components.add(velocityComponent);
 
         // Add ownership component

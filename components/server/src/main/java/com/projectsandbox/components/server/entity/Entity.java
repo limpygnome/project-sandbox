@@ -301,7 +301,7 @@ public strictfp abstract class Entity implements Serializable
                     transitionAllowed = (state == EntityState.UPDATED || state == EntityState.PENDING_DELETED || state == EntityState.NONE);
                     break;
                 case PENDING_DELETED:
-                    transitionAllowed = (state == EntityState.DELETED);
+                    transitionAllowed = (state == EntityState.PENDING_DELETED || state == EntityState.DELETED);
 
                     // Remove from quadtree...
                     if (transitionAllowed)

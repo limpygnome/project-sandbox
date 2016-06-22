@@ -1,14 +1,19 @@
 package com.projectsandbox.components.game.flare;
 
 import com.projectsandbox.components.game.OwnershipComponent;
+import com.projectsandbox.components.game.VelocityComponent;
 import com.projectsandbox.components.server.Controller;
 import com.projectsandbox.components.server.entity.Entity;
 import com.projectsandbox.components.server.entity.annotation.EntityType;
+import com.projectsandbox.components.server.entity.physics.Vector2;
 import com.projectsandbox.components.server.entity.physics.collisions.CollisionResult;
 import com.projectsandbox.components.server.entity.physics.collisions.map.CollisionMapResult;
+import com.projectsandbox.components.server.entity.physics.spatial.ProximityResult;
 import com.projectsandbox.components.server.player.PlayerInfo;
 import com.projectsandbox.components.server.world.map.WorldMap;
 import com.projectsandbox.components.server.world.spawn.Spawn;
+
+import java.util.Set;
 
 /**
  * A flare is designed to exist only for a small period of time, with low health, removed on collision with another
@@ -17,12 +22,15 @@ import com.projectsandbox.components.server.world.spawn.Spawn;
 @EntityType(typeId = 610, typeName = "world/flare")
 public class Flare extends Entity
 {
+    private static float FLARE_INTERCEPT_SPEED = 8.0f;
+    private static float FLARE_INTERCEPT_RADIUS = 1000.0f;
+
     private long gameTimeExpires;
     private long lifespan;
 
     public Flare(WorldMap map, long lifespan)
     {
-        super(map, (short) 16, (short) 16);
+        super(map, (short) 32, (short) 32);
 
         setMaxHealth(1);
 
@@ -47,6 +55,35 @@ public class Flare extends Entity
         if (gameTime >= gameTimeExpires)
         {
             remove();
+        }
+        else
+        {
+            // Fetch our ownership
+            OwnershipComponent ownershipComponent = (OwnershipComponent) components.fetchComponent(OwnershipComponent.class);
+
+            // Find and move towards nearby entities...
+            Set<ProximityResult> nearbyEntities = map.entityManager.getQuadTree().getEntitiesWithinRadius(this, FLARE_INTERCEPT_RADIUS);
+            ProximityResult closest = null;
+
+            for (ProximityResult proximityResult : nearbyEntities)
+            {
+                if ((closest == null || closest.distance > proximityResult.distance) && !ownershipComponent.isOwnedBySamePlayer(proximityResult.entity))
+                {
+                    closest = proximityResult;
+                }
+            }
+
+            // Move towards closest entity
+            if (closest != null)
+            {
+                // Generate velocity to move towards target
+                float angleOfEntity = Vector2.angleToFaceTarget(positionNew, 0.0f, closest.entity.positionNew);
+                Vector2 velocity = Vector2.vectorFromAngle(angleOfEntity, FLARE_INTERCEPT_SPEED);
+
+                // Set velocity
+                VelocityComponent velocityComponent = (VelocityComponent) components.fetchComponent(VelocityComponent.class);
+                velocityComponent.getVelocity().add(velocity);
+            }
         }
     }
 

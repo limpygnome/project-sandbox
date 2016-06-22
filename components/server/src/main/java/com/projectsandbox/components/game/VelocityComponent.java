@@ -117,4 +117,9 @@ public class VelocityComponent implements Serializable, EntityComponent, Collisi
         return velocity;
     }
 
+    public void setInitialVelocity(Vector2 initialVelocity)
+    {
+        this.initialVelocity = initialVelocity;
+    }
+
 }
