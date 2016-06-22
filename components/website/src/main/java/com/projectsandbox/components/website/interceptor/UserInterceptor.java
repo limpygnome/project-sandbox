@@ -44,12 +44,14 @@ public class UserInterceptor implements HandlerInterceptor
         }
 
         // Restrict certain paths to users only
+        // TODO: we should make this automatic using annotations on startup e.g. implement interface to fetch any restricted URLs
         if (user == null)
         {
             if  (
                     requestPath.startsWith("account") ||
                     requestPath.startsWith("auth/user") ||
-                    requestPath.startsWith("auth/logout")
+                    requestPath.startsWith("auth/logout") ||
+                    requestPath.startsWith("editor")
                 )
             {
                 httpServletResponse.sendRedirect("/home");

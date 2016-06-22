@@ -13,8 +13,6 @@ long-term goals
 ================
 - introduce ships
 - introduce new weapons/abilities
--- flares -> shoots out random entities, used for rockets to hit them, rather than ship -> shoots out and explodes, only minimal damage, make rocket health low
---- destroyed on collision with any entity
 --- heavy missile battery
 --- basic turrets -> consider making rotation clientside / send locked-on ent id instead?
 - introduce shipyard
