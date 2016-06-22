@@ -67,7 +67,10 @@ public class Flare extends Entity
 
             for (ProximityResult proximityResult : nearbyEntities)
             {
-                if ((closest == null || closest.distance > proximityResult.distance) && !ownershipComponent.isOwnedBySamePlayer(proximityResult.entity))
+                if  (   !proximityResult.entity.physicsIntangible &&
+                        (closest == null || closest.distance > proximityResult.distance) &&
+                        !ownershipComponent.isOwnedBySamePlayer(proximityResult.entity)
+                    )
                 {
                     closest = proximityResult;
                 }

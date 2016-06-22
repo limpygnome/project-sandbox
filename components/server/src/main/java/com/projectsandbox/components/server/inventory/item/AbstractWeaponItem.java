@@ -192,6 +192,21 @@ public abstract class AbstractWeaponItem extends AbstractInventoryItem
     @Override
     public String eventFetchItemText(Controller controller)
     {
-        return String.format("%02d %04d", mags, bullets);
+        final String MULTIPLE_BULLET_FORMAT = "%02d %04d";
+        final String SINGLE_BULLET_FORMAT = "%d";
+
+        String result;
+
+        if (bulletsPerMag > 1)
+        {
+            result = String.format(MULTIPLE_BULLET_FORMAT, mags, bullets);
+        }
+        else
+        {
+            result = String.format(SINGLE_BULLET_FORMAT, mags);
+        }
+
+        return result;
     }
+
 }

@@ -10,11 +10,10 @@ import com.projectsandbox.components.server.entity.respawn.RespawnManager;
 import com.projectsandbox.components.server.entity.respawn.pending.PositionPendingRespawn;
 import com.projectsandbox.components.server.inventory.InventoryInvokeState;
 import com.projectsandbox.components.server.inventory.InventoryInvokeType;
+import com.projectsandbox.components.server.inventory.InventorySlotState;
 import com.projectsandbox.components.server.inventory.annotation.InventoryItemTypeId;
 import com.projectsandbox.components.server.inventory.item.AbstractWeaponItem;
 import com.projectsandbox.components.server.world.map.WorldMap;
-
-import java.util.List;
 
 /**
  * Enables a ship to shoot flares, which trigger a collision with entities. This is useful for things such as rockets,
@@ -43,17 +42,16 @@ public class FlareItem extends AbstractWeaponItem
         this.maxVelocity = maxVelocity;
 
         invokeType = InventoryInvokeType.FIRE_ONCE;
-}
+    }
 
     @Override
-    public void eventInvoke(Controller controller, InventoryInvokeState invokeState)
+    protected void fireBullet(Controller controller)
     {
-        switch (invokeState)
-        {
-            case INVOKE_ONCE:
-                fireFlare(controller);
-                break;
-        }
+        // Fire flare
+        fireFlare(controller);
+
+        // Set slot as updated
+        slot.setState(InventorySlotState.UPDATED);
     }
 
     private void fireFlare(Controller controller)
