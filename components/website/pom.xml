@@ -149,6 +149,172 @@
                 </configuration>
             </plugin>
 
+            <!-- Minification -->
+            <plugin>
+                <groupId>com.samaxes.maven</groupId>
+                <artifactId>minify-maven-plugin</artifactId>
+                <version>1.7.4</version>
+                <executions>
+                    <execution>
+                        <id>default-minify</id>
+                        <configuration>
+                            <cssSourceDir>resources/content</cssSourceDir>
+                            <jsSourceDir>resources/content</jsSourceDir>
+                            <cssSourceFiles>
+
+                                <cssSourceFile>game/css/main.css</cssSourceFile>
+                                <cssSourceFile>game/css/main-anims.css</cssSourceFile>
+                                <cssSourceFile>game/css/weapons.css</cssSourceFile>
+
+                                <!-- Overlays -->
+                                <cssSourceFile>game/css/overlay/shared.css</cssSourceFile>
+                                <cssSourceFile>game/css/overlay/connecting.css</cssSourceFile>
+                                <cssSourceFile>game/css/overlay/death-screen.css</cssSourceFile>
+                                <cssSourceFile>game/css/overlay/ui.css</cssSourceFile>
+
+                                <!-- UI -->
+                                <cssSourceFile>game/css/ui/map.css</cssSourceFile>
+                                <cssSourceFile>game/css/ui/activity.css</cssSourceFile>
+                                <cssSourceFile>game/css/ui/chat.css</cssSourceFile>
+                                <cssSourceFile>game/css/ui/stats.css</cssSourceFile>
+                                <cssSourceFile>game/css/ui/health-bar.css</cssSourceFile>
+                                <cssSourceFile>game/css/ui/inventory.css</cssSourceFile>
+                                <cssSourceFile>game/css/ui/options.css</cssSourceFile>
+                                <cssSourceFile>game/css/ui/score.css</cssSourceFile>
+                                <cssSourceFile>game/css/ui/scoreboard.css</cssSourceFile>
+
+                                <!-- Font Icons -->
+                                <cssSourceFile>game/fonts/projectsandbox.css</cssSourceFile>
+
+                            </cssSourceFiles>
+                            <cssFinalFile>game.css</cssFinalFile>
+                            <jsSourceFiles>
+
+                                <!--
+                                    Third-party
+                                -->
+                                <jsSourceFile>third-party/js/gl-matrix-min.js</jsSourceFile>
+                                <jsSourceFile>third-party/js/jquery-1.11.3.min.js</jsSourceFile>
+
+                                <!--
+                                    Engine
+                                -->
+                                <jsSourceFile>engine/js/project-sandbox.js</jsSourceFile>
+
+                                <!-- Prototype -->
+                                <jsSourceFile>engine/js/_namespace.js</jsSourceFile>
+                                <jsSourceFile>engine/js/_prototype_inheritence.js</jsSourceFile>
+
+                                <!-- Rendering -->
+                                <jsSourceFile>engine/js/rendering/core.js</jsSourceFile>
+                                <jsSourceFile>engine/js/rendering/depth-tree.js</jsSourceFile>
+                                <jsSourceFile>engine/js/rendering/frustrum.js</jsSourceFile>
+                                <jsSourceFile>engine/js/rendering/buffer-cache.js</jsSourceFile>
+                                <jsSourceFile>engine/js/rendering/shaders.js</jsSourceFile>
+                                <jsSourceFile>engine/js/rendering/primitive.js</jsSourceFile>
+                                <jsSourceFile>engine/js/rendering/primitive-bar.js</jsSourceFile>
+                                <jsSourceFile>engine/js/rendering/entity.js</jsSourceFile>
+                                <jsSourceFile>engine/js/rendering/effect.js</jsSourceFile>
+                                <jsSourceFile>engine/js/rendering/trail.js</jsSourceFile>
+                                <jsSourceFile>engine/js/rendering/text.js</jsSourceFile>
+
+                                <!-- World -->
+                                <jsSourceFile>engine/js/world/camera.js</jsSourceFile>
+                                <jsSourceFile>engine/js/world/map.js</jsSourceFile>
+                                <jsSourceFile>engine/js/world/map-open.js</jsSourceFile>
+                                <jsSourceFile>engine/js/world/map-tiles.js</jsSourceFile>
+
+                                <!-- Lighting -->
+                                <jsSourceFile>engine/js/lighting/lights.js</jsSourceFile>
+                                <jsSourceFile>engine/js/lighting/light.js</jsSourceFile>
+
+                                <!-- Textures -->
+                                <jsSourceFile>engine/js/textures/texturesrc.js</jsSourceFile>
+                                <jsSourceFile>engine/js/textures/texture.js</jsSourceFile>
+                                <jsSourceFile>engine/js/textures/textures.js</jsSourceFile>
+
+                                <!-- Interaction -->
+                                <jsSourceFile>engine/js/interaction/shared.js</jsSourceFile>
+                                <jsSourceFile>engine/js/interaction/keyboard.js</jsSourceFile>
+                                <jsSourceFile>engine/js/interaction/mouse.js</jsSourceFile>
+
+                                <!-- Inventory -->
+                                <jsSourceFile>engine/js/inventory/inventory.js</jsSourceFile>
+                                <jsSourceFile>engine/js/inventory/inventory-item.js</jsSourceFile>
+
+                                <!-- Network -->
+                                <jsSourceFile>engine/js/network/asset-loader.js</jsSourceFile>
+                                <jsSourceFile>engine/js/network/network.js</jsSourceFile>
+                                <jsSourceFile>engine/js/network/inbound-packet.js</jsSourceFile>
+                                <jsSourceFile>engine/js/network/outbound-packet.js</jsSourceFile>
+
+                                <!-- Network: Components -->
+                                <jsSourceFile>engine/js/network/components/entities.js</jsSourceFile>
+                                <jsSourceFile>engine/js/network/components/entity-pool.js</jsSourceFile>
+                                <jsSourceFile>engine/js/network/components/inventory.js</jsSourceFile>
+                                <jsSourceFile>engine/js/network/components/world/map.js</jsSourceFile>
+                                <jsSourceFile>engine/js/network/components/world/map-open.js</jsSourceFile>
+                                <jsSourceFile>engine/js/network/components/world/map-tiles.js</jsSourceFile>
+                                <jsSourceFile>engine/js/network/components/player.js</jsSourceFile>
+                                <jsSourceFile>engine/js/network/components/session.js</jsSourceFile>
+
+                                <!-- Types -->
+                                <jsSourceFile>engine/js/types/player.js</jsSourceFile>
+
+                                <!-- Misc / unsorted -->
+                                <jsSourceFile>engine/js/utils.js</jsSourceFile>
+                                <jsSourceFile>engine/js/players.js</jsSourceFile>
+
+                                <!--
+                                    Game
+                                -->
+                                <jsSourceFile>game/js/_namespace.js</jsSourceFile>
+                                <jsSourceFile>game/js/effects.js</jsSourceFile>
+                                <jsSourceFile>game/js/entity-factory.js</jsSourceFile>
+                                <jsSourceFile>game/js/ui/controller.js</jsSourceFile>
+                                <jsSourceFile>game/js/ui/map.js</jsSourceFile>
+
+                                <!-- Game: Living -->
+                                <jsSourceFile>game/js/ent/living/player.js</jsSourceFile>
+                                <jsSourceFile>game/js/ent/living/sentry.js</jsSourceFile>
+                                <jsSourceFile>game/js/ent/living/pedestrian.js</jsSourceFile>
+
+                                <!-- Game: Pickups -->
+                                <jsSourceFile>game/js/ent/pickup/abstract_pickup.js</jsSourceFile>
+                                <jsSourceFile>game/js/ent/pickup/health.js</jsSourceFile>
+
+                                <!-- Game: Vehicles -->
+                                <jsSourceFile>game/js/ent/vehicle/ice-cream-van.js</jsSourceFile>
+                                <jsSourceFile>game/js/ent/vehicle/rocket-car.js</jsSourceFile>
+                                <jsSourceFile>game/js/ent/vehicle/bus.js</jsSourceFile>
+
+                                <!-- Game: Ships -->
+                                <jsSourceFile>game/js/ent/ships/fighter.js</jsSourceFile>
+                                <jsSourceFile>game/js/ent/ships/destroyer.js</jsSourceFile>
+
+                                <!-- Game: Weapons -->
+                                <jsSourceFile>game/js/ent/weapon/rocket.js</jsSourceFile>
+                                <jsSourceFile>game/js/ent/weapon/flare.js</jsSourceFile>
+
+                                <!-- Game: World -->
+                                <jsSourceFile>game/js/ent/world/blackhole.js</jsSourceFile>
+
+                                <!-- Game: Inventory -->
+                                <jsSourceFile>game/js/inventory/fist.js</jsSourceFile>
+                                <jsSourceFile>game/js/inventory/gatling.js</jsSourceFile>
+
+                            </jsSourceFiles>
+                            <jsFinalFile>game.js</jsFinalFile>
+                            <jsEngine>CLOSURE</jsEngine>
+                            <closureLanguage>ES8</closureLanguage>
+                        </configuration>
+                        <goals>
+                            <goal>minify</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+
         </plugins>
     </build>
 

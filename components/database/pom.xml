@@ -33,7 +33,7 @@
                     <driver>com.mysql.jdbc.Driver</driver>
                     <username>projectsandbox</username>
                     <password></password>
-                    <url>jdbc:mysql://localhost:3306/projectsandbox?allowMultiQueries=true</url>
+                    <url>jdbc:mysql://localhost:3306/projectsandbox?allowMultiQueries=true&amp;createDatabaseIfNotExist=true</url>
 
                     <referenceDriver>com.mysql.jdbc.Driver</referenceDriver>
                     <referenceUsername>projectsandbox</referenceUsername>

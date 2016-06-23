@@ -60,13 +60,10 @@ game.ui.map =
                 this.markersReset(this.containerRadar);
 
                 // Render all entities available
-                var entity;
-                for (var kv of projectSandbox.entities)
-                {
-                    entity = kv[1];
+                projectSandbox.entities.forEach(function (entity) {
                     this.markerUpdateMap(entity);
                     this.markerUpdateRadar(entity);
-                }
+                });
 
                 // Purge old
                 this.markersPurgeOld(this.containerMap);

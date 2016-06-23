@@ -156,20 +156,16 @@ var projectSandbox =
         this.textures.logic();
         
         // Update ents
-        var ent;
-        for (var kv of this.entities)
-        {
-            ent = kv[1];
-
+        this.entities.forEach(function (entity) {
             // Core logic
-            ent.coreLogic();
+            entity.coreLogic();
 
             // Custom ent logic
-            if (ent.logic)
+            if (entity.logic)
             {
-                ent.logic();
+                entity.logic();
             }
-        }
+        });
         
         // Update effects
         var effect;

@@ -26,11 +26,9 @@ projectSandbox.textures =
     {
         // Execute logic for each texture
         var texture;
-        for(var kv of this.textures)
-        {
-            texture = kv[1];
+        this.textures.forEach(function (texture) {
             texture.logic();
-        }
+        });
     },
     
     reset: function()
