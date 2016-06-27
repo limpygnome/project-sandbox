@@ -34,7 +34,7 @@
             <scope>provided</scope>
         </dependency>
 
-        <!-- Core: JSTL (tag) Library - needed for Tomcat embedded -->
+        <!-- Core: JSTL (tag) Library - needed for Tomcat -->
         <dependency>
             <groupId>javax.servlet</groupId>
             <artifactId>jstl</artifactId>
@@ -125,21 +125,6 @@
     <build>
         <plugins>
 
-            <!-- Embedded Tomcat server -->
-            <plugin>
-                <groupId>org.apache.tomcat.maven</groupId>
-                <artifactId>tomcat7-maven-plugin</artifactId>
-                <version>2.2</version>
-                <configuration>
-                    <port>8020</port>
-                    <path>/</path>
-                    <contextFile>src/main/webapp/META-INF/context.xml</contextFile>
-                    <contextReloadable>true</contextReloadable>
-                    <warDirectory>${basedir}/src/main/webapp</warDirectory>
-                    <warSourceDirectory>${basedir}/src/main/webapp</warSourceDirectory>
-                </configuration>
-            </plugin>
-
             <!-- Change name of WAR -->
             <plugin>
                <groupId>org.apache.maven.plugins</groupId>
@@ -162,17 +147,24 @@
                             <jsSourceDir>resources/content</jsSourceDir>
                             <cssSourceFiles>
 
+                                <!--
+                                    Main
+                                -->
                                 <cssSourceFile>game/css/main.css</cssSourceFile>
                                 <cssSourceFile>game/css/main-anims.css</cssSourceFile>
                                 <cssSourceFile>game/css/weapons.css</cssSourceFile>
 
-                                <!-- Overlays -->
+                                <!--
+                                    Overlays
+                                -->
                                 <cssSourceFile>game/css/overlay/shared.css</cssSourceFile>
                                 <cssSourceFile>game/css/overlay/connecting.css</cssSourceFile>
                                 <cssSourceFile>game/css/overlay/death-screen.css</cssSourceFile>
                                 <cssSourceFile>game/css/overlay/ui.css</cssSourceFile>
 
-                                <!-- UI -->
+                                <!--
+                                    UI
+                                -->
                                 <cssSourceFile>game/css/ui/map.css</cssSourceFile>
                                 <cssSourceFile>game/css/ui/activity.css</cssSourceFile>
                                 <cssSourceFile>game/css/ui/chat.css</cssSourceFile>
@@ -183,7 +175,9 @@
                                 <cssSourceFile>game/css/ui/score.css</cssSourceFile>
                                 <cssSourceFile>game/css/ui/scoreboard.css</cssSourceFile>
 
-                                <!-- Font Icons -->
+                                <!--
+                                    Font Icons
+                                -->
                                 <cssSourceFile>game/fonts/projectsandbox.css</cssSourceFile>
 
                             </cssSourceFiles>
@@ -201,11 +195,15 @@
                                 -->
                                 <jsSourceFile>engine/js/project-sandbox.js</jsSourceFile>
 
-                                <!-- Prototype -->
+                                <!--
+                                    Namespace / Global Prototype
+                                -->
                                 <jsSourceFile>engine/js/_namespace.js</jsSourceFile>
                                 <jsSourceFile>engine/js/_prototype_inheritence.js</jsSourceFile>
 
-                                <!-- Rendering -->
+                                <!--
+                                    Rendering
+                                -->
                                 <jsSourceFile>engine/js/rendering/core.js</jsSourceFile>
                                 <jsSourceFile>engine/js/rendering/depth-tree.js</jsSourceFile>
                                 <jsSourceFile>engine/js/rendering/frustrum.js</jsSourceFile>
@@ -218,37 +216,51 @@
                                 <jsSourceFile>engine/js/rendering/trail.js</jsSourceFile>
                                 <jsSourceFile>engine/js/rendering/text.js</jsSourceFile>
 
-                                <!-- World -->
+                                <!--
+                                    World
+                                -->
                                 <jsSourceFile>engine/js/world/camera.js</jsSourceFile>
                                 <jsSourceFile>engine/js/world/map.js</jsSourceFile>
                                 <jsSourceFile>engine/js/world/map-open.js</jsSourceFile>
                                 <jsSourceFile>engine/js/world/map-tiles.js</jsSourceFile>
 
-                                <!-- Lighting -->
+                                <!--
+                                    Lighting
+                                -->
                                 <jsSourceFile>engine/js/lighting/lights.js</jsSourceFile>
                                 <jsSourceFile>engine/js/lighting/light.js</jsSourceFile>
 
-                                <!-- Textures -->
+                                <!--
+                                    Textures
+                                -->
                                 <jsSourceFile>engine/js/textures/texturesrc.js</jsSourceFile>
                                 <jsSourceFile>engine/js/textures/texture.js</jsSourceFile>
                                 <jsSourceFile>engine/js/textures/textures.js</jsSourceFile>
 
-                                <!-- Interaction -->
+                                <!--
+                                    Interaction
+                                -->
                                 <jsSourceFile>engine/js/interaction/shared.js</jsSourceFile>
                                 <jsSourceFile>engine/js/interaction/keyboard.js</jsSourceFile>
                                 <jsSourceFile>engine/js/interaction/mouse.js</jsSourceFile>
 
-                                <!-- Inventory -->
+                                <!--
+                                    Inventory
+                                -->
                                 <jsSourceFile>engine/js/inventory/inventory.js</jsSourceFile>
                                 <jsSourceFile>engine/js/inventory/inventory-item.js</jsSourceFile>
 
-                                <!-- Network -->
+                                <!--
+                                    Network
+                                -->
                                 <jsSourceFile>engine/js/network/asset-loader.js</jsSourceFile>
                                 <jsSourceFile>engine/js/network/network.js</jsSourceFile>
                                 <jsSourceFile>engine/js/network/inbound-packet.js</jsSourceFile>
                                 <jsSourceFile>engine/js/network/outbound-packet.js</jsSourceFile>
 
-                                <!-- Network: Components -->
+                                <!--
+                                    Network: Components
+                                -->
                                 <jsSourceFile>engine/js/network/components/entities.js</jsSourceFile>
                                 <jsSourceFile>engine/js/network/components/entity-pool.js</jsSourceFile>
                                 <jsSourceFile>engine/js/network/components/inventory.js</jsSourceFile>
@@ -258,10 +270,14 @@
                                 <jsSourceFile>engine/js/network/components/player.js</jsSourceFile>
                                 <jsSourceFile>engine/js/network/components/session.js</jsSourceFile>
 
-                                <!-- Types -->
+                                <!--
+                                    Types
+                                -->
                                 <jsSourceFile>engine/js/types/player.js</jsSourceFile>
 
-                                <!-- Misc / unsorted -->
+                                <!--
+                                    Misc / unsorted
+                                -->
                                 <jsSourceFile>engine/js/utils.js</jsSourceFile>
                                 <jsSourceFile>engine/js/players.js</jsSourceFile>
 
@@ -274,39 +290,53 @@
                                 <jsSourceFile>game/js/ui/controller.js</jsSourceFile>
                                 <jsSourceFile>game/js/ui/map.js</jsSourceFile>
 
-                                <!-- Game: Living -->
+                                <!--
+                                    Game: Living
+                                -->
                                 <jsSourceFile>game/js/ent/living/player.js</jsSourceFile>
                                 <jsSourceFile>game/js/ent/living/sentry.js</jsSourceFile>
                                 <jsSourceFile>game/js/ent/living/pedestrian.js</jsSourceFile>
 
-                                <!-- Game: Pickups -->
+                                <!--
+                                    Game: Pickups
+                                -->
                                 <jsSourceFile>game/js/ent/pickup/abstract_pickup.js</jsSourceFile>
                                 <jsSourceFile>game/js/ent/pickup/health.js</jsSourceFile>
 
-                                <!-- Game: Vehicles -->
+                                <!--
+                                    Game: Vehicles
+                                -->
                                 <jsSourceFile>game/js/ent/vehicle/ice-cream-van.js</jsSourceFile>
                                 <jsSourceFile>game/js/ent/vehicle/rocket-car.js</jsSourceFile>
                                 <jsSourceFile>game/js/ent/vehicle/bus.js</jsSourceFile>
 
-                                <!-- Game: Ships -->
+                                <!--
+                                    Game: Ships
+                                -->
                                 <jsSourceFile>game/js/ent/ships/fighter.js</jsSourceFile>
                                 <jsSourceFile>game/js/ent/ships/destroyer.js</jsSourceFile>
 
-                                <!-- Game: Weapons -->
+                                <!--
+                                    Game: Weapons
+                                -->
                                 <jsSourceFile>game/js/ent/weapon/rocket.js</jsSourceFile>
                                 <jsSourceFile>game/js/ent/weapon/flare.js</jsSourceFile>
 
-                                <!-- Game: World -->
+                                <!--
+                                    Game: World
+                                -->
                                 <jsSourceFile>game/js/ent/world/blackhole.js</jsSourceFile>
 
-                                <!-- Game: Inventory -->
+                                <!--
+                                    Game: Inventory
+                                -->
                                 <jsSourceFile>game/js/inventory/fist.js</jsSourceFile>
                                 <jsSourceFile>game/js/inventory/gatling.js</jsSourceFile>
 
                             </jsSourceFiles>
                             <jsFinalFile>game.js</jsFinalFile>
                             <jsEngine>CLOSURE</jsEngine>
-                            <closureLanguage>ES8</closureLanguage>
+                            <closureLanguage>ECMASCRIPT5</closureLanguage>
                         </configuration>
                         <goals>
                             <goal>minify</goal>

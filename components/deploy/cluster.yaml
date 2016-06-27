@@ -1,0 +1,10 @@
+# Create simple front-end node
+pp01:
+  hostname: node01.projectsandbox
+  container_name: node01.projectsandbox
+  image: ps-tomcat-base
+  ports:
+    - "8020:8080"
+  volumes:
+    - ./files/tomcat-website/server.xml:/usr/local/tomcat/conf/server.xml
+    - ./../website/target/projectsandbox-website-1.0:/usr/local/tomcat/webapps/projectsandbox-website-1.0.war

@@ -1,0 +1,17 @@
+FROM java:8-jre
+
+ENV CATALINA_HOME /usr/local/tomcat
+ENV PATH $CATALINA_HOME/bin:$PATH
+RUN mkdir -p "$CATALINA_HOME"
+WORKDIR $CATALINA_HOME
+
+COPY apache-tomcat-8.0.36.tar.gz tomcat.tar.gz
+
+RUN set -x \
+    && tar -xvf tomcat.tar.gz --strip-components=1 \
+    && rm bin/*.bat \
+    && rm tomcat.tar.gz*
+
+EXPOSE 8080
+CMD ["catalina.sh", "run"]
+

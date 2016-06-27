@@ -1,2 +1,2 @@
-<Context reloadable="true" backgroundProcessorDelay="1">
+<Context path="website" reloadable="true" backgroundProcessorDelay="1">
 </Context>
