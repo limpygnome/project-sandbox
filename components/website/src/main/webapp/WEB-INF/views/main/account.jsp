@@ -1,5 +1,6 @@
-<%@ taglib prefix="c"		uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="c"       uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="form"    uri="http://www.springframework.org/tags/form" %>
+<%@ taglib prefix="spring"  uri="http://www.springframework.org/tags" %>
 <%@ taglib prefix="ps"      tagdir="/WEB-INF/tags/main" %>
 
 <h2>
@@ -7,7 +8,7 @@
 </h2>
 
 <p class="center">
-    <a href="/profile" class="button">
+    <a href="<spring:url value='/profile' />" class="button">
         View Profile
     </a>
 </p>
@@ -15,7 +16,7 @@
 <h3>
     Update Details
 </h3>
-<form:form cssClass="account-update-details" action="/account/update" method="post" modelAttribute="updateDetailsForm">
+<form:form cssClass="account-update-details" servletRelativeAction="/account/update" method="post" modelAttribute="updateDetailsForm">
 
     <%-- Check if form data provided i.e. invalid value --%>
     <c:choose>

@@ -11,7 +11,7 @@
             <td>
                 <ul>
                     <li>
-                        limpygnome (<a href="/profile/limpygnome">limpygnome</a>)
+                        limpygnome (<a href="<spring:url value='/profile/limpygnome' />">limpygnome</a>)
                     </li>
                 </ul>
             </td>

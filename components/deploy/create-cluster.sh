@@ -3,10 +3,15 @@
 
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
+# Make sure log dirs exist
+mkdir -p "${DIR}/logs/web"
+
 # Build image
+echo "Building ps-tomcat-base image..."
 sudo docker build -t "ps-tomcat-base" --file "${DIR}/ps-tomcat-base/dockerfile" ${DIR}
 
 # Start cluster
+echo "Starting cluster..."
 CLUSTER_YAML_FILE="${DIR}/cluster.yaml"
 
 sudo docker-compose -f "${CLUSTER_YAML_FILE}" up -d

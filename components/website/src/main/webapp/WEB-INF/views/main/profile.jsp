@@ -1,9 +1,10 @@
-<%@ taglib prefix="c"		uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="c"       uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="form"    uri="http://www.springframework.org/tags/form" %>
+<%@ taglib prefix="spring"  uri="http://www.springframework.org/tags" %>
 <%@ taglib prefix="ps"      tagdir="/WEB-INF/tags/main" %>
 
 <h2>
-    <a href="/profile">Profile</a> - ${profile_user.nickname}
+    <a href="<spring:url value='/profile' />">Profile</a> - ${profile_user.nickname}
 </h2>
 
 <div class="profile">
@@ -15,7 +16,7 @@
 
                 <c:if test="${user != null && profile_user != null && profile_user == user}">
                     <div>
-                        <a href="/profile/upload" class="button">
+                        <a href="<spring:url value='/profile/upload' />" class="button">
                             Change
                         </a>
                     </div>
@@ -100,6 +101,7 @@
                         <c:out value="${profile_user.playerMetrics.kills}" />
                     </c:when>
                     <c:otherwise>
+                        --
                         <%--
                         <c:out value="${profile_user.playerMetrics.kills / ${profile_user.playerMetrics.deaths}" />
                         --%>

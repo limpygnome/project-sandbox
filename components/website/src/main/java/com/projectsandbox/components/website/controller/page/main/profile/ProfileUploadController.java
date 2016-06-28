@@ -53,7 +53,7 @@ public class ProfileUploadController extends BaseController
         }
 
         // Create MV ready for result, in case of upload
-        ModelAndView modelAndView = createMV("main/profile_upload", "profile - upload");;
+        ModelAndView modelAndView = createMV("main/profile-upload", "profile - upload");;
 
         if (profilePictureUploadForm != null && profilePictureUploadForm.getFileUpload() != null && !bindingResult.hasErrors())
         {

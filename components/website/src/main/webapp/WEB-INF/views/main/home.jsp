@@ -1,9 +1,10 @@
-<%@ taglib prefix="c"		uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="c"       uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="form"    uri="http://www.springframework.org/tags/form" %>
+<%@ taglib prefix="spring"  uri="http://www.springframework.org/tags" %>
 <%@ taglib prefix="ps"      tagdir="/WEB-INF/tags/main" %>
 
 <ps:authenticated auth="false">
-    <form:form cssClass="box guest" method="post" action="/auth/guest" modelAttribute="guestForm">
+    <form:form cssClass="box guest" method="post" servletRelativeAction="/auth/guest" modelAttribute="guestForm">
         <h3>
             Play as Guest...
         </h3>
@@ -25,7 +26,7 @@
 
     </form:form>
 
-    <form:form cssClass="box login" method="post" action="/auth/login" modelAttribute="loginForm">
+    <form:form cssClass="box login" method="post" servletRelativeAction="/auth/login" modelAttribute="loginForm">
         <h3>
             Login
         </h3>
@@ -52,7 +53,7 @@
 
     </form:form>
 
-    <form:form cssClass="box register" method="post" action="/auth/register" modelAttribute="registerForm">
+    <form:form cssClass="box register" method="post" servletRelativeAction="/auth/register" modelAttribute="registerForm">
         <h3>
             Register
         </h3>

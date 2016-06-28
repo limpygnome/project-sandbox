@@ -5,7 +5,7 @@ ENV PATH $CATALINA_HOME/bin:$PATH
 RUN mkdir -p "$CATALINA_HOME"
 WORKDIR $CATALINA_HOME
 
-COPY apache-tomcat-8.0.36.tar.gz tomcat.tar.gz
+COPY ./ps-tomcat-base/apache-tomcat-8.0.36.tar.gz tomcat.tar.gz
 
 RUN set -x \
     && tar -xvf tomcat.tar.gz --strip-components=1 \
