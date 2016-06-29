@@ -6,6 +6,9 @@ var projectSandbox =
 
     // Session ID
     sessionId: null,
+
+    // The base URL for all requests
+    baseUrl: "",
     
     // Entities
     entities: new Map(),

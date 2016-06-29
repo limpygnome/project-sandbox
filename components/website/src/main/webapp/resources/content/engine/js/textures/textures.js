@@ -48,7 +48,7 @@ projectSandbox.textures =
         var height = json["height"];
         
         // Create src entry
-        var src = new TextureSrc(name, url, width, height);
+        var src = new TextureSrc(name, projectSandbox.baseUrl + url, width, height);
         self.src.set(name, src);
         console.log("Textures - added texture src '" + name + "'");
         

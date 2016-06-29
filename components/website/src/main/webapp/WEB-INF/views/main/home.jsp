@@ -87,7 +87,7 @@
 </ps:authenticated>
 
 <ps:authenticated auth="true">
-    <form class="box user" method="post" action="/auth/user">
+    <form:form cssClass="box user" method="post" servletRelativeAction="/auth/user">
         <h3>
             Welcome <c:out value="${user.nickname}" />!
         </h3>
@@ -99,7 +99,7 @@
             </tr>
         </table>
         <ps:csrf />
-    </form>
+    </form:form>
 </ps:authenticated>
 
 <div class="online">

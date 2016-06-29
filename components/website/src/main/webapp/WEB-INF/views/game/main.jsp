@@ -1,7 +1,9 @@
-<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib prefix="c"       uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="spring"  uri="http://www.springframework.org/tags" %>
 
 <script>
     projectSandbox.sessionId = "<c:out value="${game_session_token}" />";
+    projectSandbox.baseUrl = "<spring:url value='/' />";
 </script>
 
 <div id="projectsandbox">
@@ -108,7 +110,7 @@
                 <div id="button-fullscreen" class="button fullscreen">
                     <span class="icon-enlarge"></span>
                 </div>
-                <a class="button" href="/">
+                <a class="button" href="<spring:url value='/' />">
                     <span class="icon-enter"></span>
                 </a>
             </div>

@@ -8,5 +8,6 @@ pp01:
   volumes:
     - ./files/tomcat-website/server.xml:/usr/local/tomcat/conf/server.xml
     - ./files/tomcat-website/tomcat-users.xml:/usr/local/tomcat/conf/tomcat-users.xml
-    - ./../website/target/projectsandbox-website-1.0.war:/usr/local/tomcat/webapps/website.war
     - ./logs/web:/usr/local/tomcat/logs
+    - /home/limpygnome/git-remote/project-sandbox/components/website/target/website-1.0:/usr/local/tomcat/webapps/website
+#    - ./../website/target/projectsandbox-website-1.0.war:/usr/local/tomcat/webapps/website.war

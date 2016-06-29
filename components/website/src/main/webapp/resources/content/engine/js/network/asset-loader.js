@@ -26,7 +26,7 @@ projectSandbox.assetLoader =
         
         // Make request to load assets file
         projectSandbox.utils.ajaxJson(
-            assetListUrl,
+            projectSandbox.baseUrl + assetListUrl,
             function(json)
             {
                 self.loadFromAssetsFileCallback(assetListUrl, assetListIndexId, json);
@@ -79,7 +79,7 @@ projectSandbox.assetLoader =
         if (url.endsWith(".json"))
         {
             projectSandbox.utils.ajaxJson(
-                url,
+                projectSandbox.baseUrl + url,
                 function(data)
                 {
                     self.loadAssetCallback(assetListIndexId, assetId, url, data);
@@ -90,7 +90,7 @@ projectSandbox.assetLoader =
         else
         {
             projectSandbox.utils.ajax(
-                url,
+                projectSandbox.baseUrl + url,
                 function(data)
                 {
                     self.loadAssetCallback(assetListIndexId, assetId, url, data);
@@ -171,4 +171,5 @@ projectSandbox.assetLoader =
     {
         console.error("Failed to load resource at '" + url + "' - HTTP status code " + ajax.status + ".");
     }
+
 }

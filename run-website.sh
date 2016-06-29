@@ -2,7 +2,8 @@
 
 (
     # Use Docker...
+    cd components/website
     mvn clean package
-    cd components/deploy
+    cd ../deploy
     ./create-cluster.sh
 )

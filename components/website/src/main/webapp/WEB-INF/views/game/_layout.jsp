@@ -1,5 +1,6 @@
-<%@ taglib prefix="c"        uri="http://java.sun.com/jsp/jstl/core" %>
-<%@ taglib prefix="tiles"    uri="http://tiles.apache.org/tags-tiles" %>
+<%@ taglib prefix="c"       uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="tiles"   uri="http://tiles.apache.org/tags-tiles" %>
+<%@ taglib prefix="spring"  uri="http://www.springframework.org/tags" %>
 
 <!--
     Copyright &copy; limpygnome <c:out value="${copyright_year}"/>
@@ -21,8 +22,8 @@
         <%--
             Minified resources
         --%>
-        <link rel="stylesheet" href="/content/game.min.css" />
-        <script src="/content/game.min.js" />
+        <link rel="stylesheet" href="<spring:url value='/content/game.css' />" />
+        <script src="<spring:url value='/content/game.js' />"></script>
 
     </head>
     <body>
