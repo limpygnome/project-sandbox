@@ -6,3 +6,6 @@ target/
 *.class
 *.iml
 
+# Logs
+logs/
+*.log

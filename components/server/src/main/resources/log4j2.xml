@@ -4,12 +4,19 @@
         <Console name="Console" target="SYSTEM_OUT">
             <PatternLayout pattern="%d{YYYY-MM-dd HH:mm:ss} : %-20thread : %-5level : %-75c : %msg%n"/>
         </Console>
+        <RollingFile name="LocalFile" fileName="logs/server.log" filePattern="" append="false">
+            <PatternLayout pattern="%d{YYYY-MM-dd HH:mm:ss} : %-24thread : %-5level : %-75c : %msg%n" />
+            <Policies>
+                <SizeBasedTriggeringPolicy size="1 MB" />
+            </Policies>
+        </RollingFile>
     </Appenders>
     <Loggers>
         <Root level="error">
         </Root>
         <Logger name="com.projectsandbox.components" level="debug">
             <AppenderRef ref="Console"/>
+            <AppenderRef ref="LocalFile" />
         </Logger>
     </Loggers>
 </Configuration>

@@ -1,6 +1,7 @@
 package com.projectsandbox.components.shared.config;
 
 import com.projectsandbox.components.shared.jpa.JpaConstants;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -24,12 +25,15 @@ import javax.persistence.EntityManagerFactory;
 })
 public class JpaConfig
 {
+    @Value("${persistence.location}")
+    private String persistenceLocation;
 
     @Bean
     public EntityManagerFactory entityManagerFactoryMain()
     {
         LocalContainerEntityManagerFactoryBean factoryBean = new LocalContainerEntityManagerFactoryBean();
 
+        factoryBean.setPersistenceXmlLocation(persistenceLocation);
         factoryBean.setPersistenceUnitName(JpaConstants.PERSISTENCE_UNIT_NAME);
         factoryBean.setJpaVendorAdapter(new HibernateJpaVendorAdapter());
         factoryBean.afterPropertiesSet();
