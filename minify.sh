@@ -1,5 +1,6 @@
 
 #mvn minify:minify
-
-mvn process-resources
-
+(
+    cd components/website
+    mvn process-resources
+)
