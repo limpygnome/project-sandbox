@@ -1,2 +1,1 @@
-#mvn compile war:exploded -DskipTests
-mvn compile -DskipTests
+mvn compile war:war -DskipTests

@@ -9,5 +9,5 @@ pp01:
     - ./files/tomcat-website/server.xml:/usr/local/tomcat/conf/server.xml
     - ./files/tomcat-website/tomcat-users.xml:/usr/local/tomcat/conf/tomcat-users.xml
     - ./logs/web:/usr/local/tomcat/logs
-    - /home/limpygnome/git-remote/project-sandbox/components/website/target/website-1.0:/usr/local/tomcat/webapps/website
-#    - ./../website/target/projectsandbox-website-1.0.war:/usr/local/tomcat/webapps/website.war
+#    - /home/limpygnome/git-remote/project-sandbox/components/website/target/website-1.0:/usr/local/tomcat/webapps/website
+    - ./../website/target/projectsandbox-website-1.0.war:/usr/local/tomcat/webapps/website.war
