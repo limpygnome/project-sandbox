@@ -1,0 +1,1 @@
+mvn process-resources -DskipTests

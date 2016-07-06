@@ -1,0 +1,44 @@
+html, body
+{
+    font: normal 14px Arial;
+    margin: 0;
+    padding: 0;
+
+    background: #000;
+
+    width: 100%;
+    height: 100%;
+}
+
+header h1
+{
+    margin: 0;
+    padding: 0.5em;
+}
+
+.tools
+{
+    float: left;
+    width: 20%;
+    height: 100%;
+    background: #333;
+    color: #FFF;
+}
+
+.map-container
+{
+    float: right;
+    width: 80%;
+    height: 100%;
+    background: #666;
+}
+
+.map-container .map
+{
+    border: solid 0.2em #333;
+    box-sizing: border-box;
+
+    /* Initial size... */
+    width: 100%
+    height: 100%;
+}

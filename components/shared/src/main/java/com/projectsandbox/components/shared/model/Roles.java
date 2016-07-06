@@ -15,6 +15,7 @@ public class Roles implements Serializable
 
     @ElementCollection(fetch = FetchType.EAGER)
     @CollectionTable(name = "users_roles", joinColumns = @JoinColumn(name = "userid"))
+    @Convert(converter = RoleJpaConverter.class)
     @Column(name = "role", nullable = false)
     private Set<Role> roles;
 

@@ -147,9 +147,20 @@ body
 
 .header .buttons .user
 {
-    font-weight: bold;
     color: inherit;
     text-decoration: none;
+}
+
+.header .buttons .user .name
+{
+    font-weight: bold;
+    font-size: 1.4em;
+    padding: 0.4em;
+}
+
+.header .buttons .user .role
+{
+    color: #CCC;
 }
 
 .header .buttons .user img

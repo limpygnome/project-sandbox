@@ -18,12 +18,9 @@
             This prevents page from being zoomed when exiting full-screen mode.
         --%>
         <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0" />
+        <base href="<spring:url value='/content/resources' />">
 
-        <%--
-            Minified resources
-        --%>
-        <link rel="stylesheet" href="<spring:url value='/content/game.css' />" />
-        <script src="<spring:url value='/content/game.js' />"></script>
+        <%@ include file="_resources.jsp" %>
 
     </head>
     <body>

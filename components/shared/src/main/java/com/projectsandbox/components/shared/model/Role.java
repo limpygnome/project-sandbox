@@ -11,18 +11,20 @@ import java.io.Serializable;
  */
 public enum Role implements Serializable
 {
-    USER(1, "User"),
-    MODERATOR(100, "Moderator"),
-    ADMINISTRATOR(500, "Administrator"),
-    BANNED(9999, "Banned");
+    USER(1, 1, "User"),
+    MODERATOR(2, 100, "Moderator"),
+    ADMINISTRATOR(3, 500, "Admin"),
+    BANNED(4, 9999, "Banned");
 
     private static final long serialVersionUID = 1L;
 
+    public final int ID;
     public final int PRIORITY;
     public final String DISPLAY_NAME;
 
-    Role(int PRIORITY, String DISPLAY_NAME)
+    Role(int ID, int PRIORITY, String DISPLAY_NAME)
     {
+        this.ID = ID;
         this.PRIORITY = PRIORITY;
         this.DISPLAY_NAME = DISPLAY_NAME;
     }

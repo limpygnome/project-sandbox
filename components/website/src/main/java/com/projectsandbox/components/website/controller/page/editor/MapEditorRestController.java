@@ -6,16 +6,16 @@ import org.springframework.web.bind.annotation.RequestMethod;
 /**
  * Created by limpygnome on 22/06/16.
  */
-@RequestMapping(value = "/editor/data")
+@RequestMapping(value = "/map-editor/data")
 public class MapEditorRestController
 {
 
-    @RequestMapping(value = "/fetch", method = RequestMethod.GET)
+    @RequestMapping(value = "fetch", method = RequestMethod.GET)
     public void dataFetch()
     {
     }
 
-    @RequestMapping(value = "/persist", method = RequestMethod.POST)
+    @RequestMapping(value = "persist", method = RequestMethod.POST)
     public void dataPersist()
     {
     }

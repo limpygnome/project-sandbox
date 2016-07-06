@@ -21,4 +21,12 @@
         <put-attribute name="content" value="/WEB-INF/views/game/{1}.jsp" />
     </definition>
 
+    <!-- Game -->
+    <definition name="map-editor/layout" template="/WEB-INF/views/map-editor/_layout.jsp">
+        <put-attribute name="content" value="No content defined, error?" />
+    </definition>
+    <definition name="map-editor/*" extends="map-editor/layout">
+        <put-attribute name="content" value="/WEB-INF/views/map-editor/{1}.jsp" />
+    </definition>
+
 </tiles-definitions>

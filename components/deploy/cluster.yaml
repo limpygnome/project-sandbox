@@ -5,6 +5,7 @@ pp01:
   image: ps-tomcat-base
   ports:
     - "8020:8080"
+    - "8000:8000"
   volumes:
     - ./files/tomcat-website/server.xml:/usr/local/tomcat/conf/server.xml
     - ./files/tomcat-website/tomcat-users.xml:/usr/local/tomcat/conf/tomcat-users.xml

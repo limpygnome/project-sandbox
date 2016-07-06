@@ -25,10 +25,25 @@
                     <span class="score">
                         $ <fmt:formatNumber type="number" value="${user.playerMetrics.score}" />
                     </span>
-                    <a class="user" href="/account">
-                        <c:out value="${user.nickname}" /> [ROLE]
-                        <img src="<spring:url value='/content/game/images/annie.png' />" alt="User avatar" />
+                    <a class="user" href="<spring:url value='/account' />">
+                        <span class="thumbnail">
+                            <img src="<spring:url value='/content/game/images/annie.png' />" alt="User avatar" />
+                        </span>
+                        <span class="name">
+                            <c:out value="${user.nickname}" />
+                        </span>
+                        <span class="role">
+                            <c:out value="${user.roles.primaryRole.displayName}" />
+                        </span>
                     </a>
+                    <a href="<spring:url value='/account' />" class="button">
+                        Account
+                    </a>
+                    <ps:authenticated auth="true" roles="administrator">
+                        <a href="<spring:url value='/map-editor' />" class="button">
+                            Map Editor
+                        </a>
+                    </ps:authenticated>
                     <a href="<spring:url value='/auth/logout' />" class="button">
                         Logout
                     </a>

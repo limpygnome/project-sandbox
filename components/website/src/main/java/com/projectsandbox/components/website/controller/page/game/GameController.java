@@ -5,6 +5,7 @@ import com.projectsandbox.components.website.service.GameSessionService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -24,6 +25,8 @@ public class GameController extends BaseController
 
     private static final String GAME_SESSION_TOKEN_ATTRIB = "game_session";
 
+    @Value("${minification.enabled}")
+    private boolean minificationEnabled;
     @Autowired
     private GameSessionService gameSessionService;
 
@@ -53,6 +56,12 @@ public class GameController extends BaseController
         httpSession.setAttribute(GAME_SESSION_TOKEN_ATTRIB, gameSessionToken);
 
         return modelAndView;
+    }
+
+    @ModelAttribute("minified")
+    public boolean isMinified()
+    {
+        return minificationEnabled;
     }
 
 }

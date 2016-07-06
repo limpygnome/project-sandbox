@@ -1,9 +1,9 @@
 @font-face {
     font-family: 'projectsandbox';
     src:
-        url('../content/game/fonts/projectsandbox.ttf?96sc2c') format('truetype'),
-        url('../content/game/fonts/projectsandbox.woff?96sc2c') format('woff'),
-        url('../content/game/fonts/projectsandbox.svg?96sc2c#projectsandbox') format('svg');
+        url('projectsandbox.ttf?96sc2c') format('truetype'),
+        url('projectsandbox.woff?96sc2c') format('woff'),
+        url('projectsandbox.svg?96sc2c#projectsandbox') format('svg');
     font-weight: normal;
     font-style: normal;
 }

@@ -13,5 +13,9 @@ RUN set -x \
     && rm tomcat.tar.gz*
 
 EXPOSE 8080
-CMD ["catalina.sh", "run"]
+EXPOSE 8000
+
+ENV JPDA_ADDRESS=8000
+ENV JPDA_TRANSPORT=dt_socket
+CMD ["catalina.sh", "jpda", "run"]
 
