@@ -2,6 +2,15 @@ critical goals
 ================
 - none
 
+map editor
+=====================
+- convert packet types to be annotated and dynamically found
+- add packet type (inbound) to
+
+=====================
+
+
+
 technical debt
 ===============
 - remove accessors from projectSandbox.rendering.core

@@ -27,18 +27,21 @@ header h1
 
 .map-container
 {
-    float: right;
     width: 80%;
     height: 100%;
     background: #666;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .map-container .map
 {
-    border: solid 0.2em #333;
-    box-sizing: border-box;
+    background: #999;
 
     /* Initial size... */
-    width: 100%
-    height: 100%;
+    width: 10em;
+    height: 10em;
+
 }

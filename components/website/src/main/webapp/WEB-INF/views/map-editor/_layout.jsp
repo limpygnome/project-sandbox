@@ -19,12 +19,9 @@
             </header>
         </div>
         <div class="map-container">
-            todo...
-            <!--
-                <div class="map">
-                    &nbsp;
-                </div>
-            -->
+            <div class="map">
+                TEST
+            </div>
         </div>
     </body>
 </html>

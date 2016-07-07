@@ -13,15 +13,11 @@ public class PlayerChatOutboundPacket extends OutboundPacket
         super((byte) 'P', (byte) 'C');
     }
 
-    public void writeChatMessage(PlayerChatInboundPacket packet)
-    {
-        writeChatMessage(packet.playerInfo, packet.message);
-    }
-
     public void writeChatMessage(PlayerInfo playerInfo, String message)
     {
         packetData.add(playerInfo.playerId);
         packetData.addUtf8(playerInfo.session.getNickname());
         packetData.addUtf8(message);
     }
+
 }

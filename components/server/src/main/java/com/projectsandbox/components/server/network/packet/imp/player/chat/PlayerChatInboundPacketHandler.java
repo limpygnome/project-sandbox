@@ -2,24 +2,24 @@ package com.projectsandbox.components.server.network.packet.imp.player.chat;
 
 import com.projectsandbox.components.server.Controller;
 import com.projectsandbox.components.server.network.Socket;
-import com.projectsandbox.components.server.network.packet.InboundPacket;
-import com.projectsandbox.components.server.network.packet.PacketParseException;
+import com.projectsandbox.components.server.network.packet.handler.AuthenticatedInboundPacketHandler;
+import com.projectsandbox.components.server.network.packet.handler.InboundPacketHandler;
+import com.projectsandbox.components.server.network.packet.PacketHandlerException;
+import com.projectsandbox.components.server.network.packet.factory.PacketHandler;
 import com.projectsandbox.components.server.player.PlayerInfo;
 
 import java.io.UnsupportedEncodingException;
 import java.nio.ByteBuffer;
 
 /**
- * Used to parse an inbound chat message from a player.
+ * Used to handle an inbound chat message from a player.
  */
-public class PlayerChatInboundPacket extends InboundPacket
+@PacketHandler(mainType = 'P', subType = 'C')
+public class PlayerChatInboundPacketHandler extends AuthenticatedInboundPacketHandler
 {
 
-    public PlayerInfo playerInfo;
-    public String message;
-
     @Override
-    public void parse(Controller controller, Socket socket, PlayerInfo playerInfo, ByteBuffer bb, byte[] data) throws PacketParseException
+    public void handle(Controller controller, Socket socket, PlayerInfo playerInfo, ByteBuffer bb, byte[] data) throws PacketHandlerException
     {
         // All messgaes should be at least 6 bytes:
         // - mapMain type (1 byte)
@@ -28,23 +28,23 @@ public class PlayerChatInboundPacket extends InboundPacket
         // - at least one character (1 bytes)
         if (data.length < 5)
         {
-            throw new PacketParseException("Incorrect length", data);
+            throw new PacketHandlerException("Incorrect length", data);
         }
-
-        this.playerInfo = playerInfo;
 
         // Read length of message and validate
         short messageLength = bb.getShort(2);
 
         if (data.length != 4 + messageLength)
         {
-            throw new PacketParseException("Length of chat message is invalid", data);
+            throw new PacketHandlerException("Length of chat message is invalid", data);
         }
 
         // Parse message
+        String message;
+
         try
         {
-            this.message = new String(data, 4, messageLength, "UTF-8");
+            message = new String(data, 4, messageLength, "UTF-8");
         }
         catch (UnsupportedEncodingException e)
         {
@@ -52,8 +52,8 @@ public class PlayerChatInboundPacket extends InboundPacket
         }
 
         // Validate chars
-        // TODO: consider if we should do white-listing for chars instead
-        for (char msgChar : this.message.toCharArray())
+        // TODO: SECURITY - consider if we should do white-listing for chars instead
+        for (char msgChar : message.toCharArray())
         {
             if (msgChar < 32)
             {
@@ -63,7 +63,7 @@ public class PlayerChatInboundPacket extends InboundPacket
 
         // Build and broadcast chat message
         PlayerChatOutboundPacket playerChatOutboundPacket = new PlayerChatOutboundPacket();
-        playerChatOutboundPacket.writeChatMessage(this);
+        playerChatOutboundPacket.writeChatMessage(playerInfo, message);
 
         controller.playerService.broadcast(playerChatOutboundPacket);
 

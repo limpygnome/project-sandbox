@@ -55,6 +55,30 @@ projectSandbox.interaction.mouse =
     
     handleMouseDown: function(event)
     {
+        var ratio = projectSandbox.camera.getRenderWidth() / projectSandbox.camera.getRenderHeight();
+        var distance = projectSandbox.camera.zoom;
+
+        var clX = event.x;
+        var clY = event.y;
+        var clWidth = $("canvas").width();
+        var clHeight = $("canvas").height();
+
+        var frustrumHeight = 2 * Math.tan(45.0 / 2.0) * distance;
+        var frustrumWidth = frustrumHeight * ratio;
+
+        var gameX = clX / clWidth;
+        var gameY = clY / clHeight;
+
+        gameX *= frustrumWidth;
+        gameY *= frustrumHeight;
+
+        gameX += projectSandbox.camera.x;
+        gameY += projectSandbox.camera.y;
+
+        console.info("position: " + event.x + "," + event.y + " : gx: " + gameX + ", gy: " + gameY);
+
+
+
         if (projectSandbox.interaction.shared.isRenderArea(event))
         {
             // Focus on render container

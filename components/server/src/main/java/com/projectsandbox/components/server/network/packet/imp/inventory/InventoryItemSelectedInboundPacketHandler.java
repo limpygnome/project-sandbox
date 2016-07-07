@@ -5,8 +5,10 @@ import com.projectsandbox.components.server.entity.Entity;
 import com.projectsandbox.components.server.entity.player.PlayerEntity;
 import com.projectsandbox.components.server.inventory.Inventory;
 import com.projectsandbox.components.server.network.Socket;
-import com.projectsandbox.components.server.network.packet.InboundPacket;
-import com.projectsandbox.components.server.network.packet.PacketParseException;
+import com.projectsandbox.components.server.network.packet.handler.AuthenticatedInboundPacketHandler;
+import com.projectsandbox.components.server.network.packet.handler.InboundPacketHandler;
+import com.projectsandbox.components.server.network.packet.PacketHandlerException;
+import com.projectsandbox.components.server.network.packet.factory.PacketHandler;
 import com.projectsandbox.components.server.player.PlayerInfo;
 
 import java.nio.ByteBuffer;
@@ -14,10 +16,12 @@ import java.nio.ByteBuffer;
 /**
  * Created by limpygnome on 29/04/15.
  */
-public class InventoryItemSelectedInboundPacket extends InboundPacket
+@PacketHandler(mainType = 'I', subType = 'S')
+public class InventoryItemSelectedInboundPacketHandler extends AuthenticatedInboundPacketHandler
 {
+
     @Override
-    public void parse(Controller controller, Socket socket, PlayerInfo playerInfo, ByteBuffer bb, byte[] data) throws PacketParseException
+    public void handle(Controller controller, Socket socket, PlayerInfo playerInfo, ByteBuffer bb, byte[] data) throws PacketHandlerException
     {
         // Read raw data
         byte rawSlotId = bb.get(2);
@@ -40,5 +44,6 @@ public class InventoryItemSelectedInboundPacket extends InboundPacket
             }
         }
     }
+
 
 }

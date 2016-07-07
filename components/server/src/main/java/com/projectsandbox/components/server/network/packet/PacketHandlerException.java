@@ -8,18 +8,19 @@ import java.util.Arrays;
 /**
  * Thrown when a packet cannot be parsed.
  */
-public class PacketParseException extends Exception
+public class PacketHandlerException extends Exception
 {
-    private final static Logger LOG = LogManager.getLogger(PacketParseException.class);
+    private final static Logger LOG = LogManager.getLogger(PacketHandlerException.class);
 
-    public PacketParseException(String message, byte[] data)
+    public PacketHandlerException(String message, byte[] data)
     {
         super(message);
 
         // We'll log the contents of the packet in debug mode for the purposes of development
         if (LOG.isDebugEnabled())
         {
-            LOG.debug("Failed to parse packet; contents: {}", Arrays.toString(data));
+            LOG.debug("Failed to either parse or handle packet; contents: {}", Arrays.toString(data));
         }
     }
+
 }
