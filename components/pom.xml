@@ -22,6 +22,7 @@
         <module>database</module>
         <module>deploy</module>
         <module>server</module>
+        <module>server-map-editor</module>
         <module>server-testing</module>
         <module>shared</module>
         <module>website</module>
