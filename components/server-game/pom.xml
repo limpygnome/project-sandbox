@@ -1,3 +1,4 @@
+
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
@@ -12,10 +13,10 @@
     </parent>
 
     <groupId>com.projectsandbox.components</groupId>
-    <artifactId>server-testing</artifactId>
+    <artifactId>server-game</artifactId>
     <packaging>jar</packaging>
 
-    <name>Project Sandbox / Components / Server Testing</name>
+    <name>Project Sandbox / Components / (Server) Game</name>
 
     <dependencies>
 
@@ -24,18 +25,6 @@
             <groupId>com.projectsandbox.components</groupId>
             <artifactId>server-shared</artifactId>
             <version>${project.version}</version>
-        </dependency>
-
-        <!-- Spring -->
-        <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-core</artifactId>
-            <version>4.1.6.RELEASE</version>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-context-support</artifactId>
-            <version>4.1.6.RELEASE</version>
         </dependency>
 
     </dependencies>

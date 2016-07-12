@@ -22,7 +22,7 @@
         <!-- Local -->
         <dependency>
             <groupId>com.projectsandbox.components</groupId>
-            <artifactId>server</artifactId>
+            <artifactId>server-shared</artifactId>
             <version>${project.version}</version>
         </dependency>
 
