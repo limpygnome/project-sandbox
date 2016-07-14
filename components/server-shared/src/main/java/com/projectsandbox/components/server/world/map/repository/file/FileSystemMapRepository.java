@@ -15,6 +15,7 @@ import org.json.simple.JSONObject;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.URI;
 import java.util.HashMap;
 import java.util.Map;
@@ -25,6 +26,7 @@ import java.util.regex.Pattern;
 import org.reflections.Reflections;
 import org.reflections.scanners.ResourcesScanner;
 import org.reflections.util.FilterBuilder;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import javax.annotation.Resource;
@@ -39,6 +41,8 @@ public class FileSystemMapRepository implements MapRepository
 
     @Resource(name = "fileSystemMapBuilders")
     private Map<String, FileSystemMapBuilder> builders;
+    @Autowired
+    private JsonHelper jsonHelper;
 
     @Override
     public Map<Short, WorldMap> fetchPublicMaps(Controller controller, MapService mapService)
@@ -55,15 +59,15 @@ public class FileSystemMapRepository implements MapRepository
             FileSystemMapBuilder mapBuilder;
             JSONObject mapData;
             WorldMap map;
+            InputStream inputStream;
 
             for (String resource : resources)
             {
                 // Load map data
                 try
                 {
-                    File file = new File(new URI(resource));
-                    FileInputStream fis = new FileInputStream(file);
-                    mapData = JsonHelper.read(fis);
+                    inputStream = getClass().getClassLoader().getResourceAsStream(resource);
+                    mapData = jsonHelper.read(inputStream);
                 }
                 catch (Exception e)
                 {

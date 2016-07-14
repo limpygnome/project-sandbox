@@ -1,15 +1,21 @@
 package com.projectsandbox.components.server.inventory;
 
 import com.projectsandbox.components.server.Controller;
+import com.projectsandbox.components.server.entity.annotation.EntityType;
 import com.projectsandbox.components.server.inventory.annotation.InventoryItemTypeId;
 import com.projectsandbox.components.server.service.EventServerPreStartup;
 import com.projectsandbox.components.server.util.Annotations;
+import com.projectsandbox.components.server.util.ClassHelper;
 import com.projectsandbox.components.server.util.counters.AnnotationInfo;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Set;
+
+import org.reflections.Reflections;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 /**
@@ -21,11 +27,8 @@ public class InventoryManager implements EventServerPreStartup
 {
     private final static Logger LOG = LogManager.getLogger(Annotations.class);
 
-    // TODO: move string constant to properties file
-    private static final String[] CLASSPATHS_INVENTORY_ITEMS =
-    {
-        "/com/projectsandbox/"
-    };
+    @Autowired
+    private ClassHelper classHelper;
 
     public HashMap<Short, Class> types;
 
@@ -44,19 +47,18 @@ public class InventoryManager implements EventServerPreStartup
             types.clear();
 
             // Fetch annotated classes
-            List<AnnotationInfo> annotationInfoList = Annotations.findAnnotatedClasses(
-                    InventoryItemTypeId.class,
-                    CLASSPATHS_INVENTORY_ITEMS,
-                    true
-            );
+            Set<Class<?>> annotatedClasses = classHelper.fetchClassesByAnnotation(InventoryItemTypeId.class);
 
             // Build imp store
+            InventoryItemTypeId inventoryItemTypeId;
             short typeId;
 
-            for (AnnotationInfo annotationInfo : annotationInfoList)
+            for (Class<?> annotatedClass : annotatedClasses)
             {
+                inventoryItemTypeId = annotatedClass.getAnnotation(InventoryItemTypeId.class);
+
                 // Fetch required data
-                typeId = (Short) annotationInfo.getAnnotationValue("typeId");
+                typeId = inventoryItemTypeId.typeId();
 
                 // Check the item doesn't already exist
                 if (types.containsKey(typeId))
@@ -65,7 +67,7 @@ public class InventoryManager implements EventServerPreStartup
                 }
 
                 // Add mapping
-                types.put(typeId, annotationInfo.getClazz());
+                types.put(typeId, annotatedClass);
             }
 
             // Check against empty map - unlikely / should never happen

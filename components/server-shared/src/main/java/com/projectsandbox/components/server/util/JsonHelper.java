@@ -6,14 +6,17 @@ import java.io.InputStreamReader;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
+import org.springframework.stereotype.Component;
 
 /**
  *
  * @author limpygnome
  */
+@Component
 public class JsonHelper
 {
-    public static JSONObject read(InputStream is) throws IOException
+
+    public JSONObject read(InputStream is) throws IOException
     {
         JSONParser parser = new JSONParser();
         try
@@ -25,4 +28,5 @@ public class JsonHelper
             throw new IOException("Failed to parse JSON", ex);
         }
     }
+
 }
