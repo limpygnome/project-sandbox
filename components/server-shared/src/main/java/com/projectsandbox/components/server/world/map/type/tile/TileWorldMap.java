@@ -3,6 +3,7 @@ package com.projectsandbox.components.server.world.map.type.tile;
 import com.projectsandbox.components.server.Controller;
 import com.projectsandbox.components.server.world.map.MapService;
 import com.projectsandbox.components.server.world.map.WorldMap;
+import com.projectsandbox.components.server.world.map.WorldMapProperties;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -23,6 +24,7 @@ public class TileWorldMap extends WorldMap
     public TileWorldMap(Controller controller, MapService mapService, short mapId)
     {
         super(controller, mapService, mapId);
+        this.properties = new WorldMapProperties();
     }
 
     @Override

@@ -24,7 +24,7 @@
         <module>server</module>
         <module>server-shared</module>
         <module>server-game</module>
-        <module>server-map-editor</module>
+        <module>server-map</module>
         <module>server-testing</module>
         <module>shared</module>
         <module>website</module>

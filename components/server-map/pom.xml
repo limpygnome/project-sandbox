@@ -12,7 +12,7 @@
     </parent>
 
     <groupId>com.projectsandbox.components</groupId>
-    <artifactId>server-map-editor</artifactId>
+    <artifactId>server-map</artifactId>
     <packaging>jar</packaging>
 
     <name>Project Sandbox / Components / Server Map Editor</name>

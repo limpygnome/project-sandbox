@@ -1,22 +1,17 @@
-package com.projectsandbox.components.server.world.map.repository.file;
+package com.projectsandbox.server.map.repository.file;
 
 import com.projectsandbox.components.server.Controller;
-import com.projectsandbox.components.server.constant.PathConstants;
-import com.projectsandbox.components.server.util.FileSystem;
-import com.projectsandbox.components.server.util.FileSystemFile;
 import com.projectsandbox.components.server.util.JsonHelper;
 import com.projectsandbox.components.server.world.map.repository.MapRepository;
 import com.projectsandbox.components.server.world.map.MapService;
 import com.projectsandbox.components.server.world.map.WorldMap;
+import com.projectsandbox.server.map.repository.file.load.FileSystemMapBuilder;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.json.simple.JSONObject;
 
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.URI;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
@@ -25,7 +20,6 @@ import java.util.regex.Pattern;
 
 import org.reflections.Reflections;
 import org.reflections.scanners.ResourcesScanner;
-import org.reflections.util.FilterBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 

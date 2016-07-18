@@ -1,4 +1,4 @@
-package com.projectsandbox.components.server.world.map.repository.file;
+package com.projectsandbox.server.map.repository.file.load.type;
 
 import com.projectsandbox.components.server.Controller;
 import com.projectsandbox.components.server.entity.physics.Vertices;
@@ -8,6 +8,7 @@ import com.projectsandbox.components.server.world.map.WorldMapProperties;
 import com.projectsandbox.components.server.world.map.type.tile.TileData;
 import com.projectsandbox.components.server.world.map.type.tile.TileType;
 import com.projectsandbox.components.server.world.map.type.tile.TileWorldMap;
+import com.projectsandbox.server.map.repository.file.load.FileSystemGenericWoldMapBuilder;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.springframework.stereotype.Component;

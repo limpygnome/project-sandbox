@@ -16,11 +16,10 @@ public class OpenWorldMap extends WorldMap
 {
     private final static Logger LOG = LogManager.getLogger(OpenWorldMap.class);
 
-    private OpenWorldMapProperties properties;
-
     public OpenWorldMap(Controller controller, MapService mapService, short mapId)
     {
         super(controller, mapService, mapId);
+        this.properties = new OpenWorldMapProperties();
     }
 
     @Override
@@ -41,20 +40,16 @@ public class OpenWorldMap extends WorldMap
     }
 
     @Override
-    public OpenWorldMapProperties getProperties()
-    {
-        return properties;
-    }
-
-    @Override
     public float getMaxX()
     {
+        OpenWorldMapProperties properties = (OpenWorldMapProperties) this.properties;
         return properties.getLimitWidth();
     }
 
     @Override
     public float getMaxY()
     {
+        OpenWorldMapProperties properties = (OpenWorldMapProperties) this.properties;
         return properties.getLimitHeight();
     }
 

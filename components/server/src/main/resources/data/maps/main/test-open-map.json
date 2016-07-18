@@ -17,22 +17,18 @@
     [
         {
             "typeName" : "vehicle/ice-cream-van",
-            "count": 1,
             "faction" : 1000
         },
         {
             "typeName" : "ship/fighter",
-            "count" : 1,
             "faction" : 1000
         },
         {
             "typeName" : "ship/destroyer",
-            "count" : 1,
             "faction" : 1000
         },
         {
             "typeName" : "world/blackhole",
-            "count" : 1,
             "faction" : 1000,
             "spawn" :
             {

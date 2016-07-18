@@ -1,4 +1,4 @@
-package com.projectsandbox.components.server.world.map.repository.file;
+package com.projectsandbox.server.map.repository.file.load;
 
 import com.projectsandbox.components.server.Controller;
 import com.projectsandbox.components.server.world.map.MapService;

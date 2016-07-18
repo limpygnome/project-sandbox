@@ -1,6 +1,6 @@
 package com.projectsandbox.components.server.config;
 
-import com.projectsandbox.components.server.world.map.repository.file.FileSystemMapBuilder;
+import com.projectsandbox.server.map.repository.file.load.FileSystemMapBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;

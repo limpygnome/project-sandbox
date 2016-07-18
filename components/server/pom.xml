@@ -37,7 +37,7 @@
         </dependency>
         <dependency>
             <groupId>com.projectsandbox.components</groupId>
-            <artifactId>server-map-editor</artifactId>
+            <artifactId>server-map</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>

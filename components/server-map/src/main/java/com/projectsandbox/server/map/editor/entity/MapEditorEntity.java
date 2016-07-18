@@ -1,4 +1,4 @@
-package com.limpygnome.projectsandbox.server.mapeditor;
+package com.projectsandbox.server.map.editor.entity;
 
 import com.projectsandbox.components.server.entity.annotation.EntityType;
 import com.projectsandbox.components.server.entity.player.PlayerEntity;

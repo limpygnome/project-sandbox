@@ -8,17 +8,25 @@ import com.projectsandbox.components.server.entity.ai.ArtificialIntelligenceMana
 import com.projectsandbox.components.server.network.packet.OutboundPacket;
 
 import java.io.IOException;
+import java.io.Serializable;
+import java.util.LinkedList;
+import java.util.List;
 
 /**
  * Represents a (world) map, an environment/area in which a player interacts.
  */
-public abstract class WorldMap
+public abstract class WorldMap implements Serializable
 {
-    protected final Controller controller;
-    protected final MapService mapService;
+    private static final long serialVersionUID = 1L;
+
+    protected transient final Controller controller;
+    protected transient final MapService mapService;
 
     // TODO: services need to send only data to players in map; thus we'll need to map players to maps i.e. broadcastToMap
     // TODO: consider making protected...
+
+
+    // TODO: need to move map-dependent data out of managers, move to global level and then data back into here...
     public EntityManager entityManager;
     public RespawnManager respawnManager;
     public EffectsManager effectsManager;
@@ -34,14 +42,14 @@ public abstract class WorldMap
     /**
      * Properties and cached values for this map.
      */
-    private WorldMapProperties properties;
+    protected WorldMapProperties properties;
 
     /**
      * Cached packet of data sent to client for map.
      *
      * WARNING: if this is used elsewhere, it needs thread protection.
      */
-    protected OutboundPacket packet;
+    protected transient OutboundPacket packet;
 
     /**
      * Creates a new instance and sets up internal state ready for tile data.
@@ -55,6 +63,7 @@ public abstract class WorldMap
         this.controller = controller;
         this.mapService = mapService;
         this.mapId = mapId;
+        this.components = new LinkedList<>();
 
         // Setup managers
         this.entityManager = new EntityManager(controller, this);
