@@ -1,25 +1,15 @@
-package com.projectsandbox.server.map.repository.file.load;
+package com.projectsandbox.components.server.map.repository.file;
 
 import com.projectsandbox.components.server.Controller;
-import com.projectsandbox.components.server.entity.EntityTypeMappingStoreService;
-import com.projectsandbox.components.server.entity.Entity;
-import com.projectsandbox.components.server.entity.respawn.pending.EntityPendingRespawn;
 import com.projectsandbox.components.server.world.map.MapComponent;
-import com.projectsandbox.components.server.world.map.MapEntKV;
 import com.projectsandbox.components.server.world.map.MapService;
 import com.projectsandbox.components.server.world.map.WorldMap;
-import com.projectsandbox.components.server.world.map.WorldMapProperties;
-import com.projectsandbox.components.server.world.spawn.FactionSpawns;
-import com.projectsandbox.components.server.world.spawn.Spawn;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.io.IOException;
-import java.lang.reflect.Constructor;
-import java.util.Iterator;
 import java.util.List;
 
 /**

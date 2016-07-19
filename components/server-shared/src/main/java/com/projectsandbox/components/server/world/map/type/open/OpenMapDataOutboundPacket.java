@@ -18,7 +18,7 @@ public class OpenMapDataOutboundPacket extends OutboundPacket
 
     public void build(OpenWorldMap map) throws IOException
     {
-        OpenWorldMapProperties properties = map.getProperties();
+        OpenWorldMapProperties properties = (OpenWorldMapProperties) map.getProperties();
 
         // Write limits of map
         packetData.add(properties.getLimitWidth());

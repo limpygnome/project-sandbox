@@ -32,14 +32,6 @@ public class OpenWorldMap extends WorldMap
     }
 
     @Override
-    public void setProperties(WorldMapProperties properties)
-    {
-        super.setProperties(properties);
-
-        this.properties = (OpenWorldMapProperties) properties;
-    }
-
-    @Override
     public float getMaxX()
     {
         OpenWorldMapProperties properties = (OpenWorldMapProperties) this.properties;

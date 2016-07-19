@@ -1,14 +1,12 @@
-package com.projectsandbox.server.map.repository.file.load.type;
+package com.projectsandbox.components.server.map.component;
 
 import com.projectsandbox.components.server.Controller;
 import com.projectsandbox.components.server.entity.physics.Vertices;
-import com.projectsandbox.components.server.world.map.MapService;
 import com.projectsandbox.components.server.world.map.WorldMap;
-import com.projectsandbox.components.server.world.map.WorldMapProperties;
+import com.projectsandbox.components.server.world.map.MapComponent;
 import com.projectsandbox.components.server.world.map.type.tile.TileData;
 import com.projectsandbox.components.server.world.map.type.tile.TileType;
 import com.projectsandbox.components.server.world.map.type.tile.TileWorldMap;
-import com.projectsandbox.server.map.repository.file.load.FileSystemGenericWoldMapBuilder;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.springframework.stereotype.Component;
@@ -18,41 +16,28 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Implementation for {@link TileWorldMap}.
+ * Created by limpygnome on 18/07/16.
  */
 @Component
-public class FileSystemTileWorldMapBuilder extends FileSystemGenericWoldMapBuilder
+public class TilesMapComponent implements MapComponent
 {
 
     @Override
-    public String getBuilderName()
+    public void load(Controller controller, JSONObject mapData, WorldMap map) throws IOException
     {
-        return "tile-world-map";
-    }
-
-    @Override
-    public WorldMap createMapInstance(Controller controller, MapService mapService, short mapId)
-    {
-        return new TileWorldMap(controller, mapService, mapId);
-    }
-
-    @Override
-    public WorldMapProperties createPropertiesInstance()
-    {
-        return new WorldMapProperties();
-    }
-
-    @Override
-    public WorldMap build(Controller controller, MapService mapService, JSONObject mapData) throws IOException
-    {
-        TileWorldMap map = (TileWorldMap) super.build(controller, mapService, mapData);
-
-        if (map != null)
+        if (map instanceof TileWorldMap)
         {
-            buildTileTypesAndTiles(controller, mapData, map);
+            buildTileTypesAndTiles(controller, mapData, (TileWorldMap) map);
         }
+    }
 
-        return map;
+    @Override
+    public void persist(Controller controller, WorldMap map)
+    {
+        if (map instanceof TileWorldMap)
+        {
+            // load tiles..
+        }
     }
 
     private void buildTileTypesAndTiles(Controller controller, JSONObject mapData, TileWorldMap map)

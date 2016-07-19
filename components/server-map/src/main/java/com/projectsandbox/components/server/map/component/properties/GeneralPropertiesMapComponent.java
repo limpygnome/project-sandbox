@@ -1,4 +1,4 @@
-package com.projectsandbox.server.map.component.properties;
+package com.projectsandbox.components.server.map.component.properties;
 
 import com.projectsandbox.components.server.Controller;
 import com.projectsandbox.components.server.entity.EntityTypeMappingStoreService;
@@ -12,7 +12,8 @@ import org.springframework.stereotype.Component;
 /**
  * Created by limpygnome on 18/07/16.
  */
-public abstract class GeneralProperties implements MapComponent
+@Component
+public class GeneralPropertiesMapComponent implements MapComponent
 {
     @Autowired
     private EntityTypeMappingStoreService entityTypeMappingStoreService;

@@ -1,4 +1,4 @@
-package com.projectsandbox.server.map.component;
+package com.projectsandbox.components.server.map.component;
 
 import com.projectsandbox.components.server.Controller;
 import com.projectsandbox.components.server.entity.Entity;
@@ -8,7 +8,7 @@ import com.projectsandbox.components.server.world.map.MapEntKV;
 import com.projectsandbox.components.server.world.map.WorldMap;
 import com.projectsandbox.components.server.world.map.MapComponent;
 import com.projectsandbox.components.server.world.spawn.Spawn;
-import com.projectsandbox.server.map.component.helper.SpawnParserHelper;
+import com.projectsandbox.components.server.map.component.helper.SpawnParserHelper;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,7 +22,7 @@ import java.util.Iterator;
  * Created by limpygnome on 18/07/16.
  */
 @Component
-public class Entities implements MapComponent
+public class EntitiesMapComponent implements MapComponent
 {
     @Autowired
     private EntityTypeMappingStoreService entityTypeMappingStoreService;

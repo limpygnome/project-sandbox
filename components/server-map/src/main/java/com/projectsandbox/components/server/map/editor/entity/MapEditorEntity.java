@@ -1,4 +1,4 @@
-package com.projectsandbox.server.map.editor.entity;
+package com.projectsandbox.components.server.map.editor.entity;
 
 import com.projectsandbox.components.server.entity.annotation.EntityType;
 import com.projectsandbox.components.server.entity.player.PlayerEntity;

@@ -1,4 +1,4 @@
-package com.projectsandbox.server.map.repository.file.load;
+package com.projectsandbox.components.server.map.repository.file;
 
 import com.projectsandbox.components.server.Controller;
 import com.projectsandbox.components.server.world.map.MapService;
@@ -16,6 +16,11 @@ import java.io.IOException;
 public interface FileSystemMapBuilder
 {
 
+    /**
+     * The name of the builder. Also used for when loading a map and deciding which builder should be used.
+     *
+     * @return builder name
+     */
     String getBuilderName();
 
     /**
@@ -27,13 +32,6 @@ public interface FileSystemMapBuilder
      * @return
      */
     WorldMap createMapInstance(Controller controller, MapService mapService, short mapId);
-
-    /**
-     * Creates a new instance of {@link WorldMapProperties}.
-     *
-     * @return
-     */
-    WorldMapProperties createPropertiesInstance();
 
     /**
      * Builds an instance from the provided map data.

@@ -63,7 +63,6 @@ public abstract class WorldMap implements Serializable
         this.controller = controller;
         this.mapService = mapService;
         this.mapId = mapId;
-        this.components = new LinkedList<>();
 
         // Setup managers
         this.entityManager = new EntityManager(controller, this);
