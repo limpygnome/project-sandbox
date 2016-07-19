@@ -13,6 +13,6 @@ public interface MapComponent
 
     void load(Controller controller, JSONObject mapData, WorldMap map) throws IOException;
 
-    void persist(Controller controller, WorldMap map);
+    void persist(Controller controller, JSONObject rootObject, WorldMap map);
 
 }

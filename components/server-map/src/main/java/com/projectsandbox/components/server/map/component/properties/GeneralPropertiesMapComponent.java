@@ -46,7 +46,7 @@ public class GeneralPropertiesMapComponent implements MapComponent
     }
 
     @Override
-    public void persist(Controller controller, WorldMap map)
+    public void persist(Controller controller, JSONObject rootObject, WorldMap map)
     {
     }
 

@@ -1,6 +1,7 @@
 package com.projectsandbox.components.server.map.repository.file;
 
 import com.projectsandbox.components.server.Controller;
+import com.projectsandbox.components.server.map.repository.file.builder.FileSystemMapBuilder;
 import com.projectsandbox.components.server.util.JsonHelper;
 import com.projectsandbox.components.server.world.map.repository.MapRepository;
 import com.projectsandbox.components.server.world.map.MapService;
