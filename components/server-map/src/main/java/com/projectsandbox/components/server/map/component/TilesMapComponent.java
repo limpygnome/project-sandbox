@@ -32,12 +32,8 @@ public class TilesMapComponent implements MapComponent
     }
 
     @Override
-    public void persist(Controller controller, WorldMap map)
+    public void persist(Controller controller, JSONObject rootObject, WorldMap map)
     {
-        if (map instanceof TileWorldMap)
-        {
-            // load tiles..
-        }
     }
 
     private void buildTileTypesAndTiles(Controller controller, JSONObject mapData, TileWorldMap map)

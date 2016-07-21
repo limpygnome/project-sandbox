@@ -25,11 +25,8 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 public class AppConfig
 {
 
-    @Autowired
-    private List<FileSystemMapBuilder> builders;
-
     @Bean(name = "fileSystemMapBuilders")
-    public Map<String, FileSystemMapBuilder> fileMapBuilders()
+    public Map<String, FileSystemMapBuilder> fileMapBuilders(List<FileSystemMapBuilder> builders)
     {
         Map<String, FileSystemMapBuilder> map = new HashMap<>();
 

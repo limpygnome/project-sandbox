@@ -77,7 +77,7 @@ public class RocketLauncherItem extends AbstractWeaponItem
         rpg.projectInFrontOfEntity(entityOwner, ROCKET_LAUNCH_SPACING, offset);
 
         // Add rocket to world
-        entityOwner.map.respawnManager.respawn(new CurrentPositionRespawn(controller, rpg));
+        controller.respawnManager.respawn(new CurrentPositionRespawn(controller, rpg));
     }
 
     @Override

@@ -6,6 +6,7 @@ import com.projectsandbox.components.server.service.EventServerPreStartup;
 import com.projectsandbox.components.server.service.EventLogicCycleService;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 import com.projectsandbox.components.server.world.map.repository.MapRepository;
 import org.apache.logging.log4j.LogManager;
@@ -36,7 +37,7 @@ public class MapService implements EventServerPreStartup, EventLogicCycleService
 
     public MapService()
     {
-        this.mapCache = new HashMap<>();
+        this.mapCache = new ConcurrentHashMap<>();
         this.mainMap = null;
     }
 
@@ -97,6 +98,16 @@ public class MapService implements EventServerPreStartup, EventLogicCycleService
             map = kv.getValue();
             map.logic();
         }
+    }
+
+    /**
+     * Retrieves all the maps in the cache; thread-safe.
+     *
+     * @return collection of active maps
+     */
+    public Map<Short, WorldMap> getMapCache()
+    {
+        return mapCache;
     }
 
 }

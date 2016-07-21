@@ -547,7 +547,7 @@ public strictfp abstract class Entity implements Serializable
     public synchronized void eventDeath(Controller controller, AbstractKiller killer)
     {
         // Respawn the entity
-        map.respawnManager.respawn(new EntityPendingRespawn(controller, this, DEFAULT_RESPAWN_TIME_MS));
+        controller.respawnManager.respawn(new EntityPendingRespawn(controller, this, DEFAULT_RESPAWN_TIME_MS));
 
         // Invoke callbacks
         Set<DeathComponentEvent> callbacks = components.fetch(DeathComponentEvent.class);

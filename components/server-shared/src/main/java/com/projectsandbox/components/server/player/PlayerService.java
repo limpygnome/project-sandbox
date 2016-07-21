@@ -5,6 +5,7 @@ import com.projectsandbox.components.server.Controller;
 import com.projectsandbox.components.server.entity.Entity;
 import com.projectsandbox.components.server.entity.player.PlayerEntity;
 import com.projectsandbox.components.server.entity.PlayerEntityService;
+import com.projectsandbox.components.server.entity.respawn.RespawnManager;
 import com.projectsandbox.components.server.entity.respawn.pending.EntityPendingRespawn;
 import com.projectsandbox.components.server.network.Socket;
 import com.projectsandbox.components.server.network.packet.OutboundPacket;
@@ -44,6 +45,8 @@ public class PlayerService implements EventLogicCycleService, IdCounterConsumer
     private PacketService packetService;
     @Autowired
     private PlayerEntityService playerEntityService;
+    @Autowired
+    private RespawnManager respawnManager;
 
     private final IdCounterProvider idCounterProvider;
     private final Map<Socket, PlayerInfo> mappings;
@@ -292,7 +295,7 @@ public class PlayerService implements EventLogicCycleService, IdCounterConsumer
             Entity entityPlayer = playerEntityService.createPlayer(map, playerInfo, false);
 
             // Spawn the player
-            map.respawnManager.respawn(new EntityPendingRespawn(controller, entityPlayer));
+            respawnManager.respawn(new EntityPendingRespawn(controller, entityPlayer));
 
             // Send map data
             packetService.send(playerInfo, map.getPacket());

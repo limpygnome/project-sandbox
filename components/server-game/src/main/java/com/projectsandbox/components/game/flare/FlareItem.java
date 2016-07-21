@@ -61,7 +61,7 @@ public class FlareItem extends AbstractWeaponItem
         if (parent != null)
         {
             WorldMap map = parent.map;
-            RespawnManager respawnManager = map.respawnManager;
+            RespawnManager respawnManager = controller.respawnManager;
 
             // Generate position behind entity
             Vector2 positionBehind = parent.positionNew.clone().offset(parent.rotation, (float) -parent.height / 2.0f);

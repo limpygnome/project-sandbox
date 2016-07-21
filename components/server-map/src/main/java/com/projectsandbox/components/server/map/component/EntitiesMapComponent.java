@@ -3,6 +3,7 @@ package com.projectsandbox.components.server.map.component;
 import com.projectsandbox.components.server.Controller;
 import com.projectsandbox.components.server.entity.Entity;
 import com.projectsandbox.components.server.entity.EntityTypeMappingStoreService;
+import com.projectsandbox.components.server.entity.respawn.RespawnManager;
 import com.projectsandbox.components.server.entity.respawn.pending.EntityPendingRespawn;
 import com.projectsandbox.components.server.world.map.MapEntKV;
 import com.projectsandbox.components.server.world.map.WorldMap;
@@ -27,6 +28,8 @@ public class EntitiesMapComponent implements MapComponent
     @Autowired
     private EntityTypeMappingStoreService entityTypeMappingStoreService;
     @Autowired
+    private RespawnManager respawnManager;
+    @Autowired
     private SpawnParserHelper spawnParserHelper;
 
     @Override
@@ -37,7 +40,7 @@ public class EntitiesMapComponent implements MapComponent
     }
 
     @Override
-    public void persist(Controller controller, WorldMap map)
+    public void persist(Controller controller, JSONObject rootObject, WorldMap map)
     {
     }
 
@@ -156,7 +159,7 @@ public class EntitiesMapComponent implements MapComponent
         }
 
         // Add to world
-        map.respawnManager.respawn(new EntityPendingRespawn(controller, entity));
+        respawnManager.respawn(new EntityPendingRespawn(controller, entity));
     }
 
     private MapEntKV loadEntityProperties(JSONObject rawProperties)

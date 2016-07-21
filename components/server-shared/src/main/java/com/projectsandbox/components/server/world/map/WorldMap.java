@@ -5,6 +5,7 @@ import com.projectsandbox.components.server.effect.EffectsManager;
 import com.projectsandbox.components.server.entity.EntityManager;
 import com.projectsandbox.components.server.entity.respawn.RespawnManager;
 import com.projectsandbox.components.server.entity.ai.ArtificialIntelligenceManager;
+import com.projectsandbox.components.server.entity.respawn.RespawnMapData;
 import com.projectsandbox.components.server.network.packet.OutboundPacket;
 
 import java.io.IOException;
@@ -28,7 +29,7 @@ public abstract class WorldMap implements Serializable
 
     // TODO: need to move map-dependent data out of managers, move to global level and then data back into here...
     public EntityManager entityManager;
-    public RespawnManager respawnManager;
+    private RespawnMapData respawnMapData;
     public EffectsManager effectsManager;
     public ArtificialIntelligenceManager artificialIntelligenceManager;
 
@@ -66,7 +67,7 @@ public abstract class WorldMap implements Serializable
 
         // Setup managers
         this.entityManager = new EntityManager(controller, this);
-        this.respawnManager = new RespawnManager(controller, this);
+        this.respawnMapData = new RespawnMapData();
         this.effectsManager = new EffectsManager(controller, this);
         this.artificialIntelligenceManager = new ArtificialIntelligenceManager(controller, this);
     }
@@ -85,7 +86,6 @@ public abstract class WorldMap implements Serializable
     {
         // Execute manager logic...
         entityManager.logic();
-        respawnManager.logic();
         effectsManager.logic();
     }
 
@@ -132,6 +132,11 @@ public abstract class WorldMap implements Serializable
      * @return he maximum y axis for this map
      */
     public abstract float getMaxY();
+
+    public RespawnMapData getRespawnMapData()
+    {
+        return respawnMapData;
+    }
 
     @Override
     public String toString()

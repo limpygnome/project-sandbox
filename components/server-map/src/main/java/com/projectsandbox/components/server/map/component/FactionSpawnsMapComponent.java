@@ -35,10 +35,9 @@ public class FactionSpawnsMapComponent implements MapComponent
     }
 
     @Override
-    public void persist(Controller controller, WorldMap map)
+    public void persist(Controller controller, JSONObject rootObject, WorldMap map)
     {
     }
-
 
     protected void buildFactionSpawn(Controller controller, WorldMap map, JSONObject factionData)
     {
@@ -61,7 +60,7 @@ public class FactionSpawnsMapComponent implements MapComponent
 
         // Add to map
         // TODO: should add to "spawnData" in this map...
-        map.respawnManager.factionSpawnsAdd(map.getMapId(), factionSpawns);
+        map.getRespawnMapData().factionSpawnsAdd(map.getMapId(), factionSpawns);
     }
 
 }

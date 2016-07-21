@@ -5,13 +5,14 @@ import com.projectsandbox.components.server.entity.Entity;
 import com.projectsandbox.components.server.entity.EntityManager;
 import com.projectsandbox.components.server.entity.player.PlayerEntity;
 import com.projectsandbox.components.server.service.EventLogicCycleService;
+import com.projectsandbox.components.server.world.map.MapService;
 import com.projectsandbox.components.server.world.map.WorldMap;
-import com.projectsandbox.components.server.world.spawn.FactionSpawns;
 import com.projectsandbox.components.server.world.spawn.Spawn;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
 
@@ -20,36 +21,17 @@ import java.util.LinkedList;
  *
  * TODO: add support for multiple maps; this should be a single instance for all maps
  */
+@Component
 public class RespawnManager implements EventLogicCycleService
 {
     private final static Logger LOG = LogManager.getLogger(RespawnManager.class);
 
+    @Autowired
+    private MapService mapService;
+
+    // TODO: remove this controller ASAP, pretty bad...
+    @Autowired
     private Controller controller;
-
-    private WorldMap map;
-    private LinkedList<PendingRespawn> pendingRespawnList;
-
-    /* Faction ID -> FactionSpawns */
-    private HashMap<Short, FactionSpawns> factionSpawnsMap;
-
-    public RespawnManager(Controller controller, WorldMap map)
-    {
-        this.controller = controller;
-        this.map = map;
-        this.pendingRespawnList = new LinkedList<>();
-        this.factionSpawnsMap = new HashMap<>();
-    }
-
-    public synchronized void factionSpawnsAdd(Short mapId, FactionSpawns factionSpawns)
-    {
-        this.factionSpawnsMap.put(factionSpawns.getFactionId(), factionSpawns);
-        LOG.debug("Added faction spawns - map id: {}, spawns: {}", mapId, factionSpawns);
-    }
-
-    public synchronized FactionSpawns factionSpawnsGet(short factionId)
-    {
-        return this.factionSpawnsMap.get(factionId);
-    }
 
     public void respawn(PendingRespawn pendingRespawn)
     {
@@ -64,7 +46,7 @@ public class RespawnManager implements EventLogicCycleService
         Entity entity = pendingRespawn.entity;
 
         // Remove from world, if already exists
-        map.entityManager.remove(entity);
+        entity.map.entityManager.remove(entity);
 
         // Add to pending respawn...
         addToInternalPendingRespawnCollectionSynchronized(pendingRespawn);
@@ -76,9 +58,11 @@ public class RespawnManager implements EventLogicCycleService
 
     private synchronized void addToInternalPendingRespawnCollectionSynchronized(PendingRespawn pendingRespawn)
     {
+        RespawnMapData respawnMapData = pendingRespawn.entity.map.getRespawnMapData();
+
         // Add at suitable index based on time to respawn, so that items with shortest time are at the front
         // for efficiency (saves having to iterate the entire list, can just check top)
-        Iterator<PendingRespawn> iterator = pendingRespawnList.iterator();
+        Iterator<PendingRespawn> iterator = respawnMapData.pendingRespawnList.iterator();
         PendingRespawn pendingRespawnItem;
         int index = 0;
 
@@ -97,12 +81,22 @@ public class RespawnManager implements EventLogicCycleService
             }
         }
 
-        pendingRespawnList.add(index, pendingRespawn);
+        respawnMapData.pendingRespawnList.add(index, pendingRespawn);
     }
 
     @Override
     public void logic()
     {
+        // Run logic for each map
+        for (WorldMap map : mapService.getMapCache().values())
+        {
+            logicForMap(map);
+        }
+    }
+
+    private void logicForMap(WorldMap map)
+    {
+        RespawnMapData respawnMapData = map.getRespawnMapData();
         LinkedList<RespawnData> entitiesToSpawn = new LinkedList<>();
 
         // Check if next entity can respawn yet; if it can, add it to a list of ents to be added to ent manager
@@ -110,7 +104,7 @@ public class RespawnManager implements EventLogicCycleService
         {
             RespawnData respawnData;
             PendingRespawn pendingRespawn;
-            Iterator<PendingRespawn> iterator = pendingRespawnList.iterator();
+            Iterator<PendingRespawn> iterator = respawnMapData.pendingRespawnList.iterator();
 
             long gameTime = controller.gameTime();
 
@@ -186,7 +180,7 @@ public class RespawnManager implements EventLogicCycleService
         entity.eventReset(controller, respawnData.spawn, respawnAfterPersisted);
 
         // Add to world if new entity
-        if (!map.entityManager.add(entity))
+        if (!entity.map.entityManager.add(entity))
         {
             LOG.warn("Could not respawn entity, failed to add to entity manager - entity id: {}", entity.id);
             return false;
