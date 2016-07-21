@@ -115,11 +115,11 @@ public class Sentry extends Entity
             castVictim.entity.damage(controller, this, BULLET_DAMAGE, SentryKiller.class);
 
             // Create bullet effect
-            map.effectsManager.add(new BulletEffect(x, y));
+            controller.effectsManager.add(map, new BulletEffect(x, y));
         }
 
         // Show red target tracer
-        map.effectsManager.add(new TracerEffect(positionNew, new Vector2(x, y)));
+        controller.effectsManager.add(map, new TracerEffect(positionNew, new Vector2(x, y)));
     }
 
     @Override

@@ -1,5 +1,6 @@
 package com.projectsandbox.components.server;
 
+import com.projectsandbox.components.server.effect.EffectsManager;
 import com.projectsandbox.components.server.entity.PlayerEntityService;
 import com.projectsandbox.components.server.entity.respawn.RespawnManager;
 import com.projectsandbox.components.server.network.packet.PacketService;
@@ -50,6 +51,8 @@ public class Controller
     public PlayerEntityService playerEntityService;
     @Autowired
     public RespawnManager respawnManager;
+    @Autowired
+    public EffectsManager effectsManager;
 
     @Autowired
     private List<EventServerPreStartup> eventServerPreStartups;

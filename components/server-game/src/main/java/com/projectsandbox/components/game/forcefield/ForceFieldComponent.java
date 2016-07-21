@@ -214,7 +214,7 @@ public class ForceFieldComponent  implements Serializable, EntityComponent, Logi
 
         // Create effect at point of impact
         ExplosionEffect effect = new ExplosionEffect(collisionPos.x, collisionPos.y, ExplosionEffect.SubType.FORCE_FIELD);
-        parent.map.effectsManager.add(effect);
+        controller.effectsManager.add(parent.map, effect);
     }
 
     /*

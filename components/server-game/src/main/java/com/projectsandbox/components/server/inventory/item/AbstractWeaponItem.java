@@ -13,6 +13,7 @@ import com.projectsandbox.components.server.inventory.InventoryInvokeState;
 import com.projectsandbox.components.server.inventory.InventorySlotState;
 import com.projectsandbox.components.server.inventory.WeaponConstants;
 import com.projectsandbox.components.server.inventory.InventoryMergeResult;
+import com.projectsandbox.components.server.world.map.WorldMap;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -153,8 +154,8 @@ public abstract class AbstractWeaponItem extends AbstractInventoryItem
 
         if (entity != null)
         {
-            entity.map.effectsManager.add(new BulletEffect(destX, destY));
-            entity.map.effectsManager.add(new TracerEffect(source, new Vector2(destX, destY)));
+            controller.effectsManager.add(entity.map, new BulletEffect(destX, destY));
+            controller.effectsManager.add(entity.map, new TracerEffect(source, new Vector2(destX, destY)));
         }
     }
 

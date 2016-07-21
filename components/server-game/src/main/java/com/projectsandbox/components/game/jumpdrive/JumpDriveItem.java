@@ -82,7 +82,7 @@ public class JumpDriveItem extends AbstractInventoryItem
                         ExplosionEffect effect = new ExplosionEffect(
                                 parent.positionNew.x, parent.positionNew.y, ExplosionEffect.SubType.JUMP_DRIVE
                         );
-                        parent.map.effectsManager.add(effect);
+                        controller.effectsManager.add(parent.map, effect);
 
                         // Fetch any possible collisions
                         EntityManager entityManager = parent.map.entityManager;
