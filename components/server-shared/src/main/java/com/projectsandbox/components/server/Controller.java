@@ -1,6 +1,7 @@
 package com.projectsandbox.components.server;
 
 import com.projectsandbox.components.server.effect.EffectsManager;
+import com.projectsandbox.components.server.entity.EntityManager;
 import com.projectsandbox.components.server.entity.PlayerEntityService;
 import com.projectsandbox.components.server.entity.respawn.RespawnManager;
 import com.projectsandbox.components.server.network.packet.PacketService;
@@ -47,6 +48,9 @@ public class Controller
     public SessionService sessionService;
     @Autowired
     public ChatService chatService;
+
+    @Autowired
+    private EntityManager entityManager;
     @Autowired
     public PlayerEntityService playerEntityService;
     @Autowired

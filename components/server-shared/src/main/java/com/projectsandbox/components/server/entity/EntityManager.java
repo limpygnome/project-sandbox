@@ -8,7 +8,7 @@ import com.projectsandbox.components.server.entity.physics.collisions.map.Collis
 import com.projectsandbox.components.server.entity.physics.spatial.QuadTree;
 import com.projectsandbox.components.server.network.packet.imp.entity.EntityUpdatesOutboundPacket;
 import com.projectsandbox.components.server.player.PlayerInfo;
-import com.projectsandbox.components.server.service.EventLogicCycleService;
+import com.projectsandbox.components.server.service.EventMapLogicCycleService;
 import com.projectsandbox.components.server.util.IdCounterProvider;
 import com.projectsandbox.components.server.util.counters.IdCounterConsumer;
 import com.projectsandbox.components.server.world.map.WorldMap;
@@ -17,16 +17,17 @@ import org.apache.logging.log4j.Logger;
 
 import java.io.IOException;
 import java.util.*;
-import java.util.concurrent.ConcurrentHashMap;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 /**
  * Handles all of the entities in the world.
  *
  * Thread-safe.
  */
-public class EntityManager implements EventLogicCycleService, IdCounterConsumer
+@Component
+public class EntityManager implements EventMapLogicCycleService, IdCounterConsumer
 {
     private final static Logger LOG = LogManager.getLogger(EntityManager.class);
 
@@ -41,12 +42,6 @@ public class EntityManager implements EventLogicCycleService, IdCounterConsumer
     @Autowired
     private EntityTypeMappingStoreService entityTypeMappingStoreService;
 
-    /* Used for efficient collision detection and network updates. */
-    private QuadTree quadTree;
-
-    /* A map of entity id -> entity. */
-    private final Map<Short, Entity> entities;
-
     /* Counter for producing entity identifiers. */
     private IdCounterProvider idCounterProvider;
 
@@ -57,16 +52,10 @@ public class EntityManager implements EventLogicCycleService, IdCounterConsumer
         this.map = map;
 
         // Setup collections...
-        this.entities = new ConcurrentHashMap<>();
         this.idCounterProvider = new IdCounterProvider(this);
 
         // Inject dependencies...
         controller.inject(this);
-    }
-
-    public synchronized void postMapLoad()
-    {
-        this.quadTree = new QuadTree(map);
     }
 
     public synchronized Entity fetch(Short key)
@@ -80,8 +69,10 @@ public class EntityManager implements EventLogicCycleService, IdCounterConsumer
      * @param entity
      * @return
      */
-    public boolean add(Entity entity)
+    public boolean add(WorldMap map, Entity entity)
     {
+        EntityMapData mapData = map.getEntityMapData();
+
         // Fetch the next available identifier
         Short entityId = idCounterProvider.nextId(entity.id);
 
@@ -105,10 +96,10 @@ public class EntityManager implements EventLogicCycleService, IdCounterConsumer
                 entity.setState(EntityState.CREATED);
 
                 // Add entity to pending map
-                entities.put(entityId, entity);
+                mapData.entities.put(entityId, entity);
 
                 // Add to quadtree
-                quadTree.update(entity);
+                mapData.quadTree.update(entity);
 
                 LOG.debug("Added entity to world - entity: {}", entity);
             }
@@ -141,21 +132,23 @@ public class EntityManager implements EventLogicCycleService, IdCounterConsumer
     }
 
     @Override
-    public void logic()
+    public void logic(WorldMap map)
     {
+        EntityMapData mapData = map.getEntityMapData();
+
         try
         {
             // Execute logic for each entity
-            executeEntityLogic();
+            executeEntityLogic(mapData);
 
             // Perform collision detection
-            performCollisionDetection();
+            performCollisionDetection(mapData);
 
             // Build and distribute update packets
-            sendEntityUpdatesToPlayers();
+            sendEntityUpdatesToPlayers(mapData);
 
             // Update state of entities
-            updateEntityStates();
+            updateEntityStates(mapData);
         }
         catch (Exception e)
         {
@@ -173,11 +166,11 @@ public class EntityManager implements EventLogicCycleService, IdCounterConsumer
         return entities;
     }
 
-    private void executeEntityLogic()
+    private void executeEntityLogic(EntityMapData mapData)
     {
-        synchronized (entities)
+        synchronized (mapData.entities)
         {
-            for (Entity entity : entities.values())
+            for (Entity entity : mapData.entities.values())
             {
                 // We won't run logic for deleted or dead enities
                 if (!entity.isDeleted())
@@ -188,16 +181,16 @@ public class EntityManager implements EventLogicCycleService, IdCounterConsumer
         }
     }
 
-    private void performCollisionDetection()
+    private void performCollisionDetection(EntityMapData mapData)
     {
         // Fetch map boundaries
         float mapMaxX = map.getMaxX();
         float mapMaxY = map.getMaxY();
 
         // Perform collision check for each entity
-        synchronized (entities)
+        synchronized (mapData.entities)
         {
-            for (Entity entityA : entities.values())
+            for (Entity entityA : mapData.entities.values())
             {
                 performCollisionDetection(mapMaxX, mapMaxY, entityA);
             }

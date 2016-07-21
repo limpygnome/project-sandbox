@@ -2,9 +2,11 @@ package com.projectsandbox.components.server.world.map;
 
 import com.projectsandbox.components.server.Controller;
 
+import com.projectsandbox.components.server.service.EventMapLogicCycleService;
 import com.projectsandbox.components.server.service.EventServerPreStartup;
 import com.projectsandbox.components.server.service.EventLogicCycleService;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -24,6 +26,9 @@ public class MapService implements EventServerPreStartup, EventLogicCycleService
 
     @Autowired
     private Controller controller;
+
+    @Autowired
+    private List<EventMapLogicCycleService> eventMapLogicCycleServices;
 
     // The repository used for fetching maps
     @Autowired
@@ -91,23 +96,13 @@ public class MapService implements EventServerPreStartup, EventLogicCycleService
     public void logic()
     {
         // Execute logic for each map...
-        WorldMap map;
-
-        for (Map.Entry<Short, WorldMap> kv : mapCache.entrySet())
+        for (WorldMap map : mapCache.values())
         {
-            map = kv.getValue();
-            map.logic();
+            for (EventMapLogicCycleService service : eventMapLogicCycleServices)
+            {
+                service.logic(map);
+            }
         }
-    }
-
-    /**
-     * Retrieves all the maps in the cache; thread-safe.
-     *
-     * @return collection of active maps
-     */
-    public Map<Short, WorldMap> getMapCache()
-    {
-        return mapCache;
     }
 
 }

@@ -4,6 +4,7 @@ import com.projectsandbox.components.server.Controller;
 import com.projectsandbox.components.server.effect.EffectsManager;
 import com.projectsandbox.components.server.effect.EffectsMapData;
 import com.projectsandbox.components.server.entity.EntityManager;
+import com.projectsandbox.components.server.entity.EntityMapData;
 import com.projectsandbox.components.server.entity.respawn.RespawnManager;
 import com.projectsandbox.components.server.entity.ai.ArtificialIntelligenceManager;
 import com.projectsandbox.components.server.entity.respawn.RespawnMapData;
@@ -29,7 +30,7 @@ public abstract class WorldMap implements Serializable
 
 
     // TODO: need to move map-dependent data out of managers, move to global level and then data back into here...
-    public EntityManager entityManager;
+    private EntityMapData entityMapData;
     private RespawnMapData respawnMapData;
     private EffectsMapData effectsMapData;
     public ArtificialIntelligenceManager artificialIntelligenceManager;
@@ -67,7 +68,7 @@ public abstract class WorldMap implements Serializable
         this.mapId = mapId;
 
         // Setup managers
-        this.entityManager = new EntityManager(controller, this);
+        this.entityMapData = new EntityMapData();
         this.respawnMapData = new RespawnMapData();
         this.effectsMapData = new EffectsMapData();
         this.artificialIntelligenceManager = new ArtificialIntelligenceManager(controller, this);
@@ -80,13 +81,12 @@ public abstract class WorldMap implements Serializable
      */
     public void postMapLoad()
     {
-        this.entityManager.postMapLoad();
+        entityMapData.setup(this);
     }
 
     public void logic()
     {
-        // Execute manager logic...
-        entityManager.logic();
+        // TODO: remove this from all maps and map service...
     }
 
     /**
@@ -132,6 +132,11 @@ public abstract class WorldMap implements Serializable
      * @return he maximum y axis for this map
      */
     public abstract float getMaxY();
+
+    public EntityMapData getEntityMapData()
+    {
+        return entityMapData;
+    }
 
     public RespawnMapData getRespawnMapData()
     {
