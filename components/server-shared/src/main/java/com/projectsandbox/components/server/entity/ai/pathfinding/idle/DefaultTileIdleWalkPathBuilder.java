@@ -22,6 +22,7 @@ import java.util.TreeSet;
  */
 public class DefaultTileIdleWalkPathBuilder implements IdleWalkPathBuilder
 {
+    private static final long serialVersionUID = 1L;
 
     @Override
     public Path build(Controller controller, Entity entity, int maxDepth)

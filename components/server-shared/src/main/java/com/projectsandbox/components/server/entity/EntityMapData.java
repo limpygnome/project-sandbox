@@ -8,14 +8,16 @@ import com.projectsandbox.components.server.world.map.WorldMap;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import java.io.Serializable;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * Created by limpygnome on 21/07/16.
  */
-public class EntityMapData implements IdCounterConsumer
+public class EntityMapData implements IdCounterConsumer, Serializable
 {
+    private final static long serialVersionUID = 1L;
     private final static Logger LOG = LogManager.getLogger(EntityMapData.class);
 
     /* Used for efficient collision detection and network updates. */

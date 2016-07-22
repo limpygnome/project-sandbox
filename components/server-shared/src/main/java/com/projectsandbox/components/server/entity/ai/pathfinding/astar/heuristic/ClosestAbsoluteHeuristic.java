@@ -9,6 +9,8 @@ import com.projectsandbox.components.server.world.map.WorldMap;
  */
 public class ClosestAbsoluteHeuristic implements AStarHeuristic
 {
+    private static final long serialVersionUID = 1L;
+
     @Override
     public float getCost(WorldMap map, Entity entity, int tileX, int tileY, int targetTileX, int targetTileY)
     {
@@ -19,4 +21,5 @@ public class ClosestAbsoluteHeuristic implements AStarHeuristic
                 (dx * dx) + (dy * dy)
         );
     }
+
 }

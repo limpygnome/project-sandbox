@@ -2,8 +2,6 @@ package com.projectsandbox.components.server.world.map.type.tile;
 
 import com.projectsandbox.components.server.world.map.WorldMap;
 import com.projectsandbox.components.server.world.map.WorldMapProperties;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
 import java.io.IOException;
 
@@ -12,7 +10,7 @@ import java.io.IOException;
  */
 public class TileWorldMap extends WorldMap
 {
-    private final static Logger LOG = LogManager.getLogger(TileWorldMap.class);
+    private static final long serialVersionUID = 1L;
 
     /**
      * Tile data for this map.

@@ -3,10 +3,12 @@ package com.projectsandbox.components.server.entity.ai.pathfinding;
 import com.projectsandbox.components.server.Controller;
 import com.projectsandbox.components.server.entity.Entity;
 
+import java.io.Serializable;
+
 /**
  * Created by limpygnome on 07/09/15.
  */
-public interface IdleWalkPathBuilder
+public interface IdleWalkPathBuilder extends Serializable
 {
 
     /**

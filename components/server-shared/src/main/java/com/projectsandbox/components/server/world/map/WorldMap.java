@@ -1,20 +1,13 @@
 package com.projectsandbox.components.server.world.map;
 
-import com.projectsandbox.components.server.Controller;
-import com.projectsandbox.components.server.effect.EffectsManager;
 import com.projectsandbox.components.server.effect.EffectsMapData;
-import com.projectsandbox.components.server.entity.EntityManager;
 import com.projectsandbox.components.server.entity.EntityMapData;
 import com.projectsandbox.components.server.entity.ai.ArtificialIntelligenceMapData;
-import com.projectsandbox.components.server.entity.respawn.RespawnManager;
-import com.projectsandbox.components.server.entity.ai.ArtificialIntelligenceManager;
 import com.projectsandbox.components.server.entity.respawn.RespawnMapData;
 import com.projectsandbox.components.server.network.packet.OutboundPacket;
 
 import java.io.IOException;
 import java.io.Serializable;
-import java.util.LinkedList;
-import java.util.List;
 
 /**
  * Represents a (world) map, an environment/area in which a player interacts.
@@ -72,11 +65,6 @@ public abstract class WorldMap implements Serializable
     public void postMapLoad()
     {
         entityMapData.setup(this);
-    }
-
-    public void logic()
-    {
-        // TODO: remove this from all maps and map service...
     }
 
     /**

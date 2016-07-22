@@ -1,9 +1,11 @@
 package com.projectsandbox.components.server.util.counters;
 
+import java.io.Serializable;
+
 /**
  * Implemented by a parent class, where child instances must have unique identifiers.
  */
-public interface IdCounterConsumer
+public interface IdCounterConsumer extends Serializable
 {
     /**
      * Used to indicate if the consumer, of counter identifiers, contains an identifier within its collection(s).

@@ -6,13 +6,15 @@ import com.projectsandbox.components.server.world.map.WorldMap;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import java.io.Serializable;
 import java.util.*;
 
 /**
  * Quad-tree for spatial partitioning of entities.
  */
-public class QuadTree
+public class QuadTree implements Serializable
 {
+    private final static long serialVersionUID = 1L;
     private final static Logger LOG = LogManager.getLogger(QuadTreeNode.class);
 
     private static final int MAX_DEPTH = 4;

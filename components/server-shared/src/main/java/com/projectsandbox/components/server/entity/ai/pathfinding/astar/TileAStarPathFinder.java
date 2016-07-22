@@ -16,6 +16,8 @@ import com.projectsandbox.components.server.world.map.type.tile.TileWorldMap;
  */
 public class TileAStarPathFinder implements PathFinder
 {
+    private static final long serialVersionUID = 1L;
+
     public static final int MAX_DEPTH = 200;
 
     private AStarHeuristic heuristic;

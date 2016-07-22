@@ -4,11 +4,15 @@ import com.projectsandbox.components.server.Controller;
 import com.projectsandbox.components.server.entity.Entity;
 import com.projectsandbox.components.server.world.spawn.Spawn;
 
+import java.io.Serializable;
+
 /**
  * Holds the required data for spawning an entity.
  */
-public abstract class PendingRespawn
+public abstract class PendingRespawn implements Serializable
 {
+    private static final long serialVersionUID = 1L;
+
     public final Entity entity;
     public final long gameTimeRespawn;
 

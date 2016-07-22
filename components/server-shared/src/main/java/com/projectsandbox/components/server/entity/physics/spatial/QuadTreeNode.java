@@ -2,6 +2,7 @@ package com.projectsandbox.components.server.entity.physics.spatial;
 
 import com.projectsandbox.components.server.entity.Entity;
 
+import java.io.Serializable;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
@@ -9,8 +10,10 @@ import java.util.Set;
 /**
  * A node in a quad-tree.
  */
-public class QuadTreeNode
+public class QuadTreeNode implements Serializable
 {
+    private static final long serialVersionUID = 1L;
+
     float lowerX;
     float lowerY;
 

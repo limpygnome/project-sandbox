@@ -8,11 +8,15 @@ import com.projectsandbox.components.server.entity.ai.pathfinding.idle.DefaultTi
 import com.projectsandbox.components.server.world.map.WorldMap;
 import com.projectsandbox.components.server.world.map.type.tile.TileWorldMap;
 
+import java.io.Serializable;
+
 /**
  * Created by limpygnome on 22/07/16.
  */
-public class ArtificialIntelligenceMapData
+public class ArtificialIntelligenceMapData implements Serializable
 {
+    private static final long serialVersionUID = 1L;
+
     /* Used to find paths */
     protected PathFinder pathFinder;
 

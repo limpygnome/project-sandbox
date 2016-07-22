@@ -3,11 +3,15 @@ package com.projectsandbox.components.server.effect.types;
 import com.projectsandbox.components.server.entity.physics.Vector2;
 import com.projectsandbox.components.server.network.packet.PacketData;
 
+import java.io.Serializable;
+
 /**
  * Created by limpygnome on 06/05/15.
  */
-public abstract class AbstractEffect
+public abstract class AbstractEffect implements Serializable
 {
+    private static final long serialVersionUID = 1L;
+
     public byte type;
 
     public AbstractEffect(byte type)

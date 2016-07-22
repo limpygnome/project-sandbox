@@ -1,8 +1,6 @@
 package com.projectsandbox.components.server.world.map.type.open;
 
 import com.projectsandbox.components.server.world.map.WorldMap;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
 import java.io.IOException;
 
@@ -11,7 +9,7 @@ import java.io.IOException;
  */
 public class OpenWorldMap extends WorldMap
 {
-    private final static Logger LOG = LogManager.getLogger(OpenWorldMap.class);
+    private static final long serialVersionUID = 1L;
 
     public OpenWorldMap(short mapId)
     {

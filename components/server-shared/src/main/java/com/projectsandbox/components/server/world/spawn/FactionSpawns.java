@@ -1,13 +1,16 @@
 package com.projectsandbox.components.server.world.spawn;
 
+import java.io.Serializable;
 import java.util.Iterator;
 import java.util.LinkedList;
 
 /**
  * Used to represent the spawns belonging to a faction for a map.
  */
-public class FactionSpawns
+public class FactionSpawns implements Serializable
 {
+    private static final long serialVersionUID = 1L;
+
     private short factionId;
     private LinkedList<Spawn> spawns;
     private Iterator<Spawn> spawnIterator;

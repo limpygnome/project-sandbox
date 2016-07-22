@@ -4,11 +4,14 @@ import com.projectsandbox.components.server.util.counters.IdCounterConsumer;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import java.io.Serializable;
+
 /**
  * Provides 16-bit identifiers, used for Entity and PlayerInfo IDs.
  */
-public class IdCounterProvider
+public class IdCounterProvider implements Serializable
 {
+    private final static long serialVersionUID = 1L;
     private final static Logger LOG = LogManager.getLogger(IdCounterProvider.class);
 
     // The consumer of these identifiers; used to check if it already contains an identifier
