@@ -1,9 +1,6 @@
 package com.projectsandbox.components.server.world.map.type.open;
 
-import com.projectsandbox.components.server.Controller;
-import com.projectsandbox.components.server.world.map.MapService;
 import com.projectsandbox.components.server.world.map.WorldMap;
-import com.projectsandbox.components.server.world.map.WorldMapProperties;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -16,9 +13,9 @@ public class OpenWorldMap extends WorldMap
 {
     private final static Logger LOG = LogManager.getLogger(OpenWorldMap.class);
 
-    public OpenWorldMap(Controller controller, MapService mapService, short mapId)
+    public OpenWorldMap(short mapId)
     {
-        super(controller, mapService, mapId);
+        super(mapId);
         this.properties = new OpenWorldMapProperties();
     }
 

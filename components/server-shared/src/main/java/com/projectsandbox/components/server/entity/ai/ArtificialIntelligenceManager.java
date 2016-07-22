@@ -2,48 +2,20 @@ package com.projectsandbox.components.server.entity.ai;
 
 import com.projectsandbox.components.server.Controller;
 import com.projectsandbox.components.server.entity.Entity;
-import com.projectsandbox.components.server.entity.ai.pathfinding.IdleWalkPathBuilder;
-import com.projectsandbox.components.server.entity.ai.pathfinding.idle.DefaultTileIdleWalkPathBuilder;
 import com.projectsandbox.components.server.entity.physics.Vector2;
 import com.projectsandbox.components.server.entity.ai.pathfinding.Path;
-import com.projectsandbox.components.server.entity.ai.pathfinding.PathFinder;
-import com.projectsandbox.components.server.entity.ai.pathfinding.astar.TileAStarPathFinder;
-import com.projectsandbox.components.server.entity.ai.pathfinding.astar.heuristic.ClosestAbsoluteHeuristic;
 import com.projectsandbox.components.server.world.map.WorldMap;
-import com.projectsandbox.components.server.world.map.type.tile.TileWorldMap;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 /**
  * Used to build paths for entity artificial intelligence.
  */
+@Service
 public class ArtificialIntelligenceManager
 {
+    @Autowired
     private Controller controller;
-    private WorldMap map;
-
-    /* Used to find paths */
-    private PathFinder pathFinder;
-
-    /* Used to build idle walk paths */
-    private IdleWalkPathBuilder idleWalkPathBuilder;
-
-    public ArtificialIntelligenceManager(Controller controller, WorldMap map)
-    {
-        this.controller = controller;
-        this.map = map;
-
-        // Select implementations based on map
-        if (map instanceof TileWorldMap)
-        {
-            // TODO: consider testing manhattan against absolute heuristic for performance
-            this.pathFinder = new TileAStarPathFinder(new ClosestAbsoluteHeuristic());
-            this.idleWalkPathBuilder = new DefaultTileIdleWalkPathBuilder();
-        }
-        else
-        {
-            this.pathFinder = null;
-            this.idleWalkPathBuilder = null;
-        }
-    }
 
     public Path findPath(Entity entity, Entity target)
     {
@@ -52,12 +24,15 @@ public class ArtificialIntelligenceManager
 
     public Path findPath(Entity entity, Vector2 target)
     {
-        if (pathFinder != null)
+        WorldMap map = entity.map;
+        ArtificialIntelligenceMapData mapData = map.getArtificialIntelligenceMapData();
+
+        if (mapData.pathFinder != null)
         {
             throw new RuntimeException("Path finding not supported - map type: " + map.getClass().getName());
         }
 
-        return pathFinder.findPath(
+        return mapData.pathFinder.findPath(
                 entity,
                 entity.positionNew.x, entity.positionNew.y,
                 target.x, target.y
@@ -66,12 +41,16 @@ public class ArtificialIntelligenceManager
 
     public Path findIdlePath(Entity entity, int maxDepth)
     {
-        if (idleWalkPathBuilder == null)
+        WorldMap map = entity.map;
+        ArtificialIntelligenceMapData mapData = map.getArtificialIntelligenceMapData();
+
+        if (mapData.idleWalkPathBuilder == null)
         {
             throw new RuntimeException("Idle path finding not supported for map type - map type: " + map.getClass().getName());
         }
 
-        return idleWalkPathBuilder.build(controller, entity, maxDepth);
+        Path path = mapData.idleWalkPathBuilder.build(controller, entity, maxDepth);
+        return path;
     }
 
 }

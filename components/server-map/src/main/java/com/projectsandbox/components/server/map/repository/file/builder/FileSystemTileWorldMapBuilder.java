@@ -22,7 +22,7 @@ public class FileSystemTileWorldMapBuilder extends FileSystemOpenWorldMapBuilder
     @Override
     public WorldMap createMapInstance(Controller controller, MapService mapService, short mapId)
     {
-        return new TileWorldMap(controller, mapService, mapId);
+        return new TileWorldMap(mapId);
     }
 
 }

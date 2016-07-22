@@ -3,6 +3,7 @@ package com.projectsandbox.components.server;
 import com.projectsandbox.components.server.effect.EffectsManager;
 import com.projectsandbox.components.server.entity.EntityManager;
 import com.projectsandbox.components.server.entity.PlayerEntityService;
+import com.projectsandbox.components.server.entity.ai.ArtificialIntelligenceManager;
 import com.projectsandbox.components.server.entity.respawn.RespawnManager;
 import com.projectsandbox.components.server.network.packet.PacketService;
 import com.projectsandbox.components.server.player.ChatService;
@@ -57,6 +58,8 @@ public class Controller
     public RespawnManager respawnManager;
     @Autowired
     public EffectsManager effectsManager;
+    @Autowired
+    public ArtificialIntelligenceManager artificialIntelligenceManager;
 
     @Autowired
     private List<EventServerPreStartup> eventServerPreStartups;

@@ -5,6 +5,7 @@ import com.projectsandbox.components.server.effect.EffectsManager;
 import com.projectsandbox.components.server.effect.EffectsMapData;
 import com.projectsandbox.components.server.entity.EntityManager;
 import com.projectsandbox.components.server.entity.EntityMapData;
+import com.projectsandbox.components.server.entity.ai.ArtificialIntelligenceMapData;
 import com.projectsandbox.components.server.entity.respawn.RespawnManager;
 import com.projectsandbox.components.server.entity.ai.ArtificialIntelligenceManager;
 import com.projectsandbox.components.server.entity.respawn.RespawnMapData;
@@ -21,19 +22,6 @@ import java.util.List;
 public abstract class WorldMap implements Serializable
 {
     private static final long serialVersionUID = 1L;
-
-    protected transient final Controller controller;
-    protected transient final MapService mapService;
-
-    // TODO: services need to send only data to players in map; thus we'll need to map players to maps i.e. broadcastToMap
-    // TODO: consider making protected...
-
-
-    // TODO: need to move map-dependent data out of managers, move to global level and then data back into here...
-    private EntityMapData entityMapData;
-    private RespawnMapData respawnMapData;
-    private EffectsMapData effectsMapData;
-    public ArtificialIntelligenceManager artificialIntelligenceManager;
 
     /**
      * Unique identifier for this map.
@@ -54,24 +42,26 @@ public abstract class WorldMap implements Serializable
      */
     protected transient OutboundPacket packet;
 
+    // Map data for services
+    private EntityMapData entityMapData;
+    private RespawnMapData respawnMapData;
+    private EffectsMapData effectsMapData;
+    private ArtificialIntelligenceMapData artificialIntelligenceMapData;
+
     /**
      * Creates a new instance and sets up internal state ready for tile data.
      *
-     * @param controller
-     * @param mapService The map manager to which this instance belongs
      * @param mapId The unique identifier for this map
      */
-    public WorldMap(Controller controller, MapService mapService, short mapId)
+    public WorldMap(short mapId)
     {
-        this.controller = controller;
-        this.mapService = mapService;
         this.mapId = mapId;
 
         // Setup managers
         this.entityMapData = new EntityMapData();
         this.respawnMapData = new RespawnMapData();
         this.effectsMapData = new EffectsMapData();
-        this.artificialIntelligenceManager = new ArtificialIntelligenceManager(controller, this);
+        this.artificialIntelligenceMapData = new ArtificialIntelligenceMapData(this);
     }
 
     /**
@@ -146,6 +136,11 @@ public abstract class WorldMap implements Serializable
     public EffectsMapData getEffectsMapData()
     {
         return effectsMapData;
+    }
+
+    public ArtificialIntelligenceMapData getArtificialIntelligenceMapData()
+    {
+        return artificialIntelligenceMapData;
     }
 
     @Override

@@ -149,7 +149,7 @@ public abstract class AbstractPedestrian extends Entity
                 if (rebuildPath)
                 {
                     // Re-compute path towards entity
-                    lastPathFound = map.artificialIntelligenceManager.findPath(this, targetEntity);
+                    lastPathFound = controller.artificialIntelligenceManager.findPath(this, targetEntity);
                     lastPathOffset = 0;
                 }
             }
@@ -328,14 +328,14 @@ public abstract class AbstractPedestrian extends Entity
                     targetVector = new Vector2(lastSpawn.x, lastSpawn.y);
 
                     // Rebuild path
-                    lastPathFound = map.artificialIntelligenceManager.findPath(this, targetVector);
+                    lastPathFound = controller.artificialIntelligenceManager.findPath(this, targetVector);
                     lastPathOffset = 0;
 
                     state = PedestrianState.IdleReturnToSpawn;
                     break;
                 case WALK:
                     // Rebuild idle path
-                    lastPathFound = map.artificialIntelligenceManager.findIdlePath(this, IDLE_WALK_MAX_STEPS);
+                    lastPathFound = controller.artificialIntelligenceManager.findIdlePath(this, IDLE_WALK_MAX_STEPS);
 
                     if (lastPathFound != null && lastPathFound.getTotalNodes() > 0)
                     {

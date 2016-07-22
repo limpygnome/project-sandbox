@@ -30,7 +30,7 @@ public class FileSystemOpenWorldMapBuilder extends FileSystemGenericWoldMapBuild
     @Override
     public WorldMap createMapInstance(Controller controller, MapService mapService, short mapId)
     {
-        return new OpenWorldMap(controller, mapService, mapId);
+        return new OpenWorldMap(mapId);
     }
 
     /**
