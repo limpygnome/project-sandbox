@@ -35,7 +35,7 @@ public class BlackholeComponent implements Serializable, EntityComponent, LogicC
     public void eventLogic(Controller controller, Entity entity)
     {
         // Fetch nearby entities
-        QuadTree quadTree = entity.map.entityManager.getQuadTree();
+        QuadTree quadTree = entity.map.getEntityMapData().getQuadTree();
         Set<ProximityResult> nearbyEntities = quadTree.getEntitiesWithinRadius(entity, radius);
 
         float distance;

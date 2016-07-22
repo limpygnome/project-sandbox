@@ -7,10 +7,12 @@ import com.projectsandbox.components.server.entity.EntityManager;
 import com.projectsandbox.components.server.entity.physics.Vector2;
 import com.projectsandbox.components.server.entity.physics.collisions.CollisionDetection;
 import com.projectsandbox.components.server.entity.physics.collisions.CollisionResult;
+import com.projectsandbox.components.server.entity.physics.spatial.QuadTree;
 import com.projectsandbox.components.server.inventory.InventoryInvokeType;
 import com.projectsandbox.components.server.inventory.InventorySlotState;
 import com.projectsandbox.components.server.inventory.annotation.InventoryItemTypeId;
 import com.projectsandbox.components.server.inventory.item.AbstractInventoryItem;
+import com.projectsandbox.components.server.world.map.WorldMap;
 
 import java.util.Set;
 
@@ -84,11 +86,16 @@ public class JumpDriveItem extends AbstractInventoryItem
                         );
                         controller.effectsManager.add(parent.map, effect);
 
-                        // Fetch any possible collisions
-                        EntityManager entityManager = parent.map.entityManager;
-                        Set<Entity> nearbyEntities = entityManager.getQuadTree().getCollidableEntities(parent);
+                        // Fetch collision detection
+                        EntityManager entityManager = controller.entityManager;
                         CollisionDetection collisionDetection = entityManager.getCollisionDetection();
 
+                        // Fetch nearby entities
+                        WorldMap map = parent.map;
+                        QuadTree quadTree = map.getEntityMapData().getQuadTree();
+                        Set<Entity> nearbyEntities = quadTree.getCollidableEntities(parent);
+
+                        // Fetch any possible collisions
                         CollisionResult collisionResult;
 
                         for (Entity entity : nearbyEntities)

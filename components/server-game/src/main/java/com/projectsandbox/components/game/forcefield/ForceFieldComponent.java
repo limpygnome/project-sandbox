@@ -16,6 +16,7 @@ import com.projectsandbox.components.server.entity.physics.collisions.CollisionR
 import com.projectsandbox.components.server.entity.physics.spatial.ProximityResult;
 import com.projectsandbox.components.server.entity.physics.spatial.QuadTree;
 import com.projectsandbox.components.server.inventory.InventorySlotState;
+import com.projectsandbox.components.server.world.map.WorldMap;
 
 import java.io.Serializable;
 import java.util.Iterator;
@@ -154,10 +155,13 @@ public class ForceFieldComponent  implements Serializable, EntityComponent, Logi
                                                      .offset(parent.positionNew)
                                                      .rotate(parent.rotation);
 
-        EntityManager entityManager = parent.map.entityManager;
-
+        // Fetch collision detection
+        EntityManager entityManager = controller.entityManager;
         CollisionDetection collisionDetection = entityManager.getCollisionDetection();
-        QuadTree quadTree = entityManager.getQuadTree();
+
+        // Fetch quad-tree
+        WorldMap map = parent.map;
+        QuadTree quadTree = map.getEntityMapData().getQuadTree();
 
         // Perform collision detection between entities and forcefield vertices
         float radius = radiusX > radiusY ? radiusX : radiusY;

@@ -284,7 +284,7 @@ public abstract class AbstractPedestrian extends Entity
         if (flagCanAttack && state.IDLE)
         {
             // Fetch quad-tree
-            QuadTree quadTree = map.entityManager.getQuadTree();
+            QuadTree quadTree = map.getEntityMapData().getQuadTree();
 
             // Find nearest entity...
             Set<ProximityResult> nearbyEnts = quadTree.getEntitiesWithinRadius(this, engageDistance);

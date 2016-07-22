@@ -3,6 +3,7 @@ package com.projectsandbox.components.server.player;
 
 import com.projectsandbox.components.server.Controller;
 import com.projectsandbox.components.server.entity.Entity;
+import com.projectsandbox.components.server.entity.EntityManager;
 import com.projectsandbox.components.server.entity.player.PlayerEntity;
 import com.projectsandbox.components.server.entity.PlayerEntityService;
 import com.projectsandbox.components.server.entity.respawn.RespawnManager;
@@ -45,6 +46,8 @@ public class PlayerService implements EventLogicCycleService, IdCounterConsumer
     private PacketService packetService;
     @Autowired
     private PlayerEntityService playerEntityService;
+    @Autowired
+    private EntityManager entityManager;
     @Autowired
     private RespawnManager respawnManager;
 
@@ -174,7 +177,7 @@ public class PlayerService implements EventLogicCycleService, IdCounterConsumer
 
                 if (playerEntity.isRemovableOnPlayerEntChange(playerInfo))
                 {
-                    entity.map.entityManager.remove(playerEntity);
+                    entityManager.remove(entity);
                     LOG.debug("Removed entity for disconnecting player - ply id: {}, ent id: {}", playerInfo.playerId, entity.id);
                 }
             }
@@ -328,7 +331,7 @@ public class PlayerService implements EventLogicCycleService, IdCounterConsumer
                     // Check if to remove old entity...
                     if (playerEntity.isRemovableOnPlayerEntChange(playerInfo))
                     {
-                        entity.map.entityManager.remove(currentEntity);
+                        entityManager.remove(currentEntity);
                     }
                 }
 

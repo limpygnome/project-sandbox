@@ -2,9 +2,11 @@ package com.projectsandbox.components.server.entity.physics.spatial;
 
 import com.projectsandbox.components.server.Controller;
 import com.projectsandbox.components.server.entity.Entity;
+import com.projectsandbox.components.server.entity.EntityMapData;
 import com.projectsandbox.components.server.entity.death.AbstractKiller;
 import com.projectsandbox.components.server.entity.physics.Vector2;
 import com.projectsandbox.components.server.util.CustomMath;
+import com.projectsandbox.components.server.world.map.WorldMap;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -31,7 +33,8 @@ public final class SpatialActions
     {
         // TODO: test vertices for large objects...
         // Fetch quad-tree
-        QuadTree quadTree = entityCenter.map.entityManager.getQuadTree();
+        WorldMap map = entityCenter.map;
+        QuadTree quadTree = map.getEntityMapData().getQuadTree();
 
         // Find nearby entities
         Set<ProximityResult> proximityResults = quadTree.getEntitiesWithinRadius(entityCenter, radius);

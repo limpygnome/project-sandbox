@@ -49,7 +49,7 @@ public class Sentry extends Entity
     public void eventLogic(Controller controller)
     {
         // Fetch quad-tree
-        QuadTree quadTree = map.entityManager.getQuadTree();
+        QuadTree quadTree = map.getEntityMapData().getQuadTree();
 
         // Find nearest entity
         Set<ProximityResult> nearbyEntities = quadTree.getEntitiesWithinRadius(this, RANGE);

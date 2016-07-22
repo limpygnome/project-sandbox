@@ -10,6 +10,7 @@ import com.projectsandbox.components.server.service.EventLogicCycleService;
 import java.io.IOException;
 import java.util.Set;
 
+import com.projectsandbox.components.server.service.EventMapLogicCycleService;
 import com.projectsandbox.components.server.world.map.MapService;
 import com.projectsandbox.components.server.world.map.WorldMap;
 import org.apache.logging.log4j.LogManager;
@@ -21,7 +22,7 @@ import org.springframework.stereotype.Component;
  * Manages and executes logic for effects.
  */
 @Component
-public class EffectsManager implements EventLogicCycleService
+public class EffectsManager implements EventMapLogicCycleService
 {
     private final static Logger LOG = LogManager.getLogger(EffectsManager.class);
 
@@ -33,23 +34,18 @@ public class EffectsManager implements EventLogicCycleService
     private PacketService packetService;
 
     @Override
-    public void logic()
+    public void logic(WorldMap map)
     {
-        EffectsMapData mapData;
+        EffectsMapData mapData = map.getEffectsMapData();
 
-        for (WorldMap map : mapService.getMapCache().values())
+        // Send updates / pending effects
+        try
         {
-            mapData = map.getEffectsMapData();
-
-            // Send updates / pending effects
-            try
-            {
-                sendUpdates(map, mapData);
-            }
-            catch (IOException e)
-            {
-                LOG.error("failed to send effect updates", e);
-            }
+            sendUpdates(map, mapData);
+        }
+        catch (IOException e)
+        {
+            LOG.error("failed to send effect updates", e);
         }
     }
 

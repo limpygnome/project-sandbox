@@ -50,7 +50,7 @@ public class Controller
     public ChatService chatService;
 
     @Autowired
-    private EntityManager entityManager;
+    public EntityManager entityManager;
     @Autowired
     public PlayerEntityService playerEntityService;
     @Autowired

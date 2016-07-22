@@ -99,7 +99,8 @@ public class Casting
                                           Vector2 linePerpStart, Vector2 linePerpEnd, float maxDistance)
     {
         // Fetch quad-tree
-        QuadTree quadTree = origin.map.entityManager.getQuadTree();
+        WorldMap map = origin.map;
+        QuadTree quadTree = map.getEntityMapData().getQuadTree();
 
         // Iterate and find each entity within the radius of being hit
         Set<ProximityResult> possibleEnts = quadTree.getEntitiesWithinRadius(origin, maxDistance);

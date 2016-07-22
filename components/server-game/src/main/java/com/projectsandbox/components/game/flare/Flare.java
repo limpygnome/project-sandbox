@@ -9,6 +9,7 @@ import com.projectsandbox.components.server.entity.physics.Vector2;
 import com.projectsandbox.components.server.entity.physics.collisions.CollisionResult;
 import com.projectsandbox.components.server.entity.physics.collisions.map.CollisionMapResult;
 import com.projectsandbox.components.server.entity.physics.spatial.ProximityResult;
+import com.projectsandbox.components.server.entity.physics.spatial.QuadTree;
 import com.projectsandbox.components.server.player.PlayerInfo;
 import com.projectsandbox.components.server.world.map.WorldMap;
 import com.projectsandbox.components.server.world.spawn.Spawn;
@@ -62,7 +63,8 @@ public class Flare extends Entity
             OwnershipComponent ownershipComponent = (OwnershipComponent) components.fetchComponent(OwnershipComponent.class);
 
             // Find and move towards nearby entities...
-            Set<ProximityResult> nearbyEntities = map.entityManager.getQuadTree().getEntitiesWithinRadius(this, FLARE_INTERCEPT_RADIUS);
+            QuadTree quadTree = map.getEntityMapData().getQuadTree();
+            Set<ProximityResult> nearbyEntities = quadTree.getEntitiesWithinRadius(this, FLARE_INTERCEPT_RADIUS);
             ProximityResult closest = null;
 
             for (ProximityResult proximityResult : nearbyEntities)

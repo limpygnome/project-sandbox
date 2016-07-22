@@ -198,7 +198,8 @@ public strictfp abstract class Entity implements Serializable
         rebuildCachedVertices();
 
         // Update quadtree
-        map.entityManager.getQuadTree().update(this);
+        EntityMapData mapData = map.getEntityMapData();
+        mapData.getQuadTree().update(this);
         
         // Update slotState
         if (changeX && changeY)
@@ -305,7 +306,7 @@ public strictfp abstract class Entity implements Serializable
                     // Remove from quadtree...
                     if (transitionAllowed)
                     {
-                        map.entityManager.getQuadTree().remove(this);
+                        map.getEntityMapData().getQuadTree().remove(this);
                     }
 
                     break;
@@ -538,7 +539,7 @@ public strictfp abstract class Entity implements Serializable
     /**
      * Event for death of entity.
      * 
-     * Default behaviour is to delete entity. Method should be overridden to
+     * Default behaviour is to respawn entity. Method should be overridden to
      * change behaviour.
      * 
      * @param controller

@@ -4,7 +4,7 @@ import com.projectsandbox.components.server.Controller;
 import com.projectsandbox.components.server.entity.Entity;
 import com.projectsandbox.components.server.entity.EntityManager;
 import com.projectsandbox.components.server.entity.player.PlayerEntity;
-import com.projectsandbox.components.server.service.EventLogicCycleService;
+import com.projectsandbox.components.server.service.EventMapLogicCycleService;
 import com.projectsandbox.components.server.world.map.MapService;
 import com.projectsandbox.components.server.world.map.WorldMap;
 import com.projectsandbox.components.server.world.spawn.Spawn;
@@ -22,16 +22,16 @@ import java.util.LinkedList;
  * TODO: add support for multiple maps; this should be a single instance for all maps
  */
 @Component
-public class RespawnManager implements EventLogicCycleService
+public class RespawnManager implements EventMapLogicCycleService
 {
     private final static Logger LOG = LogManager.getLogger(RespawnManager.class);
 
     @Autowired
-    private MapService mapService;
-
-    // TODO: remove this controller ASAP, pretty bad...
-    @Autowired
     private Controller controller;
+    @Autowired
+    private MapService mapService;
+    @Autowired
+    private EntityManager entityManager;
 
     public void respawn(PendingRespawn pendingRespawn)
     {
@@ -46,7 +46,7 @@ public class RespawnManager implements EventLogicCycleService
         Entity entity = pendingRespawn.entity;
 
         // Remove from world, if already exists
-        entity.map.entityManager.remove(entity);
+        entityManager.remove(entity);
 
         // Add to pending respawn...
         addToInternalPendingRespawnCollectionSynchronized(pendingRespawn);
@@ -85,16 +85,7 @@ public class RespawnManager implements EventLogicCycleService
     }
 
     @Override
-    public void logic()
-    {
-        // Run logic for each map
-        for (WorldMap map : mapService.getMapCache().values())
-        {
-            logicForMap(map);
-        }
-    }
-
-    private void logicForMap(WorldMap map)
+    public void logic(WorldMap map)
     {
         RespawnMapData respawnMapData = map.getRespawnMapData();
         LinkedList<RespawnData> entitiesToSpawn = new LinkedList<>();
@@ -180,7 +171,7 @@ public class RespawnManager implements EventLogicCycleService
         entity.eventReset(controller, respawnData.spawn, respawnAfterPersisted);
 
         // Add to world if new entity
-        if (!entity.map.entityManager.add(entity))
+        if (!entityManager.add(entity))
         {
             LOG.warn("Could not respawn entity, failed to add to entity manager - entity id: {}", entity.id);
             return false;

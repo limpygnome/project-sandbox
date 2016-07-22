@@ -1,6 +1,7 @@
 package com.projectsandbox.components.server.network.packet.imp.entity;
 
 import com.projectsandbox.components.server.entity.EntityManager;
+import com.projectsandbox.components.server.entity.EntityMapData;
 import com.projectsandbox.components.server.entity.physics.spatial.ProximityResult;
 import com.projectsandbox.components.server.entity.physics.spatial.QuadTree;
 import com.projectsandbox.components.server.network.packet.OutboundPacket;
@@ -10,6 +11,7 @@ import com.projectsandbox.components.server.entity.UpdateMasks;
 import com.projectsandbox.components.server.player.PlayerInfo;
 import com.projectsandbox.components.server.player.network.Scene;
 import com.projectsandbox.components.server.player.network.SceneUpdates;
+import com.projectsandbox.components.server.world.map.WorldMap;
 
 import java.io.IOException;
 import java.util.*;
@@ -32,23 +34,23 @@ public class EntityUpdatesOutboundPacket extends OutboundPacket
         super((byte)'E', (byte)'U');
     }
 
-    public void build(EntityManager entityManager, PlayerInfo playerInfo) throws IOException
-    {
-        buildUpdates(entityManager, playerInfo);
-    }
-
     /*
         Add only updates to the world, localized to the player for non creation and deletion states.
      */
-    private void buildUpdates(EntityManager entityManager, PlayerInfo playerInfo) throws IOException
+    public void build(PlayerInfo playerInfo) throws IOException
     {
         Entity playerEntity = playerInfo.entity;
 
         // Write actual entity updates
         if (playerEntity != null)
         {
+            // TODO: consider if this is the right approach for accessing items in the quad-tree....
+            // Fetch map data
+            WorldMap map = playerEntity.map;
+            EntityMapData mapData = map.getEntityMapData();
+
             // Fetch quad-tree
-            QuadTree quadTree = entityManager.getQuadTree();
+            QuadTree quadTree = mapData.getQuadTree();
 
             // Fetch entities within radius
             Set<ProximityResult> nearbyEntities = quadTree.getEntitiesWithinRadius(playerEntity, RADIUS_ENTITY_UPDATES);
