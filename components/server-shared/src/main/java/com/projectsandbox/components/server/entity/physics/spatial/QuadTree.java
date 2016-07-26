@@ -1,5 +1,6 @@
 package com.projectsandbox.components.server.entity.physics.spatial;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.projectsandbox.components.server.entity.Entity;
 import com.projectsandbox.components.server.entity.physics.Vector2;
 import com.projectsandbox.components.server.world.map.WorldMap;
@@ -19,6 +20,7 @@ public class QuadTree implements Serializable
 
     private static final int MAX_DEPTH = 4;
 
+    @JsonManagedReference
     private QuadTreeNode rootNode;
     private Map<Entity, QuadTreeNode> entityToNode;
 

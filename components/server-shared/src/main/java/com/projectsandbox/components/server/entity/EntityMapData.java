@@ -21,7 +21,7 @@ public class EntityMapData implements IdCounterConsumer, Serializable
     private final static Logger LOG = LogManager.getLogger(EntityMapData.class);
 
     /* Used for efficient collision detection and network updates. */
-    protected QuadTree quadTree;
+    protected transient QuadTree quadTree;
 
     /* A map of entity id -> entity. */
     protected final Map<Short, Entity> entities;

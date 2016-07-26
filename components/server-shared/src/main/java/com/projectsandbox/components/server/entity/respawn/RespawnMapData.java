@@ -7,6 +7,7 @@ import org.apache.logging.log4j.Logger;
 import java.io.Serializable;
 import java.util.HashMap;
 import java.util.LinkedList;
+import java.util.List;
 
 /**
  * Created by limpygnome on 21/07/16.
@@ -16,7 +17,7 @@ public class RespawnMapData implements Serializable
     private final static long serialVersionUID = 1L;
     private final static Logger LOG = LogManager.getLogger(RespawnMapData.class);
 
-    protected LinkedList<PendingRespawn> pendingRespawnList;
+    protected List<PendingRespawn> pendingRespawnList;
 
     /* Faction ID -> FactionSpawns */
     protected HashMap<Short, FactionSpawns> factionSpawnsMap;

@@ -28,4 +28,6 @@ public interface MapRepository
      */
     WorldMap fetchMap(Controller controller, MapService mapService, UUID uuid);
 
+    void persist(WorldMap map);
+
 }

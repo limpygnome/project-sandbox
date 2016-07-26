@@ -1,5 +1,8 @@
 package com.projectsandbox.components.server.map.repository.file;
 
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
+import com.fasterxml.jackson.annotation.PropertyAccessor;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.projectsandbox.components.server.Controller;
 import com.projectsandbox.components.server.map.repository.file.builder.FileSystemMapBuilder;
 import com.projectsandbox.components.server.util.JsonHelper;
@@ -91,6 +94,8 @@ public class FileSystemMapRepository implements MapRepository
                     // Add to result
                     maps.put(map.getMapId(), map);
 
+                    persist(map);
+
                     LOG.debug("loaded public map - {}", map);
                 }
             }
@@ -107,6 +112,23 @@ public class FileSystemMapRepository implements MapRepository
     public WorldMap fetchMap(Controller controller, MapService mapService, UUID uuid)
     {
         throw new RuntimeException("no support for loading individual maps");
+    }
+
+    @Override
+    public void persist(WorldMap map)
+    {
+        try
+        {
+            ObjectMapper mapper = new ObjectMapper();
+            mapper.setVisibility(PropertyAccessor.FIELD, JsonAutoDetect.Visibility.ANY);
+
+            String mapData = mapper.writeValueAsString(map);
+            String doNothing = mapData.toUpperCase();
+        }
+        catch (Exception e)
+        {
+            throw new RuntimeException("Failed to persist map", e);
+        }
     }
 
 }
