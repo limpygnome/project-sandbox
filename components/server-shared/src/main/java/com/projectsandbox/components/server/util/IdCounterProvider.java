@@ -1,5 +1,6 @@
 package com.projectsandbox.components.server.util;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.projectsandbox.components.server.util.counters.IdCounterConsumer;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -15,6 +16,7 @@ public class IdCounterProvider implements Serializable
     private final static Logger LOG = LogManager.getLogger(IdCounterProvider.class);
 
     // The consumer of these identifiers; used to check if it already contains an identifier
+    @JsonBackReference
     private IdCounterConsumer consumer;
 
     // Keeps track of what is most likely the next available ID

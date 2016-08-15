@@ -1,5 +1,6 @@
 package com.projectsandbox.components.server.entity;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.projectsandbox.components.server.Controller;
 import com.projectsandbox.components.server.entity.physics.spatial.QuadTree;
 import com.projectsandbox.components.server.util.IdCounterProvider;
@@ -27,6 +28,7 @@ public class EntityMapData implements IdCounterConsumer, Serializable
     protected final Map<Short, Entity> entities;
 
     /* Counter for producing entity identifiers. */
+    @JsonManagedReference
     private IdCounterProvider idCounterProvider;
 
     public EntityMapData()

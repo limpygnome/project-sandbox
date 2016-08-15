@@ -122,6 +122,12 @@ public class FileSystemMapRepository implements MapRepository
             ObjectMapper mapper = new ObjectMapper();
             mapper.setVisibility(PropertyAccessor.FIELD, JsonAutoDetect.Visibility.ANY);
 
+            Map<String, String> test = new HashMap<>();
+            test.put("a", "123");
+            test.put("b", "456");
+            String testData = mapper.writeValueAsString(test);
+            LOG.error(testData);
+
             String mapData = mapper.writeValueAsString(map);
             String doNothing = mapData.toUpperCase();
         }

@@ -1,5 +1,7 @@
 package com.projectsandbox.components.server.entity.physics.spatial;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.projectsandbox.components.server.entity.Entity;
 
 import java.io.Serializable;
@@ -22,7 +24,10 @@ public class QuadTreeNode implements Serializable
 
     List<Entity> entities;
 
+    @JsonManagedReference
     QuadTreeNode parentNode;
+
+    @JsonBackReference
     QuadTreeNode[] childNodes;
 
     public QuadTreeNode(QuadTreeNode parentNode, int maxDepth, float lowerX, float lowerY, float upperX, float upperY)
