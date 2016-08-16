@@ -48,8 +48,8 @@ public class PlayerVehicleMovementComponent implements Serializable, EntityCompo
     public void eventLogic(Controller controller, Entity entity)
     {
         PlayerEntity playerEntity = (PlayerEntity) entity;
-
         PlayerInfo playerInfoDriver = playerEntity.getPlayer();
+
         float acceleration = 0.0f;
         float steerAngle = 0.0f;
 

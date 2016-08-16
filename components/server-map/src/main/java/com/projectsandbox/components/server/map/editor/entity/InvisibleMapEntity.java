@@ -2,17 +2,18 @@ package com.projectsandbox.components.server.map.editor.entity;
 
 import com.projectsandbox.components.server.entity.annotation.EntityType;
 import com.projectsandbox.components.server.entity.player.PlayerEntity;
+import com.projectsandbox.components.server.map.editor.component.StaticMovementComponent;
 import com.projectsandbox.components.server.player.PlayerInfo;
 import com.projectsandbox.components.server.world.map.WorldMap;
 
 /**
- * Created by limpygnome on 07/07/16.
+ * Simple entity to move around the map to assist with map editing.
  */
-@EntityType(typeId = 123, typeName = "util/map-editor")
-public class MapEditorEntity extends PlayerEntity
+@EntityType(typeId = 123, typeName = "util/invisible-map-editor")
+public class InvisibleMapEntity extends PlayerEntity
 {
 
-    public MapEditorEntity(WorldMap map)
+    public InvisibleMapEntity(WorldMap map)
     {
         super(
                 map,
@@ -21,6 +22,11 @@ public class MapEditorEntity extends PlayerEntity
                 new PlayerInfo[1],
                 null
         );
+
+        this.physicsIntangible = true;
+        this.physicsStatic = true;
+
+        components.add(new StaticMovementComponent());
     }
 
     @Override
