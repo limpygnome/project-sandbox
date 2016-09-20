@@ -15,10 +15,19 @@ import java.io.Serializable;
  */
 public class StaticMovementComponent implements Serializable, EntityComponent, LogicComponentEvent
 {
-    private static final float OFFSET_INCREMENT_PER_CYCLE = 0.1f;
+    /* The amount of movement added during each cycle when keys are continuously held. */
+    private static final float OFFSET_INCREMENT_PER_CYCLE = 0.5f;
+
+    /* The amount moved per cycle when holding shift key. */
+    private static final float SUPER_JUMP_AMOUNT = 1000.0f;
 
     /* Incremented each logic cycle, in which there's movement, in order to navigate faster. */
     private float accelerate;
+
+    public StaticMovementComponent()
+    {
+        accelerate = OFFSET_INCREMENT_PER_CYCLE;
+    }
 
     @Override
     public void eventLogic(Controller controller, Entity entity)
@@ -34,28 +43,38 @@ public class StaticMovementComponent implements Serializable, EntityComponent, L
             // Handle any keys down
             if (playerInfo.isKeyDown(PlayerKeys.MovementUp))
             {
-                offsetY += OFFSET_INCREMENT_PER_CYCLE;
+                offsetY += accelerate;
             }
             if (playerInfo.isKeyDown(PlayerKeys.MovementDown))
             {
-                offsetY -= OFFSET_INCREMENT_PER_CYCLE;
+                offsetY -= accelerate;
             }
             if (playerInfo.isKeyDown(PlayerKeys.MovementLeft))
             {
-                offsetX -= OFFSET_INCREMENT_PER_CYCLE;
+                offsetX -= accelerate;
             }
             if (playerInfo.isKeyDown(PlayerKeys.MovementDown.MovementRight))
             {
-                offsetX += OFFSET_INCREMENT_PER_CYCLE;
+                offsetX += accelerate;
             }
 
-            if (offsetX != 0.0f && offsetY != 0.0f)
+            if (offsetX != 0.0f || offsetY != 0.0f)
             {
+                // Check if to apply super-jump instead
+                if (playerInfo.isKeyDown(PlayerKeys.Shift))
+                {
+                    // Need to look at incrementing super-jump amount each cycle...
+                    offsetX = (offsetX > 0.0f ? SUPER_JUMP_AMOUNT : offsetX < 0.0f ? -SUPER_JUMP_AMOUNT : 0.0f);
+                    offsetY = (offsetY > 0.0f ? SUPER_JUMP_AMOUNT : offsetY < 0.0f ? -SUPER_JUMP_AMOUNT : 0.0f);
+                }
+                else
+                {
+                    // Increment acceleration for next cycle for continuous keys
+                    accelerate += OFFSET_INCREMENT_PER_CYCLE;
+                }
+
                 // Apply offset
                 entity.positionOffset(offsetX, offsetY);
-
-                // Increment acceleration for next cycle if any keys down
-                accelerate += OFFSET_INCREMENT_PER_CYCLE;
             }
             else if (accelerate > OFFSET_INCREMENT_PER_CYCLE)
             {

@@ -202,7 +202,7 @@ projectSandbox.network.player =
     MOVEMENT_RIGHT: 8,
 
     ACTION_KEY: 16,
-
+    SHIFT_KEY: 32,
     SPACEBAR: 32768,
 
     // Previous packet - no point updating the server if the value is the same!
@@ -226,6 +226,7 @@ projectSandbox.network.player =
         // Compute new movement packet
         var movement = 0;
 
+        // TODO: make this handler-based, rather than check each time...
         if (keyboard.isKeyDown("W"))
         {
             movement |= this.MOVEMENT_UP;
@@ -242,12 +243,14 @@ projectSandbox.network.player =
         {
             movement |= this.MOVEMENT_RIGHT;
         }
-
         if (keyboard.isKeyDown("F"))
         {
             movement |= this.ACTION_KEY;
         }
-
+        if (keyboard.isKeyDown(16))
+        {
+            movement |= this.SHIFT_KEY;
+        }
         if (keyboard.isKeyDown(" "))
         {
             movement |= this.SPACEBAR;

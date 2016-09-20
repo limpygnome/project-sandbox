@@ -142,6 +142,11 @@
 <script src="game/js/ent/world/blackhole.js"></script>
 
 <!--
+    Game: Utility
+-->
+<script src="game/js/ent/util/invisible-map-entity.js"></script>
+
+<!--
     Game: Inventory
 -->
 <script src="game/js/inventory/fist.js"></script>

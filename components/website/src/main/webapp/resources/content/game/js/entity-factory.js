@@ -56,6 +56,11 @@ game.entityFactory = {
                 entity = new game.entities.world.Blackhole();
                 break;
 
+            // Utility
+            case 901:
+                entity = new game.entities.util.InvisibleMapEntity();
+                break;
+
             default:
                 entity = null;
                 console.error("engine/network/entityPool - unhandled entity type id: " + typeId);

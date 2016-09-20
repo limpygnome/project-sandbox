@@ -3,3 +3,4 @@ game = {}
 game.ui = {}
 game.entities = {};
 game.entities.world = {};
+game.entities.util = {};

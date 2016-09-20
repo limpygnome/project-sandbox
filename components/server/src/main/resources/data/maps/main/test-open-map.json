@@ -10,7 +10,7 @@
         "background" : "background/space-red",
         "width" : 120000.0,
         "height" : 120000.0,
-        "defaultPlayerEntity" : "ship/fighter"
+        "defaultPlayerEntity" : "util/invisible-map-editor"
     },
 
     "entities":

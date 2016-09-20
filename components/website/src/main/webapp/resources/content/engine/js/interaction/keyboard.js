@@ -40,12 +40,32 @@ projectSandbox.interaction.keyboard =
     
     setKeyCode: function(keyCode, value)
     {
-        var strKeyCode = String.fromCharCode(keyCode);
-        this.keys.set(strKeyCode, value);
+        var key;
+
+        // Convert key code to easily readable value for print chars
+        if (keyCode >= 32 && keyCode <= 126)
+        {
+            key = String.fromCharCode(keyCode);
+
+            // Fallback...
+            if (key == null || key.length == 0)
+            {
+                key = keyCode;
+            }
+        }
+        else
+        {
+            key = keyCode;
+        }
+
+        // Update state of key in map
+        this.keys.set(key, value);
+
+        console.debug("projectSandbox.interaction.keyboard - key: " + key + " [key code: '" + keyCode + "'], value: " + value);
     },
 
     isKeyDown: function(keyCode)
     {
-        return this.keys.get(keyCode) && true;
+        return this.keys.get(keyCode);
     }
 }

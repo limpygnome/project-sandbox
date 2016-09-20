@@ -7,19 +7,45 @@ package com.projectsandbox.components.server.player;
 
 public enum PlayerKeys
 {
+    /**
+     * Currently the W key.
+     */
     MovementUp(1),
+
+    /**
+     * Currently the A key.
+     */
     MovementLeft(2),
+
+    /**
+     * Currently the S key.
+     */
     MovementDown(4),
+
+    /**
+     * Currently the D key.
+     */
     MovementRight(8),
-    
+
+    /**
+     * Currently the F key.
+     */
     Action(16),
 
+    /**
+     * Currently the shift key.
+     */
+    Shift(32),
+
+    /**
+     * Currently the space bar.
+     */
     Spacebar(32768)
     ;
 
     public final int FLAG;
 
-    private PlayerKeys(int flag)
+    PlayerKeys(int flag)
     {
         this.FLAG = flag;
     }

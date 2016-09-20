@@ -94,7 +94,7 @@ public class FileSystemMapRepository implements MapRepository
                     // Add to result
                     maps.put(map.getMapId(), map);
 
-                    persist(map);
+                    //persist(map);
 
                     LOG.debug("loaded public map - {}", map);
                 }

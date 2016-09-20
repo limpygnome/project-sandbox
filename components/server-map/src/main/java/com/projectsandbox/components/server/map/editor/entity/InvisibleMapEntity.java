@@ -9,17 +9,17 @@ import com.projectsandbox.components.server.world.map.WorldMap;
 /**
  * Simple entity to move around the map to assist with map editing.
  */
-@EntityType(typeId = 123, typeName = "util/invisible-map-editor")
+@EntityType(typeId = 901, typeName = "util/invisible-map-editor")
 public class InvisibleMapEntity extends PlayerEntity
 {
 
-    public InvisibleMapEntity(WorldMap map)
+    public InvisibleMapEntity(WorldMap map, PlayerInfo[] players)
     {
         super(
                 map,
                 (short) 16,
                 (short) 16,
-                new PlayerInfo[1],
+                players,
                 null
         );
 
