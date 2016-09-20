@@ -1,5 +1,6 @@
 package com.projectsandbox.components.game.vehicle.ship;
 
+import com.projectsandbox.components.game.MapBoundsComponent;
 import com.projectsandbox.components.game.SpaceMovementComponent;
 import com.projectsandbox.components.server.Controller;
 import com.projectsandbox.components.server.entity.player.PlayerEntity;
@@ -42,6 +43,8 @@ public class Destroyer extends PlayerEntity
                 0.4f,       // Acceleration
                 0.05f       // Turning speed
         ));
+
+        components.add(new MapBoundsComponent());
 
         setMaxHealth(400.0f);
     }

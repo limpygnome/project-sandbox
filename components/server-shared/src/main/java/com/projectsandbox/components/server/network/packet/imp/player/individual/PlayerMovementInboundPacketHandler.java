@@ -14,8 +14,6 @@ import org.apache.logging.log4j.Logger;
 
 /**
  * A packet sent by the client to update their movement slotState.
- * 
- * @author limpygnome
  */
 @PacketHandler(mainType = 'P', subType = 'M')
 public class PlayerMovementInboundPacketHandler extends AuthenticatedInboundPacketHandler

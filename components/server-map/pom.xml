@@ -25,6 +25,11 @@
             <artifactId>server-shared</artifactId>
             <version>${project.version}</version>
         </dependency>
+        <dependency>
+            <groupId>com.projectsandbox.components</groupId>
+            <artifactId>server-game</artifactId>
+            <version>${project.version}</version>
+        </dependency>
 
         <!-- Spring -->
         <dependency>

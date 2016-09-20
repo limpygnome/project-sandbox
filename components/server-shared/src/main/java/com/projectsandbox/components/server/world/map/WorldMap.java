@@ -64,7 +64,7 @@ public abstract class WorldMap implements Serializable
      */
     public void postMapLoad()
     {
-        entityMapData.setup(this);
+        entityMapData.reset(this);
     }
 
     /**

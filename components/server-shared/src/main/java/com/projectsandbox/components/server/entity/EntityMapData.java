@@ -25,7 +25,7 @@ public class EntityMapData implements IdCounterConsumer, Serializable
     protected transient QuadTree quadTree;
 
     /* A map of entity id -> entity. */
-    protected final Map<Short, Entity> entities;
+    protected Map<Short, Entity> entities;
 
     /* Counter for producing entity identifiers. */
     @JsonManagedReference
@@ -35,7 +35,7 @@ public class EntityMapData implements IdCounterConsumer, Serializable
     {
         this.idCounterProvider = new IdCounterProvider(this);
         this.quadTree = null;
-        this.entities = new ConcurrentHashMap<>();
+        this.entities = null;
     }
 
     /**
@@ -43,9 +43,10 @@ public class EntityMapData implements IdCounterConsumer, Serializable
      *
      * @param map the map to which this belongs
      */
-    public void setup(WorldMap map)
+    public void reset(WorldMap map)
     {
         quadTree = new QuadTree(map);
+        entities = new ConcurrentHashMap<>();
     }
 
     @Override

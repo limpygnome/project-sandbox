@@ -177,7 +177,7 @@ public class EntityManager implements EventMapLogicCycleService
             LOG.warn("Entity went outside the map - ent: {}, pos: {}", entity, entity.positionNew);
 
             // Kill the ent...
-            entity.kill(controller, null, MapBoundsKiller.class);
+            entity.kill(controller, null,   MapBoundsKiller.class);
         }
         else
         {

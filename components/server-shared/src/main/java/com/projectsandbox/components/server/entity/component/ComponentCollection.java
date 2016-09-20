@@ -42,7 +42,7 @@ public class ComponentCollection< K extends Class<ComponentEvent>, V extends Ent
         return components.get(clazz);
     }
 
-    public synchronized void add(V entityComponent)
+    public synchronized ComponentCollection add(V entityComponent)
     {
         // Register entity for each event type for callback
         Class[] clazzes = entityComponent.getClass().getInterfaces();
@@ -57,6 +57,8 @@ public class ComponentCollection< K extends Class<ComponentEvent>, V extends Ent
 
         // Add to components
         components.put(entityComponent.getClass(), entityComponent);
+
+        return this;
     }
 
     public synchronized V remove(Class<V> clazz)

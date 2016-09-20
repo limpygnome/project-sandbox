@@ -1,5 +1,6 @@
 package com.projectsandbox.components.server.map.editor.entity;
 
+import com.projectsandbox.components.game.MapBoundsComponent;
 import com.projectsandbox.components.server.entity.annotation.EntityType;
 import com.projectsandbox.components.server.entity.player.PlayerEntity;
 import com.projectsandbox.components.server.map.editor.component.StaticMovementComponent;
@@ -10,10 +11,10 @@ import com.projectsandbox.components.server.world.map.WorldMap;
  * Simple entity to move around the map to assist with map editing.
  */
 @EntityType(typeId = 901, typeName = "util/invisible-map-editor")
-public class InvisibleMapEntity extends PlayerEntity
+public class InvisibleMapEditorEntity extends PlayerEntity
 {
 
-    public InvisibleMapEntity(WorldMap map, PlayerInfo[] players)
+    public InvisibleMapEditorEntity(WorldMap map, PlayerInfo[] players)
     {
         super(
                 map,
@@ -26,7 +27,8 @@ public class InvisibleMapEntity extends PlayerEntity
         this.physicsIntangible = true;
         this.physicsStatic = true;
 
-        components.add(new StaticMovementComponent());
+        components  .add(new StaticMovementComponent())
+                    .add(new MapBoundsComponent());
     }
 
     @Override

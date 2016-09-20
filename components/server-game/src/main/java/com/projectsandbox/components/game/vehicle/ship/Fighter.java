@@ -1,5 +1,6 @@
 package com.projectsandbox.components.game.vehicle.ship;
 
+import com.projectsandbox.components.game.MapBoundsComponent;
 import com.projectsandbox.components.game.flare.FlareItem;
 import com.projectsandbox.components.game.forcefield.ForceFieldItem;
 import com.projectsandbox.components.game.jumpdrive.JumpDriveItem;
@@ -45,6 +46,8 @@ public class Fighter extends PlayerEntity
                 1.0f,       // Acceleration
                 0.2f        // Turning speed
         ));
+
+        components.add(new MapBoundsComponent());
 
         setMaxHealth(150.0f);
     }

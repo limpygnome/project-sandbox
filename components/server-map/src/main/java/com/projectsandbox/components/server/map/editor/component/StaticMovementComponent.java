@@ -8,12 +8,12 @@ import com.projectsandbox.components.server.entity.player.PlayerEntity;
 import com.projectsandbox.components.server.player.PlayerInfo;
 import com.projectsandbox.components.server.player.PlayerKeys;
 
-import java.io.Serializable;
-
 /**
- * Created by limpygnome on 16/08/16.
+ * Simple component to statically move around the map fast.
+ *
+ * Intended for map editing entities.
  */
-public class StaticMovementComponent implements Serializable, EntityComponent, LogicComponentEvent
+public class StaticMovementComponent implements EntityComponent, LogicComponentEvent
 {
     /* The amount of movement added during each cycle when keys are continuously held. */
     private static final float OFFSET_INCREMENT_PER_CYCLE = 0.5f;

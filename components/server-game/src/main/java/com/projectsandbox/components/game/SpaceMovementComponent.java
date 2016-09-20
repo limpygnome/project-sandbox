@@ -10,14 +10,11 @@ import com.projectsandbox.components.server.entity.physics.Vector2;
 import com.projectsandbox.components.server.entity.physics.collisions.map.CollisionMapResult;
 import com.projectsandbox.components.server.player.PlayerInfo;
 import com.projectsandbox.components.server.player.PlayerKeys;
-import com.projectsandbox.components.server.world.map.WorldMap;
-
-import java.io.Serializable;
 
 /**
- * Created by limpygnome on 14/04/16.
+ * Used to add space simulated movement to an entity.
  */
-public class SpaceMovementComponent implements Serializable, EntityComponent, LogicComponentEvent, CollisionMapComponentEvent
+public class SpaceMovementComponent implements EntityComponent, LogicComponentEvent, CollisionMapComponentEvent
 {
     private static final long serialVersionUID = 1L;
 
@@ -87,8 +84,6 @@ public class SpaceMovementComponent implements Serializable, EntityComponent, Lo
     @Override
     public void eventCollisionMap(Controller controller, Entity entity, CollisionMapResult collisionMapResult)
     {
-        WorldMap worldMap = entity.map;
-
         // Invert velocity
         VelocityComponent velocityComponent = (VelocityComponent) entity.components.fetchComponent(VelocityComponent.class);
 
@@ -97,9 +92,6 @@ public class SpaceMovementComponent implements Serializable, EntityComponent, Lo
             Vector2 velocity = velocityComponent.getVelocity();
             velocity.perp();
         }
-
-        // Make sure we're within map to avoid death
-        entity.positionNew.limit(0.0f, worldMap.getMaxX(), 0.0f, worldMap.getMaxY());
     }
 
 }

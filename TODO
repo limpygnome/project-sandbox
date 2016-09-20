@@ -13,6 +13,7 @@ map editor
 
 technical debt
 ===============
+- move player keys to use key based events, instead of logic checking - wastes a lot of CPU!
 - remove accessors from projectSandbox.rendering.core
 - move scripts in engine/rendering to rendering namespace
 - move death/kill and inventory item messages to clientside; perhaps unique 2-byte ID for messages in a giant file
