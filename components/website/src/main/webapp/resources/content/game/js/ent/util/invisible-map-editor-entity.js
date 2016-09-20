@@ -1,5 +1,4 @@
-
-game.entities.util.InvisibleMapEntity = function()
+game.entities.util.InvisibleMapEditorEntity = function()
 {
     Entity.call(this,
         {
@@ -12,4 +11,4 @@ game.entities.util.InvisibleMapEntity = function()
     this.setTexture("error");
 };
 
-game.entities.util.InvisibleMapEntity.inherits(Entity);
+game.entities.util.InvisibleMapEditorEntity.inherits(Entity);

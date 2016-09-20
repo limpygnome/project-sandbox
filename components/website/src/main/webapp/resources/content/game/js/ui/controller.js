@@ -83,6 +83,9 @@ game.ui.controller =
 
         // Reset UI
         this.reset();
+
+        // Invoke global event for newer modules
+        $(document).trigger("gameSetup");
     },
 
     renderAreaKeyUp: function(event)

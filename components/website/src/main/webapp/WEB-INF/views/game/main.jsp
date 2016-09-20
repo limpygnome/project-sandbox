@@ -79,6 +79,26 @@
                 </div>
             </div>
 
+            <div id="ps-map-editor" class="panel top">
+                <div>
+                    <div class="button map-reload">
+                        Reload
+                    </div>
+                    <div class="button map-save">
+                        Save
+                    </div>
+                    <div class="button map-clear">
+                        Clear
+                    </div>
+                </div>
+                <h1>
+                    Add Entity
+                </h1>
+                <div class="entities">
+                    Loading...
+                </div>
+            </div>
+
             <div id="ps-chat" class="panel top">
                 <div id="ps-chat-messages">
                     <p>

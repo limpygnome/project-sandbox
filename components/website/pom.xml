@@ -166,15 +166,16 @@
                                 <!--
                                     UI
                                 -->
-                                <cssSourceFile>game/css/ui/map.css</cssSourceFile>
                                 <cssSourceFile>game/css/ui/activity.css</cssSourceFile>
                                 <cssSourceFile>game/css/ui/chat.css</cssSourceFile>
-                                <cssSourceFile>game/css/ui/stats.css</cssSourceFile>
                                 <cssSourceFile>game/css/ui/health-bar.css</cssSourceFile>
                                 <cssSourceFile>game/css/ui/inventory.css</cssSourceFile>
+                                <cssSourceFile>game/css/ui/map.css</cssSourceFile>
+                                <cssSourceFile>game/css/ui/map-editor.css</cssSourceFile>
                                 <cssSourceFile>game/css/ui/options.css</cssSourceFile>
                                 <cssSourceFile>game/css/ui/score.css</cssSourceFile>
                                 <cssSourceFile>game/css/ui/scoreboard.css</cssSourceFile>
+                                <cssSourceFile>game/css/ui/stats.css</cssSourceFile>
 
                                 <!--
                                     Font Icons
@@ -290,6 +291,7 @@
                                 <jsSourceFile>game/js/entity-factory.js</jsSourceFile>
                                 <jsSourceFile>game/js/ui/controller.js</jsSourceFile>
                                 <jsSourceFile>game/js/ui/map.js</jsSourceFile>
+                                <jsSourceFile>game/js/ui/map-editor.js</jsSourceFile>
 
                                 <!--
                                     Game: Living

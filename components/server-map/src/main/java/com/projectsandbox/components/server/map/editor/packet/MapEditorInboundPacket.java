@@ -51,7 +51,7 @@ public class MapEditorInboundPacket extends AuthenticatedInboundPacketHandler
 
             switch (action)
             {
-                case "map-reset":
+                case "map-reload":
 
                     break;
                 case "map-save":
@@ -59,11 +59,8 @@ public class MapEditorInboundPacket extends AuthenticatedInboundPacketHandler
                 case "map-clear":
                     actionClearMap(map);
                     break;
-                case "entity-add":
-
-                    break;
-                case "entity-remove":
-
+                case "entity-select":
+                    // set type id on invisible map entity, so that when it adds entity, it uses the type set by this :)
                     break;
             }
         }
@@ -93,7 +90,7 @@ public class MapEditorInboundPacket extends AuthenticatedInboundPacketHandler
         return auth;
     }
 
-    private void actionResetMap()
+    private void actionReloadMap()
     {
     }
 

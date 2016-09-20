@@ -1,0 +1,35 @@
+#projectsandbox #ps-ui #ps-map-editor
+{
+    position: fixed;
+    width: 24em;
+    top: 8em;
+    left: 1.5em;
+}
+
+#projectsandbox #ps-ui #ps-map-editor h1
+{
+    font-size: 1.4em;
+    padding: 0.2em;
+    margin: 0.2em;
+}
+
+#projectsandbox #ps-ui #ps-map-editor .button
+{
+    display: inline-block;
+    background: #333;
+    padding: 0.8em 0.5em;
+    margin: 0.4em;
+    border-radius: 0.6em;
+}
+
+#projectsandbox #ps-ui #ps-map-editor .button:hover,
+#projectsandbox #ps-ui #ps-map-editor .button:focus
+{
+    background: #666;
+    cursor: pointer;
+}
+
+#projectsandbox #ps-ui #ps-map-editor .entities
+{
+    padding: 0.8em;
+}

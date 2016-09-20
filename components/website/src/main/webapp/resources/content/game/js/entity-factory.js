@@ -1,73 +1,63 @@
-game.entityFactory = {
+game.entityFactory = (function(){
 
-    create : function (typeId)
+    // typeId (int) -> entity prototype
+    var typeMap = new Map();
+
+    $(document).on("ready", function() {
+        // Add types to map - this needs to be manually maintained for now...
+        typeMap.set(0, Entity);
+
+        // -- Living
+        typeMap.set(1, Player);
+        typeMap.set(500, Sentry);
+        typeMap.set(510, Pedestrian);
+        typeMap.set(600, Rocket);
+        typeMap.set(610, game.entities.world.Flare);
+
+        // -- Vehicles
+        typeMap.set(20, IceCreamVan);
+        typeMap.set(21, RocketCar);
+        typeMap.set(22, Bus);
+
+        // -- Ships
+        typeMap.set(200, Fighter);
+        typeMap.set(210, Destroyer);
+
+        // -- Pickups
+        typeMap.set(1201, HealthPickup);
+
+        // -- Environment
+        typeMap.set(4000, game.entities.world.Blackhole);
+
+        // -- Utility
+        typeMap.set(901, game.entities.util.InvisibleMapEditorEntity);
+    });
+
+    var create = function(typeId)
     {
-        var entity;
+        var instance = null;
 
-        switch (typeId)
+        instance = new Entity();
+        return instance;
+
+        // Fetch type from map
+        var type = typeMap.get(typeId);
+
+        if (type != null)
         {
-            case 0:
-                entity = new Entity();
-                break;
-
-            // Living
-            case 1:
-                entity = new Player();
-                break;
-            case 500:
-                entity = new Sentry();
-                break;
-            case 510:
-                entity = new Pedestrian();
-                break;
-            case 600:
-                entity = new Rocket();
-                break;
-            case 610:
-                entity = new game.entities.world.Flare();
-                break;
-
-            // Vehicles
-            case 20:
-                entity = new IceCreamVan();
-                break;
-            case 21:
-                entity = new RocketCar();
-                break;
-            case 22:
-                entity = new Bus();
-                break;
-
-            // Ships
-            case 200:
-                entity = new Fighter();
-                break;
-            case 210:
-                entity = new Destroyer();
-                break;
-
-            // Pickups
-            case 1201:
-                entity = new HealthPickup();
-                break;
-
-            // Environment
-            case 4000:
-                entity = new game.entities.world.Blackhole();
-                break;
-
-            // Utility
-            case 901:
-                entity = new game.entities.util.InvisibleMapEntity();
-                break;
-
-            default:
-                entity = null;
-                console.error("engine/network/entityPool - unhandled entity type id: " + typeId);
-                break;
+            // Create new instance
+            instance = type();
+        }
+        else
+        {
+            console.error("game/entityFactory - unhandled entity type id: " + typeId);
         }
 
-        return entity;
-    }
+        return instance;
+    };
 
-};
+    return {
+        create  : create
+    };
+
+})();

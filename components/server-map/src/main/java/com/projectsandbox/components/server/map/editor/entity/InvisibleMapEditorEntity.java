@@ -29,6 +29,8 @@ public class InvisibleMapEditorEntity extends PlayerEntity
 
         components  .add(new StaticMovementComponent())
                     .add(new MapBoundsComponent());
+
+        // add new editor component -> select (spacebar) -> send custom packet to client to show data for entity, another key removes entity
     }
 
     @Override
