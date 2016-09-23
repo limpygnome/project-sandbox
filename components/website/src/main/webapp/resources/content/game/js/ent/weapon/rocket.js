@@ -26,6 +26,8 @@ function Rocket()
     );
 }
 
+Rocket.typeId = 600;
+Rocket.title = "Rocket";
 Rocket.inherits(Entity);
 
 Rocket.prototype.logic = function()

@@ -14,6 +14,7 @@ import com.projectsandbox.components.server.network.packet.PacketData;
 import com.projectsandbox.components.server.player.PlayerInfo;
 import com.projectsandbox.components.server.util.CustomMath;
 import com.projectsandbox.components.server.Controller;
+import com.projectsandbox.components.server.world.map.MapEntKV;
 import com.projectsandbox.components.server.world.map.WorldMap;
 import com.projectsandbox.components.server.world.spawn.Spawn;
 import org.apache.logging.log4j.LogManager;
@@ -120,6 +121,11 @@ public strictfp abstract class Entity implements Serializable
         this.maxHealth = 0.0f;
 
         this.physicsStatic = false;
+    }
+
+    public void applyMapKeyValues(MapEntKV mapEntKV)
+    {
+        // Nothing by default...
     }
     
     public synchronized void rotation(float radians)
@@ -548,7 +554,7 @@ public strictfp abstract class Entity implements Serializable
     public synchronized void eventDeath(Controller controller, AbstractKiller killer)
     {
         // Respawn the entity
-        controller.respawnManager.respawn(new EntityPendingRespawn(controller, this, DEFAULT_RESPAWN_TIME_MS));
+        controller.respawnManager.respawn(new EntityPendingRespawn(controller, map, this, DEFAULT_RESPAWN_TIME_MS));
 
         // Invoke callbacks
         Set<DeathComponentEvent> callbacks = components.fetch(DeathComponentEvent.class);

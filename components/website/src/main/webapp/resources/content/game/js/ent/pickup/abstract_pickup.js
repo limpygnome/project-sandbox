@@ -1,7 +1,8 @@
-function AbstractPickup(width, height, depth)
+function AbstractPickup(title, width, height, depth)
 {
     Entity.call(this,
         {
+            title: title,
             model: "3d-cube",
             width: width,
             height: height,

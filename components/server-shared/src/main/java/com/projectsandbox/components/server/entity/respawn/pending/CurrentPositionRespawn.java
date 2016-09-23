@@ -2,7 +2,7 @@ package com.projectsandbox.components.server.entity.respawn.pending;
 
 import com.projectsandbox.components.server.Controller;
 import com.projectsandbox.components.server.entity.Entity;
-import com.projectsandbox.components.server.entity.respawn.PendingRespawn;
+import com.projectsandbox.components.server.world.map.WorldMap;
 import com.projectsandbox.components.server.world.spawn.Spawn;
 
 /**
@@ -12,14 +12,14 @@ public class CurrentPositionRespawn extends PendingRespawn
 {
     private Spawn spawn;
 
-    public CurrentPositionRespawn(Controller controller, Entity entity)
+    public CurrentPositionRespawn(Controller controller, WorldMap map, Entity entity)
     {
-        this(controller, entity, 0);
+        this(controller, map, entity, 0);
     }
 
-    public CurrentPositionRespawn(Controller controller, Entity entity, long respawnDelay)
+    public CurrentPositionRespawn(Controller controller, WorldMap map, Entity entity, long respawnDelay)
     {
-        super(controller, entity, respawnDelay);
+        super(controller, map, entity, respawnDelay);
 
         this.spawn = new Spawn(entity.positionNew.x, entity.positionNew.y, entity.rotation);
     }

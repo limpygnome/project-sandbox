@@ -2,6 +2,7 @@ package com.projectsandbox.components.server;
 
 import com.projectsandbox.components.server.effect.EffectsManager;
 import com.projectsandbox.components.server.entity.EntityManager;
+import com.projectsandbox.components.server.entity.EntityTypeMappingStoreService;
 import com.projectsandbox.components.server.entity.PlayerEntityService;
 import com.projectsandbox.components.server.entity.ai.ArtificialIntelligenceManager;
 import com.projectsandbox.components.server.entity.respawn.RespawnManager;
@@ -60,6 +61,8 @@ public class Controller
     public EffectsManager effectsManager;
     @Autowired
     public ArtificialIntelligenceManager artificialIntelligenceManager;
+    @Autowired
+    public EntityTypeMappingStoreService entityTypeMappingStoreService;
 
     @Autowired
     private List<EventServerPreStartup> eventServerPreStartups;

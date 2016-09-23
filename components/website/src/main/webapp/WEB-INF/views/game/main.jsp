@@ -94,6 +94,9 @@
                 <h1>
                     Add Entity
                 </h1>
+                <p>
+                    space = action, 1 = add ent mode, 2 = remove ent mode
+                </p>
                 <div class="entities">
                     Loading...
                 </div>

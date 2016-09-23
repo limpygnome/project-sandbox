@@ -58,29 +58,6 @@ public class EntitiesMapComponent implements MapComponent
 
     protected void loadEntity(Controller controller, WorldMap map, JSONObject entData) throws IOException
     {
-        // Fetch ent type - either by ID or name
-        Class entClass;
-
-        if (entData.containsKey("typeName"))
-        {
-            entClass = entityTypeMappingStoreService.getEntityClassByTypeName((String) entData.get("typeName"));
-        }
-        else if (entData.containsKey("typeId"))
-        {
-            entClass = entityTypeMappingStoreService.getEntityClassByTypeId((short) (long) entData.get("typeId"));
-        }
-        else
-        {
-            throw new RuntimeException("No type defined for entity in map file");
-        }
-
-        // Check class was found
-        if (entClass == null)
-        {
-            throw new IOException("Entity type not found - typeID: " + entData.get("typeId") + ", typeName: " +
-                    entData.get("typeName"));
-        }
-
         // Parse faction
         short faction = (short) (long) entData.get("faction");
 
@@ -100,66 +77,30 @@ public class EntitiesMapComponent implements MapComponent
             mapEntKV = null;
         }
 
-        // Create new instances of type
-        loadEntityInstance(controller, map, entClass, mapEntKV, faction, spawn);
-    }
-
-    private void loadEntityInstance(Controller controller, WorldMap map, Class entClass, MapEntKV mapEntKV, short faction, Spawn spawn) throws IOException
-    {
-        boolean useKv = (mapEntKV != null);
-
-        // Fetch constructor
-        Constructor entConstructor;
-
-        try
-        {
-            if (useKv)
-            {
-                entConstructor = entClass.getConstructor(WorldMap.class, MapEntKV.class);
-            }
-            else
-            {
-                entConstructor = entClass.getConstructor(WorldMap.class);
-            }
-        }
-        catch (NoSuchMethodException e)
-        {
-            if (mapEntKV != null)
-            {
-                throw new RuntimeException("Entity constructor missing for KV loading from map - class: " + entClass.getName(), e);
-            }
-            else
-            {
-                throw new RuntimeException("Entity class does not contain default constructor - class: " + entClass.getName(), e);
-            }
-        }
-
-        // Create ents
+        // Create instance
         Entity entity;
 
-        try
+        if (entData.containsKey("typeName"))
         {
-            // Create instance
-            if (useKv)
-            {
-                entity = (Entity) entConstructor.newInstance(map, mapEntKV);
-            }
-            else
-            {
-                entity = (Entity) entConstructor.newInstance(map);
-            }
+            String typeName = (String) entData.get("typeName");
+            entity = entityTypeMappingStoreService.createByTypeName(typeName, mapEntKV);
+        }
+        else if (entData.containsKey("typeId"))
+        {
+            short typeId = (short) (long) entData.get("typeId");
+            entity = entityTypeMappingStoreService.createByTypeId(typeId, mapEntKV);
+        }
+        else
+        {
+            throw new RuntimeException("No type defined for entity in map file");
+        }
 
-            // Set parameters
-            entity.faction = faction;
-            entity.spawn = spawn;
-        }
-        catch (Exception e)
-        {
-            throw new IOException("Unable to create entity instance - class: " + entClass.getName(), e);
-        }
+        // Set parameters
+        entity.faction = faction;
+        entity.spawn = spawn;
 
         // Add to world
-        respawnManager.respawn(new EntityPendingRespawn(controller, entity));
+        respawnManager.respawn(new EntityPendingRespawn(controller, map, entity));
     }
 
     private MapEntKV loadEntityProperties(JSONObject rawProperties)

@@ -2,7 +2,7 @@ package com.projectsandbox.components.server.entity.respawn.pending;
 
 import com.projectsandbox.components.server.Controller;
 import com.projectsandbox.components.server.entity.Entity;
-import com.projectsandbox.components.server.entity.respawn.PendingRespawn;
+import com.projectsandbox.components.server.world.map.WorldMap;
 import com.projectsandbox.components.server.world.spawn.FactionSpawns;
 import com.projectsandbox.components.server.world.spawn.Spawn;
 import org.apache.logging.log4j.LogManager;
@@ -18,14 +18,14 @@ public class EntityPendingRespawn extends PendingRespawn
 {
     private final static Logger LOG = LogManager.getLogger(EntityPendingRespawn.class);
 
-    public EntityPendingRespawn(Controller controller, Entity entity)
+    public EntityPendingRespawn(Controller controller, WorldMap map, Entity entity)
     {
-        super(controller, entity, 0);
+        super(controller, map, entity, 0);
     }
 
-    public EntityPendingRespawn(Controller controller, Entity entity, long respawnDelay)
+    public EntityPendingRespawn(Controller controller, WorldMap map, Entity entity, long respawnDelay)
     {
-        super(controller, entity, respawnDelay);
+        super(controller, map, entity, respawnDelay);
     }
 
     @Override

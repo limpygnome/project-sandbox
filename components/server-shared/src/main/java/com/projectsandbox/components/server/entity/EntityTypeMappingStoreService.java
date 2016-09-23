@@ -4,9 +4,14 @@ import com.projectsandbox.components.server.entity.annotation.EntityType;
 import com.projectsandbox.components.server.util.Annotations;
 import com.projectsandbox.components.server.util.ClassHelper;
 import com.projectsandbox.components.server.util.counters.AnnotationInfo;
+import com.projectsandbox.components.server.world.map.MapEntKV;
+import com.projectsandbox.components.server.world.map.WorldMap;
+import com.sun.xml.internal.bind.v2.runtime.reflect.opt.Const;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Modifier;
 import java.util.HashMap;
 import java.util.List;
@@ -79,14 +84,47 @@ public class EntityTypeMappingStoreService
         LOG.debug("loaded {} imp of entities", typeIdToClass.size());
     }
 
-    public Class getEntityClassByTypeId(short typeId)
+    public Entity createByTypeId(short typeId, MapEntKV entityData)
     {
-        return typeIdToClass.get(typeId);
+        Class<? extends Entity> type = typeIdToClass.get(typeId);
+
+        if (type == null)
+        {
+            throw new RuntimeException("Entity type ID does not exist - " + typeId);
+        }
+
+        return createInstance(type, entityData);
     }
 
-    public Class getEntityClassByTypeName(String typeName)
+    public Entity createByTypeName(String typeName, MapEntKV entityData)
     {
-        return typeNameToClass.get(typeName);
+        Class<? extends Entity> type = typeNameToClass.get(typeName);
+
+        if (type == null)
+        {
+            throw new RuntimeException("Entity type name does not exist - " + typeName);
+        }
+
+        return createInstance(type, entityData);
+    }
+
+    private Entity createInstance(Class<? extends Entity> type, MapEntKV entityData)
+    {
+        try
+        {
+            Entity entity = type.newInstance();
+
+            if (entityData != null)
+            {
+                entity.applyMapKeyValues(entityData);
+            }
+
+            return entity;
+        }
+        catch (IllegalAccessException | InstantiationException e)
+        {
+            throw new RuntimeException("Failed to create entity - type: " + type.getName(), e);
+        }
     }
 
 }

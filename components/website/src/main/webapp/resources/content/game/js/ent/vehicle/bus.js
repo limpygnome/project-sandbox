@@ -2,6 +2,7 @@ function Bus()
 {
     Entity.call(this,
         {
+            title: "Bus",
             model: "3d-cube",
             width: 28.0,
             height: 96.0,
@@ -30,6 +31,8 @@ function Bus()
     );
 }
 
+Bus.typeId = 22;
+Bus.title = "Bus";
 Bus.inherits(Entity);
 
 Bus.prototype.logic = function()

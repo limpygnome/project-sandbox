@@ -4,6 +4,7 @@ import com.projectsandbox.components.server.Controller;
 import com.projectsandbox.components.server.entity.Entity;
 import com.projectsandbox.components.server.entity.EntityManager;
 import com.projectsandbox.components.server.entity.player.PlayerEntity;
+import com.projectsandbox.components.server.entity.respawn.pending.PendingRespawn;
 import com.projectsandbox.components.server.service.EventMapLogicCycleService;
 import com.projectsandbox.components.server.world.map.MapService;
 import com.projectsandbox.components.server.world.map.WorldMap;
@@ -18,8 +19,6 @@ import java.util.LinkedList;
 
 /**
  * A layer above {@link EntityManager} for respawning an entity with additional params.
- *
- * TODO: add support for multiple maps; this should be a single instance for all maps
  */
 @Component
 public class RespawnManager implements EventMapLogicCycleService
@@ -58,7 +57,8 @@ public class RespawnManager implements EventMapLogicCycleService
 
     private synchronized void addToInternalPendingRespawnCollectionSynchronized(PendingRespawn pendingRespawn)
     {
-        RespawnMapData respawnMapData = pendingRespawn.entity.map.getRespawnMapData();
+        WorldMap map = pendingRespawn.map;
+        RespawnMapData respawnMapData = map.getRespawnMapData();
 
         // Add at suitable index based on time to respawn, so that items with shortest time are at the front
         // for efficiency (saves having to iterate the entire list, can just check top)

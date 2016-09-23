@@ -2,6 +2,7 @@ function Player()
 {
     Entity.call(this,
         {
+            title: "Player",
             model: "2d-rect",
             width: 16.0,
             height: 20.0
@@ -28,6 +29,8 @@ function Player()
     );
 }
 
+Player.typeId = 1;
+Player.title = "Player";
 Player.inherits(Entity);
 
 Player.prototype.logic = function()

@@ -2,6 +2,7 @@ function Destroyer()
 {
     Entity.call(this,
         {
+            title: "Destroyer",
             model: "2d-rect",
             width: 167.0,
             height: 231.0
@@ -39,6 +40,8 @@ function Destroyer()
     );
 }
 
+Destroyer.typeId = 210;
+Destroyer.title = "Destroyer";
 Destroyer.inherits(Entity);
 
 Destroyer.prototype.logic = function()

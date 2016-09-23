@@ -1,7 +1,8 @@
-package com.projectsandbox.components.server.entity.respawn;
+package com.projectsandbox.components.server.entity.respawn.pending;
 
 import com.projectsandbox.components.server.Controller;
 import com.projectsandbox.components.server.entity.Entity;
+import com.projectsandbox.components.server.world.map.WorldMap;
 import com.projectsandbox.components.server.world.spawn.Spawn;
 
 import java.io.Serializable;
@@ -13,16 +14,18 @@ public abstract class PendingRespawn implements Serializable
 {
     private static final long serialVersionUID = 1L;
 
+    public final WorldMap map;
     public final Entity entity;
     public final long gameTimeRespawn;
 
-    protected PendingRespawn(Controller controller, Entity entity)
+    protected PendingRespawn(Controller controller, WorldMap map, Entity entity)
     {
-        this(controller, entity, 0);
+        this(controller, map, entity, 0);
     }
 
-    protected PendingRespawn(Controller controller, Entity entity, long respawnDelay)
+    protected PendingRespawn(Controller controller, WorldMap map, Entity entity, long respawnDelay)
     {
+        this.map = map;
         this.entity = entity;
         long gameTime = controller.gameTime();
         this.gameTimeRespawn = gameTime + respawnDelay;

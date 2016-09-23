@@ -110,6 +110,8 @@ public class QuadTree implements Serializable
     /**
      * Fetches entities which may be able to collide with the provided entity.
      *
+     * These will be entities within the same partitions.
+     *
      * @param entity the entity
      * @return list of possible entities
      */

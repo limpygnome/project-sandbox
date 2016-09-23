@@ -2,6 +2,7 @@ function Fighter()
 {
     Entity.call(this,
         {
+            title: "Fighter",
             model: "2d-rect",
             width: 45.0,
             height: 50.0
@@ -39,6 +40,8 @@ function Fighter()
     );
 }
 
+Fighter.typeId = 200;
+Fighter.title = "Fighter";
 Fighter.inherits(Entity);
 
 Fighter.prototype.logic = function()

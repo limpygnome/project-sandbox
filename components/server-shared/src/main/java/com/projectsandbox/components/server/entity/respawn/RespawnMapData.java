@@ -1,5 +1,6 @@
 package com.projectsandbox.components.server.entity.respawn;
 
+import com.projectsandbox.components.server.entity.respawn.pending.PendingRespawn;
 import com.projectsandbox.components.server.world.spawn.FactionSpawns;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;

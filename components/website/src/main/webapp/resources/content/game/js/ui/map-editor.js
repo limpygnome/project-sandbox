@@ -22,9 +22,17 @@ game.ui.mapEditor = (function(){
     };
 
     var setupEntitiesBox = function() {
-        // Fetch all entities from entity-factory
+        // Clear content
+        $("#ps-map-editor .entities").html("");
 
-        // Populate entities box with element to select them
+        // Fetch all entities from entity-factory
+        var types = game.entityFactory.typeMap;
+
+        // Populate entities box with types
+        types.forEach(function(type) {
+            // Add element to box
+            $("#ps-map-editor .entities").append("<span data-type-id='" + type.typeId + "' class='button'>" + type.title + "</span>");
+        });
     };
 
     var setup = function() {

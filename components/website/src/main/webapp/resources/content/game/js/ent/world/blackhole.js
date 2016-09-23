@@ -1,16 +1,22 @@
-game.entities.world.Blackhole = function()
 {
-    Entity.call(this,
-        {
-            model: "2d-rect",
-            width: 4096.0,
-            height: 4096.0
-        }
-    );
+    var entity = function()
+    {
+        Entity.call(this,
+            {
+                title: "Blackhole",
+                model: "2d-rect",
+                width: 4096.0,
+                height: 4096.0
+            }
+        );
 
-    this.setTexture("error");
-    this.z = -0.6;
-};
+        this.setTexture("error");
+        this.z = -0.6;
+    };
 
-game.entities.world.Blackhole.inherits(Entity);
+    entity.typeId = 4000;
+    entity.title = "Blackhole";
+    entity.inherits(Entity);
 
+    game.entities.world.Blackhole = entity;
+}
