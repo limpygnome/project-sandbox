@@ -18,14 +18,19 @@ public class HealthPickup extends AbstractPickup
 {
     private float healthAmount;
 
-    public HealthPickup(WorldMap map, MapEntKV mapEntKV)
+    public HealthPickup()
     {
         super(
-                map,
                 HEALTH_WIDTH,
-                HEALTH_HEIGHT,
-                mapEntKV.getLong("pickup.respawn_delay")
+                HEALTH_HEIGHT
         );
+    }
+
+    @Override
+    public void applyMapKeyValues(MapEntKV mapEntKV)
+    {
+        long respawnDelay = mapEntKV.getLong("pickup.respawn_delay");
+        setRespawnDelay(respawnDelay);
 
         this.healthAmount = mapEntKV.getFloat("health_pickup.health");
     }
@@ -65,4 +70,5 @@ public class HealthPickup extends AbstractPickup
     {
         return "Health Pickup";
     }
+
 }

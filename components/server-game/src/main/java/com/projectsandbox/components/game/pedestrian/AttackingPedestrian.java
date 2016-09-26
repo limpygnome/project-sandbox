@@ -12,10 +12,9 @@ import com.projectsandbox.components.server.constant.entity.PedestrianConstants;
 public class AttackingPedestrian extends AbstractPedestrian
 {
 
-    public AttackingPedestrian(WorldMap map)
+    public AttackingPedestrian()
     {
         super(
-                map,
                 PedestrianConstants.ENT_WIDTH,
                 PedestrianConstants.ENT_HEIGHT,
                 PedestrianConstants.ATTACKING_PED_HEALTH,

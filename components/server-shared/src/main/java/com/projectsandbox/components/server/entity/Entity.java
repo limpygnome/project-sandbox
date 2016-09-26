@@ -92,9 +92,9 @@ public strictfp abstract class Entity implements Serializable
      */
     public boolean physicsIntangible;
 
-    public Entity(WorldMap map, short width, short height)
+    public Entity(short width, short height)
     {
-        this.map = map;
+        this.map = null;
         this.id = null;
         this.faction = DEFAULT_FACTION;
         this.spawn = null;

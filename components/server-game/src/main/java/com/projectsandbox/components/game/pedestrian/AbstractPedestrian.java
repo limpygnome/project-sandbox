@@ -54,11 +54,11 @@ public abstract class AbstractPedestrian extends Entity
     /* Cached calculation to indicate if this pedestrian can even attack. */
     private boolean flagCanAttack;
 
-    public AbstractPedestrian(WorldMap map, short width, short height, float health, Class[] inventoryItems,
+    public AbstractPedestrian(short width, short height, float health, Class[] inventoryItems,
                               float engageDistance,  float followSpeed, float followDistance, float attackDistance,
                               float attackRotationNoise, IdleMode idleMode)
     {
-        super(map, width, height);
+        super(width, height);
 
         setMaxHealth(health);
 

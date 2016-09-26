@@ -70,7 +70,7 @@ public class FlareItem extends AbstractWeaponItem
             Flare flare;
             for (int i = 0; i < flares; i++)
             {
-                flare = new Flare(map, lifespan);
+                flare = new Flare(lifespan);
                 fireFlare(controller, respawnManager, flare, parent, positionBehind);
             }
         }
@@ -92,7 +92,7 @@ public class FlareItem extends AbstractWeaponItem
         flare.components.add(ownershipComponent);
 
         respawnManager.respawn(new PositionPendingRespawn(
-                controller, flare, positionBehind.x, positionBehind.y, 0.0f
+                controller, parent.map, flare, positionBehind.x, positionBehind.y, 0.0f
         ));
     }
 

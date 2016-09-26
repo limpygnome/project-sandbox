@@ -29,9 +29,9 @@ public class Flare extends Entity
     private long gameTimeExpires;
     private long lifespan;
 
-    public Flare(WorldMap map, long lifespan)
+    public Flare(long lifespan)
     {
-        super(map, (short) 32, (short) 32);
+        super((short) 32, (short) 32);
 
         setMaxHealth(1);
 

@@ -36,6 +36,7 @@ public class PlayerEntityService
      */
     public PlayerEntity createPlayer(WorldMap worldMap, PlayerInfo playerInfo, boolean forceCreate)
     {
+        // TODO: all of this map logic is flawed / outdated, needs changing...
         try
         {
             GameSession gameSession = playerInfo.session;
@@ -67,9 +68,6 @@ public class PlayerEntityService
                         // Set map
                         playerEntity.map = entityMap;
 
-                        // Set current players
-                        playerEntity.setPlayers(new PlayerInfo[]{playerInfo});
-
                         // Set flag to indicate this entity has been created from persistence
                         playerEntity.setRespawnPersistedPlayer(true);
                     }
@@ -87,10 +85,12 @@ public class PlayerEntityService
             // Create default entity if no entity yet
             if (playerEntity == null)
             {
-                // Create default entity for map
-                Class clazz = worldMap.getProperties().getDefaultEntityType();
-                playerEntity = createFromClass(worldMap, clazz, playerInfo);
+                String defaultEntityTypeName = worldMap.getProperties().getDefaultEntityTypeName();
+                playerEntity = (PlayerEntity) entityTypeMappingStoreService.createByTypeName(defaultEntityTypeName, null);
             }
+
+            // Set the current player
+            playerEntity.setPlayer(playerInfo, 0);
 
             // Set flag to allow persistence of entity
             playerEntity.setPersistToSession(true);

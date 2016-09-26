@@ -2,6 +2,7 @@ package com.projectsandbox.components.server.map.component.properties;
 
 import com.projectsandbox.components.server.Controller;
 import com.projectsandbox.components.server.entity.EntityTypeMappingStoreService;
+import com.projectsandbox.components.server.entity.player.PlayerEntity;
 import com.projectsandbox.components.server.world.map.MapComponent;
 import com.projectsandbox.components.server.world.map.WorldMap;
 import com.projectsandbox.components.server.world.map.WorldMapProperties;
@@ -32,14 +33,19 @@ public class GeneralPropertiesMapComponent implements MapComponent
 
         // -- Read type and fetch from ent mappings
         String entityTypeName = (String) rawProperties.get("defaultPlayerEntity");
-        Class clazz = entityTypeMappingStoreService.getEntityClassByTypeName(entityTypeName);
 
-        if (clazz == null)
+        Class entityType = entityTypeMappingStoreService.getClassByTypeName(entityTypeName);
+        if (entityType == null)
         {
             throw new RuntimeException("Unable to use '" + entityTypeName + "' as default player entity, type does not exist - map id: " + map.getMapId());
         }
+        else if (!PlayerEntity.class.isAssignableFrom(entityType))
+        {
+            throw new RuntimeException("Default player entity must be assignable from PlayerEntity type - map id: " +
+                    map.getMapId() + ", typeName: " + entityTypeName + ", class: " + entityType.getName());
+        }
 
-        properties.setDefaultEntityType(clazz);
+        properties.setDefaultEntityTypeName(entityTypeName);
 
         // Set map with properties loaded
         map.setProperties(properties);

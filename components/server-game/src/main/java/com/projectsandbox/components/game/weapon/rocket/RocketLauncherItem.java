@@ -8,6 +8,7 @@ import com.projectsandbox.components.server.entity.respawn.pending.CurrentPositi
 import com.projectsandbox.components.server.inventory.annotation.InventoryItemTypeId;
 import com.projectsandbox.components.server.inventory.InventoryInvokeType;
 import com.projectsandbox.components.server.player.PlayerInfo;
+import com.projectsandbox.components.server.world.map.WorldMap;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -73,11 +74,12 @@ public class RocketLauncherItem extends AbstractWeaponItem
     private void fireRocket(Controller controller, PlayerInfo playerInfoOwner, Entity entityOwner, Vector2 offset)
     {
         // Create entity and put in front of owner/parent entity
-        Entity rpg = new Rocket(entityOwner.map, controller, playerInfoOwner);
+        Entity rpg = new Rocket(controller, playerInfoOwner);
         rpg.projectInFrontOfEntity(entityOwner, ROCKET_LAUNCH_SPACING, offset);
 
         // Add rocket to world
-        controller.respawnManager.respawn(new CurrentPositionRespawn(controller, rpg));
+        WorldMap map = entityOwner.map;
+        controller.respawnManager.respawn(new CurrentPositionRespawn(controller, map, rpg));
     }
 
     @Override

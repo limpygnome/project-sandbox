@@ -298,7 +298,7 @@ public class PlayerService implements EventLogicCycleService, IdCounterConsumer
             Entity entityPlayer = playerEntityService.createPlayer(map, playerInfo, false);
 
             // Spawn the player
-            respawnManager.respawn(new EntityPendingRespawn(controller, entityPlayer));
+            respawnManager.respawn(new EntityPendingRespawn(controller, map, entityPlayer));
 
             // Send map data
             packetService.send(playerInfo, map.getPacket());

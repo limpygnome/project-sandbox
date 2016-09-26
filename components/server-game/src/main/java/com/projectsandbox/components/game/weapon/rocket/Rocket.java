@@ -29,9 +29,10 @@ public class Rocket extends Entity
     private long gameTimeCreated;
     private boolean exploded;
 
-    public Rocket(WorldMap map, Controller controller, PlayerInfo playerInfoOwner, float initialSpeed)
+    // TODO: review initialSpeed
+    public Rocket(Controller controller, PlayerInfo playerInfoOwner, float initialSpeed)
     {
-        super(map, (short) 9, (short) 12);
+        super((short) 9, (short) 12);
 
         this.gameTimeCreated = controller.gameTime();
         this.exploded = false;
@@ -49,9 +50,9 @@ public class Rocket extends Entity
      * @param controller
      * @param playerInfo Can be null
      */
-    public Rocket(WorldMap map, Controller controller, PlayerInfo playerInfo)
+    public Rocket(Controller controller, PlayerInfo playerInfo)
     {
-        this(map, controller, playerInfo, ROCKET_SPEED_STEP);
+        this(controller, playerInfo, ROCKET_SPEED_STEP);
     }
 
     @Override

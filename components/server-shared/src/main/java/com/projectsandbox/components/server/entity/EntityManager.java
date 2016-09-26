@@ -38,18 +38,28 @@ public class EntityManager implements EventMapLogicCycleService
 
     public boolean add(Entity entity)
     {
-        WorldMap map = entity.map;
-        EntityMapData mapData = map.getEntityMapData();
-        return mapData.add(entity);
+        if (entity.map != null)
+        {
+            WorldMap map = entity.map;
+            EntityMapData mapData = map.getEntityMapData();
+            return mapData.add(entity);
+        }
+        else
+        {
+            return false;
+        }
     }
 
     public void remove(Entity entity)
     {
-        WorldMap map = entity.map;
-        EntityMapData mapData = map.getEntityMapData();
+        if (entity.map != null)
+        {
+            WorldMap map = entity.map;
+            EntityMapData mapData = map.getEntityMapData();
 
-        // Remove from entities
-        mapData.remove(controller, entity);
+            // Remove from entities
+            mapData.remove(controller, entity);
+        }
     }
 
     @Override

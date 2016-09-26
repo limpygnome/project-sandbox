@@ -84,6 +84,11 @@ public class EntityTypeMappingStoreService
         LOG.debug("loaded {} imp of entities", typeIdToClass.size());
     }
 
+    public Class getClassByTypeName(String typeName)
+    {
+        return typeNameToClass.get(typeName);
+    }
+
     public Entity createByTypeId(short typeId, MapEntKV entityData)
     {
         Class<? extends Entity> type = typeIdToClass.get(typeId);

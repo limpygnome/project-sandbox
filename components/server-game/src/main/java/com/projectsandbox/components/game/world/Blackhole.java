@@ -13,9 +13,9 @@ import com.projectsandbox.components.server.world.map.WorldMap;
 public class Blackhole extends Entity
 {
 
-    public Blackhole(WorldMap map)
+    public Blackhole()
     {
-        super(map, (short) 4096, (short) 4096);
+        super((short) 4096, (short) 4096);
 
         this.physicsIntangible = true;
         this.physicsStatic = true;

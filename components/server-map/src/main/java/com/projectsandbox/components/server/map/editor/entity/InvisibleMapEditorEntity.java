@@ -14,15 +14,14 @@ import com.projectsandbox.components.server.world.map.WorldMap;
 public class InvisibleMapEditorEntity extends PlayerEntity
 {
 
-    public InvisibleMapEditorEntity(WorldMap map, PlayerInfo[] players)
+    public InvisibleMapEditorEntity()
     {
         super(
-                map,
                 (short) 16,
-                (short) 16,
-                players,
-                null
+                (short) 16
         );
+
+        setMaxPlayers(1);
 
         this.physicsIntangible = true;
         this.physicsStatic = true;

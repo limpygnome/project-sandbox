@@ -36,9 +36,9 @@ public class Sentry extends Entity
     public float defaultRotation;
     private long lastFired;
 
-    public Sentry(WorldMap map)
+    public Sentry()
     {
-        super(map, (short) 32, (short) 32);
+        super((short) 32, (short) 32);
 
         this.defaultRotation = 0.0f;
         this.lastFired = 0;

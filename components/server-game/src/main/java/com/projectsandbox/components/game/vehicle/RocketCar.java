@@ -16,15 +16,14 @@ import com.projectsandbox.components.server.world.spawn.Spawn;
 public class RocketCar extends PlayerEntity
 {
 
-    public RocketCar(WorldMap map, PlayerInfo[] players)
+    public RocketCar()
     {
         super(
-                map,
                 (short) 24,
-                (short) 36,
-                players,
-                new Inventory[1]
+                (short) 36
         );
+
+        setMaxPlayers(2);
 
         components.add(new PlayerEjectionComponent(this, new Vector2[]
                 {
@@ -40,11 +39,6 @@ public class RocketCar extends PlayerEntity
         ));
 
         setMaxHealth(50.0f);
-    }
-
-    public RocketCar(WorldMap map)
-    {
-        this(map, new PlayerInfo[2]);
     }
 
     @Override

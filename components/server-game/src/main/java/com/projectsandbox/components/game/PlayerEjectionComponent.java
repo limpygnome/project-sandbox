@@ -133,6 +133,7 @@ public class PlayerEjectionComponent implements Serializable, EntityComponent, L
         // Spawn player
         controller.respawnManager.respawn(new PositionPendingRespawn(
                 controller,
+                worldMap,
                 entityPlayer,
                 new Spawn(plyPos.x, plyPos.y, entity.rotation)
         ));
@@ -172,7 +173,7 @@ public class PlayerEjectionComponent implements Serializable, EntityComponent, L
             {
                 // Create and respawn player
                 Entity entityPlayer = controller.playerEntityService.createPlayer(worldMap, playerInfo, true);
-                controller.respawnManager.respawn(new EntityPendingRespawn(controller, entityPlayer));
+                controller.respawnManager.respawn(new EntityPendingRespawn(controller, worldMap, entityPlayer));
 
                 // Set seat to empty
                 players[i] = null;

@@ -33,37 +33,12 @@ public abstract class PlayerEntity extends Entity
     /* The index should match the players index i.e. players[0] controls inventories[0]. */
     private Inventory[] inventories;
 
-    /**
-     * Creates a new instance.
-     *
-     * The 'players' parameter should at least be an empty array of players able to use the entity, or an array of
-     * actual players using it, or a mix. The size of the array will control how many players can simultaneously
-     * use the entity.
-     *
-     * The 'inventories' parameter should at least be an empty array of possible inventories, or an array of actual
-     * inventories to use, or a mix of both.
-     *
-     * As an example for a vehicle, you could specify an empty array of size four for 'players', along with an
-     * 'inventories' array of size one with a main weapon in position one (zero indexed), so that the first passenger
-     * has a weapon.
-     *
-     * @param map map to which the entity belongs
-     * @param width width
-     * @param height height
-     * @param players sets up the players
-     * @param inventories sets up the inventories
-     */
-    public PlayerEntity(WorldMap map, short width, short height, PlayerInfo[] players, Inventory[] inventories)
+    public PlayerEntity(short width, short height)
     {
-        super(map, width, height);
+        super(width, height);
 
-        if (players == null || players.length == 0)
-        {
-            throw new IllegalArgumentException("Players must be defined, even if null sized array; defines number of players able to use vehicle");
-        }
-
-        setPlayers(players);
-        setInventories(inventories);
+        players = null;
+        inventories = null;
     }
 
     private synchronized void updateInventoryOwnership(int index)
@@ -102,6 +77,11 @@ public abstract class PlayerEntity extends Entity
     public synchronized void eventSpawn(Controller controller, Spawn spawn)
     {
         super.eventSpawn(controller, spawn);
+
+        if (players == null)
+        {
+            throw new RuntimeException("No maximum players defined, make call to setMaxPlayers");
+        }
 
         PlayerInfo playerInfo;
         Inventory inventory;
@@ -157,30 +137,28 @@ public abstract class PlayerEntity extends Entity
 
     public abstract String entityName();
 
-    /**
-     * Refer to constructor.
-     *
-     * @param players players
-     */
-    public synchronized void setPlayers(PlayerInfo[] players)
+    public synchronized void setMaxPlayers(int maxPlayers)
     {
-        // TODO: do we need to unbind old players?
-        this.persistToSession = false;
-        this.players = players;
-
-        // Update inventory ownership
-        if (inventories != null)
+        // Check not already defined
+        if (players != null)
         {
-            for (int i = 0; i < players.length; i++)
-            {
-                updateInventoryOwnership(i);
-            }
+            throw new RuntimeException("Maximum players already setup, cannot be called multiple times");
         }
+
+        // Setup empty arrays for players and their inventories
+        this.players = new PlayerInfo[maxPlayers];
+        this.inventories = new Inventory[maxPlayers];
     }
 
     public synchronized void setPlayer(PlayerInfo player, int index)
     {
         // TODO: do we need to unbind old player?
+
+        // Ensure players setup
+        if (players == null)
+        {
+            throw new RuntimeException("Need to call setMaxPlayers");
+        }
 
         // Reset persistence flag if main player changes
         if (index == 0 && player != players[0])
@@ -203,26 +181,6 @@ public abstract class PlayerEntity extends Entity
         else
         {
             LOG.warn("Unable to set inventory, inventories not large enough - index: {}, ent id: {}", index, id);
-        }
-    }
-
-    /**
-     * Refer to constructor.
-     *
-     * @param inventories inventories
-     */
-    public synchronized void setInventories(Inventory[] inventories)
-    {
-        // TODO: do we need to unbind old inventories?
-        this.inventories = inventories;
-
-        if (inventories != null)
-        {
-            // Make sure all players are owners, if available...
-            for (int i = 0; i < inventories.length; i++)
-            {
-                updateInventoryOwnership(i);
-            }
         }
     }
 

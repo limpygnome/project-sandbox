@@ -11,23 +11,20 @@ import com.projectsandbox.components.server.entity.physics.Vector2;
 import com.projectsandbox.components.server.inventory.Inventory;
 import com.projectsandbox.components.game.weapon.GatlingItem;
 import com.projectsandbox.components.game.weapon.rocket.RocketLauncherItem;
-import com.projectsandbox.components.server.player.PlayerInfo;
-import com.projectsandbox.components.server.world.map.WorldMap;
 import com.projectsandbox.components.server.world.spawn.Spawn;
 
 @EntityType(typeId = 210, typeName = "ship/destroyer")
 public class Destroyer extends PlayerEntity
 {
 
-    public Destroyer(WorldMap map, PlayerInfo[] players)
+    public Destroyer()
     {
         super(
-                map,
                 (short) 167,
-                (short) 231,
-                players,
-                new Inventory[1]
+                (short) 231
         );
+
+        setMaxPlayers(1);
 
         components.add(new PlayerEjectionComponent(this, new Vector2[]
                 {
@@ -47,11 +44,6 @@ public class Destroyer extends PlayerEntity
         components.add(new MapBoundsComponent());
 
         setMaxHealth(400.0f);
-    }
-
-    public Destroyer(WorldMap map)
-    {
-        this(map, new PlayerInfo[1]);
     }
 
     @Override

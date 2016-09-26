@@ -16,15 +16,14 @@ import com.projectsandbox.components.server.world.map.WorldMap;
 public class IceCreamVan extends PlayerEntity
 {
 
-    public IceCreamVan(WorldMap map, PlayerInfo[] players)
+    public IceCreamVan()
     {
         super(
-                map,
                 (short) 32,
-                (short) 64,
-                players,
-                null
+                (short) 64
         );
+
+        setMaxPlayers(4);
 
         components.add(new PlayerEjectionComponent(this, new Vector2[]
                 {
@@ -42,11 +41,6 @@ public class IceCreamVan extends PlayerEntity
         ));
 
         setMaxHealth(300.0f);
-    }
-
-    public IceCreamVan(WorldMap map)
-    {
-        this(map, new PlayerInfo[4]);
     }
 
     @Override

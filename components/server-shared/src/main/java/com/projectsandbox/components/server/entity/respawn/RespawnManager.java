@@ -125,7 +125,7 @@ public class RespawnManager implements EventMapLogicCycleService
         // Add entities to world
         for (RespawnData respawnData : entitiesToSpawn)
         {
-            if (!respawnEntity(respawnData))
+            if (!respawnEntity(map, respawnData))
             {
                 // Re-queue if failed...
                 addToInternalPendingRespawnCollectionSynchronized(respawnData.pendingRespawn);
@@ -149,7 +149,7 @@ public class RespawnManager implements EventMapLogicCycleService
         return new RespawnData(spawn, pendingRespawn);
     }
 
-    private boolean respawnEntity(RespawnData respawnData)
+    private boolean respawnEntity(WorldMap map, RespawnData respawnData)
     {
         Entity entity = respawnData.pendingRespawn.entity;
         PlayerEntity playerEntity = null;
@@ -169,6 +169,9 @@ public class RespawnManager implements EventMapLogicCycleService
 
         // Reset entity
         entity.eventReset(controller, respawnData.spawn, respawnAfterPersisted);
+
+        // Set map
+        entity.map = map;
 
         // Add to world if new entity
         if (!entityManager.add(entity))

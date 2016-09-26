@@ -28,20 +28,17 @@ public class Player extends PlayerEntity
      */
     public float rotationFactor;
 
-    public Player(WorldMap map, PlayerInfo[] players)
+    public Player()
     {
-        super(map, PlayerConstants.PLAYER_WIDTH, PlayerConstants.PLAYER_HEIGHT, players, new Inventory[players.length]);
+        super(PlayerConstants.PLAYER_WIDTH, PlayerConstants.PLAYER_HEIGHT);
+
+        setMaxPlayers(1);
 
         // Set default values
         this.movementSpeedFactor = PlayerConstants.DEFAULT_MOVEMENT_SPEED_FACTOR;
         this.rotationFactor = PlayerConstants.DEFAULT_ROTATION_FACTOR;
 
         setMaxHealth(PlayerConstants.DEFAULT_HEALTH);
-    }
-    
-    public Player(WorldMap map)
-    {
-        this(map, null);
     }
 
     @Override

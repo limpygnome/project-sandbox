@@ -14,23 +14,20 @@ import com.projectsandbox.components.game.VelocityComponent;
 import com.projectsandbox.components.server.entity.physics.Vector2;
 import com.projectsandbox.components.server.inventory.Inventory;
 import com.projectsandbox.components.game.weapon.rocket.RocketLauncherItem;
-import com.projectsandbox.components.server.player.PlayerInfo;
-import com.projectsandbox.components.server.world.map.WorldMap;
 import com.projectsandbox.components.server.world.spawn.Spawn;
 
 @EntityType(typeId = 200, typeName = "ship/fighter")
 public class Fighter extends PlayerEntity
 {
 
-    public Fighter(WorldMap map, PlayerInfo[] players)
+    public Fighter()
     {
         super(
-                map,
                 (short) 45,
-                (short) 50,
-                players,
-                new Inventory[1]
+                (short) 50
         );
+
+        setMaxPlayers(1);
 
         components.add(new PlayerEjectionComponent(this, new Vector2[]
                 {
@@ -50,11 +47,6 @@ public class Fighter extends PlayerEntity
         components.add(new MapBoundsComponent());
 
         setMaxHealth(150.0f);
-    }
-
-    public Fighter(WorldMap map)
-    {
-        this(map, new PlayerInfo[1]);
     }
 
     @Override

@@ -5,7 +5,6 @@ import com.projectsandbox.components.server.entity.Entity;
 import com.projectsandbox.components.server.entity.physics.collisions.CollisionResult;
 import com.projectsandbox.components.server.entity.respawn.pending.EntityPendingRespawn;
 import com.projectsandbox.components.server.player.PlayerInfo;
-import com.projectsandbox.components.server.world.map.WorldMap;
 
 /**
  * Created by limpygnome on 06/07/15.
@@ -14,17 +13,21 @@ public abstract class AbstractPickup extends Entity
 {
     private long respawnDelay;
 
-    public AbstractPickup(WorldMap map, short width, short height, long respawnDelay)
+    public AbstractPickup(short width, short height)
     {
-        super(map, width, height);
+        super(width, height);
 
-        this.respawnDelay = respawnDelay;
         this.physicsIntangible = true;
 
         setGodmode();
     }
 
     public abstract boolean applyPickup(Controller controller, Entity entity);
+
+    protected void setRespawnDelay(long respawnDelay)
+    {
+        this.respawnDelay = respawnDelay;
+    }
 
     @Override
     public void eventCollisionEntity(Controller controller, Entity entCollider, Entity entVictim, Entity entOther, CollisionResult result)
@@ -33,7 +36,7 @@ public abstract class AbstractPickup extends Entity
         if (applyPickup(controller, entOther))
         {
             // Pickup has been redeemed, now to respawn in a period of time
-            controller.respawnManager.respawn(new EntityPendingRespawn(controller, this, respawnDelay));
+            controller.respawnManager.respawn(new EntityPendingRespawn(controller, map, this, respawnDelay));
         }
     }
 

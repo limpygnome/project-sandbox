@@ -11,15 +11,14 @@ import com.projectsandbox.components.server.world.map.WorldMap;
 @EntityType(typeId = 22, typeName = "vehicle/bus")
 public class Bus extends PlayerEntity
 {
-    public Bus(WorldMap map, PlayerInfo[] players)
+    public Bus()
     {
         super(
-                map,
                 (short) 28,
-                (short) 96,
-                players,
-                null
+                (short) 96
         );
+
+        setMaxPlayers(12);
 
         components.add(new PlayerEjectionComponent(this, new Vector2[]
                 {
@@ -50,11 +49,6 @@ public class Bus extends PlayerEntity
         ));
 
         setMaxHealth(400.0f);
-    }
-
-    public Bus(WorldMap map)
-    {
-        this(map, new PlayerInfo[12]);
     }
 
     @Override
