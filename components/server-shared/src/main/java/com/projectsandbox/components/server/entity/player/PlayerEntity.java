@@ -157,7 +157,13 @@ public abstract class PlayerEntity extends Entity
         // Ensure players setup
         if (players == null)
         {
-            throw new RuntimeException("Need to call setMaxPlayers");
+            if (inventories == null)
+            {
+                throw new RuntimeException("Need to call setMaxPlayers - type: " + getClass().getSimpleName());
+            }
+
+            // Must have just respawned, hence just create new empty players
+            players = new PlayerInfo[inventories.length];
         }
 
         // Reset persistence flag if main player changes

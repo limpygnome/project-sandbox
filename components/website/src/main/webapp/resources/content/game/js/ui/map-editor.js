@@ -1,27 +1,70 @@
 game.ui.mapEditor = (function(){
 
 
-    var handleMapReload = function() {
+    var handleMapReload = function()
+    {
+        var payload = {
+            action: "map-reload"
+        };
+        sendData(payload);
+        return false;
     };
 
-    var handleMapClear = function() {
+    var handleMapClear = function()
+    {
+        var payload = {
+            action: "map-clear"
+        };
+        sendData(payload);
+        return false;
     };
 
-    var handleMapSave = function() {
+    var handleMapSave = function()
+    {
+        var payload = {
+            action: "map-save"
+        };
+        sendData(payload);
+        return false;
     };
 
-    var handleEntitySelect = function(typeId) {
+    var handleEntitySelect = function(typeId)
+    {
+        var payload = {
+            action: "entity-select",
+            typeId: typeId
+        };
+
+        sendData(payload);
+        return false;
+    };
+
+    var sendData = function(payload)
+    {
+        // Convert payload to string
+        var data = JSON.stringify(payload);
+
+        // Build new packet
+        var packet = new projectSandbox.network.OutboundPacket();
+        packet.addChar("M");
+        packet.addChar("E");
+        packet.addUtf8(data);
+
+        // Send
+        projectSandbox.network.send(packet.build());
     };
 
 
-    var setupButtonHooks = function() {
+    var setupButtonHooks = function()
+    {
         // Hook map editor buttons
         $("#ps-map-editor .map-reload").on("click", handleMapReload);
         $("#ps-map-editor .map-clear").on("click", handleMapClear);
         $("#ps-map-editor .map-save").on("click", handleMapSave);
     };
 
-    var setupEntitiesBox = function() {
+    var setupEntitiesBox = function()
+    {
         // Clear content
         $("#ps-map-editor .entities").html("");
 
@@ -35,7 +78,8 @@ game.ui.mapEditor = (function(){
         });
     };
 
-    var setup = function() {
+    var setup = function()
+    {
         setupButtonHooks();
         setupEntitiesBox();
     };

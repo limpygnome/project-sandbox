@@ -3,6 +3,10 @@ package com.projectsandbox.components.server.map.editor.packet;
 import com.projectsandbox.components.server.Controller;
 import com.projectsandbox.components.server.entity.Entity;
 import com.projectsandbox.components.server.entity.EntityMapData;
+import com.projectsandbox.components.server.entity.respawn.RespawnManager;
+import com.projectsandbox.components.server.entity.respawn.pending.EntityPendingRespawn;
+import com.projectsandbox.components.server.map.editor.component.MapEditorComponent;
+import com.projectsandbox.components.server.map.editor.entity.InvisibleMapEditorEntity;
 import com.projectsandbox.components.server.network.Socket;
 import com.projectsandbox.components.server.network.packet.PacketHandlerException;
 import com.projectsandbox.components.server.network.packet.factory.PacketHandler;
@@ -32,14 +36,19 @@ public class MapEditorInboundPacket extends AuthenticatedInboundPacketHandler
 
     @Autowired
     private JsonHelper jsonHelper;
+    @Autowired
+    private RespawnManager respawnManager;
 
     @Override
     public void handle(Controller controller, Socket socket, PlayerInfo playerInfo, ByteBuffer bb, byte[] rawData) throws PacketHandlerException
     {
         try
         {
+            // Fetch length
+            short length = bb.getShort(2);
+
             // Convert to string and parse as JSON...
-            InputStream inputStream = new ByteArrayInputStream(rawData);
+            InputStream inputStream = new ByteArrayInputStream(rawData, 4, length);
             JSONObject data = jsonHelper.read(inputStream);
 
             // Fetch map and entity
@@ -57,10 +66,13 @@ public class MapEditorInboundPacket extends AuthenticatedInboundPacketHandler
                 case "map-save":
                     break;
                 case "map-clear":
-                    actionClearMap(map);
+                    actionClearMap(map, controller, playerInfo);
                     break;
                 case "entity-select":
-                    // set type id on invisible map entity, so that when it adds entity, it uses the type set by this :)
+                    actionEntitySelect(controller, entity, data);
+                    break;
+                default:
+                    LOG.warn("unknown map editor action - data: {}", data);
                     break;
             }
         }
@@ -98,21 +110,44 @@ public class MapEditorInboundPacket extends AuthenticatedInboundPacketHandler
     {
     }
 
-    private void actionClearMap(WorldMap map)
+    private void actionClearMap(WorldMap map, Controller controller, PlayerInfo playerInfo)
     {
         // Reset entity data
         EntityMapData data = map.getEntityMapData();
         data.reset(map);
 
-        // TODO: reset spawns too?
+        // Respawn main player
+        InvisibleMapEditorEntity entity = new InvisibleMapEditorEntity();
+        entity.setPlayer(playerInfo, 0);
+        respawnManager.respawn(new EntityPendingRespawn(controller, map, entity));
     }
 
-    private void actionAddEntity()
+    private void actionEntitySelect(Controller controller, Entity entity, JSONObject data)
     {
+        MapEditorComponent component = getMapEditorComponent(entity);
+
+        if (component != null && data.containsKey("typeId"))
+        {
+            short typeId = (short) (long) data.get("typeId");
+            component.setCurrentEntityTypeId(controller, typeId);
+            LOG.info("updated selected type - typeId: {}", typeId);
+        }
     }
 
     private void actionRemoveEntity()
     {
+    }
+
+    private MapEditorComponent getMapEditorComponent(Entity entity)
+    {
+        MapEditorComponent component = (MapEditorComponent) entity.components.fetchComponent(MapEditorComponent.class);
+
+        if (component == null)
+        {
+            LOG.warn("No map editor component found");
+        }
+
+        return component;
     }
 
 }

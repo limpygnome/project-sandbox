@@ -222,41 +222,6 @@ public strictfp abstract class Entity implements Serializable
         }
     }
 
-    /**
-     * Places this entity in front of the specified parent.
-     *
-     * @param parent the parent entity
-     * @param spacing the spacing between the two ents
-     * @param offset the offset from the centre front of the entity; can be null
-     */
-    public synchronized void projectInFrontOfEntity(Entity parent, float spacing, Vector2 offset)
-    {
-        // Clone the rotation of the parent
-        rotation(parent.rotation);
-
-        // Calculate new position, so we're in front of parent
-        Vector2 newPosition = parent.positionNew.clone();
-
-        newPosition.add(Vector2.vectorFromAngle(this.rotation, parent.height / 2.0f));
-        newPosition.add(Vector2.vectorFromAngle(this.rotation, height / 2.0f));
-        newPosition.add(Vector2.vectorFromAngle(this.rotation, spacing));
-
-        if (offset != null)
-        {
-            newPosition.add(Vector2.vectorFromAngle(this.rotation, offset));
-        }
-
-        // Make any callbacks to components
-        Set<ProjectInFrontOfEntityEvent> callbacks = components.fetch(ProjectInFrontOfEntityEvent.class);
-
-        for (ProjectInFrontOfEntityEvent callback : callbacks)
-        {
-            callback.projectInFrontOfEntity(this, parent, spacing, newPosition);
-        }
-
-        position(newPosition);
-    }
-
     public synchronized boolean isDeleted()
     {
         return state == EntityState.PENDING_DELETED || state == EntityState.DELETED || id == null;
@@ -339,8 +304,7 @@ public strictfp abstract class Entity implements Serializable
         }
         else
         {
-            LOG.error("Disallowed state transition - old state: {} -> new state: {}, ent: {}", this.state, state, this);
-            throw new RuntimeException("Unexpected entity transition - new: " + state + ", old: " + this.state);
+            LOG.debug("Disallowed state transition - old state: {} -> new state: {}, ent: {}", this.state, state, this);
         }
     }
     

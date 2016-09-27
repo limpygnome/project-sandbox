@@ -1,5 +1,6 @@
 package com.projectsandbox.components.game.weapon.rocket;
 
+import com.projectsandbox.components.server.entity.respawn.pending.ProjectInFrontOfEntityRespawn;
 import com.projectsandbox.components.server.inventory.item.AbstractWeaponItem;
 import com.projectsandbox.components.server.Controller;
 import com.projectsandbox.components.server.entity.Entity;
@@ -73,13 +74,12 @@ public class RocketLauncherItem extends AbstractWeaponItem
 
     private void fireRocket(Controller controller, PlayerInfo playerInfoOwner, Entity entityOwner, Vector2 offset)
     {
-        // Create entity and put in front of owner/parent entity
-        Entity rpg = new Rocket(controller, playerInfoOwner);
-        rpg.projectInFrontOfEntity(entityOwner, ROCKET_LAUNCH_SPACING, offset);
+        // Create rocket
+        Rocket rocket = new Rocket(controller, playerInfoOwner);
 
         // Add rocket to world
         WorldMap map = entityOwner.map;
-        controller.respawnManager.respawn(new CurrentPositionRespawn(controller, map, rpg));
+        controller.respawnManager.respawn(new ProjectInFrontOfEntityRespawn(controller, map, rocket, entityOwner, ROCKET_LAUNCH_SPACING, offset));
     }
 
     @Override
