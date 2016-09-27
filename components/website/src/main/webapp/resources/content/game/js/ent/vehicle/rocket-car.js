@@ -33,6 +33,8 @@ function RocketCar()
 
 RocketCar.typeId = 21;
 RocketCar.title = "Rocket Car";
+RocketCar.mapEditorEnabled = true;
+
 RocketCar.inherits(Entity);
 
 RocketCar.prototype.logic = function()

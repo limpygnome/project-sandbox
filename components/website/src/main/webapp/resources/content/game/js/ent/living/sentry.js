@@ -16,4 +16,6 @@ function Sentry()
 
 Sentry.typeId = 500;
 Sentry.title = "Sentry";
+Sentry.mapEditorEnabled = true;
+
 Sentry.inherits(Entity);

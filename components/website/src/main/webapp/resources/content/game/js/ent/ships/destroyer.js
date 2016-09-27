@@ -42,6 +42,8 @@ function Destroyer()
 
 Destroyer.typeId = 210;
 Destroyer.title = "Destroyer";
+Destroyer.mapEditorEnabled = true;
+
 Destroyer.inherits(Entity);
 
 Destroyer.prototype.logic = function()

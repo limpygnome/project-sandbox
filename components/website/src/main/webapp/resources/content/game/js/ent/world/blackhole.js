@@ -16,6 +16,8 @@
 
     entity.typeId = 4000;
     entity.title = "Blackhole";
+    entity.mapEditorEnabled = true;
+
     entity.inherits(Entity);
 
     game.entities.world.Blackhole = entity;

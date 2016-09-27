@@ -7,4 +7,6 @@ function HealthPickup()
 
 HealthPickup.typeId = 1201;
 HealthPickup.title = "Health Pickup";
+HealthPickup.mapEditorEnabled = true;
+
 HealthPickup.inherits(AbstractPickup);

@@ -31,6 +31,8 @@ function Player()
 
 Player.typeId = 1;
 Player.title = "Player";
+Player.mapEditorEnabled = true;
+
 Player.inherits(Entity);
 
 Player.prototype.logic = function()

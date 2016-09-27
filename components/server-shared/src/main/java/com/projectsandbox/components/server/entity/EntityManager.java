@@ -96,7 +96,16 @@ public class EntityManager implements EventMapLogicCycleService
                 // We won't run logic for deleted or dead enities
                 if (!entity.isDeleted())
                 {
-                    entity.eventLogic(controller);
+                    try
+                    {
+                        entity.eventLogic(controller);
+                    }
+                    catch (Exception e)
+                    {
+                        // Remove entity to prevent spamming the server
+                        entity.remove();
+                        LOG.warn("Exception during logic of entity, removing from world - id: {}, type: {}", entity.id, entity.getClass().getName(), e);
+                    }
                 }
             }
         }

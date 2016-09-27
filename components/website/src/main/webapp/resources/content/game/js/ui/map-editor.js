@@ -72,14 +72,18 @@ game.ui.mapEditor = (function(){
         var types = game.entityFactory.typeMap;
 
         // Populate entities box with types
-        types.forEach(function(type) {
-            // Add button, to box, to change selected type
-            $("#ps-map-editor .entities").append("<span data-type-id='" + type.typeId + "' class='button'>" + type.title + "</span>");
+        types.forEach(function(type)
+        {
+            if (type.mapEditorEnabled)
+            {
+                // Add button, to box, to change selected type
+                $("#ps-map-editor .entities").append("<span data-type-id='" + type.typeId + "' class='button'>" + type.title + "</span>");
 
-            // Hook new button
-            $("#ps-map-editor .entities .button[data-type-id=" + type.typeId + "]").on("click", function(){
-                handleEntitySelect(type.typeId);
-            });
+                // Hook new button
+                $("#ps-map-editor .entities .button[data-type-id=" + type.typeId + "]").on("click", function(){
+                    handleEntitySelect(type.typeId);
+                });
+            }
         });
     };
 

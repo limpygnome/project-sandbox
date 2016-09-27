@@ -11,6 +11,7 @@ import com.projectsandbox.components.server.entity.respawn.pending.PositionPendi
 import com.projectsandbox.components.server.player.PlayerInfo;
 import com.projectsandbox.components.server.player.PlayerKeys;
 import com.projectsandbox.components.server.world.map.WorldMap;
+import com.projectsandbox.components.server.world.spawn.Spawn;
 
 import java.util.Set;
 
@@ -55,14 +56,15 @@ public class MapEditorComponent implements EntityComponent, LogicComponentEvent
         // Create entity instance
         Entity newEntity = controller.entityTypeMappingStoreService.createByTypeId(currentEntityTypeId, null);
 
-        // Spawn at position of map-editor entity on map
+        // Create spawn based on editor's current position/rotation
         WorldMap map = entityEditor.map;
+        Spawn spawn = new Spawn(entityEditor.positionNew.x, entityEditor.positionNew.y, entityEditor.rotation);
 
-        float x = entityEditor.positionNew.x;
-        float y = entityEditor.positionNew.y;
-        float rotation = entityEditor.rotation;
+        // Assign spawn to entity, so it always spawns there
+        newEntity.spawn = spawn;
 
-        controller.respawnManager.respawn(new PositionPendingRespawn(controller, map, newEntity, x, y, rotation));
+        // Respawn entity
+        controller.respawnManager.respawn(new PositionPendingRespawn(controller, map, newEntity, spawn));
     }
 
     private void removeClosestEntity(Controller controller, Entity entityEditor)

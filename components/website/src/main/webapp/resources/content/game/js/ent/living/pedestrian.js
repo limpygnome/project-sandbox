@@ -30,6 +30,8 @@ function Pedestrian()
 
 Pedestrian.typeId = 510;
 Pedestrian.title = "Pedestrian";
+Pedestrian.mapEditorEnabled = true;
+
 Pedestrian.inherits(Entity);
 
 Pedestrian.prototype.logic = function()

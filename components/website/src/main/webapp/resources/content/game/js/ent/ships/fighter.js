@@ -42,6 +42,8 @@ function Fighter()
 
 Fighter.typeId = 200;
 Fighter.title = "Fighter";
+Fighter.mapEditorEnabled = true;
+
 Fighter.inherits(Entity);
 
 Fighter.prototype.logic = function()

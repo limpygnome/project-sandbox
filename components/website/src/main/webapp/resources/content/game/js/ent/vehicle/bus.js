@@ -33,6 +33,8 @@ function Bus()
 
 Bus.typeId = 22;
 Bus.title = "Bus";
+Bus.mapEditorEnabled = true;
+
 Bus.inherits(Entity);
 
 Bus.prototype.logic = function()

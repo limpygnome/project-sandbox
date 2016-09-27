@@ -33,6 +33,8 @@ function IceCreamVan()
 
 IceCreamVan.typeId = 20;
 IceCreamVan.title = "Ice Cream Van";
+IceCreamVan.mapEditorEnabled = true;
+
 IceCreamVan.inherits(Entity);
 
 IceCreamVan.prototype.logic = function()

@@ -14,4 +14,6 @@ game.entities.util.InvisibleMapEditorEntity = function()
 
 game.entities.util.InvisibleMapEditorEntity.typeId = 901;
 game.entities.util.InvisibleMapEditorEntity.title = "Invisible Editor";
+game.entities.util.InvisibleMapEditorEntity.mapEditorEnabled = true;
+
 game.entities.util.InvisibleMapEditorEntity.inherits(Entity);
