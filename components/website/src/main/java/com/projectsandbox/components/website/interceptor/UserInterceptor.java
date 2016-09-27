@@ -7,6 +7,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 
 /**
  * Created by limpygnome on 28/07/15.
@@ -54,7 +55,7 @@ public class UserInterceptor implements HandlerInterceptor
                     requestPath.startsWith("editor")
                 )
             {
-                httpServletResponse.sendRedirect("/home");
+                redirectToHome(httpServletRequest, httpServletResponse);
                 return false;
             }
         }
@@ -66,12 +67,18 @@ public class UserInterceptor implements HandlerInterceptor
                 )
             {
                 httpServletResponse.sendRedirect("/home");
+                redirectToHome(httpServletRequest, httpServletResponse);
                 return false;
             }
         }
 
 
         return true;
+    }
+
+    private void redirectToHome(HttpServletRequest request, HttpServletResponse response) throws IOException
+    {
+        response.sendRedirect(request.getContextPath() + "/home");
     }
 
     @Override

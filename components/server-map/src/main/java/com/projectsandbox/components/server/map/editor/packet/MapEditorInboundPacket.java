@@ -144,7 +144,7 @@ public class MapEditorInboundPacket extends AuthenticatedInboundPacketHandler
 
         if (component == null)
         {
-            LOG.warn("No map editor component found");
+            LOG.warn("No map editor component found on entity - id: {}, type: {}", entity.id, entity.getClass().getName());
         }
 
         return component;

@@ -89,7 +89,7 @@
 <table>
     <tr>
         <td>
-            <form method="post" action="/account/delete">
+            <form method="post" action="<spring:url value='/account/delete' />">
                 <input type="submit" value="Delete Account" />
                 <ps:csrf />
             </form>
@@ -100,7 +100,7 @@
     </tr>
     <tr>
         <td>
-            <form method="post" action="/account/reset/game-session">
+            <form method="post" action="<spring:url value='/account/reset/game-session' />">
                 <input type="submit" value="Reset Game Session" />
                 <ps:csrf />
             </form>
@@ -111,7 +111,7 @@
     </tr>
     <tr>
         <td>
-            <form method="post" action="/account/reset/stats">
+            <form method="post" action="<spring:url value='/account/reset/stats' />">
                 <input type="submit" value="Reset Stats" />
                 <ps:csrf />
             </form>
