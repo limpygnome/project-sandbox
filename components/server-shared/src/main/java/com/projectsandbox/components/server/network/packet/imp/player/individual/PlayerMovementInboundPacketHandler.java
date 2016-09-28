@@ -33,7 +33,7 @@ public class PlayerMovementInboundPacketHandler extends AuthenticatedInboundPack
         short keys = bb.getShort(2);
 
         // Update current player
-        playerInfo.keys = keys;
+        playerInfo.keys.setKeys(keys);
 
         //LOG.debug("Movement - ply id: {},flags: {}", playerInfo.playerId, keys);
     }

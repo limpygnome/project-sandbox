@@ -2,7 +2,7 @@ package com.projectsandbox.components.server.entity.respawn.pending;
 
 import com.projectsandbox.components.server.Controller;
 import com.projectsandbox.components.server.entity.Entity;
-import com.projectsandbox.components.server.entity.component.event.ProjectInFrontOfEntityEvent;
+import com.projectsandbox.components.server.entity.component.event.ProjectInFrontOfEntityComponentEvent;
 import com.projectsandbox.components.server.entity.physics.Vector2;
 import com.projectsandbox.components.server.world.map.WorldMap;
 import com.projectsandbox.components.server.world.spawn.Spawn;
@@ -46,9 +46,9 @@ public class ProjectInFrontOfEntityRespawn extends PendingRespawn
         }
 
         // Make any callbacks to components for this type of respawn/event
-        Set<ProjectInFrontOfEntityEvent> callbacks = entity.components.fetch(ProjectInFrontOfEntityEvent.class);
+        Set<ProjectInFrontOfEntityComponentEvent> callbacks = entity.components.fetch(ProjectInFrontOfEntityComponentEvent.class);
 
-        for (ProjectInFrontOfEntityEvent callback : callbacks)
+        for (ProjectInFrontOfEntityComponentEvent callback : callbacks)
         {
             callback.projectInFrontOfEntity(entity, parent, spacing, newPosition);
         }

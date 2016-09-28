@@ -5,7 +5,7 @@ import com.projectsandbox.components.server.entity.Entity;
 import com.projectsandbox.components.server.entity.component.EntityComponent;
 import com.projectsandbox.components.server.entity.component.event.CollisionEntityComponentEvent;
 import com.projectsandbox.components.server.entity.component.event.LogicComponentEvent;
-import com.projectsandbox.components.server.entity.component.event.ProjectInFrontOfEntityEvent;
+import com.projectsandbox.components.server.entity.component.event.ProjectInFrontOfEntityComponentEvent;
 import com.projectsandbox.components.server.entity.component.event.ResetComponentEvent;
 import com.projectsandbox.components.server.entity.physics.Vector2;
 import com.projectsandbox.components.server.entity.physics.collisions.CollisionResult;
@@ -15,7 +15,7 @@ import java.io.Serializable;
 /**
  * Used to apply zero gravity to entities.
  */
-public class VelocityComponent implements Serializable, EntityComponent, CollisionEntityComponentEvent, LogicComponentEvent, ResetComponentEvent, ProjectInFrontOfEntityEvent
+public class VelocityComponent implements Serializable, EntityComponent, CollisionEntityComponentEvent, LogicComponentEvent, ResetComponentEvent, ProjectInFrontOfEntityComponentEvent
 {
     private static final long serialVersionUID = 1L;
 

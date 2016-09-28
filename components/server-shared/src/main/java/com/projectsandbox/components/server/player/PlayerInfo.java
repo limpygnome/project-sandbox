@@ -34,14 +34,14 @@ public class PlayerInfo
     public GameSession session;
 
     /**
-     * The keys currently held down by the player.
-     */
-    public short keys;
-
-    /**
      * The player's web socket.
      */
     public Socket socket;
+
+    /**
+     * Holds data for player's keys.
+     */
+    public PlayerInfoKeys keys;
 
     /**
      * TODO: consider removal or move into player data
@@ -63,22 +63,17 @@ public class PlayerInfo
 
     public PlayerInfo(Socket socket, GameSession session, short playerId)
     {
-        this.keys = 0;
-        this.socket = socket;
-        this.entity = null;
-        this.session = session;
         this.playerId = playerId;
+        this.session = session;
+        this.socket = socket;
+        this.keys = new PlayerInfoKeys();
+        this.entity = null;
         this.scene = new Scene();
     }
 
     public synchronized boolean isConnected()
     {
         return socket != null && socket.isOpen();
-    }
-
-    public synchronized boolean isKeyDown(PlayerKeys key)
-    {
-        return (keys & key.FLAG) == key.FLAG;
     }
 
     /**
@@ -105,23 +100,12 @@ public class PlayerInfo
         return map;
     }
 
-    public synchronized void setKey(PlayerKeys key, boolean down)
-    {
-        if (down)
-        {
-            keys |= key.FLAG;
-        } else
-        {
-            keys &= ~key.FLAG;
-        }
-    }
-
     public synchronized void eventPlayerKilled(Controller controller, AbstractKiller death, PlayerInfo[] playerInfoKillers)
     {
         try
         {
             // Reset keys
-            this.keys = 0;
+            keys.reset();
 
             // Update metrics
             session.getPlayerMetrics().incrementDeaths();

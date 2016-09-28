@@ -7,7 +7,7 @@ import com.projectsandbox.components.server.entity.physics.Vector2;
 /**
  * Created by limpygnome on 23/05/16.
  */
-public interface ProjectInFrontOfEntityEvent extends ComponentEvent
+public interface ProjectInFrontOfEntityComponentEvent extends ComponentEvent
 {
 
     void projectInFrontOfEntity(Entity entity, Entity parent, float spacing, Vector2 newPosition);
