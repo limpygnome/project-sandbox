@@ -66,7 +66,7 @@ public class PlayerInfo
         this.playerId = playerId;
         this.session = session;
         this.socket = socket;
-        this.keys = new PlayerInfoKeys();
+        this.keys = new PlayerInfoKeys(this);
         this.entity = null;
         this.scene = new Scene();
     }
@@ -105,7 +105,7 @@ public class PlayerInfo
         try
         {
             // Reset keys
-            keys.reset();
+            keys.reset(controller);
 
             // Update metrics
             session.getPlayerMetrics().incrementDeaths();

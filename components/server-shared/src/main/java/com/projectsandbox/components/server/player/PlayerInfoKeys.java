@@ -1,5 +1,8 @@
 package com.projectsandbox.components.server.player;
 
+import com.projectsandbox.components.server.Controller;
+import com.projectsandbox.components.server.entity.Entity;
+import com.projectsandbox.components.server.entity.player.PlayerEntity;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -13,6 +16,9 @@ public class PlayerInfoKeys
 {
     private final static Logger LOG = LogManager.getLogger(PlayerInfoKeys.class);
 
+    // Reference to player
+    private PlayerInfo playerInfo;
+
     /*
      * The keys currently held down by the player.
      *
@@ -23,24 +29,14 @@ public class PlayerInfoKeys
     // Observers registered for key down/up events
     private List<PlayerKeysObserver> observers;
 
-    public PlayerInfoKeys()
+    public PlayerInfoKeys(PlayerInfo playerInfo)
     {
-        keys = 0;
-        observers = new LinkedList<>();
+        this.playerInfo = playerInfo;
+        this.keys = 0;
+        this.observers = new LinkedList<>();
     }
 
-    public void addListener(PlayerKeysObserver observer)
-    {
-        observers.add(observer);
-    }
-
-    public void removeListener(PlayerKeysObserver observer)
-    {
-        observers.remove(observer);
-    }
-
-    // TODO: fix this so it's event driven; observer pattern perhaps -> components need to hook into this
-    public synchronized void setKeys(short keys)
+    public synchronized void setKeys(Controller controller, short keys)
     {
         short oldKeys = this.keys;
 
@@ -59,12 +55,12 @@ public class PlayerInfoKeys
             if (oldKeyDown != newKeyDown)
             {
                 // Raise with observers
-                keyEvent(key, newKeyDown);
+                keyEvent(controller, key, newKeyDown);
             }
         }
     }
 
-    public synchronized void setKey(PlayerKeys key, boolean down)
+    public synchronized void setKey(Controller controller, PlayerKeys key, boolean down)
     {
         // Change keys
         if (down)
@@ -77,35 +73,32 @@ public class PlayerInfoKeys
         }
 
         // Inform observers
-        keyEvent(key, down);
+        keyEvent(controller, key, down);
     }
 
     /**
      * Resets all the keys to up / not pressed.
      */
-    public synchronized void reset()
+    public synchronized void reset(Controller controller)
     {
-        setKeys((short) 0);
+        setKeys(controller, (short) 0);
     }
 
-    private void keyEvent(PlayerKeys key, boolean down)
+    private void keyEvent(Controller controller, PlayerKeys key, boolean isKeyDown)
     {
-        for (PlayerKeysObserver observer : observers)
+        // Hand to attached entity of player
+        Entity entity = playerInfo.entity;
+
+        if (entity != null && entity instanceof PlayerEntity)
         {
-            if (down)
-            {
-                observer.keyDown(key);
-            }
-            else
-            {
-                observer.keyUp(key);
-            }
+            PlayerEntity playerEntity = (PlayerEntity) entity;
+            playerEntity.eventPlayerInfoKeyChange(controller, playerInfo, key, isKeyDown);
         }
     }
 
-//    public synchronized boolean isKeyDown(PlayerKeys key)
-//    {
-//        return (keys & key.FLAG) == key.FLAG;
-//    }
+    public boolean isKeyDown(PlayerKeys key)
+    {
+        return (keys & key.FLAG) == key.FLAG;
+    }
 
 }

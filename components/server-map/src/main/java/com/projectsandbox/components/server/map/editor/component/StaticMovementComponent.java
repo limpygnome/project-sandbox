@@ -41,19 +41,19 @@ public class StaticMovementComponent implements EntityComponent, LogicComponentE
             float offsetY = 0.0f;
 
             // Handle any keys down
-            if (playerInfo.isKeyDown(PlayerKeys.MovementUp))
+            if (playerInfo.keys.isKeyDown(PlayerKeys.MovementUp))
             {
                 offsetY += accelerate;
             }
-            if (playerInfo.isKeyDown(PlayerKeys.MovementDown))
+            if (playerInfo.keys.isKeyDown(PlayerKeys.MovementDown))
             {
                 offsetY -= accelerate;
             }
-            if (playerInfo.isKeyDown(PlayerKeys.MovementLeft))
+            if (playerInfo.keys.isKeyDown(PlayerKeys.MovementLeft))
             {
                 offsetX -= accelerate;
             }
-            if (playerInfo.isKeyDown(PlayerKeys.MovementDown.MovementRight))
+            if (playerInfo.keys.isKeyDown(PlayerKeys.MovementDown.MovementRight))
             {
                 offsetX += accelerate;
             }
@@ -61,7 +61,7 @@ public class StaticMovementComponent implements EntityComponent, LogicComponentE
             if (offsetX != 0.0f || offsetY != 0.0f)
             {
                 // Check if to apply super-jump instead
-                if (playerInfo.isKeyDown(PlayerKeys.Shift))
+                if (playerInfo.keys.isKeyDown(PlayerKeys.Shift))
                 {
                     // Need to look at incrementing super-jump amount each cycle...
                     offsetX = (offsetX > 0.0f ? SUPER_JUMP_AMOUNT : offsetX < 0.0f ? -SUPER_JUMP_AMOUNT : 0.0f);

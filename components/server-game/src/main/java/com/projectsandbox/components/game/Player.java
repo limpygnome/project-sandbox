@@ -56,21 +56,21 @@ public class Player extends PlayerEntity
         if (playerInfo != null)
         {
             // Update player's position
-            if (playerInfo.isKeyDown(PlayerKeys.MovementUp))
+            if (playerInfo.keys.isKeyDown(PlayerKeys.MovementUp))
             {
                 changeDist += movementSpeedFactor;
             }
-            if (playerInfo.isKeyDown(PlayerKeys.MovementDown))
+            if (playerInfo.keys.isKeyDown(PlayerKeys.MovementDown))
             {
                 changeDist -= movementSpeedFactor;
             }
 
             // Check for rotation
-            if (playerInfo.isKeyDown(PlayerKeys.MovementRight))
+            if (playerInfo.keys.isKeyDown(PlayerKeys.MovementRight))
             {
                 changeRotation = rotationFactor;
             }
-            if (playerInfo.isKeyDown(PlayerKeys.MovementLeft))
+            if (playerInfo.keys.isKeyDown(PlayerKeys.MovementLeft))
             {
                 changeRotation = -rotationFactor;
             }

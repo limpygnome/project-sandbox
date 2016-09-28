@@ -1,23 +1,14 @@
 package com.projectsandbox.components.server.entity;
 
 import com.projectsandbox.components.server.entity.annotation.EntityType;
-import com.projectsandbox.components.server.util.Annotations;
 import com.projectsandbox.components.server.util.ClassHelper;
-import com.projectsandbox.components.server.util.counters.AnnotationInfo;
 import com.projectsandbox.components.server.world.map.MapEntKV;
-import com.projectsandbox.components.server.world.map.WorldMap;
-import com.sun.xml.internal.bind.v2.runtime.reflect.opt.Const;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Modifier;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Set;
 
-import org.reflections.Reflections;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

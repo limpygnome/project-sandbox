@@ -2,10 +2,12 @@ package com.projectsandbox.components.server.entity.player;
 
 import com.projectsandbox.components.server.Controller;
 import com.projectsandbox.components.server.entity.Entity;
+import com.projectsandbox.components.server.entity.component.event.PlayerInfoKeyDownComponentEvent;
 import com.projectsandbox.components.server.inventory.Inventory;
 import com.projectsandbox.components.server.player.PlayerInfo;
-import com.projectsandbox.components.server.world.map.WorldMap;
+import com.projectsandbox.components.server.player.PlayerKeys;
 import com.projectsandbox.components.server.world.spawn.Spawn;
+import java.util.Set;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -32,6 +34,7 @@ public abstract class PlayerEntity extends Entity
 
     /* The index should match the players index i.e. players[0] controls inventories[0]. */
     private Inventory[] inventories;
+
 
     public PlayerEntity(short width, short height)
     {
@@ -152,9 +155,7 @@ public abstract class PlayerEntity extends Entity
 
     public synchronized void setPlayer(PlayerInfo player, int index)
     {
-        // TODO: do we need to unbind old player?
-
-        // Ensure players setup
+        // Ensure players array setup; may not be case after deserialization...
         if (players == null)
         {
             if (inventories == null)
@@ -164,6 +165,18 @@ public abstract class PlayerEntity extends Entity
 
             // Must have just respawned, hence just create new empty players
             players = new PlayerInfo[inventories.length];
+        }
+
+        // Check index in range
+        if (index >= players.length)
+        {
+            throw new RuntimeException("Attempted to put player in seat index " + index + ", but only " + players.length + " seats");
+        }
+
+        // Check another player is not already assigned
+        if (players[index] != null)
+        {
+            throw new RuntimeException("Attempted to assign player to seat index " + index +", but already player");
         }
 
         // Reset persistence flag if main player changes
@@ -303,6 +316,31 @@ public abstract class PlayerEntity extends Entity
         }
 
         return true;
+    }
+
+    /**
+     * Forwards keys to inventory and to components (as events).
+     */
+    public void eventPlayerInfoKeyChange(Controller controller, PlayerInfo playerInfo, PlayerKeys key, boolean isKeyDown)
+    {
+        // Fetch index of player
+        int playerIndex = getPlayerIndex(playerInfo);
+
+        // Forward to inventory
+        Inventory inventory = inventories[playerIndex];
+
+        if (inventory != null)
+        {
+            inventory.eventPlayerInfoKeyChange(controller, playerInfo, key, playerIndex, isKeyDown);
+        }
+
+        // Forward as component event
+        Set<PlayerInfoKeyDownComponentEvent> eventHandlers = this.components.fetch(PlayerInfoKeyDownComponentEvent.class);
+
+        for (PlayerInfoKeyDownComponentEvent event : eventHandlers)
+        {
+            event.eventPlayerInfoKeyChange(controller, playerInfo, key, playerIndex, isKeyDown);
+        }
     }
 
 }

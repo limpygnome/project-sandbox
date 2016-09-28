@@ -57,23 +57,23 @@ public class PlayerVehicleMovementComponent implements Serializable, EntityCompo
         if (playerInfoDriver != null)
         {
             // Check if to apply power/reverse
-            if (playerInfoDriver.isKeyDown(PlayerKeys.MovementUp))
+            if (playerInfoDriver.keys.isKeyDown(PlayerKeys.MovementUp))
             {
                 acceleration = accelerationFactor;
             }
-            if (playerInfoDriver.isKeyDown(PlayerKeys.MovementDown))
+            if (playerInfoDriver.keys.isKeyDown(PlayerKeys.MovementDown))
             {
                 // TODO: separate variable for reverse
                 acceleration -= accelerationFactor;
             }
 
             // Check for steer angle
-            if (playerInfoDriver.isKeyDown(PlayerKeys.MovementLeft))
+            if (playerInfoDriver.keys.isKeyDown(PlayerKeys.MovementLeft))
             {
                 steerAngle -= this.steeringAngle;
             }
 
-            if (playerInfoDriver.isKeyDown(PlayerKeys.MovementRight))
+            if (playerInfoDriver.keys.isKeyDown(PlayerKeys.MovementRight))
             {
                 steerAngle += this.steeringAngle;
             }

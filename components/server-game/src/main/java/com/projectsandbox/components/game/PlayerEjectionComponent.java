@@ -2,6 +2,7 @@ package com.projectsandbox.components.game;
 
 import com.projectsandbox.components.server.Controller;
 import com.projectsandbox.components.server.entity.Entity;
+import com.projectsandbox.components.server.entity.component.event.PlayerInfoKeyDownComponentEvent;
 import com.projectsandbox.components.server.entity.player.PlayerEntity;
 import com.projectsandbox.components.server.entity.component.EntityComponent;
 import com.projectsandbox.components.server.entity.component.event.CollisionEntityComponentEvent;
@@ -22,9 +23,14 @@ import java.io.Serializable;
 /**
  * Created by limpygnome on 12/04/16.
  */
-public class PlayerEjectionComponent implements Serializable, EntityComponent, LogicComponentEvent, DeathComponentEvent, CollisionEntityComponentEvent
+public class PlayerEjectionComponent implements Serializable, EntityComponent, LogicComponentEvent,
+        DeathComponentEvent, CollisionEntityComponentEvent, PlayerInfoKeyDownComponentEvent
 {
+
     private static final long serialVersionUID = 1L;
+
+    // Holds reference to owner of this component
+    private PlayerEntity entity;
 
     /**
      * The space between a vehicle and an ejected player.
@@ -33,31 +39,67 @@ public class PlayerEjectionComponent implements Serializable, EntityComponent, L
 
     protected Vector2[] playerEjectPositions;
 
+    // TODO: bad logic, change it.
     // Indicates that the driver, player zero, was spawned in this vehicle - thus respawn vehicle with player on death
     protected boolean flagDriverSpawned;
 
     public PlayerEjectionComponent(PlayerEntity playerEntity, Vector2[] playerEjectPositions)
     {
+        // Check at least one ejection seat
         if (playerEjectPositions == null || playerEjectPositions.length == 0 || playerEjectPositions[0] == null)
         {
             throw new IllegalArgumentException("Player ejection positions must have at least one non-null item");
         }
-        else if (playerEjectPositions.length < 1)
-        {
-            throw new IllegalArgumentException("Must be at least one eject position");
-        }
 
+        // Set ejection seats
         this.playerEjectPositions = playerEjectPositions;
+
+        // Copy ref to owner
+        this.entity = playerEntity;
 
         // Check if spawned entity has player/driver; they'll need respawn later if so...
         this.flagDriverSpawned = (playerEntity.getPlayer() != null);
     }
 
     @Override
+    public void eventPlayerInfoKeyChange(Controller controller, PlayerInfo playerInfo, PlayerKeys key, int index, boolean isKeyDown)
+    {
+        // Only handle if action key to eject player
+        if (key == PlayerKeys.Action)
+        {
+            // Fetch ejection seat
+            Vector2 ejectPosition;
+
+            if (playerEjectPositions.length >= index)
+            {
+                ejectPosition = playerEjectPositions[0];
+            }
+            else
+            {
+                ejectPosition = playerEjectPositions[index];
+            }
+
+            // Eject player from the vehicle
+            playerEject(controller, entity, playerInfo, ejectPosition);
+
+            // Clear-out player
+            entity.setPlayer(null, index);
+
+            // Reset spawn flag if driver
+            PlayerInfo playerInfoDriver = entity.getPlayer();
+
+            if (playerInfo == playerInfoDriver)
+            {
+                flagDriverSpawned = false;
+            }
+        }
+    }
+
+    @Override
     public synchronized void eventLogic(Controller controller, Entity entity)
     {
+        // TODO: create connected/disconnected event to reset player...perhaps at playerinfo or playerentity level instead
         PlayerEntity playerEntity = (PlayerEntity) entity;
-        PlayerInfo playerInfoDriver = playerEntity.getPlayer();
         PlayerInfo[] players = entity.getPlayers();
 
         // Check if players want to get out / are still connected
@@ -73,37 +115,6 @@ public class PlayerEjectionComponent implements Serializable, EntityComponent, L
                 {
                     // Free the seat...
                     players[i] = null;
-                }
-                else if (playerInfo.isKeyDown(PlayerKeys.Action))
-                {
-                    // Set action key to handled
-                    playerInfo.setKey(PlayerKeys.Action, false);
-
-                    // Fetch ejection seat
-                    Vector2 ejectPosition;
-
-                    if (playerEjectPositions.length >= i)
-                    {
-                        ejectPosition = playerEjectPositions[0];
-                    }
-                    else
-                    {
-                        ejectPosition = playerEjectPositions[i];
-                    }
-
-                    // Eject player from the vehicle
-                    playerEject(controller, entity, playerInfo, ejectPosition);
-
-                    // Free-up the space
-                    players[i] = null;
-
-                    // Reset spawn flag if driver
-                    if (playerInfo == playerInfoDriver)
-                    {
-                        flagDriverSpawned = false;
-                    }
-
-                    // NOTE: future event hook could go here...
                 }
             }
         }
@@ -193,11 +204,8 @@ public class PlayerEjectionComponent implements Serializable, EntityComponent, L
             // Check if they're holding down action key to get in vehicle
             PlayerInfo playerInfo = playerEntityOther.getPlayer();
 
-            if (playerInfo != null && playerInfo.isKeyDown(PlayerKeys.Action))
+            if (playerInfo != null && playerInfo.keys.isKeyDown(PlayerKeys.Action))
             {
-                // Set action key off/handled
-                playerInfo.setKey(PlayerKeys.Action, false);
-
                 // Check for next available seat
                 PlayerInfo[] players = playerEntity.getPlayers();
                 PlayerInfo plyInSeat;

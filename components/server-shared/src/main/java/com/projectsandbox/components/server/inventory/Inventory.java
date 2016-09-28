@@ -2,6 +2,7 @@ package com.projectsandbox.components.server.inventory;
 
 import com.projectsandbox.components.server.Controller;
 import com.projectsandbox.components.server.entity.Entity;
+import com.projectsandbox.components.server.entity.component.event.PlayerInfoKeyDownComponentEvent;
 import com.projectsandbox.components.server.entity.player.PlayerEntity;
 import com.projectsandbox.components.server.inventory.item.AbstractInventoryItem;
 import com.projectsandbox.components.server.network.packet.imp.inventory.InventoryUpdatesOutboundPacket;
@@ -18,7 +19,7 @@ import java.util.Map;
 /**
  * Represents an inventory.
  */
-public class Inventory implements Serializable
+public class Inventory implements Serializable, PlayerInfoKeyDownComponentEvent
 {
     private final static Logger LOG = LogManager.getLogger(Inventory.class);
 
@@ -139,9 +140,6 @@ public class Inventory implements Serializable
         {
             packet.eventReset();
         }
-
-        // Check state of keys
-        checkKeys(controller);
 
         // Update logic of items
         Iterator<Map.Entry<Short, AbstractInventoryItem>> iterator = items.entrySet().iterator();
@@ -402,7 +400,18 @@ public class Inventory implements Serializable
         return item;
     }
 
-    private void checkKeys(Controller controller)
+    @Override
+    public void eventPlayerInfoKeyChange(Controller controller, PlayerInfo playerInfo, PlayerKeys key, int index, boolean isKeyDown)
+    {
+        switch (key)
+        {
+            case Spacebar:
+                updateActionKeyDown(isKeyDown);
+                break;
+        }
+    }
+
+    private void updateActionKeyDown(boolean keyDown)
     {
         // Must be an item selected and owner
         if (owner == null || selected == null)
@@ -410,13 +419,11 @@ public class Inventory implements Serializable
             return;
         }
 
-        // Check if to update fire key-down state
-        final boolean FIRE = owner.isKeyDown(PlayerKeys.Spacebar);
-
-        if (FIRE != selected.slot.keyDown)
+        // Check if key-down state has changed...
+        if (keyDown != selected.slot.keyDown)
         {
-            selected.slot.keyDown = FIRE;
-            LOG.debug("Selected item invoke change - key down: {}", FIRE);
+            selected.slot.keyDown = keyDown;
+            LOG.debug("Selected item invoke change - key down: {}", keyDown);
         }
     }
 

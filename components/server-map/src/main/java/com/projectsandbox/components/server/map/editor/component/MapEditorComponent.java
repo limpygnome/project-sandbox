@@ -3,10 +3,9 @@ package com.projectsandbox.components.server.map.editor.component;
 import com.projectsandbox.components.server.Controller;
 import com.projectsandbox.components.server.entity.Entity;
 import com.projectsandbox.components.server.entity.component.EntityComponent;
-import com.projectsandbox.components.server.entity.component.event.LogicComponentEvent;
+import com.projectsandbox.components.server.entity.component.event.PlayerInfoKeyDownComponentEvent;
 import com.projectsandbox.components.server.entity.physics.spatial.ProximityResult;
 import com.projectsandbox.components.server.entity.physics.spatial.QuadTree;
-import com.projectsandbox.components.server.entity.respawn.pending.EntityPendingRespawn;
 import com.projectsandbox.components.server.entity.respawn.pending.PositionPendingRespawn;
 import com.projectsandbox.components.server.player.PlayerInfo;
 import com.projectsandbox.components.server.player.PlayerKeys;
@@ -18,10 +17,18 @@ import java.util.Set;
 /**
  * Created by limpygnome on 21/09/16.
  */
-public class MapEditorComponent implements EntityComponent, LogicComponentEvent
+public class MapEditorComponent implements EntityComponent, PlayerInfoKeyDownComponentEvent
 {
     // The type currently selected, for when adding entities
     private short currentEntityTypeId;
+
+    // Store ref to entity
+    private Entity entity;
+
+    public MapEditorComponent(Entity entity)
+    {
+        this.entity = entity;
+    }
 
     /**
      * Sets the current selected (entity) type ID.
@@ -32,22 +39,16 @@ public class MapEditorComponent implements EntityComponent, LogicComponentEvent
     }
 
     @Override
-    public void eventLogic(Controller controller, Entity entity)
+    public void eventPlayerInfoKeyChange(Controller controller, PlayerInfo playerInfo, PlayerKeys key, int index, boolean isKeyDown)
     {
-        // TODO: make event-driven
-        // Check for key-presses
-        PlayerInfo playerInfo = entity.getPlayer();
-
-        if (playerInfo != null)
+        switch (key)
         {
-            if (playerInfo.isKeyDown(PlayerKeys.Spacebar))
-            {
+            case Spacebar:
                 createNewEntity(controller, entity);
-            }
-            else if (playerInfo.isKeyDown(PlayerKeys.Action))
-            {
+                break;
+            case Action:
                 removeClosestEntity(controller, entity);
-            }
+                break;
         }
     }
 

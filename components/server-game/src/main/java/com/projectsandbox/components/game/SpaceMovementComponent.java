@@ -42,12 +42,12 @@ public class SpaceMovementComponent implements EntityComponent, LogicComponentEv
             // Handle changing the rotation
             float angleOffset = 0.0f;
 
-            if (playerDriver.isKeyDown(PlayerKeys.MovementLeft))
+            if (playerDriver.keys.isKeyDown(PlayerKeys.MovementLeft))
             {
                 angleOffset -= turnRadians;
             }
 
-            if (playerDriver.isKeyDown(PlayerKeys.MovementRight))
+            if (playerDriver.keys.isKeyDown(PlayerKeys.MovementRight))
             {
                 angleOffset += turnRadians;
             }
@@ -57,11 +57,11 @@ public class SpaceMovementComponent implements EntityComponent, LogicComponentEv
             // Handle acceleration
             Vector2 offset = null;
 
-            if (playerDriver.isKeyDown(PlayerKeys.MovementUp))
+            if (playerDriver.keys.isKeyDown(PlayerKeys.MovementUp))
             {
                 offset = Vector2.vectorFromAngle(entity.rotation, acceleration);
             }
-            else if (playerDriver.isKeyDown(PlayerKeys.MovementDown))
+            else if (playerDriver.keys.isKeyDown(PlayerKeys.MovementDown))
             {
                 offset = Vector2.vectorFromAngle(entity.rotation, -acceleration);
             }
