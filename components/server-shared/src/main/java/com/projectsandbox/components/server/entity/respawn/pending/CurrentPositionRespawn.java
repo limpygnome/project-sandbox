@@ -19,7 +19,7 @@ public class CurrentPositionRespawn extends PendingRespawn
 
     public CurrentPositionRespawn(Controller controller, WorldMap map, Entity entity, long respawnDelay)
     {
-        super(controller, map, entity, respawnDelay);
+        super(controller, map, entity, respawnDelay, false);
 
         this.spawn = new Spawn(entity.positionNew.x, entity.positionNew.y, entity.rotation);
     }

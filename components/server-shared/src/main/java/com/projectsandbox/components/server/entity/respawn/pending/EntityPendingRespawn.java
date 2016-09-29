@@ -18,14 +18,9 @@ public class EntityPendingRespawn extends PendingRespawn
 {
     private final static Logger LOG = LogManager.getLogger(EntityPendingRespawn.class);
 
-    public EntityPendingRespawn(Controller controller, WorldMap map, Entity entity)
+    public EntityPendingRespawn(Controller controller, WorldMap map, Entity entity, long respawnDelay, boolean loadedFromSession)
     {
-        super(controller, map, entity, 0);
-    }
-
-    public EntityPendingRespawn(Controller controller, WorldMap map, Entity entity, long respawnDelay)
-    {
-        super(controller, map, entity, respawnDelay);
+        super(controller, map, entity, respawnDelay, loadedFromSession);
     }
 
     @Override

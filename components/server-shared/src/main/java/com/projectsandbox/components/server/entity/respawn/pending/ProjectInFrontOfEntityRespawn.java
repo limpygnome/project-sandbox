@@ -20,7 +20,7 @@ public class ProjectInFrontOfEntityRespawn extends PendingRespawn
 
     public ProjectInFrontOfEntityRespawn(Controller controller, WorldMap map, Entity entity, Entity parent, float spacing, Vector2 offset)
     {
-        super(controller, map, entity, 0);
+        super(controller, map, entity, 0, false);
 
         this.parent = parent;
         this.spacing = spacing;

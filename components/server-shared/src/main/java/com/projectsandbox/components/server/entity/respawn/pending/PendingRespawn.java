@@ -17,18 +17,15 @@ public abstract class PendingRespawn implements Serializable
     public final WorldMap map;
     public final Entity entity;
     public final long gameTimeRespawn;
+    public final boolean loadedFromSession;
 
-    protected PendingRespawn(Controller controller, WorldMap map, Entity entity)
-    {
-        this(controller, map, entity, 0);
-    }
-
-    protected PendingRespawn(Controller controller, WorldMap map, Entity entity, long respawnDelay)
+    protected PendingRespawn(Controller controller, WorldMap map, Entity entity, long respawnDelay, boolean loadedFromSession)
     {
         this.map = map;
         this.entity = entity;
         long gameTime = controller.gameTime();
         this.gameTimeRespawn = gameTime + respawnDelay;
+        this.loadedFromSession = loadedFromSession;
     }
 
     /**

@@ -54,11 +54,14 @@ public class GameSessionDataWrapper implements Serializable
             catch (SerializationException e)
             {
                 LOG.info("failed to load game session data - class not found - " + e.getMessage());
+                value = null;
+                data = null;
             }
             catch (Exception e)
             {
                 LOG.warn("failed to load game session data", e);
                 value = null;
+                data = null;
             }
         }
 

@@ -27,75 +27,58 @@ public class PlayerEntityService
     private EntityTypeMappingStoreService entityTypeMappingStoreService;
 
     /**
-     * Creates a new player.
+     * Loads, otherwise creates, an entity for player.
      *
-     * @param worldMap the current map
+     * @param defaultMap the default map
      * @param playerInfo the player
      * @param forceCreate true = always new entity, false = look for persisted entity
      * @return an entity
      */
-    public PlayerEntity createPlayer(WorldMap worldMap, PlayerInfo playerInfo, boolean forceCreate)
+    public LoadOrCreateResult loadOrCreatePlayer(WorldMap defaultMap, PlayerInfo playerInfo, boolean forceCreate)
     {
+
         // TODO: all of this map logic is flawed / outdated, needs changing...
         try
         {
+            LoadOrCreateResult result = new LoadOrCreateResult();
             GameSession gameSession = playerInfo.session;
-            PlayerEntity playerEntity;
 
+            // Load from session if not forcibly creating new...
             if (!forceCreate)
             {
-                // Attempt to load from session
-                playerEntity = createPlayerFromSession(worldMap, playerInfo, gameSession);
+                // Fetch required data from session
+                PlayerEntity entity = createPlayerFromSession(defaultMap, playerInfo, gameSession);
+                Short mapId = gameSession.gameDataGetShort(PLAYERDATA_MAPID);
 
-                if (playerEntity != null)
+                // Load map
+                if (mapId != null)
                 {
-                    // Fetch the map to which the entity belonged
-                    Short mapId = gameSession.gameDataGetShort(PLAYERDATA_MAPID);
-                    WorldMap entityMap;
+                    WorldMap map = mapService.get(mapId);
 
-                    if (mapId != null)
+                    if (map != null && entity != null)
                     {
-                        entityMap = mapService.get(mapId);
-                    }
-                    else
-                    {
-                        entityMap = null;
-                    }
-
-                    // Setup entity if we found the map
-                    if (entityMap != null)
-                    {
-                        // Set map
-                        playerEntity.map = entityMap;
-
-                        // Set flag to indicate this entity has been created from persistence
-                        playerEntity.setRespawnPersistedPlayer(true);
-                    }
-                    else
-                    {
-                        playerEntity = null;
+                        result.loadedFromSession = true;
+                        result.entity = entity;
+                        result.map = map;
                     }
                 }
             }
-            else
-            {
-                playerEntity = null;
-            }
 
-            // Create default entity if no entity yet
-            if (playerEntity == null)
+            // Create default entity if no entity yet; use provided map as default
+            if (result.entity == null)
             {
-                String defaultEntityTypeName = worldMap.getProperties().getDefaultEntityTypeName();
-                playerEntity = (PlayerEntity) entityTypeMappingStoreService.createByTypeName(defaultEntityTypeName, null);
+                String defaultEntityTypeName = defaultMap.getProperties().getDefaultEntityTypeName();
+                result.entity = (PlayerEntity) entityTypeMappingStoreService.createByTypeName(defaultEntityTypeName, null);
+                result.map = defaultMap;
             }
 
             // Set the current player
-            playerEntity.setPlayer(playerInfo, 0);
+            result.entity.setPlayer(playerInfo, 0);
 
             // Set flag to allow persistence of entity
-            playerEntity.setPersistToSession(true);
+            result.entity.setPersistToSession(true);
 
-            return playerEntity;
+            return result;
         }
         catch (Exception e)
         {
@@ -124,19 +107,28 @@ public class PlayerEntityService
         {
             PlayerEntity playerEntity = (PlayerEntity) entity;
 
-            // Check entity can be persisted
-            if (playerEntity.isPersistToSession(playerInfo))
-            {
-                GameSession gameSession = playerInfo.session;
-
-                // Persist entity and mapid
-                gameSession.gameDataPut(PLAYERDATA_MAPID, playerEntity.map.getMapId());
-                gameSession.gameDataPut(PLAYERDATA_ENTITY_KEY, playerEntity);
-            }
+            // Persist entity and mapid
+            GameSession gameSession = playerInfo.session;
+            gameSession.gameDataPut(PLAYERDATA_MAPID, playerEntity.map.getMapId());
+            gameSession.gameDataPut(PLAYERDATA_ENTITY_KEY, playerEntity);
         }
         else if (entity != null)
         {
             LOG.debug("Player not persisted since entity is not a player entity");
+        }
+    }
+
+    public static class LoadOrCreateResult
+    {
+        public boolean loadedFromSession;
+        public WorldMap map;
+        public PlayerEntity entity;
+
+        private LoadOrCreateResult()
+        {
+            this.loadedFromSession = false;
+            this.map = null;
+            this.entity = null;
         }
     }
 

@@ -22,13 +22,6 @@ public abstract class PlayerEntity extends Entity
     */
     private transient boolean persistToSession;
 
-    /*
-        A flag used by the respawn manager, which changes the behaviour for respawning this entity if true.
-
-        This is for respawning entities which have been persisted.
-     */
-    private transient boolean respawnPersistedPlayer;
-
     /* All of the players which are using this entity. */
     private transient PlayerInfo[] players;
 
@@ -121,6 +114,35 @@ public abstract class PlayerEntity extends Entity
                 {
                     inventory.logic(controller);
                 }
+            }
+        }
+    }
+
+    public synchronized void eventPlayerInfoDisconnect(Controller controller, PlayerInfo playerInfo)
+    {
+        // Remove player and check if any other playrers
+        boolean otherPlayer = false;
+
+        for (int i = 0; i < players.length; i++)
+        {
+            if (players[i] == playerInfo)
+            {
+                players[i] = null;
+            }
+            else
+            {
+                otherPlayer = true;
+            }
+        }
+
+        // Allow last player to persist this entity
+        if (!otherPlayer)
+        {
+            // If we can persist the entity, then do so and remove from world...
+            if (persistToSession)
+            {
+                controller.playerEntityService.persistPlayer(playerInfo);
+                remove();
             }
         }
     }
@@ -264,38 +286,6 @@ public abstract class PlayerEntity extends Entity
     public void setPersistToSession(boolean persistToSession)
     {
         this.persistToSession = persistToSession;
-    }
-
-    /**
-     * Indicates if this entity has been created from a persisted game session.
-     *
-     * @return true = previously persisted, false = normal entity
-     */
-    public boolean isRespawnPersistedPlayer()
-    {
-        return respawnPersistedPlayer;
-    }
-
-    /**
-     * Sets a flag to indicate if to change the behaviour when respawning the player, due to the entity being created
-     * from a persisted game session.
-     *
-     * @param respawnPersistedPlayer true = persisted, false = normal respawn
-     */
-    public void setRespawnPersistedPlayer(boolean respawnPersistedPlayer)
-    {
-        this.respawnPersistedPlayer = respawnPersistedPlayer;
-    }
-
-    /**
-     * Indicates if the entity should be persisted to the driver's session.
-     *
-     * @param playerInfo the player to which the entity will be persisted
-     * @return true = persist, false = do not persist
-     */
-    public boolean isPersistToSession(PlayerInfo playerInfo)
-    {
-        return persistToSession && players[0] == playerInfo;
     }
 
     /**

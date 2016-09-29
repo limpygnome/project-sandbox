@@ -2,6 +2,7 @@ package com.projectsandbox.components.game;
 
 import com.projectsandbox.components.server.Controller;
 import com.projectsandbox.components.server.entity.Entity;
+import com.projectsandbox.components.server.entity.PlayerEntityService;
 import com.projectsandbox.components.server.entity.component.event.PlayerInfoKeyDownComponentEvent;
 import com.projectsandbox.components.server.entity.player.PlayerEntity;
 import com.projectsandbox.components.server.entity.component.EntityComponent;
@@ -128,7 +129,8 @@ public class PlayerEjectionComponent implements Serializable, EntityComponent, L
         Vector2 plyPos = ejectPosition.clone();
 
         // Create new player ent in position of vehicle
-        Entity entityPlayer = controller.playerEntityService.createPlayer(worldMap, playerInfo, true);
+        PlayerEntityService.LoadOrCreateResult result = controller.playerEntityService.loadOrCreatePlayer(worldMap, playerInfo, true);
+        PlayerEntity entityPlayer = result.entity;
 
         // Add player to pos offset
         float playerOffsetX = playerEjectVectorPos(ejectPosition.x, entityPlayer.width / 2.0f);
@@ -183,8 +185,8 @@ public class PlayerEjectionComponent implements Serializable, EntityComponent, L
             if (playerInfo != null && !(flagDriverSpawned && i == 0))
             {
                 // Create and respawn player
-                Entity entityPlayer = controller.playerEntityService.createPlayer(worldMap, playerInfo, true);
-                controller.respawnManager.respawn(new EntityPendingRespawn(controller, worldMap, entityPlayer));
+                PlayerEntityService.LoadOrCreateResult result = controller.playerEntityService.loadOrCreatePlayer(worldMap, playerInfo, true);
+                controller.respawnManager.respawn(new EntityPendingRespawn(controller, worldMap, result.entity, 0, false));
 
                 // Set seat to empty
                 players[i] = null;

@@ -100,7 +100,7 @@ public class EntitiesMapComponent implements MapComponent
         entity.spawn = spawn;
 
         // Add to world
-        respawnManager.respawn(new EntityPendingRespawn(controller, map, entity));
+        respawnManager.respawn(new EntityPendingRespawn(controller, map, entity, 0, false));
     }
 
     private MapEntKV loadEntityProperties(JSONObject rawProperties)

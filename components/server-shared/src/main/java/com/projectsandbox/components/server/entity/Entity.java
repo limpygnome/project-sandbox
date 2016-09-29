@@ -20,6 +20,7 @@ import com.projectsandbox.components.server.world.spawn.Spawn;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import javax.naming.ldap.Control;
 import java.io.Serializable;
 import java.lang.annotation.Annotation;
 import java.util.Set;
@@ -518,7 +519,7 @@ public strictfp abstract class Entity implements Serializable
     public synchronized void eventDeath(Controller controller, AbstractKiller killer)
     {
         // Respawn the entity
-        controller.respawnManager.respawn(new EntityPendingRespawn(controller, map, this, DEFAULT_RESPAWN_TIME_MS));
+        controller.respawnManager.respawn(new EntityPendingRespawn(controller, map, this, DEFAULT_RESPAWN_TIME_MS, false));
 
         // Invoke callbacks
         Set<DeathComponentEvent> callbacks = components.fetch(DeathComponentEvent.class);

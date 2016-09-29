@@ -152,23 +152,9 @@ public class RespawnManager implements EventMapLogicCycleService
     private boolean respawnEntity(WorldMap map, RespawnData respawnData)
     {
         Entity entity = respawnData.pendingRespawn.entity;
-        PlayerEntity playerEntity = null;
-
-        // Determine if entity has been respawned from persistence
-        boolean respawnAfterPersisted = false;
-
-        if (entity instanceof PlayerEntity)
-        {
-            playerEntity = (PlayerEntity) entity;
-
-            if (playerEntity.isRespawnPersistedPlayer())
-            {
-                respawnAfterPersisted = true;
-            }
-        }
 
         // Reset entity
-        entity.eventReset(controller, respawnData.spawn, respawnAfterPersisted);
+        entity.eventReset(controller, respawnData.spawn, respawnData.pendingRespawn.loadedFromSession);
 
         // Set map
         entity.map = map;
@@ -178,12 +164,6 @@ public class RespawnManager implements EventMapLogicCycleService
         {
             LOG.warn("Could not respawn entity, failed to add to entity manager - entity id: {}", entity.id);
             return false;
-        }
-
-        // Reset respwan-persisted flag
-        if (respawnAfterPersisted)
-        {
-            playerEntity.setRespawnPersistedPlayer(false);
         }
 
         // Invoke spawn event

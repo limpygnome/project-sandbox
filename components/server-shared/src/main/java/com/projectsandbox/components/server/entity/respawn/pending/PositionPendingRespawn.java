@@ -14,7 +14,7 @@ public class PositionPendingRespawn extends PendingRespawn
 
     public PositionPendingRespawn(Controller controller, WorldMap map, Entity entity, Spawn spawn, long respawnDelay)
     {
-        super(controller, map, entity, respawnDelay);
+        super(controller, map, entity, respawnDelay, false);
 
         this.spawn = spawn;
     }
@@ -26,7 +26,7 @@ public class PositionPendingRespawn extends PendingRespawn
 
     public PositionPendingRespawn(Controller controller, WorldMap map, Entity entity, float x, float y, float rotation, long respawnDelay)
     {
-        super(controller, map, entity, respawnDelay);
+        super(controller, map, entity, respawnDelay, false);
 
         this.spawn = new Spawn(x, y, rotation);
     }

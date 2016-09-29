@@ -119,7 +119,7 @@ public class MapEditorInboundPacket extends AuthenticatedInboundPacketHandler
         // Respawn main player
         InvisibleMapEditorEntity entity = new InvisibleMapEditorEntity();
         entity.setPlayer(playerInfo, 0);
-        respawnManager.respawn(new EntityPendingRespawn(controller, map, entity));
+        respawnManager.respawn(new EntityPendingRespawn(controller, map, entity, 0, false));
     }
 
     private void actionEntitySelect(Controller controller, Entity entity, JSONObject data)

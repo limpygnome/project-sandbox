@@ -167,19 +167,13 @@ public class PlayerService implements EventLogicCycleService, IdCounterConsumer
                 }
             }
 
-            // Persist player's current entity
-            playerEntityService.persistPlayer(playerInfo);
-
-            // Remove entity
+            // Inform entity regarding player disconnecting
             if (entity != null && entity instanceof PlayerEntity)
             {
                 PlayerEntity playerEntity = (PlayerEntity) entity;
 
-                if (playerEntity.isRemovableOnPlayerEntChange(playerInfo))
-                {
-                    entityManager.remove(entity);
-                    LOG.debug("Removed entity for disconnecting player - ply id: {}, ent id: {}", playerInfo.playerId, entity.id);
-                }
+                // Inform entity regarding player disconnecting
+                playerEntity.eventPlayerInfoDisconnect(controller, playerInfo);
             }
 
             // Remove socket mapping
@@ -205,7 +199,7 @@ public class PlayerService implements EventLogicCycleService, IdCounterConsumer
             // Unload game session
             controller.sessionService.unload(playerInfo.session);
 
-            // Inform server the player has left
+            // Inform other players that the player has left
             PlayerEventsUpdatesOutboundPacket playerEventsUpdatesOutboundPacket = new PlayerEventsUpdatesOutboundPacket();
             playerEventsUpdatesOutboundPacket.writePlayerLeft(playerInfo);
             broadcast(playerEventsUpdatesOutboundPacket);
@@ -294,11 +288,11 @@ public class PlayerService implements EventLogicCycleService, IdCounterConsumer
             // Determine lobby/default map for player
             WorldMap map = mapService.mainMap;
 
-            // Create entity for player
-            Entity entityPlayer = playerEntityService.createPlayer(map, playerInfo, false);
+            // Load/create entity
+            PlayerEntityService.LoadOrCreateResult result = playerEntityService.loadOrCreatePlayer(map, playerInfo, false);
 
             // Spawn the player
-            respawnManager.respawn(new EntityPendingRespawn(controller, map, entityPlayer));
+            respawnManager.respawn(new EntityPendingRespawn(controller, map, result.entity, 0, result.loadedFromSession));
 
             // Send map data
             packetService.send(playerInfo, map.getPacket());
