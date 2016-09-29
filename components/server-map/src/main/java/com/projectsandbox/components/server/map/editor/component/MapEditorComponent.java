@@ -41,31 +41,37 @@ public class MapEditorComponent implements EntityComponent, PlayerInfoKeyDownCom
     @Override
     public void eventPlayerInfoKeyChange(Controller controller, PlayerInfo playerInfo, PlayerKeys key, int index, boolean isKeyDown)
     {
-        switch (key)
+        if (isKeyDown)
         {
-            case Spacebar:
-                createNewEntity(controller, entity);
-                break;
-            case Action:
-                removeClosestEntity(controller, entity);
-                break;
+            switch (key)
+            {
+                case Spacebar:
+                    createNewEntity(controller, entity);
+                    break;
+                case Action:
+                    removeClosestEntity(controller, entity);
+                    break;
+            }
         }
     }
 
     private void createNewEntity(Controller controller, Entity entityEditor)
     {
-        // Create entity instance
-        Entity newEntity = controller.entityTypeMappingStoreService.createByTypeId(currentEntityTypeId, null);
+        if (currentEntityTypeId != 0)
+        {
+            // Create entity instance
+            Entity newEntity = controller.entityTypeMappingStoreService.createByTypeId(currentEntityTypeId, null);
 
-        // Create spawn based on editor's current position/rotation
-        WorldMap map = entityEditor.map;
-        Spawn spawn = new Spawn(entityEditor.positionNew.x, entityEditor.positionNew.y, entityEditor.rotation);
+            // Create spawn based on editor's current position/rotation
+            WorldMap map = entityEditor.map;
+            Spawn spawn = new Spawn(entityEditor.positionNew.x, entityEditor.positionNew.y, entityEditor.rotation);
 
-        // Assign spawn to entity, so it always spawns there
-        newEntity.spawn = spawn;
+            // Assign spawn to entity, so it always spawns there
+            newEntity.spawn = spawn;
 
-        // Respawn entity
-        controller.respawnManager.respawn(new PositionPendingRespawn(controller, map, newEntity, spawn));
+            // Respawn entity
+            controller.respawnManager.respawn(new PositionPendingRespawn(controller, map, newEntity, spawn));
+        }
     }
 
     private void removeClosestEntity(Controller controller, Entity entityEditor)

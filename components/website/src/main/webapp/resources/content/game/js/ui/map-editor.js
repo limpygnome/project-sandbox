@@ -7,7 +7,7 @@ game.ui.mapEditor = (function(){
             action: "map-reload"
         };
         sendData(payload);
-        return false;
+        return true;
     };
 
     var handleMapClear = function()
@@ -16,7 +16,7 @@ game.ui.mapEditor = (function(){
             action: "map-clear"
         };
         sendData(payload);
-        return false;
+        return true;
     };
 
     var handleMapSave = function()
@@ -25,7 +25,7 @@ game.ui.mapEditor = (function(){
             action: "map-save"
         };
         sendData(payload);
-        return false;
+        return true;
     };
 
     var handleEntitySelect = function(typeId)
@@ -36,7 +36,7 @@ game.ui.mapEditor = (function(){
         };
 
         sendData(payload);
-        return false;
+        return true;
     };
 
     var sendData = function(payload)
@@ -80,8 +80,9 @@ game.ui.mapEditor = (function(){
                 $("#ps-map-editor .entities").append("<span data-type-id='" + type.typeId + "' class='button'>" + type.title + "</span>");
 
                 // Hook new button
+                // TODO: jquery bug whereby touchpad click is not working; proven by addeventlistener working with click
                 $("#ps-map-editor .entities .button[data-type-id=" + type.typeId + "]").on("click", function(){
-                    handleEntitySelect(type.typeId);
+                    return handleEntitySelect(type.typeId);
                 });
             }
         });
