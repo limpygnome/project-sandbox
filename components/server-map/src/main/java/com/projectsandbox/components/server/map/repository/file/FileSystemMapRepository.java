@@ -94,7 +94,7 @@ public class FileSystemMapRepository implements MapRepository
                     // Add to result
                     maps.put(map.getMapId(), map);
 
-                    //persist(map);
+                    persist(map);
 
                     LOG.debug("loaded public map - {}", map);
                 }
@@ -122,10 +122,11 @@ public class FileSystemMapRepository implements MapRepository
             ObjectMapper mapper = new ObjectMapper();
             mapper.setVisibility(PropertyAccessor.FIELD, JsonAutoDetect.Visibility.ANY);
 
-            Map<String, String> test = new HashMap<>();
-            test.put("a", "123");
-            test.put("b", "456");
-            String testData = mapper.writeValueAsString(test);
+            //Map<String, String> test = new HashMap<>();
+            //test.put("a", "123");
+            //test.put("b", "456");
+
+            String testData = mapper.writeValueAsString(map);
             LOG.error(testData);
 
             String mapData = mapper.writeValueAsString(map);

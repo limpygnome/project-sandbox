@@ -134,10 +134,6 @@ public class MapEditorInboundPacket extends AuthenticatedInboundPacketHandler
         }
     }
 
-    private void actionRemoveEntity()
-    {
-    }
-
     private MapEditorComponent getMapEditorComponent(Entity entity)
     {
         MapEditorComponent component = (MapEditorComponent) entity.components.fetchComponent(MapEditorComponent.class);

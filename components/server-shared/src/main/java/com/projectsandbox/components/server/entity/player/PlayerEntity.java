@@ -54,6 +54,7 @@ public abstract class PlayerEntity extends Entity
     {
         super.eventLogic(controller);
 
+        // Run inventory logic
         if (inventories != null)
         {
             Inventory inventory;
