@@ -20,16 +20,16 @@ public class TileMapDataOutboundPacket extends OutboundPacket
     public void build(TileWorldMap map) throws IOException
     {
         // Add number of tiles
-        packetData.add((short) map.tileData.tileTypes.length);
+        packetData.add((short) map.tileMapData.tileTypes.length);
         
         // Add tile imp
         TileType tileType;
         byte[] textureNameBytes;
 
-        for (int i = 0; i < map.tileData.tileTypes.length; i++)
+        for (int i = 0; i < map.tileMapData.tileTypes.length; i++)
         {
             // Fetch tile type
-            tileType = map.tileData.tileTypes[i];
+            tileType = map.tileMapData.tileTypes[i];
             
             // Convert texture name to bytes
             textureNameBytes = tileType.texture.getBytes("UTF-8");
@@ -43,15 +43,15 @@ public class TileMapDataOutboundPacket extends OutboundPacket
         
         // Add map properties
         packetData.add(map.getMapId());
-        packetData.add((short) map.tileData.tileSize);
-        packetData.add(map.tileData.widthTiles);
-        packetData.add(map.tileData.heightTiles);
+        packetData.add((short) map.tileMapData.tileSize);
+        packetData.add(map.tileMapData.widthTiles);
+        packetData.add(map.tileMapData.heightTiles);
         
         // Add tiles
         short[] tileRow;
-        for(int y = 0; y < map.tileData.tiles.length; y++)
+        for(int y = 0; y < map.tileMapData.tiles.length; y++)
         {
-            tileRow = map.tileData.tiles[y];
+            tileRow = map.tileMapData.tiles[y];
             for(int x = 0; x < tileRow.length; x++)
             {
                 packetData.add(tileRow[x]);

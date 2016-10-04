@@ -33,7 +33,7 @@ public class TileAStarPathFinder implements PathFinder
         TileWorldMap tileMap = (TileWorldMap) entity.map;
 
         // Convert positions into tiles
-        int tileSize = (int) tileMap.tileData.tileSize;
+        int tileSize = (int) tileMap.tileMapData.tileSize;
 
         // TODO: use map position method
         int startTileX = (int) (startX / tileSize);
@@ -101,7 +101,7 @@ public class TileAStarPathFinder implements PathFinder
                     neighborY = currentNode.tileY + offsetY;
 
                     // Check within bounds of map
-                    if (neighborX < 0 || neighborY < 0 || neighborX >= tileMap.tileData.widthTiles || neighborY >= tileMap.tileData.heightTiles)
+                    if (neighborX < 0 || neighborY < 0 || neighborX >= tileMap.tileMapData.widthTiles || neighborY >= tileMap.tileMapData.heightTiles)
                     {
                         continue;
                     }
@@ -169,7 +169,7 @@ public class TileAStarPathFinder implements PathFinder
 
     private boolean isTileUsable(TileWorldMap tileMap, Entity entity, int tileX, int tileY)
     {
-        TileType tileType = tileMap.tileData.tileTypes[tileMap.tileData.tiles[tileY][tileX]];
+        TileType tileType = tileMap.tileMapData.tileTypes[tileMap.tileMapData.tiles[tileY][tileX]];
 
         // TODO: improve by looking at size of entity and neighbors being solid
         return !tileType.properties.solid;

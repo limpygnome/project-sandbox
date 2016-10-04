@@ -1,4 +1,4 @@
-package com.projectsandbox.components.server.map.component.helper;
+package com.projectsandbox.components.server.entity.respawn;
 
 import com.projectsandbox.components.server.world.spawn.Spawn;
 import org.json.simple.JSONObject;

@@ -5,18 +5,16 @@ import com.projectsandbox.components.server.entity.ai.pathfinding.PathFinder;
 import com.projectsandbox.components.server.entity.ai.pathfinding.astar.TileAStarPathFinder;
 import com.projectsandbox.components.server.entity.ai.pathfinding.astar.heuristic.ClosestAbsoluteHeuristic;
 import com.projectsandbox.components.server.entity.ai.pathfinding.idle.DefaultTileIdleWalkPathBuilder;
+import com.projectsandbox.components.server.world.map.MapData;
 import com.projectsandbox.components.server.world.map.WorldMap;
 import com.projectsandbox.components.server.world.map.type.tile.TileWorldMap;
-
-import java.io.Serializable;
+import org.json.simple.JSONObject;
 
 /**
  * Created by limpygnome on 22/07/16.
  */
-public class ArtificialIntelligenceMapData implements Serializable
+public class ArtificialIntelligenceMapData implements MapData
 {
-    private static final long serialVersionUID = 1L;
-
     /* Used to find paths */
     protected PathFinder pathFinder;
 
@@ -36,6 +34,16 @@ public class ArtificialIntelligenceMapData implements Serializable
             this.pathFinder = null;
             this.idleWalkPathBuilder = null;
         }
+    }
+
+    @Override
+    public void serialize(JSONObject root)
+    {
+    }
+
+    @Override
+    public void deserialize(JSONObject root)
+    {
     }
 
 }

@@ -2,7 +2,7 @@ package com.projectsandbox.components.server.entity.physics;
 
 import com.projectsandbox.components.server.entity.Entity;
 import com.projectsandbox.components.server.util.CustomMath;
-import com.projectsandbox.components.server.world.map.type.tile.TileData;
+import com.projectsandbox.components.server.world.map.type.tile.TileMapData;
 
 import java.io.Serializable;
 
@@ -249,20 +249,20 @@ public class Vertices implements Serializable
     /**
      * Builds vertices for a map tile.
      * 
-     * @param tileData
+     * @param tileMapData
      * @param tileX
      * @param tileY
      * @return 
      */
-    public static Vertices buildTileVertices(TileData tileData, int tileX, int tileY)
+    public static Vertices buildTileVertices(TileMapData tileMapData, int tileX, int tileY)
     {
         // Calculate x and y - y must be inverted!
-        float x = (tileX * tileData.tileSize) + tileData.tileSizeHalf;
-        float y = (tileY * tileData.tileSize) + tileData.tileSizeHalf;
+        float x = (tileX * tileMapData.tileSize) + tileMapData.tileSizeHalf;
+        float y = (tileY * tileMapData.tileSize) + tileMapData.tileSizeHalf;
         
         Vector2 position = new Vector2(x, y);
         
-        return new Vertices(position, 0.0f, tileData.tileSize, tileData.tileSize);
+        return new Vertices(position, 0.0f, tileMapData.tileSize, tileMapData.tileSize);
     }
 
     /**

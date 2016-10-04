@@ -1,7 +1,9 @@
 package com.projectsandbox.components.server.world.map.type.tile;
 
+import com.projectsandbox.components.server.Controller;
+import com.projectsandbox.components.server.world.map.GeneralMapData;
 import com.projectsandbox.components.server.world.map.WorldMap;
-import com.projectsandbox.components.server.world.map.WorldMapProperties;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.io.IOException;
 
@@ -10,17 +12,15 @@ import java.io.IOException;
  */
 public class TileWorldMap extends WorldMap
 {
-    private static final long serialVersionUID = 1L;
-
     /**
      * Tile data for this map.
      */
-    public TileData tileData;
+    @Autowired
+    public TileMapData tileMapData;
 
-    public TileWorldMap(short mapId)
+    public TileWorldMap(String mapId, Controller controller)
     {
-        super(mapId);
-        this.properties = new WorldMapProperties();
+        super(mapId, controller);
     }
 
     @Override
@@ -35,13 +35,13 @@ public class TileWorldMap extends WorldMap
     @Override
     public float getMaxX()
     {
-        return tileData.maxX;
+        return tileMapData.maxX;
     }
 
     @Override
     public float getMaxY()
     {
-        return tileData.maxY;
+        return tileMapData.maxY;
     }
 
 }

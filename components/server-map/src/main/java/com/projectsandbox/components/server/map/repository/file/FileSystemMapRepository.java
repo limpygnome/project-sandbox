@@ -9,6 +9,9 @@ import com.projectsandbox.components.server.util.JsonHelper;
 import com.projectsandbox.components.server.world.map.repository.MapRepository;
 import com.projectsandbox.components.server.world.map.MapService;
 import com.projectsandbox.components.server.world.map.WorldMap;
+import com.projectsandbox.components.server.world.map.type.open.OpenWorldMap;
+import com.projectsandbox.components.server.world.map.type.tile.TileWorldMap;
+import jdk.nashorn.internal.objects.NativeArray;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.json.simple.JSONObject;
@@ -36,15 +39,13 @@ public class FileSystemMapRepository implements MapRepository
 {
     private final static Logger LOG = LogManager.getLogger(FileSystemMapRepository.class);
 
-    @Resource(name = "fileSystemMapBuilders")
-    private Map<String, FileSystemMapBuilder> builders;
     @Autowired
     private JsonHelper jsonHelper;
 
     @Override
-    public Map<Short, WorldMap> fetchPublicMaps(Controller controller, MapService mapService)
+    public Map<String, WorldMap> fetchPublicMaps(Controller controller, MapService mapService)
     {
-        Map<Short, WorldMap> maps = new HashMap<>();
+        Map<String, WorldMap> maps = new HashMap<>();
 
         try
         {
@@ -71,33 +72,21 @@ public class FileSystemMapRepository implements MapRepository
                     mapData = null;
                 }
 
-                // Read type and fetch builder
-                mapType = (String) mapData.get("type");
-                mapBuilder = builders.get(mapType);
+                // Read map
+                map = readMap(controller, mapData);
 
-                if (mapBuilder == null)
-                {
-                    throw new RuntimeException("Unable to find map builder for map type: " + mapType);
-                }
+                // Prepare for runtime
+                map.postMapLoad();
 
-                // Build map using data
-                map = mapBuilder.build(controller, mapService, mapData);
+                // Build initial packet
+                map.rebuildMapPacket();
 
-                if (map != null)
-                {
-                    // Prepare for runtime
-                    map.postMapLoad();
+                // Add to result
+                maps.put(map.getMapId(), map);
 
-                    // Build initial packet
-                    map.rebuildMapPacket();
+                persist(map);
 
-                    // Add to result
-                    maps.put(map.getMapId(), map);
-
-                    persist(map);
-
-                    LOG.debug("loaded public map - {}", map);
-                }
+                LOG.debug("loaded public map - {}", map);
             }
         }
         catch (IOException e)
@@ -108,10 +97,43 @@ public class FileSystemMapRepository implements MapRepository
         return maps;
     }
 
-    @Override
-    public WorldMap fetchMap(Controller controller, MapService mapService, UUID uuid)
+    private WorldMap readMap(Controller controller, JSONObject root)
     {
-        throw new RuntimeException("no support for loading individual maps");
+        // Parse unique identifier...
+        String mapId = (String) root.get("id");
+
+        if (mapId == null || mapId.length() == 0)
+        {
+            throw new RuntimeException("MapID is mandatory and missing");
+        }
+
+        // Parse type and create instance based on it
+        String type = (String) root.get("type");
+
+        if (type == null || type.length() == 0)
+        {
+            throw new RuntimeException("Type is mandatory and missing");
+        }
+
+        // Create new map instance
+        WorldMap map;
+
+        switch (type)
+        {
+            case "open-world-map":
+                map = new OpenWorldMap(mapId, controller);
+                break;
+            case "tile-world-map":
+                map = new TileWorldMap(mapId, controller);
+                break;
+            default:
+                throw new RuntimeException("Unknown map type: " + type);
+        }
+
+        // Deserialize map data
+        finish this...
+
+        return map;
     }
 
     @Override

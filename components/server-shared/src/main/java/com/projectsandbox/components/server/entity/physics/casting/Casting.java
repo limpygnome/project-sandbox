@@ -178,16 +178,16 @@ public class Casting
         }
 
         // Now find the start/end indexes for tiles to consider
-        int tileStartX = (int) Math.floor(startX / map.tileData.tileSize);
-        int tileStartY = (int) Math.floor(startY / map.tileData.tileSize);
-        int tileEndX = (int) Math.ceil(endX / map.tileData.tileSize);
-        int tileEndY = (int) Math.ceil(endY / map.tileData.tileSize);
+        int tileStartX = (int) Math.floor(startX / map.tileMapData.tileSize);
+        int tileStartY = (int) Math.floor(startY / map.tileMapData.tileSize);
+        int tileEndX = (int) Math.ceil(endX / map.tileMapData.tileSize);
+        int tileEndY = (int) Math.ceil(endY / map.tileMapData.tileSize);
 
         // Clamp to size of map
-        tileStartX = CustomMath.limit(0, map.tileData.widthTiles - 1, tileStartX);
-        tileStartY = CustomMath.limit(0, map.tileData.heightTiles - 1, tileStartY);
-        tileEndX = CustomMath.limit(0, map.tileData.widthTiles - 1, tileEndX);
-        tileEndY = CustomMath.limit(0, map.tileData.heightTiles - 1, tileEndY);
+        tileStartX = CustomMath.limit(0, map.tileMapData.widthTiles - 1, tileStartX);
+        tileStartY = CustomMath.limit(0, map.tileMapData.heightTiles - 1, tileStartY);
+        tileEndX = CustomMath.limit(0, map.tileMapData.widthTiles - 1, tileEndX);
+        tileEndY = CustomMath.limit(0, map.tileMapData.heightTiles - 1, tileEndY);
 
         // Iterate each tile
         boolean collision;
@@ -202,13 +202,13 @@ public class Casting
         {
             for (int x = tileStartX; x <= tileEndX; x++)
             {
-                tileTypeId = map.tileData.tiles[y][x];
-                tileType = map.tileData.tileTypes[tileTypeId];
+                tileTypeId = map.tileMapData.tiles[y][x];
+                tileType = map.tileMapData.tileTypes[tileTypeId];
 
                 // Only perform checks on solid tiles
                 if (tileType.properties.solid)
                 {
-                    tileVertices = map.tileData.tileVertices[y][x];
+                    tileVertices = map.tileMapData.tileVertices[y][x];
 
                     // Check tile is within correct direction and vertices of ent cross the line i.e. intersection
                     collision = castTestOthersideOfLine(lineStart, lineEnd, linePerpStart, linePerpEnd, tileVertices);

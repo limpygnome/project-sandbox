@@ -18,15 +18,7 @@ public interface MapRepository
      *
      * @return
      */
-    Map<Short, WorldMap> fetchPublicMaps(Controller controller, MapService mapService);
-
-    /**
-     * Used to fetch a map, using its identifier.
-     *
-     * @param uuid
-     * @return
-     */
-    WorldMap fetchMap(Controller controller, MapService mapService, UUID uuid);
+    Map<String, WorldMap> fetchPublicMaps(Controller controller, MapService mapService);
 
     void persist(WorldMap map);
 

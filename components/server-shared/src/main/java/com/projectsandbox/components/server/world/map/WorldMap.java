@@ -1,33 +1,22 @@
 package com.projectsandbox.components.server.world.map;
 
+import com.projectsandbox.components.server.Controller;
 import com.projectsandbox.components.server.effect.EffectsMapData;
 import com.projectsandbox.components.server.entity.EntityMapData;
 import com.projectsandbox.components.server.entity.ai.ArtificialIntelligenceMapData;
 import com.projectsandbox.components.server.entity.respawn.RespawnMapData;
 import com.projectsandbox.components.server.network.packet.OutboundPacket;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Scope;
 
 import java.io.IOException;
-import java.io.Serializable;
 
 /**
  * Represents a (world) map, an environment/area in which a player interacts.
  */
-public abstract class WorldMap implements Serializable
+@Scope("prototype")
+public abstract class WorldMap
 {
-    private static final long serialVersionUID = 1L;
-
-    /**
-     * Unique identifier for this map.
-     *
-     * TODO: convert to UUID.
-     */
-    private final short mapId;
-
-    /**
-     * Properties and cached values for this map.
-     */
-    protected WorldMapProperties properties;
-
     /**
      * Cached packet of data sent to client for map.
      *
@@ -35,26 +24,38 @@ public abstract class WorldMap implements Serializable
      */
     protected transient OutboundPacket packet;
 
+    // Mandatory and not stored as generic map data
+    private String mapId;
+
     // Map data for services
+    @Autowired
     private EntityMapData entityMapData;
+    @Autowired
+    private GeneralMapData generalMapData;
+    @Autowired
     private RespawnMapData respawnMapData;
+    @Autowired
     private EffectsMapData effectsMapData;
+    @Autowired
     private ArtificialIntelligenceMapData artificialIntelligenceMapData;
 
     /**
      * Creates a new instance and sets up internal state ready for tile data.
-     *
-     * @param mapId The unique identifier for this map
      */
-    public WorldMap(short mapId)
+    public WorldMap(String mapId, Controller controller)
     {
         this.mapId = mapId;
+        controller.inject(this);
+    }
 
-        // Setup managers
-        this.entityMapData = new EntityMapData();
-        this.respawnMapData = new RespawnMapData();
-        this.effectsMapData = new EffectsMapData();
-        this.artificialIntelligenceMapData = new ArtificialIntelligenceMapData(this);
+    /**
+     * Retrieves the identifier for this map.
+     *
+     * @return unique identifier
+     */
+    public String getMapId()
+    {
+        return mapId;
     }
 
     /**
@@ -84,21 +85,6 @@ public abstract class WorldMap implements Serializable
     public OutboundPacket getPacket()
     {
         return packet;
-    }
-
-    public short getMapId()
-    {
-        return mapId;
-    }
-
-    public void setProperties(WorldMapProperties properties)
-    {
-        this.properties = properties;
-    }
-
-    public WorldMapProperties getProperties()
-    {
-        return properties;
     }
 
     /**
@@ -134,15 +120,14 @@ public abstract class WorldMap implements Serializable
     @Override
     public String toString()
     {
-        // TODO: regenerate this / move into imp
-        StringBuilder sb = new StringBuilder();
-
-        sb      .append("map{properties:\n")
-                .append(properties.toString())
-                .append("\n,\ntile data:\n")
-                .append("\n}");
-        
-        return sb.toString();
+        return "WorldMap{" +
+                "packet=" + packet +
+                ", entityMapData=" + entityMapData +
+                ", generalMapData=" + generalMapData +
+                ", respawnMapData=" + respawnMapData +
+                ", effectsMapData=" + effectsMapData +
+                ", artificialIntelligenceMapData=" + artificialIntelligenceMapData +
+                '}';
     }
-    
+
 }

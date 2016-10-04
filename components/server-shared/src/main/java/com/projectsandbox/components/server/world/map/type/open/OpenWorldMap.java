@@ -1,5 +1,6 @@
 package com.projectsandbox.components.server.world.map.type.open;
 
+import com.projectsandbox.components.server.Controller;
 import com.projectsandbox.components.server.world.map.WorldMap;
 
 import java.io.IOException;
@@ -9,12 +10,11 @@ import java.io.IOException;
  */
 public class OpenWorldMap extends WorldMap
 {
-    private static final long serialVersionUID = 1L;
+    private OpenWorldMapData openWorldMapData;
 
-    public OpenWorldMap(short mapId)
+    public OpenWorldMap(String mapId, Controller controller)
     {
-        super(mapId);
-        this.properties = new OpenWorldMapProperties();
+        super(mapId, controller);
     }
 
     @Override
@@ -29,15 +29,13 @@ public class OpenWorldMap extends WorldMap
     @Override
     public float getMaxX()
     {
-        OpenWorldMapProperties properties = (OpenWorldMapProperties) this.properties;
-        return properties.getLimitWidth();
+        return openWorldMapData.getLimitWidth();
     }
 
     @Override
     public float getMaxY()
     {
-        OpenWorldMapProperties properties = (OpenWorldMapProperties) this.properties;
-        return properties.getLimitHeight();
+        return openWorldMapData.getLimitHeight();
     }
 
 }
