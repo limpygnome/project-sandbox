@@ -7,10 +7,14 @@
         "name" : "main open test map",
         "enabled" : true,
         "lobby" : true,
+        "defaultPlayerEntity" : "util/invisible-map-editor"
+    },
+
+    "openWorldProperties" :
+    {
         "background" : "background/space-red",
         "width" : 120000.0,
-        "height" : 120000.0,
-        "defaultPlayerEntity" : "util/invisible-map-editor"
+        "height" : 120000.0
     },
 
     "entities":

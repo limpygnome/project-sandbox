@@ -57,13 +57,48 @@ public class EntityMapData implements IdCounterConsumer, MapData
     }
 
     @Override
-    public void serialize(Controller controller, WorldMap map, JSONObject root) throws IOException
+    public synchronized void serialize(Controller controller, WorldMap map, JSONObject root) throws IOException
     {
+        // Create new root for entities
+        JSONObject entities = new JSONObject();
+        JSONObject entity;
+
+        for (Map.Entry<Short, Entity> kv : this.entities.entrySet())
+        {
+            // Serialize entity
+            entity = serializeEntity(kv.getValue());
+
+            // Add to available entities
+            todo: json array not object
+            entities.values().add(entity);
+        }
+
+        // Attach entities to root
+        root.put("entities", entities);
+    }
+
+    private JSONObject serializeEntity(Entity entity)
+    {
+        JSONObject entityData = new JSONObject();
+
+        // TODO: we need flag on entities which are map-spawned, ignore rest...
+
+        // type
+        // faction
+        // spawn
+        // properties
+        // -- TODO: get entity to write its own properties, as well as change current method to read own too
+
+        return entityData;
     }
 
     @Override
-    public void deserialize(Controller controller, WorldMap map, JSONObject root) throws IOException
+    public synchronized void deserialize(Controller controller, WorldMap map, JSONObject root) throws IOException
     {
+        // Reset state
+        reset(map);
+
+        // Reload entities
         JSONArray rawEntities = (JSONArray) root.get("entities");
         JSONObject rawEntity;
 
@@ -155,6 +190,7 @@ public class EntityMapData implements IdCounterConsumer, MapData
     {
         quadTree = new QuadTree(map);
         entities = new ConcurrentHashMap<>();
+        idCounterProvider.reset();
     }
 
     @Override

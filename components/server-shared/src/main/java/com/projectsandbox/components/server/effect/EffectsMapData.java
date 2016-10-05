@@ -28,11 +28,13 @@ public class EffectsMapData implements MapData
     @Override
     public void serialize(Controller controller, WorldMap map, JSONObject root)
     {
+        // Does nothing / not required...
     }
 
     @Override
     public void deserialize(Controller controller, WorldMap map, JSONObject root)
     {
+        // Does nothing / not required...
     }
 
 }

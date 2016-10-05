@@ -28,6 +28,15 @@ public class GeneralMapData implements MapData
     @Override
     public void serialize(Controller controller, WorldMap map, JSONObject root) throws IOException
     {
+        // Create properties root
+        JSONObject propertiesData = new JSONObject();
+        propertiesData.put("name", name);
+        propertiesData.put("enabled", enabled);
+        propertiesData.put("lobby", lobby);
+        propertiesData.put("defaultPlayerEntity", defaultEntityTypeName);
+
+        // Attach properties root
+        root.put("properties", propertiesData);
     }
 
     @Override

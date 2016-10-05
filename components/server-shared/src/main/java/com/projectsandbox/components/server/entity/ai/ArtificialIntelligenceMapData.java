@@ -33,6 +33,7 @@ public class ArtificialIntelligenceMapData implements MapData
     @Override
     public void serialize(Controller controller, WorldMap map, JSONObject root)
     {
+        // Does nothing / not required...
     }
 
     @Override

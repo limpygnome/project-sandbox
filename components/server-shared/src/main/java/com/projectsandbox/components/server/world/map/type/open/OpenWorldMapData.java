@@ -21,12 +21,19 @@ public class OpenWorldMapData implements MapData
     @Override
     public void serialize(Controller controller, WorldMap map, JSONObject root)
     {
+        JSONObject openWorldPropertiesData = new JSONObject();
+        openWorldPropertiesData.put("background", background);
+        openWorldPropertiesData.put("width", limitWidth);
+        openWorldPropertiesData.put("height", limitHeight);
+
+        // Attach to root
+        root.put("openWorldProperties", openWorldPropertiesData);
     }
 
     @Override
     public void deserialize(Controller controller, WorldMap map, JSONObject root)
     {
-        JSONObject rawProperties = (JSONObject) root.get("properties");
+        JSONObject rawProperties = (JSONObject) root.get("openWorldProperties");
 
         if (rawProperties == null)
         {
