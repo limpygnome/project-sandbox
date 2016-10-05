@@ -5,12 +5,16 @@ import com.projectsandbox.components.server.entity.EntityTypeMappingStoreService
 import com.projectsandbox.components.server.entity.player.PlayerEntity;
 import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 
 /**
  * Used to contain properties belonging to an instance of {@link WorldMap}.
  */
+@Component
+@Scope(value = "prototype")
 public class GeneralMapData implements MapData
 {
     @Autowired

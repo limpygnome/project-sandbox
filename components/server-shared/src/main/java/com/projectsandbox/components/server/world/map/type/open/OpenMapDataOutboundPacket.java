@@ -18,14 +18,14 @@ public class OpenMapDataOutboundPacket extends OutboundPacket
 
     public void build(OpenWorldMap map) throws IOException
     {
-        OpenWorldMapProperties properties = (OpenWorldMapProperties) map.getProperties();
+        OpenWorldMapData mapData = map.getOpenWorldMapData();
 
         // Write limits of map
-        packetData.add(properties.getLimitWidth());
-        packetData.add(properties.getLimitHeight());
+        packetData.add(mapData.getLimitWidth());
+        packetData.add(mapData.getLimitHeight());
 
         // Write background data
-        String background = properties.getBackground();
+        String background = mapData.getBackground();
 
         // -- 0: Flag to indicate if background enabled
         // -- 1: texture (string), if enabled is true

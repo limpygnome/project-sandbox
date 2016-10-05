@@ -16,6 +16,8 @@ import org.apache.logging.log4j.Logger;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 import java.util.Iterator;
@@ -25,6 +27,8 @@ import java.util.concurrent.ConcurrentHashMap;
 /**
  * Created by limpygnome on 21/07/16.
  */
+@Component
+@Scope(value = "prototype")
 public class EntityMapData implements IdCounterConsumer, MapData
 {
     private final static Logger LOG = LogManager.getLogger(EntityMapData.class);

@@ -11,6 +11,8 @@ import org.apache.logging.log4j.Logger;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Component;
 
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -19,6 +21,8 @@ import java.util.List;
 /**
  * Created by limpygnome on 21/07/16.
  */
+@Component
+@Scope(value = "prototype")
 public class RespawnMapData implements MapData
 {
     private final static Logger LOG = LogManager.getLogger(RespawnMapData.class);

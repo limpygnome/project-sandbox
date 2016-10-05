@@ -7,14 +7,14 @@ import com.projectsandbox.components.server.entity.ai.ArtificialIntelligenceMapD
 import com.projectsandbox.components.server.entity.respawn.RespawnMapData;
 import com.projectsandbox.components.server.network.packet.OutboundPacket;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Scope;
 
 import java.io.IOException;
+import java.util.LinkedList;
+import java.util.List;
 
 /**
  * Represents a (world) map, an environment/area in which a player interacts.
  */
-@Scope("prototype")
 public abstract class WorldMap
 {
     /**
@@ -29,9 +29,9 @@ public abstract class WorldMap
 
     // Map data for services
     @Autowired
-    private EntityMapData entityMapData;
-    @Autowired
     private GeneralMapData generalMapData;
+    @Autowired
+    private EntityMapData entityMapData;
     @Autowired
     private RespawnMapData respawnMapData;
     @Autowired
@@ -97,6 +97,11 @@ public abstract class WorldMap
      */
     public abstract float getMaxY();
 
+    public GeneralMapData getGeneralMapData()
+    {
+        return generalMapData;
+    }
+
     public EntityMapData getEntityMapData()
     {
         return entityMapData;
@@ -115,6 +120,17 @@ public abstract class WorldMap
     public ArtificialIntelligenceMapData getArtificialIntelligenceMapData()
     {
         return artificialIntelligenceMapData;
+    }
+
+    public List<MapData> getMapData()
+    {
+        List<MapData> result = new LinkedList<>();
+        result.add(generalMapData);
+        result.add(entityMapData);
+        result.add(respawnMapData);
+        result.add(effectsMapData);
+        result.add(artificialIntelligenceMapData);
+        return result;
     }
 
     @Override

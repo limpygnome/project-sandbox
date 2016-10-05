@@ -1,14 +1,7 @@
 package com.projectsandbox.components.server.config;
 
-import com.projectsandbox.components.server.map.repository.file.builder.FileSystemMapBuilder;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
-
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.scheduling.annotation.EnableScheduling;
 
@@ -24,18 +17,5 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 })
 public class AppConfig
 {
-
-    @Bean(name = "fileSystemMapBuilders")
-    public Map<String, FileSystemMapBuilder> fileMapBuilders(List<FileSystemMapBuilder> builders)
-    {
-        Map<String, FileSystemMapBuilder> map = new HashMap<>();
-
-        for ( FileSystemMapBuilder builder : builders)
-        {
-            map.put(builder.getBuilderName(), builder);
-        }
-
-        return map;
-    }
 
 }

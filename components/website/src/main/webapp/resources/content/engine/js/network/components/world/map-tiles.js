@@ -16,8 +16,7 @@ projectSandbox.network.world.mapTiles =
         }
 
         // Parse attributes
-        // TODO: change to UUID...
-        var mapId = packet.readShort();
+        var mapId = packet.readAscii();
         var tileSize = packet.readShort();
         var width = packet.readShort();
         var height = packet.readShort();

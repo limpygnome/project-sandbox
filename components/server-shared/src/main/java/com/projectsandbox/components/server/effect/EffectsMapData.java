@@ -1,8 +1,12 @@
 package com.projectsandbox.components.server.effect;
 
+import com.projectsandbox.components.server.Controller;
 import com.projectsandbox.components.server.effect.types.AbstractEffect;
 import com.projectsandbox.components.server.world.map.MapData;
+import com.projectsandbox.components.server.world.map.WorldMap;
 import org.json.simple.JSONObject;
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Component;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -10,10 +14,10 @@ import java.util.List;
 /**
  * Created by limpygnome on 21/07/16.
  */
+@Component
+@Scope(value = "prototype")
 public class EffectsMapData implements MapData
 {
-    private static final long serialVersionUID = 1L;
-
     protected List<AbstractEffect> pendingSend;
 
     public EffectsMapData()
@@ -22,12 +26,12 @@ public class EffectsMapData implements MapData
     }
 
     @Override
-    public void serialize(JSONObject root)
+    public void serialize(Controller controller, WorldMap map, JSONObject root)
     {
     }
 
     @Override
-    public void deserialize(JSONObject root)
+    public void deserialize(Controller controller, WorldMap map, JSONObject root)
     {
     }
 

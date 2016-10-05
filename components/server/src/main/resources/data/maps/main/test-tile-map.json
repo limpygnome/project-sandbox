@@ -1,12 +1,12 @@
 {
     "type" : "tile-world-map",
-    "id" : 2,
+    "id" : "2",
 
     "properties" :
     {
         "name" : "main tile test map",
         "enabled" : false,
-        "lobby" : true,
+        "lobby" : false,
         "defaultPlayerEntity" : "living/player"
     },
 

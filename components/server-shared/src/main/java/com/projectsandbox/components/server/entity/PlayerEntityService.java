@@ -67,7 +67,7 @@ public class PlayerEntityService
             // Create default entity if no entity yet; use provided map as default
             if (result.entity == null)
             {
-                String defaultEntityTypeName = defaultMap.getProperties().getDefaultEntityTypeName();
+                String defaultEntityTypeName = defaultMap.getGeneralMapData().getDefaultEntityTypeName();
                 result.entity = (PlayerEntity) entityTypeMappingStoreService.createByTypeName(defaultEntityTypeName, null);
                 result.map = defaultMap;
             }

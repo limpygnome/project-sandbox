@@ -4,10 +4,14 @@ import com.projectsandbox.components.server.Controller;
 import com.projectsandbox.components.server.world.map.MapData;
 import com.projectsandbox.components.server.world.map.WorldMap;
 import org.json.simple.JSONObject;
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Component;
 
 /**
  * Extends generic properties for instances of {@link OpenWorldMap}.
  */
+@Component
+@Scope(value = "prototype")
 public class OpenWorldMapData implements MapData
 {
     private float limitWidth;

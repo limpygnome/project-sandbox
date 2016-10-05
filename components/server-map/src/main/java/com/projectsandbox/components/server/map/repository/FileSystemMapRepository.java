@@ -1,35 +1,31 @@
-package com.projectsandbox.components.server.map.repository.file;
+package com.projectsandbox.components.server.map.repository;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.PropertyAccessor;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.projectsandbox.components.server.Controller;
-import com.projectsandbox.components.server.map.repository.file.builder.FileSystemMapBuilder;
 import com.projectsandbox.components.server.util.JsonHelper;
-import com.projectsandbox.components.server.world.map.repository.MapRepository;
+import com.projectsandbox.components.server.world.map.MapData;
 import com.projectsandbox.components.server.world.map.MapService;
 import com.projectsandbox.components.server.world.map.WorldMap;
+import com.projectsandbox.components.server.world.map.repository.MapRepository;
 import com.projectsandbox.components.server.world.map.type.open.OpenWorldMap;
 import com.projectsandbox.components.server.world.map.type.tile.TileWorldMap;
-import jdk.nashorn.internal.objects.NativeArray;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.json.simple.JSONObject;
-
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
-import java.util.UUID;
-import java.util.regex.Pattern;
-
 import org.reflections.Reflections;
 import org.reflections.scanners.ResourcesScanner;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-import javax.annotation.Resource;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.regex.Pattern;
 
 /**
  * Used to load maps from a file-system or the class-path.
@@ -53,8 +49,6 @@ public class FileSystemMapRepository implements MapRepository
             Set<String> resources = reflections.getResources(Pattern.compile("(.+)\\.json"));
 
             // Iterate and load each map file
-            String mapType;
-            FileSystemMapBuilder mapBuilder;
             JSONObject mapData;
             WorldMap map;
             InputStream inputStream;
@@ -84,8 +78,6 @@ public class FileSystemMapRepository implements MapRepository
                 // Add to result
                 maps.put(map.getMapId(), map);
 
-                persist(map);
-
                 LOG.debug("loaded public map - {}", map);
             }
         }
@@ -97,7 +89,7 @@ public class FileSystemMapRepository implements MapRepository
         return maps;
     }
 
-    private WorldMap readMap(Controller controller, JSONObject root)
+    private WorldMap readMap(Controller controller, JSONObject root) throws IOException
     {
         // Parse unique identifier...
         String mapId = (String) root.get("id");
@@ -118,6 +110,7 @@ public class FileSystemMapRepository implements MapRepository
         // Create new map instance
         WorldMap map;
 
+        // Create map based on type
         switch (type)
         {
             case "open-world-map":
@@ -130,8 +123,12 @@ public class FileSystemMapRepository implements MapRepository
                 throw new RuntimeException("Unknown map type: " + type);
         }
 
-        // Deserialize map data
-        finish this...
+        // Deserialize map data (i.e. let each map data load its own data from the root JSON element)
+        List<MapData> mapDataList = map.getMapData();
+        for (MapData mapData : mapDataList)
+        {
+            mapData.deserialize(controller, map, root);
+        }
 
         return map;
     }
@@ -141,6 +138,9 @@ public class FileSystemMapRepository implements MapRepository
     {
         try
         {
+            // TODO:  create json root object (empty except map id), fetch map data, invoke serialize, and persist root object
+
+
             ObjectMapper mapper = new ObjectMapper();
             mapper.setVisibility(PropertyAccessor.FIELD, JsonAutoDetect.Visibility.ANY);
 

@@ -1,20 +1,19 @@
 package com.projectsandbox.components.server.world.map;
 
 import com.projectsandbox.components.server.Controller;
-
+import com.projectsandbox.components.server.service.EventLogicCycleService;
 import com.projectsandbox.components.server.service.EventMapLogicCycleService;
 import com.projectsandbox.components.server.service.EventServerPreStartup;
-import com.projectsandbox.components.server.service.EventLogicCycleService;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
-
 import com.projectsandbox.components.server.world.map.repository.MapRepository;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * Responsible for managing/handling maps.
@@ -35,7 +34,7 @@ public class MapService implements EventServerPreStartup, EventLogicCycleService
     private MapRepository mapRepository;
 
     // A cache for storing either common or active maps
-    private Map<Short, WorldMap> mapCache;
+    private Map<String, WorldMap> mapCache;
 
     // The mapMain/lobby map
     public WorldMap mainMap;
@@ -60,18 +59,18 @@ public class MapService implements EventServerPreStartup, EventLogicCycleService
     public synchronized void eventServerPreStartup(Controller controller)
     {
         // Load public maps into cache
-        Map<Short, WorldMap> publicMaps = mapRepository.fetchPublicMaps(controller, this);
+        Map<String, WorldMap> publicMaps = mapRepository.fetchPublicMaps(controller, this);
         mapCache = new HashMap<>(publicMaps);
 
         // Set the mapMain/lobby map
         this.mainMap = null;
 
         WorldMap map;
-        for (Map.Entry<Short, WorldMap> kv : mapCache.entrySet())
+        for (Map.Entry<String, WorldMap> kv : mapCache.entrySet())
         {
             map = kv.getValue();
 
-            if (map.getProperties().isLobby())
+            if (map.getGeneralMapData().isLobby())
             {
                 // Check lobby not already found; can only be one...
                 if (this.mainMap != null)
@@ -89,7 +88,7 @@ public class MapService implements EventServerPreStartup, EventLogicCycleService
             throw new RuntimeException("Main/lobby map not found");
         }
 
-        LOG.info("Loaded {} maps, lobby: {} [uuid: {}]", mapCache.size(), mainMap.getProperties().getName(), mainMap.getMapId());
+        LOG.info("Loaded {} maps, lobby: {} [uuid: {}]", mapCache.size(), mainMap.getGeneralMapData().getName(), mainMap.getMapId());
     }
 
     @Override

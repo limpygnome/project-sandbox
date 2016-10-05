@@ -1,11 +1,12 @@
 package com.projectsandbox.components.server.world.map.type.tile;
 
 import com.projectsandbox.components.server.Controller;
-import com.projectsandbox.components.server.world.map.GeneralMapData;
+import com.projectsandbox.components.server.world.map.MapData;
 import com.projectsandbox.components.server.world.map.WorldMap;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.io.IOException;
+import java.util.List;
 
 /**
  * A world map where entities move along tiles.
@@ -42,6 +43,14 @@ public class TileWorldMap extends WorldMap
     public float getMaxY()
     {
         return tileMapData.maxY;
+    }
+
+    @Override
+    public List<MapData> getMapData()
+    {
+        List<MapData> result = super.getMapData();
+        result.add(tileMapData);
+        return result;
     }
 
 }

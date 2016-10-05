@@ -8,6 +8,8 @@ import com.projectsandbox.components.server.world.map.MapPosition;
 import com.projectsandbox.components.server.world.map.WorldMap;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -16,6 +18,8 @@ import java.util.Map;
 /**
  * Used to hold tile data for an instance of {@link WorldMap}.
  */
+@Component
+@Scope(value = "prototype")
 public class TileMapData implements MapData
 {
     private WorldMap map;
@@ -36,15 +40,7 @@ public class TileMapData implements MapData
 
     public Vertices[][] tileVertices;
 
-    /**
-     * Creates a new instance.
-     *
-     * @param map the map to which this belongs
-     */
-    public TileMapData(WorldMap map)
-    {
-        this.map = map;
-    }
+    public TileMapData() { }
 
     @Override
     public void serialize(Controller controller, WorldMap map, JSONObject root) throws IOException
@@ -54,45 +50,41 @@ public class TileMapData implements MapData
     @Override
     public void deserialize(Controller controller, WorldMap map, JSONObject root) throws IOException
     {
+        this.map = map;
         buildTileTypesAndTiles(controller, root, (TileWorldMap) map);
     }
 
     private void buildTileTypesAndTiles(Controller controller, JSONObject root, TileWorldMap map)
             throws IOException
     {
-        TileMapData tileMapData = new TileMapData(map);
-
         // Load tile properties
-        buildTileProperties(tileMapData, root);
+        buildTileProperties(root);
 
         // Load tile-type data
         TileType[] tileTypes = buildTileTypes(controller, root);
-        tileMapData.tileTypes = tileTypes;
+        this.tileTypes = tileTypes;
 
         // Create map to speed-up 'tile-name -> ID' translation
         Map<String, TileType> tileTypeByNameMappings = buildTileTypeMap(tileTypes);
 
         // Load tiles
-        buildTiles(map, tileTypeByNameMappings, root, tileMapData);
-
-        // Set map tile data
-        map.tileMapData = tileMapData;
+        buildTiles(map, tileTypeByNameMappings, root);
     }
 
-    private void buildTileProperties(TileMapData tileMapData, JSONObject root)
+    private void buildTileProperties(JSONObject root)
     {
         JSONObject rawTileProperties = (JSONObject) root.get("tileProperties");
 
         // Parse tile properties
-        tileMapData.tileSize = (float) (long) rawTileProperties.get("tileSize");
-        tileMapData.tileSizeHalf = tileMapData.tileSize / 2.0f;
-        tileMapData.tileSizeQuarter = tileMapData.tileSize / 4.0f;
-        tileMapData.widthTiles = (short) (long) rawTileProperties.get("tilesWidth");
-        tileMapData.heightTiles = (short) (long) rawTileProperties.get("tilesHeight");
+        tileSize = (float) (long) rawTileProperties.get("tileSize");
+        tileSizeHalf = tileSize / 2.0f;
+        tileSizeQuarter = tileSize / 4.0f;
+        widthTiles = (short) (long) rawTileProperties.get("tilesWidth");
+        heightTiles = (short) (long) rawTileProperties.get("tilesHeight");
 
         // Compute max boundaries
-        tileMapData.maxX = tileMapData.tileSize * (float) tileMapData.widthTiles;
-        tileMapData.maxY = tileMapData.tileSize * (float) tileMapData.heightTiles;
+        maxX = tileSize * (float) widthTiles;
+        maxY = tileSize * (float) heightTiles;
     }
 
     private TileType[] buildTileTypes(Controller controller, JSONObject mapData) throws IOException
@@ -136,15 +128,15 @@ public class TileMapData implements MapData
         return tileTypeMap;
     }
 
-    private void buildTiles(WorldMap map, Map<String, TileType> tileTypeMap, JSONObject mapData, TileMapData tileMapData) throws IOException
+    private void buildTiles(WorldMap map, Map<String, TileType> tileTypeMap, JSONObject mapData) throws IOException
     {
         JSONArray tiles = (JSONArray) mapData.get("tiles");
 
         // Setup tiles array
-        tileMapData.tiles = new short[tileMapData.heightTiles][tileMapData.widthTiles];
+        this.tiles = new short[heightTiles][widthTiles];
 
         // Setup vertices array
-        tileMapData.tileVertices = new Vertices[tileMapData.heightTiles][tileMapData.widthTiles];
+        this.tileVertices = new Vertices[heightTiles][widthTiles];
 
         // Parse tiles
         int yOffset = 0;
@@ -153,16 +145,16 @@ public class TileMapData implements MapData
         TileType type;
 
         // -- Note: y is inverted since 0 is bottom and x is top!
-        for(int y = tileMapData.heightTiles - 1; y >= 0; y--)
+        for(int y = heightTiles - 1; y >= 0; y--)
         {
-            for(int x = 0; x < tileMapData.widthTiles; x++)
+            for(int x = 0; x < widthTiles; x++)
             {
                 // Fetch tile
                 tile = (String) tiles.get(yOffset++);
 
                 // Locate actual type
                 typeIndex = tileTypeMap.get(tile).id;
-                type = tileMapData.tileTypes[typeIndex];
+                type = tileTypes[typeIndex];
 
                 if(type == null)
                 {
@@ -173,10 +165,10 @@ public class TileMapData implements MapData
                 }
 
                 // Assign type
-                tileMapData.tiles[y][x] = type.id;
+                this.tiles[y][x] = type.id;
 
                 // Build vertices
-                tileMapData.tileVertices[y][x] = Vertices.buildTileVertices(tileMapData, x, y);
+                this.tileVertices[y][x] = Vertices.buildTileVertices(this, x, y);
             }
         }
     }
