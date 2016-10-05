@@ -14,6 +14,7 @@ import com.projectsandbox.components.server.network.packet.handler.Authenticated
 import com.projectsandbox.components.server.player.PlayerInfo;
 import com.projectsandbox.components.server.util.JsonHelper;
 import com.projectsandbox.components.server.world.map.WorldMap;
+import com.projectsandbox.components.server.world.map.repository.MapRepository;
 import com.projectsandbox.components.shared.model.Role;
 import com.projectsandbox.components.shared.model.Roles;
 import com.projectsandbox.components.shared.model.User;
@@ -38,6 +39,8 @@ public class MapEditorInboundPacket extends AuthenticatedInboundPacketHandler
     private JsonHelper jsonHelper;
     @Autowired
     private RespawnManager respawnManager;
+    @Autowired
+    private MapRepository mapRepository;
 
     @Override
     public void handle(Controller controller, Socket socket, PlayerInfo playerInfo, ByteBuffer bb, byte[] rawData) throws PacketHandlerException
@@ -61,12 +64,13 @@ public class MapEditorInboundPacket extends AuthenticatedInboundPacketHandler
             switch (action)
             {
                 case "map-reload":
-
+                    actionReloadMap(controller, map);
                     break;
                 case "map-save":
+                    actionSaveMap(controller, map);
                     break;
                 case "map-clear":
-                    actionClearMap(map, controller, playerInfo);
+                    actionClearMap(controller, map, playerInfo);
                     break;
                 case "entity-select":
                     actionEntitySelect(controller, entity, data);
@@ -102,15 +106,17 @@ public class MapEditorInboundPacket extends AuthenticatedInboundPacketHandler
         return auth;
     }
 
-    private void actionReloadMap()
+    private void actionReloadMap(Controller controller, WorldMap map)
     {
+        mapRepository.reload(controller, map);
     }
 
-    private void actionSaveMap()
+    private void actionSaveMap(Controller controller, WorldMap map)
     {
+        mapRepository.persist(controller, map);
     }
 
-    private void actionClearMap(WorldMap map, Controller controller, PlayerInfo playerInfo)
+    private void actionClearMap(Controller controller, WorldMap map, PlayerInfo playerInfo)
     {
         // Reset entity data
         EntityMapData data = map.getEntityMapData();

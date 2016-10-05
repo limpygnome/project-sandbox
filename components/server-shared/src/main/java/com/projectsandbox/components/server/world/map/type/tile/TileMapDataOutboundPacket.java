@@ -42,7 +42,6 @@ public class TileMapDataOutboundPacket extends OutboundPacket
         }
         
         // Add map properties
-        packetData.addAscii(map.getMapId());
         packetData.add((short) map.tileMapData.tileSize);
         packetData.add(map.tileMapData.widthTiles);
         packetData.add(map.tileMapData.heightTiles);

@@ -39,13 +39,26 @@ public abstract class WorldMap
     @Autowired
     private ArtificialIntelligenceMapData artificialIntelligenceMapData;
 
+    // List of map data
+    protected List<MapData> mapData;
+
     /**
      * Creates a new instance and sets up internal state ready for tile data.
      */
     public WorldMap(String mapId, Controller controller)
     {
+        this.mapData = new LinkedList<>();
         this.mapId = mapId;
+
+        // Inject members
         controller.inject(this);
+
+        // Add map data
+        mapData.add(generalMapData);
+        mapData.add(entityMapData);
+        mapData.add(respawnMapData);
+        mapData.add(effectsMapData);
+        mapData.add(artificialIntelligenceMapData);
     }
 
     /**
@@ -124,13 +137,7 @@ public abstract class WorldMap
 
     public List<MapData> getMapData()
     {
-        List<MapData> result = new LinkedList<>();
-        result.add(generalMapData);
-        result.add(entityMapData);
-        result.add(respawnMapData);
-        result.add(effectsMapData);
-        result.add(artificialIntelligenceMapData);
-        return result;
+        return mapData;
     }
 
     @Override

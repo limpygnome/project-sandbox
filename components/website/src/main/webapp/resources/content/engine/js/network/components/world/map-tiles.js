@@ -16,7 +16,6 @@ projectSandbox.network.world.mapTiles =
         }
 
         // Parse attributes
-        var mapId = packet.readAscii();
         var tileSize = packet.readShort();
         var width = packet.readShort();
         var height = packet.readShort();

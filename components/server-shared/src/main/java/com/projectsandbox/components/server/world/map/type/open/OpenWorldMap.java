@@ -1,12 +1,10 @@
 package com.projectsandbox.components.server.world.map.type.open;
 
 import com.projectsandbox.components.server.Controller;
-import com.projectsandbox.components.server.world.map.MapData;
 import com.projectsandbox.components.server.world.map.WorldMap;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.io.IOException;
-import java.util.List;
 
 /**
  * An open space map, suitable for space.
@@ -19,6 +17,9 @@ public class OpenWorldMap extends WorldMap
     public OpenWorldMap(String mapId, Controller controller)
     {
         super(mapId, controller);
+
+        // Add map data
+        mapData.add(openWorldMapData);
     }
 
     @Override
@@ -45,14 +46,6 @@ public class OpenWorldMap extends WorldMap
     public OpenWorldMapData getOpenWorldMapData()
     {
         return openWorldMapData;
-    }
-
-    @Override
-    public List<MapData> getMapData()
-    {
-        List<MapData> result = super.getMapData();
-        result.add(openWorldMapData);
-        return result;
     }
 
 }

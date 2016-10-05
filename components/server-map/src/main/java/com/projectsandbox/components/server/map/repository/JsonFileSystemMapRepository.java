@@ -1,7 +1,5 @@
 package com.projectsandbox.components.server.map.repository;
 
-import com.fasterxml.jackson.annotation.JsonAutoDetect;
-import com.fasterxml.jackson.annotation.PropertyAccessor;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.projectsandbox.components.server.Controller;
 import com.projectsandbox.components.server.util.JsonHelper;
@@ -17,8 +15,12 @@ import org.json.simple.JSONObject;
 import org.reflections.Reflections;
 import org.reflections.scanners.ResourcesScanner;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Repository;
 
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.HashMap;
@@ -31,12 +33,15 @@ import java.util.regex.Pattern;
  * Used to load maps from a file-system or the class-path.
  */
 @Repository
-public class FileSystemMapRepository implements MapRepository
+public class JsonFileSystemMapRepository implements MapRepository
 {
-    private final static Logger LOG = LogManager.getLogger(FileSystemMapRepository.class);
+    private final static Logger LOG = LogManager.getLogger(JsonFileSystemMapRepository.class);
 
     @Autowired
     private JsonHelper jsonHelper;
+
+    @Value("${maps.public.location}")
+    private String publicMapsLocationPath;
 
     @Override
     public Map<String, WorldMap> fetchPublicMaps(Controller controller, MapService mapService)
@@ -45,7 +50,7 @@ public class FileSystemMapRepository implements MapRepository
 
         try
         {
-            Reflections reflections = new Reflections("data.map", new ResourcesScanner());
+            Reflections reflections = new Reflections("data.maps.main.", new ResourcesScanner());
             Set<String> resources = reflections.getResources(Pattern.compile("(.+)\\.json"));
 
             // Iterate and load each map file
@@ -134,30 +139,53 @@ public class FileSystemMapRepository implements MapRepository
     }
 
     @Override
-    public void persist(WorldMap map)
+    public void persist(Controller controller, WorldMap map)
     {
         try
         {
-            // TODO:  create json root object (empty except map id), fetch map data, invoke serialize, and persist root object
+            // Determine base path of maps directory
+            String basePath = getClass().getResource("/").getFile() + publicMapsLocationPath;
 
+            // Build path for file and check we can write to parent
+            File path = new File(basePath + "/" + map.getMapId() + ".json");
 
+            if (!path.getParentFile().exists())
+            {
+                throw new RuntimeException("Unable to persist map, parent path does not exist: " + path.getAbsolutePath());
+            }
+
+            LOG.info("Writing map to file - id: {}, path: {}", map.getMapId(), path);
+
+            // Create root for attaching map data
+            JSONObject root = new JSONObject();
+
+            // Invoke serialize on all map data instances
+            for (MapData mapData : map.getMapData())
+            {
+                mapData.serialize(controller, map, root);
+            }
+
+            // Serialize json
             ObjectMapper mapper = new ObjectMapper();
-            mapper.setVisibility(PropertyAccessor.FIELD, JsonAutoDetect.Visibility.ANY);
+            String data = mapper.writeValueAsString(root);
 
-            //Map<String, String> test = new HashMap<>();
-            //test.put("a", "123");
-            //test.put("b", "456");
+            // Persist to file system
+            BufferedWriter writer = new BufferedWriter(new FileWriter(path));
+            writer.write(data);
+            writer.flush();
+            writer.close();
 
-            String testData = mapper.writeValueAsString(map);
-            LOG.error(testData);
-
-            String mapData = mapper.writeValueAsString(map);
-            String doNothing = mapData.toUpperCase();
+            LOG.info("Successfully persisted map - id: {}, path: {}", map.getMapId(), path.getAbsolutePath());
         }
         catch (Exception e)
         {
             throw new RuntimeException("Failed to persist map", e);
         }
+    }
+
+    @Override
+    public void reload(Controller controller, WorldMap map)
+    {
     }
 
 }
