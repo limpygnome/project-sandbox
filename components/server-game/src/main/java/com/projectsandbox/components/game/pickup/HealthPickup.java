@@ -2,10 +2,11 @@ package com.projectsandbox.components.game.pickup;
 
 import com.projectsandbox.components.server.Controller;
 import com.projectsandbox.components.server.entity.Entity;
+import com.projectsandbox.components.server.entity.EntityMapDataSerializer;
 import com.projectsandbox.components.server.entity.player.PlayerEntity;
 import com.projectsandbox.components.server.entity.annotation.EntityType;
-import com.projectsandbox.components.server.world.map.MapEntKV;
 import com.projectsandbox.components.server.world.map.WorldMap;
+import org.json.simple.JSONObject;
 
 import static com.projectsandbox.components.server.constant.entity.pickup.PickupConstants.HEALTH_WIDTH;
 import static com.projectsandbox.components.server.constant.entity.pickup.PickupConstants.HEALTH_HEIGHT;
@@ -14,7 +15,7 @@ import static com.projectsandbox.components.server.constant.entity.pickup.Pickup
  * Created by limpygnome on 06/07/15.
  */
 @EntityType(typeId = 1201, typeName = "pickup/health")
-public class HealthPickup extends AbstractPickup
+public class HealthPickup extends AbstractPickup implements EntityMapDataSerializer
 {
     private float healthAmount;
 
@@ -27,12 +28,27 @@ public class HealthPickup extends AbstractPickup
     }
 
     @Override
-    public void applyMapKeyValues(MapEntKV mapEntKV)
+    public void serialize(Controller controller, WorldMap map, JSONObject entityData)
     {
-        long respawnDelay = mapEntKV.getLong("pickup.respawn_delay");
-        setRespawnDelay(respawnDelay);
+        JSONObject healthData = new JSONObject();
+        healthData.put("respawn-delay", getRespawnDelay());
+        healthData.put("amount", healthAmount);
 
-        this.healthAmount = mapEntKV.getFloat("health_pickup.health");
+        // Attach health data to entity
+        entityData.put("health", healthData);
+    }
+
+    @Override
+    public void deserialize(Controller controller, WorldMap map, JSONObject entityData)
+    {
+        JSONObject healthData = (JSONObject) entityData.get("health");
+
+        if (healthData != null)
+        {
+            long respawnDelay = (long) healthData.get("respawn-delay");
+            setRespawnDelay(respawnDelay);
+            this.healthAmount = (float) (double) healthData.get("amount");
+        }
     }
 
     @Override

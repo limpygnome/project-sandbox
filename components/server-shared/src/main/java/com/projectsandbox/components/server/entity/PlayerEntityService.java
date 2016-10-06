@@ -68,7 +68,7 @@ public class PlayerEntityService
             if (result.entity == null)
             {
                 String defaultEntityTypeName = defaultMap.getGeneralMapData().getDefaultEntityTypeName();
-                result.entity = (PlayerEntity) entityTypeMappingStoreService.createByTypeName(defaultEntityTypeName, null);
+                result.entity = (PlayerEntity) entityTypeMappingStoreService.createByTypeName(defaultEntityTypeName);
                 result.map = defaultMap;
             }
 

@@ -2,7 +2,7 @@ package com.projectsandbox.components.server.entity.respawn;
 
 import com.projectsandbox.components.server.Controller;
 import com.projectsandbox.components.server.entity.respawn.pending.PendingRespawn;
-import com.projectsandbox.components.server.world.map.MapData;
+import com.projectsandbox.components.server.world.map.mapdata.MapData;
 import com.projectsandbox.components.server.world.map.WorldMap;
 import com.projectsandbox.components.server.world.spawn.FactionSpawns;
 import com.projectsandbox.components.server.world.spawn.Spawn;
@@ -17,6 +17,7 @@ import org.springframework.stereotype.Component;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by limpygnome on 21/07/16.
@@ -44,22 +45,41 @@ public class RespawnMapData implements MapData
     @Override
     public void serialize(Controller controller, WorldMap map, JSONObject root)
     {
+        JSONArray factionSpawnsData = new JSONArray();
+        JSONObject factionSpawnData;
+
+        for (Map.Entry<Short, FactionSpawns> kv : factionSpawnsMap.entrySet())
+        {
+            factionSpawnData = serializeFactionSpawn(kv.getValue());
+            factionSpawnsData.add(factionSpawnData);
+        }
+
+        // Attach factions spawns to parent
+        root.put("factionSpawns", factionSpawnsData);
+    }
+
+    public JSONObject serializeFactionSpawn(FactionSpawns factionSpawn)
+    {
+        for (Spawn spawn : factionSpawn.getSpawns())
+        {
+            finish here.
+        }
     }
 
     @Override
     public void deserialize(Controller controller, WorldMap map, JSONObject root)
     {
-        JSONArray rawSpawnData = (JSONArray) root.get("factionSpawns");
-        JSONObject rawFactionSpawns;
+        JSONArray factionSpawnsData = (JSONArray) root.get("factionSpawns");
+        JSONObject factionSpawnData;
 
-        for (Object factionData : rawSpawnData)
+        for (Object factionData : factionSpawnsData)
         {
-            rawFactionSpawns = (JSONObject) factionData;
-            buildFactionSpawn(map, rawFactionSpawns);
+            factionSpawnData = (JSONObject) factionData;
+            deserializeFactionSpawn(map, factionSpawnData);
         }
     }
 
-    protected void buildFactionSpawn(WorldMap map, JSONObject factionData)
+    protected void deserializeFactionSpawn(WorldMap map, JSONObject factionData)
     {
         short factionId = (short) (long) factionData.get("id");
 
@@ -73,7 +93,7 @@ public class RespawnMapData implements MapData
             Spawn spawn;
             for (Object spawnData : spawnsData)
             {
-                spawn = spawnParserHelper.parseSpawn((JSONObject) spawnData);
+                spawn = spawnParserHelper.deserialize((JSONObject) spawnData);
                 factionSpawns.addSpawn(spawn);
             }
         }

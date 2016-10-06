@@ -6,7 +6,7 @@ import com.projectsandbox.components.server.entity.ai.pathfinding.PathFinder;
 import com.projectsandbox.components.server.entity.ai.pathfinding.astar.TileAStarPathFinder;
 import com.projectsandbox.components.server.entity.ai.pathfinding.astar.heuristic.ClosestAbsoluteHeuristic;
 import com.projectsandbox.components.server.entity.ai.pathfinding.idle.DefaultTileIdleWalkPathBuilder;
-import com.projectsandbox.components.server.world.map.MapData;
+import com.projectsandbox.components.server.world.map.mapdata.MapData;
 import com.projectsandbox.components.server.world.map.WorldMap;
 import com.projectsandbox.components.server.world.map.type.tile.TileWorldMap;
 import org.json.simple.JSONObject;

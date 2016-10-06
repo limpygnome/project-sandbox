@@ -1,26 +1,29 @@
 package com.projectsandbox.components.server.entity;
 
+import com.projectsandbox.components.server.Controller;
 import com.projectsandbox.components.server.entity.annotation.EntityType;
 import com.projectsandbox.components.server.entity.component.ComponentCollection;
-import com.projectsandbox.components.server.entity.component.event.*;
+import com.projectsandbox.components.server.entity.component.event.CollisionEntityComponentEvent;
+import com.projectsandbox.components.server.entity.component.event.CollisionMapComponentEvent;
+import com.projectsandbox.components.server.entity.component.event.DamageComponentEvent;
+import com.projectsandbox.components.server.entity.component.event.DeathComponentEvent;
+import com.projectsandbox.components.server.entity.component.event.LogicComponentEvent;
+import com.projectsandbox.components.server.entity.component.event.ResetComponentEvent;
 import com.projectsandbox.components.server.entity.death.AbstractKiller;
-import com.projectsandbox.components.server.entity.physics.collisions.CollisionResult;
 import com.projectsandbox.components.server.entity.physics.Vector2;
 import com.projectsandbox.components.server.entity.physics.Vertices;
+import com.projectsandbox.components.server.entity.physics.collisions.CollisionResult;
 import com.projectsandbox.components.server.entity.physics.collisions.map.CollisionMapResult;
 import com.projectsandbox.components.server.entity.physics.collisions.map.CollisionTileMapResult;
 import com.projectsandbox.components.server.entity.respawn.pending.EntityPendingRespawn;
 import com.projectsandbox.components.server.network.packet.PacketData;
 import com.projectsandbox.components.server.player.PlayerInfo;
 import com.projectsandbox.components.server.util.CustomMath;
-import com.projectsandbox.components.server.Controller;
-import com.projectsandbox.components.server.world.map.MapEntKV;
 import com.projectsandbox.components.server.world.map.WorldMap;
 import com.projectsandbox.components.server.world.spawn.Spawn;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import javax.naming.ldap.Control;
 import java.io.Serializable;
 import java.lang.annotation.Annotation;
 import java.util.Set;
@@ -54,7 +57,7 @@ public strictfp abstract class Entity implements Serializable
 
     // The ID of the faction to which the player belongs
     public short faction;
-    
+
     // The type of entity
     public short entityType;
 
@@ -65,6 +68,7 @@ public strictfp abstract class Entity implements Serializable
     private transient EntityState state;
     /** Refer to {@link UpdateMasks} */
     public transient char updateMask;
+    public boolean mapSpawned;
 
     // Size
     public short width;
@@ -122,11 +126,6 @@ public strictfp abstract class Entity implements Serializable
         this.maxHealth = 0.0f;
 
         this.physicsStatic = false;
-    }
-
-    public void applyMapKeyValues(MapEntKV mapEntKV)
-    {
-        // Nothing by default...
     }
     
     public synchronized void rotation(float radians)

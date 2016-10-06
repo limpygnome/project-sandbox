@@ -2,17 +2,14 @@ package com.projectsandbox.components.server.entity;
 
 import com.projectsandbox.components.server.entity.annotation.EntityType;
 import com.projectsandbox.components.server.util.ClassHelper;
-import com.projectsandbox.components.server.world.map.MapEntKV;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-
-import java.util.HashMap;
-import java.util.Set;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
+import java.util.HashMap;
+import java.util.Set;
 
 /**
  * Finds all of the annotated entities and builds a map for dynamically creating instances by name or identifier.
@@ -75,12 +72,18 @@ public class EntityTypeMappingStoreService
         LOG.debug("loaded {} imp of entities", typeIdToClass.size());
     }
 
+    public String getTypeName(Entity entity)
+    {
+        EntityType annotation = entity.getClass().getAnnotation(EntityType.class);
+        return annotation.typeName();
+    }
+
     public Class getClassByTypeName(String typeName)
     {
         return typeNameToClass.get(typeName);
     }
 
-    public Entity createByTypeId(short typeId, MapEntKV entityData)
+    public Entity createByTypeId(short typeId)
     {
         Class<? extends Entity> type = typeIdToClass.get(typeId);
 
@@ -89,10 +92,10 @@ public class EntityTypeMappingStoreService
             throw new RuntimeException("Entity type ID does not exist - " + typeId);
         }
 
-        return createInstance(type, entityData);
+        return createInstance(type);
     }
 
-    public Entity createByTypeName(String typeName, MapEntKV entityData)
+    public Entity createByTypeName(String typeName)
     {
         Class<? extends Entity> type = typeNameToClass.get(typeName);
 
@@ -101,20 +104,14 @@ public class EntityTypeMappingStoreService
             throw new RuntimeException("Entity type name does not exist - " + typeName);
         }
 
-        return createInstance(type, entityData);
+        return createInstance(type);
     }
 
-    private Entity createInstance(Class<? extends Entity> type, MapEntKV entityData)
+    private Entity createInstance(Class<? extends Entity> type)
     {
         try
         {
             Entity entity = type.newInstance();
-
-            if (entityData != null)
-            {
-                entity.applyMapKeyValues(entityData);
-            }
-
             return entity;
         }
         catch (IllegalAccessException | InstantiationException e)

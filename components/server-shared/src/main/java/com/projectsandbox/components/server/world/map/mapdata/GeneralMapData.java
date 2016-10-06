@@ -1,8 +1,9 @@
-package com.projectsandbox.components.server.world.map;
+package com.projectsandbox.components.server.world.map.mapdata;
 
 import com.projectsandbox.components.server.Controller;
 import com.projectsandbox.components.server.entity.EntityTypeMappingStoreService;
 import com.projectsandbox.components.server.entity.player.PlayerEntity;
+import com.projectsandbox.components.server.world.map.WorldMap;
 import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;

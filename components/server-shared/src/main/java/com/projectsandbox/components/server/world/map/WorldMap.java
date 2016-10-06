@@ -6,6 +6,8 @@ import com.projectsandbox.components.server.entity.EntityMapData;
 import com.projectsandbox.components.server.entity.ai.ArtificialIntelligenceMapData;
 import com.projectsandbox.components.server.entity.respawn.RespawnMapData;
 import com.projectsandbox.components.server.network.packet.OutboundPacket;
+import com.projectsandbox.components.server.world.map.mapdata.GeneralMapData;
+import com.projectsandbox.components.server.world.map.mapdata.MapData;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.io.IOException;

@@ -3,7 +3,7 @@ package com.projectsandbox.components.server.map.repository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.projectsandbox.components.server.Controller;
 import com.projectsandbox.components.server.util.JsonHelper;
-import com.projectsandbox.components.server.world.map.MapData;
+import com.projectsandbox.components.server.world.map.mapdata.MapData;
 import com.projectsandbox.components.server.world.map.MapService;
 import com.projectsandbox.components.server.world.map.WorldMap;
 import com.projectsandbox.components.server.world.map.repository.MapRepository;

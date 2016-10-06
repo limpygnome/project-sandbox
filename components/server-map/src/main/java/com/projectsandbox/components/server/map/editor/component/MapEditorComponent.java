@@ -60,7 +60,8 @@ public class MapEditorComponent implements EntityComponent, PlayerInfoKeyDownCom
         if (currentEntityTypeId != 0)
         {
             // Create entity instance
-            Entity newEntity = controller.entityTypeMappingStoreService.createByTypeId(currentEntityTypeId, null);
+            Entity newEntity = controller.entityTypeMappingStoreService.createByTypeId(currentEntityTypeId);
+            newEntity.mapSpawned = true;
 
             // Create spawn based on editor's current position/rotation
             WorldMap map = entityEditor.map;

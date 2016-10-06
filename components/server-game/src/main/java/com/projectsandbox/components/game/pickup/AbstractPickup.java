@@ -29,6 +29,11 @@ public abstract class AbstractPickup extends Entity
         this.respawnDelay = respawnDelay;
     }
 
+    public long getRespawnDelay()
+    {
+        return respawnDelay;
+    }
+
     @Override
     public void eventCollisionEntity(Controller controller, Entity entCollider, Entity entVictim, Entity entOther, CollisionResult result)
     {

@@ -3,7 +3,7 @@ package com.projectsandbox.components.server.world.map.type.tile;
 import com.projectsandbox.components.server.Controller;
 import com.projectsandbox.components.server.entity.physics.Vector2;
 import com.projectsandbox.components.server.entity.physics.Vertices;
-import com.projectsandbox.components.server.world.map.MapData;
+import com.projectsandbox.components.server.world.map.mapdata.MapData;
 import com.projectsandbox.components.server.world.map.MapPosition;
 import com.projectsandbox.components.server.world.map.WorldMap;
 import org.json.simple.JSONArray;
@@ -45,6 +45,7 @@ public class TileMapData implements MapData
     @Override
     public void serialize(Controller controller, WorldMap map, JSONObject root) throws IOException
     {
+        // TODO...
     }
 
     @Override

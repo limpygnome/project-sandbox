@@ -11,7 +11,7 @@ import org.springframework.stereotype.Component;
 public class SpawnParserHelper
 {
 
-    public Spawn parseSpawn(JSONObject spawn)
+    public Spawn deserialize(JSONObject spawn)
     {
         if (spawn != null)
         {
@@ -30,6 +30,21 @@ public class SpawnParserHelper
         {
             return null;
         }
+    }
+
+    public JSONObject serialize(Spawn spawn)
+    {
+        JSONObject spawnData = new JSONObject();
+        spawnData.put("x", spawn.x);
+        spawnData.put("y", spawn.y);
+
+        if (spawn.z != 0.0f)
+        {
+            spawnData.put("z", spawn.z);
+        }
+
+        spawnData.put("rotation", spawn.rotation);
+        return spawnData;
     }
 
 }

@@ -7,9 +7,8 @@ import com.projectsandbox.components.server.entity.respawn.SpawnParserHelper;
 import com.projectsandbox.components.server.entity.respawn.pending.EntityPendingRespawn;
 import com.projectsandbox.components.server.util.IdCounterProvider;
 import com.projectsandbox.components.server.util.counters.IdCounterConsumer;
-import com.projectsandbox.components.server.world.map.MapData;
-import com.projectsandbox.components.server.world.map.MapEntKV;
 import com.projectsandbox.components.server.world.map.WorldMap;
+import com.projectsandbox.components.server.world.map.mapdata.MapData;
 import com.projectsandbox.components.server.world.spawn.Spawn;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -20,7 +19,6 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
-import java.util.Iterator;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -60,34 +58,53 @@ public class EntityMapData implements IdCounterConsumer, MapData
     public synchronized void serialize(Controller controller, WorldMap map, JSONObject root) throws IOException
     {
         // Create new root for entities
-        JSONObject entities = new JSONObject();
-        JSONObject entity;
+        JSONArray entities = new JSONArray();
+
+        Entity entity;
+        JSONObject entityData;
 
         for (Map.Entry<Short, Entity> kv : this.entities.entrySet())
         {
-            // Serialize entity
-            entity = serializeEntity(kv.getValue());
+            entity = kv.getValue();
 
-            // Add to available entities
-            todo: json array not object
-            entities.values().add(entity);
+            if (entity.mapSpawned)
+            {
+                // Serialize entity
+                entityData = serializeEntity(controller, map, entity);
+
+                // Add to available entities
+                entities.add(entityData);
+            }
         }
 
         // Attach entities to root
         root.put("entities", entities);
     }
 
-    private JSONObject serializeEntity(Entity entity)
+    private JSONObject serializeEntity(Controller controller, WorldMap map, Entity entity)
     {
         JSONObject entityData = new JSONObject();
 
-        // TODO: we need flag on entities which are map-spawned, ignore rest...
+        // Fetch entity type name, more human readable
+        String typeName = entityTypeMappingStoreService.getTypeName(entity);
 
-        // type
-        // faction
-        // spawn
-        // properties
-        // -- TODO: get entity to write its own properties, as well as change current method to read own too
+        // Serialize general attributes
+        entityData.put("typeName", typeName);
+        entityData.put("faction", entity.faction);
+
+        // Serialize spawn data
+        Spawn spawn = entity.spawn;
+        if (spawn != null)
+        {
+            entityData.put("spawn", spawnParserHelper.serialize(spawn));
+        }
+
+        // Serialize custom properties/data for entity instance
+        if (entity instanceof EntityMapDataSerializer)
+        {
+            EntityMapDataSerializer serializer = (EntityMapDataSerializer) entity;
+            serializer.serialize(controller, map, entityData);
+        }
 
         return entityData;
     }
@@ -105,80 +122,44 @@ public class EntityMapData implements IdCounterConsumer, MapData
         for (Object rawEntityObject : rawEntities)
         {
             rawEntity = (JSONObject) rawEntityObject;
-            loadEntity(controller, map, rawEntity);
+            deserializeEntity(controller, map, rawEntity);
         }
     }
 
-    protected void loadEntity(Controller controller, WorldMap map, JSONObject entData) throws IOException
+    protected void deserializeEntity(Controller controller, WorldMap map, JSONObject entityData) throws IOException
     {
-        // Parse faction
-        short faction = (short) (long) entData.get("faction");
-
-        // Parse spawn (optional)
-        Spawn spawn = spawnParserHelper.parseSpawn((JSONObject) entData.get("spawn"));
-
-        // Parse KV for spawning ent
-        JSONObject rawKV = (JSONObject) entData.get("properties");
-        MapEntKV mapEntKV;
-
-        if (rawKV != null)
-        {
-            mapEntKV = loadEntityProperties(rawKV);
-        }
-        else
-        {
-            mapEntKV = null;
-        }
-
         // Create instance
         Entity entity;
 
-        if (entData.containsKey("typeName"))
+        if (entityData.containsKey("typeName"))
         {
-            String typeName = (String) entData.get("typeName");
-            entity = entityTypeMappingStoreService.createByTypeName(typeName, mapEntKV);
+            String typeName = (String) entityData.get("typeName");
+            entity = entityTypeMappingStoreService.createByTypeName(typeName);
         }
-        else if (entData.containsKey("typeId"))
+        else if (entityData.containsKey("typeId"))
         {
-            short typeId = (short) (long) entData.get("typeId");
-            entity = entityTypeMappingStoreService.createByTypeId(typeId, mapEntKV);
+            short typeId = (short) (long) entityData.get("typeId");
+            entity = entityTypeMappingStoreService.createByTypeId(typeId);
         }
         else
         {
             throw new RuntimeException("No type defined for entity in map file");
         }
 
-        // Set parameters
-        entity.faction = faction;
-        entity.spawn = spawn;
+        // Deserialize general parameters
+        entity.mapSpawned = true;
+        entity.faction = (short) (long) entityData.get("faction");
+        entity.spawn = spawnParserHelper.deserialize((JSONObject) entityData.get("spawn"));
+
+        // Deserialize custom entity data
+        if (entity instanceof EntityMapDataSerializer)
+        {
+            EntityMapDataSerializer serializer = (EntityMapDataSerializer) entity;
+            serializer.deserialize(controller, map, entityData);
+        }
 
         // Add to world
         respawnManager.respawn(new EntityPendingRespawn(controller, map, entity, 0, false));
-    }
-
-    private MapEntKV loadEntityProperties(JSONObject rawProperties)
-    {
-        // TODO: refactor away from "KV" naming
-        MapEntKV mapEntKV = new MapEntKV();
-
-        // Parse each KV
-        Iterator iterator = rawProperties.entrySet().iterator();
-        java.util.Map.Entry<Object, Object> kv;
-        String key;
-        String value;
-
-        while (iterator.hasNext())
-        {
-            // Read KV
-            kv = (java.util.Map.Entry<Object, Object>) iterator.next();
-            key = (String) kv.getKey();
-            value = kv.getValue().toString();
-
-            // Add to map
-            mapEntKV.put(key, value);
-        }
-
-        return mapEntKV;
     }
 
     /**

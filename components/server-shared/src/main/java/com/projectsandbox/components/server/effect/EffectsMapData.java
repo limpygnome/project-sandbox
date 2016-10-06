@@ -2,7 +2,7 @@ package com.projectsandbox.components.server.effect;
 
 import com.projectsandbox.components.server.Controller;
 import com.projectsandbox.components.server.effect.types.AbstractEffect;
-import com.projectsandbox.components.server.world.map.MapData;
+import com.projectsandbox.components.server.world.map.mapdata.MapData;
 import com.projectsandbox.components.server.world.map.WorldMap;
 import org.json.simple.JSONObject;
 import org.springframework.context.annotation.Scope;
