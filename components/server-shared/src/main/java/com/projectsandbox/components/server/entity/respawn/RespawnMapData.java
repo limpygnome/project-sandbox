@@ -60,10 +60,21 @@ public class RespawnMapData implements MapData
 
     public JSONObject serializeFactionSpawn(FactionSpawns factionSpawn)
     {
+        JSONObject factionData = new JSONObject();
+        JSONArray spawnsData = new JSONArray();
+        JSONObject spawnData;
+
         for (Spawn spawn : factionSpawn.getSpawns())
         {
-            finish here.
+            spawnData = spawnParserHelper.serialize(spawn);
+            spawnsData.add(spawnData);
         }
+
+        // Attach settings to faction
+        factionData.put("id", factionSpawn.getFactionId());
+        factionData.put("spawns", spawnsData);
+
+        return factionData;
     }
 
     @Override

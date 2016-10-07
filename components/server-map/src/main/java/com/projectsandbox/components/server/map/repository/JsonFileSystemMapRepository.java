@@ -1,14 +1,13 @@
 package com.projectsandbox.components.server.map.repository;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
 import com.projectsandbox.components.server.Controller;
 import com.projectsandbox.components.server.util.JsonHelper;
-import com.projectsandbox.components.server.world.map.mapdata.MapData;
 import com.projectsandbox.components.server.world.map.MapService;
 import com.projectsandbox.components.server.world.map.WorldMap;
+import com.projectsandbox.components.server.world.map.mapdata.MapData;
 import com.projectsandbox.components.server.world.map.repository.MapRepository;
-import com.projectsandbox.components.server.world.map.type.open.OpenWorldMap;
-import com.projectsandbox.components.server.world.map.type.tile.TileWorldMap;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.json.simple.JSONObject;
@@ -39,6 +38,8 @@ public class JsonFileSystemMapRepository implements MapRepository
 
     @Autowired
     private JsonHelper jsonHelper;
+    @Autowired
+    private MapService mapService;
 
     @Value("${maps.public.location}")
     private String publicMapsLocationPath;
@@ -74,16 +75,23 @@ public class JsonFileSystemMapRepository implements MapRepository
                 // Read map
                 map = readMap(controller, mapData);
 
-                // Prepare for runtime
-                map.postMapLoad();
+                if (map != null)
+                {
+                    // Prepare for runtime
+                    map.postMapLoad();
 
-                // Build initial packet
-                map.rebuildMapPacket();
+                    // Build initial packet
+                    map.rebuildMapPacket();
 
-                // Add to result
-                maps.put(map.getMapId(), map);
+                    // Add to result
+                    maps.put(map.getMapId(), map);
 
-                LOG.debug("loaded public map - {}", map);
+                    LOG.debug("loaded public map - {}", map);
+                }
+                else
+                {
+                    LOG.debug("Ignored map, not enabled - resource: {}", resource);
+                }
             }
         }
         catch (IOException e)
@@ -112,20 +120,24 @@ public class JsonFileSystemMapRepository implements MapRepository
             throw new RuntimeException("Type is mandatory and missing");
         }
 
-        // Create new map instance
+        // Fetch map class type
+        Class<? extends WorldMap> classType = mapService.getClassTypeByTypeName(type);
+
+        if (classType == null)
+        {
+            throw new RuntimeException("Unknown map type: " + type);
+        }
+
+        // Create new instance
         WorldMap map;
 
-        // Create map based on type
-        switch (type)
+        try
         {
-            case "open-world-map":
-                map = new OpenWorldMap(mapId, controller);
-                break;
-            case "tile-world-map":
-                map = new TileWorldMap(mapId, controller);
-                break;
-            default:
-                throw new RuntimeException("Unknown map type: " + type);
+            map = classType.getConstructor(String.class, Controller.class).newInstance(mapId, controller);
+        }
+        catch (Exception e)
+        {
+            throw new RuntimeException("Failed to create map - id: " + mapId, e);
         }
 
         // Deserialize map data (i.e. let each map data load its own data from the root JSON element)
@@ -133,6 +145,12 @@ public class JsonFileSystemMapRepository implements MapRepository
         for (MapData mapData : mapDataList)
         {
             mapData.deserialize(controller, map, root);
+        }
+
+        // Don't return the map if not enabled...
+        if (!map.getGeneralMapData().isEnabled())
+        {
+            map = null;
         }
 
         return map;
@@ -159,6 +177,12 @@ public class JsonFileSystemMapRepository implements MapRepository
             // Create root for attaching map data
             JSONObject root = new JSONObject();
 
+            // Append mandatory core attribs
+            root.put("id", map.getMapId());
+
+            String typeName = mapService.getTypeNameByClassType(map.getClass());
+            root.put("type", typeName);
+
             // Invoke serialize on all map data instances
             for (MapData mapData : map.getMapData())
             {
@@ -167,6 +191,7 @@ public class JsonFileSystemMapRepository implements MapRepository
 
             // Serialize json
             ObjectMapper mapper = new ObjectMapper();
+            mapper.enable(SerializationFeature.INDENT_OUTPUT);
             String data = mapper.writeValueAsString(root);
 
             // Persist to file system

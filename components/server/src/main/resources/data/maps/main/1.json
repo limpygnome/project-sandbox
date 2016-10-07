@@ -1,0 +1,1080 @@
+{
+  "entities" : [ {
+    "faction" : 1000,
+    "typeName" : "vehicle/ice-cream-van"
+  }, {
+    "faction" : 1000,
+    "typeName" : "ship/fighter"
+  }, {
+    "faction" : 1000,
+    "typeName" : "ship/destroyer"
+  }, {
+    "spawn" : {
+      "rotation" : 0.0,
+      "x" : 2500.0,
+      "y" : 2500.0
+    },
+    "faction" : 1000,
+    "typeName" : "world/blackhole"
+  }, {
+    "spawn" : {
+      "rotation" : 0.0,
+      "x" : 257.5,
+      "y" : 1646.5
+    },
+    "faction" : 0,
+    "typeName" : "living/sentry"
+  }, {
+    "spawn" : {
+      "rotation" : 0.0,
+      "x" : 317.5,
+      "y" : 1471.0
+    },
+    "faction" : 0,
+    "typeName" : "living/sentry"
+  }, {
+    "spawn" : {
+      "rotation" : 0.0,
+      "x" : 1506.0,
+      "y" : 84.0
+    },
+    "faction" : 0,
+    "typeName" : "living/sentry"
+  }, {
+    "spawn" : {
+      "rotation" : 0.0,
+      "x" : 1421.0,
+      "y" : 222.0
+    },
+    "faction" : 0,
+    "typeName" : "living/sentry"
+  }, {
+    "spawn" : {
+      "rotation" : 0.0,
+      "x" : 1045.0,
+      "y" : 222.0
+    },
+    "faction" : 0,
+    "typeName" : "living/sentry"
+  }, {
+    "spawn" : {
+      "rotation" : 0.0,
+      "x" : 797.5,
+      "y" : 222.0
+    },
+    "faction" : 0,
+    "typeName" : "living/sentry"
+  }, {
+    "spawn" : {
+      "rotation" : 0.0,
+      "x" : 458.5,
+      "y" : 222.0
+    },
+    "faction" : 0,
+    "typeName" : "living/sentry"
+  }, {
+    "spawn" : {
+      "rotation" : 0.0,
+      "x" : 340.0,
+      "y" : 1334.0
+    },
+    "faction" : 0,
+    "typeName" : "pickup/health",
+    "health" : {
+      "respawn-delay" : 0,
+      "amount" : 0.0
+    }
+  }, {
+    "spawn" : {
+      "rotation" : 0.0,
+      "x" : 864.0,
+      "y" : 378.5
+    },
+    "faction" : 0,
+    "typeName" : "pickup/health",
+    "health" : {
+      "respawn-delay" : 0,
+      "amount" : 0.0
+    }
+  }, {
+    "spawn" : {
+      "rotation" : 0.0,
+      "x" : 790.5,
+      "y" : 373.5
+    },
+    "faction" : 0,
+    "typeName" : "pickup/health",
+    "health" : {
+      "respawn-delay" : 0,
+      "amount" : 0.0
+    }
+  }, {
+    "spawn" : {
+      "rotation" : 0.0,
+      "x" : 664.0,
+      "y" : 373.5
+    },
+    "faction" : 0,
+    "typeName" : "pickup/health",
+    "health" : {
+      "respawn-delay" : 0,
+      "amount" : 0.0
+    }
+  }, {
+    "spawn" : {
+      "rotation" : 0.0,
+      "x" : 496.5,
+      "y" : 267.0
+    },
+    "faction" : 0,
+    "typeName" : "pickup/health",
+    "health" : {
+      "respawn-delay" : 0,
+      "amount" : 0.0
+    }
+  }, {
+    "spawn" : {
+      "rotation" : 0.0,
+      "x" : 304.0,
+      "y" : 598.5
+    },
+    "faction" : 0,
+    "typeName" : "pickup/health",
+    "health" : {
+      "respawn-delay" : 0,
+      "amount" : 0.0
+    }
+  }, {
+    "spawn" : {
+      "rotation" : 0.0,
+      "x" : 461.5,
+      "y" : 877.5
+    },
+    "faction" : 0,
+    "typeName" : "pickup/health",
+    "health" : {
+      "respawn-delay" : 0,
+      "amount" : 0.0
+    }
+  }, {
+    "spawn" : {
+      "rotation" : 0.0,
+      "x" : 284.0,
+      "y" : 1159.5
+    },
+    "faction" : 0,
+    "typeName" : "pickup/health",
+    "health" : {
+      "respawn-delay" : 0,
+      "amount" : 0.0
+    }
+  }, {
+    "spawn" : {
+      "rotation" : 0.0,
+      "x" : 332.5,
+      "y" : 1189.0
+    },
+    "faction" : 0,
+    "typeName" : "pickup/health",
+    "health" : {
+      "respawn-delay" : 0,
+      "amount" : 0.0
+    }
+  }, {
+    "spawn" : {
+      "rotation" : 0.0,
+      "x" : 418.0,
+      "y" : 1035.0
+    },
+    "faction" : 0,
+    "typeName" : "pickup/health",
+    "health" : {
+      "respawn-delay" : 0,
+      "amount" : 0.0
+    }
+  }, {
+    "spawn" : {
+      "rotation" : 0.0,
+      "x" : 358.0,
+      "y" : 885.0
+    },
+    "faction" : 0,
+    "typeName" : "pickup/health",
+    "health" : {
+      "respawn-delay" : 0,
+      "amount" : 0.0
+    }
+  }, {
+    "spawn" : {
+      "rotation" : 0.0,
+      "x" : 358.0,
+      "y" : 727.5
+    },
+    "faction" : 0,
+    "typeName" : "pickup/health",
+    "health" : {
+      "respawn-delay" : 0,
+      "amount" : 0.0
+    }
+  }, {
+    "spawn" : {
+      "rotation" : 0.0,
+      "x" : 364.5,
+      "y" : 1016.5
+    },
+    "faction" : 0,
+    "typeName" : "pickup/health",
+    "health" : {
+      "respawn-delay" : 0,
+      "amount" : 0.0
+    }
+  }, {
+    "spawn" : {
+      "rotation" : 0.0,
+      "x" : 364.5,
+      "y" : 1144.0
+    },
+    "faction" : 0,
+    "typeName" : "pickup/health",
+    "health" : {
+      "respawn-delay" : 0,
+      "amount" : 0.0
+    }
+  }, {
+    "spawn" : {
+      "rotation" : 0.0,
+      "x" : 346.5,
+      "y" : 1052.0
+    },
+    "faction" : 0,
+    "typeName" : "pickup/health",
+    "health" : {
+      "respawn-delay" : 0,
+      "amount" : 0.0
+    }
+  }, {
+    "spawn" : {
+      "rotation" : 0.0,
+      "x" : 346.5,
+      "y" : 881.5
+    },
+    "faction" : 0,
+    "typeName" : "pickup/health",
+    "health" : {
+      "respawn-delay" : 0,
+      "amount" : 0.0
+    }
+  }, {
+    "spawn" : {
+      "rotation" : 0.0,
+      "x" : 456.5,
+      "y" : 674.0
+    },
+    "faction" : 0,
+    "typeName" : "pickup/health",
+    "health" : {
+      "respawn-delay" : 0,
+      "amount" : 0.0
+    }
+  }, {
+    "spawn" : {
+      "rotation" : 0.0,
+      "x" : 465.5,
+      "y" : 653.5
+    },
+    "faction" : 0,
+    "typeName" : "pickup/health",
+    "health" : {
+      "respawn-delay" : 0,
+      "amount" : 0.0
+    }
+  }, {
+    "spawn" : {
+      "rotation" : 0.0,
+      "x" : 366.5,
+      "y" : 752.5
+    },
+    "faction" : 0,
+    "typeName" : "pickup/health",
+    "health" : {
+      "respawn-delay" : 0,
+      "amount" : 0.0
+    }
+  }, {
+    "spawn" : {
+      "rotation" : 0.0,
+      "x" : 397.0,
+      "y" : 809.5
+    },
+    "faction" : 0,
+    "typeName" : "pickup/health",
+    "health" : {
+      "respawn-delay" : 0,
+      "amount" : 0.0
+    }
+  }, {
+    "spawn" : {
+      "rotation" : 0.0,
+      "x" : 397.0,
+      "y" : 809.5
+    },
+    "faction" : 0,
+    "typeName" : "pickup/health",
+    "health" : {
+      "respawn-delay" : 0,
+      "amount" : 0.0
+    }
+  }, {
+    "spawn" : {
+      "rotation" : 0.0,
+      "x" : 419.5,
+      "y" : 809.5
+    },
+    "faction" : 0,
+    "typeName" : "pickup/health",
+    "health" : {
+      "respawn-delay" : 0,
+      "amount" : 0.0
+    }
+  }, {
+    "spawn" : {
+      "rotation" : 0.0,
+      "x" : 436.0,
+      "y" : 809.5
+    },
+    "faction" : 0,
+    "typeName" : "pickup/health",
+    "health" : {
+      "respawn-delay" : 0,
+      "amount" : 0.0
+    }
+  }, {
+    "spawn" : {
+      "rotation" : 0.0,
+      "x" : 436.0,
+      "y" : 809.5
+    },
+    "faction" : 0,
+    "typeName" : "pickup/health",
+    "health" : {
+      "respawn-delay" : 0,
+      "amount" : 0.0
+    }
+  }, {
+    "spawn" : {
+      "rotation" : 0.0,
+      "x" : 431.0,
+      "y" : 820.0
+    },
+    "faction" : 0,
+    "typeName" : "pickup/health",
+    "health" : {
+      "respawn-delay" : 0,
+      "amount" : 0.0
+    }
+  }, {
+    "spawn" : {
+      "rotation" : 0.0,
+      "x" : 408.5,
+      "y" : 825.0
+    },
+    "faction" : 0,
+    "typeName" : "pickup/health",
+    "health" : {
+      "respawn-delay" : 0,
+      "amount" : 0.0
+    }
+  }, {
+    "spawn" : {
+      "rotation" : 0.0,
+      "x" : 383.5,
+      "y" : 825.0
+    },
+    "faction" : 0,
+    "typeName" : "pickup/health",
+    "health" : {
+      "respawn-delay" : 0,
+      "amount" : 0.0
+    }
+  }, {
+    "spawn" : {
+      "rotation" : 0.0,
+      "x" : 386.0,
+      "y" : 760.5
+    },
+    "faction" : 0,
+    "typeName" : "pickup/health",
+    "health" : {
+      "respawn-delay" : 0,
+      "amount" : 0.0
+    }
+  }, {
+    "spawn" : {
+      "rotation" : 0.0,
+      "x" : 394.5,
+      "y" : 896.5
+    },
+    "faction" : 0,
+    "typeName" : "pickup/health",
+    "health" : {
+      "respawn-delay" : 0,
+      "amount" : 0.0
+    }
+  }, {
+    "spawn" : {
+      "rotation" : 0.0,
+      "x" : 424.0,
+      "y" : 896.5
+    },
+    "faction" : 0,
+    "typeName" : "pickup/health",
+    "health" : {
+      "respawn-delay" : 0,
+      "amount" : 0.0
+    }
+  }, {
+    "spawn" : {
+      "rotation" : 0.0,
+      "x" : 455.5,
+      "y" : 880.5
+    },
+    "faction" : 0,
+    "typeName" : "pickup/health",
+    "health" : {
+      "respawn-delay" : 0,
+      "amount" : 0.0
+    }
+  }, {
+    "spawn" : {
+      "rotation" : 0.0,
+      "x" : 455.5,
+      "y" : 829.5
+    },
+    "faction" : 0,
+    "typeName" : "pickup/health",
+    "health" : {
+      "respawn-delay" : 0,
+      "amount" : 0.0
+    }
+  }, {
+    "spawn" : {
+      "rotation" : 0.0,
+      "x" : 400.0,
+      "y" : 774.0
+    },
+    "faction" : 0,
+    "typeName" : "pickup/health",
+    "health" : {
+      "respawn-delay" : 0,
+      "amount" : 0.0
+    }
+  }, {
+    "spawn" : {
+      "rotation" : 0.0,
+      "x" : 380.5,
+      "y" : 754.5
+    },
+    "faction" : 0,
+    "typeName" : "pickup/health",
+    "health" : {
+      "respawn-delay" : 0,
+      "amount" : 0.0
+    }
+  }, {
+    "spawn" : {
+      "rotation" : 0.0,
+      "x" : 359.5,
+      "y" : 714.0
+    },
+    "faction" : 0,
+    "typeName" : "pickup/health",
+    "health" : {
+      "respawn-delay" : 0,
+      "amount" : 0.0
+    }
+  }, {
+    "spawn" : {
+      "rotation" : 0.0,
+      "x" : 338.0,
+      "y" : 757.5
+    },
+    "faction" : 0,
+    "typeName" : "pickup/health",
+    "health" : {
+      "respawn-delay" : 0,
+      "amount" : 0.0
+    }
+  }, {
+    "spawn" : {
+      "rotation" : 0.0,
+      "x" : 384.5,
+      "y" : 826.5
+    },
+    "faction" : 0,
+    "typeName" : "pickup/health",
+    "health" : {
+      "respawn-delay" : 0,
+      "amount" : 0.0
+    }
+  }, {
+    "spawn" : {
+      "rotation" : 0.0,
+      "x" : 458.0,
+      "y" : 900.0
+    },
+    "faction" : 0,
+    "typeName" : "pickup/health",
+    "health" : {
+      "respawn-delay" : 0,
+      "amount" : 0.0
+    }
+  }, {
+    "spawn" : {
+      "rotation" : 0.0,
+      "x" : 483.5,
+      "y" : 951.5
+    },
+    "faction" : 0,
+    "typeName" : "pickup/health",
+    "health" : {
+      "respawn-delay" : 0,
+      "amount" : 0.0
+    }
+  }, {
+    "spawn" : {
+      "rotation" : 0.0,
+      "x" : 483.5,
+      "y" : 978.0
+    },
+    "faction" : 0,
+    "typeName" : "pickup/health",
+    "health" : {
+      "respawn-delay" : 0,
+      "amount" : 0.0
+    }
+  }, {
+    "spawn" : {
+      "rotation" : 0.0,
+      "x" : 480.5,
+      "y" : 978.0
+    },
+    "faction" : 0,
+    "typeName" : "pickup/health",
+    "health" : {
+      "respawn-delay" : 0,
+      "amount" : 0.0
+    }
+  }, {
+    "spawn" : {
+      "rotation" : 0.0,
+      "x" : 480.5,
+      "y" : 970.5
+    },
+    "faction" : 0,
+    "typeName" : "pickup/health",
+    "health" : {
+      "respawn-delay" : 0,
+      "amount" : 0.0
+    }
+  }, {
+    "spawn" : {
+      "rotation" : 0.0,
+      "x" : 476.0,
+      "y" : 958.5
+    },
+    "faction" : 0,
+    "typeName" : "pickup/health",
+    "health" : {
+      "respawn-delay" : 0,
+      "amount" : 0.0
+    }
+  }, {
+    "spawn" : {
+      "rotation" : 0.0,
+      "x" : 471.0,
+      "y" : 948.0
+    },
+    "faction" : 0,
+    "typeName" : "pickup/health",
+    "health" : {
+      "respawn-delay" : 0,
+      "amount" : 0.0
+    }
+  }, {
+    "spawn" : {
+      "rotation" : 0.0,
+      "x" : 471.0,
+      "y" : 928.5
+    },
+    "faction" : 0,
+    "typeName" : "pickup/health",
+    "health" : {
+      "respawn-delay" : 0,
+      "amount" : 0.0
+    }
+  }, {
+    "spawn" : {
+      "rotation" : 0.0,
+      "x" : 454.5,
+      "y" : 904.5
+    },
+    "faction" : 0,
+    "typeName" : "pickup/health",
+    "health" : {
+      "respawn-delay" : 0,
+      "amount" : 0.0
+    }
+  }, {
+    "spawn" : {
+      "rotation" : 0.0,
+      "x" : 436.0,
+      "y" : 876.0
+    },
+    "faction" : 0,
+    "typeName" : "pickup/health",
+    "health" : {
+      "respawn-delay" : 0,
+      "amount" : 0.0
+    }
+  }, {
+    "spawn" : {
+      "rotation" : 0.0,
+      "x" : 436.0,
+      "y" : 843.0
+    },
+    "faction" : 0,
+    "typeName" : "pickup/health",
+    "health" : {
+      "respawn-delay" : 0,
+      "amount" : 0.0
+    }
+  }, {
+    "spawn" : {
+      "rotation" : 0.0,
+      "x" : 436.0,
+      "y" : 818.5
+    },
+    "faction" : 0,
+    "typeName" : "pickup/health",
+    "health" : {
+      "respawn-delay" : 0,
+      "amount" : 0.0
+    }
+  }, {
+    "spawn" : {
+      "rotation" : 0.0,
+      "x" : 436.0,
+      "y" : 792.0
+    },
+    "faction" : 0,
+    "typeName" : "pickup/health",
+    "health" : {
+      "respawn-delay" : 0,
+      "amount" : 0.0
+    }
+  }, {
+    "spawn" : {
+      "rotation" : 0.0,
+      "x" : 436.0,
+      "y" : 748.5
+    },
+    "faction" : 0,
+    "typeName" : "pickup/health",
+    "health" : {
+      "respawn-delay" : 0,
+      "amount" : 0.0
+    }
+  }, {
+    "spawn" : {
+      "rotation" : 0.0,
+      "x" : 436.0,
+      "y" : 717.0
+    },
+    "faction" : 0,
+    "typeName" : "pickup/health",
+    "health" : {
+      "respawn-delay" : 0,
+      "amount" : 0.0
+    }
+  }, {
+    "spawn" : {
+      "rotation" : 0.0,
+      "x" : 436.0,
+      "y" : 683.5
+    },
+    "faction" : 0,
+    "typeName" : "pickup/health",
+    "health" : {
+      "respawn-delay" : 0,
+      "amount" : 0.0
+    }
+  }, {
+    "spawn" : {
+      "rotation" : 0.0,
+      "x" : 436.0,
+      "y" : 648.0
+    },
+    "faction" : 0,
+    "typeName" : "pickup/health",
+    "health" : {
+      "respawn-delay" : 0,
+      "amount" : 0.0
+    }
+  }, {
+    "spawn" : {
+      "rotation" : 0.0,
+      "x" : 436.0,
+      "y" : 648.0
+    },
+    "faction" : 0,
+    "typeName" : "pickup/health",
+    "health" : {
+      "respawn-delay" : 0,
+      "amount" : 0.0
+    }
+  }, {
+    "spawn" : {
+      "rotation" : 0.0,
+      "x" : 431.0,
+      "y" : 650.0
+    },
+    "faction" : 0,
+    "typeName" : "pickup/health",
+    "health" : {
+      "respawn-delay" : 0,
+      "amount" : 0.0
+    }
+  }, {
+    "spawn" : {
+      "rotation" : 0.0,
+      "x" : 428.5,
+      "y" : 655.5
+    },
+    "faction" : 0,
+    "typeName" : "pickup/health",
+    "health" : {
+      "respawn-delay" : 0,
+      "amount" : 0.0
+    }
+  }, {
+    "spawn" : {
+      "rotation" : 0.0,
+      "x" : 428.5,
+      "y" : 667.5
+    },
+    "faction" : 0,
+    "typeName" : "pickup/health",
+    "health" : {
+      "respawn-delay" : 0,
+      "amount" : 0.0
+    }
+  }, {
+    "spawn" : {
+      "rotation" : 0.0,
+      "x" : 428.5,
+      "y" : 678.0
+    },
+    "faction" : 0,
+    "typeName" : "pickup/health",
+    "health" : {
+      "respawn-delay" : 0,
+      "amount" : 0.0
+    }
+  }, {
+    "spawn" : {
+      "rotation" : 0.0,
+      "x" : 428.5,
+      "y" : 697.5
+    },
+    "faction" : 0,
+    "typeName" : "pickup/health",
+    "health" : {
+      "respawn-delay" : 0,
+      "amount" : 0.0
+    }
+  }, {
+    "spawn" : {
+      "rotation" : 0.0,
+      "x" : 413.0,
+      "y" : 713.0
+    },
+    "faction" : 0,
+    "typeName" : "pickup/health",
+    "health" : {
+      "respawn-delay" : 0,
+      "amount" : 0.0
+    }
+  }, {
+    "spawn" : {
+      "rotation" : 0.0,
+      "x" : 404.5,
+      "y" : 740.0
+    },
+    "faction" : 0,
+    "typeName" : "pickup/health",
+    "health" : {
+      "respawn-delay" : 0,
+      "amount" : 0.0
+    }
+  }, {
+    "spawn" : {
+      "rotation" : 0.0,
+      "x" : 353.5,
+      "y" : 585.0
+    },
+    "faction" : 0,
+    "typeName" : "pickup/health",
+    "health" : {
+      "respawn-delay" : 0,
+      "amount" : 0.0
+    }
+  }, {
+    "spawn" : {
+      "rotation" : 0.0,
+      "x" : 353.5,
+      "y" : 557.5
+    },
+    "faction" : 0,
+    "typeName" : "pickup/health",
+    "health" : {
+      "respawn-delay" : 0,
+      "amount" : 0.0
+    }
+  }, {
+    "spawn" : {
+      "rotation" : 0.0,
+      "x" : 353.5,
+      "y" : 512.5
+    },
+    "faction" : 0,
+    "typeName" : "pickup/health",
+    "health" : {
+      "respawn-delay" : 0,
+      "amount" : 0.0
+    }
+  }, {
+    "spawn" : {
+      "rotation" : 0.0,
+      "x" : 353.5,
+      "y" : 480.0
+    },
+    "faction" : 0,
+    "typeName" : "pickup/health",
+    "health" : {
+      "respawn-delay" : 0,
+      "amount" : 0.0
+    }
+  }, {
+    "spawn" : {
+      "rotation" : 0.0,
+      "x" : 353.5,
+      "y" : 445.5
+    },
+    "faction" : 0,
+    "typeName" : "pickup/health",
+    "health" : {
+      "respawn-delay" : 0,
+      "amount" : 0.0
+    }
+  }, {
+    "spawn" : {
+      "rotation" : 0.0,
+      "x" : 353.5,
+      "y" : 390.0
+    },
+    "faction" : 0,
+    "typeName" : "pickup/health",
+    "health" : {
+      "respawn-delay" : 0,
+      "amount" : 0.0
+    }
+  }, {
+    "spawn" : {
+      "rotation" : 0.0,
+      "x" : 353.5,
+      "y" : 330.0
+    },
+    "faction" : 0,
+    "typeName" : "pickup/health",
+    "health" : {
+      "respawn-delay" : 0,
+      "amount" : 0.0
+    }
+  }, {
+    "spawn" : {
+      "rotation" : 0.0,
+      "x" : 353.5,
+      "y" : 265.5
+    },
+    "faction" : 0,
+    "typeName" : "pickup/health",
+    "health" : {
+      "respawn-delay" : 0,
+      "amount" : 0.0
+    }
+  }, {
+    "spawn" : {
+      "rotation" : 0.0,
+      "x" : 401.0,
+      "y" : 172.5
+    },
+    "faction" : 0,
+    "typeName" : "pickup/health",
+    "health" : {
+      "respawn-delay" : 0,
+      "amount" : 0.0
+    }
+  }, {
+    "spawn" : {
+      "rotation" : 0.0,
+      "x" : 450.5,
+      "y" : 123.0
+    },
+    "faction" : 0,
+    "typeName" : "pickup/health",
+    "health" : {
+      "respawn-delay" : 0,
+      "amount" : 0.0
+    }
+  }, {
+    "spawn" : {
+      "rotation" : 0.0,
+      "x" : 502.0,
+      "y" : 71.5
+    },
+    "faction" : 0,
+    "typeName" : "pickup/health",
+    "health" : {
+      "respawn-delay" : 0,
+      "amount" : 0.0
+    }
+  }, {
+    "spawn" : {
+      "rotation" : 0.0,
+      "x" : 583.0,
+      "y" : 71.5
+    },
+    "faction" : 0,
+    "typeName" : "pickup/health",
+    "health" : {
+      "respawn-delay" : 0,
+      "amount" : 0.0
+    }
+  }, {
+    "spawn" : {
+      "rotation" : 0.0,
+      "x" : 639.5,
+      "y" : 71.5
+    },
+    "faction" : 0,
+    "typeName" : "pickup/health",
+    "health" : {
+      "respawn-delay" : 0,
+      "amount" : 0.0
+    }
+  }, {
+    "spawn" : {
+      "rotation" : 0.0,
+      "x" : 728.0,
+      "y" : 71.5
+    },
+    "faction" : 0,
+    "typeName" : "pickup/health",
+    "health" : {
+      "respawn-delay" : 0,
+      "amount" : 0.0
+    }
+  }, {
+    "spawn" : {
+      "rotation" : 0.0,
+      "x" : 821.0,
+      "y" : 164.5
+    },
+    "faction" : 0,
+    "typeName" : "pickup/health",
+    "health" : {
+      "respawn-delay" : 0,
+      "amount" : 0.0
+    }
+  }, {
+    "spawn" : {
+      "rotation" : 0.0,
+      "x" : 885.5,
+      "y" : 164.5
+    },
+    "faction" : 0,
+    "typeName" : "pickup/health",
+    "health" : {
+      "respawn-delay" : 0,
+      "amount" : 0.0
+    }
+  }, {
+    "spawn" : {
+      "rotation" : 0.0,
+      "x" : 986.0,
+      "y" : 164.5
+    },
+    "faction" : 0,
+    "typeName" : "pickup/health",
+    "health" : {
+      "respawn-delay" : 0,
+      "amount" : 0.0
+    }
+  }, {
+    "spawn" : {
+      "rotation" : 0.0,
+      "x" : 1091.0,
+      "y" : 164.5
+    },
+    "faction" : 0,
+    "typeName" : "pickup/health",
+    "health" : {
+      "respawn-delay" : 0,
+      "amount" : 0.0
+    }
+  }, {
+    "spawn" : {
+      "rotation" : 0.0,
+      "x" : 1163.5,
+      "y" : 201.0
+    },
+    "faction" : 0,
+    "typeName" : "pickup/health",
+    "health" : {
+      "respawn-delay" : 0,
+      "amount" : 0.0
+    }
+  } ],
+  "id" : "1",
+  "openWorldProperties" : {
+    "background" : "background/space-red",
+    "width" : 120000.0,
+    "height" : 120000.0
+  },
+  "type" : "open-world-map",
+  "factionSpawns" : [ {
+    "id" : 0,
+    "spawns" : [ {
+      "rotation" : 0.0,
+      "x" : 150.0,
+      "y" : 150.0
+    } ]
+  }, {
+    "id" : 1000,
+    "spawns" : [ {
+      "rotation" : 0.0,
+      "x" : 450.0,
+      "y" : 450.0
+    }, {
+      "rotation" : 0.0,
+      "x" : 750.0,
+      "y" : 750.0
+    } ]
+  } ],
+  "properties" : {
+    "lobby" : true,
+    "defaultPlayerEntity" : "util/invisible-map-editor",
+    "name" : "main open test map",
+    "enabled" : true
+  }
+}

@@ -48,7 +48,7 @@ public class PlayerEntityService
             {
                 // Fetch required data from session
                 PlayerEntity entity = createPlayerFromSession(defaultMap, playerInfo, gameSession);
-                Short mapId = gameSession.gameDataGetShort(PLAYERDATA_MAPID);
+                String mapId = gameSession.gameDataGetStr(PLAYERDATA_MAPID);
 
                 // Load map
                 if (mapId != null)

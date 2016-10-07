@@ -2,6 +2,7 @@ package com.projectsandbox.components.server.world.map.type.open;
 
 import com.projectsandbox.components.server.Controller;
 import com.projectsandbox.components.server.world.map.WorldMap;
+import com.projectsandbox.components.server.world.map.type.MapType;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.io.IOException;
@@ -9,6 +10,7 @@ import java.io.IOException;
 /**
  * An open space map, suitable for space.
  */
+@MapType(typeName = "open-world-map", classType = OpenWorldMap.class)
 public class OpenWorldMap extends WorldMap
 {
     @Autowired
