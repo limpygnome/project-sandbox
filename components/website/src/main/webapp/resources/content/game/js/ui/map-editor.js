@@ -58,9 +58,9 @@ game.ui.mapEditor = (function(){
     var setupButtonHooks = function()
     {
         // Hook map editor buttons
-        $("#ps-map-editor .map-reload").on("click", handleMapReload);
-        $("#ps-map-editor .map-clear").on("click", handleMapClear);
-        $("#ps-map-editor .map-save").on("click", handleMapSave);
+        $("#ps-map-editor .map-reload").off("click.map-reload").on("click.map-reload", handleMapReload);
+        $("#ps-map-editor .map-clear").off("click.map-clear").on("click.map-clear", handleMapClear);
+        $("#ps-map-editor .map-save").off("click.map-save").on("click.map-save", handleMapSave);
     };
 
     var setupEntitiesBox = function()
