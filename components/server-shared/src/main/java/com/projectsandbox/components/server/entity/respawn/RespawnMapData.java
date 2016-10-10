@@ -89,9 +89,17 @@ public class RespawnMapData implements MapData
             factionSpawnData = (JSONObject) factionData;
             deserializeFactionSpawn(map, factionSpawnData);
         }
+
+        // Create non-persistable entity to represent spawns
+        deserializeCreateSpawnMarkerEntities(map);
     }
 
-    protected void deserializeFactionSpawn(WorldMap map, JSONObject factionData)
+    private void deserializeCreateSpawnMarkerEntities(WorldMap map)
+    {
+        finish this...
+    }
+
+    private void deserializeFactionSpawn(WorldMap map, JSONObject factionData)
     {
         short factionId = (short) (long) factionData.get("id");
 
