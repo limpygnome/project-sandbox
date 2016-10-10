@@ -146,6 +146,7 @@
     Game: Utility
 -->
 <script src="game/js/ent/util/invisible-map-editor-entity.js"></script>
+<script src="game/js/ent/util/spawn-marker.js"></script>
 
 <!--
     Game: Inventory

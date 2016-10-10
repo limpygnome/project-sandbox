@@ -80,6 +80,7 @@ public class RespawnMapData implements MapData
     @Override
     public void deserialize(Controller controller, WorldMap map, JSONObject root)
     {
+        // Parse data for spawns
         JSONArray factionSpawnsData = (JSONArray) root.get("factionSpawns");
         JSONObject factionSpawnData;
 

@@ -33,3 +33,9 @@
 {
     padding: 0.8em;
 }
+
+#projectsandbox #ps-ui #ps-map-editor .faction select
+{
+    padding: 0.25em;
+    width: 100%;
+}

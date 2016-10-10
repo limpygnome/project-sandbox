@@ -31,6 +31,7 @@ game.entityFactory = (function(){
 
         // -- Utility
         add(game.entities.util.InvisibleMapEditorEntity);
+        add(game.entities.util.SpawnMarker);
     });
 
     var add = function(type)

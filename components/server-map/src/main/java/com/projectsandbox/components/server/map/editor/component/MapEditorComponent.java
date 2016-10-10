@@ -22,6 +22,9 @@ public class MapEditorComponent implements EntityComponent, PlayerInfoKeyDownCom
     // The type currently selected, for when adding entities
     private short currentEntityTypeId;
 
+    // The type of faction currently used for spawning entities and spawns
+    private short faction;
+
     // Store ref to entity
     private Entity entity;
 
@@ -36,6 +39,11 @@ public class MapEditorComponent implements EntityComponent, PlayerInfoKeyDownCom
     public void setCurrentEntityTypeId(Controller controller, short typeId)
     {
         currentEntityTypeId = typeId;
+    }
+
+    public void setCurrentFaction(short faction)
+    {
+        this.faction = faction;
     }
 
     @Override
@@ -62,6 +70,7 @@ public class MapEditorComponent implements EntityComponent, PlayerInfoKeyDownCom
             // Create entity instance
             Entity newEntity = controller.entityTypeMappingStoreService.createByTypeId(currentEntityTypeId);
             newEntity.mapSpawned = true;
+            newEntity.faction = faction;
 
             // Create spawn based on editor's current position/rotation
             WorldMap map = entityEditor.map;

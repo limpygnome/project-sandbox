@@ -80,6 +80,7 @@
             </div>
 
             <div id="ps-map-editor" class="panel top">
+
                 <div>
                     <div class="button map-reload">
                         Reload
@@ -91,15 +92,31 @@
                         Clear
                     </div>
                 </div>
+
+                <h1>
+                    Faction
+                </h1>
+                <div class="faction">
+                    <select>
+                        <option value="0">
+                            Default (0)
+                        </option>
+                        <option value="1000">
+                            Vehicles (1000)
+                        </option>
+                    </select>
+                </div>
+
                 <h1>
                     Add Entity
                 </h1>
                 <p>
-                    space = action, 1 = add ent mode, 2 = remove ent mode
+                    space - create entity, f = remove entity
                 </p>
                 <div class="entities">
                     Loading...
                 </div>
+
             </div>
 
             <div id="ps-chat" class="panel top">

@@ -75,6 +75,9 @@ public class MapEditorInboundPacket extends AuthenticatedInboundPacketHandler
                 case "entity-select":
                     actionEntitySelect(controller, entity, data);
                     break;
+                case "faction-select":
+                    actionFactionSelect(controller, entity, data);
+                    break;
                 default:
                     LOG.warn("unknown map editor action - data: {}", data);
                     break;
@@ -132,11 +135,23 @@ public class MapEditorInboundPacket extends AuthenticatedInboundPacketHandler
     {
         MapEditorComponent component = getMapEditorComponent(entity);
 
-        if (component != null && data.containsKey("typeId"))
+        if (data.containsKey("typeId"))
         {
             short typeId = (short) (long) data.get("typeId");
             component.setCurrentEntityTypeId(controller, typeId);
             LOG.info("updated selected type - typeId: {}", typeId);
+        }
+    }
+
+    private void actionFactionSelect(Controller controller, Entity entity, JSONObject data)
+    {
+        MapEditorComponent component = getMapEditorComponent(entity);
+
+        if (data.containsKey("faction"))
+        {
+            short faction = (short) (long) data.get("faction");
+            component.setCurrentFaction(faction);
+            LOG.info("updated selected faction - faction: {}", faction);
         }
     }
 
@@ -147,6 +162,7 @@ public class MapEditorInboundPacket extends AuthenticatedInboundPacketHandler
         if (component == null)
         {
             LOG.warn("No map editor component found on entity - id: {}, type: {}", entity.id, entity.getClass().getName());
+            throw new RuntimeException("No map editor component found!");
         }
 
         return component;
