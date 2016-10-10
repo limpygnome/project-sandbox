@@ -1,3 +1,6 @@
+/*
+    A client-side only entity for representing spawn markers whilst in map-editor mode.
+*/
 {
     var entity = function()
     {

@@ -1,12 +1,13 @@
-game.ui.mapEditor = (function(){
+game.ui.mapEditor.controls = (function(){
 
+    var network = game.ui.mapEditor.network;
 
     var handleMapReload = function()
     {
         var payload = {
             action: "map-reload"
         };
-        sendData(payload);
+        network.sendData(payload);
         return true;
     };
 
@@ -15,7 +16,7 @@ game.ui.mapEditor = (function(){
         var payload = {
             action: "map-clear"
         };
-        sendData(payload);
+        network.sendData(payload);
         return true;
     };
 
@@ -24,7 +25,7 @@ game.ui.mapEditor = (function(){
         var payload = {
             action: "map-save"
         };
-        sendData(payload);
+        network.sendData(payload);
         return true;
     };
 
@@ -35,25 +36,9 @@ game.ui.mapEditor = (function(){
             typeId: typeId
         };
 
-        sendData(payload);
+        network.sendData(payload);
         return true;
     };
-
-    var sendData = function(payload)
-    {
-        // Convert payload to string
-        var data = JSON.stringify(payload);
-
-        // Build new packet
-        var packet = new projectSandbox.network.OutboundPacket();
-        packet.addChar("M");
-        packet.addChar("E");
-        packet.addUtf8(data);
-
-        // Send
-        projectSandbox.network.send(packet.build());
-    };
-
 
     var setupButtonHooks = function()
     {
@@ -94,7 +79,7 @@ game.ui.mapEditor = (function(){
         setupEntitiesBox();
     };
 
-    // Invoke setup when game is ready...
+    // Invoke our setup when game is ready...
     $(document).on("gameSetup", setup);
 
     return {
