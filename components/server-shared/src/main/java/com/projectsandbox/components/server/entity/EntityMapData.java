@@ -39,7 +39,7 @@ public class EntityMapData implements IdCounterConsumer, MapData
     private SpawnParserHelper spawnParserHelper;
 
     /* Used for efficient collision detection and network updates. */
-    protected transient QuadTree quadTree;
+    protected QuadTree quadTree;
 
     /* A map of entity id -> entity. */
     protected Map<Short, Entity> entities;
@@ -52,6 +52,16 @@ public class EntityMapData implements IdCounterConsumer, MapData
         this.idCounterProvider = new IdCounterProvider(this);
         this.quadTree = null;
         this.entities = null;
+    }
+
+    @Override
+    public void reset(Controller controller, WorldMap map)
+    {
+        // Put all entities to death
+        for (Entity entity : entities.values())
+        {
+            entity.remove();
+        }
     }
 
     @Override
@@ -90,7 +100,7 @@ public class EntityMapData implements IdCounterConsumer, MapData
 
         // Serialize general attributes
         entityData.put("typeName", typeName);
-        entityData.put("faction", entity.faction);
+        entityData.put("faction", entity.factionId);
 
         // Serialize spawn data
         Spawn spawn = entity.spawn;
@@ -148,7 +158,7 @@ public class EntityMapData implements IdCounterConsumer, MapData
 
         // Deserialize general parameters
         entity.mapSpawned = true;
-        entity.faction = (short) (long) entityData.get("faction");
+        entity.factionId = (short) (long) entityData.get("faction");
         entity.spawn = spawnParserHelper.deserialize((JSONObject) entityData.get("spawn"));
 
         // Deserialize custom entity data
@@ -169,6 +179,7 @@ public class EntityMapData implements IdCounterConsumer, MapData
      */
     public void reset(WorldMap map)
     {
+        // TODO: should reset rather than clear, unlikely ever issue live...
         quadTree = new QuadTree(map);
         entities = new ConcurrentHashMap<>();
         idCounterProvider.reset();

@@ -29,6 +29,20 @@ game.ui.mapEditor.controls = (function(){
         return true;
     };
 
+    var handleFactionChange = function(event)
+    {
+        // parseInt is required as equivalent of type-casting
+        var value = parseInt($(event.target).val());
+
+        var payload = {
+            action: "faction-select",
+            faction: value
+        };
+
+        network.sendData(payload);
+        return true;
+    };
+
     var handleEntitySelect = function(typeId)
     {
         var payload = {
@@ -40,12 +54,15 @@ game.ui.mapEditor.controls = (function(){
         return true;
     };
 
-    var setupButtonHooks = function()
+    var setupControlHooks = function()
     {
         // Hook map editor buttons
         $("#ps-map-editor .map-reload").off("click.map-reload").on("click.map-reload", handleMapReload);
         $("#ps-map-editor .map-clear").off("click.map-clear").on("click.map-clear", handleMapClear);
         $("#ps-map-editor .map-save").off("click.map-save").on("click.map-save", handleMapSave);
+
+        // Hook faction changer dropdown
+        $("#ps-map-editor .faction select").off("change.faction-select").on("change.faction-select", handleFactionChange);
     };
 
     var setupEntitiesBox = function()
@@ -75,7 +92,7 @@ game.ui.mapEditor.controls = (function(){
 
     var setup = function()
     {
-        setupButtonHooks();
+        setupControlHooks();
         setupEntitiesBox();
     };
 

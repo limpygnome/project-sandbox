@@ -1,6 +1,6 @@
 critical goals
 ================
-- none
+- remove or optimise radar/map; causing massive performance degradation due to jquery
 
 map editor
 =====================
@@ -21,6 +21,7 @@ technical debt
 
 long-term goals
 ================
+- optimise map by only running logic on entities within player view
 - introduce ships
 - introduce new weapons/abilities
 --- heavy missile battery

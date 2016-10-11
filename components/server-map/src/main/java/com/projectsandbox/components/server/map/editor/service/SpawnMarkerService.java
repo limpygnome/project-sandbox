@@ -8,16 +8,16 @@ import com.projectsandbox.components.server.service.EventServerPostStartup;
 import com.projectsandbox.components.server.world.map.WorldMap;
 import com.projectsandbox.components.server.world.spawn.Faction;
 import com.projectsandbox.components.server.world.spawn.Spawn;
+import java.util.Set;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 /**
- * A service to create spawn marker entities in place of spawn points.
+ * A service to create spawn markers for all the markers, on post-startup of the server, for a map.
  *
- * Currently works by adding markers on startup i.e. post map load
+ * TODO: make map loaded event instead, since this will be dynamic in the future...
  */
 @Service
 public class SpawnMarkerService implements EventServerPostStartup
@@ -44,13 +44,13 @@ public class SpawnMarkerService implements EventServerPostStartup
 
         RespawnMapData respawnMapData;
         Map<Short, Faction> factionSpawnsMap;
-        List<Spawn> spawns;
+        Set<Spawn> spawns;
 
         // Iterate each map
         for (WorldMap map : maps.values())
         {
             respawnMapData = map.getRespawnMapData();
-            factionSpawnsMap = respawnMapData.getFactionSpawns();
+            factionSpawnsMap = respawnMapData.getFactions();
 
             // Iterate spawns for each faction
             for (Faction faction : factionSpawnsMap.values())
@@ -59,38 +59,22 @@ public class SpawnMarkerService implements EventServerPostStartup
 
                 for (Spawn spawn : spawns)
                 {
-                    create(controller, map, faction, spawn);
+                    createMarker(controller, map, spawn);
                 }
             }
         }
     }
 
-    /**
-     * Should be invoked when a spawn is created.
-     */
-    public synchronized void create(Controller controller, WorldMap map, Faction faction, Spawn spawn)
+    private void createMarker(Controller controller, WorldMap map, Spawn spawn)
     {
         // Create entity and add for respawn
         SpawnMarker spawnMarker = new SpawnMarker();
+
         PositionPendingRespawn respawn = new PositionPendingRespawn(controller, map, spawnMarker, spawn, 0);
         controller.respawnManager.respawn(respawn);
 
         // Add marker to collection for tracking
         spawnMarkers.put(spawn, spawnMarker);
-    }
-
-    /**
-     * Should be invoked when a spawn is removed.
-     */
-    public synchronized void remove(Controller controller, Spawn spawn)
-    {
-        SpawnMarker spawnMarker = spawnMarkers.remove(spawn);
-
-        if (spawnMarker != null)
-        {
-            // Remove from world
-            controller.entityManager.remove(spawnMarker);
-        }
     }
 
 }

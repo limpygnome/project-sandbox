@@ -5,6 +5,7 @@ import com.projectsandbox.components.server.entity.Entity;
 import com.projectsandbox.components.server.entity.EntityMapData;
 import com.projectsandbox.components.server.entity.respawn.RespawnManager;
 import com.projectsandbox.components.server.entity.respawn.pending.EntityPendingRespawn;
+import com.projectsandbox.components.server.entity.respawn.pending.PositionPendingRespawn;
 import com.projectsandbox.components.server.map.editor.entity.component.MapEditorComponent;
 import com.projectsandbox.components.server.map.editor.entity.InvisibleMapEditorEntity;
 import com.projectsandbox.components.server.network.Socket;
@@ -121,14 +122,13 @@ public class MapEditorInboundPacket extends AuthenticatedInboundPacketHandler
 
     private void actionClearMap(Controller controller, WorldMap map, PlayerInfo playerInfo)
     {
-        // Reset entity data
-        EntityMapData data = map.getEntityMapData();
-        data.reset(map);
+        // Invoke reset on map
+        map.reset(controller);
 
-        // Respawn main player
+        // Respawn editor player
         InvisibleMapEditorEntity entity = new InvisibleMapEditorEntity();
         entity.setPlayer(playerInfo, 0);
-        respawnManager.respawn(new EntityPendingRespawn(controller, map, entity, 0, false));
+        respawnManager.respawn(new PositionPendingRespawn(controller, map, entity, 0.0f, 0.0f, 0.0f, 0));
     }
 
     private void actionEntitySelect(Controller controller, Entity entity, JSONObject data)

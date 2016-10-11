@@ -43,6 +43,12 @@ public class TileMapData implements MapData
     public TileMapData() { }
 
     @Override
+    public void reset(Controller controller, WorldMap map)
+    {
+        // TODO...
+    }
+
+    @Override
     public void serialize(Controller controller, WorldMap map, JSONObject root) throws IOException
     {
         // TODO...

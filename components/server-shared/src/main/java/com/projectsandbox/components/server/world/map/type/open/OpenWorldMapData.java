@@ -46,6 +46,12 @@ public class OpenWorldMapData implements MapData
         setLimitHeight((float) (double) rawProperties.get("height"));
     }
 
+    @Override
+    public void reset(Controller controller, WorldMap map)
+    {
+        // Does nothing at present...
+    }
+
     public float getLimitWidth()
     {
         return limitWidth;

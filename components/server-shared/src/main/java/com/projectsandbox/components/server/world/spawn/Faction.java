@@ -1,5 +1,7 @@
 package com.projectsandbox.components.server.world.spawn;
 
+import java.util.HashSet;
+import java.util.Set;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -16,14 +18,20 @@ public class Faction
 
     private short factionId;
     private Color colour;
-    private LinkedList<Spawn> spawns;
+    private Set<Spawn> spawns;
     private Iterator<Spawn> spawnIterator;
     
     public Faction(short factionId, Color colour)
     {
         this.factionId = factionId;
         this.colour = colour;
-        this.spawns = new LinkedList<>();
+        this.spawns = new HashSet<>();
+    }
+
+    public void reset()
+    {
+        spawns.clear();
+        resetNextSpawnIterator();
     }
 
     public short getFactionId()
@@ -38,18 +46,27 @@ public class Faction
 
     public synchronized void addSpawn(Spawn spawn)
     {
-        spawns.add(spawn);
-        resetNextSpawnIterator();
+        if (!spawns.contains(spawn))
+        {
+            spawns.add(spawn);
+            resetNextSpawnIterator();
 
-        LOG.debug("Added spawn - {}", spawn);
+            LOG.debug("Added spawn - faction: {}, spawn: {}", factionId, spawn);
+        }
     }
 
     public synchronized void removeSpawn(Spawn spawn)
     {
-        spawns.remove(spawn);
-        resetNextSpawnIterator();
+        if (spawns.remove(spawn))
+        {
+            resetNextSpawnIterator();
 
-        LOG.debug("Removed spawn - {}", spawn);
+            LOG.debug("Removed spawn - {}", spawn);
+        }
+        else
+        {
+            LOG.warn("Attempted to remove spawn that does not belong to faction - faction: {}, spawn: {}", factionId, spawn);
+        }
     }
 
     private synchronized void resetNextSpawnIterator()
@@ -73,7 +90,7 @@ public class Faction
         return !spawns.isEmpty();
     }
 
-    public synchronized LinkedList<Spawn> getSpawns()
+    public synchronized Set<Spawn> getSpawns()
     {
         return spawns;
     }

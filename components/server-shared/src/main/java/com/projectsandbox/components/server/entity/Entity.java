@@ -56,7 +56,7 @@ public strictfp abstract class Entity implements Serializable
     public transient Short id;
 
     // The ID of the faction to which the player belongs
-    public short faction;
+    public short factionId;
 
     // The type of entity
     public short entityType;
@@ -101,7 +101,7 @@ public strictfp abstract class Entity implements Serializable
     {
         this.map = null;
         this.id = null;
-        this.faction = DEFAULT_FACTION;
+        this.factionId = DEFAULT_FACTION;
         this.spawn = null;
         this.components = new ComponentCollection();
         

@@ -2,40 +2,8 @@
   "entities" : [ {
     "spawn" : {
       "rotation" : 0.0,
-      "x" : 5050.5,
-      "y" : 4962.0
-    },
-    "faction" : 0,
-    "typeName" : "vehicle/rocket-car"
-  }, {
-    "spawn" : {
-      "rotation" : 0.0,
-      "x" : 5160.5,
-      "y" : 4962.0
-    },
-    "faction" : 0,
-    "typeName" : "vehicle/rocket-car"
-  }, {
-    "spawn" : {
-      "rotation" : 0.0,
-      "x" : 5092.0,
-      "y" : 4962.0
-    },
-    "faction" : 0,
-    "typeName" : "vehicle/rocket-car"
-  }, {
-    "spawn" : {
-      "rotation" : 0.0,
-      "x" : 5123.5,
-      "y" : 4962.0
-    },
-    "faction" : 0,
-    "typeName" : "vehicle/rocket-car"
-  }, {
-    "spawn" : {
-      "rotation" : 0.0,
-      "x" : 5353.5,
-      "y" : 4962.0
+      "x" : 663.0,
+      "y" : 458.5
     },
     "faction" : 0,
     "typeName" : "pickup/health",
@@ -46,8 +14,8 @@
   }, {
     "spawn" : {
       "rotation" : 0.0,
-      "x" : 5386.5,
-      "y" : 4962.0
+      "x" : 715.5,
+      "y" : 390.5
     },
     "faction" : 0,
     "typeName" : "pickup/health",
@@ -58,8 +26,8 @@
   }, {
     "spawn" : {
       "rotation" : 0.0,
-      "x" : 5430.0,
-      "y" : 4962.0
+      "x" : 600.0,
+      "y" : 390.5
     },
     "faction" : 0,
     "typeName" : "pickup/health",
@@ -70,316 +38,24 @@
   }, {
     "spawn" : {
       "rotation" : 0.0,
-      "x" : 5491.5,
-      "y" : 4962.0
-    },
-    "faction" : 0,
-    "typeName" : "pickup/health",
-    "health" : {
-      "respawn-delay" : 0,
-      "amount" : 0.0
-    }
-  }, {
-    "spawn" : {
-      "rotation" : 0.0,
-      "x" : 5529.0,
-      "y" : 4962.0
-    },
-    "faction" : 0,
-    "typeName" : "pickup/health",
-    "health" : {
-      "respawn-delay" : 0,
-      "amount" : 0.0
-    }
-  }, {
-    "spawn" : {
-      "rotation" : 0.0,
-      "x" : 5586.0,
-      "y" : 4962.0
-    },
-    "faction" : 0,
-    "typeName" : "pickup/health",
-    "health" : {
-      "respawn-delay" : 0,
-      "amount" : 0.0
-    }
-  }, {
-    "spawn" : {
-      "rotation" : 0.0,
-      "x" : 5634.0,
-      "y" : 4962.0
-    },
-    "faction" : 0,
-    "typeName" : "pickup/health",
-    "health" : {
-      "respawn-delay" : 0,
-      "amount" : 0.0
-    }
-  }, {
-    "spawn" : {
-      "rotation" : 0.0,
-      "x" : 5668.5,
-      "y" : 4962.0
-    },
-    "faction" : 0,
-    "typeName" : "pickup/health",
-    "health" : {
-      "respawn-delay" : 0,
-      "amount" : 0.0
-    }
-  }, {
-    "spawn" : {
-      "rotation" : 0.0,
-      "x" : 5167.5,
-      "y" : 5234.5
-    },
-    "faction" : 0,
-    "typeName" : "ship/destroyer"
-  }, {
-    "spawn" : {
-      "rotation" : 0.0,
-      "x" : 5385.0,
-      "y" : 5234.5
-    },
-    "faction" : 0,
-    "typeName" : "ship/destroyer"
-  }, {
-    "spawn" : {
-      "rotation" : 0.0,
-      "x" : 5385.0,
-      "y" : 5498.5
-    },
-    "faction" : 0,
-    "typeName" : "ship/destroyer"
-  }, {
-    "spawn" : {
-      "rotation" : 0.0,
-      "x" : 5157.0,
-      "y" : 5498.5
-    },
-    "faction" : 0,
-    "typeName" : "ship/destroyer"
-  }, {
-    "spawn" : {
-      "rotation" : 0.0,
-      "x" : 5519.0,
-      "y" : 5095.0
-    },
-    "faction" : 0,
-    "typeName" : "living/sentry"
-  }, {
-    "spawn" : {
-      "rotation" : 0.0,
-      "x" : 5024.0,
-      "y" : 5095.0
-    },
-    "faction" : 0,
-    "typeName" : "living/sentry"
-  }, {
-    "spawn" : {
-      "rotation" : 0.0,
-      "x" : 5024.0,
-      "y" : 5707.5
-    },
-    "faction" : 0,
-    "typeName" : "living/sentry"
-  }, {
-    "spawn" : {
-      "rotation" : 0.0,
-      "x" : 5529.5,
-      "y" : 5709.0
-    },
-    "faction" : 0,
-    "typeName" : "living/sentry"
-  }, {
-    "spawn" : {
-      "rotation" : 0.0,
-      "x" : 976.0,
-      "y" : 478.0
-    },
-    "faction" : 0,
-    "typeName" : "util/invisible-map-editor"
-  }, {
-    "spawn" : {
-      "rotation" : 0.0,
-      "x" : 1056.0,
-      "y" : 478.0
-    },
-    "faction" : 0,
-    "typeName" : "util/invisible-map-editor"
-  }, {
-    "spawn" : {
-      "rotation" : 0.0,
-      "x" : 1141.5,
-      "y" : 478.0
-    },
-    "faction" : 0,
-    "typeName" : "util/invisible-map-editor"
-  }, {
-    "spawn" : {
-      "rotation" : 0.0,
-      "x" : 1209.5,
-      "y" : 478.0
-    },
-    "faction" : 0,
-    "typeName" : "util/invisible-map-editor"
-  }, {
-    "spawn" : {
-      "rotation" : 0.0,
-      "x" : 1281.0,
-      "y" : 478.0
-    },
-    "faction" : 0,
-    "typeName" : "util/invisible-map-editor"
-  }, {
-    "spawn" : {
-      "rotation" : 0.0,
-      "x" : 1354.0,
-      "y" : 478.0
-    },
-    "faction" : 0,
-    "typeName" : "util/invisible-map-editor"
-  }, {
-    "spawn" : {
-      "rotation" : 0.0,
-      "x" : 1002.0,
-      "y" : 626.0
-    },
-    "faction" : 0,
-    "typeName" : "vehicle/rocket-car"
-  }, {
-    "spawn" : {
-      "rotation" : 0.0,
-      "x" : 1097.0,
-      "y" : 626.0
-    },
-    "faction" : 0,
-    "typeName" : "vehicle/rocket-car"
-  }, {
-    "spawn" : {
-      "rotation" : 0.0,
-      "x" : 1173.5,
-      "y" : 626.0
-    },
-    "faction" : 0,
-    "typeName" : "vehicle/rocket-car"
-  }, {
-    "spawn" : {
-      "rotation" : 0.0,
-      "x" : 1259.5,
-      "y" : 626.0
-    },
-    "faction" : 0,
-    "typeName" : "vehicle/rocket-car"
-  }, {
-    "spawn" : {
-      "rotation" : 0.0,
-      "x" : 1329.5,
-      "y" : 626.0
-    },
-    "faction" : 0,
-    "typeName" : "vehicle/rocket-car"
-  }, {
-    "spawn" : {
-      "rotation" : 0.0,
-      "x" : 1051.5,
-      "y" : 716.0
-    },
-    "faction" : 0,
-    "typeName" : "ship/fighter"
-  }, {
-    "spawn" : {
-      "rotation" : 0.0,
-      "x" : 1128.0,
-      "y" : 716.0
-    },
-    "faction" : 0,
-    "typeName" : "ship/fighter"
-  }, {
-    "spawn" : {
-      "rotation" : 0.0,
-      "x" : 1213.5,
-      "y" : 716.0
-    },
-    "faction" : 0,
-    "typeName" : "ship/fighter"
-  }, {
-    "spawn" : {
-      "rotation" : 0.0,
-      "x" : 1298.5,
-      "y" : 716.0
-    },
-    "faction" : 0,
-    "typeName" : "ship/fighter"
-  }, {
-    "spawn" : {
-      "rotation" : 0.0,
-      "x" : 1258.0,
-      "y" : 791.5
-    },
-    "faction" : 0,
-    "typeName" : "ship/fighter"
-  }, {
-    "spawn" : {
-      "rotation" : 0.0,
-      "x" : 1163.0,
-      "y" : 791.5
-    },
-    "faction" : 0,
-    "typeName" : "ship/fighter"
-  }, {
-    "spawn" : {
-      "rotation" : 0.0,
-      "x" : 1091.0,
-      "y" : 791.5
-    },
-    "faction" : 0,
-    "typeName" : "ship/fighter"
-  }, {
-    "spawn" : {
-      "rotation" : 0.0,
-      "x" : 1127.0,
-      "y" : 861.0
-    },
-    "faction" : 0,
-    "typeName" : "ship/fighter"
-  }, {
-    "spawn" : {
-      "rotation" : 0.0,
-      "x" : 1209.5,
-      "y" : 861.0
-    },
-    "faction" : 0,
-    "typeName" : "ship/fighter"
-  }, {
-    "spawn" : {
-      "rotation" : 0.0,
-      "x" : 1172.0,
-      "y" : 1054.0
-    },
-    "faction" : 0,
-    "typeName" : "ship/destroyer"
-  }, {
-    "spawn" : {
-      "rotation" : 0.0,
-      "x" : 691.5,
-      "y" : 931.5
+      "x" : 582.0,
+      "y" : 242.0
     },
     "faction" : 0,
     "typeName" : "util/spawn-marker"
   }, {
     "spawn" : {
       "rotation" : 0.0,
-      "x" : 751.5,
-      "y" : 1008.0
+      "x" : 466.5,
+      "y" : 504.5
     },
     "faction" : 0,
     "typeName" : "util/spawn-marker"
   }, {
     "spawn" : {
       "rotation" : 0.0,
-      "x" : 841.5,
-      "y" : 945.5
+      "x" : 817.0,
+      "y" : 467.5
     },
     "faction" : 0,
     "typeName" : "util/spawn-marker"
@@ -391,31 +67,27 @@
     "height" : 120000.0
   },
   "type" : "open-world-map",
-  "factionSpawns" : [ {
-    "colour" : "#ff0000",
-    "id" : 0,
-    "spawns" : [ {
-      "rotation" : 0.0,
-      "x" : 150.0,
-      "y" : 150.0
-    } ]
-  }, {
-    "colour" : "#00ff00",
-    "id" : 1000,
-    "spawns" : [ {
-      "rotation" : 0.0,
-      "x" : 450.0,
-      "y" : 450.0
-    }, {
-      "rotation" : 0.0,
-      "x" : 750.0,
-      "y" : 750.0
-    } ]
-  } ],
   "properties" : {
     "lobby" : true,
     "defaultPlayerEntity" : "util/invisible-map-editor",
     "name" : "main open test map",
     "enabled" : true
-  }
+  },
+  "factions" : [ {
+    "colour" : "#ff0000",
+    "id" : 0,
+    "spawns" : [ {
+      "rotation" : 0.0,
+      "x" : 466.5,
+      "y" : 504.5
+    }, {
+      "rotation" : 0.0,
+      "x" : 817.0,
+      "y" : 467.5
+    }, {
+      "rotation" : 0.0,
+      "x" : 582.0,
+      "y" : 242.0
+    } ]
+  } ]
 }

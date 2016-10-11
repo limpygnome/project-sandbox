@@ -53,4 +53,10 @@ public class ArtificialIntelligenceMapData implements MapData
         }
     }
 
+    @Override
+    public void reset(Controller controller, WorldMap map)
+    {
+        // Does nothing / not required...
+    }
+
 }

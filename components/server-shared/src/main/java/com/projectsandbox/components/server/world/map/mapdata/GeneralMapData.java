@@ -67,6 +67,12 @@ public class GeneralMapData implements MapData
         setDefaultEntityTypeName(entityTypeName);
     }
 
+    @Override
+    public void reset(Controller controller, WorldMap map)
+    {
+        // Does nothing at present...
+    }
+
     public String getName()
     {
         return name;

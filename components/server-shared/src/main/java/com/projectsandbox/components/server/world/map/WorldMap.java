@@ -142,6 +142,16 @@ public abstract class WorldMap
         return mapData;
     }
 
+    public void reset(Controller controller)
+    {
+        List<MapData> mapDataList = getMapData();
+
+        for (MapData mapData : mapDataList)
+        {
+            mapData.reset(controller, this);
+        }
+    }
+
     @Override
     public String toString()
     {

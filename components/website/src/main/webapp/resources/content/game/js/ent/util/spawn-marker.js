@@ -28,7 +28,7 @@
         var green = packet.readInt() / 255.0;
         var blue = packet.readInt() / 255.0;
 
-        this.setColour(red, green, blue, 0.8);
+        this.setColour(red, green, blue, 0.6);
     };
 
     game.entities.util.SpawnMarker = entity;

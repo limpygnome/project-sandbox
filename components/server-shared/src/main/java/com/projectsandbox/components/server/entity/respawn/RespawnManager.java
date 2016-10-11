@@ -3,7 +3,6 @@ package com.projectsandbox.components.server.entity.respawn;
 import com.projectsandbox.components.server.Controller;
 import com.projectsandbox.components.server.entity.Entity;
 import com.projectsandbox.components.server.entity.EntityManager;
-import com.projectsandbox.components.server.entity.player.PlayerEntity;
 import com.projectsandbox.components.server.entity.respawn.pending.PendingRespawn;
 import com.projectsandbox.components.server.service.EventMapLogicCycleService;
 import com.projectsandbox.components.server.world.map.MapService;
@@ -142,7 +141,7 @@ public class RespawnManager implements EventMapLogicCycleService
 
         if (spawn == null)
         {
-            LOG.debug("No spawn available - entity id: {}, faction id: {}", entity.id, entity.faction);
+            LOG.debug("No spawn available - entity id: {}, faction id: {}", entity.id, entity.factionId);
             return null;
         }
 

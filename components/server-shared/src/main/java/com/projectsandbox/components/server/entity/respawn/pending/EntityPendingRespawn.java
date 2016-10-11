@@ -33,12 +33,12 @@ public class EntityPendingRespawn extends PendingRespawn
         }
 
         // Attempt to spawn using spawns for faction
-        Faction faction = map.getRespawnMapData().factionSpawnsGet(entity.faction);
+        Faction faction = map.getRespawnMapData().getFaction(entity.factionId);
 
         if (faction == null)
         {
             LOG.warn("Cannot find faction spawns for entity - faction id: {}, faction: {}, entity id: {}",
-                    entity.faction, faction, entity.id);
+                    entity.factionId, faction, entity.id);
 
             return null;
         }
@@ -49,7 +49,7 @@ public class EntityPendingRespawn extends PendingRespawn
         }
         else
         {
-            LOG.warn("No spawns available for faction - id: {}, faction: {}", entity.id, entity.faction);
+            LOG.warn("No spawns available for faction - id: {}, faction: {}", entity.id, entity.factionId);
 
             return null;
         }

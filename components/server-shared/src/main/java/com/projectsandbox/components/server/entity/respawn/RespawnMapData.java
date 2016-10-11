@@ -37,12 +37,24 @@ public class RespawnMapData implements MapData
     protected List<PendingRespawn> pendingRespawnList;
 
     /* Faction ID -> Faction */
-    protected HashMap<Short, Faction> factionSpawnsMap;
+    private HashMap<Short, Faction> factionSpawnsMap;
 
     public RespawnMapData()
     {
         this.pendingRespawnList = new LinkedList<>();
         this.factionSpawnsMap = new HashMap<>();
+    }
+
+    @Override
+    public void reset(Controller controller, WorldMap map)
+    {
+        pendingRespawnList.clear();
+
+        // Reset each faction
+        for (Faction faction : factionSpawnsMap.values())
+        {
+            faction.reset();
+        }
     }
 
     @Override
@@ -62,7 +74,7 @@ public class RespawnMapData implements MapData
         }
 
         // Attach factions spawns to parent
-        root.put("factionSpawns", factionSpawnsData);
+        root.put("factions", factionSpawnsData);
     }
 
     public JSONObject serializeFactionSpawn(Faction factionSpawn)
@@ -126,12 +138,23 @@ public class RespawnMapData implements MapData
         LOG.debug("Added faction spawns - map id: {}, spawns: {}", map.getMapId(), faction);
     }
 
-    public synchronized Faction factionSpawnsGet(short factionId)
+    public synchronized void addFaction(Faction faction)
+    {
+        if (factionSpawnsMap.containsKey(faction.getFactionId()))
+        {
+            throw new RuntimeException("Faction with id '" + faction.getFactionId() + "' already exists");
+        }
+
+        factionSpawnsMap.put(faction.getFactionId(), faction);
+        LOG.debug("Added faction - {}", faction);
+    }
+
+    public synchronized Faction getFaction(short factionId)
     {
         return this.factionSpawnsMap.get(factionId);
     }
 
-    public synchronized Map<Short, Faction> getFactionSpawns()
+    public synchronized Map<Short, Faction> getFactions()
     {
         Map<Short, Faction> factionSpawnsMap = Collections.unmodifiableMap(this.factionSpawnsMap);
         return factionSpawnsMap;

@@ -37,4 +37,11 @@ public class EffectsMapData implements MapData
         // Does nothing / not required...
     }
 
+    @Override
+    public void reset(Controller controller, WorldMap map)
+    {
+        // Just clear pending effects...
+        pendingSend.clear();
+    }
+
 }

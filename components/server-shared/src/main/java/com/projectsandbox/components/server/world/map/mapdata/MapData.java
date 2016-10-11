@@ -32,4 +32,14 @@ public interface MapData
      */
     void deserialize(Controller controller, WorldMap map, JSONObject root) throws IOException;
 
+    /**
+     * Invoked when the data should be reset for the current map.
+     *
+     * Currently only used for map editing.
+     *
+     * @param controller the current controller
+     * @param map the current map to which the data belongs
+     */
+    void reset(Controller controller, WorldMap map);
+
 }

@@ -16,7 +16,6 @@ import com.projectsandbox.components.server.entity.physics.spatial.QuadTree;
 import com.projectsandbox.components.server.inventory.Inventory;
 import com.projectsandbox.components.server.inventory.InventoryInvokeState;
 import com.projectsandbox.components.server.player.PlayerInfo;
-import com.projectsandbox.components.server.world.map.WorldMap;
 import com.projectsandbox.components.server.world.spawn.Spawn;
 import com.projectsandbox.components.server.constant.entity.PedestrianConstants;
 
@@ -298,7 +297,7 @@ public abstract class AbstractPedestrian extends Entity
                     entity = proximityResult.entity;
 
                     if  (
-                            entity.faction != this.faction &&
+                            entity.factionId != this.factionId &&
                             (
                                 (entity instanceof PlayerEntity)            ||
                                 (entity instanceof AbstractPedestrian)
@@ -382,7 +381,7 @@ public abstract class AbstractPedestrian extends Entity
                 if (
                         entityCastVictim.entity != null &&
                         (
-                            !(entityCastVictim.entity instanceof AbstractPedestrian) || entityCastVictim.entity.faction != faction)
+                            !(entityCastVictim.entity instanceof AbstractPedestrian) || entityCastVictim.entity.factionId != factionId)
                         )
                 {
                     // Add rotation noise, so player is less accurate

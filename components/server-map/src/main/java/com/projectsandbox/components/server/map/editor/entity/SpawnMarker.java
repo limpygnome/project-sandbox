@@ -3,7 +3,7 @@ package com.projectsandbox.components.server.map.editor.entity;
 import com.projectsandbox.components.server.Controller;
 import com.projectsandbox.components.server.entity.Entity;
 import com.projectsandbox.components.server.entity.annotation.EntityType;
-import com.projectsandbox.components.server.entity.death.AbstractKiller;
+import com.projectsandbox.components.server.entity.respawn.RespawnMapData;
 import com.projectsandbox.components.server.network.packet.PacketData;
 import com.projectsandbox.components.server.player.PlayerInfo;
 import com.projectsandbox.components.server.world.spawn.Faction;
@@ -37,13 +37,27 @@ public class SpawnMarker extends Entity
     {
         super.eventSpawn(controller, spawn);
 
-        // Copy faction/spawn
+        RespawnMapData respawnMapData = map.getRespawnMapData();
+
+        // Fetch faction, otherwise create it
+        faction = respawnMapData.getFaction(super.factionId);
+
+        if (faction == null)
+        {
+            // Create new faction
+            faction = new Faction(factionId, Color.WHITE);
+            respawnMapData.addFaction(faction);
+        }
+
+        // Copy spawn
         this.spawn = spawn;
-        this.faction = map.getRespawnMapData().getFactionSpawns().get(super.faction);
+
+        // Add as spawn to faction
+        faction.addSpawn(spawn);
     }
 
     @Override
-    public synchronized void eventDeath(Controller controller, AbstractKiller killer)
+    public void eventPendingDeleted(Controller controller)
     {
         // Remove associated spawn
         faction.removeSpawn(spawn);

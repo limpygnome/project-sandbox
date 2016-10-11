@@ -36,11 +36,11 @@ public class PlayerEntityService
      */
     public LoadOrCreateResult loadOrCreatePlayer(WorldMap defaultMap, PlayerInfo playerInfo, boolean forceCreate)
     {
-
         // TODO: all of this map logic is flawed / outdated, needs changing...
+        LoadOrCreateResult result = new LoadOrCreateResult();
+
         try
         {
-            LoadOrCreateResult result = new LoadOrCreateResult();
             GameSession gameSession = playerInfo.session;
 
             // Load from session if not forcibly creating new...
@@ -63,27 +63,27 @@ public class PlayerEntityService
                     }
                 }
             }
-
-            // Create default entity if no entity yet; use provided map as default
-            if (result.entity == null)
-            {
-                String defaultEntityTypeName = defaultMap.getGeneralMapData().getDefaultEntityTypeName();
-                result.entity = (PlayerEntity) entityTypeMappingStoreService.createByTypeName(defaultEntityTypeName);
-                result.map = defaultMap;
-            }
-
-            // Set the current player
-            result.entity.setPlayer(playerInfo, 0);
-
-            // Set flag to allow persistence of entity
-            result.entity.setPersistToSession(true);
-
-            return result;
         }
         catch (Exception e)
         {
-            throw new RuntimeException("Unable to create player entity", e);
+            LOG.warn("Unable to create player entity, will create new instead", e);
         }
+
+        // Create default entity if no entity yet; use provided map as default
+        if (result.entity == null)
+        {
+            String defaultEntityTypeName = defaultMap.getGeneralMapData().getDefaultEntityTypeName();
+            result.entity = (PlayerEntity) entityTypeMappingStoreService.createByTypeName(defaultEntityTypeName);
+            result.map = defaultMap;
+        }
+
+        // Set the current player
+        result.entity.setPlayer(playerInfo, 0);
+
+        // Set flag to allow persistence of entity
+        result.entity.setPersistToSession(true);
+
+        return result;
     }
 
     private PlayerEntity createPlayerFromSession(WorldMap worldMap, PlayerInfo playerInfo, GameSession gameSession) throws Exception
