@@ -14,7 +14,6 @@
         );
 
         this.setTexture("white");
-        this.setColour(1.0, 0.0, 0.0, 0.8);
     };
 
     entity.title = "Spawn";
@@ -22,6 +21,15 @@
     entity.mapEditorEnabled = true;
 
     entity.inherits(Entity);
+
+    entity.prototype.readBytesCreate = function(packet)
+    {
+        var red = packet.readInt() / 255.0;
+        var green = packet.readInt() / 255.0;
+        var blue = packet.readInt() / 255.0;
+
+        this.setColour(red, green, blue, 0.8);
+    };
 
     game.entities.util.SpawnMarker = entity;
 }

@@ -359,6 +359,30 @@
     },
     "faction" : 0,
     "typeName" : "ship/destroyer"
+  }, {
+    "spawn" : {
+      "rotation" : 0.0,
+      "x" : 691.5,
+      "y" : 931.5
+    },
+    "faction" : 0,
+    "typeName" : "util/spawn-marker"
+  }, {
+    "spawn" : {
+      "rotation" : 0.0,
+      "x" : 751.5,
+      "y" : 1008.0
+    },
+    "faction" : 0,
+    "typeName" : "util/spawn-marker"
+  }, {
+    "spawn" : {
+      "rotation" : 0.0,
+      "x" : 841.5,
+      "y" : 945.5
+    },
+    "faction" : 0,
+    "typeName" : "util/spawn-marker"
   } ],
   "id" : "1",
   "openWorldProperties" : {
@@ -368,6 +392,7 @@
   },
   "type" : "open-world-map",
   "factionSpawns" : [ {
+    "colour" : "#ff0000",
     "id" : 0,
     "spawns" : [ {
       "rotation" : 0.0,
@@ -375,6 +400,7 @@
       "y" : 150.0
     } ]
   }, {
+    "colour" : "#00ff00",
     "id" : 1000,
     "spawns" : [ {
       "rotation" : 0.0,

@@ -151,10 +151,11 @@
         }
     ],
     
-    "factionSpawns":
+    "factions":
     [
         {
             "id" : 0,
+            "colour" : "#FF0000",
             "spawns" :
             [
                 {
@@ -172,6 +173,7 @@
         
         {
             "id" : 1000,
+            "colour" : "#00FF00",
             "spawns" :
             [
                 {
@@ -187,10 +189,12 @@
             ]
         },
         {
-            "id" : 2000
+            "id" : 2000,
+            "colour" : "#FF00FF"
         },
         {
             "id" : 3000,
+            "colour" : "#0000FF",
             "spawns" :
             [
                 {

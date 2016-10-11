@@ -4,8 +4,12 @@ import com.projectsandbox.components.server.Controller;
 import com.projectsandbox.components.server.entity.Entity;
 import com.projectsandbox.components.server.entity.annotation.EntityType;
 import com.projectsandbox.components.server.entity.death.AbstractKiller;
+import com.projectsandbox.components.server.network.packet.PacketData;
 import com.projectsandbox.components.server.player.PlayerInfo;
+import com.projectsandbox.components.server.world.spawn.Faction;
 import com.projectsandbox.components.server.world.spawn.Spawn;
+
+import java.awt.*;
 
 /**
  * Used to represent a spawn when editing a map.
@@ -15,6 +19,7 @@ import com.projectsandbox.components.server.world.spawn.Spawn;
 @EntityType(typeId = 902, typeName = "util/spawn-marker")
 public class SpawnMarker extends Entity
 {
+    private Faction faction;
     private Spawn spawn;
 
     public SpawnMarker()
@@ -32,16 +37,28 @@ public class SpawnMarker extends Entity
     {
         super.eventSpawn(controller, spawn);
 
-        // Add spawn at current position
+        // Copy faction/spawn
         this.spawn = spawn;
-
-        // TODO...
+        this.faction = map.getRespawnMapData().getFactionSpawns().get(super.faction);
     }
 
     @Override
     public synchronized void eventDeath(Controller controller, AbstractKiller killer)
     {
         // Remove associated spawn
+        faction.removeSpawn(spawn);
+    }
+
+    @Override
+    public void eventPacketEntCreated(PacketData packetData)
+    {
+        // Add faction colour
+        Color colour = faction.getColour();
+
+        // -- Typecast for safety...
+        packetData.add((int) colour.getRed());
+        packetData.add((int) colour.getBlue());
+        packetData.add((int) colour.getGreen());
     }
 
     @Override

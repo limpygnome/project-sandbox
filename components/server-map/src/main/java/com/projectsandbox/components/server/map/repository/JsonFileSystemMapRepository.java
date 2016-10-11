@@ -141,10 +141,17 @@ public class JsonFileSystemMapRepository implements MapRepository
         }
 
         // Deserialize map data (i.e. let each map data load its own data from the root JSON element)
-        List<MapData> mapDataList = map.getMapData();
-        for (MapData mapData : mapDataList)
+        try
         {
-            mapData.deserialize(controller, map, root);
+            List<MapData> mapDataList = map.getMapData();
+            for (MapData mapData : mapDataList)
+            {
+                mapData.deserialize(controller, map, root);
+            }
+        }
+        catch (Exception e)
+        {
+            throw new RuntimeException("Failed to deserialize map - id: " + mapId + ", type: " + type, e);
         }
 
         // Don't return the map if not enabled...

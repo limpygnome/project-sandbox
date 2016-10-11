@@ -6,7 +6,7 @@ import com.projectsandbox.components.server.entity.respawn.pending.PositionPendi
 import com.projectsandbox.components.server.map.editor.entity.SpawnMarker;
 import com.projectsandbox.components.server.service.EventServerPostStartup;
 import com.projectsandbox.components.server.world.map.WorldMap;
-import com.projectsandbox.components.server.world.spawn.FactionSpawns;
+import com.projectsandbox.components.server.world.spawn.Faction;
 import com.projectsandbox.components.server.world.spawn.Spawn;
 import org.springframework.stereotype.Service;
 
@@ -43,7 +43,7 @@ public class SpawnMarkerService implements EventServerPostStartup
         Map<String, WorldMap> maps = controller.mapService.getAll();
 
         RespawnMapData respawnMapData;
-        Map<Short, FactionSpawns> factionSpawnsMap;
+        Map<Short, Faction> factionSpawnsMap;
         List<Spawn> spawns;
 
         // Iterate each map
@@ -53,13 +53,13 @@ public class SpawnMarkerService implements EventServerPostStartup
             factionSpawnsMap = respawnMapData.getFactionSpawns();
 
             // Iterate spawns for each faction
-            for (FactionSpawns factionSpawns : factionSpawnsMap.values())
+            for (Faction faction : factionSpawnsMap.values())
             {
-                spawns = factionSpawns.getSpawns();
+                spawns = faction.getSpawns();
 
                 for (Spawn spawn : spawns)
                 {
-                    create(controller, map, spawn);
+                    create(controller, map, faction, spawn);
                 }
             }
         }
@@ -68,7 +68,7 @@ public class SpawnMarkerService implements EventServerPostStartup
     /**
      * Should be invoked when a spawn is created.
      */
-    public synchronized void create(Controller controller, WorldMap map, Spawn spawn)
+    public synchronized void create(Controller controller, WorldMap map, Faction faction, Spawn spawn)
     {
         // Create entity and add for respawn
         SpawnMarker spawnMarker = new SpawnMarker();

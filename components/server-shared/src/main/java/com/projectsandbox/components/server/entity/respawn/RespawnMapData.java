@@ -2,9 +2,10 @@ package com.projectsandbox.components.server.entity.respawn;
 
 import com.projectsandbox.components.server.Controller;
 import com.projectsandbox.components.server.entity.respawn.pending.PendingRespawn;
+import com.projectsandbox.components.server.util.CustomMath;
 import com.projectsandbox.components.server.world.map.mapdata.MapData;
 import com.projectsandbox.components.server.world.map.WorldMap;
-import com.projectsandbox.components.server.world.spawn.FactionSpawns;
+import com.projectsandbox.components.server.world.spawn.Faction;
 import com.projectsandbox.components.server.world.spawn.Spawn;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -14,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
+import java.awt.*;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -34,8 +36,8 @@ public class RespawnMapData implements MapData
 
     protected List<PendingRespawn> pendingRespawnList;
 
-    /* Faction ID -> FactionSpawns */
-    protected HashMap<Short, FactionSpawns> factionSpawnsMap;
+    /* Faction ID -> Faction */
+    protected HashMap<Short, Faction> factionSpawnsMap;
 
     public RespawnMapData()
     {
@@ -49,7 +51,7 @@ public class RespawnMapData implements MapData
         JSONArray factionSpawnsData = new JSONArray();
         JSONObject factionSpawnData;
 
-        for (Map.Entry<Short, FactionSpawns> kv : factionSpawnsMap.entrySet())
+        for (Map.Entry<Short, Faction> kv : factionSpawnsMap.entrySet())
         {
             // Only serialize factions with spawns...
             if (kv.getValue().hasSpawns())
@@ -63,7 +65,7 @@ public class RespawnMapData implements MapData
         root.put("factionSpawns", factionSpawnsData);
     }
 
-    public JSONObject serializeFactionSpawn(FactionSpawns factionSpawn)
+    public JSONObject serializeFactionSpawn(Faction factionSpawn)
     {
         JSONObject factionData = new JSONObject();
         JSONArray spawnsData = new JSONArray();
@@ -79,6 +81,9 @@ public class RespawnMapData implements MapData
         factionData.put("id", factionSpawn.getFactionId());
         factionData.put("spawns", spawnsData);
 
+        String hex = CustomMath.colour2Hex(factionSpawn.getColour());
+        factionData.put("colour", hex);
+
         return factionData;
     }
 
@@ -86,7 +91,7 @@ public class RespawnMapData implements MapData
     public void deserialize(Controller controller, WorldMap map, JSONObject root)
     {
         // Parse data for spawns
-        JSONArray factionSpawnsData = (JSONArray) root.get("factionSpawns");
+        JSONArray factionSpawnsData = (JSONArray) root.get("factions");
         JSONObject factionSpawnData;
 
         for (Object factionData : factionSpawnsData)
@@ -99,8 +104,10 @@ public class RespawnMapData implements MapData
     private void deserializeFactionSpawn(WorldMap map, JSONObject factionData)
     {
         short factionId = (short) (long) factionData.get("id");
+        String rawColour = (String) factionData.get("colour");
+        Color colour = CustomMath.hex2Colour(rawColour);
 
-        FactionSpawns factionSpawns = new FactionSpawns(factionId);
+        Faction faction = new Faction(factionId, colour);
 
         // Parse spawns
         JSONArray spawnsData = (JSONArray) factionData.get("spawns");
@@ -111,22 +118,22 @@ public class RespawnMapData implements MapData
             for (Object spawnData : spawnsData)
             {
                 spawn = spawnParserHelper.deserialize((JSONObject) spawnData);
-                factionSpawns.addSpawn(spawn);
+                faction.addSpawn(spawn);
             }
         }
 
-        this.factionSpawnsMap.put(factionSpawns.getFactionId(), factionSpawns);
-        LOG.debug("Added faction spawns - map id: {}, spawns: {}", map.getMapId(), factionSpawns);
+        this.factionSpawnsMap.put(faction.getFactionId(), faction);
+        LOG.debug("Added faction spawns - map id: {}, spawns: {}", map.getMapId(), faction);
     }
 
-    public synchronized FactionSpawns factionSpawnsGet(short factionId)
+    public synchronized Faction factionSpawnsGet(short factionId)
     {
         return this.factionSpawnsMap.get(factionId);
     }
 
-    public synchronized Map<Short, FactionSpawns> getFactionSpawns()
+    public synchronized Map<Short, Faction> getFactionSpawns()
     {
-        Map<Short, FactionSpawns> factionSpawnsMap = Collections.unmodifiableMap(this.factionSpawnsMap);
+        Map<Short, Faction> factionSpawnsMap = Collections.unmodifiableMap(this.factionSpawnsMap);
         return factionSpawnsMap;
     }
 

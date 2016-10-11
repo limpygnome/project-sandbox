@@ -66,7 +66,8 @@ projectSandbox.network.entities =
             // Set max health
             ent.maxHealth = maxHealth;
 
-            // TODO: read custom byte data here
+            // Read custom data
+            ent.readBytesCreate(packet)
 
             // Add to world
             projectSandbox.entities.set(id, ent);

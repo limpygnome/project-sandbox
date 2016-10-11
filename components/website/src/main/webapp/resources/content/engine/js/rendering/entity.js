@@ -60,7 +60,12 @@ Entity.prototype.reset = function()
     this.updatedRotation = 0;
 }
 
+Entity.prototype.readBytesCreate = function (packet)
+{
+    // Nothing by default, read custom data here...
+}
+
 Entity.prototype.readBytesUpdate = function (packet)
 {
-    // Nothing by default
+    // Nothing by default, read custom data here...
 }

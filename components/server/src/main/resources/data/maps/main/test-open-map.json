@@ -43,10 +43,11 @@
         }
     ],
 
-    "factionSpawns":
+    "factions":
     [
         {
             "id" : 0,
+            "colour" : "#FF0000",
             "spawns" :
             [
                 {
@@ -58,6 +59,7 @@
         },
         {
             "id" : 1000,
+            "colour" : "#00FF00",
             "spawns" :
             [
                 {

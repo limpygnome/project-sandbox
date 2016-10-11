@@ -1,5 +1,7 @@
 package com.projectsandbox.components.server.util;
 
+import java.awt.*;
+
 /**
  *
  * @author limpygnome
@@ -77,4 +79,33 @@ public class CustomMath
     {
         return rad * (180.0f / PI_FLOAT);
     }
+
+    public static Color hex2Colour(String hexString)
+    {
+        if (hexString == null)
+        {
+            throw new IllegalArgumentException("Invalid hex string");
+        }
+
+        // Parse components
+        int r = Integer.parseInt(hexString.substring(1, 3), 16);
+        int g = Integer.parseInt(hexString.substring(3, 5), 16);
+        int b = Integer.parseInt(hexString.substring(5, 7), 16);
+
+        // Create instance
+        Color result = new Color(r, g, b);
+        return result;
+    }
+
+    public static String colour2Hex(Color colour)
+    {
+        if (colour == null)
+        {
+            throw new IllegalArgumentException("Null colour");
+        }
+
+        String result = String.format("#%02x%02x%02x", colour.getRed(), colour.getGreen(), colour.getBlue());
+        return result;
+    }
+
 }

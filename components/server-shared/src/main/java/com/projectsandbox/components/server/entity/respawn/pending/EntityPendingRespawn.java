@@ -3,7 +3,7 @@ package com.projectsandbox.components.server.entity.respawn.pending;
 import com.projectsandbox.components.server.Controller;
 import com.projectsandbox.components.server.entity.Entity;
 import com.projectsandbox.components.server.world.map.WorldMap;
-import com.projectsandbox.components.server.world.spawn.FactionSpawns;
+import com.projectsandbox.components.server.world.spawn.Faction;
 import com.projectsandbox.components.server.world.spawn.Spawn;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -33,23 +33,23 @@ public class EntityPendingRespawn extends PendingRespawn
         }
 
         // Attempt to spawn using spawns for faction
-        FactionSpawns factionSpawns = map.getRespawnMapData().factionSpawnsGet(entity.faction);
+        Faction faction = map.getRespawnMapData().factionSpawnsGet(entity.faction);
 
-        if (factionSpawns == null)
+        if (faction == null)
         {
-            LOG.warn("Cannot find faction spawns for entity - faction id: {}, factions: {}, entity id: {}",
-                    entity.faction, factionSpawns, entity.id);
+            LOG.warn("Cannot find faction spawns for entity - faction id: {}, faction: {}, entity id: {}",
+                    entity.faction, faction, entity.id);
 
             return null;
         }
         // Use next available spawn, if spawns available
-        else if (factionSpawns.hasSpawns())
+        else if (faction.hasSpawns())
         {
-            return factionSpawns.getNextSpawn();
+            return faction.getNextSpawn();
         }
         else
         {
-            LOG.warn("No spawns available for factionSpawns - id: {}, factionSpawns: {}", entity.id, entity.faction);
+            LOG.warn("No spawns available for faction - id: {}, faction: {}", entity.id, entity.faction);
 
             return null;
         }
