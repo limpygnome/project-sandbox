@@ -1,16 +1,10 @@
 package com.projectsandbox.components.server.map.editor.entity;
 
 import com.projectsandbox.components.game.MapBoundsComponent;
-import com.projectsandbox.components.server.Controller;
-import com.projectsandbox.components.server.entity.Entity;
 import com.projectsandbox.components.server.entity.annotation.EntityType;
-import com.projectsandbox.components.server.entity.component.event.LogicComponentEvent;
 import com.projectsandbox.components.server.entity.player.PlayerEntity;
-import com.projectsandbox.components.server.map.editor.component.MapEditorComponent;
-import com.projectsandbox.components.server.map.editor.component.StaticMovementComponent;
-import com.projectsandbox.components.server.player.PlayerInfo;
-import com.projectsandbox.components.server.player.PlayerKeys;
-import com.projectsandbox.components.server.world.map.WorldMap;
+import com.projectsandbox.components.server.map.editor.entity.component.MapEditorComponent;
+import com.projectsandbox.components.server.map.editor.entity.component.StaticMovementComponent;
 
 /**
  * Simple entity to move around the map to assist with map editing.

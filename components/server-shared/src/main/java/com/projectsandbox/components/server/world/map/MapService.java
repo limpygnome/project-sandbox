@@ -12,6 +12,7 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -133,6 +134,12 @@ public class MapService implements EventServerPreStartup, EventLogicCycleService
     public synchronized WorldMap get(String mapId)
     {
         return mapCache.get(mapId);
+    }
+
+    public synchronized Map<String, WorldMap> getAll()
+    {
+        Map<String, WorldMap> maps = Collections.unmodifiableMap(mapCache);
+        return maps;
     }
 
     public synchronized String getTypeNameByClassType(Class<?> classType)

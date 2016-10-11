@@ -11,17 +11,18 @@ import com.projectsandbox.components.server.player.ChatService;
 import com.projectsandbox.components.server.player.PlayerService;
 import com.projectsandbox.components.server.player.SessionService;
 import com.projectsandbox.components.server.service.EventServerPostStartup;
-import com.projectsandbox.components.server.service.EventServerShutdown;
 import com.projectsandbox.components.server.service.EventServerPreStartup;
+import com.projectsandbox.components.server.service.EventServerShutdown;
 import com.projectsandbox.components.server.threading.GameLogicThreadedService;
-import java.util.List;
-
+import com.projectsandbox.components.server.world.map.MapService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.AutowireCapableBeanFactory;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Component;
+
+import java.util.List;
 
 /**
  * The main facade for the game, used to setup services and
@@ -51,6 +52,8 @@ public class Controller
     @Autowired
     public ChatService chatService;
 
+    @Autowired
+    public MapService mapService;
     @Autowired
     public EntityManager entityManager;
     @Autowired

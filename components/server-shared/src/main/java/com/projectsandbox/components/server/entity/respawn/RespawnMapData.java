@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -50,8 +51,12 @@ public class RespawnMapData implements MapData
 
         for (Map.Entry<Short, FactionSpawns> kv : factionSpawnsMap.entrySet())
         {
-            factionSpawnData = serializeFactionSpawn(kv.getValue());
-            factionSpawnsData.add(factionSpawnData);
+            // Only serialize factions with spawns...
+            if (kv.getValue().hasSpawns())
+            {
+                factionSpawnData = serializeFactionSpawn(kv.getValue());
+                factionSpawnsData.add(factionSpawnData);
+            }
         }
 
         // Attach factions spawns to parent
@@ -89,21 +94,13 @@ public class RespawnMapData implements MapData
             factionSpawnData = (JSONObject) factionData;
             deserializeFactionSpawn(map, factionSpawnData);
         }
-
-        // Create non-persistable entity to represent spawns
-        deserializeCreateSpawnMarkerEntities(map);
-    }
-
-    private void deserializeCreateSpawnMarkerEntities(WorldMap map)
-    {
-        finish this...
     }
 
     private void deserializeFactionSpawn(WorldMap map, JSONObject factionData)
     {
         short factionId = (short) (long) factionData.get("id");
 
-        com.projectsandbox.components.server.world.spawn.FactionSpawns factionSpawns = new com.projectsandbox.components.server.world.spawn.FactionSpawns(factionId);
+        FactionSpawns factionSpawns = new FactionSpawns(factionId);
 
         // Parse spawns
         JSONArray spawnsData = (JSONArray) factionData.get("spawns");
@@ -118,13 +115,6 @@ public class RespawnMapData implements MapData
             }
         }
 
-        // Add to map
-        // TODO: should add to "spawnData" in this map...
-        factionSpawnsAdd(map, factionSpawns);
-    }
-
-    public synchronized void factionSpawnsAdd(WorldMap map, FactionSpawns factionSpawns)
-    {
         this.factionSpawnsMap.put(factionSpawns.getFactionId(), factionSpawns);
         LOG.debug("Added faction spawns - map id: {}, spawns: {}", map.getMapId(), factionSpawns);
     }
@@ -132,6 +122,12 @@ public class RespawnMapData implements MapData
     public synchronized FactionSpawns factionSpawnsGet(short factionId)
     {
         return this.factionSpawnsMap.get(factionId);
+    }
+
+    public synchronized Map<Short, FactionSpawns> getFactionSpawns()
+    {
+        Map<Short, FactionSpawns> factionSpawnsMap = Collections.unmodifiableMap(this.factionSpawnsMap);
+        return factionSpawnsMap;
     }
 
 }

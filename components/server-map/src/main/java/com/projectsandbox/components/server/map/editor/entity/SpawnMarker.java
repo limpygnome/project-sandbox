@@ -1,9 +1,10 @@
 package com.projectsandbox.components.server.map.editor.entity;
 
 import com.projectsandbox.components.server.Controller;
+import com.projectsandbox.components.server.entity.Entity;
 import com.projectsandbox.components.server.entity.annotation.EntityType;
 import com.projectsandbox.components.server.entity.death.AbstractKiller;
-import com.projectsandbox.components.server.entity.player.PlayerEntity;
+import com.projectsandbox.components.server.player.PlayerInfo;
 import com.projectsandbox.components.server.world.spawn.Spawn;
 
 /**
@@ -12,13 +13,18 @@ import com.projectsandbox.components.server.world.spawn.Spawn;
  * The faction of the entity should be the same as the faction used for the spawn.
  */
 @EntityType(typeId = 902, typeName = "util/spawn-marker")
-public class SpawnMarker extends PlayerEntity
+public class SpawnMarker extends Entity
 {
     private Spawn spawn;
 
     public SpawnMarker()
     {
         super((short) 32, (short) 32);
+
+        // This entity should be untouchable...
+        this.physicsStatic = true;
+        this.physicsIntangible = true;
+        setGodmode();
     }
 
     @Override
@@ -39,9 +45,15 @@ public class SpawnMarker extends PlayerEntity
     }
 
     @Override
-    public String entityName()
+    public String friendlyName()
     {
-        return "Spawn";
+        return "Spawn Marker";
+    }
+
+    @Override
+    public PlayerInfo[] getPlayers()
+    {
+        return null;
     }
 
 }

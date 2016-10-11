@@ -16,7 +16,6 @@ game.ui.mapEditor.network = (function(){
     };
 
     return {
-        handlePacket    : handlePacket,
         sendData        : sendData
     };
 

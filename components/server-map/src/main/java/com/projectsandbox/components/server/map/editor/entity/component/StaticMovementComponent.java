@@ -1,4 +1,4 @@
-package com.projectsandbox.components.server.map.editor.component;
+package com.projectsandbox.components.server.map.editor.entity.component;
 
 import com.projectsandbox.components.server.Controller;
 import com.projectsandbox.components.server.entity.Entity;

@@ -17,6 +17,7 @@
         this.setColour(1.0, 0.0, 0.0, 0.8);
     };
 
+    entity.title = "Spawn";
     entity.typeId = 902;
     entity.mapEditorEnabled = true;
 

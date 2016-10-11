@@ -25,9 +25,10 @@ public class FactionSpawns
     
     public synchronized void addSpawn(Spawn spawn)
     {
+        // Add to collection
         spawns.add(spawn);
-        
-        // Resetup iterator
+
+        // Re-setup iterator
         spawnIterator = spawns.iterator();
     }
     

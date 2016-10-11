@@ -291,7 +291,8 @@
                                 <jsSourceFile>game/js/entity-factory.js</jsSourceFile>
                                 <jsSourceFile>game/js/ui/controller.js</jsSourceFile>
                                 <jsSourceFile>game/js/ui/map.js</jsSourceFile>
-                                <jsSourceFile>game/js/ui/map-editor.js</jsSourceFile>
+                                <jsSourceFile>game/js/ui/map-editor/network.js</jsSourceFile>
+                                <jsSourceFile>game/js/ui/map-editor/controls.js</jsSourceFile>
 
                                 <!--
                                     Game: Living
@@ -329,6 +330,12 @@
                                     Game: World
                                 -->
                                 <jsSourceFile>game/js/ent/world/blackhole.js</jsSourceFile>
+
+                                <!--
+                                    Game: Utility
+                                -->
+                                <jsSourceFile>game/js/ent/util/invisible-map-editor-entity.js</jsSourceFile>
+                                <jsSourceFile>game/js/ent/util/spawn-marker.js</jsSourceFile>
 
                                 <!--
                                     Game: Inventory

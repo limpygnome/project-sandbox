@@ -5,7 +5,7 @@ import com.projectsandbox.components.server.entity.Entity;
 import com.projectsandbox.components.server.entity.EntityMapData;
 import com.projectsandbox.components.server.entity.respawn.RespawnManager;
 import com.projectsandbox.components.server.entity.respawn.pending.EntityPendingRespawn;
-import com.projectsandbox.components.server.map.editor.component.MapEditorComponent;
+import com.projectsandbox.components.server.map.editor.entity.component.MapEditorComponent;
 import com.projectsandbox.components.server.map.editor.entity.InvisibleMapEditorEntity;
 import com.projectsandbox.components.server.network.Socket;
 import com.projectsandbox.components.server.network.packet.PacketHandlerException;
